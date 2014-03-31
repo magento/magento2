@@ -35,13 +35,13 @@
             template: '{{if items.length}}{{if !term && !$data.allShown() && $data.recentShown()}}' +
                 '<h5 class="title">${recentTitle}</h5>' +
                 '{{/if}}' +
-                '<ul data-mage-init="{&quot;menu&quot;:[]}">' +
+                '<ul data-mage-init=\'{"menu":[]}\'>' +
                 '{{each items}}' +
                 '{{if !$data.itemSelected($value)}}<li {{html optionData($value)}}>' +
                 '<a href="#">${$value.label}</a></li>{{/if}}' +
                 '{{/each}}' +
                 '{{if !term && !$data.allShown() && $data.recentShown()}}' +
-                '<li data-mage-init="{actionLink:{event:&quot;showAll&quot;}}" class="show-all">' +
+                '<li data-mage-init=\'{"actionLink":{"event":"showAll"}}\' class="show-all">' +
                 '<a href="#">${showAllTitle}</a></li>' +
                 '{{/if}}' +
                 '</ul>{{else}}<span class="mage-suggest-no-records">${noRecordsText}</span>{{/if}}',
@@ -781,7 +781,7 @@
                 '<li class="mage-suggest-search-field"></li></ul>',
             choiceTemplate: '<li class="mage-suggest-choice button"><div>${text}</div>' +
                 '<span class="mage-suggest-choice-close" tabindex="-1" ' +
-                'data-mage-init="{&quot;actionLink&quot;:{&quot;event&quot;:&quot;removeOption&quot;}}"></span></li>',
+                'data-mage-init=\'{"actionLink":{"event":"removeOption"}}\'></span></li>',
             selectedClass: 'mage-suggest-selected'
         },
 

@@ -51,9 +51,9 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $_wishlist;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -61,55 +61,23 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $_productFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      * @param array $priceBlockTypes
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
-        $this->_customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         $this->_productFactory = $productFactory;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $data,
             $priceBlockTypes
         );
@@ -237,13 +205,13 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         return $this->_getHelper()->getAddParams($product);
     }
 
-     /**
-      * Returns item configure url in wishlist
-      *
-      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $product
-      *
-      * @return string
-      */
+    /**
+     * Returns item configure url in wishlist
+     *
+     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $product
+     *
+     * @return string
+     */
     public function getItemConfigureUrl($product)
     {
         return $this->_getHelper()->getConfigureUrl($product);
@@ -282,7 +250,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getFormatedDate($date)
     {
-        return $this->formatDate($date, \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM);
+        return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
     }
 
     /**
@@ -351,22 +319,31 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     {
         $type_id = $product->getTypeId();
         if ($this->_catalogData->canApplyMsrp($product)) {
-            $realPriceHtml = $this->_preparePriceRenderer($type_id)
-                ->setProduct($product)
-                ->setDisplayMinimalPrice($displayMinimalPrice)
-                ->setIdSuffix($idSuffix)
-                ->setIsEmulateMode(true)
-                ->toHtml();
+            $realPriceHtml = $this->_preparePriceRenderer(
+                $type_id
+            )->setProduct(
+                $product
+            )->setDisplayMinimalPrice(
+                $displayMinimalPrice
+            )->setIdSuffix(
+                $idSuffix
+            )->setIsEmulateMode(
+                true
+            )->toHtml();
             $product->setAddToCartUrl($this->getAddToCartUrl($product));
             $product->setRealPriceHtml($realPriceHtml);
             $type_id = $this->_mapRenderer;
         }
 
-        return $this->_preparePriceRenderer($type_id)
-            ->setProduct($product)
-            ->setDisplayMinimalPrice($displayMinimalPrice)
-            ->setIdSuffix($idSuffix)
-            ->toHtml();
+        return $this->_preparePriceRenderer(
+            $type_id
+        )->setProduct(
+            $product
+        )->setDisplayMinimalPrice(
+            $displayMinimalPrice
+        )->setIdSuffix(
+            $idSuffix
+        )->toHtml();
     }
 
     /**
@@ -387,9 +364,11 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         if (is_object($buyRequest)) {
             $config = $buyRequest->getSuperProductConfig();
             if ($config && !empty($config['product_id'])) {
-                $product = $this->_productFactory->create()
-                    ->setStoreId($this->_storeManager->getStore()->getStoreId())
-                    ->load($config['product_id']);
+                $product = $this->_productFactory->create()->setStoreId(
+                    $this->_storeManager->getStore()->getStoreId()
+                )->load(
+                    $config['product_id']
+                );
             }
         }
         return parent::getProductUrl($product, $additional);
@@ -403,8 +382,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getImageUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'small_image')
-            ->resize($this->getImageSize());
+        return (string)$this->_imageHelper->init($product, 'small_image')->resize($this->getImageSize());
     }
 
     /**

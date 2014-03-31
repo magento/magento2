@@ -48,9 +48,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
     }
 
@@ -64,8 +63,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
     {
         $image = $product->getData($this->getAttribute()->getAttributeCode());
         if ($image) {
-            $url = $this->_storeManager->getStore($product->getStore())
-                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $image;
+            $url = $this->_storeManager->getStore(
+                $product->getStore()
+            )->getBaseUrl(
+                \Magento\UrlInterface::URL_TYPE_MEDIA
+            ) . 'catalog/product/' . $image;
         } else {
             $url = false;
         }

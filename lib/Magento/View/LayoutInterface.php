@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 /**
@@ -45,6 +44,8 @@ interface LayoutInterface
 
     /**
      * Create structure of elements from the loaded XML configuration
+     *
+     * @return void
      */
     public function generateElements();
 
@@ -133,6 +134,7 @@ interface LayoutInterface
      * @param string $childName
      * @param string|int|null $offsetOrSibling
      * @param bool $after
+     * @return void
      */
     public function reorderChild($parentName, $childName, $offsetOrSibling, $after = true);
 
@@ -227,6 +229,7 @@ interface LayoutInterface
      * @param array $options
      * @param string $parent
      * @param string $alias
+     * @return void
      */
     public function addContainer($name, $label, array $options = array(), $parent = '', $alias = '');
 
@@ -287,7 +290,7 @@ interface LayoutInterface
     /**
      * Set layout area
      *
-     * @param $area
+     * @param string $area
      * @return LayoutInterface
      */
     public function setArea($area);

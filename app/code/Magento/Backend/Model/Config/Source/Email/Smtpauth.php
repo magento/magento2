@@ -23,19 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Model\Config\Source\Email;
 
-class Smtpauth implements \Magento\Core\Model\Option\ArrayInterface
+class Smtpauth implements \Magento\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'NONE', 'label'=>'NONE'),
-            array('value'=>'PLAIN', 'label'=>'PLAIN'),
-            array('value'=>'LOGIN', 'label'=>'LOGIN'),
-            array('value'=>'CRAM-MD5', 'label'=>'CRAM-MD5'),
+            array('value' => 'NONE', 'label' => 'NONE'),
+            array('value' => 'PLAIN', 'label' => 'PLAIN'),
+            array('value' => 'LOGIN', 'label' => 'LOGIN'),
+            array('value' => 'CRAM-MD5', 'label' => 'CRAM-MD5')
         );
     }
 }

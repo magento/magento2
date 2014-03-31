@@ -34,10 +34,12 @@
  */
 namespace Magento\Tax\Model\Resource\Calculation;
 
-class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Rate extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -47,21 +49,18 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate
+     * @return $this
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(array(
-            'field' => array('code'),
-            'title' => __('Code'),
-        ));
+        $this->_uniqueFields = array(array('field' => array('code'), 'title' => __('Code')));
         return $this;
     }
 
     /**
      * Delete all rates
      *
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate
+     * @return $this
      */
     public function deleteAllRates()
     {
@@ -78,9 +77,13 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function isInRule($rateId)
     {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
-            ->from($this->getTable('tax_calculation'), array('tax_calculation_rate_id'))
-            ->where('tax_calculation_rate_id = ?', $rateId);
+        $select = $adapter->select()->from(
+            $this->getTable('tax_calculation'),
+            array('tax_calculation_rate_id')
+        )->where(
+            'tax_calculation_rate_id = ?',
+            $rateId
+        );
         return $adapter->fetchCol($select);
     }
 }

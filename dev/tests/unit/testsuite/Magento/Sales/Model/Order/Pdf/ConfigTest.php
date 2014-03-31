@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Order\Pdf;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -44,31 +43,35 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRenderersPerProduct()
     {
-        $configuration = array(
-            'product_type_one' => 'Renderer_One',
-            'product_type_two' => 'Renderer_Two',
+        $configuration = array('product_type_one' => 'Renderer_One', 'product_type_two' => 'Renderer_Two');
+        $this->_dataStorage->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            "renderers/page_type",
+            array()
+        )->will(
+            $this->returnValue($configuration)
         );
-        $this->_dataStorage
-            ->expects($this->once())
-            ->method('get')
-            ->with("renderers/page_type", array())
-            ->will($this->returnValue($configuration));
 
         $this->assertSame($configuration, $this->_model->getRenderersPerProduct('page_type'));
     }
 
     public function testGetTotals()
     {
-        $configuration = array(
-            'total1' => array('title' => 'Title1'),
-            'total2' => array('title' => 'Title2'),
-        );
+        $configuration = array('total1' => array('title' => 'Title1'), 'total2' => array('title' => 'Title2'));
 
-        $this->_dataStorage
-            ->expects($this->once())
-            ->method('get')
-            ->with('totals', array())
-            ->will($this->returnValue($configuration));
+        $this->_dataStorage->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'totals',
+            array()
+        )->will(
+            $this->returnValue($configuration)
+        );
 
         $this->assertSame($configuration, $this->_model->getTotals());
     }

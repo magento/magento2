@@ -26,26 +26,14 @@ return array(
         array(
             'node_one' => array(
                 array(
-                    '__attributes__' => array(
-                        'attributeOne' => '10',
-                        'attributeTwo' => '20',
-                    ),
+                    '__attributes__' => array('attributeOne' => '10', 'attributeTwo' => '20'),
                     'subnode' => array(
-                        array(
-                            '__attributes__' => array('attributeThree' => '30'),
-                            '__content__' => 'Value1',
-                        ),
-                        array(
-                            '__attributes__' => array('attributeFour' => '40'),
-                        ),
+                        array('__attributes__' => array('attributeThree' => '30'), '__content__' => 'Value1'),
+                        array('__attributes__' => array('attributeFour' => '40'))
                     ),
-                    'books' => array(
-                        array(
-                            '__attributes__' => array('attributeFive' => '50')
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    'books' => array(array('__attributes__' => array('attributeFive' => '50')))
+                )
+            )
+        )
+    )
 );

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
 
 /**
  * Product url key attribute backend
@@ -32,10 +32,7 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
-
-class Urlkey
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Catalog url
@@ -58,7 +55,7 @@ class Urlkey
      * Before save
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Urlkey
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -78,7 +75,7 @@ class Urlkey
      * Refresh product rewrites
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Urlkey
+     * @return $this
      */
     public function afterSave($object)
     {

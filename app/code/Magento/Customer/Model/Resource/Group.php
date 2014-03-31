@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Resource;
 
 /**
  * Customer group resource model
@@ -32,9 +32,7 @@
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Resource;
-
-class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Customer data
@@ -65,6 +63,8 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -74,15 +74,11 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Customer\Model\Resource\Group
+     * @return $this
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(
-            array(
-                'field' => 'customer_group_code',
-                'title' => __('Customer Group')
-            ));
+        $this->_uniqueFields = array(array('field' => 'customer_group_code', 'title' => __('Customer Group')));
 
         return $this;
     }
@@ -90,14 +86,14 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Check if group uses as default
      *
-     * @param  \Magento\Core\Model\AbstractModel $group
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param  \Magento\Model\AbstractModel $group
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
-    protected function _beforeDelete(\Magento\Core\Model\AbstractModel $group)
+    protected function _beforeDelete(\Magento\Model\AbstractModel $group)
     {
         if ($group->usesAsDefault()) {
-            throw new \Magento\Core\Exception(__('The group "%1" cannot be deleted', $group->getCode()));
+            throw new \Magento\Model\Exception(__('The group "%1" cannot be deleted', $group->getCode()));
         }
         return parent::_beforeDelete($group);
     }
@@ -105,14 +101,15 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Method set default group id to the customers collection
      *
-     * @param \Magento\Core\Model\AbstractModel $group
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Model\AbstractModel $group
+     * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $group)
+    protected function _afterDelete(\Magento\Model\AbstractModel $group)
     {
-        $customerCollection = $this->_createCustomersCollection()
-            ->addAttributeToFilter('group_id', $group->getId())
-            ->load();
+        $customerCollection = $this->_createCustomersCollection()->addAttributeToFilter(
+            'group_id',
+            $group->getId()
+        )->load();
         foreach ($customerCollection as $customer) {
             $customer->load();
             $defaultGroupId = $this->_customerData->getDefaultCustomerGroupId($customer->getStoreId());

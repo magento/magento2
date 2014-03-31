@@ -42,7 +42,7 @@
                     <label class="label" for="links_<?php echo $_link->getId() ?>">
                         <span><?php echo $this->escapeHtml($_link->getTitle()); ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                            <a class="sample"
+                            <a class="sample link"
                                href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
                                 <?php echo __('sample') ?>
                             </a>

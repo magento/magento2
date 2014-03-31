@@ -48,11 +48,13 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\App\State */
     protected $_appStateMock;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_applicationMock;
-
     /** @var \Magento\Oauth\Oauth */
     protected $_oauthServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Locale\ResolverInterface
+     */
+    protected $_localeMock;
 
     /**
      * Set up Controller object.
@@ -81,22 +83,21 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('maskException'))
             ->getMock();
-        $this->_appStateMock =  $this->getMockBuilder('Magento\App\State')
+        $this->_appStateMock =  $this->getMock('\Magento\App\State', array(), array(), '', false);
+        $localeMock =  $this->getMockBuilder('Magento\Locale')
             ->disableOriginalConstructor()
+            ->setMethods(array('getLanguage'))
             ->getMock();
-        $localeMock =  $this->getMockBuilder('Magento\Core\Model\Locale')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getLocale', 'getLanguage'))
-            ->getMock();
-        $localeMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
         $localeMock->expects($this->any())->method('getLanguage')->will($this->returnValue('en'));
 
-        $this->_applicationMock =  $this->getMockBuilder('Magento\Core\Model\App')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getLocale', 'isDeveloperMode'))
-            ->getMock();
-        $this->_applicationMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
-        $this->_applicationMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(false));
+        $localeResolverMock = $this->getMockBuilder(
+            'Magento\Locale\Resolver'
+        )->disableOriginalConstructor()->setMethods(
+            array('getLocale')
+        )->getMock();
+        $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
+
+        $layoutMock = $this->getMock('Magento\View\LayoutInterface');
 
         $this->_oauthServiceMock = $this->getMockBuilder('Magento\Oauth\Oauth')
             ->disableOriginalConstructor()
@@ -106,7 +107,9 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
-
+        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $areaMock = $this->getMock('Magento\App\AreaInterface');
+        $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
         $this->_soapController = new \Magento\Webapi\Controller\Soap(
             $this->_requestMock,
             $this->_responseMock,
@@ -114,26 +117,11 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $this->_soapServerMock,
             $this->_errorProcessorMock,
             $this->_appStateMock,
-            $this->_applicationMock,
-            $this->_oauthServiceMock
+            $layoutMock,
+            $this->_oauthServiceMock,
+            $localeResolverMock,
+            $areaListMock
         );
-    }
-
-    /**
-     * Clean up Controller and its dependencies.
-     */
-    protected function tearDown()
-    {
-        unset($this->_soapController);
-        unset($this->_requestMock);
-        unset($this->_responseMock);
-        unset($this->_wsdlGeneratorMock);
-        unset($this->_soapServerMock);
-        unset($this->_errorProcessorMock);
-        unset($this->_applicationMock);
-        unset($this->_appStateMock);
-
-        parent::tearDown();
     }
 
     /**
@@ -141,16 +129,10 @@ class SoapTest extends \PHPUnit_Framework_TestCase
      */
     public function testRedirectToInstallPage()
     {
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(false));
-        $this->_errorProcessorMock->expects($this->any())
-            ->method('maskException')
-            ->will($this->returnArgument(0));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(false));
+        $this->_errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())
-            ->method('getApiCharset')
-            ->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
 
         $this->_soapController->dispatch($this->_requestMock);
         $expectedMessage = <<<EXPECTED_MESSAGE
@@ -177,14 +159,10 @@ EXPECTED_MESSAGE;
      */
     public function testDispatchWsdl()
     {
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_mockGetParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL, 1);
         $wsdl = 'Some WSDL content';
-        $this->_wsdlGeneratorMock->expects($this->any())
-            ->method('generate')
-            ->will($this->returnValue($wsdl));
+        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
 
         $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals($wsdl, $this->_responseMock->getBody());
@@ -195,18 +173,17 @@ EXPECTED_MESSAGE;
      */
     public function testDispatchSoapRequest()
     {
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(true));
-        $this->_soapServerMock->expects($this->once())
-            ->method('handle');
-        $_SERVER['HTTP_AUTHORIZATION'] = 'OAuth access_token';
-        $this->_oauthServiceMock->expects($this->once())
-            ->method('validateAccessToken')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
+        $this->_soapServerMock->expects($this->once())->method('handle');
+        $this->_oauthServiceMock->expects(
+            $this->once()
+        )->method(
+            'validateAccessToken'
+        )->will(
+            $this->returnValue(true)
+        );
         $response = $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals(200, $response->getHttpResponseCode());
-        unset($_SERVER['HTTP_AUTHORIZATION']);
     }
 
     /**
@@ -214,21 +191,19 @@ EXPECTED_MESSAGE;
      */
     public function testDispatchWithException()
     {
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $exceptionMessage = 'some error message';
         $exception = new \Magento\Webapi\Exception($exceptionMessage);
-        $this->_soapServerMock->expects($this->any())
-            ->method('handle')
-            ->will($this->throwException($exception));
-        $this->_errorProcessorMock->expects($this->any())
-            ->method('maskException')
-            ->will($this->returnValue($exception));
+        $this->_soapServerMock->expects($this->any())->method('handle')->will($this->throwException($exception));
+        $this->_errorProcessorMock->expects(
+            $this->any()
+        )->method(
+            'maskException'
+        )->will(
+            $this->returnValue($exception)
+        );
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())
-            ->method('getApiCharset')
-            ->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
 
         $this->_soapController->dispatch($this->_requestMock);
 
@@ -258,9 +233,25 @@ EXPECTED_MESSAGE;
      */
     protected function _mockGetParam($param, $value)
     {
-        $this->_requestMock->expects($this->once())
-            ->method('getParam')
-            ->with($param)
-            ->will($this->returnValue($value));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $param
+        )->will(
+            $this->returnValue($value)
+        );
     }
+}
+
+/**
+ * The function became available in CLI mode since PHP 5.5.7 which doesn't fit Magento minimal requirement.
+ * @see http://php.net/manual/en/function.getallheaders.php
+ * @return array
+ */
+function getallheaders()
+{
+    // Mixed case on purpose
+    return array('authOrization' => 'OAuth access_token');
 }

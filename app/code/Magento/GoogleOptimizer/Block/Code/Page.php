@@ -35,7 +35,7 @@ class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param \Magento\Cms\Model\Page $page
      * @param array $data
@@ -43,7 +43,7 @@ class Page extends \Magento\GoogleOptimizer\Block\AbstractCode
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\GoogleOptimizer\Helper\Data $helper,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\GoogleOptimizer\Helper\Code $codeHelper,
         \Magento\Cms\Model\Page $page,
         array $data = array()

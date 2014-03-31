@@ -48,7 +48,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\App\Filesystem $filesystem */
         $filesystem = $objectManager->create(
             'Magento\App\Filesystem',
-            array('directoryList' => $objectManager->create(
+            array(
+                'directoryList' => $objectManager->create(
                     'Magento\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
@@ -63,13 +64,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
-            . '/_files', '/');
+        $dirPath = ltrim(
+            str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files',
+            '/'
+        );
         $this->directoryList->addDirectory(\Magento\App\Filesystem::MODULES_DIR, array('path' => $dirPath));
 
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(
-            'Magento\Module\Declaration\FileResolver', array(
+            'Magento\Module\Declaration\FileResolver',
+            array(
                 'filesystem' => $filesystem,
                 'fileIteratorFactory' => $objectManager->create('Magento\Config\FileIteratorFactory')
             )
@@ -78,49 +82,39 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Module\Declaration\Reader\Filesystem $filesystemReader */
         $filesystemReader = $objectManager->create(
-            'Magento\Module\Declaration\Reader\Filesystem', array(
-                'fileResolver' => $modulesDeclarations,
-            )
+            'Magento\Module\Declaration\Reader\Filesystem',
+            array('fileResolver' => $modulesDeclarations)
         );
 
         /** @var \Magento\Module\ModuleList $modulesList */
-        $modulesList = $objectManager->create(
-            'Magento\Module\ModuleList', array(
-                'reader' => $filesystemReader,
-            )
-        );
+        $modulesList = $objectManager->create('Magento\Module\ModuleList', array('reader' => $filesystemReader));
 
         /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader', array(
-                'moduleList' => $modulesList,
-                'filesystem' => $filesystem
-            )
+            'Magento\Module\Dir\Reader',
+            array('moduleList' => $modulesList, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');
 
         /** @var \Magento\Widget\Model\Config\FileResolver $fileResolver */
         $fileResolver = $objectManager->create(
-            'Magento\Widget\Model\Config\FileResolver', array(
-                'moduleReader' => $moduleReader,
-                'filesystem' => $filesystem,
-            )
+            'Magento\Widget\Model\Config\FileResolver',
+            array('moduleReader' => $moduleReader, 'filesystem' => $filesystem)
         );
 
         $schema = __DIR__ . '/../../../../../../../../app/code/Magento/Widget/etc/widget.xsd';
         $perFileSchema = __DIR__ . '/../../../../../../../../app/code/Magento/Widget/etc/widget_file.xsd';
         $reader = $objectManager->create(
-            'Magento\Widget\Model\Config\Reader', array(
+            'Magento\Widget\Model\Config\Reader',
+            array(
                 'moduleReader' => $moduleReader,
                 'fileResolver' => $fileResolver,
                 'schema' => $schema,
-                'perFileSchema' => $perFileSchema,
+                'perFileSchema' => $perFileSchema
             )
         );
 
-        $this->_configData = $objectManager->create('Magento\Widget\Model\Config\Data', array(
-            'reader' => $reader,
-        ));
+        $this->_configData = $objectManager->create('Magento\Widget\Model\Config\Data', array('reader' => $reader));
     }
 
     public function testGet()

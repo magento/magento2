@@ -24,9 +24,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Generator\TestAsset;
-use \Zend\Code\Generator\ClassGenerator;
+
+use Zend\Code\Generator\ClassGenerator;
 
 class SourceClass extends ParentClass
 {
@@ -41,7 +41,11 @@ class SourceClass extends ParentClass
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'',
+    public function __construct(
+        ClassGenerator $classGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
         $param4 = null
     ) {
     }
@@ -59,8 +63,13 @@ class SourceClass extends ParentClass
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function publicChildMethod(ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'',
-        array $array = array(), $param5 = null
+    public function publicChildMethod(
+        ClassGenerator $classGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
+        array $array = array(),
+        $param5 = null
     ) {
     }
 
@@ -86,7 +95,10 @@ class SourceClass extends ParentClass
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _protectedChildMethod(ClassGenerator $classGenerator, $param1 = '', $param2 = '\\',
+    protected function _protectedChildMethod(
+        ClassGenerator $classGenerator,
+        $param1 = '',
+        $param2 = '\\',
         $param3 = '\''
     ) {
     }
@@ -104,8 +116,12 @@ class SourceClass extends ParentClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function _privateChildMethod(ClassGenerator $classGenerator, $param1 = '', $param2 = '\\',
-        $param3 = '\'', array $array = array()
+    private function _privateChildMethod(
+        ClassGenerator $classGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
+        array $array = array()
     ) {
     }
 

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Sales\Order;
 
 /**
@@ -52,8 +51,11 @@ namespace Magento\Tax\Model\Sales\Order;
  * @method int getHidden()
  * @method \Magento\Tax\Model\Sales\Order\Tax setHidden(int $value)
  */
-class Tax extends \Magento\Core\Model\AbstractModel
+class Tax extends \Magento\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Tax\Model\Resource\Sales\Order\Tax');

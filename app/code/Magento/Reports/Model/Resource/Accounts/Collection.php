@@ -36,20 +36,25 @@ namespace Magento\Reports\Model\Resource\Accounts;
 
 class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
 {
-
     /**
      * Join created_at and accounts fields
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
 
         $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
-        $this->addAttributeToFilter('created_at', array('from' => $fromDate, 'to' => $toDate, 'datetime' => true))
-             ->addExpressionAttributeToSelect('accounts', 'COUNT({{entity_id}})', array('entity_id'));
+        $this->addAttributeToFilter(
+            'created_at',
+            array('from' => $fromDate, 'to' => $toDate, 'datetime' => true)
+        )->addExpressionAttributeToSelect(
+            'accounts',
+            'COUNT({{entity_id}})',
+            array('entity_id')
+        );
 
         $this->getSelect()->having("{$this->_joinFields['accounts']['field']} > ?", 0);
 
@@ -61,12 +66,11 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
-        $this->_reset()
-             ->_joinFields($fromDate, $toDate);
+        $this->_reset()->_joinFields($fromDate, $toDate);
         return $this;
     }
 
@@ -74,7 +78,7 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      * Set store ids to final result
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {

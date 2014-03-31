@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\HTTP;
 
 /**
@@ -105,8 +104,14 @@ class Authentication
      */
     public function setAuthenticationFailed($realm)
     {
-        $this->response->setHeader('HTTP/1.1', '401 Unauthorized')
-            ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
-            ->setBody('<h1>401 Unauthorized</h1>');
+        $this->response->setHeader(
+            'HTTP/1.1',
+            '401 Unauthorized'
+        )->setHeader(
+            'WWW-Authenticate',
+            'Basic realm="' . $realm . '"'
+        )->setBody(
+            '<h1>401 Unauthorized</h1>'
+        );
     }
 }

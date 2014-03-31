@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Online;
 
 /**
  * Adminhtml customers online filter
@@ -31,38 +32,29 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Customer\Block\Adminhtml\Online;
-
 class Filter extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $form->addField('filter_value', 'select',
-                array(
-                    'name' => 'filter_value',
-                    'onchange' => 'this.form.submit()',
-                    'values' => array(
-                        array(
-                            'label' => __('All'),
-                            'value' => '',
-                        ),
-
-                        array(
-                            'label' => __('Customers Only'),
-                            'value' => 'filterCustomers',
-                        ),
-
-                        array(
-                            'label' => __('Visitors Only'),
-                            'value' => 'filterGuests',
-                        )
-                    ),
-                    'no_span' => true
-                )
+        $form->addField(
+            'filter_value',
+            'select',
+            array(
+                'name' => 'filter_value',
+                'onchange' => 'this.form.submit()',
+                'values' => array(
+                    array('label' => __('All'), 'value' => ''),
+                    array('label' => __('Customers Only'), 'value' => 'filterCustomers'),
+                    array('label' => __('Visitors Only'), 'value' => 'filterGuests')
+                ),
+                'no_span' => true
+            )
         );
 
         $form->setUseContainer(true);

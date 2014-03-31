@@ -29,8 +29,7 @@
  */
 namespace Magento\DesignEditor\Model\Config\Backend\File;
 
-class RequestData
-    implements \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface
+class RequestData implements \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface
 {
     /**
      * Retrieve uploaded file tmp name by path

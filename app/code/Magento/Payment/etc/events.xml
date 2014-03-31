@@ -23,12 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Event/etc/events.xsd">
     <event name="sales_order_save_before">
         <observer name="payment_sales_order_save_before" instance="Magento\Payment\Model\Observer" method="salesOrderBeforeSave" />
-    </event>
-    <event name="sales_order_payment_save_before">
-        <observer name="payment_before_save" instance="Magento\Payment\Model\Observer" method="beforeOrderPaymentSave" />
     </event>
     <event name="sales_order_status_unassign">
         <observer name="sales_order_status_update" instance="Magento\Payment\Model\Observer" method="updateOrderStatusForPaymentMethods" />

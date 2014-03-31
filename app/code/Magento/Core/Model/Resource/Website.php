@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Core Website Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
-class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Website extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,28 +47,29 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Core\Model\Resource\Website
+     * @return $this
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(array(
-            'field' => 'code',
-            'title' => __('Website with the same code')
-        ));
+        $this->_uniqueFields = array(array('field' => 'code', 'title' => __('Website with the same code')));
         return $this;
     }
 
     /**
      * Validate website code before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\Resource\Website
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $object->getCode())) {
-            throw new \Magento\Core\Exception(__('Website code may only contain letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'));
+            throw new \Magento\Model\Exception(
+                __(
+                    'Website code may only contain letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'
+                )
+            );
         }
 
         return parent::_beforeSave($object);
@@ -78,10 +78,10 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Website
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         if ($object->getIsDefault()) {
             $this->_getWriteAdapter()->update($this->getMainTable(), array('is_default' => 0));
@@ -94,43 +94,44 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Remove core configuration data after delete website
      *
-     * @param \Magento\Core\Model\AbstractModel $model
-     * @return \Magento\Core\Model\Resource\Website
+     * @param \Magento\Model\AbstractModel $model
+     * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $model)
+    protected function _afterDelete(\Magento\Model\AbstractModel $model)
     {
         $where = array(
-            'scope = ?'    => \Magento\Core\Model\ScopeInterface::SCOPE_WEBSITES,
+            'scope = ?' => \Magento\Core\Model\ScopeInterface::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId()
         );
 
         $this->_getWriteAdapter()->delete($this->getTable('core_config_data'), $where);
 
         return $this;
-
     }
 
     /**
      * Retrieve default stores select object
      * Select fields website_id, store_id
      *
-     * @param boolean $includeDefault include/exclude default admin website
+     * @param bool $includeDefault include/exclude default admin website
      * @return \Magento\DB\Select
      */
     public function getDefaultStoresSelect($includeDefault = false)
     {
-        $ifNull  = $this->_getReadAdapter()
-            ->getCheckSql('store_group_table.default_store_id IS NULL', '0', 'store_group_table.default_store_id');
-        $select = $this->_getReadAdapter()->select()
-            ->from(
-                array('website_table' => $this->getTable('core_website')),
-                array('website_id'))
-            ->joinLeft(
-                array('store_group_table' => $this->getTable('core_store_group')),
-                'website_table.website_id=store_group_table.website_id'
-                    . ' AND website_table.default_group_id = store_group_table.group_id',
-                array('store_id' => $ifNull)
-            );
+        $ifNull = $this->_getReadAdapter()->getCheckSql(
+            'store_group_table.default_store_id IS NULL',
+            '0',
+            'store_group_table.default_store_id'
+        );
+        $select = $this->_getReadAdapter()->select()->from(
+            array('website_table' => $this->getTable('core_website')),
+            array('website_id')
+        )->joinLeft(
+            array('store_group_table' => $this->getTable('core_store_group')),
+            'website_table.website_id=store_group_table.website_id' .
+            ' AND website_table.default_group_id = store_group_table.group_id',
+            array('store_id' => $ifNull)
+        );
         if (!$includeDefault) {
             $select->where('website_table.website_id <> ?', 0);
         }

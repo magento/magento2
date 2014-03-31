@@ -55,8 +55,11 @@ class SignatureTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
         }
         $this->assertEmpty(
             $errors,
-            sprintf('%d usages of the old translation method call were discovered: %s', count($errors),
-                implode("\n\n", $errors))
+            sprintf(
+                '%d usages of the old translation method call were discovered: %s',
+                count($errors),
+                implode("\n\n", $errors)
+            )
         );
     }
 }

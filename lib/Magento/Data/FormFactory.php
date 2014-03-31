@@ -50,10 +50,8 @@ class FormFactory
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        $instanceName = 'Magento\Data\Form'
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager, $instanceName = 'Magento\Data\Form')
+    {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }

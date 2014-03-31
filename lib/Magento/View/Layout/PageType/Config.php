@@ -34,7 +34,11 @@ class Config
      */
     protected $_pageTypes = null;
 
-    /** @var  \Magento\Config\DataInterface */
+    /**
+     * Data storage
+     *
+     * @var  \Magento\Config\DataInterface
+     */
     protected $_dataStorage;
 
     /**
@@ -42,16 +46,15 @@ class Config
      *
      * @param \Magento\Config\DataInterface $dataStorage
      */
-    public function __construct(
-        \Magento\Config\DataInterface $dataStorage
-    ) {
+    public function __construct(\Magento\Config\DataInterface $dataStorage)
+    {
         $this->_dataStorage = $dataStorage;
     }
 
     /**
      * Initialize page types list
      *
-     * @return \Magento\View\Layout\PageType\Config
+     * @return $this
      */
     protected function _initPageTypes()
     {
@@ -68,7 +71,7 @@ class Config
     /**
      * Retrieve available page types
      *
-     * @return array \Magento\Object[]
+     * @return \Magento\Object[]
      */
     public function getPageTypes()
     {

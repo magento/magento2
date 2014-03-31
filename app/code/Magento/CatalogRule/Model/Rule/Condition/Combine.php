@@ -56,29 +56,32 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()
-            ->loadAttributeOptions()
-            ->getAttributeOption();
+        $productAttributes = $this->_productFactory->create()->loadAttributeOptions()->getAttributeOption();
         $attributes = array();
         foreach ($productAttributes as $code => $label) {
             $attributes[] = array(
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code, 'label' => $label
+                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                'label' => $label
             );
         }
         $conditions = parent::getNewChildSelectOptions();
-        $conditions = array_merge_recursive($conditions, array(
+        $conditions = array_merge_recursive(
+            $conditions,
             array(
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
-                'label' => __('Conditions Combination')
-            ),
-            array(
-                'label' => __('Product Attribute'),
-                'value' => $attributes
-            ),
-        ));
+                array(
+                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
+                    'label' => __('Conditions Combination')
+                ),
+                array('label' => __('Product Attribute'), 'value' => $attributes)
+            )
+        );
         return $conditions;
     }
 
+    /**
+     * @param array $productCollection
+     * @return $this
+     */
     public function collectValidatedAttributes($productCollection)
     {
         foreach ($this->getConditions() as $condition) {

@@ -23,11 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block;
+
+use Magento\Catalog\Model\Product as ModelProduct;
 
 class Product extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_finalPrice = array();
 
     /**
@@ -51,9 +55,12 @@ class Product extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return ModelProduct
+     */
     public function getProduct()
     {
-        if (!$this->getData('product') instanceof \Magento\Catalog\Model\Product) {
+        if (!$this->getData('product') instanceof ModelProduct) {
             if ($this->getData('product')->getProductId()) {
                 $productId = $this->getData('product')->getProductId();
             }
@@ -67,11 +74,17 @@ class Product extends \Magento\View\Element\Template
         return $this->getData('product');
     }
 
+    /**
+     * @return float
+     */
     public function getPrice()
     {
         return $this->getProduct()->getPrice();
     }
 
+    /**
+     * @return float
+     */
     public function getFinalPrice()
     {
         if (!isset($this->_finalPrice[$this->getProduct()->getId()])) {
@@ -80,6 +93,10 @@ class Product extends \Magento\View\Element\Template
         return $this->_finalPrice[$this->getProduct()->getId()];
     }
 
+    /**
+     * @param ModelProduct $product
+     * @return string
+     */
     public function getPriceHtml($product)
     {
         $this->setTemplate('product/price.phtml');

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
 
 /**
@@ -39,15 +38,22 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
     public function testPrepareForm()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\View\DesignInterface')
-            ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-            ->setDefaultDesignTheme();
-        $objectManager->get('Magento\Core\Model\Registry')
-            ->register('design', $objectManager ->create('Magento\Core\Model\Design'));
-        $layout = $objectManager ->create('Magento\Core\Model\Layout');
+        $objectManager->get(
+            'Magento\View\DesignInterface'
+        )->setArea(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        )->setDefaultDesignTheme();
+        $objectManager->get(
+            'Magento\Registry'
+        )->register(
+            'design',
+            $objectManager->create('Magento\Core\Model\Design')
+        );
+        $layout = $objectManager->create('Magento\Core\Model\Layout');
         $block = $layout->addBlock('Magento\Backend\Block\System\Design\Edit\Tab\General');
         $prepareFormMethod = new \ReflectionMethod(
-            'Magento\Backend\Block\System\Design\Edit\Tab\General', '_prepareForm'
+            'Magento\Backend\Block\System\Design\Edit\Tab\General',
+            '_prepareForm'
         );
         $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);

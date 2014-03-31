@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model;
 
 /**
  * EAV Entity Attribute Data Factory
@@ -32,16 +32,21 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model;
-
 class AttributeDataFactory
 {
-    const OUTPUT_FORMAT_JSON    = 'json';
-    const OUTPUT_FORMAT_TEXT    = 'text';
-    const OUTPUT_FORMAT_HTML    = 'html';
-    const OUTPUT_FORMAT_PDF     = 'pdf';
+    const OUTPUT_FORMAT_JSON = 'json';
+
+    const OUTPUT_FORMAT_TEXT = 'text';
+
+    const OUTPUT_FORMAT_HTML = 'html';
+
+    const OUTPUT_FORMAT_PDF = 'pdf';
+
     const OUTPUT_FORMAT_ONELINE = 'oneline';
-    const OUTPUT_FORMAT_ARRAY   = 'array'; // available only for multiply attributes
+
+    const OUTPUT_FORMAT_ARRAY = 'array';
+
+    // available only for multiply attributes
 
     /**
      * Array of attribute data models by input type
@@ -75,10 +80,10 @@ class AttributeDataFactory
      * Set entity to data model (need for work)
      *
      * @param \Magento\Eav\Model\Attribute $attribute
-     * @param \Magento\Core\Model\AbstractModel $entity
+     * @param \Magento\Model\AbstractModel $entity
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
      */
-    public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Core\Model\AbstractModel $entity)
+    public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Model\AbstractModel $entity)
     {
         /* @var $dataModel \Magento\Eav\Model\Attribute\Data\AbstractData */
         $dataModelClass = $attribute->getDataModel();

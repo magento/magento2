@@ -26,7 +26,7 @@
 <?php $_giftMessage = false; ?>
 <?php if(!$this->getDontDisplayContainer()): ?>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('js/extra-options.js') ?>", function() {
+    head.js("<?php echo $this->getViewFileUrl('Magento_GiftMessage::extra-options.js') ?>", function() {
         jQuery('#checkoutSteps').extraOptions({additionalUrl: '<?php echo $this->getAdditionalUrl(); ?>'});
     });
 </script>
@@ -55,8 +55,8 @@
                 <div class="options-order-container" id="options-order-container-<?php echo $this->getEntity()->getId() ?>"></div>
                 <input type="hidden" name="giftoptions[<?php echo $this->getEntity()->getId() ?>][type]" value="quote" />
                 <?php if ($this->isMessagesAvailable()): ?>
-                    <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#allow-gift-messages-for-order-container"}}'><?php echo __('Gift Message') ?></a>
-                    <div id="allow-gift-messages-for-order-container" class="no-display">
+                    <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'><?php echo __('Gift Message') ?></a>
+                    <div id="allow-gift-messages-for-order-container" class="hidden">
                         <fieldset class="fieldset">
                             <input type="hidden" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]"  value="quote" />
                             <p><?php echo __('If you don\'t want to leave a gift message for the entire order, leave this box blank.') ?></p>
@@ -81,7 +81,7 @@
                         </fieldset>
                         <script type="text/javascript">
                             jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
-                                .add('#add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>').removeClass('no-display');
+                                .add('#add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
                         </script>
                     </div>
                <?php endif ?>
@@ -115,8 +115,8 @@
                          <div class="item options">
                              <div class="options-items-container" id="options-items-container-<?php echo $this->getEntity()->getId() ?>-<?php echo $_item->getId() ?>"></div>
                              <?php if ($this->isItemMessagesAvailable($_item)): ?>
-                             <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
-                             <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message no-display">
+                             <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                             <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message hidden">
                                  <fieldset class="fieldset">
                                      <p><?php echo __('You can leave a box blank if you don\'t wish to add a gift message for the item.') ?></p>
                                      <input type="hidden" name="giftmessage[<?php echo $_item->getId() ?>][type]" value="quote_item" >
@@ -148,7 +148,7 @@
             </dd>
             <script type="text/javascript">
                 jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
-                    .add('#add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>').removeClass('no-display');
+                    .add('#add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
             </script>
             <?php endif; ?>
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
@@ -186,8 +186,8 @@
                 <input type="hidden" name="giftoptions[<?php echo $this->getEntity()->getId() ?>][type]" value="quote_address" />
                 <?php if ($this->isMessagesAvailable()): ?>
                     <?php $_giftMessage = true; ?>
-                    <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
-                    <div id="gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>" class="block message no-display">
+                    <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                    <div id="gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>" class="block message hidden">
                         <fieldset class="fieldset">
                             <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for this address.') ?></p>
                             <input type="hidden" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]" value="quote_address" />
@@ -246,8 +246,8 @@
 
                              <?php if ($this->isItemMessagesAvailable($_item)): ?>
                              <?php $_giftMessage = true; ?>
-                                 <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
-                                 <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message no-display">
+                                 <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                                 <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message hidden">
                                      <fieldset class="fieldset">
                                         <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for the item.') ?></p>
                                          <input type="hidden" name="giftmessage[<?php echo $_item->getId() ?>][type]" value="quote_address_item" />

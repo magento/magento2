@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Config\Form\Field\FieldArray;
 
 /**
  * Backend system config array field renderer
@@ -31,10 +32,7 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\System\Config\Form\Field\FieldArray;
-
-abstract class AbstractFieldArray
-    extends \Magento\Backend\Block\System\Config\Form\Field
+abstract class AbstractFieldArray extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
      * Grid columns
@@ -71,11 +69,15 @@ abstract class AbstractFieldArray
      */
     protected $_isPreparedToRender = false;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::system/config/form/field/array.phtml';
 
     /**
      * Check if columns are defined, set template
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -83,7 +85,6 @@ abstract class AbstractFieldArray
             $this->_addButtonLabel = __('Add');
         }
         parent::_construct();
-        
     }
 
     /**
@@ -91,17 +92,18 @@ abstract class AbstractFieldArray
      *
      * @param string $name
      * @param array $params
+     * @return void
      */
     public function addColumn($name, $params)
     {
         $this->_columns[$name] = array(
-            'label'     => $this->_getParam($params, 'label', 'Column'),
-            'size'      => $this->_getParam($params, 'size', false),
-            'style'     => $this->_getParam($params, 'style'),
-            'class'     => $this->_getParam($params, 'class'),
-            'renderer'  => false,
+            'label' => $this->_getParam($params, 'label', 'Column'),
+            'size' => $this->_getParam($params, 'size', false),
+            'style' => $this->_getParam($params, 'style'),
+            'class' => $this->_getParam($params, 'class'),
+            'renderer' => false
         );
-        if ((!empty($params['renderer'])) && ($params['renderer'] instanceof \Magento\View\Element\AbstractBlock)) {
+        if (!empty($params['renderer']) && $params['renderer'] instanceof \Magento\View\Element\AbstractBlock) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
     }
@@ -111,8 +113,8 @@ abstract class AbstractFieldArray
      *
      * @param array $params
      * @param string $paramName
-     * @param mixed $defaultValue
-     * @return mixed
+     * @param string|bool $defaultValue
+     * @return string|bool
      */
     protected function _getParam($params, $paramName, $defaultValue = null)
     {
@@ -129,14 +131,16 @@ abstract class AbstractFieldArray
     {
         $this->setElement($element);
         $html = $this->_toHtml();
-        $this->_arrayRowsCache = null; // doh, the object is used as singleton!
+        $this->_arrayRowsCache = null;
+        // doh, the object is used as singleton!
         return $html;
     }
 
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Object
+     * @param \Magento\Object $row
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareArrayRow(\Magento\Object $row)
@@ -204,32 +208,53 @@ abstract class AbstractFieldArray
      *
      * @param string $columnName
      * @return string
+     * @throws \Exception
      */
     public function renderCellTemplate($columnName)
     {
         if (empty($this->_columns[$columnName])) {
             throw new \Exception('Wrong column name specified.');
         }
-        $column     = $this->_columns[$columnName];
-        $inputName  = $this->_getCellInputElementName($columnName);
+        $column = $this->_columns[$columnName];
+        $inputName = $this->_getCellInputElementName($columnName);
 
         if ($column['renderer']) {
-            return $column['renderer']->setInputName($inputName)
-                ->setInputId($this->_getCellInputElementId('#{_id}', $columnName))
-                ->setColumnName($columnName)
-                ->setColumn($column)
-                ->toHtml();
+            return $column['renderer']->setInputName(
+                $inputName
+            )->setInputId(
+                $this->_getCellInputElementId('#{_id}', $columnName)
+            )->setColumnName(
+                $columnName
+            )->setColumn(
+                $column
+            )->toHtml();
         }
 
-        return '<input type="text" id="' . $this->_getCellInputElementId('#{_id}', $columnName) .'"' .
-            ' name="' . $inputName . '" value="#{' . $columnName . '}" ' .
-            ($column['size'] ? 'size="' . $column['size'] . '"' : '') . ' class="' .
-            (isset($column['class']) ? $column['class'] : 'input-text') . '"'.
-            (isset($column['style']) ? ' style="'.$column['style'] . '"' : '') . '/>';
+        return '<input type="text" id="' . $this->_getCellInputElementId(
+            '#{_id}',
+            $columnName
+        ) .
+            '"' .
+            ' name="' .
+            $inputName .
+            '" value="#{' .
+            $columnName .
+            '}" ' .
+            ($column['size'] ? 'size="' .
+            $column['size'] .
+            '"' : '') .
+            ' class="' .
+            (isset(
+            $column['class']
+        ) ? $column['class'] : 'input-text') . '"' . (isset(
+            $column['style']
+        ) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
 
     /**
      * Prepare to render
+     *
+     * @return void
      */
     protected function _prepareToRender()
     {
@@ -240,6 +265,7 @@ abstract class AbstractFieldArray
      * Render block HTML
      *
      * @return string
+     * @throws \Exception
      */
     protected function _toHtml()
     {

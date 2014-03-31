@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session;
 
 /**
@@ -32,11 +31,15 @@ namespace Magento\Session;
 class SaveHandler implements SaveHandlerInterface
 {
     /**
+     * Session handler
+     *
      * @var \SessionHandler
      */
     protected $saveHandlerAdapter;
 
     /**
+     * Constructor
+     *
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param string $saveMethod
      * @param string $default
@@ -65,6 +68,8 @@ class SaveHandler implements SaveHandlerInterface
 
     /**
      * Close Session - free resources
+     *
+     * @return bool
      */
     public function close()
     {
@@ -86,7 +91,7 @@ class SaveHandler implements SaveHandlerInterface
      * Write Session - commit data to resource
      *
      * @param string $sessionId
-     * @param mixed $data
+     * @param string $data
      * @return bool
      */
     public function write($sessionId, $data)

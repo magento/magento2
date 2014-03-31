@@ -103,7 +103,7 @@ $map = array(
     'admin/customer/online' => 'Magento_Customer::online',
     'admin/system/design/editor' => 'Magento_DesignEditor::editor',
     'admin/system/config/downloadable' => 'Magento_Downloadable::downloadable',
-    'admin/system/config/google' => 'Magento_GoogleCheckout::google',
+    'admin/system/config/google' => 'Magento_GoogleAnalytic::google',
     'admin/catalog/googleshopping' => 'Magento_GoogleShopping::googleshopping',
     'admin/catalog/googleshopping/items' => 'Magento_GoogleShopping::items',
     'admin/catalog/googleshopping/types' => 'Magento_GoogleShopping::types',
@@ -164,11 +164,11 @@ $map = array(
     'admin/system/config/rss' => 'Magento_Rss::rss',
     'admin/sales/order/actions' => 'Magento_Sales::actions',
     'admin/sales/order/actions/edit' => 'Magento_Sales::actions_edit',
-    'admin/sales/billing_agreement/actions/manage' => 'Magento_Sales::actions_manage',
+    'admin/paypal/billing_agreement/actions/manage' => 'Magento_Paypal::actions_manage',
     'admin/sales/order/actions/view' => 'Magento_Sales::actions_view',
-    'admin/sales/billing_agreement' => 'Magento_Sales::billing_agreement',
-    'admin/sales/billing_agreement/actions' => 'Magento_Sales::billing_agreement_actions',
-    'admin/sales/billing_agreement/actions/view' => 'Magento_Sales::billing_agreement_actions_view',
+    'admin/paypal/billing_agreement' => 'Magento_Paypal::billing_agreement',
+    'admin/paypal/billing_agreement/actions' => 'Magento_Paypal::billing_agreement_actions',
+    'admin/paypal/billing_agreement/actions/view' => 'Magento_Paypal::billing_agreement_actions_view',
     'admin/sales/order/actions/cancel' => 'Magento_Sales::cancel',
     'admin/sales/order/actions/capture' => 'Magento_Sales::capture',
     'admin/sales/order/actions/comment' => 'Magento_Sales::comment',
@@ -180,7 +180,7 @@ $map = array(
     'admin/sales/order/actions/hold' => 'Magento_Sales::hold',
     'admin/sales/order/actions/invoice' => 'Magento_Sales::invoice',
     'admin/system/order_statuses' => 'Magento_Sales::order_statuses',
-    'admin/sales/recurring_profile' => 'Magento_Sales::recurring_profile',
+    'admin/sales/recurringPayment' => 'Magento_Sales::recurring_payment',
     'admin/sales/order/actions/reorder' => 'Magento_Sales::reorder',
     'admin/sales/order/actions/review_payment' => 'Magento_Sales::review_payment',
     'admin/sales' => 'Magento_Sales::sales',
@@ -194,7 +194,7 @@ $map = array(
     'admin/sales/transactions' => 'Magento_Sales::transactions',
     'admin/sales/transactions/fetch' => 'Magento_Sales::transactions_fetch',
     'admin/sales/order/actions/unhold' => 'Magento_Sales::unhold',
-    'admin/sales/billing_agreement/actions/use' => 'Magento_Sales::use',
+    'admin/sales/billing_agreement/actions/use' => 'Magento_Paypal::use',
     'admin/system/config/promo' => 'Magento_SalesRule::config_promo',
     'admin/promo/quote' => 'Magento_SalesRule::quote',
     'admin/system/config/carriers' => 'Magento_Shipping::carriers',
@@ -218,7 +218,7 @@ $map = array(
     'admin/xmlconnect/templates' => 'Magento_XmlConnect::templates',
     'admin/xmlconnect' => 'Magento_XmlConnect::xmlconnect',
     'admin/xmlconnect/queue' => 'Magento_XmlConnect::xmlconnect_queue',
-    'admin/system/config/facebook' => 'Social_Facebook::facebook',
+    'admin/system/config/facebook' => 'Social_Facebook::facebook'
 );
 
 $tableName = $installer->getTable('admin_rule');
@@ -226,9 +226,7 @@ $tableName = $installer->getTable('admin_rule');
 $connection = $installer->getConnection();
 
 $select = $connection->select();
-$select->from($tableName, array())
-    ->columns(array('resource_id' => 'resource_id'))
-    ->group('resource_id');
+$select->from($tableName, array())->columns(array('resource_id' => 'resource_id'))->group('resource_id');
 
 foreach ($connection->fetchCol($select) as $oldKey) {
     /**
@@ -243,4 +241,3 @@ foreach ($connection->fetchCol($select) as $oldKey) {
     $connection->update($tableName, array('resource_id' => $map[$oldKey]), array('resource_id = ?' => $oldKey));
 }
 $installer->endSetup();
-

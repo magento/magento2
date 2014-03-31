@@ -23,25 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Model\Resource\Order;
 
+use Magento\DB\Select;
 
 /**
  * Reports orders collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model\Resource\Order;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 {
     /**
      * Is live
      *
-     * @var boolean
+     * @var bool
      */
-    protected $_isLive   = false;
+    protected $_isLive = false;
 
     /**
      * Sales amount expression
@@ -63,9 +61,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
@@ -82,15 +80,15 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Resource\Helper $coreResourceHelper
+     * @param \Magento\DB\Helper $coreResourceHelper
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
-     * 
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -98,14 +96,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Resource\Helper $coreResourceHelper,
+        \Magento\DB\Helper $coreResourceHelper,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -118,7 +116,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         );
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_orderConfig = $orderConfig;
         $this->_reportOrderFactory = $reportOrderFactory;
     }
@@ -127,18 +125,18 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Check range for live mode
      *
      * @param unknown_type $range
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function checkIsLive($range)
     {
-        $this->_isLive = (bool)!$this->_coreStoreConfig->getConfig('sales/dashboard/use_aggregated_data');
+        $this->_isLive = (bool)(!$this->_coreStoreConfig->getConfig('sales/dashboard/use_aggregated_data'));
         return $this;
     }
 
     /**
      * Retrieve is live flag for rep
      *
-     * @return boolean
+     * @return bool
      */
     public function isLive()
     {
@@ -152,7 +150,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param mixed $customStart
      * @param mixed $customEnd
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function prepareSummary($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -175,22 +173,24 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     {
         if (is_null($this->_salesAmountExpression)) {
             $adapter = $this->getConnection();
-            $expressionTransferObject = new \Magento\Object(array(
-                'expression' => '%s - %s - %s - (%s - %s - %s)',
-                'arguments' => array(
-                    $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
-                    $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
-                    $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
-                    $adapter->getIfNullSql('main_table.base_total_refunded', 0),
-                    $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
-                    $adapter->getIfNullSql('main_table.base_shipping_refunded', 0),
+            $expressionTransferObject = new \Magento\Object(
+                array(
+                    'expression' => '%s - %s - %s - (%s - %s - %s)',
+                    'arguments' => array(
+                        $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
+                        $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
+                        $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
+                        $adapter->getIfNullSql('main_table.base_total_refunded', 0),
+                        $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
+                        $adapter->getIfNullSql('main_table.base_shipping_refunded', 0)
+                    )
                 )
-            ));
+            );
 
-            $this->_eventManager->dispatch('sales_prepare_amount_expression', array(
-                'collection' => $this,
-                'expression_object' => $expressionTransferObject,
-            ));
+            $this->_eventManager->dispatch(
+                'sales_prepare_amount_expression',
+                array('collection' => $this, 'expression_object' => $expressionTransferObject)
+            );
             $this->_salesAmountExpression = vsprintf(
                 $expressionTransferObject->getExpression(),
                 $expressionTransferObject->getArguments()
@@ -207,7 +207,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param mixed $customStart
      * @param mixed $customEnd
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _prepareSummaryLive($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -221,36 +221,41 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
         $expression = $this->_getSalesAmountExpression();
         if ($isFilter == 0) {
-            $this->getSelect()->columns(array(
-                'revenue' => new \Zend_Db_Expr(
-                    sprintf('SUM((%s) * %s)', $expression,
-                        $adapter->getIfNullSql('main_table.base_to_global_rate', 0)
+            $this->getSelect()->columns(
+                array(
+                    'revenue' => new \Zend_Db_Expr(
+                        sprintf(
+                            'SUM((%s) * %s)',
+                            $expression,
+                            $adapter->getIfNullSql('main_table.base_to_global_rate', 0)
+                        )
                     )
                 )
-            ));
+            );
         } else {
-            $this->getSelect()->columns(array(
-                'revenue' => new \Zend_Db_Expr(sprintf('SUM(%s)', $expression))
-            ));
+            $this->getSelect()->columns(array('revenue' => new \Zend_Db_Expr(sprintf('SUM(%s)', $expression))));
         }
 
         $dateRange = $this->getDateRange($range, $customStart, $customEnd);
 
         $tzRangeOffsetExpression = $this->_getTZRangeOffsetExpression(
-            $range, 'created_at', $dateRange['from'], $dateRange['to']
+            $range,
+            'created_at',
+            $dateRange['from'],
+            $dateRange['to']
         );
 
-        $this->getSelect()
-            ->columns(array(
-                'quantity' => 'COUNT(main_table.entity_id)',
-                'range' => $tzRangeOffsetExpression,
-            ))
-            ->where('main_table.state NOT IN (?)', array(
-                    \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
-                    \Magento\Sales\Model\Order::STATE_NEW)
-            )
-            ->order('range', \Zend_Db_Select::SQL_ASC)
-            ->group($tzRangeOffsetExpression);
+        $this->getSelect()->columns(
+            array('quantity' => 'COUNT(main_table.entity_id)', 'range' => $tzRangeOffsetExpression)
+        )->where(
+            'main_table.state NOT IN (?)',
+            array(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW)
+        )->order(
+            'range',
+            \Zend_Db_Select::SQL_ASC
+        )->group(
+            $tzRangeOffsetExpression
+        );
 
         $this->addFieldToFilter('created_at', $dateRange);
 
@@ -263,7 +268,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $range
      * @param mixed $customStart
      * @param mixed $customEnd
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _prepareSummaryAggregated($range, $customStart, $customEnd)
     {
@@ -275,15 +280,19 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $rangePeriod = $this->_getRangeExpressionForAttribute($range, 'main_table.period');
 
         $tableName = $this->getConnection()->quoteIdentifier('main_table.period');
-        $rangePeriod2 = str_replace($tableName, "MIN($tableName)", $rangePeriod);
+        $rangePeriod2 = str_replace($tableName, "MIN({$tableName})", $rangePeriod);
 
-        $this->getSelect()->columns(array(
-            'revenue'  => 'SUM(main_table.total_revenue_amount)',
-            'quantity' => 'SUM(main_table.orders_count)',
-            'range' => $rangePeriod2,
-        ))
-            ->order('range')
-            ->group($rangePeriod);
+        $this->getSelect()->columns(
+            array(
+                'revenue' => 'SUM(main_table.total_revenue_amount)',
+                'quantity' => 'SUM(main_table.orders_count)',
+                'range' => $rangePeriod2
+            )
+        )->order(
+            'range'
+        )->group(
+            $rangePeriod
+        );
 
         $this->getSelect()->where(
             $this->_getConditionSql('main_table.period', $this->getDateRange($range, $customStart, $customEnd))
@@ -307,13 +316,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     protected function _getRangeExpression($range)
     {
-        switch ($range)
-        {
+        switch ($range) {
             case '24h':
-                $expression = $this->getConnection()->getConcatSql(array(
-                    $this->getConnection()->getDateFormatSql('{{attribute}}', '%Y-%m-%d %H:'),
-                    $this->getConnection()->quote('00')
-                ));
+                $expression = $this->getConnection()->getConcatSql(
+                    array(
+                        $this->getConnection()->getDateFormatSql('{{attribute}}', '%Y-%m-%d %H:'),
+                        $this->getConnection()->quote('00')
+                    )
+                );
                 break;
             case '7d':
             case '1m':
@@ -356,9 +366,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     {
         return str_replace(
             '{{attribute}}',
-            $this->_reportOrderFactory
-                ->create()
-                ->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
+            $this->_reportOrderFactory->create()->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
             $this->_getRangeExpression($range)
         );
     }
@@ -375,11 +383,11 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
         if (null == $tzTo) {
-            $tzTo = $this->_locale->storeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
+            $tzTo = $this->_localeDate->scopeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
         }
         $adapter = $this->getConnection();
         $expression = $this->_getRangeExpression($range);
-        $attribute  = $adapter->quoteIdentifier($attribute);
+        $attribute = $adapter->quoteIdentifier($attribute);
         $periodExpr = $adapter->getDateAddSql($attribute, $tzTo, \Magento\DB\Adapter\AdapterInterface::INTERVAL_HOUR);
 
         return str_replace('{{attribute}}', $periodExpr, $expression);
@@ -391,12 +399,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $range
      * @param string $customStart
      * @param string $customEnd
-     * @param boolean $returnObjects
+     * @param bool $returnObjects
      * @return array
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
-        $dateEnd   = $this->_locale->date();
+        $dateEnd = $this->_localeDate->date();
         $dateStart = clone $dateEnd;
 
         // go to the end of a day
@@ -408,10 +416,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $dateStart->setMinute(0);
         $dateStart->setSecond(0);
 
-        switch ($range)
-        {
+        switch ($range) {
             case '24h':
-                $dateEnd = $this->_locale->date();
+                $dateEnd = $this->_localeDate->date();
                 $dateEnd->addHour(1);
                 $dateStart = clone $dateEnd;
                 $dateStart->subDay(1);
@@ -429,7 +436,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
             case 'custom':
                 $dateStart = $customStart ? $customStart : $dateEnd;
-                $dateEnd   = $customEnd ? $customEnd : $dateEnd;
+                $dateEnd = $customEnd ? $customEnd : $dateEnd;
                 break;
 
             case '1y':
@@ -458,7 +465,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add item count expression
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addItemCountExpr()
     {
@@ -470,7 +477,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function calculateTotals($isFilter = 0)
     {
@@ -487,7 +494,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals live report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _calculateTotalsLive($isFilter = 0)
     {
@@ -496,8 +503,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
         $adapter = $this->getConnection();
 
-        $baseTaxInvoiced      = $adapter->getIfNullSql('main_table.base_tax_invoiced', 0);
-        $baseTaxRefunded      = $adapter->getIfNullSql('main_table.base_tax_refunded', 0);
+        $baseTaxInvoiced = $adapter->getIfNullSql('main_table.base_tax_invoiced', 0);
+        $baseTaxRefunded = $adapter->getIfNullSql('main_table.base_tax_refunded', 0);
         $baseShippingInvoiced = $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0);
         $baseShippingRefunded = $adapter->getIfNullSql('main_table.base_shipping_refunded', 0);
 
@@ -509,28 +516,27 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $rateExp = $adapter->getIfNullSql('main_table.base_to_global_rate', 0);
             $this->getSelect()->columns(
                 array(
-                    'revenue'  => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $revenueExp, $rateExp)),
-                    'tax'      => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $taxExp, $rateExp)),
+                    'revenue' => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $revenueExp, $rateExp)),
+                    'tax' => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $taxExp, $rateExp)),
                     'shipping' => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $shippingExp, $rateExp))
                 )
             );
         } else {
             $this->getSelect()->columns(
                 array(
-                    'revenue'  => new \Zend_Db_Expr(sprintf('SUM(%s)', $revenueExp)),
-                    'tax'      => new \Zend_Db_Expr(sprintf('SUM(%s)', $taxExp)),
+                    'revenue' => new \Zend_Db_Expr(sprintf('SUM(%s)', $revenueExp)),
+                    'tax' => new \Zend_Db_Expr(sprintf('SUM(%s)', $taxExp)),
                     'shipping' => new \Zend_Db_Expr(sprintf('SUM(%s)', $shippingExp))
                 )
             );
         }
 
-        $this->getSelect()->columns(array(
-            'quantity' => 'COUNT(main_table.entity_id)'
-        ))
-            ->where('main_table.state NOT IN (?)', array(
-                    \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
-                    \Magento\Sales\Model\Order::STATE_NEW)
-            );
+        $this->getSelect()->columns(
+            array('quantity' => 'COUNT(main_table.entity_id)')
+        )->where(
+            'main_table.state NOT IN (?)',
+            array(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW)
+        );
 
         return $this;
     }
@@ -539,19 +545,21 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals aggregated report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _calculateTotalsAggregated($isFilter = 0)
     {
         $this->setMainTable('sales_order_aggregated_created');
         $this->removeAllFieldsFromSelect();
 
-        $this->getSelect()->columns(array(
-            'revenue'  => 'SUM(main_table.total_revenue_amount)',
-            'tax'      => 'SUM(main_table.total_tax_amount_actual)',
-            'shipping' => 'SUM(main_table.total_shipping_amount_actual)',
-            'quantity' => 'SUM(orders_count)',
-        ));
+        $this->getSelect()->columns(
+            array(
+                'revenue' => 'SUM(main_table.total_revenue_amount)',
+                'tax' => 'SUM(main_table.total_tax_amount_actual)',
+                'shipping' => 'SUM(main_table.total_shipping_amount_actual)',
+                'quantity' => 'SUM(orders_count)'
+            )
+        );
 
         $statuses = $this->_orderConfig->getStateStatuses(\Magento\Sales\Model\Order::STATE_CANCELED);
 
@@ -568,7 +576,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate lifitime sales
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function calculateSales($isFilter = 0)
     {
@@ -585,14 +593,15 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $averageExpr = $adapter->getCheckSql(
                 'SUM(main_table.orders_count) > 0',
                 'SUM(main_table.total_revenue_amount)/SUM(main_table.orders_count)',
-                0);
-            $this->getSelect()->columns(array(
-                'lifetime' => 'SUM(main_table.total_revenue_amount)',
-                'average'  => $averageExpr
-            ));
+                0
+            );
+            $this->getSelect()->columns(
+                array('lifetime' => 'SUM(main_table.total_revenue_amount)', 'average' => $averageExpr)
+            );
 
             if (!$isFilter) {
-                $this->addFieldToFilter('store_id',
+                $this->addFieldToFilter(
+                    'store_id',
                     array('eq' => $this->_storeManager->getStore(\Magento\Core\Model\Store::ADMIN_CODE)->getId())
                 );
             }
@@ -607,16 +616,15 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 $expr = '(' . $expr . ') * main_table.base_to_global_rate';
             }
 
-            $this->getSelect()
-                ->columns(array(
-                    'lifetime' => "SUM({$expr})",
-                    'average'  => "AVG({$expr})"
-                ))
-                ->where('main_table.status NOT IN(?)', $statuses)
-                ->where('main_table.state NOT IN(?)', array(
-                        \Magento\Sales\Model\Order::STATE_NEW,
-                        \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)
-                );
+            $this->getSelect()->columns(
+                array('lifetime' => "SUM({$expr})", 'average' => "AVG({$expr})")
+            )->where(
+                'main_table.status NOT IN(?)',
+                $statuses
+            )->where(
+                'main_table.state NOT IN(?)',
+                array(\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)
+            );
         }
         return $this;
     }
@@ -626,20 +634,23 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
-        $this->_reset()
-            ->addFieldToFilter('created_at', array('from' => $fromDate, 'to' => $toDate))
-            ->addFieldToFilter('state', array('neq' => \Magento\Sales\Model\Order::STATE_CANCELED))
-            ->getSelect()
-            ->columns(array('orders' => 'COUNT(DISTINCT(main_table.entity_id))'))
-            ->group('entity_id');
-
-        $this->getSelect()->columns(array(
-                'items' => 'SUM(main_table.total_qty_ordered)')
+        $this->_reset()->addFieldToFilter(
+            'created_at',
+            array('from' => $fromDate, 'to' => $toDate)
+        )->addFieldToFilter(
+            'state',
+            array('neq' => \Magento\Sales\Model\Order::STATE_CANCELED)
+        )->getSelect()->columns(
+            array('orders' => 'COUNT(DISTINCT(main_table.entity_id))')
+        )->group(
+            'entity_id'
         );
+
+        $this->getSelect()->columns(array('items' => 'SUM(main_table.total_qty_ordered)'));
 
         return $this;
     }
@@ -648,7 +659,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Set store filter collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
@@ -659,33 +670,37 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $baseDiscountInvoiced = $adapter->getIfNullSql('main_table.base_discount_invoiced', 0);
         $baseTotalInvocedCost = $adapter->getIfNullSql('main_table.base_total_invoiced_cost', 0);
         if ($storeIds) {
-            $this->getSelect()->columns(array(
-                'subtotal'  => 'SUM(main_table.base_subtotal)',
-                'tax'       => 'SUM(main_table.base_tax_amount)',
-                'shipping'  => 'SUM(main_table.base_shipping_amount)',
-                'discount'  => 'SUM(main_table.base_discount_amount)',
-                'total'     => 'SUM(main_table.base_grand_total)',
-                'invoiced'  => 'SUM(main_table.base_total_paid)',
-                'refunded'  => 'SUM(main_table.base_total_refunded)',
-                'profit'    => "SUM($baseSubtotalInvoiced) "
-                . "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) "
-                . "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})"
-            ));
+            $this->getSelect()->columns(
+                array(
+                    'subtotal' => 'SUM(main_table.base_subtotal)',
+                    'tax' => 'SUM(main_table.base_tax_amount)',
+                    'shipping' => 'SUM(main_table.base_shipping_amount)',
+                    'discount' => 'SUM(main_table.base_discount_amount)',
+                    'total' => 'SUM(main_table.base_grand_total)',
+                    'invoiced' => 'SUM(main_table.base_total_paid)',
+                    'refunded' => 'SUM(main_table.base_total_refunded)',
+                    'profit' => "SUM({$baseSubtotalInvoiced}) " .
+                    "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) " .
+                    "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})"
+                )
+            );
         } else {
-            $this->getSelect()->columns(array(
-                'subtotal'  => 'SUM(main_table.base_subtotal * main_table.base_to_global_rate)',
-                'tax'       => 'SUM(main_table.base_tax_amount * main_table.base_to_global_rate)',
-                'shipping'  => 'SUM(main_table.base_shipping_amount * main_table.base_to_global_rate)',
-                'discount'  => 'SUM(main_table.base_discount_amount * main_table.base_to_global_rate)',
-                'total'     => 'SUM(main_table.base_grand_total * main_table.base_to_global_rate)',
-                'invoiced'  => 'SUM(main_table.base_total_paid * main_table.base_to_global_rate)',
-                'refunded'  => 'SUM(main_table.base_total_refunded * main_table.base_to_global_rate)',
-                'profit'    => "SUM({$baseSubtotalInvoiced} *  main_table.base_to_global_rate) "
-                . "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) "
-                . "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) "
-                . "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) "
-                . "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)"
-            ));
+            $this->getSelect()->columns(
+                array(
+                    'subtotal' => 'SUM(main_table.base_subtotal * main_table.base_to_global_rate)',
+                    'tax' => 'SUM(main_table.base_tax_amount * main_table.base_to_global_rate)',
+                    'shipping' => 'SUM(main_table.base_shipping_amount * main_table.base_to_global_rate)',
+                    'discount' => 'SUM(main_table.base_discount_amount * main_table.base_to_global_rate)',
+                    'total' => 'SUM(main_table.base_grand_total * main_table.base_to_global_rate)',
+                    'invoiced' => 'SUM(main_table.base_total_paid * main_table.base_to_global_rate)',
+                    'refunded' => 'SUM(main_table.base_total_refunded * main_table.base_to_global_rate)',
+                    'profit' => "SUM({$baseSubtotalInvoiced} *  main_table.base_to_global_rate) " .
+                    "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) " .
+                    "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) " .
+                    "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) " .
+                    "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)"
+                )
+            );
         }
 
         return $this;
@@ -694,13 +709,11 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add group By customer attribute
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function groupByCustomer()
     {
-        $this->getSelect()
-            ->where('main_table.customer_id IS NOT NULL')
-            ->group('main_table.customer_id');
+        $this->getSelect()->where('main_table.customer_id IS NOT NULL')->group('main_table.customer_id');
         return $this;
     }
 
@@ -708,11 +721,11 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Join Customer Name (concat)
      *
      * @param string $alias
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function joinCustomerName($alias = 'name')
     {
-        $fields      = array('main_table.customer_firstname', 'main_table.customer_lastname');
+        $fields = array('main_table.customer_firstname', 'main_table.customer_lastname');
         $fieldConcat = $this->getConnection()->getConcatSql($fields, ' ');
         $this->getSelect()->columns(array($alias => $fieldConcat));
         return $this;
@@ -721,13 +734,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add Order count field to select
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addOrdersCount()
     {
         $this->addFieldToFilter('state', array('neq' => \Magento\Sales\Model\Order::STATE_CANCELED));
-        $this->getSelect()
-            ->columns(array('orders_count' => 'COUNT(main_table.entity_id)'));
+        $this->getSelect()->columns(array('orders_count' => 'COUNT(main_table.entity_id)'));
 
         return $this;
     }
@@ -735,19 +747,17 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add revenue
      *
-     * @param boolean $convertCurrency
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param bool $convertCurrency
+     * @return $this
      */
     public function addRevenueToSelect($convertCurrency = false)
     {
         if ($convertCurrency) {
-            $this->getSelect()->columns(array(
-                'revenue' => '(main_table.base_grand_total * main_table.base_to_global_rate)'
-            ));
+            $this->getSelect()->columns(
+                array('revenue' => '(main_table.base_grand_total * main_table.base_to_global_rate)')
+            );
         } else {
-            $this->getSelect()->columns(array(
-                'revenue' => 'base_grand_total'
-            ));
+            $this->getSelect()->columns(array('revenue' => 'base_grand_total'));
         }
 
         return $this;
@@ -757,7 +767,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Add summary average totals
      *
      * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addSumAvgTotals($storeId = 0)
     {
@@ -769,16 +779,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         /**
          * calculate average and total amount
          */
-        $expr = ($storeId == 0)
-            ? "(main_table.base_subtotal -
-            {$baseSubtotalRefunded} - {$baseSubtotalCanceled} - ABS(main_table.base_discount_amount) -
-            {$baseDiscountCanceled}) * main_table.base_to_global_rate"
-            : "main_table.base_subtotal - {$baseSubtotalCanceled} - {$baseSubtotalRefunded} -
-            ABS(main_table.base_discount_amount) - {$baseDiscountCanceled}";
+        $expr = $storeId ==
+            0 ? "(main_table.base_subtotal -\n            {$baseSubtotalRefunded} - {$baseSubtotalCanceled} - ABS(main_table.base_discount_amount) -\n            {$baseDiscountCanceled}) * main_table.base_to_global_rate" : "main_table.base_subtotal - {$baseSubtotalCanceled} - {$baseSubtotalRefunded} -\n            ABS(main_table.base_discount_amount) - {$baseDiscountCanceled}";
 
-        $this->getSelect()
-            ->columns(array('orders_avg_amount' => "AVG({$expr})"))
-            ->columns(array('orders_sum_amount' => "SUM({$expr})"));
+        $this->getSelect()->columns(
+            array('orders_avg_amount' => "AVG({$expr})")
+        )->columns(
+            array('orders_sum_amount' => "SUM({$expr})")
+        );
 
         return $this;
     }
@@ -787,7 +795,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Sort order by total amount
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function orderByTotalAmount($dir = self::SORT_ORDER_DESC)
     {
@@ -798,8 +806,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Order by orders count
      *
-     * @param unknown_type $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param string $dir
+     * @return $this
      */
     public function orderByOrdersCount($dir = self::SORT_ORDER_DESC)
     {
@@ -810,8 +818,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Order by customer registration
      *
-     * @param unknown_type $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param string $dir
+     * @return $this
      */
     public function orderByCustomerRegistration($dir = self::SORT_ORDER_DESC)
     {
@@ -823,7 +831,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Sort order by order created_at date
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function orderByCreatedAt($dir = self::SORT_ORDER_DESC)
     {
@@ -834,7 +842,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Get select count sql
      *
-     * @return unknown
+     * @return Select
      */
     public function getSelectCountSql()
     {
@@ -853,7 +861,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Initialize initial fields to select
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -865,7 +873,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Add period filter by created_at attribute
      *
      * @param string $period
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addCreateAtPeriodFilter($period)
     {
@@ -879,10 +887,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $fieldToFilter = 'period';
         }
 
-        $this->addFieldToFilter($fieldToFilter, array(
-            'from'  => $from->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
-            'to'    => $to->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
-        ));
+        $this->addFieldToFilter(
+            $fieldToFilter,
+            array(
+                'from' => $from->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
+                'to' => $to->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+            )
+        );
 
         return $this;
     }

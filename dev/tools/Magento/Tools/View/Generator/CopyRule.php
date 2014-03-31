@@ -85,20 +85,16 @@ class CopyRule
         /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($this->_themes as $theme) {
             $area = $theme->getArea();
-            $nonModularLocations = $this->_fallbackRule->getPatternDirs(array(
-                'area'      => $area,
-                'theme'     => $theme,
-            ));
-            $modularLocations = $this->_fallbackRule->getPatternDirs(array(
-                'area'      => $area,
-                'theme'     => $theme,
-                'namespace' => $this->_composePlaceholder('namespace'),
-                'module'    => $this->_composePlaceholder('module'),
-            ));
-            $allDirPatterns = array_merge(
-                array_reverse($modularLocations),
-                array_reverse($nonModularLocations)
+            $nonModularLocations = $this->_fallbackRule->getPatternDirs(array('area' => $area, 'theme' => $theme));
+            $modularLocations = $this->_fallbackRule->getPatternDirs(
+                array(
+                    'area' => $area,
+                    'theme' => $theme,
+                    'namespace' => $this->_composePlaceholder('namespace'),
+                    'module' => $this->_composePlaceholder('module')
+                )
             );
+            $allDirPatterns = array_merge(array_reverse($modularLocations), array_reverse($nonModularLocations));
             foreach ($allDirPatterns as $pattern) {
                 foreach ($this->_getMatchingDirs($pattern) as $srcDir) {
                     $paramsFromDir = $this->_parsePlaceholders($srcDir, $pattern);
@@ -115,10 +111,7 @@ class CopyRule
                         'module' => $module
                     );
 
-                    $result[] = array(
-                        'source' => $srcDir,
-                        'destinationContext' => $destinationContext,
-                    );
+                    $result[] = array('source' => $srcDir, 'destinationContext' => $destinationContext);
                 }
             }
         }
@@ -155,10 +148,11 @@ class CopyRule
             $paths = $directoryHandler->search($patternTrailing, $patternBaseDir);
         } else {
             // pattern is already a valid path containing no placeholders
-            $paths = array($dirPattern);
+            $paths = array($directoryHandler->getRelativePath($dirPattern));
         }
         $result = array();
         foreach ($paths as $path) {
+            $path = $directoryHandler->getRelativePath($path);
             if ($directoryHandler->isDirectory($path)) {
                 $result[] = $directoryHandler->getAbsolutePath($path);
             }

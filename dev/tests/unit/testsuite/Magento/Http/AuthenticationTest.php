@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Http;
 
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
@@ -49,42 +48,51 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function getCredentialsDataProvider()
     {
-        $login    = 'login';
+        $login = 'login';
         $password = 'password';
-        $header   = 'Basic bG9naW46cGFzc3dvcmQ=';
+        $header = 'Basic bG9naW46cGFzc3dvcmQ=';
 
-        $anotherLogin    = 'another_login';
+        $anotherLogin = 'another_login';
         $anotherPassword = 'another_password';
-        $anotherHeader   = 'Basic YW5vdGhlcl9sb2dpbjphbm90aGVyX3Bhc3N3b3Jk';
+        $anotherHeader = 'Basic YW5vdGhlcl9sb2dpbjphbm90aGVyX3Bhc3N3b3Jk';
 
         return array(
             array(array(), '', ''),
             array(array('REDIRECT_HTTP_AUTHORIZATION' => $header), $login, $password),
             array(array('HTTP_AUTHORIZATION' => $header), $login, $password),
             array(array('Authorization' => $header), $login, $password),
-            array(array(
+            array(
+                array(
                     'REDIRECT_HTTP_AUTHORIZATION' => $header,
                     'PHP_AUTH_USER' => $anotherLogin,
                     'PHP_AUTH_PW' => $anotherPassword
-                ), $anotherLogin, $anotherPassword
-            ),
-            array(array(
-                    'REDIRECT_HTTP_AUTHORIZATION' => $header,
-                    'PHP_AUTH_USER' => $anotherLogin,
-                    'PHP_AUTH_PW' => $anotherPassword
-                ), $anotherLogin, $anotherPassword
+                ),
+                $anotherLogin,
+                $anotherPassword
             ),
             array(
-                array('REDIRECT_HTTP_AUTHORIZATION' => $header, 'HTTP_AUTHORIZATION' => $anotherHeader,),
-                $anotherLogin, $anotherPassword
+                array(
+                    'REDIRECT_HTTP_AUTHORIZATION' => $header,
+                    'PHP_AUTH_USER' => $anotherLogin,
+                    'PHP_AUTH_PW' => $anotherPassword
+                ),
+                $anotherLogin,
+                $anotherPassword
             ),
+            array(
+                array('REDIRECT_HTTP_AUTHORIZATION' => $header, 'HTTP_AUTHORIZATION' => $anotherHeader),
+                $anotherLogin,
+                $anotherPassword
+            )
         );
     }
 
     public function testSetAuthenticationFailed()
     {
-        $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);;
-        $response = new \Magento\App\Response\Http();
+        $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
+        $cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
+        $response = new \Magento\App\Response\Http($cookieMock, $contextMock);
         $authentication = new \Magento\HTTP\Authentication($request, $response);
         $realm = uniqid();
         $response->headersSentThrowsException = false;
@@ -93,7 +101,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey(0, $headers);
         $this->assertEquals('401 Unauthorized', $headers[0]['value']);
         $this->assertArrayHasKey(1, $headers);
-        $this->assertContains('realm="' . $realm .'"', $headers[1]['value']);
+        $this->assertContains('realm="' . $realm . '"', $headers[1]['value']);
         $this->assertContains('401', $response->getBody());
     }
 }

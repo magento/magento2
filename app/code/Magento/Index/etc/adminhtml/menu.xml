@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
     <menu>
         <add id="Magento_Index::system_index" title="Index Management" module="Magento_Index" sortOrder="20" parent="Magento_Backend::system_tools" action="adminhtml/process/list" resource="Magento_Index::index"/>
     </menu>

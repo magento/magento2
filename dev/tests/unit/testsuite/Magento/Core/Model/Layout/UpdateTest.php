@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Layout;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase
@@ -38,28 +37,39 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         $resourceModel = $this->getMock(
             'Magento\Core\Model\Resource\Layout\Update',
-            array('__wakeup', 'formatDate', 'getIdFieldName', 'beginTransaction', 'save', 'addCommitCallback',
-                'commit'),
+            array(
+                '__wakeup',
+                'formatDate',
+                'getIdFieldName',
+                'beginTransaction',
+                'save',
+                'addCommitCallback',
+                'commit'
+            ),
             array(),
             '',
             false
         );
-        $resourceModel->expects($this->once())
-            ->method('addCommitCallback')
-            ->will($this->returnSelf());
+        $resourceModel->expects($this->once())->method('addCommitCallback')->will($this->returnSelf());
         $dateTime = $this->getMock('\Magento\Stdlib\DateTime', array(), array());
-        $dateTime->expects($this->once())
-            ->method('formatDate')
-            ->with($this->isType('int'))
-            ->will($this->returnValue(self::TEST_FORMATTED_TIME));
+        $dateTime->expects(
+            $this->once()
+        )->method(
+            'formatDate'
+        )->with(
+            $this->isType('int')
+        )->will(
+            $this->returnValue(self::TEST_FORMATTED_TIME)
+        );
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Core\Model\Layout\Update */
-        $model = $helper->getObject('Magento\Core\Model\Layout\Update', array(
-            'resource' => $resourceModel,
-            'dateTime' => $dateTime
-        ));
-        $model->setId(0); // set any data to set _hasDataChanges flag
+        $model = $helper->getObject(
+            'Magento\Core\Model\Layout\Update',
+            array('resource' => $resourceModel, 'dateTime' => $dateTime)
+        );
+        $model->setId(0);
+        // set any data to set _hasDataChanges flag
         $model->save();
 
         $this->assertEquals(self::TEST_FORMATTED_TIME, $model->getUpdatedAt());

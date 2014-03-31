@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Log\Model;
 
 /**
@@ -38,11 +37,13 @@ namespace Magento\Log\Model;
  * @method int getStoreId()
  * @method \Magento\Log\Model\Visitor setStoreId(int $value)
  */
-class Visitor extends \Magento\Core\Model\AbstractModel
+class Visitor extends \Magento\Model\AbstractModel
 {
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
     const VISITOR_TYPE_CUSTOMER = 'c';
-    const VISITOR_TYPE_VISITOR  = 'v';
+
+    const VISITOR_TYPE_VISITOR = 'v';
 
     /**
      * @var bool
@@ -89,11 +90,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $_quoteFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $_customerFactory;
-
-    /**
      * @var \Magento\HTTP\Header
      */
     protected $_httpHeader;
@@ -114,10 +110,9 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -126,17 +121,17 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param string[] $ignoredUserAgents
+     * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -145,14 +140,14 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Module\Manager $moduleManager,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $ignoredUserAgents = array(),
         array $ignores = array(),
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_customerFactory = $customerFactory;
         $this->_quoteFactory = $quoteFactory;
         $this->_session = $session;
         $this->_storeManager = $storeManager;
@@ -169,6 +164,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
 
     /**
      * Object initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -192,25 +189,38 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Skip request logging
+     *
+     * @param bool $skipRequestLogging
+     * @return void
+     */
+    public function setSkipRequestLogging($skipRequestLogging)
+    {
+        $this->_skipRequestLogging = (bool)$skipRequestLogging;
+    }
+
+    /**
      * Initialize visitor information from server data
      *
-     * @return \Magento\Log\Model\Visitor
+     * @return $this
      */
     public function initServerData()
     {
         $clean = true;
-        $this->addData(array(
-            'server_addr'           => $this->_serverAddress->getServerAddress(true),
-            'remote_addr'           => $this->_remoteAddress->getRemoteAddress(true),
-            'http_secure'           => $this->_storeManager->getStore()->isCurrentlySecure(),
-            'http_host'             => $this->_httpHeader->getHttpHost($clean),
-            'http_user_agent'       => $this->_httpHeader->getHttpUserAgent($clean),
-            'http_accept_language'  => $this->_httpHeader->getHttpAcceptLanguage($clean),
-            'http_accept_charset'   => $this->_httpHeader->getHttpAcceptCharset($clean),
-            'request_uri'           => $this->_httpHeader->getRequestUri($clean),
-            'session_id'            => $this->_getSession()->getSessionId(),
-            'http_referer'          => $this->_httpHeader->getHttpReferer($clean),
-        ));
+        $this->addData(
+            array(
+                'server_addr' => $this->_serverAddress->getServerAddress(true),
+                'remote_addr' => $this->_remoteAddress->getRemoteAddress(true),
+                'http_secure' => $this->_storeManager->getStore()->isCurrentlySecure(),
+                'http_host' => $this->_httpHeader->getHttpHost($clean),
+                'http_user_agent' => $this->_httpHeader->getHttpUserAgent($clean),
+                'http_accept_language' => $this->_httpHeader->getHttpAcceptLanguage($clean),
+                'http_accept_charset' => $this->_httpHeader->getHttpAcceptCharset($clean),
+                'request_uri' => $this->_httpHeader->getRequestUri($clean),
+                'session_id' => $this->_getSession()->getSessionId(),
+                'http_referer' => $this->_httpHeader->getHttpReferer($clean)
+            )
+        );
 
         return $this;
     }
@@ -223,9 +233,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getOnlineMinutesInterval()
     {
         $configValue = $this->_coreStoreConfig->getConfig('customer/online_customers/online_minutes_interval');
-        return intval($configValue) > 0
-            ? intval($configValue)
-            : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**
@@ -236,7 +244,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getUrl()
     {
         $url = 'http' . ($this->getHttpSecure() ? 's' : '') . '://';
-        $url .= $this->getHttpHost().$this->getRequestUri();
+        $url .= $this->getHttpHost() . $this->getRequestUri();
         return $url;
     }
 
@@ -326,7 +334,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      */
     public function bindCustomerLogin($observer)
     {
-        if (!$this->getCustomerId() && $customer = $observer->getEvent()->getCustomer()) {
+        if (!$this->getCustomerId() && ($customer = $observer->getEvent()->getCustomer())) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
         }
@@ -392,28 +400,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     {
         $ipData = array();
         $data->setIpData($ipData);
-        return $this;
-    }
-
-    /**
-     * Load customer data into $data
-     *
-     * @param object $data
-     * @return $this
-     */
-    public function addCustomerData($data)
-    {
-        $customerId = $data->getCustomerId();
-        if (intval($customerId) <= 0) {
-            return $this;
-        }
-        $customerData = $this->_customerFactory->create()->load($customerId);
-        $newCustomerData = array();
-        foreach ($customerData->getData() as $propName => $propValue) {
-            $newCustomerData['customer_' . $propName] = $propValue;
-        }
-
-        $data->addData($newCustomerData);
         return $this;
     }
 

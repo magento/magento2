@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Oauth;
 
 use Magento\Oauth\Helper\Oauth as OauthHelper;
@@ -58,67 +57,84 @@ use Magento\Oauth\Exception as OauthException;
  * @method Token setAuthorized() setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Token extends \Magento\Core\Model\AbstractModel
+class Token extends \Magento\Model\AbstractModel
 {
     /**#@+
      * Token types
      */
     const TYPE_REQUEST = 'request';
+
     const TYPE_ACCESS = 'access';
+
     const TYPE_VERIFIER = 'verifier';
+
     /**#@- */
 
     /**#@+
      * Customer types
      */
     const USER_TYPE_ADMIN = 'admin';
+
     const USER_TYPE_CUSTOMER = 'customer';
+
     /**#@- */
 
-    /** @var OauthHelper */
+    /**
+     * @var OauthHelper
+     */
     protected $_oauthHelper;
 
-    /** @var \Magento\Integration\Helper\Oauth\Data */
+    /**
+     * @var \Magento\Integration\Helper\Oauth\Data
+     */
     protected $_oauthData;
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     */
     protected $_consumerFactory;
 
-    /** @var \Magento\Url\Validator */
+    /**
+     * @var \Magento\Url\Validator
+     */
     protected $_urlValidator;
 
-    /** @var Consumer\Validator\KeyLengthFactory */
+    /**
+     * @var Consumer\Validator\KeyLengthFactory
+     */
     protected $_keyLengthFactory;
 
-    /** @var \Magento\Stdlib\DateTime */
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
     protected $_dateTime;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
      * @param \Magento\Url\Validator $urlValidator
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Helper\Oauth\Data $oauthData
      * @param OauthHelper $oauthHelper
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
         \Magento\Url\Validator $urlValidator,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -142,9 +158,9 @@ class Token extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * "After save" actions
+     * The "After save" actions
      *
-     * @return Token
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -161,21 +177,23 @@ class Token extends \Magento\Core\Model\AbstractModel
      * Generate an oauth_verifier for a consumer, if the consumer doesn't already have one.
      *
      * @param int $consumerId - The id of the consumer associated with the verifier to be generated.
-     * @return Token
+     * @return $this
      */
     public function createVerifierToken($consumerId)
     {
         $tokenData = $this->getResource()->selectTokenByType($consumerId, self::TYPE_VERIFIER);
         $this->setData($tokenData ? $tokenData : array());
         if (!$this->getId()) {
-            $this->setData(array(
-                'consumer_id' => $consumerId,
-                'type' => self::TYPE_VERIFIER,
-                'token' => $this->_oauthHelper->generateToken(),
-                'secret' => $this->_oauthHelper->generateTokenSecret(),
-                'verifier' => $this->_oauthHelper->generateVerifier(),
-                'callback_url' => OauthHelper::CALLBACK_ESTABLISHED
-            ));
+            $this->setData(
+                array(
+                    'consumer_id' => $consumerId,
+                    'type' => self::TYPE_VERIFIER,
+                    'token' => $this->_oauthHelper->generateToken(),
+                    'secret' => $this->_oauthHelper->generateTokenSecret(),
+                    'verifier' => $this->_oauthHelper->generateVerifier(),
+                    'callback_url' => OauthHelper::CALLBACK_ESTABLISHED
+                )
+            );
             $this->save();
         }
         return $this;
@@ -186,7 +204,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      *
      * @param int $userId Authorization user identifier
      * @param string $userType Authorization user type
-     * @return Token
+     * @return $this
      * @throws OauthException
      */
     public function authorize($userId, $userType)
@@ -217,7 +235,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Convert token to access type
      *
-     * @return Token
+     * @return $this
      * @throws OauthException
      */
     public function convertToAccess()
@@ -239,18 +257,20 @@ class Token extends \Magento\Core\Model\AbstractModel
      *
      * @param int $entityId Token identifier
      * @param string $callbackUrl Callback URL
-     * @return Token
+     * @return $this
      */
     public function createRequestToken($entityId, $callbackUrl)
     {
         $callbackUrl = !empty($callbackUrl) ? $callbackUrl : OauthHelper::CALLBACK_ESTABLISHED;
-        $this->setData(array(
-               'entity_id' => $entityId,
-               'type' => self::TYPE_REQUEST,
-               'token' => $this->_oauthHelper->generateToken(),
-               'secret' => $this->_oauthHelper->generateTokenSecret(),
-               'callback_url' => $callbackUrl
-           ));
+        $this->setData(
+            array(
+                'entity_id' => $entityId,
+                'type' => self::TYPE_REQUEST,
+                'token' => $this->_oauthHelper->generateToken(),
+                'secret' => $this->_oauthHelper->generateTokenSecret(),
+                'callback_url' => $callbackUrl
+            )
+        );
         $this->save();
 
         return $this;
@@ -288,7 +308,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Before save actions
      *
-     * @return \Magento\Integration\Model\Oauth\Consumer
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -304,13 +324,14 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Validate data
      *
-     * @return array|bool
+     * @return bool
      * @throws OauthException Throw exception on fail validation
      */
     public function validate()
     {
-        if (OauthHelper::CALLBACK_ESTABLISHED != $this->getCallbackUrl()
-            && !$this->_urlValidator->isValid($this->getCallbackUrl())
+        if (OauthHelper::CALLBACK_ESTABLISHED != $this->getCallbackUrl() && !$this->_urlValidator->isValid(
+            $this->getCallbackUrl()
+        )
         ) {
             $messages = $this->_urlValidator->getMessages();
             throw new OauthException(array_shift($messages));
@@ -372,7 +393,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      * Set the token's verifier.
      *
      * @param string $verifier
-     * @return Token
+     * @return $this
      */
     public function setVerifier($verifier)
     {

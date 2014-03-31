@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="adminhtml.report.grid.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.report.review.product.grid" as="grid">
             <arguments>
@@ -51,7 +51,7 @@
                     <argument name="filter_visibility" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">gridProducts</argument>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="path" xsi:type="string">catalog/product_review</item>
+                        <item name="path" xsi:type="string">review/product</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="productId" xsi:type="string">getId</item>
                         </item>

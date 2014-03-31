@@ -70,8 +70,8 @@ class IndexOutdated implements \Magento\AdminNotification\Model\System\MessageIn
             $processes = $this->_indexer->getProcessesCollection()->addEventsStats();
             /** @var $process \Magento\Index\Model\Process */
             foreach ($processes as $process) {
-                if (($process->getStatus() == \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX
-                    || $process->getEvents() > 0) && $process->getIndexer()->isVisible()
+                if (($process->getStatus() == \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX ||
+                    $process->getEvents() > 0) && $process->getIndexer()->isVisible()
                 ) {
                     $this->_indexes[] = $process->getIndexer()->getName();
                 }

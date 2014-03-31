@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +31,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testCanSendHeaders()
     {
         $response = new \Magento\TestFramework\Response(
-            $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)
+            $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false),
+            $this->getMock('Magento\App\Http\Context', array(), array(), '', false)
         );
         $this->assertTrue($response->canSendHeaders());
         $this->assertTrue($response->canSendHeaders(false));

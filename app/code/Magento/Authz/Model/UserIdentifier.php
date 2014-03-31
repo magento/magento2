@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authz\Model;
 
 /**
@@ -33,9 +32,13 @@ class UserIdentifier
      * User types.
      */
     const USER_TYPE_GUEST = 'Guest';
+
     const USER_TYPE_CUSTOMER = 'Customer';
+
     const USER_TYPE_ADMIN = 'Admin';
+
     const USER_TYPE_INTEGRATION = 'Integration';
+
     /**#@-*/
 
     /**
@@ -45,7 +48,9 @@ class UserIdentifier
      */
     protected $_userType;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_userId;
 
     /**
@@ -90,14 +95,14 @@ class UserIdentifier
     /**
      * Set user ID.
      *
-     * @param int
-     * @return UserIdentifier
+     * @param int $userId
+     * @return $this
      * @throws \LogicException
      */
     protected function _setUserId($userId)
     {
         $userId = is_numeric($userId) ? (int)$userId : $userId;
-        if (!is_integer($userId) || ($userId < 0)) {
+        if (!is_integer($userId) || $userId < 0) {
             throw new \LogicException("Invalid user ID: '{$userId}'.");
         }
         $this->_userId = $userId;
@@ -108,7 +113,7 @@ class UserIdentifier
      * Set user type.
      *
      * @param string $userType
-     * @return UserIdentifier
+     * @return $this
      * @throws \LogicException
      */
     protected function _setUserType($userType)

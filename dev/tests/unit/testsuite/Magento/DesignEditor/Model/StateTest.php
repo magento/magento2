@@ -42,14 +42,18 @@ class StateTest extends \PHPUnit_Framework_TestCase
      * Layout update resource models
      */
     const LAYOUT_UPDATE_RESOURCE_MODEL_CORE_CLASS_NAME = 'Magento\Core\Model\Resource\Layout\Update';
-    const LAYOUT_UPDATE_RESOURCE_MODEL_VDE_CLASS_NAME  = 'Magento\DesignEditor\Model\Resource\Layout\Update';
+
+    const LAYOUT_UPDATE_RESOURCE_MODEL_VDE_CLASS_NAME = 'Magento\DesignEditor\Model\Resource\Layout\Update';
+
     /**#@-*/
 
     /**#@+
      * Import behaviors
      */
-    const MODE_DESIGN     = 'design';
+    const MODE_DESIGN = 'design';
+
     const MODE_NAVIGATION = 'navigation';
+
     /**#@-*/
 
     /*
@@ -73,9 +77,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Layout\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AreaEmulator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_layoutFactory;
+    protected $_areaEmulator;
 
     /**
      * @var \Magento\DesignEditor\Model\Url\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -98,9 +102,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\App|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_application;
+    protected $_configMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -117,39 +121,63 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheTypeList = array('type1', 'type2');
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->_backendSession = $this->getMock(
-            'Magento\Backend\Model\Session', array('setData', 'getData', 'unsetData'),
-            array(), '', false
+            'Magento\Backend\Model\Session',
+            array('setData', 'getData', 'unsetData'),
+            array(),
+            '',
+            false
         );
-        $this->_layoutFactory = $this->getMock('Magento\Core\Model\Layout\Factory', array('createLayout'),
-            array(), '', false
+        $this->_areaEmulator = $this->getMock(
+            'Magento\DesignEditor\Model\AreaEmulator',
+            array('emulateLayoutArea'),
+            array(),
+            '',
+            false
         );
-        $this->_urlModelFactory = $this->getMock('Magento\DesignEditor\Model\Url\Factory', array('replaceClassName'),
-            array(), '', false
+        $this->_urlModelFactory = $this->getMock(
+            'Magento\DesignEditor\Model\Url\Factory',
+            array('replaceClassName'),
+            array(),
+            '',
+            false
         );
-        $this->_cacheStateMock = $this->getMockBuilder('Magento\App\Cache\StateInterface')
-            ->disableOriginalConstructor()->getMock();
+        $this->_cacheStateMock = $this->getMockBuilder(
+            'Magento\App\Cache\StateInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_dataHelper = $this->getMock('Magento\DesignEditor\Helper\Data', array('getDisabledCacheTypes'),
-            array(), '', false);
+        $this->_dataHelper = $this->getMock(
+            'Magento\DesignEditor\Helper\Data',
+            array('getDisabledCacheTypes'),
+            array(),
+            '',
+            false
+        );
 
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_application = $this->getMock('Magento\Core\Model\App', array('getStore', 'getConfig'),
             array(), '', false);
 
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array('setConfig'), array(), '', false);
-        $storeManager->expects($this->any())
-            ->method('setConfig')
-            ->with(
-                $this->equalTo(\Magento\View\DesignInterface::XML_PATH_THEME_ID),
-                $this->equalTo(self::THEME_ID)
-            )
-            ->will($this->returnSelf());
+        $storeManager->expects(
+            $this->any()
+        )->method(
+            'setConfig'
+        )->with(
+            $this->equalTo(\Magento\View\DesignInterface::XML_PATH_THEME_ID),
+            $this->equalTo(self::THEME_ID)
+        )->will(
+            $this->returnSelf()
+        );
 
-        $configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
-        $configMock->expects($this->any())
+        $this->_configMock = $this->getMock('Magento\App\ConfigInterface');
+        $this->_configMock->expects($this->any())
             ->method('setNode')
             ->with(
                 $this->equalTo('default/' . \Magento\View\DesignInterface::XML_PATH_THEME_ID),
@@ -157,29 +185,32 @@ class StateTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnSelf());
 
-        $this->_application->expects($this->any())
-            ->method('getConfig')
-            ->will($this->returnValue($configMock));
-
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('getId', '__wakeup'), array(), '', false);
-        $this->_theme->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(self::THEME_ID));
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::THEME_ID));
 
-        $this->_themeContext = $this->getMock('Magento\DesignEditor\Model\Theme\Context',
-            array('getEditableTheme', 'getVisibleTheme', 'reset', 'setEditableThemeById'), array(), '', false);
-        $this->_themeContext->expects($this->any())
-            ->method('getVisibleTheme')
-            ->will($this->returnValue($this->_theme));
+        $this->_themeContext = $this->getMock(
+            'Magento\DesignEditor\Model\Theme\Context',
+            array('getEditableTheme', 'getVisibleTheme', 'reset', 'setEditableThemeById'),
+            array(),
+            '',
+            false
+        );
+        $this->_themeContext->expects(
+            $this->any()
+        )->method(
+            'getVisibleTheme'
+        )->will(
+            $this->returnValue($this->_theme)
+        );
 
         $this->_model = new \Magento\DesignEditor\Model\State(
             $this->_backendSession,
-            $this->_layoutFactory,
+            $this->_areaEmulator,
             $this->_urlModelFactory,
             $this->_cacheStateMock,
             $this->_dataHelper,
             $this->_objectManager,
-            $this->_application,
+            $this->_configMock,
             $this->_themeContext,
             $storeManager
         );
@@ -188,7 +219,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $this->assertAttributeEquals($this->_backendSession, '_backendSession', $this->_model);
-        $this->assertAttributeEquals($this->_layoutFactory, '_layoutFactory', $this->_model);
+        $this->assertAttributeEquals($this->_areaEmulator, '_areaEmulator', $this->_model);
         $this->assertAttributeEquals($this->_urlModelFactory, '_urlModelFactory', $this->_model);
         $this->assertAttributeEquals($this->_cacheStateMock, '_cacheState', $this->_model);
         $this->assertAttributeEquals($this->_dataHelper, '_dataHelper', $this->_model);
@@ -197,38 +228,69 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function _setAdditionalExpectations()
     {
-        $this->_dataHelper->expects($this->any())
-            ->method('getDisabledCacheTypes')
-            ->will($this->returnValue($this->_cacheTypeList));
+        $this->_dataHelper->expects(
+            $this->any()
+        )->method(
+            'getDisabledCacheTypes'
+        )->will(
+            $this->returnValue($this->_cacheTypeList)
+        );
 
-        $this->_cacheStateMock->expects($this->at(0))
-            ->method('isEnabled')
-            ->with('type1')
-            ->will($this->returnValue(true));
-        $this->_cacheStateMock->expects($this->at(1))
-            ->method('setEnabled')
-            ->with('type1', false)
-            ->will($this->returnSelf());
+        $this->_cacheStateMock->expects(
+            $this->at(0)
+        )->method(
+            'isEnabled'
+        )->with(
+            'type1'
+        )->will(
+            $this->returnValue(true)
+        );
+        $this->_cacheStateMock->expects(
+            $this->at(1)
+        )->method(
+            'setEnabled'
+        )->with(
+            'type1',
+            false
+        )->will(
+            $this->returnSelf()
+        );
 
-        $this->_cacheStateMock->expects($this->at(2))
-            ->method('isEnabled')
-            ->with('type2')
-            ->will($this->returnValue(true));
-        $this->_cacheStateMock->expects($this->at(3))
-            ->method('setEnabled')
-            ->with('type2', false)
-            ->will($this->returnSelf());
+        $this->_cacheStateMock->expects(
+            $this->at(2)
+        )->method(
+            'isEnabled'
+        )->with(
+            'type2'
+        )->will(
+            $this->returnValue(true)
+        );
+        $this->_cacheStateMock->expects(
+            $this->at(3)
+        )->method(
+            'setEnabled'
+        )->with(
+            'type2',
+            false
+        )->will(
+            $this->returnSelf()
+        );
     }
 
     public function testReset()
     {
-        $this->_backendSession->expects($this->any())
-            ->method('unsetData')
-            ->with($this->logicalOr(
+        $this->_backendSession->expects(
+            $this->any()
+        )->method(
+            'unsetData'
+        )->with(
+            $this->logicalOr(
                 \Magento\DesignEditor\Model\State::CURRENT_MODE_SESSION_KEY,
                 \Magento\DesignEditor\Model\State::CURRENT_URL_SESSION_KEY
-            ))
-            ->will($this->returnValue($this->_backendSession));
+            )
+        )->will(
+            $this->returnValue($this->_backendSession)
+        );
         $this->assertEquals($this->_model, $this->_model->reset());
     }
 
@@ -237,25 +299,28 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->_setAdditionalExpectations();
         $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
 
-        $request->expects($this->once())
-            ->method('getPathInfo')
-            ->will($this->returnValue('/'));
+        $request->expects($this->once())->method('getPathInfo')->will($this->returnValue('/'));
 
-        $this->_backendSession->expects($this->at(0))
-            ->method('setData')
-            ->with('vde_current_url', '/');
+        $this->_backendSession->expects($this->at(0))->method('setData')->with('vde_current_url', '/');
 
-        $this->_backendSession->expects($this->at(1))
-            ->method('setData')
-            ->with('vde_current_mode', \Magento\DesignEditor\Model\State::MODE_NAVIGATION);
+        $this->_backendSession->expects(
+            $this->at(1)
+        )->method(
+            'setData'
+        )->with(
+            'vde_current_mode',
+            \Magento\DesignEditor\Model\State::MODE_NAVIGATION
+        );
 
-        $this->_urlModelFactory->expects($this->once())
-            ->method('replaceClassName')
-            ->with(self::URL_MODEL_NAVIGATION_MODE_CLASS_NAME);
+        $this->_urlModelFactory->expects(
+            $this->once()
+        )->method(
+            'replaceClassName'
+        )->with(
+            self::URL_MODEL_NAVIGATION_MODE_CLASS_NAME
+        );
 
-        $this->_layoutFactory->expects($this->once())
-            ->method('createLayout')
-            ->with(array('area' => self::AREA_CODE), self::LAYOUT_NAVIGATION_CLASS_NAME);
+        $this->_areaEmulator->expects($this->once())->method('emulateLayoutArea')->with(self::AREA_CODE);
         $controller = $this->getMock('Magento\Backend\Controller\Adminhtml\Action', array(), array(), '', false);
 
         $this->assertNull($this->_model->update(self::AREA_CODE, $request, $controller));

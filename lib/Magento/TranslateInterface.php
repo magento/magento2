@@ -1,7 +1,5 @@
 <?php
 /**
- * Translator interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -31,33 +29,45 @@ namespace Magento;
 interface TranslateInterface
 {
     /**
-     * Translate
-     *
-     * @param array $args
-     * @return string
+     * Default translation string
      */
-    public function translate($args);
+    const DEFAULT_STRING = 'Translate String';
 
     /**
-     * Parse and save edited translate
+     * Initialize translation data
      *
-     * @param array $translate
-     */
-    public function processAjaxPost($translate);
-
-    /**
-     * Replace translation templates with HTML fragments
-     *
-     * @param array|string $body
-     * @param bool $isJson
-     */
-    public function processResponseBody(&$body, $isJson = false);
-
-    /**
-     * Set Translate inline mode
-     *
-     * @param bool $flag
+     * @param string|null $area
+     * @param bool $forceReload
      * @return \Magento\TranslateInterface
      */
-    public function setTranslateInline($flag);
+    public function loadData($area = null, $forceReload = false);
+
+    /**
+     * Retrieve translation data
+     *
+     * @return array
+     */
+    public function getData();
+
+    /**
+     * Retrieve locale
+     *
+     * @return string
+     */
+    public function getLocale();
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return \Magento\TranslateInterface
+     */
+    public function setLocale($locale);
+
+    /**
+     * Retrieve theme code
+     *
+     * @return string
+     */
+    public function getTheme();
 }

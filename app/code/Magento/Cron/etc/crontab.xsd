@@ -27,20 +27,36 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="job" type="jobDeclaration" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="group" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="job" type="jobDeclaration" minOccurs="1" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:string" use="required"/>
+                    </xs:complexType>
+
+                    <xs:unique name="uniqueJobName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Job name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="job"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
-
-        <xs:unique name="uniqueJobName">
-            <xs:annotation>
-                <xs:documentation>
-                    Job name must be unique.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="job"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
     </xs:element>
+
+    <xs:complexType name="groupDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Group declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
     <xs:complexType name="jobDeclaration">
         <xs:annotation>

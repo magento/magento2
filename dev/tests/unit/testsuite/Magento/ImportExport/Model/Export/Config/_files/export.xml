@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/ImportExport/etc/export.xsd">
     <entity name="name_one" label="Label_One" model="Model_One" />
-    <productType name="name_two" label="Label_Two" model="Model_Two" />
+    <productType name="name_two" model="Model_Two" />
     <fileFormat name="name_three" label="Label_Three" model="Model_Three" />
 </config>

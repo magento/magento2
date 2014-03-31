@@ -25,6 +25,6 @@
 <?php /** @var $this \Magento\Shipping\Block\Tracking\Link */ ?>
 <?php $order = $this->getOrder() ?>
 <a href="#" class="action track" title="<?php echo $this->getLabel() ?>"
-   data-mage-init="{popupWindow: {windowURL:'<?php echo $this->getWindowUrl($order) ?>',windowName:'trackorder',width:800,height:600,left:0,top:0,resizable:1,scrollbars:1}}">
+   data-mage-init='{"popupWindow": {"windowURL":"<?php echo $this->getWindowUrl($order) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'>
     <span><?php echo $this->getLabel()?></span>
 </a>

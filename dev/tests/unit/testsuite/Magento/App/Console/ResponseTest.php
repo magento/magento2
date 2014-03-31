@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Console;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
@@ -59,10 +58,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $largeCode = 256;
         $lowCode = 1;
         $lowestCode = -255;
-        return array(
-            array($largeCode, 255),
-            array($lowCode, $lowCode),
-            array($lowestCode, $lowestCode),
-        );
+        return array(array($largeCode, 255), array($lowCode, $lowCode), array($lowestCode, $lowestCode));
     }
 }

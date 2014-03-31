@@ -27,7 +27,7 @@
 /** @var $this \Magento\Catalog\Model\Resource\Setup */
 $applyTo = array_merge(
     explode(',', $this->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'weight', 'apply_to')),
-    array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE)
+    array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
 );
 
 $this->updateAttribute(

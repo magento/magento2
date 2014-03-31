@@ -23,71 +23,58 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Some_For_Name" type="Some_Type_Name" />
     <virtualType name="" type="" shared="true">
-        <param name="single_array">
-            <array>
-                <item key="key1 unique for single array"><value>value</value></item>
-                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
-            </array>
-        </param>
-        <param name="nested_array">
-            <array>
-                <item key="key1 unique for single array">
-                    <array>
-                        <item key="key1 unique for single array"><value>value</value></item>
-                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
-                    </array>
+        <arguments>
+            <argument name="object" xsi:type="object" shared="true">Object</argument>
+            <argument name="init_parameter" xsi:type="init_parameter">INIT_PARAMETER</argument>
+            <argument name="const" xsi:type="const">CONST</argument>
+            <argument name="single_array" xsi:type="array">
+                <item name="key1 unique for single array" xsi:type="string">value</item>
+                <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="string">2</item>
+            </argument>
+            <argument name="nested_array" xsi:type="array">
+                <item name="key1 unique for single array" xsi:type="array">
+                    <item name="key1 unique for single array" xsi:type="string">value</item>
+                    <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="string">2</item>
                 </item>
-                <item key="backend2">
-                    <array>
-                        <item key="key1 unique for single array"><value>value</value></item>
-                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
-                            <array>
-                                <item key="key1 unique for single array"><value>value</value></item>
-                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
-                            </array>
-                        </item>
-                    </array>
+                <item name="backend2" xsi:type="array">
+                    <item name="key1 unique for single array" xsi:type="string">value</item>
+                    <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="array">
+                        <item name="key1 unique for single array" xsi:type="string">value</item>
+                        <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="string">2</item>
+                    </item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </virtualType>
     <type name="Some_Type_name">
         <plugin name="plugin_name" type="Type_Test_Value"/>
-        <param name="text_value">
-            <instance type="Instance_test_name" />
-        </param>
-        <param name="single_array">
-            <array>
-                <item key="key1 unique for single array"><value>value</value></item>
-                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
-            </array>
-        </param>
-        <param name="nested_array">
-            <array>
-                <item key="key1 unique for single array">
-                    <array>
-                        <item key="key1 unique for single array"><value>value</value></item>
-                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
-                    </array>
+        <arguments>
+            <argument name="object" xsi:type="object">Object</argument>
+            <argument name="object_shared" xsi:type="object" shared="true">Object</argument>
+            <argument name="object_shared_false" xsi:type="object" shared="false">Object</argument>
+            <argument name="init_parameter" xsi:type="init_parameter">INIT_PARAMETER</argument>
+            <argument name="const" xsi:type="const">CONST</argument>
+            <argument name="single_array" xsi:type="array">
+                <item name="key1 unique for single array" xsi:type="string">value</item>
+                <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="object">Instance_test_name</item>
+            </argument>
+            <argument name="nested_array" xsi:type="array">
+                <item name="key1 unique for single array" xsi:type="array">
+                    <item name="key1 unique for single array" xsi:type="string">value</item>
+                    <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="object">Instance_test_name</item>
                 </item>
-                <item key="backend2">
-                    <array>
-                        <item key="key1 unique for single array"><value>value</value></item>
-                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
-                            <array>
-                                <item key="key1 unique for single array"><value>value</value></item>
-                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
-                            </array>
-                        </item>
-                    </array>
+                <item name="backend2" xsi:type="array">
+                    <item name="key1 unique for single array" xsi:type="string">value</item>
+                    <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="array">
+                        <item name="key1 unique for single array" xsi:type="string">value</item>
+                        <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="object">Instance_test_name</item>
+                    </item>
                 </item>
-            </array>
-        </param>
-        <param name="baseController">
-            <value>some_value</value>
-        </param>
+            </argument>
+            <argument name="baseController" xsi:type="string">some_value</argument>
+        </arguments>
     </type>
 </config>

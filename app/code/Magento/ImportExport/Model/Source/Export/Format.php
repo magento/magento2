@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Source\Export;
 
 /**
  * Source model of export file formats
@@ -31,9 +32,7 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Source\Export;
-
-class Format implements \Magento\Core\Model\Option\ArrayInterface
+class Format implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface
@@ -43,16 +42,13 @@ class Format implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      */
-    public function __construct(
-        \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-    ) {
+    public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig)
+    {
         $this->_exportConfig = $exportConfig;
     }
 
     /**
-     * Prepare and return array of import entities ids and their names
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
@@ -61,6 +57,5 @@ class Format implements \Magento\Core\Model\Option\ArrayInterface
             $options[] = array('value' => $formatName, 'label' => __($formatConfig['label']));
         }
         return $options;
-
     }
 }

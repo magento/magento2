@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogInventory\Model\Source;
 
-class Stock implements \Magento\Core\Model\Option\ArrayInterface
+class Stock implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve option array
@@ -44,14 +44,8 @@ class Stock implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
-                'label' => __('In Stock')
-            ),
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK,
-                'label' => __('Out of Stock')
-            ),
+            array('value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK, 'label' => __('In Stock')),
+            array('value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK, 'label' => __('Out of Stock'))
         );
     }
 }

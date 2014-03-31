@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Model\Config\Source;
 
-class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
+class Allmethods implements \Magento\Option\ArrayInterface
 {
     /**
      * Core store config
@@ -59,11 +58,11 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
      * @param bool $isActiveOnlyFlag
      * @return array
      */
-    public function toOptionArray($isActiveOnlyFlag=false)
+    public function toOptionArray($isActiveOnlyFlag = false)
     {
-        $methods = array(array('value'=>'', 'label'=>''));
+        $methods = array(array('value' => '', 'label' => ''));
         $carriers = $this->_shippingConfig->getAllCarriers();
-        foreach ($carriers as $carrierCode=>$carrierModel) {
+        foreach ($carriers as $carrierCode => $carrierModel) {
             if (!$carrierModel->isActive() && (bool)$isActiveOnlyFlag === true) {
                 continue;
             }
@@ -71,15 +70,12 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
             if (!$carrierMethods) {
                 continue;
             }
-            $carrierTitle = $this->_coreStoreConfig->getConfig('carriers/'.$carrierCode.'/title');
-            $methods[$carrierCode] = array(
-                'label'   => $carrierTitle,
-                'value' => array(),
-            );
-            foreach ($carrierMethods as $methodCode=>$methodTitle) {
+            $carrierTitle = $this->_coreStoreConfig->getConfig('carriers/' . $carrierCode . '/title');
+            $methods[$carrierCode] = array('label' => $carrierTitle, 'value' => array());
+            foreach ($carrierMethods as $methodCode => $methodTitle) {
                 $methods[$carrierCode]['value'][] = array(
-                    'value' => $carrierCode.'_'.$methodCode,
-                    'label' => '['.$carrierCode.'] '.$methodTitle,
+                    'value' => $carrierCode . '_' . $methodCode,
+                    'label' => '[' . $carrierCode . '] ' . $methodTitle
                 );
             }
         }

@@ -1,0 +1,12 @@
+"";"All";"Hard";"Soft"
+"Total number of dependencies";"5";"4";"1"
+
+"Dependencies for each module:";"All";"Hard";"Soft"
+"Module1";"3";"2";"1"
+" -- Magento\Core";"";"1";"0"
+" -- Magento\Backend";"";"0";"1"
+" -- Module1";"";"1";"0"
+
+"Module2";"2";"2";"0"
+" -- Magento\Core";"";"1";"0"
+" -- Module2";"";"1";"0"

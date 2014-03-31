@@ -35,47 +35,39 @@ class Usecustom extends \Magento\Core\Model\Config\Value
     /**
      * Writer of configuration storage
      *
-     * @var \Magento\Core\Model\Config\Storage\WriterInterface
+     * @var \Magento\App\Config\Storage\WriterInterface
      */
     protected $_configWriter;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Model\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
-        \Magento\Core\Model\Config\Storage\WriterInterface $configWriter,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_configWriter = $configWriter;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * Validate custom url
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Usecustom
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -83,9 +75,7 @@ class Usecustom extends \Magento\Core\Model\Config\Value
         if ($value == 1) {
             $customUrl = $this->getData('groups/url/fields/custom/value');
             if (empty($customUrl)) {
-                throw new \Magento\Core\Exception(
-                    __('Please specify the admin custom URL.')
-                );
+                throw new \Magento\Model\Exception(__('Please specify the admin custom URL.'));
             }
         }
 
@@ -95,7 +85,7 @@ class Usecustom extends \Magento\Core\Model\Config\Value
     /**
      * Delete custom admin url from configuration if "Use Custom Admin Url" option disabled
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Usecustom
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -103,14 +93,14 @@ class Usecustom extends \Magento\Core\Model\Config\Value
 
         if (!$value) {
             $this->_configWriter->delete(
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::XML_PATH_SECURE_BASE_URL,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE_ID
+                Custom::XML_PATH_SECURE_BASE_URL,
+                Custom::CONFIG_SCOPE,
+                Custom::CONFIG_SCOPE_ID
             );
             $this->_configWriter->delete(
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::XML_PATH_UNSECURE_BASE_URL,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE_ID
+                Custom::XML_PATH_UNSECURE_BASE_URL,
+                Custom::CONFIG_SCOPE,
+                Custom::CONFIG_SCOPE_ID
             );
         }
 

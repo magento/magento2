@@ -23,7 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
 
+use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Downloadable\Model\Link\Purchased;
 
 /**
  * Downlaodable Sales Order Email items renderer
@@ -32,12 +35,10 @@
  * @package    Magento_Downloadable
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
-
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 {
     /**
-     * @var \Magento\Downloadable\Model\Link\Purchased
+     * @var Purchased
      */
     protected $_purchased;
 
@@ -73,22 +74,29 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
         parent::__construct($context, $data);
     }
 
-
     /**
      * Enter description here...
      *
-     * @return \Magento\Downloadable\Model\Link\Purchased
+     * @return Purchased
      */
     public function getLinks()
     {
-        $this->_purchased = $this->_purchasedFactory->create()->load($this->getItem()->getOrder()->getId(), 'order_id');
-        $purchasedLinks = $this->_itemsFactory->create()
-            ->addFieldToFilter('order_item_id', $this->getItem()->getOrderItem()->getId());
+        $this->_purchased = $this->_purchasedFactory->create()->load(
+            $this->getItem()->getOrder()->getId(),
+            'order_id'
+        );
+        $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter(
+            'order_item_id',
+            $this->getItem()->getOrderItem()->getId()
+        );
         $this->_purchased->setPurchasedItems($purchasedLinks);
 
         return $this->_purchased;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLinksTitle()
     {
         if ($this->_purchased->getLinkSectionTitle()) {
@@ -97,13 +105,20 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
         return $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE);
     }
 
+    /**
+     * @param Item $item
+     * @return string
+     */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->_urlBuilder->getUrl('downloadable/download/link', array(
-            'id'        => $item->getLinkHash(),
-            '_scope'    => $this->getOrder()->getStore(),
-            '_secure'   => true,
-            '_nosid'    => true
-        ));
+        return $this->_urlBuilder->getUrl(
+            'downloadable/download/link',
+            array(
+                'id' => $item->getLinkHash(),
+                '_scope' => $this->getOrder()->getStore(),
+                '_secure' => true,
+                '_nosid' => true
+            )
+        );
     }
 }

@@ -66,11 +66,8 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $appStateProperty->setValue($this->_theme, $this->_appState);
         $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->_directory));
-        $this->_directory->expects($this->once())->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
+        $this->_directory->expects($this->once())->method('getAbsolutePath')->will($this->returnArgument(0));
         $this->_model = new \Magento\View\Design\Theme\Customization\Path($filesystem);
     }
 
@@ -87,10 +84,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomizationPath()
     {
-        $expectedPath = implode(
-            '/',
-            array(\Magento\View\Design\Theme\Customization\Path::DIR_NAME, '123')
-        );
+        $expectedPath = implode('/', array(\Magento\View\Design\Theme\Customization\Path::DIR_NAME, '123'));
         $this->assertEquals($expectedPath, $this->_model->getCustomizationPath($this->_theme->setId(123)));
         $this->assertNull($this->_model->getCustomizationPath($this->_theme->setId(null)));
     }
@@ -102,10 +96,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     {
         $this->_appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('area51'));
         $expectedPath = implode('/', array('area51', 'path'));
-        $this->assertEquals(
-            $expectedPath,
-            $this->_model->getThemeFilesPath($this->_theme->setThemePath('path'))
-        );
+        $this->assertEquals($expectedPath, $this->_model->getThemeFilesPath($this->_theme->setThemePath('path')));
         $this->assertNull($this->_model->getCustomizationPath($this->_theme->setThemePath(null)));
     }
 

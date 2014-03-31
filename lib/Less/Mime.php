@@ -1,7 +1,11 @@
 <?php
 
-//less.js : lib/less/functions.js
-
+/**
+ * Mime lookup
+ *
+ * @package Less
+ * @subpackage node
+ */
 class Less_Mime{
 
 	// this map is intentionally incomplete
@@ -25,7 +29,7 @@ class Less_Mime{
 		return self::$_types[$ext];
 	}
 
-	static function charsets_lookup( $type = false ){
+	static function charsets_lookup( $type = null ){
 		// assumes all text types are UTF-8
 		return $type && preg_match('/^text\//',$type) ? 'UTF-8' : '';
 	}

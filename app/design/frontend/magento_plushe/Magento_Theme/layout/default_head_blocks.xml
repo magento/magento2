@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-css">
             <arguments>
@@ -35,7 +35,7 @@
                 <argument name="file" xsi:type="string">matchMedia.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js" after="mage-zoom-js">
             <arguments>
                 <argument name="file" xsi:type="string">js/responsive.js</argument>
             </arguments>

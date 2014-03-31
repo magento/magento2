@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup;
 
 /**
  * Class to work with database backups
@@ -31,8 +32,6 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup;
-
 class Db extends \Magento\Backup\AbstractBackup
 {
     /**
@@ -77,7 +76,7 @@ class Db extends \Magento\Backup\AbstractBackup
     /**
      * Checks whether the line is last in sql command
      *
-     * @param $line
+     * @param string $line
      * @return bool
      */
     protected function _isLineLastInCommand($line)
@@ -87,7 +86,7 @@ class Db extends \Magento\Backup\AbstractBackup
 
         $returnResult = false;
         if ($lineLength > 0) {
-            $lastSymbolIndex = $lineLength-1;
+            $lastSymbolIndex = $lineLength - 1;
             if ($cleanLine[$lastSymbolIndex] == ';') {
                 $returnResult = true;
             }
@@ -108,11 +107,15 @@ class Db extends \Magento\Backup\AbstractBackup
 
         $this->_lastOperationSucceed = false;
 
-        $backup = $this->_backupFactory->createBackupModel()
-            ->setTime($this->getTime())
-            ->setType($this->getType())
-            ->setPath($this->getBackupsDir())
-            ->setName($this->getName());
+        $backup = $this->_backupFactory->createBackupModel()->setTime(
+            $this->getTime()
+        )->setType(
+            $this->getType()
+        )->setPath(
+            $this->getBackupsDir()
+        )->setName(
+            $this->getName()
+        );
 
         $backupDb = $this->_backupFactory->createBackupDbModel();
         $backupDb->createBackup($backup);

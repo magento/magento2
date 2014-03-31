@@ -38,6 +38,9 @@ use Magento\Backend\Block\Widget;
 
 class Totals extends \Magento\Backend\Block\Dashboard\Bar
 {
+    /**
+     * @var string
+     */
     protected $_template = 'dashboard/totalbar.phtml';
 
     /**
@@ -46,9 +49,9 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     protected $_moduleManager;
 
     /**
-     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -61,20 +64,29 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         parent::__construct($context, $collectionFactory, $data);
     }
 
+    /**
+     * @return $this|void
+     */
     protected function _prepareLayout()
     {
         if (!$this->_moduleManager->isEnabled('Magento_Reports')) {
             return $this;
         }
-        $isFilter = $this->getRequest()->getParam('store')
-            || $this->getRequest()->getParam('website')
-            || $this->getRequest()->getParam('group');
+        $isFilter = $this->getRequest()->getParam(
+            'store'
+        ) || $this->getRequest()->getParam(
+            'website'
+        ) || $this->getRequest()->getParam(
+            'group'
+        );
         $period = $this->getRequest()->getParam('period', '24h');
 
         /* @var $collection \Magento\Reports\Model\Resource\Order\Collection */
-        $collection = $this->_collectionFactory->create()
-            ->addCreateAtPeriodFilter($period)
-            ->calculateTotals($isFilter);
+        $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
+            $period
+        )->calculateTotals(
+            $isFilter
+        );
 
         if ($this->getRequest()->getParam('store')) {
             $collection->addFieldToFilter('store_id', $this->getRequest()->getParam('store'));
@@ -85,7 +97,8 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
             $storeIds = $this->_storeManager->getGroup($this->getRequest()->getParam('group'))->getStoreIds();
             $collection->addFieldToFilter('store_id', array('in' => $storeIds));
         } elseif (!$collection->isLive()) {
-            $collection->addFieldToFilter('store_id',
+            $collection->addFieldToFilter(
+                'store_id',
                 array('eq' => $this->_storeManager->getStore(\Magento\Core\Model\Store::ADMIN_CODE)->getId())
             );
         }
@@ -97,6 +110,6 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         $this->addTotal(__('Revenue'), $totals->getRevenue());
         $this->addTotal(__('Tax'), $totals->getTax());
         $this->addTotal(__('Shipping'), $totals->getShipping());
-        $this->addTotal(__('Quantity'), $totals->getQuantity()*1, true);
+        $this->addTotal(__('Quantity'), $totals->getQuantity() * 1, true);
     }
 }

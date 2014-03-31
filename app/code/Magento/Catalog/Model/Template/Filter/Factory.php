@@ -52,14 +52,14 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Filter\Template
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function create($className, array $data = array())
     {
         $filter = $this->_objectManager->create($className, $data);
 
         if (!$filter instanceof \Magento\Filter\Template) {
-            throw new \Magento\Core\Exception($className . ' doesn\'t extends \Magento\Filter\Template');
+            throw new \Magento\Model\Exception($className . ' doesn\'t extends \Magento\Filter\Template');
         }
         return $filter;
     }

@@ -32,7 +32,6 @@ namespace Magento\Install\Model\Installer;
 
 class Data extends \Magento\Object
 {
-
     /**
      * Errors array
      *
@@ -44,7 +43,7 @@ class Data extends \Magento\Object
      * Add error
      *
      * @param string $error
-     * @return \Magento\Install\Model\Installer\Data
+     * @return $this
      */
     public function addError($error)
     {
@@ -61,5 +60,4 @@ class Data extends \Magento\Object
     {
         return $this->_errors;
     }
-
 }

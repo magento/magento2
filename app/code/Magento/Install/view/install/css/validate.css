@@ -28,7 +28,7 @@ input.mage-error, textarea.mage-error, ul.mage-error, select.mage-error {
 
 }
 div.mage-error {
-    background: url("../images/validation_advice_bg.gif") no-repeat scroll 2px 1px transparent;
+    background: url(../images/validation_advice_bg.gif) no-repeat scroll 2px 1px transparent;
     clear: both;
     font-size: 0.95em;
     font-weight: bold;

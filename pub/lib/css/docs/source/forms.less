@@ -1,0 +1,892 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  # Forms mixins
+//
+//  MageLess provides a set of mixins for forms elements customization. You can customize your forms globally by configuring global variables and use <code>.form-element-all()</code> mixin for your forms or you can customize every form separately using appropriate mixin.
+//
+//  # Fieldsets & fields
+//
+//  <code>.form-fieldset()</code> mixin is used to customize form fieldset and legend.
+//
+//  <code>.form-field()</code> mixin is used to customize form elements.
+//
+//  <code>.form-hasrequired()</code> mixin is used to show "required fields" message if the form has required fields.
+//
+//  Using these mixins you can customize your forms.
+//
+//  ```html
+//    <form class="form create account" action="#" method="post">
+//        <fieldset class="fieldset-example create info">
+//            <legend class="legend"><span>Personal Information</span></legend><br>
+//
+//            <div class="field name firstname required">
+//                <label class="label" for="firstname"><span>First Name</span></label>
+//
+//                <div class="control">
+//                    <input type="text" id="firstname" name="firstname" value="" title="First Name">
+//                </div>
+//            </div>
+//
+//            <div class="field name lastname required">
+//                <label class="label" for="lastname"><span>Last Name</span></label>
+//
+//                <div class="control">
+//                    <input type="text" id="lastname" name="lastname" value="" title="Last Name">
+//                </div>
+//            </div>
+//
+//            <div class="field required">
+//                <label for="email_address" class="label"><span>Email Address</span></label>
+//
+//                <div class="control">
+//                    <input type="email" name="email" id="email_address" value="" title="Email Address">
+//                </div>
+//            </div>
+//
+//            <div class="field textarea">
+//                <label for="textarea" class="label"><span>Textarea</span></label>
+//
+//                <div class="control">
+//                    <textarea rows="3" cols="5" id="textarea" name="textarea"></textarea>
+//                    <div class="note">Please enter your message here</div>
+//                </div>
+//            </div>
+//
+//            <div class="field file">
+//                <label for="file" class="label"><span>File field</span></label>
+//
+//                <div class="control">
+//                    <input type="file" id="file" value="" name="file">
+//                    <div class="note">Please choose your picture here</div>
+//                </div>
+//            </div>
+//
+//            <div class="field choice">
+//                <input type="radio" id="radio" checked="" value="1" name="radio">
+//
+//                <label for="radio" class="label"><span>Radiobutton choice</span></label>
+//            </div>
+//
+//            <div class="field choice">
+//                <input type="checkbox" id="checkbox" value="1" name="checkbox">
+//
+//                <label for="checkbox" class="label"><span>Checkbox choice</span></label>
+//            </div>
+//
+//            <div class="field region">
+//                <label for="select" class="label"><span>Select</span></label>
+//
+//                <div class="control">
+//                    <select name="select" id="select">
+//                        <option value="">Please select</option>
+//                        <option value="5">5</option>
+//                        <option value="10">10</option>
+//                        <option value="15">15</option>
+//                        <option value="20">20</option>
+//                    </select>
+//                </div>
+//            </div>
+//
+//            <div class="field multiselect">
+//                <label for="multiselect" class="label"><span>Multiple select</span></label>
+//
+//                <div class="control">
+//                    <select name="multiselect" id="multiselect" multiple="multiple">
+//                        <option value="Option 1">Option 1</option>
+//                        <option value="Option 2">Option 2</option>
+//                        <option value="Option 3">Option 3</option>
+//                        <option value="Option 4">Option 4</option>
+//                        <option value="Option 5">Option 5</option>
+//                        <option value="Option 6">Option 6</option>
+//                        <option value="Option 7">Option 7</option>
+//                    </select>
+//                </div>
+//            </div>
+//        </fieldset>
+//
+//        <fieldset class="fieldset-example create account" data-hasrequired="* Required Fields">
+//            <legend class="legend"><span>Login Information</span></legend><br>
+//
+//            <div class="field password required">
+//                <label for="password" class="label"><span>Password</span></label>
+//
+//                <div class="control">
+//                    <input type="password" name="password" id="password" title="Password">
+//                </div>
+//            </div>
+//
+//            <div class="field confirmation required">
+//                <label for="confirmation" class="label"><span>Confirm Password</span></label>
+//
+//                <div class="control">
+//                    <input type="password" name="confirmation" title="Confirm Password" id="confirmation">
+//                </div>
+//            </div>
+//
+//            <div class="field password required">
+//                <label for="password2" class="label"><span>Password</span></label>
+//
+//                <div class="control">
+//                    <input type="password" name="password2" id="password2" title="Password">
+//                </div>
+//            </div>
+//
+//            <div class="field textarea">
+//                <label for="textarea2" class="label"><span>Textarea</span></label>
+//
+//                <div class="control">
+//                    <textarea rows="3" cols="5" id="textarea2" name="textarea2"></textarea>
+//                    <div class="note">Please enter your message here</div>
+//                </div>
+//            </div>
+//
+//            <div class="field file">
+//                <label for="file2" class="label"><span>File field</span></label>
+//
+//                <div class="control">
+//                    <input type="file" id="file2" value="" name="file2">
+//                    <div class="note">Please choose your picture here</div>
+//                </div>
+//            </div>
+//
+//            <div class="field choice">
+//                <input type="radio" id="radio2" checked="" value="1" name="radio2">
+//
+//                <label for="radio2" class="label"><span>Radiobutton choice</span></label>
+//            </div>
+//
+//            <div class="field choice">
+//                <input type="checkbox" id="checkbox2" value="1" name="checkbox2">
+//
+//                <label for="checkbox2" class="label"><span>Checkbox choice</span></label>
+//            </div>
+//
+//            <div class="field region">
+//                <label for="select2" class="label"><span>Select</span></label>
+//
+//                <div class="control">
+//                    <select name="select2" id="select2">
+//                        <option value="">Please select</option>
+//                        <option value="5">5</option>
+//                        <option value="10">10</option>
+//                        <option value="15">15</option>
+//                        <option value="20">20</option>
+//                    </select>
+//                </div>
+//            </div>
+//
+//            <div class="field multiselect">
+//                <label for="multiselect2" class="label"><span>Multiple select</span></label>
+//
+//                <div class="control">
+//                    <select name="multiselect2" id="multiselect2" multiple="multiple">
+//                        <option value="Option 1">Option 1</option>
+//                        <option value="Option 2">Option 2</option>
+//                        <option value="Option 3">Option 3</option>
+//                        <option value="Option 4">Option 4</option>
+//                        <option value="Option 5">Option 5</option>
+//                        <option value="Option 6">Option 6</option>
+//                        <option value="Option 7">Option 7</option>
+//                    </select>
+//                </div>
+//            </div>
+//        </fieldset>
+//    </form>
+//  ```
+//
+
+.form.create.account {
+    .fieldset-example {
+        .form-fieldset();
+
+        &.create.info {
+            > .field {
+                .form-field(
+                    @_type: block,
+                    @_column: true
+                );
+            }
+        }
+
+        &.create.account {
+            .form-hasrequired(bottom);
+
+            > .field {
+                .form-field();
+            }
+        }
+    }
+}
+
+//  #Fieldsets & fields variables
+// ####.form-fieldset();
+// <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-fieldset-border</td>
+//            <td class="vars_value">0</td>
+//            <td>Fieldset border</td>
+//        </tr>
+//        <tr>
+//            <th>@_margin</th>
+//            <td class="vars_value">@form-fieldset-margin</td>
+//            <td class="vars_value">0 0 40px</td>
+//            <td>Fieldset margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">@form-fieldset-padding</td>
+//            <td class="vars_value">0</td>
+//            <td>Fieldset padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-color</th>
+//            <td class="vars_value">@form-fieldset-legend-color</td>
+//            <td class="vars_value">inherit</td>
+//            <td>Legend color</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-size</th>
+//            <td class="vars_value">@form-fieldset-legend-font-size</td>
+//            <td class="vars_value">20px</td>
+//            <td>Legend font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-family</th>
+//            <td class="vars_value">@form-fieldset-legend-font-family</td>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Legend font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-weight:</th>
+//            <td class="vars_value">@form-fieldset-legend-font-weight</td>
+//            <td class="vars_value"> @font-weight-base</td>
+//            <td>Legend font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-style</th>
+//            <td class="vars_value">@form-fieldset-legend-font-style</td>
+//            <td class="vars_value">normal</td>
+//            <td>Legend font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-line-height</th>
+//            <td class="vars_value">@form-fieldset-legend-line-height</td>
+//            <td class="vars_value">1.2</td>
+//            <td>Legend line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-margin</th>
+//            <td class="vars_value">@form-fieldset-legend-margin</td>
+//            <td class="vars_value">0 0 25px @form-field-type-inline-label-width</td>
+//            <td>Legend margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-padding</th>
+//            <td class="vars_value"> @_legend-padding: @form-fieldset-legend-padding,<br></td>
+//            <td class="vars_value">0</td>
+//            <td>Legend padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-width</th>
+//            <td class="vars_value">@form-fieldset-legend-width</td>
+//            <td class="vars_value"> 0 0 25px @form-field-type-inline-label-width</td>
+//            <td>Legend width</td>
+//        </tr>
+//    </table>
+// </pre>
+//
+// ####.form-field();
+// <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//        </tr>
+//        <tr>
+//            <th>@_type</th>
+//            <td class="vars_value">@form-field-column</td>
+//            <td class="vars_value">inline</td>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-field-border</td>
+//            <td class="vars_value">none</td>
+//        </tr>
+//
+//        <tr>
+//            <th>@_column</th>
+//            <td class="vars_value">@form-field-column</td>
+//            <td class="vars_value">false</td>
+//        </tr>
+//        <tr>
+//            <th>@_column-padding</th>
+//            <td class="vars_value">@form-field-column-padding</td>
+//            <td class="vars_value">0 20px 0 0</td>
+//        </tr>
+//        <tr>
+//            <th>@_column-width</th>
+//            <td class="vars_value">@form-field-column-width</td>
+//            <td class="vars_value">50%</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-block-margin</th>
+//            <td class="vars_value">@form-field-type-block-margin</td>
+//            <td class="vars_value">0 0 20px</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-margin</th>
+//            <td class="vars_value">@form-field-type-inline-margin</td>
+//            <td class="vars_value">0 0 @form-field-type-inline-vertical-margin</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Form field label</th>
+//        </tr>
+//        <tr>
+//            <th>@_label-color</th>
+//            <td class="vars_value">@form-field-label-color</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-size</th>
+//            <td class="vars_value">@form-field-label-font-size</td>
+//            <td class="vars_value">@font-size-base</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-family</th>
+//            <td class="vars_value">@form-field-label-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-weight</th>
+//            <td class="vars_value">@form-field-label-font-weight</td>
+//            <td class="vars_value">@font-weight-bold</td>
+//        </tr>
+//        <tr>
+//            <th> @_label-font-style</th>
+//            <td class="vars_value">@form-field-label-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-line-height</th>
+//            <td class="vars_value">@form-field-label-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-block-label-margin</th>
+//            <td class="vars_value">@form-field-type-block-label-margin</td>
+//            <td class="vars_value">0 0 5px</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-label-padding</th>
+//            <td class="vars_value">@form-field-type-inline-label-padding</td>
+//            <td class="vars_value">6px 15px 0 0</td>
+//        </tr>
+//
+//        <tr>
+//            <th>@_type-inline-label-width</th>
+//            <td class="vars_value">@form-field-type-inline-label-width</td>
+//            <td class="vars_value">25.8%</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-control-width</th>
+//            <td class="vars_value">@form-field-type-inline-control-width</td>
+//            <td class="vars_value">74.2%</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Label asterisk</th>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-color</th>
+//            <td class="vars_value">@form-field-label-asterisk-color</td>
+//            <td class="vars_value">#da370a</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-size</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-size</td>
+//            <td class="vars_value">@font-size-s</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-family</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-weight</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-weight,</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-style</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-line-height</th>
+//            <td class="vars_value">@form-field-label-asterisk-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-margin</th>
+//            <td class="vars_value">@form-field-label-asterisk-margin</td>
+//            <td class="vars_value">0 0 0 5px</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Field note</th>
+//        </tr>
+//        <tr>
+//            <th>@_note-color</th>
+//            <td class="vars_value">@form-field-note-color</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-size</th>
+//            <td class="vars_value">@form-field-note-font-size</td>
+//            <td class="vars_value">@font-size-s</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-family</th>
+//            <td class="vars_value">@form-field-note-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-weight</th>
+//            <td class="vars_value">@form-field-note-font-weight</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-line-height</th>
+//            <td class="vars_value">@form-field-note-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-style</th>
+//            <td class="vars_value">@form-field-note-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-margin</th>
+//            <td class="vars_value">@form-field-note-margin</td>
+//            <td class="vars_value">3px 0 0</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-padding</th>
+//            <td class="vars_value">@form-field-note-padding</td>
+//            <td class="vars_value">0</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-content</th>
+//            <td class="vars_value">@form-field-note-icon-font-content</td>
+//            <td class="vars_value">@icon-pointer-up</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font</th>
+//            <td class="vars_value">@form-field-note-icon-font</td>
+//            <td class="vars_value">@icon-font</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-size</th>
+//            <td class="vars_value">@form-field-note-icon-font-size</td>
+//            <td class="vars_value">@form-field-note-font-size * 2</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-line-height</th>
+//            <td class="vars_value">@form-field-note-icon-font-line-height</td>
+//            <td class="vars_value">@form-field-note-font-size</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color</th>
+//            <td class="vars_value">@form-field-note-icon-font-color</td>
+//            <td class="vars_value">@form-field-note-color</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color-hover</th>
+//            <td class="vars_value">@form-field-note-icon-font-color-hover</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color-active</th>
+//            <td class="vars_value">@form-field-note-icon-font-color-active</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-margin</th>
+//            <td class="vars_value">@form-field-note-icon-font-margin</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-vertical-align</th>
+//            <td class="vars_value">@form-field-note-icon-font-vertical-align</td>
+//            <td class="vars_value">@icon-font-vertical-align</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-position</th>
+//            <td class="vars_value">@form-field-note-icon-font-position</td>
+//            <td class="vars_value">@icon-font-position</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-text-hide</th>
+//            <td class="vars_value">@form-field-note-icon-font-text-hide</td>
+//            <td class="vars_value">@icon-font-text-hide</td>
+//        </tr>
+//    </table>
+// </pre>
+//
+// ####.form-hasrequired();
+// <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_position</th>
+//            <td class="vars_value">@form-hasrequired-position</td>
+//            <td class="vars_value">top</td>
+//            <td>top | bottom</td>
+//            <td>The position of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_color</th>
+//            <td class="vars_value">@form-hasrequired-color</td>
+//            <td class="vars_value">#da370a</td>
+//            <td>&nbsp;</td>
+//            <td>Text color of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-size</th>
+//            <td class="vars_value">@form-hasrequired-font-size</td>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>&nbsp;</td>
+//            <td>Font size of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-family</th>
+//            <td class="vars_value">@form-hasrequired-font-family</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font family of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-weight</th>
+//            <td class="vars_value">@form-hasrequired-font-weight</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font weight of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-style</th>
+//            <td class="vars_value">@form-hasrequired-font-style</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font style of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_line-height</th>
+//            <td class="vars_value">@form-hasrequired-line-height</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Line height of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-hasrequired-border</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Border of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_margin</th>
+//            <td class="vars_value">@form-hasrequired-margin</td>
+//            <td class="vars_value">10px 0 0</td>
+//            <td>&nbsp;</td>
+//            <td>Margin of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">@form-hasrequired-padding</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Padding of &quot;required fields&quot; notice</td>
+//        </tr>
+//    </table>
+// </pre>
+
+//#Form element inputs
+//####.form-element-input(@_type: type);
+//  ```html
+// <input  type="password" placeholder="placeholder, type = password"  /><br /><br />
+// <input type="text" placeholder="placeholder, type = text" /><br /><br />
+// <input type="url" placeholder="placeholder, type = url" /><br /><br />
+// <input type="tel" placeholder="placeholder, type = tel" /><br /><br />
+// <input type="search" placeholder="placeholder, type = search" /><br /><br />
+// <input type="number" placeholder="placeholder, type = number" /><br /><br />
+// <input  type="email" placeholder="placeholder, type = email" /><br /><br />
+// <select><option>type = select</option><option>option</option></select><br /><br />
+// <select multiple="multiple"><option>type = select multiple</option><option>option</option></select><br /><br />
+// <textarea placeholder="placeholder, type = textarea" ></textarea>
+// ```
+input[type="text"],
+input[type="password"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+input[type="number"],
+input[type="datetime"],
+input[type="email"] {
+    .form-element-input(@_type: input-text);
+}
+
+textarea {
+    .form-element-input(@_type: textarea);
+    .form-element-textarea-resize();
+}
+
+select {
+    .form-element-input(@_type: select);
+}
+
+select[multiple="multiple"] {
+    .add-height(auto);
+}
+
+
+
+// #Form element choice
+// ####.form-element-choise();
+//  ```html
+// <input type="checkbox" name="checkbox-example" /><br />
+// <input type="radio" name="radio-example"  />
+// ```
+input[type="checkbox"] {
+    .form-element-choice(@_type: input-checkbox);
+}
+
+input[type="radio"] {
+    .form-element-choice(@_type: input-radio);
+}
+
+// #Custom indents for element inputs
+// ####.form-element-indent();
+// <pre>
+// **
+// @_margin: ''
+// @_padding: ''
+// **
+// </pre>
+// ```html
+// <input type="text" class="text text-example-2" placeholder="placeholder, type = text" /><br /><br />
+// <select class="select-example-2"><option>type = select</option><option>option</option></select><br /><br />
+// <textarea class="textarea-example-2" placeholder="placeholder, type = textarea"></textarea>
+// ```
+input.text-example-2,
+select.select-example-2 {
+    .form-element-size(
+        @_height: 42px
+    );
+}
+input.text-example-2,
+select.select-example-2,
+textarea.textarea-example-2 {
+    .form-element-indent(
+        @_margin: 0 0 50px 0,
+        @_padding: 5px 25px
+    );
+}
+
+// #Custom color
+// ####.form-element-color();
+// <pre>
+// **
+// @_border-color: ''
+// @_background: ''
+// @_color: ''
+// @_focus-border-color: ''
+// @_focus-background: ''
+// @_focus-color: ''
+// @_disabled-border-color: ''
+// @_disabled-background: ''
+// @_disabled-color: ''
+// @_placeholder-color: ''
+// **
+// </pre>
+// ```html
+// <input type="text" class="text text-example-1" placeholder="placeholder, type = text" /><br /><br />
+// <input type="text" class="text text-example-1" placeholder="placeholder, type = text, disabled" disabled="disabled" /><br /><br />
+// <select class="select-example-1"><option>type = select</option><option>option</option></select><br /><br />
+// <textarea class="textarea-example-1" placeholder="placeholder, type = textarea"></textarea>
+// ```
+input.text-example-1,
+select.select-example-1,
+textarea.textarea-example-1 {
+    .form-element-color(
+        @_background: #fffced,
+        @_border-color: #24ADB2,
+        @_focus-color: green,
+        @_focus-border-color: blue,
+        @_disabled-color: red
+    );
+}
+
+input.text-example-1,
+textarea.textarea-example-1 {
+    .form-element-color(
+        @_placeholder-color: darkgray
+    );
+}
+
+// #Custom indents for choice inputs
+//  ```html
+// <input type="checkbox" name="checkbox-example-1"class="checkbox-example-1"  /><br />
+// <input type="radio" name="radio-example-1" class="radio-example-1"  />
+// ```
+input.checkbox-example-1,
+input.radio-example-1 {
+    .add-margin(@_add-margin: 15px);
+}
+
+// #Custom size
+// ####.form-element-size();
+// <pre>
+// **
+// @_margin: ''
+// @_padding: ''
+// **
+// </pre>
+// ```html
+// <input type="text" class="text text-example-3" placeholder="placeholder, type = text" /><br /><br />
+// <select class="select-example-3"><option>type = select</option><option>option</option></select><br /><br />
+// <textarea class="textarea-example-3" placeholder="placeholder, type = textarea"></textarea>
+// ```
+input.text-example-3,
+select.select-example-3 {
+    .form-element-size(
+        @_height: 42px,
+        @_width: 50%
+    );
+}
+
+textarea.textarea-example-3 {
+    .form-element-size(
+        @_width: 50%
+    );
+}
+
+// #Input number - input-text view
+// ```html
+// <input  type="number" class="number number-example" placeholder="placeholder, type = number " />
+// ```
+.number-example {
+    .form-element-number-reset();
+}
+
+// #Input saerch - input-text view
+// ```html
+// <input  type="search" class="search search-example" placeholder="placeholder, type = search " />
+// ```
+.search-example {
+    .form-element-search-reset();
+}
+
+// #Validation
+// ####.form-element-validation();
+// ```html
+// <input type="text" class="textarea-example-4 mage-error" placeholder="placeholder, type = text" />
+// <div class="mage-error">This is a required field.</div>
+// <br />
+// <input type="text" class="textarea-example-5 valid" placeholder="placeholder, type = text" />
+//
+// <br /><br />
+// <select class="select-example-4 mage-error"><option>type = select</option><option>option</option></select>
+// <div class="mage-error">This is a required field.</div>
+// <br />
+// <select class="select-example-5 valid"><option>type = select</option><option>option</option></select>
+//
+// <br /><br />
+// <textarea class="textarea-example-4 mage-error" placeholder="placeholder, type = textarea"></textarea>
+// <div class="mage-error">This is a required field.</div>
+// <br />
+// <textarea class="textarea-example-5 valid" placeholder="placeholder, type = textarea"></textarea>
+//
+// <br /><br />
+// <input type="checkbox" name="checkbox-example-1" class="checkbox-example-2 mage-error" />
+// <div class="mage-error">This is a required field.</div>
+//
+// <br /><br />
+// <input type="radio" name="radio-example-1" class="radio-example-2 mage-error" />
+// <div class="mage-error">This is a required field.</div>
+// ```
+input,
+textarea,
+select {
+    .form-validation();
+}
+
+// #Validation - use icon
+// ####.form-validation();
+// ```html
+// <input type="text" class="text-example-6 mage-error" placeholder="placeholder, type = text" />
+// <div class="mage-error">This is a required field.</div>
+// <br /><br />
+// <input type="text" class="text-example-7 valid" placeholder="placeholder, type = text" />
+// ```
+input.text-example-6,
+input.text-example-7 {
+    .form-validation(
+        @_note-icon-use: true
+    );
+}
+
+// #Validation - change color
+// ####.form-validation();
+// ```html
+// <input type="text" class="text-example-8 mage-error" placeholder="placeholder, type = text" />
+// <div class="mage-error">This is a required field.</div>
+// <br /><br />
+// <input type="text" class="text-example-9 valid" placeholder="placeholder, type = text" />
+// ```
+input.text-example-8,
+input.text-example-9 {
+    .form-validation-color(
+        @_element-color-error: #71360d,
+        @_element-color-valid: #0a864d,
+        @_element-border-color-error: #f47a1f,
+        @_element-border-color-valid: #17ad67,
+        @_element-background-error: #ffead8,
+        @_element-background-valid: #c9f5e3,
+        @_note-color: #831fe0
+    );
+}

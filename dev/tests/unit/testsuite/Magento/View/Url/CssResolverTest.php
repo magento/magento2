@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Url;
 
 class CssResolverTest extends \PHPUnit_Framework_TestCase
@@ -34,79 +33,63 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystem = $this->getMock('Magento\App\Filesystem', array('getPath', '__wakeup'), array(), '', false);
-        $filesystem->expects($this->any())
-            ->method('getPath')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue('/base_dir/'));
+        $filesystem->expects(
+            $this->any()
+        )->method(
+            'getPath'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue('/base_dir/')
+        );
         $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);
-        $viewFilesystem->expects($this->any())
-            ->method('normalizePath')
-            ->will($this->returnValueMap(array(
+        $viewFilesystem->expects(
+            $this->any()
+        )->method(
+            'normalizePath'
+        )->will(
+            $this->returnValueMap(
                 array(
-                    '/does/not/matter.css',
-                    '/does/not/matter.css'
-                ),
-                array(
-                    '/base_dir/pub/assets/new/location/any_new_name.css',
-                    '/base_dir/pub/assets/new/location/any_new_name.css'
-                ),
-                array(
-                    '/base_dir\pub/assets\new/location/any_new_name.css',
-                    '/base_dir\pub/assets\new/location/any_new_name.css'
-                ),
-                array(
-                    '/base_dir/pub/assets/referenced/di/any_new_name.css',
-                    '/base_dir/pub/assets/referenced/di/any_new_name.css'
-                ),
-                array(
-                    '/base_dir/pub/any_new_name.css',
-                    '/base_dir/pub/any_new_name.css'
-                ),
-                array(
-                    '/not/base_dir/pub/new/file.css',
-                    '/not/base_dir/pub/new/file.css'
-                ),
-                array(
-                    '/base_dir/pub/css/file.css',
-                    '/base_dir/pub/css/file.css'
-                ),
-                array(
-                    '/not/base_dir/pub/css/file.css',
-                    '/not/base_dir/pub/css/file.css'
-                ),
-                array(
-                    '/base_dir/pub/new/file.css',
-                    '/base_dir/pub/new/file.css'
-                ),
-                array(
-                    '/base_dir/pub/assets/referenced/dir/../images/h2.gif',
-                    '/base_dir/pub/assets/referenced/images/h2.gif'
-                ),
-                array(
-                    '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico',
-                    '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico'
-                ),
-                array(
-                    '/base_dir/pub/assets/referenced/dir/original.css',
-                    '/base_dir/pub/assets/referenced/dir/original.css'
-                ),
-                array(
-                    '/base_dir/pub/assets/referenced/dir/body.gif',
-                    '/base_dir/pub/assets/referenced/dir/body.gif'
-                ),
-                array(
-                    '/base_dir/pub/dir/body.gif',
-                    '/base_dir/pub/dir/body.gif'
-                ),
-                array(
-                    '/base_dir/pub/css/body.gif',
-                    '/base_dir/pub/css/body.gif'
-                ),
-                array(
-                    '/not/base_dir/pub/css/body.gif',
-                    '/not/base_dir/pub/css/body.gif'
+                    array('/does/not/matter.css', '/does/not/matter.css'),
+                    array(
+                        '/base_dir/pub/assets/new/location/any_new_name.css',
+                        '/base_dir/pub/assets/new/location/any_new_name.css'
+                    ),
+                    array(
+                        '/base_dir\pub/assets\new/location/any_new_name.css',
+                        '/base_dir\pub/assets\new/location/any_new_name.css'
+                    ),
+                    array(
+                        '/base_dir/pub/assets/referenced/di/any_new_name.css',
+                        '/base_dir/pub/assets/referenced/di/any_new_name.css'
+                    ),
+                    array('/base_dir/pub/any_new_name.css', '/base_dir/pub/any_new_name.css'),
+                    array('/not/base_dir/pub/new/file.css', '/not/base_dir/pub/new/file.css'),
+                    array('/base_dir/pub/css/file.css', '/base_dir/pub/css/file.css'),
+                    array('/not/base_dir/pub/css/file.css', '/not/base_dir/pub/css/file.css'),
+                    array('/base_dir/pub/new/file.css', '/base_dir/pub/new/file.css'),
+                    array(
+                        '/base_dir/pub/assets/referenced/dir/../images/h2.gif',
+                        '/base_dir/pub/assets/referenced/images/h2.gif'
+                    ),
+                    array(
+                        '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico',
+                        '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico'
+                    ),
+                    array(
+                        '/base_dir/pub/assets/referenced/dir/original.css',
+                        '/base_dir/pub/assets/referenced/dir/original.css'
+                    ),
+                    array(
+                        '/base_dir/pub/assets/referenced/dir/body.gif',
+                        '/base_dir/pub/assets/referenced/dir/body.gif'
+                    ),
+                    array('/base_dir/pub/dir/body.gif', '/base_dir/pub/dir/body.gif'),
+                    array('/base_dir/pub/css/body.gif', '/base_dir/pub/css/body.gif'),
+                    array('/not/base_dir/pub/css/body.gif', '/not/base_dir/pub/css/body.gif')
                 )
-            )));
+            )
+        );
         $this->object = new CssResolver($filesystem, $viewFilesystem);
     }
 
@@ -143,29 +126,29 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
                 '/does/not/matter.css',
                 '/base_dir/pub/assets/new/location/any_new_name.css',
                 $callback,
-                $result,
+                $result
             ),
             'back slashes in new name' => array(
                 $source,
                 '/does/not/matter.css',
                 '/base_dir\pub/assets\new/location/any_new_name.css',
                 $callback,
-                $result,
+                $result
             ),
             'directory with subset name' => array(
                 'body {background: url(body.gif);}',
                 '/base_dir/pub/assets/referenced/dir/original.css',
                 '/base_dir/pub/assets/referenced/di/any_new_name.css',
                 null,
-                'body {background: url(../dir/body.gif);}',
+                'body {background: url(../dir/body.gif);}'
             ),
             'objectCallback' => array(
                 'body {background: url(body.gif);}',
                 '/does/not/matter.css',
                 '/base_dir/pub/any_new_name.css',
                 $objectCallback,
-                'body {background: url(dir/body.gif);}',
-            ),
+                'body {background: url(dir/body.gif);}'
+            )
         );
     }
 
@@ -187,14 +170,8 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
     public static function replaceCssRelativeUrlsExceptionDataProvider()
     {
         return array(
-            'new css path is out of reach' => array(
-                '/base_dir/pub/css/file.css',
-                '/not/base_dir/pub/new/file.css',
-            ),
-            'referenced path is out of reach' => array(
-                '/not/base_dir/pub/css/file.css',
-                '/base_dir/pub/new/file.css',
-            ),
+            'new css path is out of reach' => array('/base_dir/pub/css/file.css', '/not/base_dir/pub/new/file.css'),
+            'referenced path is out of reach' => array('/not/base_dir/pub/css/file.css', '/base_dir/pub/new/file.css')
         );
     }
 }

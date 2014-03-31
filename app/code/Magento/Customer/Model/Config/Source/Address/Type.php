@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Model\Config\Source\Address;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve possible customer address types

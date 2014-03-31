@@ -26,9 +26,11 @@
  */
 namespace Magento\ObjectManager;
 
-use \Magento\Filesystem\DriverInterface;
-use \Magento\ObjectManager\Definition\Runtime;
-use \Magento\ObjectManager\Relations;
+use Magento\Filesystem\DriverInterface;
+use Magento\ObjectManager\Definition\Runtime;
+use Magento\ObjectManager\Relations;
+use Magento\ObjectManager\Code\Generator;
+use Magento\Interception\Code\Generator as InterceptionGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,12 +81,8 @@ class DefinitionFactory
      * @param string $generationDir
      * @param string  $definitionFormat
      */
-    public function __construct(
-        DriverInterface $filesystemDriver,
-        $definitionDir,
-        $generationDir,
-        $definitionFormat
-    ) {
+    public function __construct(DriverInterface $filesystemDriver, $definitionDir, $generationDir, $definitionFormat)
+    {
         $this->_filesystemDriver = $filesystemDriver;
         $this->_definitionDir = $definitionDir;
         $this->_generationDir = $generationDir;
@@ -118,11 +116,19 @@ class DefinitionFactory
                 $autoloader,
                 $this->_generationDir
             );
-            $generator = new \Magento\Code\Generator(null, $autoloader, $generatorIo);
+            $generator = new \Magento\Code\Generator(
+                $autoloader,
+                $generatorIo,
+                array(
+                    Generator\Factory::ENTITY_TYPE => '\Magento\ObjectManager\Code\Generator\Factory',
+                    Generator\Proxy::ENTITY_TYPE => '\Magento\ObjectManager\Code\Generator\Proxy',
+                    InterceptionGenerator\Interceptor::ENTITY_TYPE => '\Magento\Interception\Code\Generator\Interceptor'
+                )
+            );
             $autoloader = new \Magento\Code\Generator\Autoloader($generator);
             spl_autoload_register(array($autoloader, 'load'));
 
-            $result =  new Runtime();
+            $result = new Runtime();
         }
         return $result;
     }

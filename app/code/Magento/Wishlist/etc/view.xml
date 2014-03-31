@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<view>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Config/etc/view.xsd">
     <vars module="Magento_Wishlist">
         <var name="product_image_size">113</var>        <!-- Product image size used in wishlist -->
     </vars>

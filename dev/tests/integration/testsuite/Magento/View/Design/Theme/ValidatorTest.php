@@ -38,8 +38,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateWithValidData()
     {
         /** @var $validator \Magento\View\Design\Theme\Validator */
-        $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\Theme\Validator');
+        $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\Theme\Validator'
+        );
 
         $themeModel = $this->_getThemeModel();
         $themeModel->setData($this->_getThemeValidData());
@@ -53,8 +54,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateWithInvalidData()
     {
         /** @var $validator \Magento\View\Design\Theme\Validator */
-        $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\Theme\Validator');
+        $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\Theme\Validator'
+        );
 
         $themeModel = $this->_getThemeModel();
         $themeModel->setData($this->_getThemeInvalidData());
@@ -65,12 +67,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Get theme model
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _getThemeModel()
     {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface');
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\ThemeInterface'
+        );
     }
 
     /**
@@ -81,12 +84,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeValidData()
     {
         return array(
-            'theme_code'           => 'space',
-            'theme_title'          => 'Space theme',
-            'theme_version'        => '2.0.0.0',
-            'parent_theme'         => null,
-            'theme_path'           => 'default/space',
-            'preview_image'        => 'images/preview.png',
+            'theme_code' => 'space',
+            'theme_title' => 'Space theme',
+            'theme_version' => '2.0.0.0',
+            'parent_theme' => null,
+            'theme_path' => 'default/space',
+            'preview_image' => 'images/preview.png'
         );
     }
 
@@ -98,12 +101,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeInvalidData()
     {
         return array(
-            'theme_code'           => 'space',
-            'theme_title'          => 'Space theme',
-            'theme_version'        => 'last version',
-            'parent_theme'         => null,
-            'theme_path'           => 'default/space',
-            'preview_image'        => 'images/preview.png',
+            'theme_code' => 'space',
+            'theme_title' => 'Space theme',
+            'theme_version' => 'last version',
+            'parent_theme' => null,
+            'theme_path' => 'default/space',
+            'preview_image' => 'images/preview.png'
         );
     }
 }

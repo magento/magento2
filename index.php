@@ -33,6 +33,5 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require __DIR__ . '/app/bootstrap.php';
-
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $_SERVER);
 $entryPoint->run('Magento\App\Http');

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Type');
+        $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Type'
+        );
     }
 
     /**
@@ -47,7 +47,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory($typeId, $expectedClass)
     {
-        $product = new \Magento\Object;
+        $product = new \Magento\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -64,13 +64,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(null, 'Magento\Catalog\Model\Product\Type\Simple'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Simple'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Virtual'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE,
-                'Magento\Catalog\Model\Product\Type\Configurable'
-            ),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Type'),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            array(
+                \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
                 'Magento\Downloadable\Model\Product\Type'
-            ),
+            )
         );
     }
 
@@ -80,7 +78,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryReturnsSingleton($typeId)
     {
-        $product = new \Magento\Object;
+        $product = new \Magento\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -99,7 +97,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(null),
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE),
             array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
         );
@@ -122,13 +119,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(null, 'Magento\Catalog\Model\Product\Type\Price'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Price'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Price'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE,
-                'Magento\Catalog\Model\Product\Type\Configurable\Price'
-            ),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Price'),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            array(
+                \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
                 'Magento\Downloadable\Model\Product\Price'
-            ),
+            )
         );
     }
 
@@ -137,7 +132,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $options = $this->_productType->getOptionArray();
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $options);
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, $options);
-        $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE, $options);
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $options);
         $this->assertArrayHasKey(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $options);
     }
@@ -177,9 +171,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         return array(
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE),
+            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
         );
     }
 
@@ -188,7 +181,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $types = $this->_productType->getTypes();
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $types);
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, $types);
-        $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE, $types);
         $this->assertArrayHasKey(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
         $this->assertArrayHasKey(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $types);
         foreach ($types as $type) {
@@ -203,7 +195,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $types = $this->_productType->getCompositeTypes();
         $this->assertInternalType('array', $types);
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE, $types);
         $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
     }
 
@@ -213,7 +204,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         // collect the types and priority in the same order as the method returns
         $result = array();
         foreach ($types as $typeId => $type) {
-            if (!isset($type['index_priority'])) { // possible bug: index_priority is not defined for each type
+            if (!isset($type['index_priority'])) {
+                // possible bug: index_priority is not defined for each type
                 $priority = 0;
             } else {
                 $priority = (int)$type['index_priority'];
@@ -247,7 +239,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $types);
         $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, $types);
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE, $types);
         $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
         $this->assertContains(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $types);
         return $types;

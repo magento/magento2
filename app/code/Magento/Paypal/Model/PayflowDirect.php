@@ -21,12 +21,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model;
 
 class PayflowDirect extends \Magento\Paypal\Model\Direct
 {
-    protected $_code  = \Magento\Paypal\Model\Config::METHOD_WPP_PE_DIRECT;
+    /**
+     * @var string
+     */
+    protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_PE_DIRECT;
 
     /**
      * Website Payments Pro instance type
@@ -65,16 +67,21 @@ class PayflowDirect extends \Magento\Paypal\Model\Direct
     /**
      * Import direct payment results to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return void
      */
     protected function _importResultToPayment($api, $payment)
     {
-        $payment->setTransactionId($api->getPaypalTransactionId())->setIsTransactionClosed(0)
-            ->setIsTransactionPending($api->getIsPaymentPending())
-            ->setTransactionAdditionalInfo(
-                \Magento\Paypal\Model\Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID,
-                $api->getTransactionId()
+        $payment->setTransactionId(
+            $api->getPaypalTransactionId()
+        )->setIsTransactionClosed(
+            0
+        )->setIsTransactionPending(
+            $api->getIsPaymentPending()
+        )->setTransactionAdditionalInfo(
+            \Magento\Paypal\Model\Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID,
+            $api->getTransactionId()
         );
         $payment->setPreparedMessage(__('Payflow PNREF: #%1.', $api->getTransactionId()));
         $this->_pro->importPaymentInfo($api, $payment);

@@ -33,9 +33,10 @@
  */
 namespace Magento\Core\Model\Source\Urlrewrite;
 
-class Types implements \Magento\Core\Model\Option\ArrayInterface
+class Types implements \Magento\Option\ArrayInterface
 {
     const SYSTEM = 1;
+
     const CUSTOM = 0;
 
     /**
@@ -51,10 +52,7 @@ class Types implements \Magento\Core\Model\Option\ArrayInterface
     public function getAllOptions()
     {
         if (is_null($this->_options)) {
-            $this->_options = array(
-                self::SYSTEM => __('System'),
-                self::CUSTOM => __('Custom')
-            );
+            $this->_options = array(self::SYSTEM => __('System'), self::CUSTOM => __('Custom'));
         }
         return $this->_options;
     }

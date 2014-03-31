@@ -94,7 +94,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 if ($position === false) {
                     $position = count($modulesList);
                 }
-                array_splice($sortedModulesList, $position+1, 0, $moduleData['name']);
+                array_splice($sortedModulesList, $position + 1, 0, $moduleData['name']);
             } else {
                 $sortedModulesList[] = $moduleData['name'];
             }

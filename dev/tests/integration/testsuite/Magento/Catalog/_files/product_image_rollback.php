@@ -26,13 +26,16 @@
  */
 
 /** @var $config \Magento\Catalog\Model\Product\Media\Config */
-$config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Catalog\Model\Product\Media\Config');
+$config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Catalog\Model\Product\Media\Config'
+);
 
 /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\App\Filesystem')
-    ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+$mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\App\Filesystem'
+)->getDirectoryWrite(
+    \Magento\App\Filesystem::MEDIA_DIR
+);
 
 $mediaDirectory->delete($config->getBaseMediaPath());
 $mediaDirectory->delete($config->getBaseTmpMediaPath());

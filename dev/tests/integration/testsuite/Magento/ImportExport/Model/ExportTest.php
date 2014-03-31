@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model;
 
 class ExportTest extends \PHPUnit_Framework_TestCase
@@ -38,8 +37,9 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ImportExport\Model\Export');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ImportExport\Model\Export'
+        );
     }
 
     /**
@@ -52,11 +52,12 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityAdapterWithValidEntity($entity, $expectedEntityType)
     {
-        $this->_model->setData(array(
-            'entity' => $entity
-        ));
+        $this->_model->setData(array('entity' => $entity));
         $this->_model->getEntityAttributeCollection();
-        $this->assertAttributeInstanceOf($expectedEntityType, '_entityAdapter', $this->_model,
+        $this->assertAttributeInstanceOf(
+            $expectedEntityType,
+            '_entityAdapter',
+            $this->_model,
             'Entity adapter property has wrong type'
         );
     }
@@ -67,16 +68,16 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     public function getEntityDataProvider()
     {
         return array(
-            'product'            => array(
-                '$entity'             => 'catalog_product',
+            'product' => array(
+                '$entity' => 'catalog_product',
                 '$expectedEntityType' => 'Magento\ImportExport\Model\Export\Entity\Product'
             ),
             'customer main data' => array(
-                '$entity'             => 'customer',
+                '$entity' => 'customer',
                 '$expectedEntityType' => 'Magento\ImportExport\Model\Export\Entity\Eav\Customer'
             ),
-            'customer address'   => array(
-                '$entity'             => 'customer_address',
+            'customer address' => array(
+                '$entity' => 'customer_address',
                 '$expectedEntityType' => 'Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address'
             )
         );
@@ -85,14 +86,12 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     /**
      * Test method '_getEntityAdapter' in case when entity is invalid
      *
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
     public function testGetEntityAdapterWithInvalidEntity()
     {
-        $this->_model->setData(array(
-            'entity' => 'test'
-        ));
+        $this->_model->setData(array('entity' => 'test'));
         $this->_model->getEntityAttributeCollection();
     }
 }

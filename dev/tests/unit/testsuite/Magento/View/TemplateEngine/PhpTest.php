@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\TemplateEngine;
 
 class PhpTest extends \PHPUnit_Framework_TestCase
@@ -52,9 +51,11 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender()
     {
-        $blockMock = $this->getMockBuilder('Magento\View\Element\Template')
-            ->setMethods(array('testMethod'))
-            ->disableOriginalConstructor()->getMock();
+        $blockMock = $this->getMockBuilder(
+            'Magento\View\Element\Template'
+        )->setMethods(
+            array('testMethod')
+        )->disableOriginalConstructor()->getMock();
 
         $blockMock->expects($this->once())->method('testMethod');
         $blockMock->property = self::TEST_PROP_VALUE;
@@ -64,7 +65,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeEquals(null, '_currentBlock', $this->_phpEngine);
 
-        $expectedOutput = '<html>'.self::TEST_PROP_VALUE.'</html>';
+        $expectedOutput = '<html>' . self::TEST_PROP_VALUE . '</html>';
         $this->assertSame($expectedOutput, $actualOutput, 'phtml file did not render correctly');
     }
 
@@ -81,9 +82,11 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderException()
     {
-        $blockMock = $this->getMockBuilder('Magento\View\Element\Template')
-            ->setMethods(array('testMethod'))
-            ->disableOriginalConstructor()->getMock();
+        $blockMock = $this->getMockBuilder(
+            'Magento\View\Element\Template'
+        )->setMethods(
+            array('testMethod')
+        )->disableOriginalConstructor()->getMock();
 
         $filename = 'This_is_not_a_file';
         $this->_phpEngine->render($blockMock, $filename);
@@ -96,8 +99,15 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     {
         $class = 'Magento\Object';
         $object = $this->getMock($class, array(), array(), '', false);
-        $this->_helperFactoryMock->expects($this->once())
-            ->method('get')->with($class)->will($this->returnValue($object));
+        $this->_helperFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $class
+        )->will(
+            $this->returnValue($object)
+        );
         $this->_phpEngine->helper($class);
     }
 
@@ -105,10 +115,15 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     {
         $class = 'Magento\App\Helper\AbstractHelper';
         $object = $this->getMockForAbstractClass($class, array(), '', false);
-        $this->_helperFactoryMock->expects($this->once())
-            ->method('get')->with($class)->will($this->returnValue($object));
+        $this->_helperFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $class
+        )->will(
+            $this->returnValue($object)
+        );
         $this->assertEquals($object, $this->_phpEngine->helper($class));
     }
-
-
 }

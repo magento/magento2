@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Controller\Adminhtml\Extension;
 
 /**
@@ -38,9 +37,10 @@ class LocalTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/admin/extension_local/index');
         $expected = '?return=' . urlencode(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Backend\Helper\Data')->getHomePageUrl()
-            );
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Backend\Helper\Data'
+            )->getHomePageUrl()
+        );
         $this->assertRedirect($this->stringEndsWith($expected));
     }
 }

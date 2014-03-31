@@ -26,7 +26,7 @@
 <?php $_product = $this->getProduct() ?>
 <?php if ($this->canEmailToFriend()): ?>
     <a title="<?php echo __('Email to a Friend') ?>"
-       class="action mailto"
+       class="action mailto friend"
        href="<?php echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>">
         <span><?php echo __('Email to a Friend') ?></span>
     </a>

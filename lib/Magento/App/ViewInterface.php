@@ -99,7 +99,14 @@ interface ViewInterface
      * Set isLayoutLoaded flag
      *
      * @param bool $value
+     * @return void
      */
     public function setIsLayoutLoaded($value);
 
+    /**
+     * Returns is layout loaded
+     *
+     * @return bool
+     */
+    public function isLayoutLoaded();
 }

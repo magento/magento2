@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
 
 class JsTest extends \PHPUnit_Framework_TestCase
@@ -41,31 +40,30 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Js');
     }
 
-    public function testGetTranslateJson()
-    {
-        $this->assertNotNull(json_decode($this->_helper->getTranslateJson()));
-    }
-
     public function testGetTranslatorScript()
     {
         $this->assertEquals(
-            "<script type=\"text/javascript\">//<![CDATA[\n"
-                . '(function($) {$.mage.translate.add(' . $this->_helper->getTranslateJson() . ')})(jQuery);'
-                . "\n//]]></script>",
+            "<script type=\"text/javascript\">//<![CDATA[\n" .
+            '(function($) {$.mage.translate.add(' .
+            $this->_helper->encode($this->_helper->getTranslateData()) .
+            ')})(jQuery);' .
+            "\n//]]></script>",
             $this->_helper->getTranslatorScript()
         );
     }
 
     public function testGetScript()
     {
-        $this->assertEquals("<script type=\"text/javascript\">//<![CDATA[\ntest\n//]]></script>",
+        $this->assertEquals(
+            "<script type=\"text/javascript\">//<![CDATA[\ntest\n//]]></script>",
             $this->_helper->getScript('test')
         );
     }
 
     public function testIncludeScript()
     {
-        $this->assertEquals('<script type="text/javascript" src="http://localhost/pub/lib/blank.html"></script>' . "\n",
+        $this->assertEquals(
+            '<script type="text/javascript" src="http://localhost/pub/lib/blank.html"></script>' . "\n",
             $this->_helper->includeScript(self::FILE)
         );
         $script = '<script type="text/javascript" src="http://localhost/pub/lib/images/spacer.gif"></script>';

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Transactions\Child;
 
 /**
  * Adminhtml transaction details grid
@@ -31,20 +32,19 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Transactions\Child;
-
 class Grid extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
 {
     /**
      * Columns, that should be removed from grid
      *
-     * @var array
+     * @var string[]
      */
     protected $_columnsToRemove = array('parent_id', 'parent_txn_id');
 
     /**
      * Disable pager and filter
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -58,7 +58,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
     /**
      * Add filter by parent transaction ID
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -71,6 +71,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
     /**
      * Remove some columns and make other not sortable
      *
+     * @return $this
      */
     protected function _prepareColumns()
     {

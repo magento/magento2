@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
@@ -32,10 +32,8 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Fulltext;
-
-class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
-    implements \Magento\CatalogSearch\Model\Resource\EngineInterface
+class Engine extends \Magento\Model\Resource\Db\AbstractDb implements
+    \Magento\CatalogSearch\Model\Resource\EngineInterface
 {
     /**
      * Catalog product visibility
@@ -117,6 +115,7 @@ class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Init resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -130,15 +129,14 @@ class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $storeId
      * @param array $index
      * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @return $this
      */
     public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
     {
-        $this->_getWriteAdapter()->insert($this->getMainTable(), array(
-            'product_id'    => $entityId,
-            'store_id'      => $storeId,
-            'data_index'    => $index
-        ));
+        $this->_getWriteAdapter()->insert(
+            $this->getMainTable(),
+            array('product_id' => $entityId, 'store_id' => $storeId, 'data_index' => $index)
+        );
         return $this;
     }
 
@@ -148,18 +146,14 @@ class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $storeId
      * @param array $entityIndexes
      * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @return $this
      */
     public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
     {
-        $data    = array();
+        $data = array();
         $storeId = (int)$storeId;
         foreach ($entityIndexes as $entityId => $index) {
-            $data[] = array(
-                'product_id'    => (int)$entityId,
-                'store_id'      => $storeId,
-                'data_index'    => $index
-            );
+            $data[] = array('product_id' => (int)$entityId, 'store_id' => $storeId, 'data_index' => $index);
         }
 
         if ($data) {
@@ -172,7 +166,7 @@ class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Retrieve allowed visibility values for current engine
      *
-     * @return array
+     * @return int[]
      */
     public function getAllowedVisibility()
     {
@@ -195,7 +189,7 @@ class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $storeId
      * @param int $entityId
      * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @return $this
      */
     public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
     {

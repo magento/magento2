@@ -32,7 +32,7 @@ class Window extends \Magento\Backend\Block\Template
     /**
      * XML path of Severity icons url
      */
-    const XML_SEVERITY_ICONS_URL_PATH  = 'system/adminnotification/severity_icons_url';
+    const XML_SEVERITY_ICONS_URL_PATH = 'system/adminnotification/severity_icons_url';
 
     /**
      * Severity icons url

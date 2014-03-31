@@ -35,6 +35,9 @@ namespace Magento\Backend\Model\Config\Backend;
 
 class Datashare extends \Magento\Core\Model\Config\Value
 {
+    /**
+     * @return void
+     */
     protected function _afterSave()
     {
     }

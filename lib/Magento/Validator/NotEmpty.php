@@ -27,5 +27,4 @@ namespace Magento\Validator;
 
 class NotEmpty extends \Zend_Validate_NotEmpty implements \Magento\Validator\ValidatorInterface
 {
-
 }

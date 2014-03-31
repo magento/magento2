@@ -84,9 +84,9 @@ class Config
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
         $settings = array(
-            'widget_plugin_src'   => $url,
+            'widget_plugin_src' => $url,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url'   => $this->getWidgetWindowUrl($config)
+            'widget_window_url' => $this->getWidgetWindowUrl($config)
         );
 
         return $settings;
@@ -122,7 +122,7 @@ class Config
     /**
      * Encode list of widget types into query param
      *
-     * @param array $widgets List of widgets
+     * @param string[]|string $widgets List of widgets
      * @return string Query param value
      */
     public function encodeWidgetsToQuery($widgets)
@@ -136,12 +136,11 @@ class Config
      * Decode URL query param and return list of widgets
      *
      * @param string $queryParam Query param value to decode
-     * @return array Array of widget types
+     * @return string[] Array of widget types
      */
     public function decodeWidgetsFromQuery($queryParam)
     {
         $param = $this->_coreHelper->urlDecode($queryParam);
         return preg_split('/\s*\,\s*/', $param, 0, PREG_SPLIT_NO_EMPTY);
     }
-
 }

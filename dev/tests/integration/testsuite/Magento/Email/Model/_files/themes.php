@@ -21,17 +21,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-    \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-        \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+    array(
+        \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+            \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+        )
     )
-));
+);
 $objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManger->get('Magento\Core\Model\App')
-    ->loadAreaPart(
-        \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-        \Magento\Core\Model\App\Area::PART_CONFIG
-    );
+$objectManger->get('Magento\App\AreaList')
+    ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+    ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+
 $objectManger->configure(array(
     'preferences' => array(
         'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
@@ -39,6 +40,4 @@ $objectManger->configure(array(
 ));
 /** @var $registration \Magento\Core\Model\Theme\Registration */
 $registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
-$registration->register(
-    implode('/', array('*', '*', 'theme.xml'))
-);
+$registration->register(implode('/', array('*', '*', 'theme.xml')));

@@ -23,17 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Directory\Model\Resource;
 
 /**
  * Directory Country Resource Model
  */
-namespace Magento\Directory\Model\Resource;
-
-class Country extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Country extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -46,7 +46,7 @@ class Country extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Directory\Model\Country $country
      * @param string $code
      * @return \Magento\Directory\Model\Resource\Country
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function loadByCode(\Magento\Directory\Model\Country $country, $code)
     {
@@ -60,7 +60,7 @@ class Country extends \Magento\Core\Model\Resource\Db\AbstractDb
                 break;
 
             default:
-                throw new \Magento\Core\Exception(__('Please correct the country code: %1.', $code));
+                throw new \Magento\Model\Exception(__('Please correct the country code: %1.', $code));
         }
 
         return $this->load($country, $code, $field);

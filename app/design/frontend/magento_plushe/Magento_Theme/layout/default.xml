@@ -23,13 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
     <referenceBlock name="logo">
         <arguments>
             <argument name="theme_name" xsi:type="string">plushe</argument>
         </arguments>
     </referenceBlock>
-
     <referenceContainer name="header-wrapper">
         <block class="Magento\View\Element\Html\Links" name="header.links" after="minicart">
             <arguments>
@@ -37,20 +36,6 @@
             </arguments>
         </block>
     </referenceContainer>
-
-    <referenceBlock name="header.links">
-        <block class="Magento\Theme\Block\Html\Header" name="header" as="header" before="-">
-            <arguments>
-                <argument name="show_part" xsi:type="string">welcome</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
-
-    <referenceBlock name="top.links">
-        <arguments>
-            <argument name="css_class" xsi:type="string">links</argument>
-        </arguments>
-    </referenceBlock>
     <referenceBlock name="footer_links">
         <arguments>
             <argument name="css_class" xsi:type="string">links</argument>
@@ -61,4 +46,5 @@
             <argument name="columns_limit" xsi:type="string">1</argument>
         </arguments>
     </referenceBlock>
+    <move element="header" destination="header.links" before="-"/>
 </layout>

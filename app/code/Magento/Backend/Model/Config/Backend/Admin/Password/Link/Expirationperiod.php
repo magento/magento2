@@ -33,13 +33,12 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin\Password\Link;
 
-class Expirationperiod
-    extends \Magento\Core\Model\Config\Value
+class Expirationperiod extends \Magento\Core\Model\Config\Value
 {
     /**
      * Validate expiration period value before saving
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Password\Link\Expirationperiod
+     * @return $this
      */
     protected function _beforeSave()
     {

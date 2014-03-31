@@ -20,12 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 class FormFactory
@@ -43,28 +40,33 @@ class FormFactory
         $this->_objectManager = $objectManager;
     }
 
-
     /**
      * Create Form
      *
      * @param string $entityType
      * @param string $formCode
-     * @param array $attributeValues
+     * @param array $attributeValues Key is attribute code.
      * @param bool $isAjax
+     * @param bool $ignoreInvisible
+     * @param array $filterAttributes
      * @return \Magento\Customer\Model\Metadata\Form
      */
     public function create(
         $entityType,
         $formCode,
-        $attributeValues = [],
-        $isAjax = false
+        array $attributeValues = array(),
+        $isAjax = false,
+        $ignoreInvisible = Form::IGNORE_INVISIBLE,
+        $filterAttributes = array()
     ) {
-        $params = [
+        $params = array(
             'entityType' => $entityType,
             'formCode' => $formCode,
             'attributeValues' => $attributeValues,
-            'isAjax' => $isAjax,
-        ];
+            'ignoreInvisible' => $ignoreInvisible,
+            'filterAttributes' => $filterAttributes,
+            'isAjax' => $isAjax
+        );
         return $this->_objectManager->create('Magento\Customer\Model\Metadata\Form', $params);
     }
 }

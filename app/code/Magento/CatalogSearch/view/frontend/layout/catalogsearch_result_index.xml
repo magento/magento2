@@ -23,22 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="page_two_columns_left"/>
-    <referenceContainer name="left">
-        <block class="Magento\CatalogSearch\Block\Layer" name="catalogsearch.leftnav" before="-" template="Magento_Catalog::layer/view.phtml"/>
-    </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="result.phtml">
-            <block class="Magento\Catalog\Block\Product\ListProduct" name="search_result_list" template="product/list.phtml">
+        <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="result.phtml" cacheable="false">
+            <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml" cacheable="false">
                 <arguments>
                     <!-- If position of argument is depend on image size changable in VDE:
                         positions:list-secondary,grid-secondary,list-actions,grid-actions,list-primary,grid-primary
                     -->
                     <argument name="positioned" xsi:type="string">positions:list-secondary</argument>
                 </arguments>
-                <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
-                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+                <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml" cacheable="false">
+                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager" cacheable="false"/>
                 </block>
                 <action method="setToolbarBlockName">
                     <argument name="name" xsi:type="string">product_list_toolbar</argument>

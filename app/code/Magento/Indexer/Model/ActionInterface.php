@@ -17,17 +17,18 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model;
 
 interface ActionInterface
 {
     /**
      * Execute full indexation
+     *
+     * @return void
      */
     public function executeFull();
 
@@ -35,6 +36,7 @@ interface ActionInterface
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
+     * @return void
      */
     public function executeList($ids);
 
@@ -42,6 +44,7 @@ interface ActionInterface
      * Execute partial indexation by ID
      *
      * @param int $id
+     * @return void
      */
     public function executeRow($id);
 }

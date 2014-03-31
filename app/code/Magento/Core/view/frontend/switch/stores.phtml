@@ -38,7 +38,10 @@
         <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
         <li class="current"><strong><?php echo $this->escapeHtml($_group->getName()) ?></strong></li>
         <?php else: ?>
-        <li><a href="<?php echo $_group->getHomeUrl() ?>"><?php echo $this->escapeHtml($_group->getName()) ?></a></li>
+        <li>
+            <a href="#" data-post='<?php echo $this->getTargetStorePostData($_group->getDefaultStore()); ?>'>
+                <?php echo $this->escapeHtml($_group->getName()) ?></a>
+        </li>
         <?php endif; ?>
     <?php endforeach; ?>
     </ul>

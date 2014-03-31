@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Menu;
 
 /**
@@ -207,7 +206,7 @@ class Item
      * Retrieve argument element, or default value
      *
      * @param array $array
-     * @param mixed $key
+     * @param string $key
      * @param mixed $defaultValue
      * @return mixed
      */
@@ -233,7 +232,7 @@ class Item
      */
     public function hasChildren()
     {
-        return !is_null($this->_submenu) && (bool) $this->_submenu->count();
+        return !is_null($this->_submenu) && (bool)$this->_submenu->count();
     }
 
     /**
@@ -256,7 +255,7 @@ class Item
      */
     public function getUrl()
     {
-        if ((bool) $this->_action) {
+        if ((bool)$this->_action) {
             return $this->_urlModel->getUrl((string)$this->_action, array('_cache_secret_key' => true));
         }
         return '#';
@@ -276,7 +275,7 @@ class Item
      * Set Item action
      *
      * @param string $action
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setAction($action)
@@ -323,7 +322,7 @@ class Item
      * Set Item title
      *
      * @param string $title
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTitle($title)
@@ -340,7 +339,7 @@ class Item
      */
     public function hasTooltip()
     {
-        return (bool) $this->_tooltip;
+        return (bool)$this->_tooltip;
     }
 
     /**
@@ -357,7 +356,7 @@ class Item
      * Set Item tooltip
      *
      * @param string $tooltip
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTooltip($tooltip)
@@ -371,7 +370,7 @@ class Item
      * Set Item module
      *
      * @param string $module
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setModule($module)
@@ -385,7 +384,7 @@ class Item
      * Set Item module dependency
      *
      * @param string $moduleName
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setModuleDependency($moduleName)
@@ -399,7 +398,7 @@ class Item
      * Set Item config dependency
      *
      * @param string $configPath
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setConfigDependency($configPath)
@@ -416,9 +415,9 @@ class Item
      */
     public function isDisabled()
     {
-        return !$this->_moduleManager->isOutputEnabled($this->_moduleName)
-            || !$this->_isModuleDependenciesAvailable()
-            || !$this->_isConfigDependenciesAvailable();
+        return !$this->_moduleManager->isOutputEnabled(
+            $this->_moduleName
+        ) || !$this->_isModuleDependenciesAvailable() || !$this->_isConfigDependenciesAvailable();
     }
 
     /**
@@ -462,6 +461,9 @@ class Item
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function __sleep()
     {
         if ($this->_submenu) {
@@ -483,6 +485,9 @@ class Item
         );
     }
 
+    /**
+     * @return void
+     */
     public function __wakeup()
     {
         $objectManager = \Magento\App\ObjectManager::getInstance();

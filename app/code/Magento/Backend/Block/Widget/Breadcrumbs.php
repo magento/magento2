@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget;
 
 /**
  * Magento_Backend page breadcrumbs
@@ -31,39 +32,46 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget;
-
 class Breadcrumbs extends \Magento\Backend\Block\Template
 {
     /**
-     * breadcrumbs links
+     * Breadcrumbs links
      *
      * @var array
      */
     protected $_links = array();
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/breadcrumbs.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
-        $this->addLink(__('Home'),
-            __('Home'), $this->getUrl('*')
-        );
+        $this->addLink(__('Home'), __('Home'), $this->getUrl('*'));
     }
 
-    public function addLink($label, $title=null, $url=null)
+    /**
+     * @param string $label
+     * @param string|null $title
+     * @param string|null $url
+     * @return $this
+     */
+    public function addLink($label, $title = null, $url = null)
     {
         if (empty($title)) {
             $title = $label;
         }
-        $this->_links[] = array(
-            'label' => $label,
-            'title' => $title,
-            'url'   => $url
-        );
+        $this->_links[] = array('label' => $label, 'title' => $title, 'url' => $url);
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _beforeToHtml()
     {
         // TODO - Moved to Beta 2, no breadcrumbs displaying in Beta 1

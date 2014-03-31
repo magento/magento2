@@ -47,8 +47,6 @@ class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      */
     protected function _getCarriersInstances()
     {
-        return $this->_shippingConfig->getAllCarriers(
-            $this->getInvoice()->getStoreId()
-        );
+        return $this->_shippingConfig->getAllCarriers($this->getInvoice()->getStoreId());
     }
 }

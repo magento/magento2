@@ -32,8 +32,9 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function testFileFormat($file)
     {
         /** @var \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator $schemaLocator */
-        $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Sales\Model\Order\Pdf\Config\SchemaLocator');
+        $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Sales\Model\Order\Pdf\Config\SchemaLocator'
+        );
         $schemaFile = $schemaLocator->getPerFileSchema();
 
         $dom = new \Magento\Config\Dom(file_get_contents($file));
@@ -52,13 +53,13 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function testMergedFormat()
     {
         $validationState = $this->getMock('Magento\Config\ValidationStateInterface');
-        $validationState->expects($this->any())
-            ->method('isValidated')
-            ->will($this->returnValue(true));
+        $validationState->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 
         /** @var \Magento\Sales\Model\Order\Pdf\Config\Reader $reader */
-        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Pdf\Config\Reader', array('validationState' => $validationState));
+        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Order\Pdf\Config\Reader',
+            array('validationState' => $validationState)
+        );
         try {
             $reader->read();
         } catch (\Exception $e) {

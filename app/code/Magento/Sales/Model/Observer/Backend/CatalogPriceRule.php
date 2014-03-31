@@ -40,6 +40,8 @@ class CatalogPriceRule
 
     /**
      * When applying a catalog price rule, make related quotes recollect on demand
+     *
+     * @return void
      */
     public function dispatch()
     {

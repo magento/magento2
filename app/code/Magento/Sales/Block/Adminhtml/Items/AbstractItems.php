@@ -23,12 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Items;
+
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Abstract items renderer
  */
-namespace Magento\Sales\Block\Adminhtml\Items;
-
 class AbstractItems extends \Magento\Backend\Block\Template
 {
     /**
@@ -49,14 +51,14 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Flag - if it is set method canEditQty will return value of it
      *
-     * @var boolean | null
+     * @var bool|null
      */
     protected $_canEditQty = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -68,13 +70,13 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
@@ -152,10 +154,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
             $type = $item->getProductType();
         }
 
-        return $this->getItemRenderer($type)
-            ->setItem($item)
-            ->setCanEditQty($this->canEditQty())
-            ->toHtml();
+        return $this->getItemRenderer($type)->setItem($item)->setCanEditQty($this->canEditQty())->toHtml();
     }
 
     /**
@@ -168,9 +167,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     {
         $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
-            return $extraInfoBlock
-                ->setItem($item)
-                ->toHtml();
+            return $extraInfoBlock->setItem($item)->toHtml();
         }
         return '';
     }
@@ -201,6 +198,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return '&nbsp;';
     }
 
+    /**
+     * Get credit memo
+     *
+     * @return mixed
+     */
     public function getCreditmemo()
     {
         return $this->_coreRegistry->registry('current_creditmemo');
@@ -213,8 +215,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve available order
      *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Sales\Model\Order
+     * @throws \Magento\Model\Exception
+     * @return Order
      */
     public function getOrder()
     {
@@ -237,13 +239,13 @@ class AbstractItems extends \Magento\Backend\Block\Template
             return $this->getItem()->getOrder();
         }
 
-        throw new \Magento\Core\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Model\Exception(__('We cannot get the order instance.'));
     }
 
     /**
      * Retrieve price data object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getPriceDataObject()
     {
@@ -299,12 +301,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Display base and regular prices with specified rounding precision
      *
-     * @param   float $basePrice
-     * @param   float $price
-     * @param   int $precision
-     * @param   bool $strong
-     * @param   string $separator
-     * @return  string
+     * @param float $basePrice
+     * @param float $price
+     * @param int $precision
+     * @param bool $strong
+     * @param string $separator
+     * @return string
      */
     public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br />')
     {
@@ -330,13 +332,15 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function displayPriceInclTax(\Magento\Object $item)
     {
-        $qty = ($item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1));
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
+        $qty = $item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1);
+        $baseTax = $item->getTaxBeforeDiscount() ? $item
+            ->getTaxBeforeDiscount() : ($item
+            ->getTaxAmount() ? $item
+            ->getTaxAmount() : 0);
+        $tax = $item->getBaseTaxBeforeDiscount() ? $item
+            ->getBaseTaxBeforeDiscount() : ($item
+            ->getBaseTaxAmount() ? $item
+            ->getBaseTaxAmount() : 0);
 
         $basePriceTax = 0;
         $priceTax = 0;
@@ -360,17 +364,16 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function displaySubtotalInclTax($item)
     {
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
+        $baseTax = $item->getTaxBeforeDiscount() ? $item
+            ->getTaxBeforeDiscount() : ($item
+            ->getTaxAmount() ? $item
+            ->getTaxAmount() : 0);
+        $tax = $item->getBaseTaxBeforeDiscount() ? $item
+            ->getBaseTaxBeforeDiscount() : ($item
+            ->getBaseTaxAmount() ? $item
+            ->getBaseTaxAmount() : 0);
 
-        return $this->displayPrices(
-            $item->getBaseRowTotal() + $baseTax,
-            $item->getRowTotal() + $tax
-        );
+        return $this->displayPrices($item->getBaseRowTotal() + $baseTax, $item->getRowTotal() + $tax);
     }
 
     /**
@@ -433,7 +436,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Setter for flag _canEditQty
      *
      * @param bool $value
-     * @return \Magento\Sales\Block\Adminhtml\Items\AbstractItems
+     * @return $this
      * @see self::_canEditQty
      * @see self::canEditQty
      */
@@ -446,7 +449,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Check availability to edit quantity of item
      *
-     * @return boolean
+     * @return bool
      */
     public function canEditQty()
     {
@@ -461,8 +464,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
          * Disable editing of quantity of item if creating of shipment forced
          * and ship partially disabled for order
          */
-        if ($this->getOrder()->getForcedShipmentWithInvoice()
-            && ($this->canShipPartially($this->getOrder()) || $this->canShipPartiallyItem($this->getOrder()))
+        if ($this->getOrder()->getForcedShipmentWithInvoice() && ($this->canShipPartially(
+            $this->getOrder()
+        ) || $this->canShipPartiallyItem(
+            $this->getOrder()
+        ))
         ) {
             return false;
         }
@@ -472,6 +478,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return true;
     }
 
+    /**
+     * Check capture availability
+     *
+     * @return bool
+     */
     public function canCapture()
     {
         if ($this->_authorization->isAllowed('Magento_Sales::capture')) {
@@ -480,6 +491,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return false;
     }
 
+    /**
+     * Retrieve formated price
+     *
+     * @param float $price
+     * @return string
+     */
     public function formatPrice($price)
     {
         return $this->getOrder()->formatPrice($price);
@@ -507,8 +524,9 @@ class AbstractItems extends \Magento\Backend\Block\Template
 
     /**
      * CREDITMEMO
+     *
+     * @return bool
      */
-
     public function canReturnToStock()
     {
         if ($this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT)) {
@@ -520,7 +538,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
 
     /**
      * Whether to show 'Return to stock' checkbox for item
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $item
+     *
+     * @param Item $item
      * @return bool
      */
     public function canReturnItemToStock($item = null)
@@ -544,7 +563,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
 
     /**
      * Whether to show 'Return to stock' column for item parent
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $item
+     *
+     * @param Item $item
      * @return bool
      */
     public function canParentReturnToStock($item = null)
@@ -565,12 +585,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Return true if can ship partially
      *
-     * @param \Magento\Sales\Model\Order|null $order
-     * @return boolean
+     * @param Order|null $order
+     * @return bool
      */
     public function canShipPartially($order = null)
     {
-        if (is_null($order) || !$order instanceof \Magento\Sales\Model\Order) {
+        if (is_null($order) || !$order instanceof Order) {
             $order = $this->_coreRegistry->registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartially();
@@ -583,12 +603,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Return true if can ship items partially
      *
-     * @param \Magento\Sales\Model\Order|null $order
-     * @return boolean
+     * @param Order|null $order
+     * @return bool
      */
     public function canShipPartiallyItem($order = null)
     {
-        if (is_null($order) || !$order instanceof \Magento\Sales\Model\Order) {
+        if (is_null($order) || !$order instanceof Order) {
             $order = $this->_coreRegistry->registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartiallyItem();
@@ -598,6 +618,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return true;
     }
 
+    /**
+     * Check is shipment is regular
+     *
+     * @return bool
+     */
     public function isShipmentRegular()
     {
         if (!$this->canShipPartiallyItem() || !$this->canShipPartially()) {

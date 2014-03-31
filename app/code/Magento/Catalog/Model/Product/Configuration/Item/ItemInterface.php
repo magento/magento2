@@ -40,7 +40,7 @@ interface ItemInterface
      *
      * @return \Magento\Catalog\Model\Product
      */
-    function getProduct();
+    public function getProduct();
 
     /**
      * Get item option by code

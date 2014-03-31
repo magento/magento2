@@ -29,9 +29,6 @@ return array(
     ),
     'catalog_product_attribute' => array(
         'name' => 'catalog_product_attribute',
-        'depends' => array(
-            'cataloginventory_stock'
-        )
-    ),
+        'depends' => array('cataloginventory_stock')
+    )
 );
-

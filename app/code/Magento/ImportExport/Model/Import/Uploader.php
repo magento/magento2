@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import;
 
 /**
  * Import entity product model
@@ -31,18 +32,28 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Import;
-
 class Uploader extends \Magento\Core\Model\File\Uploader
 {
-    protected $_tmpDir  = '';
+    /**
+     * @var string
+     */
+    protected $_tmpDir = '';
+
+    /**
+     * @var string
+     */
     protected $_destDir = '';
+
+    /**
+     * @var array
+     */
     protected $_allowedMimeTypes = array(
         'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'gif' => 'image/gif',
         'png' => 'image/png'
     );
+
     const DEFAULT_FILE_TYPE = 'application/octet-stream';
 
     /**
@@ -60,6 +71,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      * @param \Magento\Core\Helper\File\Storage $coreFileStorage
      * @param \Magento\Image\AdapterFactory $imageFactory
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $validator
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $filePath
      */
     public function __construct(
@@ -82,6 +94,8 @@ class Uploader extends \Magento\Core\Model\File\Uploader
 
     /**
      * Initiate uploader defoult settings
+     *
+     * @return void
      */
     public function init()
     {
@@ -113,12 +127,13 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      * Prepare information about the file for moving
      *
      * @param string $filePath
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      */
     protected function _setUploadFile($filePath)
     {
         if (!$this->_directory->isReadable($filePath)) {
-            throw new \Magento\Core\Exception("File '{$filePath}' was not found or has read restriction.");
+            throw new \Magento\Model\Exception("File '{$filePath}' was not found or has read restriction.");
         }
         $this->_file = $this->_readFileInfo($filePath);
 
@@ -145,6 +160,9 @@ class Uploader extends \Magento\Core\Model\File\Uploader
 
     /**
      * Validate uploaded file by type and etc.
+     *
+     * @return void
+     * @throws \Exception
      */
     protected function _validateFile()
     {
@@ -162,7 +180,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
             if (is_object($params['object']) && method_exists($params['object'], $params['method'])) {
-                $params['object']->$params['method']($filePath);
+                $params['object']->{$params['method']}($filePath);
             }
         }
     }
@@ -246,5 +264,4 @@ class Uploader extends \Magento\Core\Model\File\Uploader
             return false;
         }
     }
-
 }

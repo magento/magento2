@@ -35,19 +35,17 @@ namespace Magento\Connect;
 
 class Loader
 {
-
     /**
      * Factory for HTTP client
      * @param string/false $protocol  'curl'/'socket' or false for auto-detect
-     * @return \Magento\HTTP\Client/\Magento\Connect\Loader\Ftp
+     * @return \Magento\HTTP\Client|\Magento\Connect\Loader\Ftp
      */
-    public static function getInstance($protocol='')
+    public static function getInstance($protocol = '')
     {
-        if ($protocol  == 'ftp') {
+        if ($protocol == 'ftp') {
             return new \Magento\Connect\Loader\Ftp();
         } else {
             return \Magento\HTTP\Client::getInstance();
         }
     }
-
 }

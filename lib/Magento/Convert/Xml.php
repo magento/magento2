@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Convert;
 
 /**
@@ -40,9 +39,9 @@ class Xml
     {
         $array = array();
         foreach ($xml as $key => $value) {
-            if (isset($value->$key)) {
+            if (isset($value->{$key})) {
                 $i = 0;
-                foreach ($value->$key as $v) {
+                foreach ($value->{$key} as $v) {
                     $array[$key][$i++] = (string)$v;
                 }
             } else {

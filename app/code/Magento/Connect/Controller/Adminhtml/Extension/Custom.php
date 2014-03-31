@@ -38,6 +38,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Redirect to edit Extension Package action
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -49,10 +50,11 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Edit Extension Package Form
      *
+     * @return void
      */
     public function editAction()
     {
-        $this ->_title->add(__('Extension'));
+        $this->_title->add(__('Extension'));
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Connect::system_extensions_custom');
@@ -62,6 +64,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Reset Extension Package form data
      *
+     * @return void
      */
     public function resetAction()
     {
@@ -72,6 +75,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Load Local Extension Package
      *
+     * @return void
      */
     public function loadAction()
     {
@@ -81,13 +85,11 @@ class Custom extends \Magento\Backend\App\Action
             try {
                 $data = $this->_objectManager->get('Magento\Connect\Helper\Data')->loadLocalPackage($packageName);
                 if (!$data) {
-                    throw new \Magento\Core\Exception(__('Something went wrong loading the package data.'));
+                    throw new \Magento\Model\Exception(__('Something went wrong loading the package data.'));
                 }
                 $data = array_merge($data, array('file_name' => $packageName));
                 $session->setCustomExtensionPackageFormData($data);
-                $this->messageManager->addSuccess(
-                    __('The package %1 data has been loaded.', $packageName)
-                );
+                $this->messageManager->addSuccess(__('The package %1 data has been loaded.', $packageName));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }
@@ -98,6 +100,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Save Extension Package
      *
+     * @return void
      */
     public function saveAction()
     {
@@ -129,10 +132,10 @@ class Custom extends \Magento\Backend\App\Action
             } else {
                 $this->_forward('create');
             }
-        } catch (\Magento\Core\Exception $e){
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong saving the package.'));
             $this->_redirect('adminhtml/*');
         }
@@ -141,6 +144,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Create new Extension Package
      *
+     * @return void
      */
     public function createAction()
     {
@@ -160,10 +164,10 @@ class Custom extends \Magento\Backend\App\Action
                 }
             }
             $this->_redirect('adminhtml/*');
-        } catch(\Magento\Core\Exception $e){
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong creating the package.'));
             $this->_redirect('adminhtml/*');
         }
@@ -172,6 +176,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Load Grid with Local Packages
      *
+     * @return void
      */
     public function loadtabAction()
     {
@@ -182,6 +187,7 @@ class Custom extends \Magento\Backend\App\Action
     /**
      * Grid for loading packages
      *
+     * @return void
      */
     public function gridAction()
     {

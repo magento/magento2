@@ -26,36 +26,31 @@ namespace ArgumentSequence;
 
 class ContextObject implements \Magento\ObjectManager\ContextInterface
 {
-
 }
-
 class ParentRequiredObject
 {
-
 }
-
 class ParentOptionalObject
 {
-
 }
-
 class ChildRequiredObject
 {
-
 }
-
 class ChildOptionalObject
 {
-
 }
-
 class ParentClass
 {
     protected $contextObject;
+
     protected $parentRequiredObject;
+
     protected $parentRequiredScalar;
+
     protected $parentOptionalObject;
+
     protected $data;
+
     protected $parentOptionalScalar;
 
     public function __construct(
@@ -66,20 +61,22 @@ class ParentClass
         array $data = array(),
         array $parentOptionalScalar = array()
     ) {
-        $this->contextObject        = $contextObject;
+        $this->contextObject = $contextObject;
         $this->parentRequiredObject = $parentRequiredObject;
         $this->parentOptionalScalar = $parentRequiredScalar;
         $this->parentOptionalObject = $parentOptionalObject;
-        $this->data                 = $data;
+        $this->data = $data;
         $this->parentOptionalScalar = $parentOptionalScalar;
     }
 }
-
 class ValidChildClass extends ParentClass
 {
     protected $childRequiredObject;
+
     protected $childRequiredScalar;
+
     protected $childOptionalObject;
+
     protected $childOptionalScalar;
 
     /**
@@ -112,12 +109,14 @@ class ValidChildClass extends ParentClass
         );
     }
 }
-
 class InvalidChildClass extends ParentClass
 {
     protected $childRequiredObject;
+
     protected $childRequiredScalar;
+
     protected $childOptionalObject;
+
     protected $childOptionalScalar;
 
     /**

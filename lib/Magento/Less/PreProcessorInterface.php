@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less;
 
 /**
@@ -32,8 +31,9 @@ interface PreProcessorInterface
     /**
      * Process less content to adapt magento view system
      *
+     * @param PreProcessor\File\Less $lessFile
      * @param string $lessContent
      * @return string of processed content
      */
-    public function process($lessContent);
+    public function process(PreProcessor\File\Less $lessFile, $lessContent);
 }

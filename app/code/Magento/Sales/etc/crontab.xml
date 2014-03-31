@@ -23,23 +23,25 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer" method="cleanExpiredQuotes">
-        <schedule>0 0 * * *</schedule>
-    </job>
-    <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportOrderData">
-        <schedule>0 0 * * *</schedule>
-    </job>
-    <job name="aggregate_sales_report_shipment_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportShipmentData">
-        <schedule>0 0 * * *</schedule>
-    </job>
-    <job name="aggregate_sales_report_invoiced_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportInvoicedData">
-        <schedule>0 0 * * *</schedule>
-    </job>
-    <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportRefundedData">
-        <schedule>0 0 * * *</schedule>
-    </job>
-    <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportBestsellersData">
-        <schedule>0 0 * * *</schedule>
-    </job>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+    <group id="default">
+        <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer" method="cleanExpiredQuotes">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportOrderData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="aggregate_sales_report_shipment_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportShipmentData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="aggregate_sales_report_invoiced_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportInvoicedData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportRefundedData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportBestsellersData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
 </config>

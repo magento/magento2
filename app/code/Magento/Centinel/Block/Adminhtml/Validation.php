@@ -32,7 +32,9 @@ namespace Magento\Centinel\Block\Adminhtml;
 class Validation extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * construct
+     * Construct
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -68,14 +70,13 @@ class Validation extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     protected function _toHtml()
     {
         $payment = $this->getQuote()->getPayment();
-        if (!$payment->getMethod()
-            || !$payment->getMethodInstance()
-            || $payment->getMethodInstance()->getIsDummy()
-            || !$payment->getMethodInstance()->getIsCentinelValidationEnabled())
-        {
+        if (!$payment->getMethod() ||
+            !$payment->getMethodInstance() ||
+            $payment->getMethodInstance()->getIsDummy() ||
+            !$payment->getMethodInstance()->getIsCentinelValidationEnabled()
+        ) {
             return '';
         }
         return parent::_toHtml();
     }
 }
-

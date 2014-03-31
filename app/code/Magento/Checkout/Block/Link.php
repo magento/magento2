@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block;
 
 /**
  * "Checkout" link
  */
-namespace Magento\Checkout\Block;
-
 class Link extends \Magento\View\Element\Html\Link
 {
     /**
@@ -71,8 +70,9 @@ class Link extends \Magento\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if (!$this->_checkoutHelper->canOnepageCheckout()
-            || !$this->_moduleManager->isOutputEnabled('Magento_Checkout')
+        if (!$this->_checkoutHelper->canOnepageCheckout() || !$this->_moduleManager->isOutputEnabled(
+            'Magento_Checkout'
+        )
         ) {
             return '';
         }

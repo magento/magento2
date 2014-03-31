@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model;
 
 /**
  * Log Aggregation Model
@@ -34,9 +35,7 @@
  * @package    Magento_Log
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
-class Aggregation extends \Magento\Core\Model\AbstractModel
+class Aggregation extends \Magento\Model\AbstractModel
 {
     /**
      * Last record data
@@ -51,18 +50,18 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -72,6 +71,8 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
 
     /**
      * Init model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -80,6 +81,7 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
 
     /**
      * Run action
+     *
      * @return void
      */
     public function run()
@@ -94,7 +96,7 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
      * Remove empty records before $lastDate
      *
      * @param  string $lastDate
-     * @return void
+     * @return null|void
      */
     private function _removeEmpty($lastDate)
     {
@@ -110,19 +112,19 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
     private function _process($store)
     {
         $lastDateRecord = null;
-        $start          = $this->_lastRecord;
-        $end            = time();
-        $date           = $start;
+        $start = $this->_lastRecord;
+        $end = time();
+        $date = $start;
 
         while ($date < $end) {
             $to = $date + 3600;
             $counts = $this->_getCounts($this->_date($date), $this->_date($to), $store);
             $data = array(
-                'store_id'=>$store,
-                'visitor_count'=>$counts['visitors'],
-                'customer_count'=>$counts['customers'],
-                'add_date'=>$this->_date($date)
-                );
+                'store_id' => $store,
+                'visitor_count' => $counts['visitors'],
+                'customer_count' => $counts['customers'],
+                'add_date' => $this->_date($date)
+            );
 
             if ($counts['visitors'] || $counts['customers']) {
                 $this->_save($data, $this->_date($date), $this->_date($to));

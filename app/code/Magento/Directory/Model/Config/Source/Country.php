@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Directory\Model\Config\Source;
 
-class Country implements \Magento\Core\Model\Option\ArrayInterface
+class Country implements \Magento\Option\ArrayInterface
 {
     /**
      * Countries
@@ -47,7 +45,7 @@ class Country implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * Options array
      *
-     * @var type
+     * @var array
      */
     protected $_options;
 
@@ -61,18 +59,16 @@ class Country implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false, $foregroundCountries = '')
     {
         if (!$this->_options) {
-            $this->_options = $this->_countryCollection
-                ->loadData()
-                ->setForegroundCountries($foregroundCountries)
-                ->toOptionArray(false);
+            $this->_options = $this->_countryCollection->loadData()->setForegroundCountries(
+                $foregroundCountries
+            )->toOptionArray(
+                false
+            );
         }
 
         $options = $this->_options;
         if (!$isMultiselect) {
-            array_unshift($options, array(
-                'value' => '',
-                'label' => __('--Please Select--'),
-            ));
+            array_unshift($options, array('value' => '', 'label' => __('--Please Select--')));
         }
 
         return $options;

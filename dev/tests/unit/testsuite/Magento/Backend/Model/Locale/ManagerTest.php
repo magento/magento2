@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Locale;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +34,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
@@ -53,28 +52,29 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
 
-        $this->_authSession = $this->getMock('Magento\Backend\Model\Auth\Session',
-            array('getUser'), array(), '', false);
+        $this->_authSession = $this->getMock(
+            'Magento\Backend\Model\Auth\Session',
+            array('getUser'),
+            array(),
+            '',
+            false
+        );
 
         $userMock = new \Magento\Object();
 
-        $this->_authSession->expects($this->any())
-            ->method('getUser')
-            ->will($this->returnValue($userMock));
+        $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
 
-        $this->_translator = $this->getMock('Magento\Core\Model\Translate',
-            array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
 
-        $this->_translator->expects($this->any())
-            ->method('setLocale')
-            ->will($this->returnValue($this->_translator));
+        $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
 
-        $this->_translator->expects($this->any())
-            ->method('init')
-            ->will($this->returnValue(false));
+        $this->_translator->expects($this->any())->method('init')->will($this->returnValue(false));
 
-        $this->_model = new \Magento\Backend\Model\Locale\Manager($this->_session, $this->_authSession,
-            $this->_translator);
+        $this->_model = new \Magento\Backend\Model\Locale\Manager(
+            $this->_session,
+            $this->_authSession,
+            $this->_translator
+        );
     }
 
     /**
@@ -82,14 +82,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function switchBackendInterfaceLocaleDataProvider()
     {
-        return array(
-            'case1' => array(
-                'locale' => 'de_DE',
-            ),
-            'case2' => array(
-                'locale' => 'en_US',
-            ),
-        );
+        return array('case1' => array('locale' => 'de_DE'), 'case2' => array('locale' => 'en_US'));
     }
 
     /**
@@ -115,7 +108,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $locale = $this->_model->getUserInterfaceLocale();
 
-        $this->assertEquals($locale, \Magento\Core\Model\LocaleInterface::DEFAULT_LOCALE);
+        $this->assertEquals($locale, \Magento\Locale\ResolverInterface::DEFAULT_LOCALE);
     }
 
     /**

@@ -43,11 +43,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         parent::_construct();
-        $this->removeButton('back')
-            ->removeButton('reset')
-            ->removeButton('save');
+        $this->removeButton('back')->removeButton('reset')->removeButton('save');
 
-        $this->_objectId   = 'export_id';
+        $this->_objectId = 'export_id';
         $this->_blockGroup = 'Magento_ImportExport';
         $this->_controller = 'adminhtml_export';
     }

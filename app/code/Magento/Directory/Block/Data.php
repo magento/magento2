@@ -125,14 +125,21 @@ class Data extends \Magento\View\Element\Template
             $options = $this->getCountryCollection()->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
-        $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName($name)
-            ->setId($id)
-            ->setTitle(__($title))
-            ->setClass('validate-select')
-            ->setValue($defValue)
-            ->setOptions($options)
-            ->getHtml();
+        $html = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setName(
+            $name
+        )->setId(
+            $id
+        )->setTitle(
+            __($title)
+        )->setClass(
+            'validate-select'
+        )->setValue(
+            $defValue
+        )->setOptions(
+            $options
+        )->getHtml();
 
         \Magento\Profiler::stop('TEST: ' . __METHOD__);
         return $html;
@@ -145,9 +152,7 @@ class Data extends \Magento\View\Element\Template
     {
         $collection = $this->getData('region_collection');
         if (is_null($collection)) {
-            $collection = $this->_regionCollectionFactory->create()
-                ->addCountryFilter($this->getCountryId())
-                ->load();
+            $collection = $this->_regionCollectionFactory->create()->addCountryFilter($this->getCountryId())->load();
 
             $this->setData('region_collection', $collection);
         }
@@ -168,14 +173,21 @@ class Data extends \Magento\View\Element\Template
             $options = $this->getRegionCollection()->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
-        $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('region')
-            ->setTitle(__('State/Province'))
-            ->setId('state')
-            ->setClass('required-entry validate-state')
-            ->setValue(intval($this->getRegionId()))
-            ->setOptions($options)
-            ->getHtml();
+        $html = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setName(
+            'region'
+        )->setTitle(
+            __('State/Province')
+        )->setId(
+            'state'
+        )->setClass(
+            'required-entry validate-state'
+        )->setValue(
+            intval($this->getRegionId())
+        )->setOptions(
+            $options
+        )->getHtml();
         \Magento\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
         return $html;
     }
@@ -204,17 +216,15 @@ class Data extends \Magento\View\Element\Template
             foreach ($this->getCountryCollection() as $country) {
                 $countryIds[] = $country->getCountryId();
             }
-            $collection = $this->_regionCollectionFactory->create()
-                ->addCountryFilter($countryIds)
-                ->load();
+            $collection = $this->_regionCollectionFactory->create()->addCountryFilter($countryIds)->load();
             $regions = array();
             foreach ($collection as $region) {
                 if (!$region->getRegionId()) {
                     continue;
                 }
                 $regions[$region->getCountryId()][$region->getRegionId()] = array(
-                    'code'=>$region->getCode(),
-                    'name'=>$region->getName()
+                    'code' => $region->getCode(),
+                    'name' => $region->getName()
                 );
             }
             $regionsJs = $this->_jsonEncoder->encode($regions);

@@ -23,29 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Payment\Model\Config\Reader">
-        <param name="fileName">
-            <value>payment.xml</value>
-        </param>
-        <param name="converter">
-            <instance type="Magento\Payment\Model\Config\Converter" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Payment\Model\Config\SchemaLocator" />
-        </param>
+        <arguments>
+            <argument name="fileName" xsi:type="string">payment.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Payment\Model\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Payment\Model\Config\SchemaLocator</argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Payment\Model\Config\Data" type="Magento\Config\Data">
-        <param name='reader'>
-            <instance type="Magento\Payment\Model\Config\Reader" />
-        </param>
-        <param name="cacheId">
-            <value>payment_config</value>
-        </param>
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Payment\Model\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">payment_config</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Payment\Model\Config">
-        <param name="dataStorage">
-            <instance type="Magento\Payment\Model\Config\Data" />
-        </param>
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Payment\Model\Config\Data</argument>
+        </arguments>
     </type>
 </config>

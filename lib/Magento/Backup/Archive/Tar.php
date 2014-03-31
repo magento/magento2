@@ -38,7 +38,7 @@ class Tar extends \Magento\Archive\Tar
     /**
      * Filenames or filename parts that are used for filtering files
      *
-     * @var array()
+     * @var array
      */
     protected $_skipFiles = array();
 
@@ -46,16 +46,19 @@ class Tar extends \Magento\Archive\Tar
      * Overridden \Magento\Archive\Tar::_createTar method that does the same actions as it's parent but filters
      * files using \Magento\Backup\Filesystem\Iterator\Filter
      *
-     * @see \Magento\Archive\Tar::_createTar()
      * @param bool $skipRoot
      * @param bool $finalize
+     * @return void
+     *
+     * @see \Magento\Archive\Tar::_createTar()
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
         $path = $this->_getCurrentFile();
 
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_skipFiles);
@@ -74,7 +77,7 @@ class Tar extends \Magento\Archive\Tar
      * Set files that shouldn't be added to tarball
      *
      * @param array $skipFiles
-     * @return \Magento\Backup\Archive\Tar
+     * @return $this
      */
     public function setSkipFiles(array $skipFiles)
     {

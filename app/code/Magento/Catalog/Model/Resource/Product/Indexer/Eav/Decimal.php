@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
 /**
  * Catalog Product Eav Decimal Attributes Indexer resource model
@@ -32,14 +32,12 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
-
-class Decimal
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+class Decimal extends AbstractEav
 {
     /**
      * Initialize connection and define main index table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,19 +47,19 @@ class Decimal
     /**
      * Prepare data index for indexable attributes
      *
-     * @param array $entityIds      the entity ids limitation
-     * @param int $attributeId      the attribute id limitation
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\Decimal
+     * @param array $entityIds the entity ids limitation
+     * @param int $attributeId the attribute id limitation
+     * @return $this
      */
     protected function _prepareIndex($entityIds = null, $attributeId = null)
     {
-        $write      = $this->_getWriteAdapter();
-        $idxTable   = $this->getIdxTable();
+        $write = $this->_getWriteAdapter();
+        $idxTable = $this->getIdxTable();
         // prepare select attributes
         if (is_null($attributeId)) {
-            $attrIds    = $this->_getIndexableAttributes();
+            $attrIds = $this->_getIndexableAttributes();
         } else {
-            $attrIds    = array($attributeId);
+            $attrIds = array($attributeId);
         }
 
         if (!$attrIds) {
@@ -69,25 +67,31 @@ class Decimal
         }
 
         $productValueExpression = $write->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
-        $select = $write->select()
-            ->from(
-                array('pdd' => $this->getTable('catalog_product_entity_decimal')),
-                array('entity_id', 'attribute_id'))
-            ->join(
-                array('cs' => $this->getTable('core_store')),
-                '',
-                array('store_id'))
-            ->joinLeft(
-                array('pds' => $this->getTable('catalog_product_entity_decimal')),
-                'pds.entity_id = pdd.entity_id AND pds.attribute_id = pdd.attribute_id'
-                    . ' AND pds.store_id=cs.store_id',
-                array('value' => $productValueExpression))
-            ->where('pdd.store_id=?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
-            ->where('cs.store_id!=?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
-            ->where('pdd.attribute_id IN(?)', $attrIds)
-            ->where("{$productValueExpression} IS NOT NULL");
+        $select = $write->select()->from(
+            array('pdd' => $this->getTable('catalog_product_entity_decimal')),
+            array('entity_id', 'attribute_id')
+        )->join(
+            array('cs' => $this->getTable('core_store')),
+            '',
+            array('store_id')
+        )->joinLeft(
+            array('pds' => $this->getTable('catalog_product_entity_decimal')),
+            'pds.entity_id = pdd.entity_id AND pds.attribute_id = pdd.attribute_id' . ' AND pds.store_id=cs.store_id',
+            array('value' => $productValueExpression)
+        )->where(
+            'pdd.store_id=?',
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        )->where(
+            'cs.store_id!=?',
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        )->where(
+            'pdd.attribute_id IN(?)',
+            $attrIds
+        )->where(
+            "{$productValueExpression} IS NOT NULL"
+        );
 
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
 
         if (!is_null($entityIds)) {
@@ -97,12 +101,15 @@ class Decimal
         /**
          * Add additional external limitation
          */
-        $this->_eventManager->dispatch('prepare_catalog_product_index_select', array(
-            'select'        => $select,
-            'entity_field'  => new \Zend_Db_Expr('pdd.entity_id'),
-            'website_field' => new \Zend_Db_Expr('cs.website_id'),
-            'store_field'   => new \Zend_Db_Expr('cs.store_id')
-        ));
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_index_select',
+            array(
+                'select' => $select,
+                'entity_field' => new \Zend_Db_Expr('pdd.entity_id'),
+                'website_field' => new \Zend_Db_Expr('cs.website_id'),
+                'store_field' => new \Zend_Db_Expr('cs.store_id')
+            )
+        );
 
         $query = $select->insertFromSelect($idxTable);
         $write->query($query);
@@ -118,15 +125,22 @@ class Decimal
     protected function _getIndexableAttributes()
     {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
-            ->from(array('ca' => $this->getTable('catalog_eav_attribute')), 'attribute_id')
-            ->join(
-                array('ea' => $this->getTable('eav_attribute')),
-                'ca.attribute_id = ea.attribute_id',
-                array())
-            ->where('ea.attribute_code != ?', 'price')
-            ->where($this->_getIndexableAttributesCondition())
-            ->where('ea.backend_type=?', 'decimal');
+        $select = $adapter->select()->from(
+            array('ca' => $this->getTable('catalog_eav_attribute')),
+            'attribute_id'
+        )->join(
+            array('ea' => $this->getTable('eav_attribute')),
+            'ca.attribute_id = ea.attribute_id',
+            array()
+        )->where(
+            'ea.attribute_code != ?',
+            'price'
+        )->where(
+            $this->_getIndexableAttributesCondition()
+        )->where(
+            'ea.backend_type=?',
+            'decimal'
+        );
 
         return $adapter->fetchCol($select);
     }

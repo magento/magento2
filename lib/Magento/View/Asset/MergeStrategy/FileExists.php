@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset\MergeStrategy;
 
 /**
@@ -30,16 +29,22 @@ namespace Magento\View\Asset\MergeStrategy;
 class FileExists implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
+     * Strategy
+     *
      * @var \Magento\View\Asset\MergeStrategyInterface
      */
     protected $strategy;
 
     /**
+     * Filesystem
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Asset\MergeStrategyInterface $strategy
      * @param \Magento\App\Filesystem $filesystem
      */

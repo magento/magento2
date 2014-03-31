@@ -22,9 +22,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\App\Action\Plugin;
-
 
 class Authentication
 {
@@ -34,7 +32,7 @@ class Authentication
     protected $_auth;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_openActions = array(
         'forgotpassword',
@@ -86,13 +84,18 @@ class Authentication
     }
 
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Backend\App\AbstractAction $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $request = $arguments[0];
+    public function aroundDispatch(
+        \Magento\Backend\App\AbstractAction $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         $requestedActionName = $request->getActionName();
         if (in_array($requestedActionName, $this->_openActions)) {
             $request->setDispatched(true);
@@ -105,13 +108,14 @@ class Authentication
             }
         }
         $this->_auth->getAuthStorage()->refreshAcl();
-        return $invocationChain->proceed($arguments);
+        return $proceed($request);
     }
 
     /**
      * Process not logged in user data
      *
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     protected function _processNotLoggedInUser(\Magento\App\RequestInterface $request)
     {
@@ -121,23 +125,44 @@ class Authentication
         }
         if (!$isRedirectNeeded && !$request->getParam('forwarded')) {
             if ($request->getParam('isIframe')) {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedIframe')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'deniedIframe'
+                )->setDispatched(
+                    false
+                );
             } elseif ($request->getParam('isAjax')) {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedJson')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'deniedJson'
+                )->setDispatched(
+                    false
+                );
             } else {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('login')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'login'
+                )->setDispatched(
+                    false
+                );
             }
         }
     }
@@ -151,9 +176,9 @@ class Authentication
     protected function _performLogin(\Magento\App\RequestInterface $request)
     {
         $outputValue = true;
-        $postLogin  = $request->getPost('login');
-        $username   = isset($postLogin['username']) ? $postLogin['username'] : '';
-        $password   = isset($postLogin['password']) ? $postLogin['password'] : '';
+        $postLogin = $request->getPost('login');
+        $username = isset($postLogin['username']) ? $postLogin['username'] : '';
+        $password = isset($postLogin['password']) ? $postLogin['password'] : '';
         $request->setPost('login', null);
 
         try {

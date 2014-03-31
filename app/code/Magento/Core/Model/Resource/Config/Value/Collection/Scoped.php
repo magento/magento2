@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Resource\Config\Value\Collection;
 
-class Scoped extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Scoped extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Scope to filter by
@@ -69,13 +69,12 @@ class Scoped extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollecti
     /**
      * Initialize select
      *
-     * @return $this|\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addFieldToSelect(array('path', 'value'))
-            ->addFieldToFilter('scope', $this->_scope);
+        $this->addFieldToSelect(array('path', 'value'))->addFieldToFilter('scope', $this->_scope);
 
         if (!is_null($this->_scopeId)) {
             $this->addFieldToFilter('scope_id', $this->_scopeId);

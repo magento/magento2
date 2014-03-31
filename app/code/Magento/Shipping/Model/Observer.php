@@ -21,26 +21,29 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Model;
 
 class Observer
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_coreLocale;
+    protected $_localeResolver;
 
     /**
      * @var \Magento\Sales\Model\Resource\Report\ShippingFactory
      */
     protected $_shippingFactory;
 
+    /**
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory
+     */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory
     ) {
-        $this->_coreLocale = $coreLocale;
+        $this->_localeResolver = $localeResolver;
         $this->_shippingFactory = $shippingFactory;
     }
 
@@ -51,11 +54,11 @@ class Observer
      */
     public function aggregateSalesReportShipmentData()
     {
-        $this->_coreLocale->emulate(0);
+        $this->_localeResolver->emulate(0);
         $currentDate = $this->_coreLocale->date();
         $date = $currentDate->subHour(25);
         $this->_shippingFactory->create()->aggregate($date);
-        $this->_coreLocale->revert();
+        $this->_localeResolver->revert();
         return $this;
     }
 }

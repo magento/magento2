@@ -47,7 +47,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
-
     protected function setUp()
     {
         $this->directoryWriteMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
@@ -58,21 +57,27 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWriteMock));
+        $this->filesystemMock->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->will(
+            $this->returnValue($this->directoryWriteMock)
+        );
 
-        $this->_model = $this->getMockForAbstractClass('Magento\Image\Adapter\AbstractAdapter',
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\Image\Adapter\AbstractAdapter',
             array($this->filesystemMock)
         );
     }
 
     protected function tearDown()
     {
-        $this->directoryWriteMock   = null;
-        $this->_model               = null;
-        $this->filesystemMock       = null;
+        $this->directoryWriteMock = null;
+        $this->_model = null;
+        $this->filesystemMock = null;
     }
+
     /**
      * Test adaptResizeValues with null as a value one of parameters
      *
@@ -95,26 +100,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
 
         $expected = array(
-            'src' => array(
-                'x' => 0,
-                'y' => 0
-            ),
-            'dst' => array(
-                'x' => 0,
-                'y' => 0,
-                'width'  => 135,
-                'height' => 135
-            ),
-            'frame' => array(
-                'width'  => 135,
-                'height' => 135
-            )
+            'src' => array('x' => 0, 'y' => 0),
+            'dst' => array('x' => 0, 'y' => 0, 'width' => 135, 'height' => 135),
+            'frame' => array('width' => 135, 'height' => 135)
         );
 
-        return array(
-            array(135, null, $expected),
-            array(null, 135, $expected),
-        );
+        return array(array(135, null, $expected), array(null, 135, $expected));
     }
 
     /**
@@ -144,8 +135,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             array(__DIR__, 'name.txt', __DIR__ . '/name.txt'),
             array(__DIR__ . '/name.txt', null, __DIR__ . '/name.txt'),
             array(null, 'name.txt', '_fileSrcPath' . '/name.txt'),
-            array(null, null, '_fileSrcPath' . '/_fileSrcName'),
+            array(null, null, '_fileSrcPath' . '/_fileSrcName')
         );
     }
-
 }

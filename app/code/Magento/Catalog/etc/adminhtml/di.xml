@@ -23,67 +23,62 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
-        <param name="attributeLabelCache">
-            <instance type="Magento\App\Cache\Type\Translate" />
-        </param>
+        <arguments>
+            <argument name="attributeLabelCache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Session">
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">adminhtml</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
-        <param name="imageTypes">
-            <array>
-                <item key="small">
-                    <array>
-                        <item key="title"><value>Small</value></item>
-                        <item key="attribute"><value>small_image</value></item>
-                    </array>
+        <arguments>
+            <argument name="imageTypes" xsi:type="array">
+                <item name="small" xsi:type="array">
+                    <item name="title" xsi:type="string">Small</item>
+                    <item name="attribute" xsi:type="string">small_image</item>
                 </item>
-                <item key="main">
-                    <array>
-                        <item key="title"><value>Main</value></item>
-                        <item key="attribute"><value>image</value></item>
-                    </array>
+                <item name="main" xsi:type="array">
+                    <item name="title" xsi:type="string">Main</item>
+                    <item name="attribute" xsi:type="string">image</item>
                 </item>
-                <item key="cart">
-                    <array>
-                        <item key="title"><value>Thumbnail</value></item>
-                        <item key="attribute"><value>thumbnail</value></item>
-                    </array>
+                <item name="cart" xsi:type="array">
+                    <item name="title" xsi:type="string">Thumbnail</item>
+                    <item name="attribute" xsi:type="string">thumbnail</item>
                 </item>
-                <item key="custom">
-                    <array>
-                        <item key="title"><value>Custom image</value></item>
-                        <item key="attribute"><value>custom_image</value></item>
-                    </array>
+                <item name="custom" xsi:type="array">
+                    <item name="title" xsi:type="string">Custom image</item>
+                    <item name="attribute" xsi:type="string">custom_image</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
-        <param name="isAvailable">
-            <value type="bool">false</value>
-        </param>
-    </type>
-    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
-        <plugin name="configurable" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">false</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
-        <param name="constructors">
-            <array>
-                <item key="crossSell"><value>Magento\Catalog\Model\Product\CopyConstructor\CrossSell</value></item>
-                <item key="upSell"><value>Magento\Catalog\Model\Product\CopyConstructor\UpSell</value></item>
-                <item key="related"><value>Magento\Catalog\Model\Product\CopyConstructor\Related</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="crossSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\CrossSell</item>
+                <item name="upSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\UpSell</item>
+                <item name="related" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\Related</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Copier">
-        <param name="copyConstructor">
-            <instance type="Magento\Catalog\Model\Product\CopyConstructor\Composite" />
-        </param>
+        <arguments>
+            <argument name="copyConstructor" xsi:type="object">Magento\Catalog\Model\Product\CopyConstructor\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\UrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Url</argument>
+        </arguments>
     </type>
 </config>

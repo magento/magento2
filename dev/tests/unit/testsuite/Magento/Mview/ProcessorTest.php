@@ -38,7 +38,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->viewsFactoryMock = $this->getMock(
-            'Magento\Mview\View\CollectionFactory', array('create'), array(), '', false
+            'Magento\Mview\View\CollectionFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $this->model = new \Magento\Mview\Processor($this->viewsFactoryMock);
     }
@@ -47,17 +51,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      * Return array of mocked views
      *
      * @param string $method
-     * @return \Magento\Mview\View[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return \Magento\Mview\ViewInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
     protected function getViews($method)
     {
-        $viewMock = $this->getMock('Magento\Mview\View', array(), array(), '', false);
-        $viewMock->expects($this->exactly(2))
-            ->method($method);
-        return array(
-            $viewMock,
-            $viewMock,
-        );
+        $viewMock = $this->getMock('Magento\Mview\ViewInterface', array(), array(), '', false);
+        $viewMock->expects($this->exactly(2))->method($method);
+        return array($viewMock, $viewMock);
     }
 
     /**
@@ -68,20 +68,15 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function getViewsMock()
     {
         $viewsMock = $this->getMock('Magento\Mview\View\Collection', array(), array(), '', false);
-        $this->viewsFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($viewsMock));
+        $this->viewsFactoryMock->expects($this->once())->method('create')->will($this->returnValue($viewsMock));
         return $viewsMock;
     }
 
     public function testUpdate()
     {
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->once())
-            ->method('getItems')
-            ->will($this->returnValue($this->getViews('update')));
-        $viewsMock->expects($this->never())
-            ->method('getItemsByColumnValue');
+        $viewsMock->expects($this->once())->method('getItems')->will($this->returnValue($this->getViews('update')));
+        $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
         $this->model->update();
     }
@@ -90,12 +85,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $group = 'group';
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->never())
-            ->method('getItems');
-        $viewsMock->expects($this->once())
-            ->method('getItemsByColumnValue')
-            ->with($group)
-            ->will($this->returnValue($this->getViews('update')));
+        $viewsMock->expects($this->never())->method('getItems');
+        $viewsMock->expects(
+            $this->once()
+        )->method(
+            'getItemsByColumnValue'
+        )->with(
+            $group
+        )->will(
+            $this->returnValue($this->getViews('update'))
+        );
 
         $this->model->update($group);
     }
@@ -103,11 +102,14 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testClearChangelog()
     {
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->once())
-            ->method('getItems')
-            ->will($this->returnValue($this->getViews('clearChangelog')));
-        $viewsMock->expects($this->never())
-            ->method('getItemsByColumnValue');
+        $viewsMock->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->will(
+            $this->returnValue($this->getViews('clearChangelog'))
+        );
+        $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
         $this->model->clearChangelog();
     }
@@ -116,12 +118,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $group = 'group';
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->never())
-            ->method('getItems');
-        $viewsMock->expects($this->once())
-            ->method('getItemsByColumnValue')
-            ->with($group)
-            ->will($this->returnValue($this->getViews('clearChangelog')));
+        $viewsMock->expects($this->never())->method('getItems');
+        $viewsMock->expects(
+            $this->once()
+        )->method(
+            'getItemsByColumnValue'
+        )->with(
+            $group
+        )->will(
+            $this->returnValue($this->getViews('clearChangelog'))
+        );
 
         $this->model->clearChangelog($group);
     }

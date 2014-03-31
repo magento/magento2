@@ -23,18 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
 
 /**
  * Adminhtml tax report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
+    /**
+     * @var string
+     */
     protected $_columnGroupBy = 'period';
 
     /**
@@ -61,16 +61,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         array $data = array()
     ) {
         $this->_configFactory = $configFactory;
-        parent::__construct(
-            $context,
-            $backendHelper,
-            $resourceFactory,
-            $collectionFactory,
-            $reportsData,
-            $data
-        );
+        parent::__construct($context, $backendHelper, $resourceFactory, $collectionFactory, $reportsData, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -78,72 +74,94 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->setCountSubTotals(true);
     }
 
+    /**
+     * @return string
+     */
     public function getResourceCollectionName()
     {
-        return ($this->getFilterData()->getData('report_type') == 'updated_at_order')
-            ? 'Magento\Tax\Model\Resource\Report\Updatedat\Collection'
-            : 'Magento\Tax\Model\Resource\Report\Collection';
+        return $this->getFilterData()->getData(
+            'report_type'
+        ) ==
+            'updated_at_order' ? 'Magento\Tax\Model\Resource\Report\Updatedat\Collection' : 'Magento\Tax\Model\Resource\Report\Collection';
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('period', array(
-            'header'            => __('Interval'),
-            'index'             => 'period',
-            'sortable'          => false,
-            'period_type'       => $this->getPeriodType(),
-            'renderer'          => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
-            'totals_label'      => __('Total'),
-            'subtotals_label'   => __('Subtotal'),
-            'html_decorators' => array('nobr'),
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'period',
+            array(
+                'header' => __('Interval'),
+                'index' => 'period',
+                'sortable' => false,
+                'period_type' => $this->getPeriodType(),
+                'renderer' => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
+                'totals_label' => __('Total'),
+                'subtotals_label' => __('Subtotal'),
+                'html_decorators' => array('nobr'),
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('code', array(
-            'header'    => __('Tax'),
-            'index'     => 'code',
-            'type'      => 'string',
-            'sortable'  => false,
-            'header_css_class'  => 'col-tax-name',
-            'column_css_class'  => 'col-tax-name'
-        ));
+        $this->addColumn(
+            'code',
+            array(
+                'header' => __('Tax'),
+                'index' => 'code',
+                'type' => 'string',
+                'sortable' => false,
+                'header_css_class' => 'col-tax-name',
+                'column_css_class' => 'col-tax-name'
+            )
+        );
 
-        $this->addColumn('percent', array(
-            'header'    => __('Rate'),
-            'index'     => 'percent',
-            'type'      => 'number',
-            'sortable'  => false,
-            'header_css_class'  => 'col-rate',
-            'column_css_class'  => 'col-rate'
-        ));
+        $this->addColumn(
+            'percent',
+            array(
+                'header' => __('Rate'),
+                'index' => 'percent',
+                'type' => 'number',
+                'sortable' => false,
+                'header_css_class' => 'col-rate',
+                'column_css_class' => 'col-rate'
+            )
+        );
 
-        $this->addColumn('orders_count', array(
-            'header'    => __('Orders'),
-            'index'     => 'orders_count',
-            'total'     => 'sum',
-            'type'      => 'number',
-            'sortable'  => false,
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
-        ));
+        $this->addColumn(
+            'orders_count',
+            array(
+                'header' => __('Orders'),
+                'index' => 'orders_count',
+                'total' => 'sum',
+                'type' => 'number',
+                'sortable' => false,
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            )
+        );
 
         if ($this->getFilterData()->getStoreIds()) {
             $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
         }
         $currencyCode = $this->getCurrentCurrencyCode();
 
-        $this->addColumn('tax_base_amount_sum', array(
-            'header'        => __('Tax Amount'),
-            'type'          => 'currency',
-            'currency_code' => $currencyCode,
-            'index'         => 'tax_base_amount_sum',
-            'total'         => 'sum',
-            'sortable'      => false,
-            'rate'          => $this->getRate($currencyCode),
-            'header_css_class'  => 'col-tax-amount',
-            'column_css_class'  => 'col-tax-amount'
-        ));
+        $this->addColumn(
+            'tax_base_amount_sum',
+            array(
+                'header' => __('Tax Amount'),
+                'type' => 'currency',
+                'currency_code' => $currencyCode,
+                'index' => 'tax_base_amount_sum',
+                'total' => 'sum',
+                'sortable' => false,
+                'rate' => $this->getRate($currencyCode),
+                'header_css_class' => 'col-tax-amount',
+                'column_css_class' => 'col-tax-amount'
+            )
+        );
 
         $this->addExportType('*/*/exportTaxCsv', __('CSV'));
         $this->addExportType('*/*/exportTaxExcel', __('Excel XML'));
@@ -152,10 +170,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * Preparing collection
-     * Filter canceled statuses for orders in taxes
+     * Preparing collection.  Filter canceled statuses for orders in taxes
      *
-     * @return \Magento\Reports\Block\Adminhtml\Sales\Tax\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {

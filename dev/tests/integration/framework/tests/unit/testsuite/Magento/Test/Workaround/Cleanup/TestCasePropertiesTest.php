@@ -46,7 +46,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         array('name' => '_testPropertyObject', 'is_static' => false),
         array('name' => 'testPublicStatic', 'is_static' => true),
         array('name' => '_testProtectedStatic', 'is_static' => true),
-        array('name' => '_testPrivateStatic', 'is_static' => true),
+        array('name' => '_testPrivateStatic', 'is_static' => true)
     );
 
     public function testEndTestSuiteDestruct()
@@ -61,9 +61,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         $testClass = $testSuite->testAt(0);
 
         $propertyObjectMock = $this->getMock('stdClass', array('__destruct'));
-        $propertyObjectMock
-            ->expects($this->once())
-            ->method('__destruct');
+        $propertyObjectMock->expects($this->once())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 
         foreach ($this->_fixtureProperties as $property) {

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session\SaveHandler;
 
 class DbTableTest extends \PHPUnit_Framework_TestCase
@@ -37,16 +36,21 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     /**#@+
      * Session keys
      */
-    const SESSION_NEW    = 'session_new';
+    const SESSION_NEW = 'session_new';
+
     const SESSION_EXISTS = 'session_exists';
+
     /**#@-*/
 
     /**#@+
      * Table column names
      */
-    const COLUMN_SESSION_ID      = 'session_id';
-    const COLUMN_SESSION_DATA    = 'session_data';
+    const COLUMN_SESSION_ID = 'session_id';
+
+    const COLUMN_SESSION_DATA = 'session_data';
+
     const COLUMN_SESSION_EXPIRES = 'session_expires';
+
     /**#@-*/
 
     /**
@@ -55,8 +59,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_sourceData = array(
-        self::SESSION_NEW    => array('new key'      => 'new value'),
-        self::SESSION_EXISTS => array('existing key' => 'existing value'),
+        self::SESSION_NEW => array('new key' => 'new value'),
+        self::SESSION_EXISTS => array('existing key' => 'existing value')
     );
 
     /**
@@ -95,11 +99,11 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model         = $this->_objectManager->get('Magento\Session\SaveHandler\DbTable');
+        $this->_model = $this->_objectManager->get('Magento\Session\SaveHandler\DbTable');
 
         /** @var $resource \Magento\App\Resource */
-        $resource            = $this->_objectManager->get('Magento\App\Resource');
-        $this->_connection   = $resource->getConnection('core_write');
+        $resource = $this->_objectManager->get('Magento\App\Resource');
+        $this->_connection = $resource->getConnection('core_write');
         $this->_sessionTable = $resource->getTableName('core_session');
 
         // session stores serialized objects with protected properties
@@ -152,9 +156,11 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
 
-        $select = $this->_connection->select()
-            ->from($this->_sessionTable)
-            ->where(self::COLUMN_SESSION_ID . ' = :' . self::COLUMN_SESSION_ID);
+        $select = $this->_connection->select()->from(
+            $this->_sessionTable
+        )->where(
+            self::COLUMN_SESSION_ID . ' = :' . self::COLUMN_SESSION_ID
+        );
         $bind = array(self::COLUMN_SESSION_ID => self::SESSION_ID);
         $session = $this->_connection->fetchRow($select, $bind);
 
@@ -177,8 +183,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         // might cause DB adapter fatal error, so we have to use array as a fixture
         $sessionData = serialize($this->_sourceData[self::SESSION_NEW]);
         return array(
-            'session_encoded'     => array('$sessionData' => base64_encode($sessionData)),
-            'session_not_encoded' => array('$sessionData' => $sessionData),
+            'session_encoded' => array('$sessionData' => base64_encode($sessionData)),
+            'session_not_encoded' => array('$sessionData' => $sessionData)
         );
     }
 
@@ -191,10 +197,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadEncoded($sessionData)
     {
-        $sessionRecord = array(
-            self::COLUMN_SESSION_ID   => self::SESSION_ID,
-            self::COLUMN_SESSION_DATA => $sessionData,
-        );
+        $sessionRecord = array(self::COLUMN_SESSION_ID => self::SESSION_ID, self::COLUMN_SESSION_DATA => $sessionData);
         $this->_connection->insertOnDuplicate($this->_sessionTable, $sessionRecord, array(self::COLUMN_SESSION_DATA));
 
         $sessionData = $this->_model->read(self::SESSION_ID);

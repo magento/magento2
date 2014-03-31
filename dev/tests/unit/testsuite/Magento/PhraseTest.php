@@ -45,22 +45,31 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     public function testRendering()
     {
         $text = 'some text';
-        $arguments = array('arg1', 'arg2');
+        $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
+
+        $this->_renderer->expects(
+            $this->once()
+        )->method(
+            'render'
+        )->with(
+            [$text],
+            $arguments
+        )->will(
+            $this->returnValue($result)
+        );
+
         $phrase = new \Magento\Phrase($text, $arguments);
-
-        $this->_renderer->expects($this->once())->method('render')->with($text, $arguments)
-            ->will($this->returnValue($result));
-
         $this->assertEquals($result, $phrase->render());
     }
 
     public function testRenderingWithoutRenderer()
     {
         $this->_removeRendererFromPhrase();
-        $result = 'some text';
-        $phrase = new \Magento\Phrase($result);
 
+        $result = 'some text';
+
+        $phrase = new \Magento\Phrase($result);
         $this->assertEquals($result, $phrase->render());
     }
 
@@ -74,13 +83,21 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     public function testThatToStringIsAliasToRender()
     {
         $text = 'some text';
-        $arguments = array('arg1', 'arg2');
+        $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
+
+        $this->_renderer->expects(
+            $this->once()
+        )->method(
+            'render'
+        )->with(
+            [$text],
+            $arguments
+        )->will(
+            $this->returnValue($result)
+        );
+
         $phrase = new \Magento\Phrase($text, $arguments);
-
-        $this->_renderer->expects($this->once())->method('render')->with($text, $arguments)
-            ->will($this->returnValue($result));
-
         $this->assertEquals($result, (string)$phrase);
     }
 

@@ -65,11 +65,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     public static function extractTables($filePath)
     {
-        $regexpMethods = array(
-            '_getRegexpTableInMethods',
-            '_getRegexpTableInArrays',
-            '_getRegexpTableInProperties'
-        );
+        $regexpMethods = array('_getRegexpTableInMethods', '_getRegexpTableInArrays', '_getRegexpTableInProperties');
 
         $result = array();
         $content = file_get_contents($filePath);
@@ -104,10 +100,10 @@ class TableTest extends \PHPUnit_Framework_TestCase
             'updateTableRow',
             'updateTable',
             'tableExists',
-            array('name'=>'joinField', 'param_index' => 1),
+            array('name' => 'joinField', 'param_index' => 1),
             'joinTable',
             'getFkName',
-            array('name'=>'getFkName', 'param_index' => 2),
+            array('name' => 'getFkName', 'param_index' => 2),
             'getIdxName',
             array('name' => 'addVirtualGridColumn', 'param_index' => 1)
         );
@@ -133,7 +129,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = str_replace('\\', '/', $filePath);
         $parts = explode('/', $filePath);
-        return (array_search('Resource', $parts) !== false) && (array_search('Collection.php', $parts) === false);
+        return array_search('Resource', $parts) !== false && array_search('Collection.php', $parts) === false;
     }
 
     /**
@@ -180,9 +176,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getRegexpTableInProperties($filePath)
     {
-        $properties = array(
-            '_aggregationTable'
-        );
+        $properties = array('_aggregationTable');
 
         $regexps = array();
         foreach ($properties as $property) {
@@ -231,8 +225,10 @@ class TableTest extends \PHPUnit_Framework_TestCase
             $descriptions[] = "{$legacyTable['name']} (line {$legacyTable['line']})";
         }
 
-        $result = 'Legacy table names with slash must be fixed to direct table names. Found: '
-            . implode(', ', $descriptions) . '.';
+        $result = 'Legacy table names with slash must be fixed to direct table names. Found: ' . implode(
+            ', ',
+            $descriptions
+        ) . '.';
         return $result;
     }
 }

@@ -36,6 +36,7 @@ interface ScopeInterface
      * Set current configuration scope
      *
      * @param string $scope
+     * @return void
      */
     public function setCurrentScope($scope);
 }

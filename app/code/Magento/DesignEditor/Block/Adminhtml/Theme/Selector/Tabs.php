@@ -23,16 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector;
 
 /**
  * Theme selectors tabs container
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector;
-
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Initialize tab
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +50,10 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _toHtml()
     {
-        return parent::_toHtml() . '<div id="' . $this->getDestElementId() . '" class="theme-selector"><div>' .
+        return parent::_toHtml() .
+            '<div id="' .
+            $this->getDestElementId() .
+            '" class="theme-selector"><div>' .
             $this->_getScript();
     }
 
@@ -60,7 +64,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _getScript()
     {
-        $script = sprintf("
+        $script = sprintf(
+            "
             (function ($) {
                 $('.themes-customizations .theme').themeControl({url: '%s'});
             })(jQuery);",

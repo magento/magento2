@@ -42,8 +42,12 @@ class Request extends \Magento\Webapi\Controller\Request
         $notAllowedParameters = array_diff($requestParams, $allowedParams);
         if (count($notAllowedParameters)) {
             $notAllowed = implode(', ', $notAllowedParameters);
-            $message =
-                __('Not allowed parameters: %1. Please use only %2 and %3.', $notAllowed, $wsdlParam, $servicesParam);
+            $message = __(
+                'Not allowed parameters: %1. Please use only %2 and %3.',
+                $notAllowed,
+                $wsdlParam,
+                $servicesParam
+            );
             throw new \Magento\Webapi\Exception($message);
         }
 
@@ -65,7 +69,7 @@ class Request extends \Magento\Webapi\Controller\Request
     {
         $serviceSeparator = ',';
         $serviceVerPattern = "[a-zA-Z\d]*V[\d]+";
-        $regexp = "/^($serviceVerPattern)([$serviceSeparator]$serviceVerPattern)*$/";
+        $regexp = "/^({$serviceVerPattern})([{$serviceSeparator}]{$serviceVerPattern})*\$/";
         //Check if the $param is of valid format
         if (empty($param) || !preg_match($regexp, $param)) {
             $message = __('Incorrect format of WSDL request URI or Requested services are missing.');

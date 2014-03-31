@@ -32,12 +32,13 @@
     <div class="comparison wrapper">
         <div class="comparison container">
             <table class="data-table data table comparison" id="product-comparison">
+                <caption><?php echo __('Compare Products') ?></caption>
                 <thead>
                 <tr>
                     <?php $_i=0 ?>
                     <?php foreach($this->getItems() as $_item): ?>
                         <?php if($_i++==0): ?>
-                            <th class="cell label remove">&nbsp;</th>
+                            <th scope="row" class="cell label remove"><?php echo __('Remove Product') ?></th>
                         <?php endif; ?>
                         <td class="cell remove product">
                             <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
@@ -55,7 +56,7 @@
                     <?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
                     <?php foreach($this->getItems() as $_item): ?>
                         <?php if($_i++==0): ?>
-                            <th class="cell label product">&nbsp;</th>
+                            <th scope="row" class="cell label product"><?php echo __('Product') ?></th>
                         <?php endif; ?>
                         <td class="cell product info">
                             <a class="product photo" href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>">
@@ -102,7 +103,7 @@
                         <?php $_i = 0 ?>
                         <?php foreach($this->getItems() as $_item): ?>
                             <?php if($_i++==0): ?>
-                                <th class="cell label">
+                                <th scope="row" class="cell label">
                                     <span class="attribute label">
                                         <?php echo $_attribute->getStoreLabel() ? $_attribute->getStoreLabel() : __($_attribute->getFrontendLabel()) ?>
                                     </span>

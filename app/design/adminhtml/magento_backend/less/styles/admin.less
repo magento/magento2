@@ -1,25 +1,25 @@
-/**
-  * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
-  *
-  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-  */
+///**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 @import "vars.less";
 @import "base.less";
@@ -2809,18 +2809,6 @@ table tbody tr:nth-child(odd):hover th {
 /*
     Messages (Global)
 -------------------------------------- */
-.message {
-    margin: 0;
-    padding: 10px 26px 10px 32px;
-    background: #f9f5ec;
-    border: 0;
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    color: #676056;
-    text-shadow: none;
-    border-bottom: 1px solid #c7c2b6;
-}
 
 .wrapper > .message {
     padding: 0 20px;
@@ -2832,25 +2820,68 @@ table tbody tr:nth-child(odd):hover th {
     margin: 0 auto;
 }
 
-.message:before,
-.message-system .message-inner:before {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    margin-top: -8px;
-    background: none;
+.messages {
+    margin: 20px 0;
+    > .message:last-child {
+        margin-bottom: 0;
+    }
+    &.license {  // license message in view\adminhtml\checker\reminder.phtml
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 20px auto;
+        max-width: 1300px;
+        min-width: 960px;
+        padding: 0 20px;
+    }
+}
+
+.message {
+    background: #f9f5ec;
+    border-bottom: 1px solid #c7c2b6;
+    border-radius: 5px;
+    color: #676056;
+    margin: 20px 0;
+    padding: 10px 26px 10px 35px;
+    position: relative;
     text-shadow: none;
-    width: auto;
-    height: auto;
-    border: 0;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    font-size: 16px;
-    content: '\e006'; /* notification icon */
-    color: #6e685e;
+    &:before {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        margin-top: -11px;
+        background: none;
+        text-shadow: none;
+        width: auto;
+        height: auto;
+        border: 0;
+        font-family: 'MUI-Icons';
+        font-style: normal;
+        speak: none;
+        font-weight: normal;
+        -webkit-font-smoothing: antialiased;
+        font-size: 16px;
+        line-height: inherit;
+        content: '\e046'; /* icon-info  */
+        color: #d87e34;
+    }
+    &.error {
+        color: #963535;
+        border-color: #963535;
+        background: #f3dcd8;
+        &:before {
+            content: '\e069';
+            color: #963535;
+        }
+    }
+    &.success {
+        border-color: #ceceb6;
+        background: #e4eecb;
+        color: #185b00;
+        &:before {
+            content: '\e067';
+            color: #185b00;
+        }
+    }
 }
 
 .messages-inbox {
@@ -2864,25 +2895,37 @@ table tbody tr:nth-child(odd):hover th {
 /* System Messages */
 .message-system {
     padding: 0;
-}
-
-.message-system:before {
-    display: none;
-}
-
-.message-system .message-inner {
-    position: relative;
-    min-width: 960px;
-    max-width: 1300px;
-    margin: 0 auto;
-}
-
-.message-system .message-inner:before {
-    margin-top: -10px;
-}
-
-.message-system .message-content {
-    padding: 10px 26px 10px 32px;
+    &:before {
+        display: none;
+    }
+    .message-inner {
+        position: relative;
+        min-width: 960px;
+        max-width: 1300px;
+        margin: 0 auto;
+        &:before {
+            background: none;
+            border: 0;
+            content: '\e006'; /* notification icon */
+            color: #6e685e;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            height: auto;
+            left: 8px;
+            margin-top: -10px;
+            position: absolute;
+            text-shadow: none;
+            top: 50%;
+            width: auto;
+            font-size: 16px;
+        }
+    }
+    .message-content {
+        padding: 10px 26px 10px 32px;
+    }
 }
 
 /*
@@ -2894,37 +2937,34 @@ table tbody tr:nth-child(odd):hover th {
     border: 0;
     box-shadow: 0 1px 2px #46433d;
     z-index: 994;
-}
-
-.message-noscript .message-content {
-    margin: 0 auto;
-    max-width: 1300px;
-    min-width: 960px;
-    padding: 3px 0;
-    position: relative;
-    text-align: center;
-}
-
-.message-noscript:before {
-    content: '';
-}
-
-.message-noscript .message-content:before {
-    position: relative;
-    background: none;
-    text-shadow: none;
-    width: auto;
-    height: auto;
-    vertical-align: middle;
-    border: 0;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    font-size: 32px;
-    content: '\e006'; /* notification icon */
-    color: #6e685e;
+    &:before {
+        content: '';
+    }
+    .message-content {
+        margin: 0 auto;
+        max-width: 1300px;
+        min-width: 960px;
+        padding: 3px 0;
+        position: relative;
+        text-align: center;
+        &:before {
+            position: relative;
+            background: none;
+            text-shadow: none;
+            width: auto;
+            height: auto;
+            vertical-align: middle;
+            border: 0;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            font-weight: normal;
+            font-size: 32px;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            content: '\e006'; /* notification icon */
+            color: #6e685e;
+        }
+    }
 }
 
 .message-demo-mode {
@@ -2935,69 +2975,66 @@ table tbody tr:nth-child(odd):hover th {
     padding: 5px 0;
     box-shadow: 0 1px 2px #46433d;
     z-index: 993;
-}
-
-.message-demo-mode:before {
-    content: '';
-}
-
-.message-demo-mode .message-content {
-    margin: 0 auto;
-    max-width: 1300px;
-    min-width: 960px;
-    position: relative;
-    text-align: center;
-}
-
-.message-demo-mode .message-content:before {
-    position: relative;
-    background: none;
-    text-shadow: none;
-    width: auto;
-    height: auto;
-    vertical-align: middle;
-    border: 0;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    font-size: 16px;
-    content: '\e006'; /* notification icon */
+    &:before {
+        content: '';
+    }
+    .message-content {
+        margin: 0 auto;
+        max-width: 1300px;
+        min-width: 960px;
+        position: relative;
+        text-align: center;
+        &:before {
+            position: relative;
+            background: none;
+            text-shadow: none;
+            width: auto;
+            height: auto;
+            vertical-align: middle;
+            border: 0;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            speak: none;
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            content: '\e006'; /* notification icon */
+        }
+    }
 }
 
 /*
     Information message
 -------------------------------------- */
-.message-info {
+.message-info,
+.message.info {
     background: #fffbf0;
     border: 1px solid #d87e34;
     margin-bottom: 20px;
-}
-
-.message-info:before {
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e046'; /* icon-info  */
-    color: #d87e34;
+    &:before {
+        font-family: 'MUI-Icons';
+        font-style: normal;
+        speak: none;
+        font-weight: normal;
+        -webkit-font-smoothing: antialiased;
+        content: '\e046'; /* icon-info  */
+        color: #d87e34;
+    }
 }
 
 /*
     Error message
 -------------------------------------- */
-.message-error {
+.message-error,
+.message.error {
     color: #963535;
     background: #f3dcd8;
     border: 1px solid #963535;
     margin-bottom: 20px;
-}
-
-.message-error:before {
-    content: '\e069';
-    color: #963535;
+    &:before {
+        content: '\e069';
+        color: #963535;
+    }
 }
 
 /*
@@ -5374,7 +5411,7 @@ button,
 .sales-creditmemo-index,
 .sales-billing-agreement-index,
 .sales-transactions-index,
-.sales-recurring-profile-index,
+.sales-recurring-payment-index,
 // products
 .adminhtml-googleshopping-items-index,
 // customer

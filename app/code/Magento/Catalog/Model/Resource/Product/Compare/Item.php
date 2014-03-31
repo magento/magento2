@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Compare;
 
 /**
  * Catalog compare item resource model
@@ -32,13 +32,12 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Compare;
-
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,8 +47,8 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load object by product
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @param mixed $product
+     * @param \Magento\Catalog\Model\Product\Compare\Item $object
+     * @param \Magento\Catalog\Model\Product|int $product
      * @return bool
      */
     public function loadByProduct(\Magento\Catalog\Model\Product\Compare\Item $object, $product)
@@ -60,8 +59,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
         } else {
             $productId = $product;
         }
-        $select = $read->select()->from($this->getMainTable())
-            ->where('product_id = ?', (int)$productId);
+        $select = $read->select()->from($this->getMainTable())->where('product_id = ?', (int)$productId);
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
@@ -91,8 +89,12 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getCount($customerId, $visitorId)
     {
         $bind = array('visitore_id' => (int)$visitorId);
-        $select = $this->_getReadAdapter()->select()->from($this->getMainTable(), 'COUNT(*)')
-            ->where('visitor_id = :visitore_id');
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            'COUNT(*)'
+        )->where(
+            'visitor_id = :visitore_id'
+        );
         if ($customerId) {
             $bind['customer_id'] = (int)$customerId;
             $select->where('customer_id = :customer_id');
@@ -103,20 +105,26 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Clean compare table
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item
+     * @return $this
      */
     public function clean()
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()
-                ->from(array('compare_table' => $this->getMainTable()), array('catalog_compare_item_id'))
-                ->joinLeft(
-                    array('visitor_table' => $this->getTable('log_visitor')),
-                    'visitor_table.visitor_id=compare_table.visitor_id AND compare_table.customer_id IS NULL',
-                    array())
-                ->where('compare_table.visitor_id > ?', 0)
-                ->where('visitor_table.visitor_id IS NULL')
-                ->limit(100);
+            $select = $this->_getReadAdapter()->select()->from(
+                array('compare_table' => $this->getMainTable()),
+                array('catalog_compare_item_id')
+            )->joinLeft(
+                array('visitor_table' => $this->getTable('log_visitor')),
+                'visitor_table.visitor_id=compare_table.visitor_id AND compare_table.customer_id IS NULL',
+                array()
+            )->where(
+                'compare_table.visitor_id > ?',
+                0
+            )->where(
+                'visitor_table.visitor_id IS NULL'
+            )->limit(
+                100
+            );
             $itemIds = $this->_getReadAdapter()->fetchCol($select);
 
             if (!$itemIds) {
@@ -136,7 +144,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Purge visitor data after customer logout
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item
+     * @return $this
      */
     public function purgeVisitorByCustomer($object)
     {
@@ -144,10 +152,8 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $where  = $this->_getWriteAdapter()->quoteInto('customer_id=?', $object->getCustomerId());
-        $bind   = array(
-            'visitor_id' => 0,
-        );
+        $where = $this->_getWriteAdapter()->quoteInto('customer_id=?', $object->getCustomerId());
+        $bind = array('visitor_id' => 0);
 
         $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
 
@@ -159,7 +165,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * After Login process
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item
+     * @return $this
      */
     public function updateCustomerFromVisitor($object)
     {
@@ -168,27 +174,35 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         // collect visitor compared items
-        $select = $this->_getWriteAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('visitor_id=?', $object->getVisitorId());
+        $select = $this->_getWriteAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'visitor_id=?',
+            $object->getVisitorId()
+        );
         $visitor = $this->_getWriteAdapter()->fetchAll($select);
 
         // collect customer compared items
-        $select = $this->_getWriteAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('customer_id = ?', $object->getCustomerId())
-            ->where('visitor_id != ?', $object->getVisitorId());
+        $select = $this->_getWriteAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'customer_id = ?',
+            $object->getCustomerId()
+        )->where(
+            'visitor_id != ?',
+            $object->getVisitorId()
+        );
         $customer = $this->_getWriteAdapter()->fetchAll($select);
 
-        $products   = array();
-        $delete     = array();
-        $update     = array();
+        $products = array();
+        $delete = array();
+        $update = array();
         foreach ($visitor as $row) {
             $products[$row['product_id']] = array(
-                'store_id'      => $row['store_id'],
-                'customer_id'   => $object->getCustomerId(),
-                'visitor_id'    => $object->getVisitorId(),
-                'product_id'    => $row['product_id']
+                'store_id' => $row['store_id'],
+                'customer_id' => $object->getCustomerId(),
+                'visitor_id' => $object->getVisitorId(),
+                'product_id' => $row['product_id']
             );
             $update[$row[$this->getIdFieldName()]] = $row['product_id'];
         }
@@ -196,26 +210,30 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
         foreach ($customer as $row) {
             if (isset($products[$row['product_id']])) {
                 $delete[] = $row[$this->getIdFieldName()];
-            }
-            else {
+            } else {
                 $products[$row['product_id']] = array(
-                    'store_id'      => $row['store_id'],
-                    'customer_id'   => $object->getCustomerId(),
-                    'visitor_id'    => $object->getVisitorId(),
-                    'product_id'    => $row['product_id']
+                    'store_id' => $row['store_id'],
+                    'customer_id' => $object->getCustomerId(),
+                    'visitor_id' => $object->getVisitorId(),
+                    'product_id' => $row['product_id']
                 );
             }
         }
 
         if ($delete) {
-            $this->_getWriteAdapter()->delete($this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $delete));
+            $this->_getWriteAdapter()->delete(
+                $this->getMainTable(),
+                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . ' IN(?)', $delete)
+            );
         }
         if ($update) {
             foreach ($update as $itemId => $productId) {
                 $bind = $products[$productId];
-                $this->_getWriteAdapter()->update($this->getMainTable(), $bind,
-                    $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $itemId));
+                $this->_getWriteAdapter()->update(
+                    $this->getMainTable(),
+                    $bind,
+                    $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $itemId)
+                );
             }
         }
 
@@ -227,7 +245,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $visitorId
      * @param int $customerId
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item
+     * @return $this
      */
     public function clearItems($visitorId = null, $customerId = null)
     {

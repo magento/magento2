@@ -26,3 +26,9 @@ PEAR_Command
 Zend
 PEAR_PackageFileManager2
 PEAR
+Magento\LibFirst
+\Magento\SomeModule\Exception
+TestSuite
+DbTest
+Model1
+Model3

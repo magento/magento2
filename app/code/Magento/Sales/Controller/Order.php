@@ -23,15 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller;
+
+use Magento\App\RequestInterface;
 
 /**
  * Sales orders controller
  */
-namespace Magento\Sales\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-
 class Order extends \Magento\Sales\Controller\AbstractController
 {
     /**
@@ -52,6 +50,8 @@ class Order extends \Magento\Sales\Controller\AbstractController
 
     /**
      * Customer order history
+     *
+     * @return void
      */
     public function historyAction()
     {

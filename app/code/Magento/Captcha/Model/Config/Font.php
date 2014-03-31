@@ -33,7 +33,7 @@
  */
 namespace Magento\Captcha\Model\Config;
 
-class Font implements \Magento\Core\Model\Option\ArrayInterface
+class Font implements \Magento\Option\ArrayInterface
 {
     /**
      * Captcha data
@@ -45,9 +45,8 @@ class Font implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @param \Magento\Captcha\Helper\Data $captchaData
      */
-    public function __construct(
-        \Magento\Captcha\Helper\Data $captchaData
-    ) {
+    public function __construct(\Magento\Captcha\Helper\Data $captchaData)
+    {
         $this->_captchaData = $captchaData;
     }
 

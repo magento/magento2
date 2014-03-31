@@ -25,7 +25,6 @@
 /**
  * Express Checkout Controller
  */
-
 namespace Magento\Paypal\Controller;
 
 class Payflowexpress extends \Magento\Paypal\Controller\Express\AbstractExpress

@@ -24,33 +24,44 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
-class OptionTest
-    extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetAddButtonId()
     {
-        $button = new \Magento\Object;
+        $button = new \Magento\Object();
 
         $itemsBlock = $this->getMock('Magento\Object', array('getChildBlock'));
-        $itemsBlock->expects($this->atLeastOnce())
-            ->method('getChildBlock')
-            ->with('add_button')
-            ->will($this->returnValue($button));
+        $itemsBlock->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getChildBlock'
+        )->with(
+            'add_button'
+        )->will(
+            $this->returnValue($button)
+        );
 
         $layout = $this->getMock('Magento\Object', array('getBlock'));
-        $layout->expects($this->atLeastOnce())
-            ->method('getBlock')
-            ->with('admin.product.bundle.items')
-            ->will($this->returnValue($itemsBlock));
+        $layout->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getBlock'
+        )->with(
+            'admin.product.bundle.items'
+        )->will(
+            $this->returnValue($itemsBlock)
+        );
 
-        $block = $this->getMock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option',
-            array('getLayout'), array(), '', false);
-        $block->expects($this->atLeastOnce())
-            ->method('getLayout')
-            ->will($this->returnValue($layout));
+        $block = $this->getMock(
+            'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option',
+            array('getLayout'),
+            array(),
+            '',
+            false
+        );
+        $block->expects($this->atLeastOnce())->method('getLayout')->will($this->returnValue($layout));
 
         $this->assertNotEquals(42, $block->getAddButtonId());
         $button->setId(42);

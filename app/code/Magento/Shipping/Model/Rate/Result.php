@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model\Rate;
 
 class Result
 {
     /**
-     * Shippin method rates
+     * Shipping method rates
      *
      * @var array
      */
@@ -51,16 +49,15 @@ class Result
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
     }
 
     /**
      * Reset result
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function reset()
     {
@@ -82,7 +79,7 @@ class Result
     /**
      * Get Error
      *
-     * @return null|bool;
+     * @return null|bool
      */
     public function getError()
     {
@@ -93,7 +90,7 @@ class Result
      * Add a rate to the result
      *
      * @param \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function append($result)
     {
@@ -102,8 +99,7 @@ class Result
         }
         if ($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult) {
             $this->_rates[] = $result;
-        }
-        elseif ($result instanceof \Magento\Shipping\Model\Rate\Result) {
+        } elseif ($result instanceof \Magento\Shipping\Model\Rate\Result) {
             $rates = $result->getAllRates();
             foreach ($rates as $rate) {
                 $this->append($rate);
@@ -165,7 +161,7 @@ class Result
             $rates[$rate->getCarrier()]['methods'][$rate->getMethod()] = array(
                 'title' => $rate->getMethodTitle(),
                 'price' => $rate->getPrice(),
-                'price_formatted' => $currencyFilter->filter($rate->getPrice()),
+                'price_formatted' => $currencyFilter->filter($rate->getPrice())
             );
         }
         return $rates;
@@ -192,7 +188,7 @@ class Result
     /**
      * Sort rates by price from min to max
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function sortRatesByPrice()
     {
@@ -219,7 +215,7 @@ class Result
      * Set price for each rate according to count of packages
      *
      * @param int $packageCount
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function updateRatePrice($packageCount)
     {

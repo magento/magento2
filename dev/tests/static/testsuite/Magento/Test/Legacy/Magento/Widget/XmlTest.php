@@ -63,10 +63,14 @@ class XmlTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $xml = simplexml_load_file($file);
-                $this->assertSame(array(), $xml->xpath('/widgets/*/supported_blocks'),
+                $this->assertSame(
+                    array(),
+                    $xml->xpath('/widgets/*/supported_blocks'),
                     'Obsolete node: <supported_blocks>. To be replaced with <supported_containers>'
                 );
-                $this->assertSame(array(), $xml->xpath('/widgets/*/*/*/block_name'),
+                $this->assertSame(
+                    array(),
+                    $xml->xpath('/widgets/*/*/*/block_name'),
                     'Obsolete node: <block_name>. To be replaced with <container_name>'
                 );
             },

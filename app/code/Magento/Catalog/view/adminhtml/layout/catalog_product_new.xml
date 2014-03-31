@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="editor"/>
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
@@ -81,11 +81,6 @@
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/type-switcher.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-variation-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/product-variation.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-base-image-uploader-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/base-image-uploader.js</argument>
@@ -119,7 +114,6 @@
         </block>
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet" name="attribute-set-info" template="Magento_Catalog::catalog/product/edit/attribute_set.phtml"/>
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory" name="new-category" template="Magento_Catalog::catalog/product/edit/category/new/form.phtml"/>
-        <block class="Magento\View\Element\Template" name="affected-attribute-set-form" template="Magento_Catalog::product/configurable/affected-attribute-set-selector/form.phtml"/>
     </referenceContainer>
     <referenceContainer name="left">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs" name="product_tabs">
@@ -142,7 +136,5 @@
     <referenceContainer name="js">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Js" name="catalog_product_js" template="catalog/product/js.phtml"/>
         <block class="Magento\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
-        <block class="Magento\Catalog\Block\Product\Configurable\AttributeSelector" template="Magento_Catalog::product/configurable/attribute-selector/js.phtml"/>
-        <block class="Magento\Catalog\Block\Product\Configurable\AttributeSelector" template="Magento_Catalog::product/configurable/affected-attribute-set-selector/js.phtml"/>
     </referenceContainer>
 </layout>

@@ -46,7 +46,8 @@ class Link extends \Magento\View\Element\AbstractBlock
      */
     protected function _toHtml()
     {
-        return '<p>' . $this->getLabel() . ' <a href="' . $this->getItemUrl() . '">'
-            . $this->escapeHtml($this->getItemName()) . '</a></p>';
+        return '<p>' . $this->getLabel() . ' <a href="' . $this->getItemUrl() . '">' . $this->escapeHtml(
+            $this->getItemName()
+        ) . '</a></p>';
     }
 }

@@ -32,7 +32,7 @@ $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
     <div class="content search">
         <form class="form minisearch" id="search_mini_form" action="<?php echo $helper->getResultUrl() ?>" method="get">
             <div class="field search">
-                <label class="label" for="search"><?php echo __('Search'); ?></label>
+                <label class="label" for="search"><span><?php echo __('Search'); ?></span></label>
                 <div class="control">
                     <input id="search"
                            type="text"
@@ -42,9 +42,11 @@ $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
                            class="input-text"
                            autocomplete="off"/>
                     <div id="search_autocomplete" class="search autocomplete"></div>
-                    <a class="action advanced" href="<?php echo $helper->getAdvancedSearchUrl(); ?>">
-                        <?php echo __('Advanced Search'); ?>
-                    </a>
+                    <div class="nested">
+                        <a class="action advanced" href="<?php echo $helper->getAdvancedSearchUrl(); ?>">
+                            <?php echo __('Advanced Search'); ?>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="actions">

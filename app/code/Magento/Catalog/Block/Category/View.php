@@ -33,12 +33,12 @@
  */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\View\Element\Template
+class View extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,15 +56,15 @@ class View extends \Magento\View\Element\Template
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Model\Layer\Category $catalogLayer,
+        \Magento\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
         array $data = array()
     ) {
@@ -74,6 +74,9 @@ class View extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -81,8 +84,8 @@ class View extends \Magento\View\Element\Template
         $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
 
         $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $category = $this->getCurrentCategory();
+        $category = $this->getCurrentCategory();
+        if ($headBlock && $category) {
             $title = $category->getMetaTitle();
             if ($title) {
                 $headBlock->setTitle($title);
@@ -96,8 +99,9 @@ class View extends \Magento\View\Element\Template
                 $headBlock->setKeywords($keywords);
             }
             //@todo: move canonical link to separate block
-            if ($this->_categoryHelper->canUseCanonicalTag()
-                && !$headBlock->getChildBlock('magento-page-head-category-canonical-link')
+            if ($this->_categoryHelper->canUseCanonicalTag() && !$headBlock->getChildBlock(
+                'magento-page-head-category-canonical-link'
+            )
             ) {
                 $headBlock->addChild(
                     'magento-page-head-category-canonical-link',
@@ -124,24 +128,39 @@ class View extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function isRssCatalogEnable()
     {
         return $this->_storeConfig->getConfig('rss/catalog/category');
     }
 
+    /**
+     * @return bool
+     */
     public function isTopCategory()
     {
-        return $this->getCurrentCategory()->getLevel()==2;
+        return $this->getCurrentCategory()->getLevel() == 2;
     }
 
+    /**
+     * @return string
+     */
     public function getRssLink()
     {
-        return $this->_urlBuilder->getUrl('rss/catalog/category', array(
-            'cid' => $this->getCurrentCategory()->getId(),
-            'store_id' => $this->_storeManager->getStore()->getId())
+        return $this->_urlBuilder->getUrl(
+            'rss/catalog/category',
+            array(
+                'cid' => $this->getCurrentCategory()->getId(),
+                'store_id' => $this->_storeManager->getStore()->getId()
+            )
         );
     }
 
+    /**
+     * @return string
+     */
     public function getProductListHtml()
     {
         return $this->getChildHtml('product_list');
@@ -160,12 +179,17 @@ class View extends \Magento\View\Element\Template
         return $this->getData('current_category');
     }
 
+    /**
+     * @return mixed
+     */
     public function getCmsBlockHtml()
     {
         if (!$this->getData('cms_block_html')) {
-            $html = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                ->setBlockId($this->getCurrentCategory()->getLandingPage())
-                ->toHtml();
+            $html = $this->getLayout()->createBlock(
+                'Magento\Cms\Block\Block'
+            )->setBlockId(
+                $this->getCurrentCategory()->getLandingPage()
+            )->toHtml();
             $this->setData('cms_block_html', $html);
         }
         return $this->getData('cms_block_html');
@@ -209,5 +233,15 @@ class View extends \Magento\View\Element\Template
             }
         }
         return $res;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getCurrentCategory()->getIdentities();
     }
 }

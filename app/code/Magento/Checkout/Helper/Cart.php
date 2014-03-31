@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Helper;
 
 /**
  * Shopping cart helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Helper;
-
 class Cart extends \Magento\Core\Helper\Url
 {
     const XML_PATH_REDIRECT_TO_CART = 'checkout/cart/redirect_to_cart';
@@ -106,13 +105,10 @@ class Cart extends \Magento\Core\Helper\Url
      */
     public function getAddUrl($product, $additional = array())
     {
-        $continueUrl    = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
-        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $continueUrl = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
+        $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
-        $routeParams = array(
-            $urlParamName   => $continueUrl,
-            'product'       => $product->getEntityId()
-        );
+        $routeParams = array($urlParamName => $continueUrl, 'product' => $product->getEntityId());
 
         if (!empty($additional)) {
             $routeParams = array_merge($routeParams, $additional);
@@ -123,8 +119,8 @@ class Cart extends \Magento\Core\Helper\Url
             $routeParams['_scope_to_url'] = true;
         }
 
-        if ($this->_getRequest()->getRouteName() == 'checkout'
-            && $this->_getRequest()->getControllerName() == 'cart') {
+        if ($this->_getRequest()->getRouteName() == 'checkout' && $this->_getRequest()->getControllerName() == 'cart'
+        ) {
             $routeParams['in_cart'] = 1;
         }
 
@@ -140,7 +136,7 @@ class Cart extends \Magento\Core\Helper\Url
     public function getRemoveUrl($item)
     {
         $params = array(
-            'id'=>$item->getId(),
+            'id' => $item->getId(),
             \Magento\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url()
         );
         return $this->_getUrl('checkout/cart/delete', $params);
@@ -149,7 +145,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Retrieve shopping cart url
      *
-     * @return unknown
+     * @return string
      */
     public function getCartUrl()
     {
@@ -179,7 +175,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Get shopping cart summary qty
      *
-     * @return decimal
+     * @return int|float
      */
     public function getItemsQty()
     {
@@ -187,9 +183,9 @@ class Cart extends \Magento\Core\Helper\Url
     }
 
     /**
-     * Get shopping cart items summary (inchlude config settings)
+     * Get shopping cart items summary (include config settings)
      *
-     * @return decimal
+     * @return int|float
      */
     public function getSummaryCount()
     {
@@ -197,7 +193,7 @@ class Cart extends \Magento\Core\Helper\Url
     }
 
     /**
-     * Check qoute for virtual products only
+     * Check quote for virtual products only
      *
      * @return bool
      */

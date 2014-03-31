@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
 /**
@@ -57,11 +56,11 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
             )
         );
 
-        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-        ->get('Magento\App\Filesystem\DirectoryList');
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\Filesystem\DirectoryList'
+        );
         /** @var $directoryList \Magento\App\Filesystem\DirectoryList */
-        $directoryList->addDirectory(\Magento\App\Filesystem::SYS_TMP_DIR,
-            array('path' => '/'));
+        $directoryList->addDirectory(\Magento\App\Filesystem::SYS_TMP_DIR, array('path' => '/'));
 
         $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
 

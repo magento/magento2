@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model\Resource;
 
 /**
  * Customer log resource
@@ -32,10 +32,7 @@
  * @package    Magento_Log
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Log\Model\Resource;
-
-class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Customer extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Visitor data table name
@@ -81,17 +78,19 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('log_customer', 'log_id');
 
-        $this->_visitorTable        = $this->getTable('log_visitor');
-        $this->_visitorInfoTable    = $this->getTable('log_visitor_info');
-        $this->_urlTable            = $this->getTable('log_url');
-        $this->_urlInfoTable        = $this->getTable('log_url_info');
-        $this->_customerTable       = $this->getTable('log_customer');
-        $this->_quoteTable          = $this->getTable('log_quote');
+        $this->_visitorTable = $this->getTable('log_visitor');
+        $this->_visitorInfoTable = $this->getTable('log_visitor_info');
+        $this->_urlTable = $this->getTable('log_url');
+        $this->_urlInfoTable = $this->getTable('log_url_info');
+        $this->_customerTable = $this->getTable('log_customer');
+        $this->_quoteTable = $this->getTable('log_quote');
     }
 
     /**
@@ -107,22 +106,24 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
         if ($field == 'customer_id') {
             // load additional data by last login
-            $table  = $this->getMainTable();
-            $select
-                ->joinInner(
-                    array('lvt' => $this->_visitorTable),
-                    "lvt.visitor_id = {$table}.visitor_id",
-                    array('last_visit_at'))
-                ->joinInner(
-                    array('lvit' => $this->_visitorInfoTable),
-                    'lvt.visitor_id = lvit.visitor_id',
-                    array('http_referer', 'remote_addr'))
-                ->joinInner(
-                    array('luit' => $this->_urlInfoTable),
-                    'luit.url_id = lvt.last_url_id',
-                    array('url'))
-                ->order("{$table}.login_at DESC")
-                ->limit(1);
+            $table = $this->getMainTable();
+            $select->joinInner(
+                array('lvt' => $this->_visitorTable),
+                "lvt.visitor_id = {$table}.visitor_id",
+                array('last_visit_at')
+            )->joinInner(
+                array('lvit' => $this->_visitorInfoTable),
+                'lvt.visitor_id = lvit.visitor_id',
+                array('http_referer', 'remote_addr')
+            )->joinInner(
+                array('luit' => $this->_urlInfoTable),
+                'luit.url_id = lvt.last_url_id',
+                array('url')
+            )->order(
+                "{$table}.login_at DESC"
+            )->limit(
+                1
+            );
         }
         return $select;
     }

@@ -2,7 +2,7 @@
 "Allowed Currencies","Devises autorisées"
 "Base Currency","Devise de base"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","La monnaie de base est utilisée pour tous les paiements en ligne. Le champ est défini par l'étendue des prix du catalogue"
-"Can\'t convert rate from ""%s-%s"".","Impossible de convertir le taux depuis « %s-%s ». "
+"Can't convert rate from ""%s-%s"".","Impossible de convertir le taux depuis « %s-%s ». "
 "Cannot retrieve rate from %s.","Ne peut extraire taux du %s."
 "Connection Timeout in Seconds","Interruption connexion en secondes"
 "Continue &raquo;","Continue &raquo;"

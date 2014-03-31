@@ -69,7 +69,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSessionVars()
     {
-        return (isset($_SESSION) ? $_SESSION : null);
+        return isset($_SESSION) ? $_SESSION : null;
     }
 
     public function testEmulateHttpRequest()

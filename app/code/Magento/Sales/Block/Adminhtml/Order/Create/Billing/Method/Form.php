@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
 
 /**
  * Adminhtml sales order create payment method form block
@@ -31,11 +32,11 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
-
 class Form extends \Magento\Payment\Block\Form\Container
 {
     /**
+     * Session quote
+     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
@@ -43,23 +44,25 @@ class Form extends \Magento\Payment\Block\Form\Container
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         array $data = array()
     ) {
         $this->_sessionQuote = $sessionQuote;
-        parent::__construct($context, $paymentHelper, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
     }
 
     /**
      * Check payment method model
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod|null $method
+     * @param \Magento\Payment\Model\MethodInterface|null $method
      * @return bool
      */
     protected function _canUseMethod($method)
@@ -116,9 +119,11 @@ class Form extends \Magento\Payment\Block\Form\Container
         return $this->_sessionQuote->getQuote();
     }
 
-    /*
-    * Whether switch/solo card type available
-    */
+    /**
+     * Whether switch/solo card type available
+     *
+     * @return true
+     */
     public function hasSsCardType()
     {
         $availableTypes = explode(',', $this->getQuote()->getPayment()->getMethod()->getConfigData('cctypes'));
@@ -128,5 +133,4 @@ class Form extends \Magento\Payment\Block\Form\Container
         }
         return false;
     }
-
 }

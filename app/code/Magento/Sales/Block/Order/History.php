@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order;
 
 /**
  * Sales order history block
  */
-namespace Magento\Sales\Block\Order;
-
 class History extends \Magento\View\Element\Template
 {
     /**
@@ -72,15 +71,25 @@ class History extends \Magento\View\Element\Template
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
 
-        $orders = $this->_orderCollectionFactory->create()
-            ->addFieldToSelect('*')
-            ->addFieldToFilter('customer_id', $this->_customerSession->getCustomer()->getId())
-            ->addFieldToFilter('state', array('in' => $this->_orderConfig->getVisibleOnFrontStates()))
-            ->setOrder('created_at', 'desc');
+        $orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+            '*'
+        )->addFieldToFilter(
+            'customer_id',
+            $this->_customerSession->getCustomer()->getId()
+        )->addFieldToFilter(
+            'state',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+        )->setOrder(
+            'created_at',
+            'desc'
+        );
 
         $this->setOrders($orders);
 
@@ -90,14 +99,18 @@ class History extends \Magento\View\Element\Template
     }
 
     /**
-     * @return $this|\Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'sales.order.history.pager')
-            ->setCollection($this->getOrders());
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager',
+            'sales.order.history.pager'
+        )->setCollection(
+            $this->getOrders()
+        );
         $this->setChild('pager', $pager);
         $this->getOrders()->load();
         return $this;

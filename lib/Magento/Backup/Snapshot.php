@@ -33,12 +33,12 @@
  */
 namespace Magento\Backup;
 
-class Snapshot extends \Magento\Backup\Filesystem
+class Snapshot extends Filesystem
 {
     /**
      * Database backup manager
      *
-     * @var \Magento\Backup\Db
+     * @var Db
      */
     protected $_dbBackupManager;
 
@@ -50,18 +50,16 @@ class Snapshot extends \Magento\Backup\Filesystem
     protected $_filesystem;
 
     /**
-     * @var \Magento\Backup\Factory
+     * @var Factory
      */
     protected $_backupFactory;
 
     /**
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Backup\Factory $backupFactory
+     * @param Factory $backupFactory
      */
-    public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        \Magento\Backup\Factory $backupFactory
-    ) {
+    public function __construct(\Magento\App\Filesystem $filesystem, Factory $backupFactory)
+    {
         $this->_filesystem = $filesystem;
         $this->_backupFactory = $backupFactory;
     }
@@ -119,7 +117,7 @@ class Snapshot extends \Magento\Backup\Filesystem
      * Overlap getType
      *
      * @return string
-     * @see \Magento\Backup\BackupInterface::getType()
+     * @see BackupInterface::getType()
      */
     public function getType()
     {
@@ -129,21 +127,27 @@ class Snapshot extends \Magento\Backup\Filesystem
     /**
      * Create Db Instance
      *
-     * @return \Magento\Backup\BackupInterface
+     * @return BackupInterface
      */
     protected function _createDbBackupInstance()
     {
-        return $this->_backupFactory->create(\Magento\Backup\Factory::TYPE_DB)
-            ->setBackupExtension('gz')
-            ->setTime($this->getTime())
-            ->setBackupsDir($this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR))
-            ->setResourceModel($this->getResourceModel());
+        return $this->_backupFactory->create(
+            Factory::TYPE_DB
+        )->setBackupExtension(
+            'gz'
+        )->setTime(
+            $this->getTime()
+        )->setBackupsDir(
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR)
+        )->setResourceModel(
+            $this->getResourceModel()
+        );
     }
 
     /**
      * Get database backup manager
      *
-     * @return \Magento\Backup\Db
+     * @return Db
      */
     protected function _getDbBackupManager()
     {
@@ -157,17 +161,17 @@ class Snapshot extends \Magento\Backup\Filesystem
     /**
      * Set Db backup manager
      *
-     * @param \Magento\Backup\AbstractBackup $manager
-     * @return \Magento\Backup\Snapshot
+     * @param AbstractBackup $manager
+     * @return $this
      */
-    public function setDbBackupManager(\Magento\Backup\AbstractBackup $manager)
+    public function setDbBackupManager(AbstractBackup $manager)
     {
         $this->_dbBackupManager = $manager;
         return $this;
     }
 
     /**
-     * Get Db Backup Filemane
+     * Get Db Backup Filename
      *
      * @return string
      */
@@ -179,7 +183,7 @@ class Snapshot extends \Magento\Backup\Filesystem
     /**
      * Remove Db backup after added it to the snapshot
      *
-     * @return \Magento\Backup\Snapshot
+     * @return $this
      */
     protected function _removeDbBackup()
     {

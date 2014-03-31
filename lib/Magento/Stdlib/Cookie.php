@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib;
 
 /**
@@ -31,20 +28,6 @@ namespace Magento\Stdlib;
  */
 class Cookie
 {
-    /**
-     * @var \Magento\App\RequestInterface
-     */
-    protected $httpRequest;
-
-    /**
-     * @param \Magento\App\RequestInterface $request
-     */
-    public function __construct(
-        \Magento\App\RequestInterface $request
-    ) {
-        $this->httpRequest = $request;
-    }
-
     /**
      * Set cookie
      *
@@ -97,7 +80,7 @@ class Cookie
         if ($period === null) {
             return $this;
         }
-        $value = $this->httpRequest->getCookie($name, false);
+        $value = $this->get($name, false);
         if ($value !== false) {
             $this->set($name, $value, $period, $path, $domain, $secure, $httponly);
         }
@@ -107,11 +90,15 @@ class Cookie
     /**
      * Retrieve cookie or false if not exists
      *
-     * @param string $name The cookie name
+     * @param string|null $name
+     * @param mixed|null $default
      * @return mixed
      */
-    public function get($name = null)
+    public function get($name = null, $default = null)
     {
-        return $this->httpRequest->getCookie($name, false);
+        if (null === $name) {
+            return $_COOKIE;
+        }
+        return (isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
     }
 }

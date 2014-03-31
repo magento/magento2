@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 /**
  * Catalog product landing page attribute source
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Attribute\Source;
-
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
@@ -47,17 +46,19 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @param \Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout
      */
-    public function __construct(
-        \Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout
-    ) {
+    public function __construct(\Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout)
+    {
         $this->_pageSourceLayout = $pageSourceLayout;
     }
 
+    /**
+     * @return array
+     */
     public function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = $this->_pageSourceLayout->toOptionArray();
-            array_unshift($this->_options, array('value'=>'', 'label'=>__('No layout updates')));
+            array_unshift($this->_options, array('value' => '', 'label' => __('No layout updates')));
         }
         return $this->_options;
     }

@@ -87,7 +87,8 @@ abstract class AbstractIo implements IoInterface
 
         $path = trim(preg_replace("/\\\\/", "/", (string)$path));
 
-        if (!preg_match("/(\.\w{1,4})$/", $path) && !preg_match("/\?[^\\/]+$/", $path) && !preg_match("/\\/$/", $path)) {
+        if (!preg_match("/(\.\w{1,4})$/", $path) && !preg_match("/\?[^\\/]+$/", $path) && !preg_match("/\\/$/", $path)
+        ) {
             $path .= '/';
         }
 
@@ -103,12 +104,11 @@ abstract class AbstractIo implements IoInterface
         $pathParts = explode("/", $pathTokP);
         $realPathParts = array();
 
-        for ($i = 0, $realPathParts = array(); $i < count($pathParts); $i++) {
+        for ($i = 0,$realPathParts = array(); $i < count($pathParts); $i++) {
             if ($pathParts[$i] == '.') {
                 continue;
-            }
-            elseif ($pathParts[$i] == '..') {
-                if ((isset($realPathParts[0])  &&  $realPathParts[0] != '..') || ($pathTokR != "")) {
+            } elseif ($pathParts[$i] == '..') {
+                if (isset($realPathParts[0]) && $realPathParts[0] != '..' || $pathTokR != "") {
                     array_pop($realPathParts);
                     continue;
                 }

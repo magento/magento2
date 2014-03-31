@@ -23,46 +23,42 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>paypal</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal</argument>
+        </arguments>
     </virtualType>
     <virtualType name="Magento\Paypal\Model\Session" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\Paypal\Model\Session\Storage" />
-        </param>
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\Session\Storage</argument>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </virtualType>
     <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>paypal_payflow</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal_payflow</argument>
+        </arguments>
     </virtualType>
     <virtualType name="Magento\Paypal\Model\PayflowSession" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\Paypal\Model\PayflowSession\Storage" />
-        </param>
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\PayflowSession\Storage</argument>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Session\Generic">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="paypal_express"><value>/paypal/express</value></item>
-                <item key="paypal_payflowexpress"><value>/paypal/payflowexpress</value></item>
-                <item key="paypal_standard"><value>/paypal/standard</value></item>
-                <item key="paypal_express_callbackshippingoptions"><value>paypal/express/callbackshippingoptions</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="paypal_express" xsi:type="string">/paypal/express</item>
+                <item name="paypal_payflowexpress" xsi:type="string">/paypal/payflowexpress</item>
+                <item name="paypal_standard" xsi:type="string">/paypal/standard</item>
+                <item name="paypal_express_callbackshippingoptions" xsi:type="string">paypal/express/callbackshippingoptions</item>
+            </argument>
+        </arguments>
     </type>
 </config>

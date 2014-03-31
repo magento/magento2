@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Collection\Db\FetchStrategy;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
@@ -51,23 +50,29 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     private $_fixtureData = array(
         array('column_one' => 'row_one_value_one', 'column_two' => 'row_one_value_two'),
-        array('column_one' => 'row_two_value_one', 'column_two' => 'row_two_value_two'),
+        array('column_one' => 'row_two_value_one', 'column_two' => 'row_two_value_two')
     );
 
     protected function setUp()
     {
         $this->_select = $this->getMock('Zend_Db_Select', array('assemble'), array(), '', false);
-        $this->_select
-            ->expects($this->once())
-            ->method('assemble')
-            ->will($this->returnValue('SELECT * FROM fixture_table'))
-        ;
+        $this->_select->expects(
+            $this->once()
+        )->method(
+            'assemble'
+        )->will(
+            $this->returnValue('SELECT * FROM fixture_table')
+        );
 
         $this->_cache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
         $this->_fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
 
         $this->_object = new \Magento\Data\Collection\Db\FetchStrategy\Cache(
-            $this->_cache, $this->_fetchStrategy, 'fixture_', array('fixture_tag_one', 'fixture_tag_two'), 86400
+            $this->_cache,
+            $this->_fetchStrategy,
+            'fixture_',
+            array('fixture_tag_one', 'fixture_tag_two'),
+            86400
         );
     }
 
@@ -81,20 +86,17 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchAllCached()
     {
-        $this->_cache
-            ->expects($this->once())
-            ->method('load')
-            ->with('fixture_06a6b0cfd83bf997e76b1b403df86569')
-            ->will($this->returnValue(serialize($this->_fixtureData)))
-        ;
-        $this->_fetchStrategy
-            ->expects($this->never())
-            ->method('fetchAll')
-        ;
-        $this->_cache
-            ->expects($this->never())
-            ->method('save')
-        ;
+        $this->_cache->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'fixture_06a6b0cfd83bf997e76b1b403df86569'
+        )->will(
+            $this->returnValue(serialize($this->_fixtureData))
+        );
+        $this->_fetchStrategy->expects($this->never())->method('fetchAll');
+        $this->_cache->expects($this->never())->method('save');
         $this->assertEquals($this->_fixtureData, $this->_object->fetchAll($this->_select, array()));
     }
 
@@ -102,23 +104,27 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'fixture_06a6b0cfd83bf997e76b1b403df86569';
         $bindParams = array('param_one' => 'value_one', 'param_two' => 'value_two');
-        $this->_cache
-            ->expects($this->once())
-            ->method('load')
-            ->with($cacheId)
-            ->will($this->returnValue(false))
-        ;
-        $this->_fetchStrategy
-            ->expects($this->once())
-            ->method('fetchAll')
-            ->with($this->_select, $bindParams)
-            ->will($this->returnValue($this->_fixtureData))
-        ;
-        $this->_cache
-            ->expects($this->once())
-            ->method('save')
-            ->with(serialize($this->_fixtureData), $cacheId, array('fixture_tag_one', 'fixture_tag_two'), 86400)
-        ;
+        $this->_cache->expects($this->once())->method('load')->with($cacheId)->will($this->returnValue(false));
+        $this->_fetchStrategy->expects(
+            $this->once()
+        )->method(
+            'fetchAll'
+        )->with(
+            $this->_select,
+            $bindParams
+        )->will(
+            $this->returnValue($this->_fixtureData)
+        );
+        $this->_cache->expects(
+            $this->once()
+        )->method(
+            'save'
+        )->with(
+            serialize($this->_fixtureData),
+            $cacheId,
+            array('fixture_tag_one', 'fixture_tag_two'),
+            86400
+        );
         $this->assertEquals($this->_fixtureData, $this->_object->fetchAll($this->_select, $bindParams));
     }
 }

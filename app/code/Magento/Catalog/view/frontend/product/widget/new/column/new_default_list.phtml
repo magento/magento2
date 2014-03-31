@@ -53,7 +53,7 @@
                                     <?php if($_product->isSaleable()): ?>
                                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                                             <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
-                                                    data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_product) ?>'}}">
+                                                    data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_product) ?>"}}'>
                                                 <span><?php echo __('Add to Cart') ?></span>
                                             </button>
                                         <?php else: ?>

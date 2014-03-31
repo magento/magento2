@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
 
 /**
  * Export customer address entity model
@@ -34,10 +35,7 @@
  *
  * @method \Magento\Customer\Model\Resource\Address\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
-namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
-
-class Address
-    extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
+class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
     /**#@+
      * Permanent column names
@@ -45,34 +43,41 @@ class Address
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL      = '_email';
-    const COLUMN_WEBSITE    = '_website';
+    const COLUMN_EMAIL = '_email';
+
+    const COLUMN_WEBSITE = '_website';
+
     const COLUMN_ADDRESS_ID = '_entity_id';
+
     /**#@-*/
 
     /**#@+
      * Particular columns that contains of customer default addresses
      */
-    const COLUMN_NAME_DEFAULT_BILLING  = '_address_default_billing_';
+    const COLUMN_NAME_DEFAULT_BILLING = '_address_default_billing_';
+
     const COLUMN_NAME_DEFAULT_SHIPPING = '_address_default_shipping_';
+
     /**#@-*/
 
     /**#@+
      * Attribute collection name
      */
     const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Address\Attribute\Collection';
+
     /**#@-*/
 
     /**#@+
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = 'export/customer_page_size/address';
+
     /**#@-*/
 
     /**
      * Permanent entity columns
      *
-     * @var array
+     * @var string[]
      */
     protected $_permanentAttributes = array(self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID);
 
@@ -82,7 +87,7 @@ class Address
      * @var array
      */
     protected static $_defaultAddressAttributeMapping = array(
-        self::COLUMN_NAME_DEFAULT_BILLING  => 'default_billing',
+        self::COLUMN_NAME_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_NAME_DEFAULT_SHIPPING => 'default_shipping'
     );
 
@@ -108,7 +113,9 @@ class Address
     protected $_customerEntity;
 
     /**
-     * Existing customers information. In form of:
+     * Existing customers information.
+     *
+     * In form of:
      *
      * [customer e-mail] => array(
      *    [website id 1] => customer_id 1,
@@ -126,7 +133,7 @@ class Address
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory
      * @param \Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory $eavCustomerFactory
@@ -138,7 +145,7 @@ class Address
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory,
         \Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory $eavCustomerFactory,
@@ -150,19 +157,22 @@ class Address
             $storeManager,
             $collectionFactory,
             $resourceColFactory,
-            $locale,
+            $localeDate,
             $eavConfig,
             $data
         );
 
-        $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
-            : $customerColFactory->create();
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $customerColFactory->create();
 
-        $this->_customerEntity = isset($data['customer_entity']) ? $data['customer_entity']
-            : $eavCustomerFactory->create();
+        $this->_customerEntity = isset(
+            $data['customer_entity']
+        ) ? $data['customer_entity'] : $eavCustomerFactory->create();
 
-        $this->_addressCollection = isset($data['address_collection']) ? $data['address_collection']
-            : $addressColFactory->create();
+        $this->_addressCollection = isset(
+            $data['address_collection']
+        ) ? $data['address_collection'] : $addressColFactory->create();
 
         $this->_initWebsites(true);
         $this->setFileName($this->getEntityTypeCode());
@@ -171,7 +181,7 @@ class Address
     /**
      * Initialize existent customers data
      *
-     * @return \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address
+     * @return $this
      */
     protected function _initCustomers()
     {
@@ -194,7 +204,7 @@ class Address
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _getHeaderColumns()
     {
@@ -238,7 +248,7 @@ class Address
      * Export given customer address data plus related customer data (required for import)
      *
      * @param \Magento\Customer\Model\Address $item
-     * @return string
+     * @return void
      */
     public function exportItem($item)
     {
@@ -249,25 +259,24 @@ class Address
 
         // Fill row with default address attributes values
         foreach (self::$_defaultAddressAttributeMapping as $columnName => $attributeCode) {
-            if (!empty($customer[$attributeCode]) && ($customer[$attributeCode] == $item->getId())) {
+            if (!empty($customer[$attributeCode]) && $customer[$attributeCode] == $item->getId()) {
                 $row[$columnName] = 1;
             }
         }
 
         // Unique key
         $row[self::COLUMN_ADDRESS_ID] = $item['entity_id'];
-        $row[self::COLUMN_EMAIL]      = $customer['email'];
-        $row[self::COLUMN_WEBSITE]    = $this->_websiteIdToCode[$customer['website_id']];
+        $row[self::COLUMN_EMAIL] = $customer['email'];
+        $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$customer['website_id']];
 
-        $this->getWriter()
-            ->writeRow($row);
+        $this->getWriter()->writeRow($row);
     }
 
     /**
      * Set parameters (push filters from post into export customer model)
      *
      * @param array $parameters
-     * @return \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address
+     * @return $this
      */
     public function setParameters(array $parameters)
     {

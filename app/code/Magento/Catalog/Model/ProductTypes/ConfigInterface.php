@@ -54,4 +54,13 @@ interface ConfigInterface
      * @return array
      */
     public function getComposableTypes();
+
+    /**
+     * Get list of product types that comply with condition
+     *
+     * @param string $customAttributeName
+     * @param string $value
+     * @return array
+     */
+    public function filter($customAttributeName, $value = 'true');
 }

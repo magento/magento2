@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Massaction grid column filter
@@ -31,11 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-class SkipList
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+class SkipList extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getCondition()
     {
         return array('nin' => $this->getValue() ?: array(0));

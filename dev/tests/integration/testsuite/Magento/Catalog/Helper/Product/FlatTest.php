@@ -24,47 +24,34 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper\Product;
 
 class FlatTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
      */
     protected $_helper;
 
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
+     */
+    protected $_state;
+
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Helper\Product\Flat');
-    }
-
-    public function testGetFlag()
-    {
-        $flag = $this->_helper->getFlag();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Flat\Flag', $flag);
-    }
-
-    public function testIsBuilt()
-    {
-        $this->assertFalse($this->_helper->isBuilt());
-        $flag = $this->_helper->getFlag();
-        try {
-            $flag->setIsBuilt(true);
-            $this->assertTrue($this->_helper->isBuilt());
-
-            $flag->setIsBuilt(false);
-        } catch (\Exception $e) {
-            $flag->setIsBuilt(false);
-            throw $e;
-        }
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Helper\Product\Flat\Indexer'
+        );
+        $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            '\Magento\Catalog\Model\Indexer\Product\Flat\State'
+        );
     }
 
     public function testIsEnabledDefault()
     {
 
-        $this->assertFalse($this->_helper->isEnabled());
+        $this->assertFalse($this->_state->isFlatEnabled());
     }
 
     /**
@@ -72,7 +59,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEnabled()
     {
-        $this->assertTrue($this->_helper->isEnabled());
+        $this->assertTrue($this->_state->isFlatEnabled());
     }
 
     public function testIsAddFilterableAttributesDefault()
@@ -82,8 +69,10 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAddFilterableAttributes()
     {
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Helper\Product\Flat', array('addFilterableAttrs' => 1));
+        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            array('addFilterableAttrs' => 1)
+        );
         $this->assertEquals(1, $helper->isAddFilterableAttributes());
     }
 
@@ -94,8 +83,10 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAddChildData()
     {
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Helper\Product\Flat', array('addChildData' => 1));
+        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            array('addChildData' => 1)
+        );
         $this->assertEquals(1, $helper->isAddChildData());
     }
 }

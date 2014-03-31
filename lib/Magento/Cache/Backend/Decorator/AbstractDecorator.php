@@ -27,8 +27,7 @@
  */
 namespace Magento\Cache\Backend\Decorator;
 
-abstract class AbstractDecorator extends \Zend_Cache_Backend
-    implements \Zend_Cache_Backend_ExtendedInterface
+abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
      * Concrete Cache Backend class that is being decorated
@@ -47,8 +46,10 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend
      */
     public function __construct(array $options = array())
     {
-        if (array_key_exists('concrete_backend', $options)
-            && ($options['concrete_backend'] instanceof \Zend_Cache_Backend_Interface)
+        if (array_key_exists(
+            'concrete_backend',
+            $options
+        ) && $options['concrete_backend'] instanceof \Zend_Cache_Backend_Interface
         ) {
             $this->_backend = $options['concrete_backend'];
             unset($options['concrete_backend']);

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Widget\Grid\Row;
 
 class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -36,21 +35,31 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlPath = 'mng/item/edit';
 
         $itemMock = $this->getMock('Magento\Object', array('getItemId'), array(), '', false);
-        $itemMock->expects($this->once())
-            ->method('getItemId')
-            ->will($this->returnValue($itemId));
+        $itemMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
 
-        $urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(),
-            'Magento\Backend\Model\UrlProxy', false);
-        $urlModelMock->expects($this->once())
-            ->method('getUrl')
-            ->will($this->returnValue('http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId));
+        $urlModelMock = $this->getMock(
+            'Magento\Backend\Model\Url',
+            array(),
+            array(),
+            'Magento\Backend\Model\UrlProxy',
+            false
+        );
+        $urlModelMock->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->will(
+            $this->returnValue('http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId)
+        );
 
-        $model = new \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator($urlModelMock, array(
-            'path' => $urlPath,
-            'params' => array('flag' => 1),
-            'extraParamsTemplate' => array('item_id' => 'getItemId')
-        ));
+        $model = new \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator(
+            $urlModelMock,
+            array(
+                'path' => $urlPath,
+                'params' => array('flag' => 1),
+                'extraParamsTemplate' => array('item_id' => 'getItemId')
+            )
+        );
 
         $url = $model->getUrl($itemMock);
 

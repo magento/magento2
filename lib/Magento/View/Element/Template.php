@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 use Magento\App\Filesystem;
@@ -45,11 +44,15 @@ class Template extends AbstractBlock
     protected $_viewVars = array();
 
     /**
+     * Base URL
+     *
      * @var string
      */
     protected $_baseUrl;
 
     /**
+     * JS URL
+     *
      * @var string
      */
     protected $_jsUrl;
@@ -69,6 +72,8 @@ class Template extends AbstractBlock
     protected $_filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
@@ -81,16 +86,22 @@ class Template extends AbstractBlock
     protected $_template;
 
     /**
+     * Template engine pool
+     *
      * @var \Magento\View\TemplateEnginePool
      */
     protected $templateEnginePool;
 
     /**
+     * Store manager
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
@@ -110,18 +121,20 @@ class Template extends AbstractBlock
     private $mediaDirectory;
 
     /**
+     * Template context
+     *
      * @var \Magento\View\Element\BlockInterface
      */
     protected $templateContext;
 
     /**
+     * Constructor
+     *
      * @param Template\Context $context
      * @param array $data
      */
-    public function __construct(
-        Template\Context $context,
-        array $data = array()
-    ) {
+    public function __construct(Template\Context $context, array $data = array())
+    {
         $this->_filesystem = $context->getFilesystem();
         $this->_viewFileSystem = $context->getViewFileSystem();
         $this->templateEnginePool = $context->getEnginePool();
@@ -134,7 +147,8 @@ class Template extends AbstractBlock
     /**
      * Set template context. Sets the object that should represent $this in template
      *
-     * @param $templateContext
+     * @param \Magento\View\Element\BlockInterface $templateContext
+     * @return void
      */
     public function setTemplateContext($templateContext)
     {
@@ -143,6 +157,7 @@ class Template extends AbstractBlock
 
     /**
      * Internal constructor, that is called from real constructor
+     * @return void
      */
     protected function _construct()
     {
@@ -173,7 +188,7 @@ class Template extends AbstractBlock
      * Set path to template used for generating block's output.
      *
      * @param string $template
-     * @return \Magento\View\Element\Template
+     * @return $this
      */
     public function setTemplate($template)
     {
@@ -212,7 +227,7 @@ class Template extends AbstractBlock
      *
      * @param   string|array $key
      * @param   mixed $value
-     * @return  \Magento\View\Element\Template
+     * @return  $this
      */
     public function assign($key, $value = null)
     {
@@ -363,11 +378,15 @@ class Template extends AbstractBlock
 
         $themesDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::THEMES_DIR));
         $appDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::APP_DIR));
-        return (
-            $this->isPathInDirectory($fileName, $appDir)
-            || $this->isPathInDirectory($fileName, $themesDir)
-            || $this->isAllowSymlinks()
-        ) && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($fileName));
+        return ($this->isPathInDirectory(
+            $fileName,
+            $appDir
+        ) || $this->isPathInDirectory(
+            $fileName,
+            $themesDir
+        ) || $this->isAllowSymlinks()) && $this->getRootDirectory()->isFile(
+            $this->getRootDirectory()->getRelativePath($fileName)
+        );
     }
 
     /**

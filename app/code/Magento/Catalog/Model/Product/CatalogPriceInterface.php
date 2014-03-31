@@ -43,7 +43,7 @@ interface CatalogPriceInterface
      * Calculate price without discount for external catalogs if applicable
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return mixed
+     * @return float|null
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product);
 }

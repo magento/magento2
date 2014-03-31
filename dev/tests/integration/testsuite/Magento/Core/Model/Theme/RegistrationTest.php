@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Theme;
 
 class RegistrationTest extends \PHPUnit_Framework_TestCase
@@ -44,15 +43,24 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design'),
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+                )
             )
-        ));
-        $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\App\AreaList')
+            ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+            ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+
+        $objectManager->get('Magento\App\State')
+            ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $this->_theme = $objectManager
             ->create('Magento\View\Design\ThemeInterface');
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme\Registration', array('theme' => $this->_theme));
+        $this->_model = $objectManager
+            ->create('Magento\Core\Model\Theme\Registration');
     }
 
     /**
@@ -96,8 +104,11 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $subVirtualTheme = clone $this->_theme;
         $subVirtualTheme->setData($theme->getData())->setId(null);
-        $subVirtualTheme->setParentId($virtualTheme->getId())
-            ->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->save();
+        $subVirtualTheme->setParentId(
+            $virtualTheme->getId()
+        )->setType(
+            \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+        )->save();
 
         $this->registerThemes();
         $parentId = $subVirtualTheme->getParentId();
@@ -120,5 +131,16 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $this->registerThemes();
         $testTheme->load($testTheme->getId());
         $this->assertNotEquals((int)$testTheme->getType(), \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testRegister()
+    {
+        $this->registerThemes();
+        $themePath = implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'));
+        $theme = $this->_model->getThemeFromDb($themePath);
+        $this->assertEquals($themePath, $theme->getFullPath());
     }
 }

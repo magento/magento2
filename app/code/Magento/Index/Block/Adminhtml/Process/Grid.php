@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Block\Adminhtml\Process;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -78,6 +77,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -90,7 +91,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid collection
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -103,7 +104,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add name and description to collection elements
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _afterLoadCollection()
     {
@@ -126,81 +127,90 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('indexer_code', array(
-            'header'    => __('Index'),
-            'width'     => '180',
-            'align'     => 'left',
-            'index'     => 'name',
-            'sortable'  => false,
-        ));
+        $this->addColumn(
+            'indexer_code',
+            array('header' => __('Index'), 'width' => '180', 'align' => 'left', 'index' => 'name', 'sortable' => false)
+        );
 
-        $this->addColumn('description', array(
-            'header'    => __('Description'),
-            'align'     => 'left',
-            'index'     => 'description',
-            'sortable'  => false,
-        ));
+        $this->addColumn(
+            'description',
+            array('header' => __('Description'), 'align' => 'left', 'index' => 'description', 'sortable' => false)
+        );
 
-        $this->addColumn('mode', array(
-            'header'    => __('Mode'),
-            'width'     => '150',
-            'align'     => 'left',
-            'index'     => 'mode',
-            'type'      => 'options',
-            'options'   => $this->_indexProcess->getModesOptions()
-        ));
-
-        $this->addColumn('status', array(
-            'header'    => __('Status'),
-            'width'     => '120',
-            'align'     => 'left',
-            'index'     => 'status',
-            'type'      => 'options',
-            'options'   => $this->_indexProcess->getStatusesOptions(),
-            'frame_callback' => array($this, 'decorateStatus')
-        ));
-
-        $this->addColumn('update_required', array(
-            'header'    => __('Update Required'),
-            'sortable'  => false,
-            'width'     => '120',
-            'align'     => 'left',
-            'index'     => 'update_required',
-            'type'      => 'options',
-            'options'   => $this->_indexProcess->getUpdateRequiredOptions(),
-            'frame_callback' => array($this, 'decorateUpdateRequired')
-        ));
-
-        $this->addColumn('ended_at', array(
-            'header'    => __('Updated'),
-            'type'      => 'datetime',
-            'width'     => '180',
-            'align'     => 'left',
-            'index'     => 'ended_at',
-            'frame_callback' => array($this, 'decorateDate')
-        ));
-
-        $this->addColumn('action',
+        $this->addColumn(
+            'mode',
             array(
-                'header'    =>  __('Action'),
-                'width'     => '100',
-                'type'      => 'action',
-                'getter'    => 'getId',
-                'actions'   => array(
+                'header' => __('Mode'),
+                'width' => '150',
+                'align' => 'left',
+                'index' => 'mode',
+                'type' => 'options',
+                'options' => $this->_indexProcess->getModesOptions()
+            )
+        );
+
+        $this->addColumn(
+            'status',
+            array(
+                'header' => __('Status'),
+                'width' => '120',
+                'align' => 'left',
+                'index' => 'status',
+                'type' => 'options',
+                'options' => $this->_indexProcess->getStatusesOptions(),
+                'frame_callback' => array($this, 'decorateStatus')
+            )
+        );
+
+        $this->addColumn(
+            'update_required',
+            array(
+                'header' => __('Update Required'),
+                'sortable' => false,
+                'width' => '120',
+                'align' => 'left',
+                'index' => 'update_required',
+                'type' => 'options',
+                'options' => $this->_indexProcess->getUpdateRequiredOptions(),
+                'frame_callback' => array($this, 'decorateUpdateRequired')
+            )
+        );
+
+        $this->addColumn(
+            'ended_at',
+            array(
+                'header' => __('Updated'),
+                'type' => 'datetime',
+                'width' => '180',
+                'align' => 'left',
+                'index' => 'ended_at',
+                'frame_callback' => array($this, 'decorateDate')
+            )
+        );
+
+        $this->addColumn(
+            'action',
+            array(
+                'header' => __('Action'),
+                'width' => '100',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
                     array(
-                        'caption'   => __('Reindex Data'),
-                        'url'       => array('base'=> '*/*/reindexProcess'),
-                        'field'     => 'process'
-                    ),
+                        'caption' => __('Reindex Data'),
+                        'url' => array('base' => '*/*/reindexProcess'),
+                        'field' => 'process'
+                    )
                 ),
-                'filter'    => false,
-                'sortable'  => false,
-                'is_system' => true,
-        ));
+                'filter' => false,
+                'sortable' => false,
+                'is_system' => true
+            )
+        );
 
         parent::_prepareColumns();
 
@@ -221,17 +231,17 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $class = '';
         switch ($row->getStatus()) {
-            case \Magento\Index\Model\Process::STATUS_PENDING :
+            case \Magento\Index\Model\Process::STATUS_PENDING:
                 $class = 'grid-severity-notice';
                 break;
-            case \Magento\Index\Model\Process::STATUS_RUNNING :
+            case \Magento\Index\Model\Process::STATUS_RUNNING:
                 $class = 'grid-severity-major';
                 break;
-            case \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX :
+            case \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX:
                 $class = 'grid-severity-critical';
                 break;
         }
-        return '<span class="'.$class.'"><span>'.$value.'</span></span>';
+        return '<span class="' . $class . '"><span>' . $value . '</span></span>';
     }
 
     /**
@@ -255,7 +265,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 $class = 'grid-severity-critical';
                 break;
         }
-        return '<span class="'.$class.'"><span>'.$value.'</span></span>';
+        return '<span class="' . $class . '"><span>' . $value . '</span></span>';
     }
 
     /**
@@ -291,7 +301,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add mass-actions to grid
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareMassaction()
     {
@@ -300,25 +310,27 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $modeOptions = $this->_indexProcess->getModesOptions();
 
-        $this->getMassactionBlock()->addItem('change_mode', array(
-            'label'         => __('Change Index Mode'),
-            'url'           => $this->getUrl('adminhtml/*/massChangeMode'),
-            'additional'    => array(
-                'mode'      => array(
-                    'name'      => 'index_mode',
-                    'type'      => 'select',
-                    'class'     => 'required-entry',
-                    'label'     => __('Index mode'),
-                    'values'    => $modeOptions
+        $this->getMassactionBlock()->addItem(
+            'change_mode',
+            array(
+                'label' => __('Change Index Mode'),
+                'url' => $this->getUrl('adminhtml/*/massChangeMode'),
+                'additional' => array(
+                    'mode' => array(
+                        'name' => 'index_mode',
+                        'type' => 'select',
+                        'class' => 'required-entry',
+                        'label' => __('Index mode'),
+                        'values' => $modeOptions
+                    )
                 )
             )
-        ));
+        );
 
-        $this->getMassactionBlock()->addItem('reindex', array(
-            'label'    => __('Reindex Data'),
-            'url'      => $this->getUrl('adminhtml/*/massReindex'),
-            'selected' => true,
-        ));
+        $this->getMassactionBlock()->addItem(
+            'reindex',
+            array('label' => __('Reindex Data'), 'url' => $this->getUrl('adminhtml/*/massReindex'), 'selected' => true)
+        );
 
         return $this;
     }

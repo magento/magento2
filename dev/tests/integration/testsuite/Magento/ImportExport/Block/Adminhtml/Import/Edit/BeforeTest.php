@@ -45,14 +45,8 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_sourceEntities = array(
-        'entity_1' => array(
-            'code'  => 'behavior_1',
-            'token' => 'Some_Random_First_Class',
-        ),
-        'entity_2' => array(
-            'code'  => 'behavior_2',
-            'token' => 'Some_Random_Second_Class',
-        ),
+        'entity_1' => array('code' => 'behavior_1', 'token' => 'Some_Random_First_Class'),
+        'entity_2' => array('code' => 'behavior_2', 'token' => 'Some_Random_Second_Class')
     );
 
     /**
@@ -60,10 +54,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_expectedEntities = array(
-        'entity_1' => 'behavior_1',
-        'entity_2' => 'behavior_2',
-    );
+    protected $_expectedEntities = array('entity_1' => 'behavior_1', 'entity_2' => 'behavior_2');
 
     /**
      * Source unique behaviors
@@ -72,7 +63,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_sourceBehaviors = array(
         'behavior_1' => 'Some_Random_First_Class',
-        'behavior_2' => 'Some_Random_Second_Class',
+        'behavior_2' => 'Some_Random_Second_Class'
     );
 
     /**
@@ -85,9 +76,13 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $coreHelper = $this->getMock('Magento\Core\Helper\Data', array('jsonEncode'), array(), '', false, false);
-        $coreHelper->expects($this->any())
-            ->method('jsonEncode')
-            ->will($this->returnCallback(array($this, 'jsonEncodeCallback')));
+        $coreHelper->expects(
+            $this->any()
+        )->method(
+            'jsonEncode'
+        )->will(
+            $this->returnCallback(array($this, 'jsonEncodeCallback'))
+        );
 
         $importModel = $this->getMock(
             'Magento\ImportExport\Model\Import',
@@ -96,15 +91,23 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $importModel->expects($this->any())
-            ->method('getEntityBehaviors')
-            ->will($this->returnValue($this->_sourceEntities));
-        $importModel->expects($this->any())
-            ->method('getUniqueEntityBehaviors')
-            ->will($this->returnValue($this->_sourceBehaviors));
+        $importModel->expects(
+            $this->any()
+        )->method(
+            'getEntityBehaviors'
+        )->will(
+            $this->returnValue($this->_sourceEntities)
+        );
+        $importModel->expects(
+            $this->any()
+        )->method(
+            'getUniqueEntityBehaviors'
+        )->will(
+            $this->returnValue($this->_sourceBehaviors)
+        );
 
         $arguments = array(
-            'coreData'  => $coreHelper,
+            'coreData' => $coreHelper,
             'importModel' => $importModel,
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
         );

@@ -23,36 +23,39 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
 /**
  * Adminhtml creditmemo create
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
-
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'order_id';
@@ -75,6 +78,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_coreRegistry->registry('current_creditmemo');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->getCreditmemo()->getInvoice()) {
@@ -86,6 +94,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $header;
     }
 
+    /**
+     * Get back url
+     *
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl(

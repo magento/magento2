@@ -35,8 +35,10 @@ namespace Magento\Backup\Model;
 
 class Observer
 {
-    const XML_PATH_BACKUP_ENABLED          = 'system/backup/enabled';
-    const XML_PATH_BACKUP_TYPE             = 'system/backup/type';
+    const XML_PATH_BACKUP_ENABLED = 'system/backup/enabled';
+
+    const XML_PATH_BACKUP_TYPE = 'system/backup/type';
+
     const XML_PATH_BACKUP_MAINTENANCE_MODE = 'system/backup/maintenance';
 
     /**
@@ -56,7 +58,7 @@ class Observer
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -86,7 +88,7 @@ class Observer
 
     /**
      * @param \Magento\Backup\Helper\Data $backupData
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\Filesystem $filesystem
@@ -94,7 +96,7 @@ class Observer
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\Filesystem $filesystem,
@@ -127,16 +129,24 @@ class Observer
 
         $this->_errors = array();
         try {
-            $backupManager = $this->_backupFactory->create($type)
-                ->setBackupExtension($this->_backupData->getExtensionByType($type))
-                ->setTime(time())
-                ->setBackupsDir($this->_backupData->getBackupsDir());
+            $backupManager = $this->_backupFactory->create(
+                $type
+            )->setBackupExtension(
+                $this->_backupData->getExtensionByType($type)
+            )->setTime(
+                time()
+            )->setBackupsDir(
+                $this->_backupData->getBackupsDir()
+            );
 
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             if ($type != \Magento\Backup\Factory::TYPE_DB) {
-                $backupManager->setRootDir($this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR))
-                    ->addIgnorePaths($this->_backupData->getBackupIgnorePaths());
+                $backupManager->setRootDir(
+                    $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR)
+                )->addIgnorePaths(
+                    $this->_backupData->getBackupIgnorePaths()
+                );
             }
 
             $backupManager->create();

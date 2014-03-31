@@ -23,137 +23,121 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
     <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>install</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">install</argument>
+        </arguments>
     </virtualType>
     <virtualType name="Magento\Install\Model\Session" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\Install\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Install\Model\Session\Storage</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Install\Block\Begin">
-        <param name="eulaFile">
-            <value>LICENSE.html</value>
-        </param>
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="eulaFile" xsi:type="string">LICENSE.html</argument>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\End">
-        <param name="cryptKey">
-            <value type="argument">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</value>
-        </param>
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="cryptKey" xsi:type="init_parameter">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</argument>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Installer\Db">
-        <param name="dbConfig">
-            <array>
-                <item key="mysql4">
-                    <array>
-                        <item key="type"><value>pdo_mysql</value></item>
-                        <item key="initStatements"><value>SET NAMES utf8</value></item>
-                        <item key="min_version"><value>4.1.20</value></item>
-                    </array>
+        <arguments>
+            <argument name="dbConfig" xsi:type="array">
+                <item name="mysql4" xsi:type="array">
+                    <item name="type" xsi:type="string">pdo_mysql</item>
+                    <item name="initStatements" xsi:type="string">SET NAMES utf8</item>
+                    <item name="min_version" xsi:type="string">4.1.20</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Installer\Db\AbstractDb">
-        <param name="dbExtensions">
-            <array>
-                <item key="mysql4">
-                    <array>
-                        <item key="pdo"><value>pdo_mysql</value></item>
-                    </array>
+        <arguments>
+            <argument name="dbExtensions" xsi:type="array">
+                <item name="mysql4" xsi:type="array">
+                    <item name="pdo" xsi:type="string">pdo_mysql</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Config\Reader">
-        <param name="fileName">
-            <value>install_wizard.xml</value>
-        </param>
-        <param name="converter">
-            <instance type="Magento\Install\Model\Config\Converter" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Install\Model\Config\SchemaLocator" />
-        </param>
+        <arguments>
+            <argument name="fileName" xsi:type="string">install_wizard.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Install\Model\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Install\Model\Config\SchemaLocator</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Config\Data">
-        <param name='reader'>
-            <instance type="Magento\Install\Model\Config\Reader" />
-        </param>
-        <param name="cacheId">
-            <value>install_wizard_config</value>
-        </param>
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Install\Model\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">install_wizard_config</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\AbstractBlock">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\Config">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\Locale">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\Db\Main">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Block\Db\Type">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Controller\Wizard">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Installer">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Observer">
-        <param name='session'>
-            <instance type="Magento\Install\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Model\Installer\AbstractInstaller">
-        <param name="installer">
-            <instance type="Magento\Install\Model\Installer\Proxy" />
-        </param>
+        <arguments>
+            <argument name="installer" xsi:type="object">Magento\Install\Model\Installer\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\App\AreaList">
-        <param name="areas">
-            <array>
-                <item key="install">
-                    <array>
-                        <item key="frontName"><value>install</value></item>
-                        <item key="router"><value>install</value></item>
-                    </array>
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="install" xsi:type="array">
+                    <item name="frontName" xsi:type="string">install</item>
+                    <item name="router" xsi:type="string">install</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Backend\Model\Url\ScopeResolver" shared="false">
-        <param name="areaCode">
-            <value>adminhtml</value>
-        </param>
+        <arguments>
+            <argument name="areaCode" xsi:type="string">adminhtml</argument>
+        </arguments>
     </type>
 </config>

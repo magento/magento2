@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Session;
+
+use Magento\Session\SessionManagerInterface;
 
 class Pool
 {
@@ -47,12 +48,12 @@ class Pool
      * @param string $instanceName
      * @param array $data
      * @throws \LogicException
-     * @return \Magento\Session\SessionManagerInterface
+     * @return SessionManagerInterface
      */
     public function get($instanceName, $data = array())
     {
         $object = $this->_objectManager->get($instanceName, array('data' => $data));
-        if (!$object instanceof \Magento\Session\SessionManagerInterface) {
+        if (!$object instanceof SessionManagerInterface) {
             throw new \LogicException($instanceName . ' doesn\'t implement \Magento\Session\SessionManagerInterface');
         }
 

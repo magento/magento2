@@ -23,28 +23,24 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Weee\Helper\Data">
-        <param name="weeeTax">
-            <instance type="Magento\Weee\Model\Tax\Proxy" />
-        </param>
+        <arguments>
+            <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Weee\Model\Observer">
-        <param name="layout">
-            <instance type="Magento\Core\Model\Layout\Proxy" />
-        </param>
-        <param name="weeeTax">
-            <instance type="Magento\Weee\Model\Tax\Proxy" />
-        </param>
-        <param name="weeeData">
-            <instance type="Magento\Weee\Helper\Data\Proxy" />
-        </param>
+        <arguments>
+            <argument name="layout" xsi:type="object">Magento\Core\Model\Layout\Proxy</argument>
+            <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
+            <argument name="weeeData" xsi:type="object">Magento\Weee\Helper\Data\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="weee_setup"><value>Magento\Sales\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="weee_setup" xsi:type="string">Magento\Sales\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

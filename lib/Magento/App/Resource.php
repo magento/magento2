@@ -25,19 +25,25 @@
  */
 namespace Magento\App;
 
+use Magento\App\Resource\ConfigInterface as ResourceConfigInterface;
+use Magento\App\Resource\ConnectionFactory;
+
 class Resource
 {
-    const AUTO_UPDATE_ONCE       = 0;
-    const AUTO_UPDATE_NEVER      = -1;
-    const AUTO_UPDATE_ALWAYS     = 1;
+    const AUTO_UPDATE_ONCE = 0;
+
+    const AUTO_UPDATE_NEVER = -1;
+
+    const AUTO_UPDATE_ALWAYS = 1;
 
     const PARAM_TABLE_PREFIX = 'db.table_prefix';
-    const DEFAULT_READ_RESOURCE  = 'core_read';
+
+    const DEFAULT_READ_RESOURCE = 'core_read';
 
     /**
      * Instances of actual connections
      *
-     * @var \Magento\DB\Adapter\Interface[]
+     * @var \Magento\DB\Adapter\AdapterInterface[]
      */
     protected $_connections = array();
 
@@ -51,21 +57,21 @@ class Resource
     /**
      * Resource config
      *
-     * @var \Magento\App\Resource\ConfigInterface
+     * @var ResourceConfigInterface
      */
     protected $_config;
 
     /**
      * Resource connection adapter factory
      *
-     * @var \Magento\App\Resource\ConnectionFactory
+     * @var ConnectionFactory
      */
     protected $_connectionFactory;
 
     /**
      * Application cache
      *
-     * @var \Magento\App\CacheInterface
+     * @var CacheInterface
      */
     protected $_cache;
 
@@ -75,15 +81,15 @@ class Resource
     protected $_tablePrefix;
 
     /**
-     * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\App\Resource\ConfigInterface $resourceConfig
-     * @param \Magento\App\Resource\ConnectionFactory $adapterFactory
+     * @param CacheInterface $cache
+     * @param ResourceConfigInterface $resourceConfig
+     * @param ConnectionFactory $adapterFactory
      * @param string $tablePrefix
      */
     public function __construct(
-        \Magento\App\CacheInterface $cache,
-        Resource\ConfigInterface $resourceConfig,
-        Resource\ConnectionFactory $adapterFactory,
+        CacheInterface $cache,
+        ResourceConfigInterface $resourceConfig,
+        ConnectionFactory $adapterFactory,
         $tablePrefix = ''
     ) {
         $this->_cache = $cache;
@@ -95,10 +101,10 @@ class Resource
     /**
      * Set cache instance
      *
-     * @param \Magento\App\CacheInterface $cache
+     * @param CacheInterface $cache
      * @return void
      */
-    public function setCache(\Magento\App\CacheInterface $cache)
+    public function setCache(CacheInterface $cache)
     {
         $this->_cache = $cache;
     }
@@ -119,7 +125,7 @@ class Resource
      * Retrieve connection to resource specified by $resourceName
      *
      * @param string $resourceName
-     * @return \Magento\DB\Adapter\AdapterInterface|bool
+     * @return \Magento\DB\Adapter\AdapterInterface|false
      */
     public function getConnection($resourceName)
     {
@@ -205,10 +211,18 @@ class Resource
      * @param string $indexType
      * @return string
      */
-    public function getIdxName($tableName, $fields, $indexType = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX)
-    {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
-            ->getIndexName($this->getTableName($tableName), $fields, $indexType);
+    public function getIdxName(
+        $tableName,
+        $fields,
+        $indexType = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+    ) {
+        return $this->getConnection(
+            self::DEFAULT_READ_RESOURCE
+        )->getIndexName(
+            $this->getTableName($tableName),
+            $fields,
+            $indexType
+        );
     }
 
     /**
@@ -222,8 +236,13 @@ class Resource
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
-            ->getForeignKeyName($this->getTableName($priTableName), $priColumnName,
-                $this->getTableName($refTableName), $refColumnName);
+        return $this->getConnection(
+            self::DEFAULT_READ_RESOURCE
+        )->getForeignKeyName(
+            $this->getTableName($priTableName),
+            $priColumnName,
+            $this->getTableName($refTableName),
+            $refColumnName
+        );
     }
 }

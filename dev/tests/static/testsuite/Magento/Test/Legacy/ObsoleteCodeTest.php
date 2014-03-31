@@ -43,11 +43,16 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected static $_classes    = array();
-    protected static $_constants  = array();
-    protected static $_methods    = array();
+    protected static $_classes = array();
+
+    protected static $_constants = array();
+
+    protected static $_methods = array();
+
     protected static $_attributes = array();
+
     protected static $_namespaces = array();
+
     /**#@-*/
 
     /**
@@ -123,7 +128,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _readList($file)
     {
-        return include($file);
+        return include $file;
     }
 
     public function testPhpFiles()
@@ -159,7 +164,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $content = file_get_contents($file);
-                $this->_assertNotRegExp('/\bMage::(\w+?)\(/iS', $content, "Static Method of 'Mage' class is obsolete.");
+                $this->_assertNotRegExp(
+                    '/\bMage::(\w+?)\(/iS',
+                    $content,
+                    "Static Method of 'Mage' class is obsolete."
+                );
             },
             \Magento\TestFramework\Utility\Files::init()->getPhpFiles(false, false, true)
         );
@@ -250,7 +259,9 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     }
                     $this->_assertNotRegExp('/this->' . $quotedMethod . '\s*\(/iS', $content, $message);
                     $this->_assertNotRegExp(
-                        '/(self|static|parent)::\s*' . $quotedMethod . '\s*\(/iS', $content, $message
+                        '/(self|static|parent)::\s*' . $quotedMethod . '\s*\(/iS',
+                        $content,
+                        $message
                     );
                 }
             } else {
@@ -306,7 +317,9 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     protected function _testGetChildSpecialCase($content, $file)
     {
         if (0 === strpos($file, \Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/app/')) {
-            $this->_assertNotRegexp('/[^a-z\d_]getChild\s*\(/iS', $content,
+            $this->_assertNotRegexp(
+                '/[^a-z\d_]getChild\s*\(/iS',
+                $content,
                 'Block method getChild() is obsolete. ' .
                 'Replacement suggestion: \Magento\View\Element\AbstractBlock::getChildBlock()'
             );
@@ -321,8 +334,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     protected function _testGetOptionsSpecialCase($content)
     {
         $this->_assertNotRegexp(
-            '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media'
-                .'|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
+            '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media' .
+            '|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
             $content,
             'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\App\Filesystem'
         );
@@ -333,17 +346,23 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testObsoleteMethodArguments($content)
     {
-        $this->_assertNotRegExp('/[^a-z\d_]getTypeInstance\s*\(\s*[^\)]+/iS', $content,
+        $this->_assertNotRegExp(
+            '/[^a-z\d_]getTypeInstance\s*\(\s*[^\)]+/iS',
+            $content,
             'Backwards-incompatible change: method getTypeInstance() is not supposed to be invoked with any arguments.'
         );
-        $this->_assertNotRegExp('/\->getUsedProductIds\(([^\)]+,\s*[^\)]+)?\)/', $content,
-            'Backwards-incompatible change: method getUsedProductIds($product)'
-                . ' must be invoked with one and only one argument - product model object'
+        $this->_assertNotRegExp(
+            '/\->getUsedProductIds\(([^\)]+,\s*[^\)]+)?\)/',
+            $content,
+            'Backwards-incompatible change: method getUsedProductIds($product)' .
+            ' must be invoked with one and only one argument - product model object'
         );
 
-        $this->_assertNotRegExp('#->_setActiveMenu\([\'"]([\w\d/_]+)[\'"]\)#Ui', $content,
-            'Backwards-incompatible change: method _setActiveMenu()'
-                . ' must be invoked with menu item identifier than xpath for menu item'
+        $this->_assertNotRegExp(
+            '#->_setActiveMenu\([\'"]([\w\d/_]+)[\'"]\)#Ui',
+            $content,
+            'Backwards-incompatible change: method _setActiveMenu()' .
+            ' must be invoked with menu item identifier than xpath for menu item'
         );
     }
 
@@ -362,7 +381,9 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             } else {
                 $fullyQualified = $attribute;
             }
-            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($attribute, '/') . '[^a-z\d_]/iS', $content,
+            $this->_assertNotRegExp(
+                '/[^a-z\d_]' . preg_quote($attribute, '/') . '[^a-z\d_]/iS',
+                $content,
                 $this->_suggestReplacement(sprintf("Class attribute '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }
@@ -374,8 +395,10 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     protected function _testObsoleteActions($content)
     {
         $suggestion = 'Resizing images upon the client request is obsolete, use server-side resizing instead';
-        $this->_assertNotRegExp('#[^a-z\d_/]catalog/product/image[^a-z\d_/]#iS', $content,
-            "Action 'catalog/product/image' is obsolete. $suggestion"
+        $this->_assertNotRegExp(
+            '#[^a-z\d_/]catalog/product/image[^a-z\d_/]#iS',
+            $content,
+            "Action 'catalog/product/image' is obsolete. {$suggestion}"
         );
     }
 
@@ -396,23 +419,31 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             list($constant, $class, $replacement) = $row;
             if ($class) {
                 $fullyQualified = "{$class}::{$constant}";
-                $regex = preg_quote($fullyQualified, '/');
+                $fullyQualified = strtr($fullyQualified, array('\\' => '\\\\'));
+                $regex = preg_quote($fullyQualified);
                 if ($this->_isClassOrInterface($content, $class)) {
                     $regex .= '|' . $this->_getClassConstantDefinitionRegExp($constant)
                         . '|' . preg_quote("self::{$constant}", '/')
                         . '|' . preg_quote("static::{$constant}", '/');
-                } else if ($this->_isDirectDescendant($content, $class)) {
+                } elseif ($this->_isDirectDescendant($content, $class)) {
                     $regex .= '|' . preg_quote("parent::{$constant}", '/');
                     if (!$this->_isClassConstantDefined($content, $constant)) {
-                        $regex .= '|' . preg_quote("self::{$constant}", '/')
-                            . '|' . preg_quote("static::{$constant}", '/');
+                        $regex .= '|' . preg_quote(
+                            "self::{$constant}",
+                            '/'
+                        ) . '|' . preg_quote(
+                            "static::{$constant}",
+                            '/'
+                        );
                     }
                 }
             } else {
                 $fullyQualified = $constant;
                 $regex = preg_quote($constant, '/');
             }
-            $this->_assertNotRegExp('/[^a-z\d_]' . $regex . '[^a-z\d_]/iS', $content,
+            $this->_assertNotRegExp(
+                '/[^a-z\d_](' . $regex . ')[^a-z\d_]/iS',
+                $content,
                 $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }
@@ -446,7 +477,9 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testObsoletePropertySkipCalculate($content)
     {
-        $this->_assertNotRegExp('/[^a-z\d_]skipCalculate[^a-z\d_]/iS', $content,
+        $this->_assertNotRegExp(
+            '/[^a-z\d_]skipCalculate[^a-z\d_]/iS',
+            $content,
             "Configuration property 'skipCalculate' is obsolete."
         );
     }
@@ -510,7 +543,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, preg_match($regex, $content), $message);
     }
 
-
     public function testMageMethodsObsolete()
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
@@ -536,14 +568,21 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function mageObsoleteDataProvider()
     {
-        $blackList = include(__DIR__ . '/_files/blacklist/obsolete_mage.php');
+        $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = array();
         $appPath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         foreach ($blackList as $file) {
             $ignored[] = realpath($appPath . '/' . $file);
         }
-        $files = \Magento\TestFramework\Utility\Files::init()->
-            getClassFiles(true, true, true, true, true, true, false);
+        $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false
+        );
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);
         return \Magento\TestFramework\Utility\Files::composeDataSets($files);

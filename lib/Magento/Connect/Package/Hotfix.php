@@ -23,27 +23,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Package;
 
- /**
+/**
  * Class to work with Magento Connect Hotfix
  *
  * @category    Magento
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect\Package;
-
 class Hotfix extends \Magento\Connect\Package
 {
-
     /**
      * Initializes an empty package object
      *
      * @param null|string $definition optional package definition xml
-     * @return \Magento\Connect\Package
+     * @return $this
      */
-    protected function _init($definition=null)
+    protected function _init($definition = null)
     {
 
         if (!is_null($definition)) {
@@ -75,10 +72,12 @@ END;
     }
 
     /**
-    * Add content to node <replace/>
-    *
-    * @return \Magento\Connect\Package\Hotfix
-    */
+     * Add content to node <replace/>
+     *
+     * @param string $path
+     * @param string $targetName
+     * @return $this
+     */
     public function addReplace($path, $targetName)
     {
         $found = false;
@@ -89,7 +88,7 @@ END;
             $parent = $this->_getNode('dir', $parent, $directory);
         }
         $fileName = basename($path);
-        if ($fileName!='') {
+        if ($fileName != '') {
             $fileNode = $parent->addChild('file');
             $fileNode->addAttribute('name', $fileName);
         }
@@ -105,9 +104,9 @@ END;
      * @param string $path Path to directory
      * @param string $exclude Exclude
      * @param string $include Include
-     * @return \Magento\Connect\Package
+     * @return $this
      */
-    public function addReplaceDir($targetName, $targetDir, $path, $exclude=null, $include=null)
+    public function addReplaceDir($targetName, $targetDir, $path, $exclude = null, $include = null)
     {
         $targetDirLen = strlen($targetDir);
         //get all subdirectories and files.
@@ -123,7 +122,7 @@ END;
                 }
                 if (is_dir($entry)) {
                     $baseName = basename($entry);
-                    if ('.'===$baseName || '..'===$baseName) {
+                    if ('.' === $baseName || '..' === $baseName) {
                         continue;
                     }
                     //for subdirectory call method recursively
@@ -135,5 +134,4 @@ END;
         }
         return $this;
     }
-
 }

@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Block\System\Config;
 
 /**
@@ -35,10 +33,11 @@ namespace Magento\Backend\Block\System\Config;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-
     const SCOPE_DEFAULT = 'default';
+
     const SCOPE_WEBSITES = 'websites';
-    const SCOPE_STORES   = 'stores';
+
+    const SCOPE_STORES = 'stores';
 
     /**
      * Config data array
@@ -90,7 +89,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configFactory;
 
     /**
-     * \Magento\Data\FormFactory
+     * Magento\Data\FormFactory
      *
      * @var \Magento\Data\FormFactory
      */
@@ -126,7 +125,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Backend\Model\Config\Structure $configStructure
@@ -137,7 +136,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\Backend\Model\Config\Structure $configStructure,
@@ -154,26 +153,28 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_config = $coreConfig;
 
         $this->_scopeLabels = array(
-            self::SCOPE_DEFAULT  => __('[GLOBAL]'),
+            self::SCOPE_DEFAULT => __('[GLOBAL]'),
             self::SCOPE_WEBSITES => __('[WEBSITE]'),
-            self::SCOPE_STORES   => __('[STORE VIEW]'),
+            self::SCOPE_STORES => __('[STORE VIEW]')
         );
     }
 
     /**
      * Initialize objects required to render config form
      *
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     protected function _initObjects()
     {
-        $this->_configDataObject = $this->_configFactory->create(array(
-            'data' => array(
-                'section' => $this->getSectionCode(),
-                'website' => $this->getWebsiteCode(),
-                'store' => $this->getStoreCode()
+        $this->_configDataObject = $this->_configFactory->create(
+            array(
+                'data' => array(
+                    'section' => $this->getSectionCode(),
+                    'website' => $this->getWebsiteCode(),
+                    'store' => $this->getStoreCode()
+                )
             )
-        ));
+        );
 
         $this->_configData = $this->_configDataObject->load();
         $this->_fieldsetRenderer = $this->_fieldsetFactory->create();
@@ -184,7 +185,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize form
      *
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     public function initForm()
     {
@@ -210,6 +211,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure\Element\Group $group
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
      * @param \Magento\Data\Form\AbstractForm $form
+     * @return void
      */
     protected function _initGroup(
         \Magento\Backend\Model\Config\Structure\Element\Group $group,
@@ -217,9 +219,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Data\Form\AbstractForm $form
     ) {
         $frontendModelClass = $group->getFrontendModel();
-        $fieldsetRenderer = $frontendModelClass ?
-            $this->_layout->getBlockSingleton($frontendModelClass) :
-            $this->_fieldsetRenderer;
+        $fieldsetRenderer = $frontendModelClass ? $this->_layout->getBlockSingleton(
+            $frontendModelClass
+        ) : $this->_fieldsetRenderer;
 
         $fieldsetRenderer->setForm($this);
         $fieldsetRenderer->setConfigData($this->_configData);
@@ -276,7 +278,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
      * @param string $fieldPrefix
      * @param string $labelPrefix
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     public function initFields(
         \Magento\Data\Form\Element\Fieldset $fieldset,
@@ -301,8 +303,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 if ($element->getSectionId() != $section->getId()) {
                     $groupPath = $element->getGroupPath();
                     if (!isset($extraConfigGroups[$groupPath])) {
-                        $this->_configData = $this->_configDataObject
-                            ->extendConfig($groupPath, false, $this->_configData);
+                        $this->_configData = $this->_configDataObject->extendConfig(
+                            $groupPath,
+                            false,
+                            $this->_configData
+                        );
                         $extraConfigGroups[$groupPath] = true;
                     }
                 }
@@ -317,9 +322,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $field
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
-     * @param $path
+     * @param string $path
      * @param string $fieldPrefix
      * @param string $labelPrefix
+     * @return void
      */
     protected function _initElement(
         \Magento\Backend\Model\Config\Structure\Element\Field $field,
@@ -353,11 +359,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($field->hasBackendModel()) {
             $backendModel = $field->getBackendModel();
-            $backendModel->setPath($path)
-                ->setValue($data)
-                ->setWebsite($this->getWebsiteCode())
-                ->setStore($this->getStoreCode())
-                ->afterLoad();
+            $backendModel->setPath(
+                $path
+            )->setValue(
+                $data
+            )->setWebsite(
+                $this->getWebsiteCode()
+            )->setStore(
+                $this->getStoreCode()
+            )->afterLoad();
             $data = $backendModel->getValue();
         }
 
@@ -367,22 +377,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $formField = $fieldset->addField($elementId, $field->getType(), array(
-            'name' => $elementName,
-            'label' => $field->getLabel($labelPrefix),
-            'comment' => $field->getComment($data),
-            'tooltip' => $field->getTooltip(),
-            'hint' => $field->getHint(),
-            'value' => $data,
-            'inherit' => $inherit,
-            'class' => $field->getFrontendClass() . $sharedClass . $requiresClass,
-            'field_config' => $field->getData(),
-            'scope' => $this->getScope(),
-            'scope_id' => $this->getScopeId(),
-            'scope_label' => $this->getScopeLabel($field),
-            'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-            'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
-        ));
+        $formField = $fieldset->addField(
+            $elementId,
+            $field->getType(),
+            array(
+                'name' => $elementName,
+                'label' => $field->getLabel($labelPrefix),
+                'comment' => $field->getComment($data),
+                'tooltip' => $field->getTooltip(),
+                'hint' => $field->getHint(),
+                'value' => $data,
+                'inherit' => $inherit,
+                'class' => $field->getFrontendClass() . $sharedClass . $requiresClass,
+                'field_config' => $field->getData(),
+                'scope' => $this->getScope(),
+                'scope_id' => $this->getScopeId(),
+                'scope_label' => $this->getScopeLabel($field),
+                'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite())
+            )
+        );
         $field->populateInput($formField);
 
         if ($field->hasValidation()) {
@@ -403,16 +417,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param array $dependencies
      * @param string $elementId
      * @param string $elementName
+     * @return void
      */
     protected function _populateDependenciesBlock(array $dependencies, $elementId, $elementName)
     {
         foreach ($dependencies as $dependentField) {
             /** @var $dependentField \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
             $fieldNameFrom = $this->_generateElementName($dependentField->getId(), null, '_');
-            $this->_getDependence()
-                ->addFieldMap($elementId, $elementName)
-                ->addFieldMap($this->_generateElementId($dependentField->getId()), $fieldNameFrom)
-                ->addFieldDependence($elementName, $fieldNameFrom, $dependentField);
+            $this->_getDependence()->addFieldMap(
+                $elementId,
+                $elementName
+            )->addFieldMap(
+                $this->_generateElementId($dependentField->getId()),
+                $fieldNameFrom
+            )->addFieldDependence(
+                $elementName,
+                $fieldNameFrom,
+                $dependentField
+            );
         }
     }
 
@@ -427,8 +449,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _generateElementName($elementPath, $fieldPrefix = '', $separator = '/')
     {
         $part = explode($separator, $elementPath);
-        array_shift($part); //shift section name
-        $fieldId = array_pop($part);   //shift filed id
+        array_shift($part);
+        //shift section name
+        $fieldId = array_pop($part);
+        //shift filed id
         $groupName = implode('][groups][', $part);
         $name = 'groups[' . $groupName . '][fields][' . $fieldPrefix . $fieldId . '][value]';
         return $name;
@@ -457,9 +481,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     *
-     *
-     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Element\AbstractBlock|void
+     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {
@@ -605,11 +627,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'export' => 'Magento\Backend\Block\System\Config\Form\Field\Export',
-            'import' => 'Magento\Backend\Block\System\Config\Form\Field\Import',
             'allowspecific' => 'Magento\Backend\Block\System\Config\Form\Field\Select\Allowspecific',
             'image' => 'Magento\Backend\Block\System\Config\Form\Field\Image',
-            'file' => 'Magento\Backend\Block\System\Config\Form\Field\File',
+            'file' => 'Magento\Backend\Block\System\Config\Form\Field\File'
         );
     }
 
@@ -670,7 +690,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get css class for "requires" functionality
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $field
-     * @param $fieldPrefix
+     * @param string $fieldPrefix
      * @return string
      */
     protected function _getRequiresCssClass(\Magento\Backend\Model\Config\Structure\Element\Field $field, $fieldPrefix)

@@ -17,11 +17,10 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class EntityFactory implements \Magento\Data\Collection\EntityFactoryInterface
@@ -46,7 +45,7 @@ class EntityFactory implements \Magento\Data\Collection\EntityFactoryInterface
     /**
      * Create class instance with specified parameters
      *
-     * @param $className
+     * @param string $className
      * @param array $data
      * @throws \LogicException
      * @return \Magento\Object

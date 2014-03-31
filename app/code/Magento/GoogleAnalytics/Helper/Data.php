@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleAnalytics\Helper;
 
+use Magento\Core\Model\Store;
 
 /**
  * GoogleAnalytics data helper
@@ -31,14 +33,13 @@
  * @category   Magento
  * @package    Magento_GoogleAnalytics
  */
-namespace Magento\GoogleAnalytics\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Config paths for using throughout the code
      */
-    const XML_PATH_ACTIVE  = 'google/analytics/active';
+    const XML_PATH_ACTIVE = 'google/analytics/active';
+
     const XML_PATH_ACCOUNT = 'google/analytics/account';
 
     /**
@@ -63,7 +64,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Whether GA is ready to use
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function isGoogleAnalyticsAvailable($store = null)

@@ -33,7 +33,7 @@ class ProcessorFactory
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Config\Data\ProcessorInterface[]
+     * @var ProcessorInterface[]
      */
     protected $_pool;
 
@@ -49,14 +49,14 @@ class ProcessorFactory
      * Get concrete Processor Interface instance
      *
      * @param string $model
-     * @return \Magento\App\Config\Data\ProcessorInterface
+     * @return ProcessorInterface
      * @throws \InvalidArgumentException
      */
     public function get($model)
     {
         if (!isset($this->_pool[$model])) {
             $instance = $this->_objectManager->create($model);
-            if (!($instance instanceof \Magento\App\Config\Data\ProcessorInterface)) {
+            if (!$instance instanceof ProcessorInterface) {
                 throw new \InvalidArgumentException(
                     $model . ' does not instance of \Magento\App\Config\Data\ProcessorInterface'
                 );

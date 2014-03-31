@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
 
 class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
@@ -34,33 +33,36 @@ class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_fileList = array();
+    protected $fileList = array();
 
     /**
      * Path to scheme file
      *
      * @var string
      */
-    protected $_schemeFile;
+    protected $schemeFile;
 
     protected function setUp()
     {
-        $this->markTestIncomplete('Will enable after first indexer will be implemented');
-        $this->_schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')
-            ->getPath(\Magento\App\Filesystem::APP_DIR) . '/code/Magento/Indexer/etc/indexer.xsd';
+        $this->schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\Filesystem'
+        )->getPath(
+            \Magento\App\Filesystem::APP_DIR
+        ) . '/code/Magento/Indexer/etc/indexer.xsd';
     }
 
     /**
      * Test each acl configuration file
      * @param string $file
+     * @dataProvider indexerConfigFileDataProvider
      */
     public function testIndexerConfigFile($file)
     {
         $domConfig = new \Magento\Config\Dom(file_get_contents($file));
-        $result = $domConfig->validate($this->_schemeFile, $errors);
+        $result = $domConfig->validate($this->schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
-            $message .= "$error\n";
+            $message .= "{$error}\n";
         }
         $this->assertTrue($result, $message);
     }
@@ -71,8 +73,11 @@ class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function indexerConfigFileDataProvider()
     {
         $fileList = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')
-                ->getPath(\Magento\App\Filesystem::APP_DIR) . '/*/*/*/etc/indexer.xml'
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\App\Filesystem'
+            )->getPath(
+                \Magento\App\Filesystem::APP_DIR
+            ) . '/*/*/*/etc/indexer.xml'
         );
         $dataProviderResult = array();
         foreach ($fileList as $file) {

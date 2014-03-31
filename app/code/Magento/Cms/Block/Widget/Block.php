@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Block\Widget;
 
 /**
  * Cms Static Block Widget
@@ -32,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Widget;
-
 class Block extends \Magento\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -46,7 +44,7 @@ class Block extends \Magento\View\Element\Template implements \Magento\Widget\Bl
      *
      * @var array
      */
-    static protected $_widgetUsageMap = array();
+    protected static $_widgetUsageMap = array();
 
     /**
      * Block factory
@@ -76,7 +74,7 @@ class Block extends \Magento\View\Element\Template implements \Magento\Widget\Bl
      * Prepare block text and determine whether block output enabled or not
      * Prevent blocks recursion if needed
      *
-     * @return \Magento\Cms\Block\Widget\Block
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -93,8 +91,7 @@ class Block extends \Magento\View\Element\Template implements \Magento\Widget\Bl
             $storeId = $this->_storeManager->getStore()->getId();
             /** @var \Magento\Cms\Model\Block $block */
             $block = $this->_blockFactory->create();
-            $block->setStoreId($storeId)
-                ->load($blockId);
+            $block->setStoreId($storeId)->load($blockId);
             if ($block->getIsActive()) {
                 $this->setText(
                     $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())

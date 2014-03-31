@@ -34,7 +34,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_structure = new \Magento\Data\Structure;
+        $this->_structure = new \Magento\Data\Structure();
     }
 
     /**
@@ -58,20 +58,24 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         return array(
             array(array()),
             array(array('element' => array('arbitrary_key' => 'value'))),
-            array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 2, 'three' => 3)),
-                'two' => array(\Magento\Data\Structure::PARENT => 'one'),
-                'three' => array(\Magento\Data\Structure::PARENT => 'one'),
-                'four' => array(\Magento\Data\Structure::CHILDREN => array())
-            )),
-            array(array(
-                'one' => array(
-                    \Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.'),
-                    \Magento\Data\Structure::GROUPS => array('group' => array('two' => 'two', 'three' => 'three')),
-                ),
-                'two' => array(\Magento\Data\Structure::PARENT => 'one'),
-                'three' => array()
-            )),
+            array(
+                array(
+                    'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 2, 'three' => 3)),
+                    'two' => array(\Magento\Data\Structure::PARENT => 'one'),
+                    'three' => array(\Magento\Data\Structure::PARENT => 'one'),
+                    'four' => array(\Magento\Data\Structure::CHILDREN => array())
+                )
+            ),
+            array(
+                array(
+                    'one' => array(
+                        \Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.'),
+                        \Magento\Data\Structure::GROUPS => array('group' => array('two' => 'two', 'three' => 'three'))
+                    ),
+                    'two' => array(\Magento\Data\Structure::PARENT => 'one'),
+                    'three' => array()
+                )
+            )
         );
     }
 
@@ -90,50 +94,56 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         return array(
             'numeric id' => array(array('element')),
             'non-existing parent' => array(array('element' => array(\Magento\Data\Structure::PARENT => 'unknown'))),
-            'completely missing nested set' => array(array(
-                'one' => array(\Magento\Data\Structure::PARENT => 'two'),
-                'two' => array(),
-            )),
-            'messed up nested set' => array(array(
-                'one' => array(\Magento\Data\Structure::PARENT => 'two'),
-                'two' => array(\Magento\Data\Structure::CHILDREN => array('three' => 't.h.r.e.e.')),
-                'three' => array(),
-            )),
-            'nested set invalid data type' => array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => '')
-            )),
-            'duplicate aliases' => array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 'alias', 'three' => 'alias')),
-                'two' => array(\Magento\Data\Structure::PARENT => 'one'),
-                'three' => array(\Magento\Data\Structure::PARENT => 'one'),
-            )),
-            'missing child' => array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.', 'three' => 't.h.r.e.e.')),
-                'two' => array(\Magento\Data\Structure::PARENT => 'one'),
-            )),
-            'missing reference back to parent' => array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.')),
-                'two' => array(),
-            )),
-            'broken reference back to parent' => array(array(
-                'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.', 'three' => 't.h.r.e.e.')),
-                'two' => array(\Magento\Data\Structure::PARENT => 'three'),
-                'three' => array(\Magento\Data\Structure::PARENT => 'one')
-            )),
-            'groups invalid data type' => array(array(
-                'one' => array(\Magento\Data\Structure::GROUPS => '')
-            )),
-            'group invalid data type' => array(array(
-                'one' => array(\Magento\Data\Structure::GROUPS => array(1))
-            )),
-            'asymmetric group' => array(array(
-                'one' => array(\Magento\Data\Structure::GROUPS => array('two' => 'three')),
-                'two' => array(),
-                'three' => array(),
-            )),
-            'group references to non-existing element' => array(array(
-                'one' => array(\Magento\Data\Structure::GROUPS => array('two' => 'two')),
-            )),
+            'completely missing nested set' => array(
+                array('one' => array(\Magento\Data\Structure::PARENT => 'two'), 'two' => array())
+            ),
+            'messed up nested set' => array(
+                array(
+                    'one' => array(\Magento\Data\Structure::PARENT => 'two'),
+                    'two' => array(\Magento\Data\Structure::CHILDREN => array('three' => 't.h.r.e.e.')),
+                    'three' => array()
+                )
+            ),
+            'nested set invalid data type' => array(array('one' => array(\Magento\Data\Structure::CHILDREN => ''))),
+            'duplicate aliases' => array(
+                array(
+                    'one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 'alias', 'three' => 'alias')),
+                    'two' => array(\Magento\Data\Structure::PARENT => 'one'),
+                    'three' => array(\Magento\Data\Structure::PARENT => 'one')
+                )
+            ),
+            'missing child' => array(
+                array(
+                    'one' => array(
+                        \Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.', 'three' => 't.h.r.e.e.')
+                    ),
+                    'two' => array(\Magento\Data\Structure::PARENT => 'one')
+                )
+            ),
+            'missing reference back to parent' => array(
+                array('one' => array(\Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.')), 'two' => array())
+            ),
+            'broken reference back to parent' => array(
+                array(
+                    'one' => array(
+                        \Magento\Data\Structure::CHILDREN => array('two' => 't.w.o.', 'three' => 't.h.r.e.e.')
+                    ),
+                    'two' => array(\Magento\Data\Structure::PARENT => 'three'),
+                    'three' => array(\Magento\Data\Structure::PARENT => 'one')
+                )
+            ),
+            'groups invalid data type' => array(array('one' => array(\Magento\Data\Structure::GROUPS => ''))),
+            'group invalid data type' => array(array('one' => array(\Magento\Data\Structure::GROUPS => array(1)))),
+            'asymmetric group' => array(
+                array(
+                    'one' => array(\Magento\Data\Structure::GROUPS => array('two' => 'three')),
+                    'two' => array(),
+                    'three' => array()
+                )
+            ),
+            'group references to non-existing element' => array(
+                array('one' => array(\Magento\Data\Structure::GROUPS => array('two' => 'two')))
+            )
         );
     }
 
@@ -179,9 +189,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_structure->getAttribute('two', 'non-existing'));
         $this->assertEquals('bar', $this->_structure->getAttribute('two', 'foo'));
         $value = uniqid();
-        $this->_structure->setAttribute('two', 'non-existing', $value)
-            ->setAttribute('two', 'foo', $value)
-        ;
+        $this->_structure->setAttribute('two', 'non-existing', $value)->setAttribute('two', 'foo', $value);
         $this->assertEquals($value, $this->_structure->getAttribute('two', 'non-existing'));
         $this->assertEquals($value, $this->_structure->getAttribute('two', 'foo'));
     }
@@ -213,7 +221,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         return array(
             array(\Magento\Data\Structure::CHILDREN),
             array(\Magento\Data\Structure::PARENT),
-            array(\Magento\Data\Structure::GROUPS),
+            array(\Magento\Data\Structure::GROUPS)
         );
     }
 
@@ -239,9 +247,11 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('four.5', $this->_structure->getAttribute('three', \Magento\Data\Structure::PARENT));
 
         // rename element and see how parent got updated
-        $this->_structure->renameElement('three', 'three.5'); // first child
+        $this->_structure->renameElement('three', 'three.5');
+        // first child
         $this->assertSame(array('three.5' => 'th', 'two' => 'tw'), $this->_structure->getChildren('four.5'));
-        $this->_structure->renameElement('two', 'two.5'); // second and last child
+        $this->_structure->renameElement('two', 'two.5');
+        // second and last child
         $this->assertSame(array('three.5' => 'th', 'two.5' => 'tw'), $this->_structure->getChildren('four.5'));
     }
 
@@ -272,9 +282,14 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->_structure->setAsChild('x', 'parent', '', $offset);
         $children = $this->_structure->getChildren('parent');
         $actualOffset = array_search('x', array_keys($children));
-        $this->assertSame($expectedOffset, $actualOffset,
-            "The 'x' is expected to be at '{$expectedOffset}' offset, rather than '{$actualOffset}', in array: "
-                . var_export($children, 1)
+        $this->assertSame(
+            $expectedOffset,
+            $actualOffset,
+            "The 'x' is expected to be at '{$expectedOffset}' offset, rather than '{$actualOffset}', in array: " .
+            var_export(
+                $children,
+                1
+            )
         );
     }
 
@@ -284,9 +299,18 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     public function setAsChildOffsetDataProvider()
     {
         return array(
-            array(0, 0), array(1, 1), array(2, 2), array(3, 3), array(4, 4), array(5, 5),
+            array(0, 0),
+            array(1, 1),
+            array(2, 2),
+            array(3, 3),
+            array(4, 4),
+            array(5, 5),
             array(null, 5),
-            array(-1, 4), array(-2, 3), array(-3, 2), array(-4, 1), array(-5, 0),
+            array(-1, 4),
+            array(-2, 3),
+            array(-3, 2),
+            array(-4, 1),
+            array(-5, 0)
         );
     }
 
@@ -311,10 +335,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      */
     public function setAsChildExceptionDataProvider()
     {
-        return array(
-            array('one', 'three'),
-            array('one', 'one'),
-        );
+        return array(array('one', 'three'), array('one', 'one'));
     }
 
     public function testUnsetChild()
@@ -352,15 +373,35 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             // x* 1 2 3 4 5
-            array(0, 0, 1), array(0, 1, 1), array(0, 2, 2), array(0, 3, 3), array(0, +100500, 6),
-            array(0, -1, 5), array(0, -4, 2), array(0, -5, 1), array(0, -999, 1),
+            array(0, 0, 1),
+            array(0, 1, 1),
+            array(0, 2, 2),
+            array(0, 3, 3),
+            array(0, +100500, 6),
+            array(0, -1, 5),
+            array(0, -4, 2),
+            array(0, -5, 1),
+            array(0, -999, 1),
             // 1 x* 2 3 4 5
-            array(1, 0, 1), array(1, 1, 2), array(1, 2, 2), array(1, 3, 3),
-            array(1, -1, 5), array(1, -4, 2), array(1, -5, 2), array(1, -6, 1),
+            array(1, 0, 1),
+            array(1, 1, 2),
+            array(1, 2, 2),
+            array(1, 3, 3),
+            array(1, -1, 5),
+            array(1, -4, 2),
+            array(1, -5, 2),
+            array(1, -6, 1),
             // 1 2 x* 3 4 5
-            array(2, 0, 1), array(2, 1, 2), array(2, 2, 3), array(2, 3, 3), array(2, 4, 4), array(2, null, 6),
+            array(2, 0, 1),
+            array(2, 1, 2),
+            array(2, 2, 3),
+            array(2, 3, 3),
+            array(2, 4, 4),
+            array(2, null, 6),
             // 1 2 3 4 5 x*
-            array(5, 0, 1), array(5, 1, 2), array(5, 5, 6)
+            array(5, 0, 1),
+            array(5, 1, 2),
+            array(5, 5, 6)
         );
     }
 
@@ -392,13 +433,27 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             // x* 1 2 3 4 5
-            array(0, 'one', 1, 2), array(0, 'three', 2, 5), array(0, 'five', 1, 6), array(0, 'five', 10, 6),
-            array(0, 'one', -1, 1), array(0, 'one', -999, 1),
+            array(0, 'one', 1, 2),
+            array(0, 'three', 2, 5),
+            array(0, 'five', 1, 6),
+            array(0, 'five', 10, 6),
+            array(0, 'one', -1, 1),
+            array(0, 'one', -999, 1),
             // 1 2 x* 3 4 5
-            array(2, 'two', 1, 3), array(2, 'two', 2, 4), array(2, 'two', 3, 5),  array(2, 'two', 999, 6),
-            array(2, 'two', -1, 2), array(2, 'two', -2, 1), array(2, 'two', -999, 1),
-            array(2, 'x', 1, 3), array(2, 'x', 2, 4), array(2, 'x', 3, 5),  array(2, 'x', 999, 6),
-            array(2, 'x', -1, 3), array(2, 'x', -2, 2), array(2, 'x', -999, 1),
+            array(2, 'two', 1, 3),
+            array(2, 'two', 2, 4),
+            array(2, 'two', 3, 5),
+            array(2, 'two', 999, 6),
+            array(2, 'two', -1, 2),
+            array(2, 'two', -2, 1),
+            array(2, 'two', -999, 1),
+            array(2, 'x', 1, 3),
+            array(2, 'x', 2, 4),
+            array(2, 'x', 3, 5),
+            array(2, 'x', 999, 6),
+            array(2, 'x', -1, 3),
+            array(2, 'x', -2, 2),
+            array(2, 'x', -999, 1)
         );
     }
 
@@ -492,14 +547,16 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      */
     protected function _populateSampleStructure()
     {
-        $this->_structure->importElements(array(
-            'one' => array(),
-            'two' => array(\Magento\Data\Structure::PARENT => 'four', 'foo' => 'bar'),
-            'three' => array(\Magento\Data\Structure::PARENT => 'four', 'bar' => 'baz'),
-            'four' => array(\Magento\Data\Structure::CHILDREN => array('three' => 'th', 'two' => 'tw')),
-            'five' => array(\Magento\Data\Structure::PARENT => 'six', 5),
-            'six' => array(\Magento\Data\Structure::CHILDREN => array('five' => 'f')),
-        ));
+        $this->_structure->importElements(
+            array(
+                'one' => array(),
+                'two' => array(\Magento\Data\Structure::PARENT => 'four', 'foo' => 'bar'),
+                'three' => array(\Magento\Data\Structure::PARENT => 'four', 'bar' => 'baz'),
+                'four' => array(\Magento\Data\Structure::CHILDREN => array('three' => 'th', 'two' => 'tw')),
+                'five' => array(\Magento\Data\Structure::PARENT => 'six', 5),
+                'six' => array(\Magento\Data\Structure::CHILDREN => array('five' => 'f'))
+            )
+        );
     }
 
     /**
@@ -508,12 +565,24 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     protected function _populateSampleSortStructure()
     {
         $child = array(\Magento\Data\Structure::PARENT => 'parent');
-        $this->_structure->importElements(array(
-            'parent' => array(\Magento\Data\Structure::CHILDREN => array(
-                'one' => 'e1', 'two' => 'e2', 'three' => 'e3', 'four' => 'e4', 'five' => 'e5',
-            )),
-            'one' => $child, 'two' => $child, 'three' => $child, 'four' => $child, 'five' => $child,
-            'x' => array(),
-        ));
+        $this->_structure->importElements(
+            array(
+                'parent' => array(
+                    \Magento\Data\Structure::CHILDREN => array(
+                        'one' => 'e1',
+                        'two' => 'e2',
+                        'three' => 'e3',
+                        'four' => 'e4',
+                        'five' => 'e5'
+                    )
+                ),
+                'one' => $child,
+                'two' => $child,
+                'three' => $child,
+                'four' => $child,
+                'five' => $child,
+                'x' => array()
+            )
+        );
     }
 }

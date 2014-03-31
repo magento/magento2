@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Block\Email;
 
 /**
  * ProductAlert email price changed grid
@@ -32,10 +32,11 @@
  * @package    Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Block\Email;
-
 class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {
+    /**
+     * @var string
+     */
     protected $_template = 'email/price.phtml';
 
     /**

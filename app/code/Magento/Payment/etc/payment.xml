@@ -53,9 +53,4 @@
             <label>Other</label>
         </type>
     </credit_cards>
-    <groups>
-        <group id="offline">
-            <label>Offline Payment Methods</label>
-        </group>
-    </groups>
 </payment>

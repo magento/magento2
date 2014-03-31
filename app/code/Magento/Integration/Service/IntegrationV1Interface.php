@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Service;
 
-use \Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Integration Service Interface
@@ -79,7 +78,7 @@ interface IntegrationV1Interface
      *
      * @param int $integrationId
      * @return array Integration data
-     * @throws \Magento\Integration\Exception if the integration does not exist or cannot be deleted
+     * @throws \Magento\Integration\Exception If the integration does not exist or cannot be deleted
      */
     public function delete($integrationId);
 }

@@ -68,6 +68,8 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
 
     /**
      * Initialize current application store
+     *
+     * @return void
      */
     public function initCurrentStore()
     {
@@ -78,6 +80,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      * Allow or disallow single store mode
      *
      * @param bool $value
+     * @return void
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -122,7 +125,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      *
      * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
      * @return \Magento\Core\Model\Website
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getWebsite($websiteId = null)
     {
@@ -157,7 +160,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      *
      * @param null|\Magento\Core\Model\Store\Group|string $groupId
      * @return \Magento\Core\Model\Store\Group
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getGroup($groupId = null)
     {
@@ -190,6 +193,8 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
 
     /**
      * Reinitialize store list
+     *
+     * @return void
      */
     public function reinitStores()
     {
@@ -199,17 +204,18 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     /**
      * Retrieve default store for default group and website
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Core\Model\Store|null
      */
     public function getDefaultStoreView()
     {
-       return null;
+        return null;
     }
 
     /**
      *  Unset website by id from app cache
      *
      * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
+     * @return void
      */
     public function clearWebsiteCache($websiteId = null)
     {
@@ -219,7 +225,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     /**
      * Get either default or any store view
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Core\Model\Store|null
      */
     public function getAnyStoreView()
     {
@@ -230,13 +236,14 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      * Set current default store
      *
      * @param string $store
+     * @return void
      */
     public function setCurrentStore($store)
     {
-
     }
 
     /**
+     * @return void
      * @throws \Magento\Core\Model\Store\Exception
      */
     public function throwStoreException()

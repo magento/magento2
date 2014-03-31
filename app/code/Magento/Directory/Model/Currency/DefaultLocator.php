@@ -23,17 +23,16 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Directory\Model\Currency;
 
 class DefaultLocator
 {
     /**
-     * Application object
+     * Config object
      *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\ConfigInterface
      */
-    protected $_app;
+    protected $_configuration;
 
     /**
      * Store manager
@@ -43,16 +42,14 @@ class DefaultLocator
     protected $_storeManager;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\ConfigInterface $configuration
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Core\Model\App $app,
+        \Magento\App\ConfigInterface $configuration,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_app = $app;
+        $this->_configuration = $configuration;
         $this->_storeManager = $storeManager;
     }
 
@@ -72,9 +69,12 @@ class DefaultLocator
             $currencyCode = $this->_storeManager->getWebsite($website)->getBaseCurrencyCode();
         } else if ($request->getParam('group')) {
             $group = $request->getParam('group');
-            $currencyCode =  $this->_storeManager->getGroup($group)->getWebsite()->getBaseCurrencyCode();
+            $currencyCode = $this->_storeManager->getGroup($group)->getWebsite()->getBaseCurrencyCode();
         } else {
-            $currencyCode = $this->_app->getBaseCurrencyCode();
+            $currencyCode = $this->_configuration->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                'default'
+            );
         }
 
         return $currencyCode;

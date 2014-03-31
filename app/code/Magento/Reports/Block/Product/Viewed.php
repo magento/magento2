@@ -23,19 +23,16 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Product;
 
 /**
  * Reports Recently Viewed Products Block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Product;
-
-class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
+class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \Magento\View\Block\IdentityInterface
 {
-    const XML_PATH_RECENTLY_VIEWED_COUNT    = 'catalog/recently_products/viewed_count';
+    const XML_PATH_RECENTLY_VIEWED_COUNT = 'catalog/recently_products/viewed_count';
 
     /**
      * Viewed Product Index type
@@ -59,6 +56,8 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
 
     /**
      * Added predefined ids support
+     *
+     * @return int
      */
     public function getCount()
     {
@@ -77,10 +76,21 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
      */
     protected function _toHtml()
     {
-        if (!$this->getCount()) {
-            return '';
-        }
         $this->setRecentlyViewedProducts($this->getItemsCollection());
         return parent::_toHtml();
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getItemsCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+        return $identities;
     }
 }

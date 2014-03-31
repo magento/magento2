@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource\Entity;
 
 /**
  * EAV entity type resource model
@@ -32,12 +32,12 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity;
-
-class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Type extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -47,9 +47,9 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load Entity Type by Code
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param string $code
-     * @return \Magento\Eav\Model\Resource\Entity\Type
+     * @return $this
      */
     public function loadByCode($object, $code)
     {
@@ -65,10 +65,13 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getAdditionalAttributeTable($entityTypeId)
     {
         $adapter = $this->_getReadAdapter();
-        $bind    = array('entity_type_id' => $entityTypeId);
-        $select  = $adapter->select()
-            ->from($this->getMainTable(), array('additional_attribute_table'))
-            ->where('entity_type_id = :entity_type_id');
+        $bind = array('entity_type_id' => $entityTypeId);
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array('additional_attribute_table')
+        )->where(
+            'entity_type_id = :entity_type_id'
+        );
 
         return $adapter->fetchOne($select, $bind);
     }

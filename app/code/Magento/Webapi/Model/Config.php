@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Magento
  *
@@ -24,6 +23,9 @@
  */
 namespace Magento\Webapi\Model;
 
+use Magento\Webapi\Model\Cache\Type;
+use Magento\Webapi\Model\Config\Reader;
+
 /**
  * Web API Config Model.
  *
@@ -44,7 +46,7 @@ class Config
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Webapi\Model\Config\Reader
+     * @var Reader
      */
     protected $_configReader;
 
@@ -61,13 +63,11 @@ class Config
     protected $_services;
 
     /**
-     * @param Cache\Type $configCacheType
-     * @param Config\Reader $configReader
+     * @param Type $configCacheType
+     * @param Reader $configReader
      */
-    public function __construct(
-        \Magento\Webapi\Model\Cache\Type $configCacheType,
-        \Magento\Webapi\Model\Config\Reader $configReader
-    ) {
+    public function __construct(Type $configCacheType, Reader $configReader)
+    {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
     }
@@ -93,6 +93,8 @@ class Config
 
     /**
      * Load services from cache
+     *
+     * @return string|bool
      */
     protected function _loadFromCache()
     {
@@ -103,7 +105,7 @@ class Config
      * Save services into the cache
      *
      * @param string $data serialized version of the webapi registry
-     * @return \Magento\Webapi\Model\Config
+     * @return $this
      */
     protected function _saveToCache($data)
     {

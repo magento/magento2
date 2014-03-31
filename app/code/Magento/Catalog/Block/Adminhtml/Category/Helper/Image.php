@@ -60,12 +60,16 @@ class Image extends \Magento\Data\Form\Element\Image
         parent::__construct($factoryElement, $factoryCollection, $escaper, $urlBuilder, $data);
     }
 
+    /**
+     * @return bool|string
+     */
     protected function _getUrl()
     {
         $url = false;
         if ($this->getValue()) {
-            $url = $this->_storeManager->getStore()
-                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/category/' . $this->getValue();
+            $url = $this->_storeManager->getStore()->getBaseUrl(
+                \Magento\UrlInterface::URL_TYPE_MEDIA
+            ) . 'catalog/category/' . $this->getValue();
         }
         return $url;
     }

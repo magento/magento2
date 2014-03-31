@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Adminhtml additional helper block for product configuration
@@ -31,10 +32,7 @@
  * @package    Magento_GiftMessage
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
-
-class Config
-    extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
+class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
 {
     /**
      * Core store config
@@ -64,7 +62,7 @@ class Config
     /**
      * Get config value data
      *
-     * @return mixed
+     * @return string|null
      */
     protected function _getValueFromConfig()
     {

@@ -21,12 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cache\Backend;
 
 class MongoDbTest extends \PHPUnit_Framework_TestCase
 {
     protected $_connectionString;
+
     protected $_dbName = 'magento_integration_test';
 
     /**
@@ -102,7 +102,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'one tag' => array(array('tag1'), array('test1', 'test2', 'test3')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test3')),
+            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test3'))
         );
     }
 
@@ -120,7 +120,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'one tag' => array(array('tag2'), array('test2', 'test4', 'test5')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test4', 'test5')),
+            'multiple tags' => array(array('tag1', 'tag2'), array('test4', 'test5'))
         );
     }
 
@@ -137,9 +137,9 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     public function getIdsMatchingAnyTagsDataProvider()
     {
         return array(
-            'no tags'       => array(array(), array()),
-            'one tag'       => array(array('tag2'), array('test1', 'test3')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test2', 'test3')),
+            'no tags' => array(array(), array()),
+            'one tag' => array(array('tag2'), array('test1', 'test3')),
+            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test2', 'test3'))
         );
     }
 
@@ -164,7 +164,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'test';
         $this->_model->save('test data', $cacheId, array(), 2);
-        $this->assertGreaterThan(0, $this->_model->test($cacheId), "Cache with id '$cacheId' has not been saved");
+        $this->assertGreaterThan(0, $this->_model->test($cacheId), "Cache with id '{$cacheId}' has not been saved");
         $this->_model->touch($cacheId, $extraLifeTime);
         sleep(2);
         $this->assertThat($this->_model->test($cacheId), $constraint);
@@ -174,7 +174,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'not enough extra lifetime' => array(0, $this->isFalse()),
-            'enough extra lifetime'     => array(1000, $this->logicalNot($this->isFalse())),
+            'enough extra lifetime' => array(1000, $this->logicalNot($this->isFalse()))
         );
     }
 
@@ -196,10 +196,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     public function loadDataProvider()
     {
         return array(
-            'infinite lifetime with validity'    => array('test data', null, false, 'test data'),
+            'infinite lifetime with validity' => array('test data', null, false, 'test data'),
             'infinite lifetime without validity' => array('test data', null, true, 'test data'),
-            'zero lifetime with validity'        => array('test data', 0, false, false),
-            'zero lifetime without validity'     => array('test data', 0, true, 'test data'),
+            'zero lifetime with validity' => array('test data', 0, false, false),
+            'zero lifetime without validity' => array('test data', 0, true, 'test data')
         );
     }
 
@@ -228,9 +228,9 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'test';
         $this->_model->save('test data', $cacheId);
-        $this->assertGreaterThan(0, $this->_model->test($cacheId), "Cache with id '$cacheId' has not been found");
+        $this->assertGreaterThan(0, $this->_model->test($cacheId), "Cache with id '{$cacheId}' has not been found");
         $this->_model->remove($cacheId);
-        $this->assertFalse($this->_model->test($cacheId), "Cache with id '$cacheId' has not been removed");
+        $this->assertFalse($this->_model->test($cacheId), "Cache with id '{$cacheId}' has not been removed");
     }
 
     /**
@@ -263,7 +263,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
                 \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 array('tag1', 'tag2'),
                 array('test4', 'test5')
-            ),
+            )
         );
     }
 

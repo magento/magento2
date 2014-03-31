@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Index\Model\Resource\Event;
 
+use Magento\Index\Model\Process;
 
 /**
  * Index Event Collection
@@ -32,15 +34,12 @@
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Index\Model\Resource\Event;
-
-use Magento\Index\Model\Process;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,13 +49,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by entity
      *
-     * @param string | array $entity
+     * @param string|array $entity
      * @return $this
      */
     public function addEntityFilter($entity)
     {
         if (is_array($entity) && !empty($entity)) {
-            $this->addFieldToFilter('entity', array('in'=>$entity));
+            $this->addFieldToFilter('entity', array('in' => $entity));
         } else {
             $this->addFieldToFilter('entity', $entity);
         }
@@ -66,13 +65,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by type
      *
-     * @param string | array $type
+     * @param string|array $type
      * @return $this
      */
     public function addTypeFilter($type)
     {
         if (is_array($type) && !empty($type)) {
-            $this->addFieldToFilter('type', array('in'=>$type));
+            $this->addFieldToFilter('type', array('in' => $type));
         } else {
             $this->addFieldToFilter('type', $type);
         }
@@ -115,7 +114,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected function _joinProcessEventTable()
     {
         if (!$this->getFlag('process_event_table_joined')) {
-            $this->getSelect()->join(array('process_event' => $this->getTable('index_process_event')),
+            $this->getSelect()->join(
+                array('process_event' => $this->getTable('index_process_event')),
                 'process_event.event_id=main_table.event_id',
                 array('process_event_status' => 'status')
             );

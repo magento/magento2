@@ -34,14 +34,17 @@
  */
 namespace Magento\Wishlist\Model\Resource\Item\Option;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+use Magento\Catalog\Model\Product;
+use Magento\Wishlist\Model\Item;
+
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Array of option ids grouped by item id
      *
      * @var array
      */
-    protected $_optionsByItem    = array();
+    protected $_optionsByItem = array();
 
     /**
      * Array of option ids grouped by product id
@@ -63,16 +66,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Fill array of options by item and product
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Option\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
         parent::_afterLoad();
 
         foreach ($this as $option) {
-            $optionId   = $option->getId();
-            $itemId     = $option->getWishlistItemId();
-            $productId  = $option->getProductId();
+            $optionId = $option->getId();
+            $itemId = $option->getWishlistItemId();
+            $productId = $option->getProductId();
             if (isset($this->_optionsByItem[$itemId])) {
                 $this->_optionsByItem[$itemId][] = $optionId;
             } else {
@@ -91,8 +94,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Apply quote item(s) filter to collection
      *
-     * @param  int|array $item
-     * @return \Magento\Wishlist\Model\Resource\Item\Option\Collection
+     * @param  int|array|Item $item
+     * @return $this
      */
     public function addItemFilter($item)
     {
@@ -101,7 +104,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             $this->_setIsLoaded(true);
         } else if (is_array($item)) {
             $this->addFieldToFilter('wishlist_item_id', array('in' => $item));
-        } else if ($item instanceof \Magento\Wishlist\Model\Item) {
+        } else if ($item instanceof Item) {
             $this->addFieldToFilter('wishlist_item_id', $item->getId());
         } else {
             $this->addFieldToFilter('wishlist_item_id', $item);
@@ -125,12 +128,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Get all option for item
      *
-     * @param  mixed $item
+     * @param Item|int|string $item
      * @return array
      */
     public function getOptionsByItem($item)
     {
-        if ($item instanceof \Magento\Wishlist\Model\Item) {
+        if ($item instanceof Item) {
             $itemId = $item->getId();
         } else {
             $itemId = $item;
@@ -151,12 +154,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Get all option for item
      *
-     * @param  mixed $item
+     * @param  Product|int|string $product
      * @return array
      */
     public function getOptionsByProduct($product)
     {
-        if ($product instanceof \Magento\Catalog\Model\Product) {
+        if ($product instanceof Product) {
             $productId = $product->getId();
         } else {
             $productId = $product;

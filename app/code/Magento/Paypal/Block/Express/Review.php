@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Express;
 
 /**
  * Paypal Express Onepage checkout block
@@ -31,8 +32,6 @@
  * @package    Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Block\Express;
-
 class Review extends \Magento\View\Element\Template
 {
     /**
@@ -77,7 +76,7 @@ class Review extends \Magento\View\Element\Template
      * Quote object setter
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @return \Magento\Paypal\Block\Express\Review
+     * @return $this
      */
     public function setQuote(\Magento\Sales\Model\Quote $quote)
     {
@@ -98,7 +97,7 @@ class Review extends \Magento\View\Element\Template
     /**
      * Return quote shipping address
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return false|\Magento\Sales\Model\Quote\Address
      */
     public function getShippingAddress()
     {
@@ -161,16 +160,14 @@ class Review extends \Magento\View\Element\Template
         if ($rate->getErrorMessage()) {
             $price = $rate->getErrorMessage();
         } else {
-            $price = $this->_getShippingPrice($rate->getPrice(),
-                $this->_taxHelper->displayShippingPriceIncludingTax());
+            $price = $this->_getShippingPrice(
+                $rate->getPrice(),
+                $this->_taxHelper->displayShippingPriceIncludingTax()
+            );
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
-            if (($incl != $price) && $this->_taxHelper->displayShippingBothPrices()) {
-                $renderedInclTax = sprintf(
-                    $inclTaxFormat,
-                    __('Incl. Tax'),
-                    $incl
-                );
+            if ($incl != $price && $this->_taxHelper->displayShippingBothPrices()) {
+                $renderedInclTax = sprintf($inclTaxFormat, __('Incl. Tax'), $incl);
             }
         }
         return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
@@ -188,6 +185,9 @@ class Review extends \Magento\View\Element\Template
 
     /**
      * Set controller path
+     *
+     * @param string $prefix
+     * @return void
      */
     public function setControllerPath($prefix)
     {
@@ -199,18 +199,11 @@ class Review extends \Magento\View\Element\Template
      *
      * @param float $price
      * @param bool $isInclTax
-     *
-     * @return bool
+     * @return string
      */
     protected function _getShippingPrice($price, $isInclTax)
     {
-        return $this->_formatPrice(
-            $this->_taxHelper->getShippingPrice(
-                $price,
-                $isInclTax,
-                $this->_address
-            )
-        );
+        return $this->_formatPrice($this->_taxHelper->getShippingPrice($price, $isInclTax, $this->_address));
     }
 
     /**
@@ -227,7 +220,7 @@ class Review extends \Magento\View\Element\Template
     /**
      * Retrieve payment method and assign additional template values
      *
-     * @return \Magento\Paypal\Block\Express\Review
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -250,21 +243,27 @@ class Review extends \Magento\View\Element\Template
                     foreach ($rates as $rate) {
                         if ($this->_address->getShippingMethod() == $rate->getCode()) {
                             $this->_currentShippingRate = $rate;
-                            break(2);
+                            break 2;
                         }
                     }
                 }
             }
 
             // misc shipping parameters
-            $this->setShippingMethodSubmitUrl($this->getUrl("{$this->_controllerPath}/saveShippingMethod"))
-                ->setCanEditShippingAddress($this->_quote->getMayEditShippingAddress())
-                ->setCanEditShippingMethod($this->_quote->getMayEditShippingMethod())
-            ;
+            $this->setShippingMethodSubmitUrl(
+                $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
+            )->setCanEditShippingAddress(
+                $this->_quote->getMayEditShippingAddress()
+            )->setCanEditShippingMethod(
+                $this->_quote->getMayEditShippingMethod()
+            );
         }
 
-        $this->setEditUrl($this->getUrl("{$this->_controllerPath}/edit"))
-            ->setPlaceOrderUrl($this->getUrl("{$this->_controllerPath}/placeOrder"));
+        $this->setEditUrl(
+            $this->getUrl("{$this->_controllerPath}/edit")
+        )->setPlaceOrderUrl(
+            $this->getUrl("{$this->_controllerPath}/placeOrder")
+        );
 
         return parent::_beforeToHtml();
     }

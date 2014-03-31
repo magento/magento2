@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid column widget for rendering action grid cells
@@ -31,8 +32,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
@@ -63,24 +62,24 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     public function render(\Magento\Object $row)
     {
         $actions = $this->getColumn()->getActions();
-        if ( empty($actions) || !is_array($actions) ) {
+        if (empty($actions) || !is_array($actions)) {
             return '&nbsp;';
         }
 
-        if (sizeof($actions)==1 && !$this->getColumn()->getNoLink()) {
+        if (sizeof($actions) == 1 && !$this->getColumn()->getNoLink()) {
             foreach ($actions as $action) {
-                if ( is_array($action) ) {
+                if (is_array($action)) {
                     return $this->_toLinkHtml($action, $row);
                 }
             }
         }
 
-        $out = '<select class="action-select" onchange="varienGridAction.execute(this);">'
-             . '<option value=""></option>';
+        $out = '<select class="action-select" onchange="varienGridAction.execute(this);">' .
+            '<option value=""></option>';
         $i = 0;
         foreach ($actions as $action) {
             $i++;
-            if ( is_array($action) ) {
+            if (is_array($action)) {
                 $out .= $this->_toOptionHtml($action, $row);
             }
         }
@@ -91,7 +90,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Render single action as dropdown option html
      *
-     * @param unknown_type $action
+     * @param array $action
      * @param \Magento\Object $row
      * @return string
      */
@@ -102,7 +101,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
 
-        $htmlAttibutes = array('value'=>$this->escapeHtml($this->_jsonEncoder->encode($action)));
+        $htmlAttibutes = array('value' => $this->escapeHtml($this->_jsonEncoder->encode($action)));
         $actionAttributes->setData($htmlAttibutes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
     }
@@ -122,9 +121,9 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         if (isset($action['confirm'])) {
-            $action['onclick'] = 'return window.confirm(\''
-                               . addslashes($this->escapeHtml($action['confirm']))
-                               . '\')';
+            $action['onclick'] = 'return window.confirm(\'' . addslashes(
+                $this->escapeHtml($action['confirm'])
+            ) . '\')';
             unset($action['confirm']);
         }
 
@@ -135,14 +134,14 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Prepares action data for html render
      *
-     * @param array $action
-     * @param string $actionCaption
+     * @param array &$action
+     * @param string &$actionCaption
      * @param \Magento\Object $row
-     * @return \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
+     * @return $this
      */
     protected function _transformActionData(&$action, &$actionCaption, \Magento\Object $row)
     {
-        foreach ( $action as $attribute => $value ) {
+        foreach ($action as $attribute => $value) {
             if (isset($action[$attribute]) && !is_array($action[$attribute])) {
                 $this->getColumn()->setFormat($action[$attribute]);
                 $action[$attribute] = parent::render($row);
@@ -158,7 +157,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 
                 case 'url':
                     if (is_array($action['url']) && isset($action['field'])) {
-                        $params = array($action['field']=>$this->_getValue($row));
+                        $params = array($action['field'] => $this->_getValue($row));
                         if (isset($action['url']['params'])) {
                             $params = array_merge($action['url']['params'], $params);
                         }
@@ -171,10 +170,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     break;
 
                 case 'popup':
-                    $action['onclick'] =
-                        'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
+                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
                     break;
-
             }
         }
         return $this;

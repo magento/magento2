@@ -23,7 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Io;
 
 /**
  * FTP client
@@ -32,16 +32,20 @@
  * @package    Magento_Io
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Io;
-
 class Ftp extends AbstractIo
 {
     const ERROR_EMPTY_HOST = 1;
+
     const ERROR_INVALID_CONNECTION = 2;
+
     const ERROR_INVALID_LOGIN = 3;
+
     const ERROR_INVALID_PATH = 4;
+
     const ERROR_INVALID_MODE = 5;
+
     const ERROR_INVALID_DESTINATION = 6;
+
     const ERROR_INVALID_SOURCE = 7;
 
     /**
@@ -65,6 +69,9 @@ class Ftp extends AbstractIo
      */
     protected $_error;
 
+    /**
+     * @var string
+     */
     protected $_tmpFilename;
 
     /**
@@ -85,7 +92,7 @@ class Ftp extends AbstractIo
      * @return true
      * @throws IoException
      */
-    public function open(array $args=array())
+    public function open(array $args = array())
     {
         if (empty($args['host'])) {
             $this->_error = self::ERROR_EMPTY_HOST;
@@ -169,7 +176,7 @@ class Ftp extends AbstractIo
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode=0777, $recursive=true)
+    public function mkdir($dir, $mode = 0777, $recursive = true)
     {
         return @ftp_mkdir($this->_conn, $dir);
     }
@@ -181,7 +188,7 @@ class Ftp extends AbstractIo
      * @param bool $recursive
      * @return bool
      */
-    public function rmdir($dir, $recursive=false)
+    public function rmdir($dir, $recursive = false)
     {
         return @ftp_rmdir($this->_conn, $dir);
     }
@@ -214,7 +221,7 @@ class Ftp extends AbstractIo
      * @param string|resource|null $dest destination file name, stream, or if null will return file contents
      * @return false|string
      */
-    public function read($filename, $dest=null)
+    public function read($filename, $dest = null)
     {
         if (is_string($dest)) {
             $result = ftp_get($this->_conn, $dest, $filename, $this->_config['file_mode']);
@@ -233,7 +240,8 @@ class Ftp extends AbstractIo
             if (is_null($dest)) {
                 fseek($stream, 0);
                 $result = '';
-                for ($result = ''; $s = fread($stream, 4096); $result .= $s);
+                for ($result = ''; $s = fread($stream, 4096); $result .= $s) {
+                }
                 fclose($stream);
             }
         }
@@ -248,7 +256,7 @@ class Ftp extends AbstractIo
      * @param null $mode
      * @return bool
      */
-    public function write($filename, $src, $mode=null)
+    public function write($filename, $src, $mode = null)
     {
         if (is_string($src) && is_readable($src)) {
             return @ftp_put($this->_conn, $filename, $src, $this->_config['file_mode']);
@@ -311,16 +319,13 @@ class Ftp extends AbstractIo
      * @param null $grep ignored parameter
      * @return array
      */
-    public function ls($grep=null)
+    public function ls($grep = null)
     {
         $ls = @ftp_nlist($this->_conn, '.');
 
         $list = array();
         foreach ($ls as $file) {
-            $list[] = array(
-                'text'=>$file,
-                'id'=>$this->pwd().'/'.$file,
-            );
+            $list[] = array('text' => $file, 'id' => $this->pwd() . '/' . $file);
         }
 
         return $list;
@@ -330,10 +335,10 @@ class Ftp extends AbstractIo
      * @param bool $new
      * @return string
      */
-    protected function _tmpFilename($new=false)
+    protected function _tmpFilename($new = false)
     {
         if ($new || !$this->_tmpFilename) {
-            $this->_tmpFilename = tempnam( md5(uniqid(rand(), TRUE)), '' );
+            $this->_tmpFilename = tempnam(md5(uniqid(rand(), true)), '');
         }
         return $this->_tmpFilename;
     }

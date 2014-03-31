@@ -21,10 +21,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Oauth\Helper;
 
-use \Magento\Oauth\OauthInterface;
+use Magento\Oauth\OauthInterface;
 
 class Request
 {
@@ -32,10 +31,15 @@ class Request
      * HTTP Response Codes
      */
     const HTTP_OK = 200;
+
     const HTTP_BAD_REQUEST = 400;
+
     const HTTP_UNAUTHORIZED = 401;
+
     const HTTP_METHOD_NOT_ALLOWED = 405;
+
     const HTTP_INTERNAL_ERROR = 500;
+
     /**#@-*/
 
     /**
@@ -113,8 +117,7 @@ class Request
     public function getRequestUrl($httpRequest)
     {
         // TODO: Fix needed for $this->getRequest()->getHttpHost(). Hosts with port are not covered.
-        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost() .
-            $httpRequest->getRequestUri();
+        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost() . $httpRequest->getRequestUri();
     }
 
     /**
@@ -172,15 +175,17 @@ class Request
     /**
      * Retrieve protocol parameters from query string
      *
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @param array $queryString
      * @return void
      */
     protected function _fetchProtocolParamsFromQuery(&$protocolParams, $queryString)
     {
-        foreach ($queryString as $queryParamName => $queryParamValue) {
-            if ($this->_isProtocolParameter($queryParamName)) {
-                $protocolParams[$queryParamName] = $queryParamValue;
+        if (is_array($queryString)) {
+            foreach ($queryString as $queryParamName => $queryParamValue) {
+                if ($this->_isProtocolParameter($queryParamName)) {
+                    $protocolParams[$queryParamName] = $queryParamValue;
+                }
             }
         }
     }
@@ -200,13 +205,14 @@ class Request
      * Process header parameters for Oauth
      *
      * @param string $authHeaderValue
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @return void
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
     {
         if ($authHeaderValue && 'oauth' === strtolower(substr($authHeaderValue, 0, 5))) {
-            $authHeaderValue = substr($authHeaderValue, 6); // ignore 'OAuth ' at the beginning
+            $authHeaderValue = substr($authHeaderValue, 6);
+            // ignore 'OAuth ' at the beginning
 
             foreach (explode(',', $authHeaderValue) as $paramStr) {
                 $nameAndValue = explode('=', trim($paramStr), 2);
@@ -224,7 +230,7 @@ class Request
     /**
      * Process query string for Oauth
      *
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @param string $queryString
      * @return void
      */
@@ -248,10 +254,8 @@ class Request
      * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
-    public function prepareErrorResponse(
-        \Exception $exception,
-        \Zend_Controller_Response_Http $response = null
-    ) {
+    public function prepareErrorResponse(\Exception $exception, \Zend_Controller_Response_Http $response = null)
+    {
         $errorMap = $this->_errors;
         $errorsToHttpCode = $this->_errorsToHttpCode;
 

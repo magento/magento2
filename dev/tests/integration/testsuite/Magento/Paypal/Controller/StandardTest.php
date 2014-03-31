@@ -52,13 +52,16 @@ class StandardTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_order->save();
         $this->_order->load('100000001', 'increment_id');
 
-        $this->_session->setLastRealOrderId($this->_order->getRealOrderId())
-            ->setLastQuoteId($this->_order->getQuoteId());
+        $this->_session->setLastRealOrderId(
+            $this->_order->getRealOrderId()
+        )->setLastQuoteId(
+            $this->_order->getQuoteId()
+        );
 
         $this->dispatch('paypal/standard/redirect');
         $this->assertContains(
-            '<form action="https://www.paypal.com/cgi-bin/webscr" id="paypal_standard_checkout"'
-            . ' name="paypal_standard_checkout" method="POST">',
+            '<form action="https://www.paypal.com/cgi-bin/webscr" id="paypal_standard_checkout"' .
+            ' name="paypal_standard_checkout" method="POST">',
             $this->getResponse()->getBody()
         );
     }
@@ -73,8 +76,7 @@ class StandardTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $this->_session->setQuoteId($quote->getId());
-        $this->_session->setPaypalStandardQuoteId($quote->getId())
-            ->setLastRealOrderId('100000002');
+        $this->_session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000002');
         $this->dispatch('paypal/standard/cancel');
 
         $this->_order->load('100000002', 'increment_id');

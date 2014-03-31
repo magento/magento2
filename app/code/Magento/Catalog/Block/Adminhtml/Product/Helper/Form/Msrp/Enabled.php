@@ -48,4 +48,3 @@ class Enabled extends \Magento\Data\Form\Element\Select
         return parent::getElementHtml();
     }
 }
-

@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Di\Code\Scanner;
 
 class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
@@ -45,19 +44,16 @@ class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\Tools\Di\Code\Scanner\XmlInterceptorScanner();
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
-        $this->_testFiles =  array(
+        $this->_testFiles = array(
             $this->_testDir . '/app/code/Magento/SomeModule/etc/di.xml',
-            $this->_testDir . '/app/etc/di/config.xml',
+            $this->_testDir . '/app/etc/di/config.xml'
         );
     }
 
     public function testCollectEntities()
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
-        $expected = array(
-            'Magento\App\Cache\Interceptor',
-            'Magento\App\Action\Context\Interceptor',
-        );
+        $expected = array('Magento\App\Cache\Interceptor', 'Magento\App\Action\Context\Interceptor');
         $this->assertEquals($expected, $actual);
     }
 }

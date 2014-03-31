@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Config\Source;
 
 /**
@@ -31,7 +30,7 @@ namespace Magento\Catalog\Model\Config\Source;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Category implements \Magento\Core\Model\Option\ArrayInterface
+class Category implements \Magento\Option\ArrayInterface
 {
     /**
      * Category collection factory
@@ -45,34 +44,31 @@ class Category implements \Magento\Core\Model\Option\ArrayInterface
      *
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
      */
-    public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
-    ) {
+    public function __construct(\Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory)
+    {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
     }
 
+    /**
+     * Return option array
+     *
+     * @param bool $addEmpty
+     * @return array
+     */
     public function toOptionArray($addEmpty = true)
     {
         /** @var \Magento\Catalog\Model\Resource\Category\Collection $collection */
         $collection = $this->_categoryCollectionFactory->create();
 
-        $collection->addAttributeToSelect('name')
-            ->addRootLevelFilter()
-            ->load();
+        $collection->addAttributeToSelect('name')->addRootLevelFilter()->load();
 
         $options = array();
 
         if ($addEmpty) {
-            $options[] = array(
-                'label' => __('-- Please Select a Category --'),
-                'value' => ''
-            );
+            $options[] = array('label' => __('-- Please Select a Category --'), 'value' => '');
         }
         foreach ($collection as $category) {
-            $options[] = array(
-               'label' => $category->getName(),
-               'value' => $category->getId()
-            );
+            $options[] = array('label' => $category->getName(), 'value' => $category->getId());
         }
 
         return $options;

@@ -64,7 +64,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedMessages
      * @param boolean $breakChainOnFailure
      */
-    public function testIsValid($value, $validators, $expectedResult, $expectedMessages = array(),
+    public function testIsValid(
+        $value,
+        $validators,
+        $expectedResult,
+        $expectedMessages = array(),
         $breakChainOnFailure = false
     ) {
         foreach ($validators as $validator) {
@@ -87,29 +91,42 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         // Case 1. Validators fails without breaking chain
         $validatorA = $this->getMock('Magento\Validator\ValidatorInterface');
-        $validatorA->expects($this->once())->method('isValid')
-            ->with($value)->will($this->returnValue(false));
-        $validatorA->expects($this->once())->method('getMessages')
-            ->will($this->returnValue(array('foo' => array('Foo message 1'), 'bar' => array('Foo message 2'))));
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(array('foo' => array('Foo message 1'), 'bar' => array('Foo message 2')))
+        );
 
         $validatorB = $this->getMock('Magento\Validator\ValidatorInterface');
-        $validatorB->expects($this->once())->method('isValid')
-            ->with($value)->will($this->returnValue(false));
-        $validatorB->expects($this->once())->method('getMessages')
-            ->will($this->returnValue(array('foo' => array('Bar message 1'), 'bar' => array('Bar message 2'))));
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorB->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(array('foo' => array('Bar message 1'), 'bar' => array('Bar message 2')))
+        );
 
-        $result[] = array($value, array($validatorA, $validatorB), false, array(
-            'foo' => array('Foo message 1', 'Bar message 1'),
-            'bar' => array('Foo message 2', 'Bar message 2')
-        ));
+        $result[] = array(
+            $value,
+            array($validatorA, $validatorB),
+            false,
+            array('foo' => array('Foo message 1', 'Bar message 1'), 'bar' => array('Foo message 2', 'Bar message 2'))
+        );
 
         // Case 2. Validators fails with breaking chain
         $validatorA = $this->getMock('Magento\Validator\ValidatorInterface');
-        $validatorA->expects($this->once())->method('isValid')
-            ->with($value)
-            ->will($this->returnValue(false));
-        $validatorA->expects($this->once())->method('getMessages')
-            ->will($this->returnValue(array('field' => 'Error message')));
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
+        $validatorA->expects(
+            $this->once()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(array('field' => 'Error message'))
+        );
 
         $validatorB = $this->getMock('Magento\Validator\ValidatorInterface');
         $validatorB->expects($this->never())->method('isValid');
@@ -118,13 +135,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         // Case 3. Validators succeed
         $validatorA = $this->getMock('Magento\Validator\ValidatorInterface');
-        $validatorA->expects($this->once())->method('isValid')
-            ->with($value)->will($this->returnValue(true));
+        $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorA->expects($this->never())->method('getMessages');
 
         $validatorB = $this->getMock('Magento\Validator\ValidatorInterface');
-        $validatorB->expects($this->once())->method('isValid')
-            ->with($value)->will($this->returnValue(true));
+        $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorB->expects($this->never())->method('getMessages');
 
         $result[] = array($value, array($validatorA, $validatorB), true);
@@ -142,21 +157,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $propertyValidator = new \Magento\Validator\Constraint\Property($classConstraint, 'name', 'id');
 
         /** @var \Magento\Translate\AbstractAdapter $translator */
-        $translator= $this->getMockBuilder('Magento\Translate\AbstractAdapter')
-            ->getMockForAbstractClass();
+        $translator = $this->getMockBuilder('Magento\Translate\AbstractAdapter')->getMockForAbstractClass();
         \Magento\Validator\AbstractValidator::setDefaultTranslator($translator);
 
         $this->_validator->addValidator($classConstraint);
         $this->_validator->addValidator($propertyValidator);
         $expected = array(
-            array(
-                'instance' => $classConstraint,
-                'breakChainOnFailure' => false
-            ),
-            array(
-                'instance' => $propertyValidator,
-                'breakChainOnFailure' => false
-            )
+            array('instance' => $classConstraint, 'breakChainOnFailure' => false),
+            array('instance' => $propertyValidator, 'breakChainOnFailure' => false)
         );
         $this->assertAttributeEquals($expected, '_validators', $this->_validator);
         $this->assertEquals($translator, $fooValidator->getTranslator(), 'Translator was not set');
@@ -170,8 +178,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $fooValidator = new \Magento\Validator\Test\True();
         $this->_validator->addValidator($fooValidator);
         /** @var \Magento\Translate\AbstractAdapter $translator */
-        $translator= $this->getMockBuilder('Magento\Translate\AbstractAdapter')
-            ->getMockForAbstractClass();
+        $translator = $this->getMockBuilder('Magento\Translate\AbstractAdapter')->getMockForAbstractClass();
         $this->_validator->setTranslator($translator);
         $this->assertEquals($translator, $fooValidator->getTranslator());
         $this->assertEquals($translator, $this->_validator->getTranslator());

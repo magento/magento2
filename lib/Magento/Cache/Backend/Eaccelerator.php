@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cache\Backend;
 
 class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
@@ -32,7 +31,8 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * Log message
      */
     const TAGS_UNSUPPORTED_BY_CLEAN_OF_EACCELERATOR_BACKEND = 'Magento\Cache\Backend\Eaccelerator::clean() : tags are unsupported by the Eaccelerator backend';
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND =  'Magento\Cache\Backend\Eaccelerator::save() : tags are unsupported by the Eaccelerator backend';
+
+    const TAGS_UNSUPPORTED_BY_SAVE_OF_EACCELERATOR_BACKEND = 'Magento\Cache\Backend\Eaccelerator::save() : tags are unsupported by the Eaccelerator backend';
 
     /**
      * Constructor
@@ -90,7 +90,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $data datas to cache
      * @param string $id cache id
      * @param string[] $tags array of strings, the cache record will be tagged by each string entry
-     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @param int|bool $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return bool true if no problem
      */
     public function save($data, $id, $tags = array(), $specificLifetime = false)
@@ -127,7 +127,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
      * @param string $mode clean mode
      * @param string[] $tags array of tags
      * @throws \Zend_Cache_Exception
-     * @return bool true if no problem
+     * @return bool|void true if no problem
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
@@ -136,7 +136,9 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
                 return eaccelerator_clean();
                 break;
             case \Zend_Cache::CLEANING_MODE_OLD:
-                $this->_log("Magento\Cache\Backend\Eaccelerator::clean() : CLEANING_MODE_OLD is unsupported by the Eaccelerator backend");
+                $this->_log(
+                    "Magento\Cache\Backend\Eaccelerator::clean() : CLEANING_MODE_OLD is unsupported by the Eaccelerator backend"
+                );
                 break;
             case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
             case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
@@ -158,8 +160,8 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
     public function getFillingPercentage()
     {
         $mem = eaccelerator_info();
-        $memSize    = $mem['memorySize'];
-        $memAvailable= $mem['memoryAvailable'];
+        $memSize = $mem['memorySize'];
+        $memAvailable = $mem['memoryAvailable'];
         $memUsed = $memSize - $memAvailable;
         if ($memSize == 0) {
             \Zend_Cache::throwException('can\'t get eaccelerator memory size');
@@ -167,7 +169,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
         if ($memUsed > $memSize) {
             return 100;
         }
-        return ((int) (100. * ($memUsed / $memSize)));
+        return (int)(100. * ($memUsed / $memSize));
     }
 
     /**
@@ -261,11 +263,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
                 return false;
             }
             $lifetime = $tmp[2];
-            return array(
-                'expire' => $mtime + $lifetime,
-                'tags' => array(),
-                'mtime' => $mtime
-            );
+            return array('expire' => $mtime + $lifetime, 'tags' => array(), 'mtime' => $mtime);
         }
         return false;
     }
@@ -290,7 +288,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
             }
             $lifetime = $tmp[2];
             $newLifetime = $lifetime - (time() - $mtime) + $extraLifetime;
-            if ($newLifetime <=0) {
+            if ($newLifetime <= 0) {
                 return false;
             }
             eaccelerator_put($id, array($data, time(), $newLifetime), $newLifetime);
@@ -324,5 +322,4 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
             'get_list' => true
         );
     }
-
 }

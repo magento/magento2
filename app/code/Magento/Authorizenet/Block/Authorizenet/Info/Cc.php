@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Block\Authorizenet\Info;
 
 use Magento\Payment\Block\Info;
@@ -37,6 +36,9 @@ class Cc extends \Magento\Payment\Block\Info\Cc
      */
     protected $_isCheckoutProgressBlockFlag = true;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Authorizenet::info/cc.phtml';
 
     /**
@@ -74,7 +76,7 @@ class Cc extends \Magento\Payment\Block\Info\Cc
     /**
      * Retrieve card info object
      *
-     * @return mixed
+     * @return \Magento\Payment\Model\Info
      */
     public function getInfo()
     {
@@ -90,7 +92,7 @@ class Cc extends \Magento\Payment\Block\Info\Cc
      * in Previously used card information block
      *
      * @param bool $flag
-     * @return \Magento\Authorizenet\Block\Authorizenet\Info\Cc
+     * @return $this
      */
     public function setCheckoutProgressBlock($flag)
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 class TemplateEnginePoolTest extends \PHPUnit_Framework_TestCase
@@ -45,12 +44,7 @@ class TemplateEnginePoolTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $engine = $this->getMock('Magento\View\TemplateEngineInterface');
-        $this->_factory
-            ->expects($this->once())
-            ->method('create')
-            ->with('test')
-            ->will($this->returnValue($engine))
-        ;
+        $this->_factory->expects($this->once())->method('create')->with('test')->will($this->returnValue($engine));
         $this->assertSame($engine, $this->_model->get('test'));
         // Make sure factory is invoked only once and the same instance is returned afterwards
         $this->assertSame($engine, $this->_model->get('test'));

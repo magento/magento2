@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Url;
 
-interface ScopeInterface
+interface ScopeInterface extends \Magento\BaseScopeInterface
 {
     /**
      * Retrieve base URL
@@ -34,13 +33,6 @@ interface ScopeInterface
      * @return string
      */
     public function getBaseUrl($type = '', $secure = null);
-
-    /**
-     * Retrieve scope code
-     *
-     * @return string
-     */
-    public function getCode();
 
     /**
      * Retrieve scope configuration data

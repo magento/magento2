@@ -44,7 +44,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         $this->_factoryMock = $this->getMock('Magento\Log\Model\Shell\Command\Factory', array(), array(), '', false);
         $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $this->_model = $this->getMock('Magento\Log\Model\Shell',
+        $this->_model = $this->getMock(
+            'Magento\Log\Model\Shell',
             array('_applyPhpVariables'),
             array($filesystemMock, 'entryPoint.php', $this->_factoryMock)
         );
@@ -64,10 +65,15 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputRegex('/clean command message/');
         $this->_model->setRawArgs(array('clean', '--days', 10));
         $commandMock = $this->getMock('Magento\Log\Model\Shell\CommandInterface');
-        $this->_factoryMock->expects($this->once())
-            ->method('createCleanCommand')
-            ->with(10)
-            ->will($this->returnValue($commandMock));
+        $this->_factoryMock->expects(
+            $this->once()
+        )->method(
+            'createCleanCommand'
+        )->with(
+            10
+        )->will(
+            $this->returnValue($commandMock)
+        );
         $commandMock->expects($this->once())->method('execute')->will($this->returnValue('clean command message'));
         $this->_factoryMock->expects($this->never())->method('createStatusCommand');
         $this->_model->run();
@@ -78,9 +84,13 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputRegex('/status command message/');
         $this->_model->setRawArgs(array('status'));
         $commandMock = $this->getMock('Magento\Log\Model\Shell\CommandInterface');
-        $this->_factoryMock->expects($this->once())
-            ->method('createStatusCommand')
-            ->will($this->returnValue($commandMock));
+        $this->_factoryMock->expects(
+            $this->once()
+        )->method(
+            'createStatusCommand'
+        )->will(
+            $this->returnValue($commandMock)
+        );
         $commandMock->expects($this->once())->method('execute')->will($this->returnValue('status command message'));
         $this->_factoryMock->expects($this->never())->method('createCleanCommand');
         $this->_model->run();

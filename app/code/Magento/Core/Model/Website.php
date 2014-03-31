@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model;
 
 /**
  * Core Website model
@@ -44,12 +45,15 @@
  * @method int getIsDefault()
  * @method \Magento\Core\Model\Website setIsDefault(int $value)
  */
-namespace Magento\Core\Model;
-
-class Website extends \Magento\Core\Model\AbstractModel
+class Website extends \Magento\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
-    const ENTITY    = 'core_website';
+    const ENTITY = 'core_website';
+
     const CACHE_TAG = 'website';
+
+    /**
+     * @var bool
+     */
     protected $_cacheTag = true;
 
     /**
@@ -72,7 +76,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Website Group Collection array
      *
-     * @var array
+     * @var \Magento\Core\Model\Store\Group[]
      */
     protected $_groups;
 
@@ -128,7 +132,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Website default store
      *
-     * @var \Magento\Core\Model\Store
+     * @var Store
      */
     protected $_defaultStore;
 
@@ -150,7 +154,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     protected $_configDataResource;
 
     /**
-     * @var \Magento\Core\Model\StoreFactory
+     * @var StoreFactory
      */
     protected $_storeFactory;
 
@@ -160,19 +164,14 @@ class Website extends \Magento\Core\Model\AbstractModel
     protected $_storeGroupFactory;
 
     /**
-     * @var \Magento\Core\Model\WebsiteFactory
+     * @var WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_app;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
@@ -180,32 +179,30 @@ class Website extends \Magento\Core\Model\AbstractModel
     protected $_currencyFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param Resource\Config\Data $configDataResource
      * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\Core\Model\Store\GroupFactory $storeGroupFactory
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\App $app
+     * @param StoreFactory $storeFactory
+     * @param Store\GroupFactory $storeGroupFactory
+     * @param WebsiteFactory $websiteFactory
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\App\ConfigInterface $coreConfig,
         \Magento\Core\Model\StoreFactory $storeFactory,
         \Magento\Core\Model\Store\GroupFactory $storeGroupFactory,
         \Magento\Core\Model\WebsiteFactory $websiteFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\App $app,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -216,13 +213,13 @@ class Website extends \Magento\Core\Model\AbstractModel
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
-        $this->_app = $app;
         $this->_currencyFactory = $currencyFactory;
     }
 
     /**
      * init model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -234,7 +231,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param int|string $id
      * @param string $field
-     * @return \Magento\Core\Model\Website
+     * @return $this
      */
     public function load($id, $field = null)
     {
@@ -267,6 +264,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Load group collection and set internal data
      *
+     * @return void
      */
     protected function _loadGroups()
     {
@@ -278,7 +276,7 @@ class Website extends \Magento\Core\Model\AbstractModel
             if ($this->getDefaultGroupId() == $group->getId()) {
                 $this->_defaultGroup = $group;
             }
-            $this->_groupsCount ++;
+            $this->_groupsCount++;
         }
     }
 
@@ -286,7 +284,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      * Set website groups
      *
      * @param array $groups
-     * @return \Magento\Core\Model\Website
+     * @return $this
      */
     public function setGroups($groups)
     {
@@ -310,9 +308,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      */
     public function getGroupCollection()
     {
-        return $this->_storeGroupFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($this->getId());
+        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId());
     }
 
     /**
@@ -373,6 +369,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Load store collection and set internal data
      *
+     * @return void
      */
     protected function _loadStores()
     {
@@ -385,7 +382,7 @@ class Website extends \Magento\Core\Model\AbstractModel
             if ($this->getDefaultGroup() && $this->getDefaultGroup()->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount ++;
+            $this->_storesCount++;
         }
     }
 
@@ -393,6 +390,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      * Set website stores
      *
      * @param array $stores
+     * @return void
      */
     public function setStores($stores)
     {
@@ -405,7 +403,7 @@ class Website extends \Magento\Core\Model\AbstractModel
             if ($this->getDefaultGroup() && $this->getDefaultGroup()->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount ++;
+            $this->_storesCount++;
         }
     }
 
@@ -416,9 +414,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      */
     public function getStoreCollection()
     {
-        return $this->_storeFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($this->getId());
+        return $this->_storeFactory->create()->getCollection()->addWebsiteFilter($this->getId());
     }
 
     /**
@@ -474,7 +470,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * is can delete website
+     * Can delete website
      *
      * @return bool
      */
@@ -484,8 +480,8 @@ class Website extends \Magento\Core\Model\AbstractModel
             return false;
         }
         if (is_null($this->_isCanDelete)) {
-            $this->_isCanDelete = ($this->_websiteFactory->create()->getCollection()->getSize() > 1)
-                && !$this->getIsDefault();
+            $this->_isCanDelete = $this->_websiteFactory->create()->getCollection()->getSize() > 1 &&
+                !$this->getIsDefault();
         }
         return $this->_isCanDelete;
     }
@@ -500,27 +496,35 @@ class Website extends \Magento\Core\Model\AbstractModel
         return join('-', array($this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()));
     }
 
+    /**
+     * @return mixed
+     */
     public function getDefaultGroupId()
     {
         return $this->_getData('default_group_id');
     }
 
+    /**
+     * @return mixed
+     */
     public function getCode()
     {
         return $this->_getData('code');
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         $this->_configDataResource->clearWebsiteData($this);
         return parent::_beforeDelete();
     }
 
     /**
-     * rewrite in order to clear configuration cache
+     * Rewrite in order to clear configuration cache
      *
-     * @return \Magento\Core\Model\Website
+     * @return $this
      */
     protected function _afterDelete()
     {
@@ -536,13 +540,18 @@ class Website extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseCurrencyCode()
     {
-        if ($this->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE)
-            == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL
+        if ($this->getConfig(
+            \Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE
+        ) == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL
         ) {
-            return $this->_app->getBaseCurrencyCode();
+            $currencyCode = $this->_coreConfig
+                ->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+
         } else {
-            return $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
+            $currencyCode =  $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
         }
+
+        return $currencyCode;
     }
 
     /**
@@ -563,7 +572,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve Default Website Store or null
      *
-     * @return \Magento\Core\Model\Store
+     * @return Store
      */
     public function getDefaultStore()
     {
@@ -596,5 +605,15 @@ class Website extends \Magento\Core\Model\AbstractModel
             $this->_isReadOnly = (bool)$value;
         }
         return $this->_isReadOnly;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

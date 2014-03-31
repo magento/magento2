@@ -44,12 +44,11 @@ Back,返回
 "Checkout with Multiple Addresses","按多个地址支付"
 "City","城市"
 "Clear Shopping Cart","清空购物车"
-"Click <a href=""%s"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","单击<a href=""%s"">这里来打印</a>您订单确认信息的拷贝。"
+"Click <a href=""%s"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%s"">这里来打印</a>您订单确认信息的拷贝。"
 "Click <a href=""%s"">here</a> to continue shopping.","单击<a href=""%s"">这里</a>来继续购物。"
 "Close","关闭"
 "Company","公司"
 "Condition Name","条件名称"
-"Configurable Product Image","可配置产品图片"
 "Configure Cart Item","配置购物车项目"
 "Confirm Password","确认密码"
 "Content","内容"
@@ -292,40 +291,15 @@ Total:,总计：
 "Update Total",更新总额
 "Use Billing Address",使用账单地址
 "VAT Number","VAT 编号"
-"View cart",查看购物车
-"We can't find the product.",未找到该产品。
-"We cannot add this item to your shopping cart",不能添加该条目到您的购物车
-"We cannot apply the coupon code.",不能应用该优惠券代码。
-"We cannot configure the product.",不能配置该产品。
-"We cannot open the overview page.",不能打开概览页。
-"We cannot remove the item.",不能移除该条目。
-"We cannot update the item.",不能更新该条目。
-"We cannot update the shopping cart.",不能更新购物车。
-"We received your order.",已接收您的订单。
-"We'll send you a confirmation email with order details and tracking information.",我们将发送一封带有订单详细跟踪信息的确认邮件给您。
-"What's this?",这是什么？
-"You added %1 to your shopping cart.",%1被加入到了您的购物车
-"You have no items in your shopping cart.",您的购物车内没有物品。
-"You will receive an order confirmation email with details of your order and a link to track its progress.",您将收到一封含有订单详细和订单链接的确认邮件以便跟踪订单过程。
-"You will see the order total before you submit the order.",在提交该订单前您将会看到订单总额。
-"Your Checkout Progress",您的结帐流程
-"Your billing agreement # is: %1.","您的账单编号为： %1"
-"Your order # is: %1.","您的订单编号为： %1"
-"Your order cannot be completed at this time as there is no payment methods available for it.",由于付款方法不可用，现在无法完成您的订单。
-"Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.",由于送货方法不可用，现在无法完成您的订单。请更改您的收货地址。
-"Your order has been received.",您的订单已经被收到
-"Your order number is ",您的订单号是
-"Your recurring payment profiles:",您的付款档案：
-"Zip/Postal Code",邮政编码
-"1 item",1个条目
-"Cart Subtotal",购物车小计
-"Checkout as a Guest",作为访客结账
-"Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
-"Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物。"
-"Invalid checkout type",无效的结账类型
-"Invalid data",无效的数据
-"Invalid method: %1","无效的方法： %1"
-"Invalid shipping method",无效的货运方法
-"Minimum order amount is %1",最小的订单额为%1
-"My Cart (%1 items)","我的购物车（%1 个条目）"
-"My Cart (1 item)",我的购物车（1个条目）
+"We are processing your order and you will soon receive an email with details of the order. Once the order has shipped you will receive another email with a link to track its progress.","我们正在处理您的订单，您将很快收到包含订单详情的电子邮件。当订单运送后，您会收到另一封邮件，并可使用邮件中的链接来追踪运送进度。"
+"What's this?","这是什么？"
+"You have no items in your shopping cart.","您的购物车内没有物品。"
+"You will receive an order confirmation email with details of your order and a link to track its progress.","您将会收到一份内含订单详细信息和可查询进展情况链接的确认邮件"
+"Your Checkout Progress","您的结帐流程"
+"Your order # is: %s.","您的订单编号为： %s"
+"Your order cannot be completed at this time as there is no payment methods available for it.","由于付款方法不可用，现在无法完成您的订单。"
+"Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.","由于送货方法不可用，现在无法完成您的订单。请更改您的收货地址。"
+"Your order has been received.","我们已经收到您的订单。"
+"Your order number is ","您的订单号是"
+"Your recurring payments:","您的付款档案："
+"Zip/Postal Code","邮政编码"

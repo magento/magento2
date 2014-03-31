@@ -82,22 +82,24 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('arguments_complex_values.xml');
 
-        $this->assertEquals(array('parameters' => array('first' => '1', 'second' => '2')),
-            $layout->getBlock('block_with_args_complex_values')->getOne());
+        $this->assertEquals(
+            array('parameters' => array('first' => '1', 'second' => '2')),
+            $layout->getBlock('block_with_args_complex_values')->getOne()
+        );
 
         $this->assertEquals('two', $layout->getBlock('block_with_args_complex_values')->getTwo());
 
-        $this->assertEquals(array('extra' => array('key1' => 'value1', 'key2' => 'value2')),
-            $layout->getBlock('block_with_args_complex_values')->getThree());
+        $this->assertEquals(
+            array('extra' => array('key1' => 'value1', 'key2' => 'value2')),
+            $layout->getBlock('block_with_args_complex_values')->getThree()
+        );
     }
 
     public function testLayoutObjectArgumentsDirective()
     {
         $layout = $this->_getLayoutModel('arguments_object_type.xml');
         $this->assertInstanceOf('Magento\Data\Collection\Db', $layout->getBlock('block_with_object_args')->getOne());
-        $this->assertInstanceOf('Magento\Data\Collection\Db',
-            $layout->getBlock('block_with_object_args')->getTwo()
-        );
+        $this->assertInstanceOf('Magento\Data\Collection\Db', $layout->getBlock('block_with_object_args')->getTwo());
         $this->assertEquals(3, $layout->getBlock('block_with_object_args')->getThree());
     }
 
@@ -113,13 +115,9 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('arguments_object_type_updaters.xml');
 
-        $expectedObjectData = array(
-            0 => 'updater call',
-            1 => 'updater call',
-            2 => 'updater call',
-        );
+        $expectedObjectData = array(0 => 'updater call', 1 => 'updater call');
 
-        $expectedSimpleData = 2;
+        $expectedSimpleData = 1;
 
         $dataSource = $layout->getBlock('block_with_object_updater_args')->getOne();
         $this->assertInstanceOf('Magento\Data\Collection', $dataSource);
@@ -233,7 +231,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
             'Before element which is after' => array('sort_before_after.xml', '312'),
             'Before element which is previous' => array('sort_before_before.xml', '213'),
             'After element which is after' => array('sort_after_after.xml', '312'),
-            'After element which is previous' => array('sort_after_previous.xml', '321'),
+            'After element which is previous' => array('sort_after_previous.xml', '321')
         );
     }
 
@@ -281,4 +279,3 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('block2', 'block3'), $childNames);
     }
 }
-

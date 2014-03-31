@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 /**
  * Adminhtml sales order create abstract block
@@ -31,20 +32,28 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
     /**
+     * Session quote
+     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
+     * Order create
+     *
      * @var \Magento\Sales\Model\AdminOrder\Create
      */
     protected $_orderCreate;
 
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
+     * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param array $data
+     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
@@ -119,15 +128,22 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve formated price
      *
-     * @param   decimal $value
-     * @return  string
+     * @param decimal $value
+     * @return string
      */
     public function formatPrice($value)
     {
         return $this->getStore()->formatPrice($value);
     }
 
-    public function convertPrice($value, $format=true)
+    /**
+     * Convert price
+     *
+     * @param float $value
+     * @param bool $format
+     * @return float
+     */
+    public function convertPrice($value, $format = true)
     {
         return $this->getStore()->convertPrice($value, $format);
     }

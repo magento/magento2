@@ -1,0 +1,1346 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+//
+//    Typography
+//--------------------------------------
+
+//Base
+@font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-family-serif: Georgia, 'Times New Roman', Times, serif;
+@font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+@font-path: "../../fonts/";
+
+@color-primary: #333;
+@color-primary-dark: darken(@color-primary, 35%);
+@color-primary-darker: darken(@color-primary, 13.5%);
+@color-primary-lighter: lighten(@color-primary, 29%);
+@color-primary-light: lighten(@color-primary, 45%);
+@color-secondary: #e8e8e8;
+@color-secondary-light: lighten(@color-secondary, 5%);
+@page-bg-color: #fff;
+@panel-bg: darken(@page-bg-color, 6%);
+@color-active: #ff5501;
+@color-error: #e02b27;
+
+@font-family-base: @font-family-sans-serif; // Also used in: @loader-text-font-family
+// setting font-size for HTML tag, use <b>%</b>  units
+@font-size-root: 62.5%;
+// defines ratio between root font size and base font size
+@font-size-base-ratio: 1.4;
+@font-rem-ratio: unit(@font-size-root * 16/100);
+//base font size value in <b>px</b>:
+@font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); // Also used in: @loader-text-font-size
+@font-size-xl: ceil(1.5 * @font-size-base);
+@font-size-l: ceil(1.25 * @font-size-base);
+@font-size-s: ceil(0.85 * @font-size-base); // Also used in: Breadcrumbs and in Small button
+@font-size-xs: floor(0.75 * @font-size-base);
+
+@font-weight-base: 400;
+@font-weight-light: 300;
+@font-weight-semibold: 600;
+@font-weight-bold: 700; // Also used in: @loader-text-font-weight
+@font-style-base: normal; // Also used in: @loader-text-font-style
+@font-style-emphasis: italic;
+
+@line-height-base: 1.428571429;
+@line-height-computed: floor(@font-size-base * @line-height-base);
+@line-height-s: 1.33;
+@line-height-l: 1.5;
+
+@text-color: @color-primary; // Also used in @pager-action-color-visited, @pager-action-color-hover, @pager-action-color-active, @tab-control-color-active
+@text-color-intense: @color-primary-darker;
+@text-color-muted: @color-primary-lighter; // Also used in @pager-action-color, @tab-control-color
+
+@indent-base: @line-height-computed; // 20px
+@indent-xl-base: @indent-base * 2; // 40px
+@indent-l-base: @indent-base * 1.5; // 30px
+@indent-m-base: @indent-base * 1.25; // 25px
+@indent-s-base: @indent-base / 2; // 10px
+@indent-xs-base: @indent-base / 4; // 5px
+
+@border-color-base: darken(@page-bg-color, 18%);
+@border-width-base: 1px;
+
+
+//Links
+
+@link-color: #1979c3;
+@link-text-decoration: none;
+
+@link-color-visited: #800080;
+@link-text-decoration-visited: none;
+
+@link-color-hover: #006bb4;
+@link-text-decoration-hover: underline;
+
+@link-color-active: @color-active;
+@link-text-decoration-active: underline;
+
+// Lists
+@list-color-base: ''; //@text-color
+@list-font-size-base: false; //@font-size-base
+@list-margin-top: 0;
+@list-margin-bottom: @indent-m-base;
+@list-item-margin-top: 0;
+@list-item-margin-bottom: @indent-s-base;
+
+@dl-margin-top: 0;
+@dl-margin-bottom: @indent-base;
+@dt-margin-top: 0;
+@dt-margin-bottom: @indent-xs-base;
+@dt-font-weight: @font-weight-bold;
+@dd-margin-top: 0;
+@dd-margin-bottom: @indent-s-base;
+
+// Paragraphs
+@p-margin-top: 0;
+@p-margin-bottom: @indent-s-base;
+
+//Headings
+@heading-font-family-base: ''; //@font-family-base
+@heading-font-weight-base: @font-weight-light;
+@heading-line-height-base: 1.1;
+@heading-color-base: ''; //@text-color
+@heading-font-style-base: ''; //@font-style-base
+@heading-margin-top-base: @indent-base;
+@heading-margin-bottom-base: @indent-base;
+
+@h1-font-size: ceil((@font-size-base * 2.85)); // 40px
+@h1-font-color: @heading-color-base;
+@h1-font-family: @heading-font-family-base;
+@h1-font-weight: @heading-font-weight-base;
+@h1-font-style: @heading-font-style-base;
+@h1-line-height: @heading-line-height-base;
+@h1-margin-top: @heading-margin-top-base;
+@h1-margin-bottom: @heading-margin-bottom-base;
+
+@h2-font-size: ceil((@font-size-base * 1.85)); // 26px
+@h2-font-color: @heading-color-base;
+@h2-font-family: @heading-font-family-base;
+@h2-font-weight: @heading-font-weight-base;
+@h2-font-style: @heading-font-style-base;
+@h2-line-height: @heading-line-height-base;
+@h2-margin-top: @indent-m-base;
+@h2-margin-bottom: @heading-margin-bottom-base;
+
+@h3-font-size: ceil((@font-size-base * 1.28)); // 18px
+@h3-font-color: @heading-color-base;
+@h3-font-family: @heading-font-family-base;
+@h3-font-weight: @heading-font-weight-base;
+@h3-font-style: @heading-font-style-base;
+@h3-line-height: @heading-line-height-base;
+@h3-margin-top: @indent-base * 0.75;
+@h3-margin-bottom: @indent-s-base;
+
+@h4-font-size: @font-size-base; // 14px
+@h4-font-color: @heading-color-base;
+@h4-font-family: @heading-font-family-base;
+@h4-font-weight: @font-weight-bold;
+@h4-font-style: @heading-font-style-base;
+@h4-line-height: @heading-line-height-base;
+@h4-margin-top: @heading-margin-top-base;
+@h4-margin-bottom: @heading-margin-bottom-base;
+
+@h5-font-size: ceil((@font-size-base * 0.85)); // 12px
+@h5-font-color: @heading-color-base;
+@h5-font-family: @heading-font-family-base;
+@h5-font-weight: @font-weight-bold;
+@h5-font-style: @heading-font-style-base;
+@h5-line-height: @heading-line-height-base;
+@h5-margin-top: @heading-margin-top-base;
+@h5-margin-bottom: @heading-margin-bottom-base;
+
+@h6-font-size: ceil((@font-size-base * 0.7)); // 10px
+@h6-font-color: @heading-color-base;
+@h6-font-family: @heading-font-family-base;
+@h6-font-weight: @font-weight-bold;
+@h6-font-style: @heading-font-style-base;
+@h6-line-height: @heading-line-height-base;
+@h6-margin-top: @heading-margin-top-base;
+@h6-margin-bottom: @heading-margin-bottom-base;
+
+@heading-small-color: @color-primary;
+@heading-small-line-height: 1;
+@heading-small-size: (@font-size-xs/@font-size-base) * 100%;
+
+// Code blocks
+@code-font-size: @font-size-s;
+@code-color: @color-primary-darker;
+@code-bg: @panel-bg;
+@code-padding: 2px 4px;
+
+@pre-color: @color-primary-darker;
+@pre-bg: @panel-bg;
+@pre-border-color: @border-color-base;
+@pre-border-width: @border-width-base;
+
+@kbd-color: @color-primary-darker;
+@kbd-bg: @panel-bg;
+
+
+// Blockquote
+
+@blockquote-font-size: @font-size-base;
+@blockquote-font-style: @font-style-emphasis;
+@blockquote-border-color: @border-color-base;
+@blockquote-border-width: 0;
+@blockquote-padding: 0;
+@blockquote-margin: 0 0 @indent-base @indent-xl-base;
+@blockquote-before-content: '\2014 \00A0'; // em dash, nbsp
+@blockquote-small-color: @color-primary;
+@blockquote-small-font-size: @font-size-xs;
+@cite-font-style: @font-style-base;
+
+// Misc
+
+@hr-border-color: @border-color-base;
+@hr-border-style: solid;
+@hr-border-width: 1px;
+
+@mark-color: @color-primary-dark;
+@mark-bg: @panel-bg;
+
+@abbr-border-color: @border-color-base;
+
+// Disable filters output in css
+@disable-filters: false;
+
+//
+//    Tables variables
+//--------------------------------------
+@table-width: 100%;
+@table-margin-bottom: @indent-base;
+@table-bg: transparent;
+@table-head-bg: @table-bg;
+@table-foot-bg: @table-bg;
+@table-td-bg: @table-bg;
+@table-body-th-bg: @table-bg;
+
+@table-cell-padding-horizontal: @indent-s-base;
+@table-cell-padding-vertical: 3px;
+
+@table-border-color: @border-color-base;
+@table-border-width: @border-width-base;
+@table-border-style: solid;
+
+@table-caption-hide: false; //Default value false, set true to hide caption
+@table-caption-font-size: @font-size-l;
+@table-caption-color: @text-color-intense;
+@table-caption-font-family: @font-family-base;
+@table-caption-font-weight: @font-weight-base;
+@table-caption-font-style: @font-style-base;
+@table-caption-line-height: @line-height-base;
+@table-caption-alignment: left;
+@table-caption-margin-top: @indent-base;
+@table-caption-margin-bottom: @indent-s-base;
+
+@table-td-font-size: @font-size-base;
+@table-td-color: @text-color;
+@table-td-font-family: @font-family-base;
+@table-td-font-weight: @font-weight-base;
+@table-td-line-height: @line-height-base;
+@table-td-font-style: @font-style-base;
+
+@table-th-font-size: @font-size-base;
+@table-th-color: @text-color-intense;
+@table-th-font-family: @font-family-base;
+@table-th-font-weight: @font-weight-bold;
+@table-th-line-height: @line-height-base;
+@table-th-font-style: @font-style-base;
+
+@table-cell-bg-stripped: lighten(@table-cell-bg-hover, 15%);
+@table-cell-bg-hover: @panel-bg;
+@table-cell-color-stripped: @table-td-color;
+
+@table-bg-responsive: @table-bg;
+@table-th-bg-responsive: @table-cell-bg-stripped;
+
+//
+//    Page layout variables
+//--------------------------------------
+
+// Layout widths variables
+@layout-min-width: 1000px;
+@layout-max-width: 1280px;
+@layout-indent: 20px;
+
+// Classnames defining different layouts
+@layout-class-1column: layout-1;
+@layout-class-2columns-left: layout-2-left;
+@layout-class-2columns-right: layout-2-right;
+@layout-class-3columns: layout-3;
+
+// Variables used for layout grid
+@total-columns: 12;
+@gutter-width: 0;
+
+// Variables for layout columns
+@layout-columns-width: @total-columns;
+@layout-column-sidebar-width: 2;
+@layout-column-left-width: @layout-column-sidebar-width;
+@layout-column-right-width: @layout-column-sidebar-width;
+
+// Variables for layout columns depending on layout used
+@layout-column-main-width-1: 100%;
+@layout-column-main-width-2-left: @layout-columns-width - @layout-column-left-width;
+@layout-column-main-width-2-right: @layout-columns-width - @layout-column-right-width;
+@layout-column-main-width-3: @layout-columns-width - @layout-column-left-width - @layout-column-right-width;
+
+// Settings variables (TO DO: should be global)
+@no-flex: true;
+@responsive: true;
+
+//
+//    Navigation variables
+//--------------------------------------
+
+@navigation-background: @color-secondary;
+@navigation-border: '';
+
+@navigation-level0-item-line-height: 53px;
+@navigation-level0-item-margin: 0 10px 0 0;
+@navigation-level0-item-padding: 0 12px;
+
+@navigation-level0-item-background: '';
+@navigation-level0-item-border: '';
+@navigation-level0-item-color: #575757;
+@navigation-level0-item-text-decoration: '';
+
+@navigation-level0-item-background-hover: '';
+@navigation-level0-item-border-hover: '';
+@navigation-level0-item-color-hover: #333;
+@navigation-level0-item-text-decoration-hover: @navigation-level0-item-text-decoration;
+
+@navigation-level0-item-background-active: '';
+@navigation-level0-item-border-active: '';
+@navigation-level0-item-color-active: @navigation-level0-item-color-hover;
+@navigation-level0-item-text-decoration-active: @navigation-level0-item-text-decoration;
+
+@submenu-background: @page-bg-color;
+
+@submenu-border-color: @border-color-base;
+@submenu-border-style: solid;
+@submenu-border-width: @border-width-base;
+@submenu-box-shadow: 0 5px 5px rgba(0, 0, 0, .19);
+
+@submenu-arrow: true; // true | false
+@submenu-min-width: 230px;
+
+@submenu-padding: 15px 0;
+@submenu-item-padding: 8px 20px;
+
+@submenu-item-hover-background: @color-secondary;
+@submenu-item-background: '';
+@submenu-item-border: '';
+@submenu-item-color: #575757;
+@submenu-item-text-decoration: '';
+
+@submenu-item-background-hover: '';
+@submenu-item-border-hover: '';
+@submenu-item-color-hover: #333;
+@submenu-item-text-decoration-hover: @navigation-level0-item-text-decoration;
+
+@navigation-level0-item-background-active: '';
+@navigation-level0-item-border-active: '';
+@navigation-level0-item-color-active: @navigation-level0-item-color-hover;
+@navigation-level0-item-text-decoration-active: @navigation-level0-item-text-decoration;
+
+
+
+@nav-responsive-bg: @color-secondary-light;
+
+//
+//    Sections variables
+//--------------------------------------
+
+//  Tabs
+
+//  Tabs controls
+@tab-control-font-size: @font-size-base;
+@tab-control-font-family: @font-family-base;
+@tab-control-font-weight: @font-weight-semibold;
+@tab-control-font-style: @font-style-base;
+@tab-control-line-height: @tab-control-height;
+
+// Current tab
+@tab-control-bg: @panel-bg;
+@tab-control-color: @text-color-muted;
+@tab-control-text-decoration: none;
+
+// Hovered tab
+@tab-control-bg-hover: lighten(@tab-control-bg, 5%);
+@tab-control-color-hover: @tab-control-color;
+@tab-control-text-decoration-hover: @tab-control-text-decoration;
+
+// Active tab
+@tab-control-bg-active: lighten(@tab-control-bg, 15%); // Also used in: @tab-content-bg
+@tab-control-color-active: @text-color;
+@tab-control-text-decoration-active: @tab-control-text-decoration;
+
+@tab-control-height-base: @line-height-computed;
+@tab-control-height: @indent-base;
+@tab-control-margin-right: @indent-xs-base;
+@tab-control-padding: @indent-xs-base @indent-xl-base;
+
+@tab-control-padding-top: @indent-xs-base;
+@tab-control-padding-right: @indent-base;
+@tab-control-padding-left: @tab-control-padding-right;
+@tab-control-padding-bottom: @tab-control-padding-top;
+
+// Tabs content
+@tab-content-bg: @tab-control-bg-active;
+@tab-content-border-top-status: false;
+@tab-control-border-color: @border-color-base;
+@tab-control-border-width: @border-width-base;
+@tab-content-border: @tab-control-border-width solid @tab-control-border-color;
+
+@tab-content-margin-top: @tab-control-height + @tab-control-border-width;
+@tab-content-padding: @indent-base;
+
+@tab-content-margin-top: @tab-control-height + @tab-control-border-width + @tab-control-padding-top + @tab-control-padding-bottom;
+@tab-control-margin-right: @indent-xs-base;
+
+@tab-content-padding-top: @indent-base;
+@tab-content-padding-right: @indent-base;
+@tab-content-padding-left: @tab-content-padding-right;
+@tab-content-padding-bottom: @tab-content-padding-top;
+
+// Accordions  variables
+@accordion-control-font-family: @tab-control-font-family;
+@accordion-control-font-size: @font-size-l;
+@accordion-control-font-style: @tab-control-font-style;
+@accordion-control-font-weight: @tab-control-font-weight;
+@accordion-control-line-height: @accordion-control-height;
+
+@accordion-control-border: @tab-control-border-width solid @tab-control-border-color;
+
+@accordion-control-bg: @tab-control-bg;
+@accordion-control-color: @tab-control-color;
+@accordion-control-text-decoration: @tab-control-text-decoration;
+
+@accordion-control-color-visited: @accordion-control-color;
+@accordion-control-text-decoration-visited: @accordion-control-text-decoration;
+
+@accordion-control-bg-hover: @tab-control-bg-hover;
+@accordion-control-color-hover: @tab-control-color-hover;
+@accordion-control-text-decoration-hover: @tab-control-text-decoration-hover;
+
+@accordion-control-bg-active: @tab-control-bg-active;
+@accordion-control-color-active: @tab-control-color-active;
+@accordion-control-text-decoration-active: @tab-control-text-decoration-active;
+
+@accordion-control-height: @indent-xl-base;
+@accordion-control-margin-bottom: @indent-xs-base;
+
+@accordion-control-padding-top: @tab-control-padding-top;
+@accordion-control-padding-right: @indent-base;
+@accordion-control-padding-bottom: @tab-control-padding-bottom;
+@accordion-control-padding-left: @accordion-control-padding-right;
+
+@accordion-content-bg: @tab-control-bg-active;
+@accordion-content-border: @tab-content-border;
+
+@accordion-content-margin: 0;
+
+@accordion-content-padding: @tab-content-padding-top @tab-content-padding-right @tab-content-padding-bottom @tab-content-padding-left;
+
+//
+//    Buttons variables
+//--------------------------------------
+
+// Button font style
+@button-font-family: @font-family-base;
+@button-font-size: @font-size-base;
+@button-font-weight: @font-weight-bold;
+@button-height: 30px;
+@button-margin: 0;
+@button-padding: 0 15px; // is set up to false when buttons don't depend of side paddings or have fixed width, Also used in @button-primary-padding
+@button-width: ''; // is set up to false when buttons depend of side paddings or to fixed value when needed
+
+// Buttons display settings
+@button-display: inline-block;
+@button-default-border: @button-border;
+@button-cursor: pointer;
+@button-disabled-opacity: 0.5;
+
+// Default = secondary button
+@button-color: #333;
+@button-background: #f2f2f2;
+@button-border: 1px solid #cdcdcd;
+@button-gradient-start-color: '';
+@button-gradient-end-color: '';
+
+@button-color-hover: #555;
+@button-background-hover: #e2e2e2;
+@button-border-hover: 1px solid #cdcdcd;
+@button-gradient-start-color-hover: '';
+@button-gradient-end-color-hover: '';
+
+@button-background-active: #e2e2e2;
+@button-color-active: #333;
+@button-border-active: 1px solid #cdcdcd;
+@button-gradient-start-color-active: '';
+@button-gradient-end-color-active: '';
+
+// Primary button
+@button-primary-height: 30px;
+@button-primary-width: '';
+@button-primary-margin: '';
+@button-primary-padding: @button-padding;
+@button-primary-gradient: false;
+@button-primary-gradient-direction: '';
+
+@button-primary-background: #1979c3;
+@button-primary-border: 1px solid #1979c3;
+@button-primary-color: #fff;
+@button-primary-gradient-start-color: '';
+@button-primary-gradient-end-color: '';
+
+@button-primary-background-hover: #006bb4;
+@button-primary-border-hover: 1px solid #006bb4;
+@button-primary-color-hover: #fff;
+@button-primary-gradient-start-color-hover: '';
+@button-primary-gradient-end-color-hover: '';
+
+@button-primary-background-active: #006bb4;
+@button-primary-border-active: 1px solid #006bb4;
+@button-primary-color-active: #fff;
+@button-primary-gradient-start-color-active: '';
+@button-primary-gradient-end-color-active: '';
+
+
+// Gradient button
+// Does button have gradient background:
+@button-gradient: false;
+@button-gradient-direction: '';
+
+// Button with icon
+@button-icon-use: false;
+@button-font-content: @icon-settings;
+@button-icon-font: @icon-font; // Also used in: @popup-icon-font
+@button-icon-font-size: 22px; // Also used in: @popup-icon-font-size
+@button-icon-font-line-height: @icon-font-line-height; // Also used in: @popup-icon-font-line-height
+@button-icon-font-color: inherit; // Also used in: @popup-icon-font-color
+@button-icon-font-color-hover: inherit; // Also used in: @popup-icon-font-color-hover
+@button-icon-font-color-active: inherit; // Also used in: @popup-icon-font-color-active
+@button-icon-font-margin: 0; // Also used in: @popup-icon-font-margin
+@button-icon-font-vertical-align: top; // Also used in: @popup-icon-font-vertical-align
+@button-icon-font-position: @icon-position; // Also used in: @popup-icon-font-position
+@button-icon-font-text-hide: false; // Also used in: @popup-icon-font-text-hide
+
+// Large button
+@button-l-font-size: @font-size-l;
+@button-l-padding: 0 17px;
+@button-l-height: 50px;
+// Small button
+@button-s-font-size: 11px;
+@button-s-padding: 0 8px;
+@button-s-height: 22px;
+
+//
+//    Responsive
+//--------------------------------------
+@mobile: 768px;
+@break-point-1: 768px;
+
+//
+//    Icons variables
+//--------------------------------------
+@icon-position: before;
+@icon-text-hide: false;
+@icon-height: 26px;
+@icon-width: 26px;
+@icon-margin: '';
+@icon-vertical-align: middle; // Also used in: @icon-font-vertical-align
+
+@icon-image-position-x: 0;
+@icon-image-position-y: 0;
+
+@icon-sprite-position-x: 0;
+@icon-sprite-position-y: 0;
+@icon-sprite-grid: 26px;
+
+@icon-font: 'icons-blank-theme'; // Also used in: @button-icon-font, @rating-icon-font, @pager-icon-font
+@icon-font-position: @icon-position;
+@icon-font-text-hide: @icon-text-hide;
+@icon-font-margin: @icon-margin;
+@icon-font-size: inherit; // Also used in: @icon-font-line-height
+@icon-font-line-height: @icon-font-size;
+@icon-font-color: inherit;
+@icon-font-color-hover: '';
+@icon-font-color-active: '';
+@icon-font-vertical-align: @icon-vertical-align;
+
+// Variables for icons-blank-theme
+@icon-wishlist-full: '\e600';
+@icon-wishlist-empty: '\e601';
+@icon-warning: '\e602';
+@icon-update: '\e603';
+@icon-trash: '\e604';
+@icon-star: '\e605';
+@icon-settings: '\e606';
+@icon-pointer-down: '\e607';
+@icon-next: '\e608';
+@icon-menu: '\e609';
+@icon-location: '\e60a';
+@icon-list: '\e60b';
+@icon-info: '\e60c';
+@icon-grid: '\e60d';
+@icon-comment-reflected: '\e60e';
+@icon-collapse: '\e60f';
+@icon-checkmark: '\e610';
+@icon-cart: '\e611';
+@icon-calendar: '\e612';
+@icon-arrow-up: '\e613';
+@icon-arrow-down: '\e614';
+@icon-search: '\e615';
+@icon-remove: '\e616';
+@icon-prev: '\e617';
+@icon-pointer-up: '\e618';
+@icon-pointer-right: '\e619';
+@icon-pointer-left: '\e61a';
+@icon-flag: '\e61b';
+@icon-expand: '\e61c';
+@icon-envelope: '\e61d';
+@icon-compare-full: '\e61e';
+@icon-compare-empty: '\e61f';
+@icon-comment: '\e620';
+@icon-up: '\e621';
+@icon-down: '\e622';
+
+//
+//    Messages variables
+//--------------------------------------
+@message-padding: @indent-s-base @indent-base;
+@message-margin: 0 0 @indent-s-base;
+
+@message-color: false; // Each message type has its own message color
+@message-font-size: 13px;
+@message-font-family: @font-family-base;
+@message-font-style: @font-style-base;
+@message-font-weight: @font-weight-base;
+@message-line-height: 1.2em;
+
+@message-icon-font-size: ceil(@message-font-size * 2 + 2);
+@message-icon-font-line-height: @message-icon-font-size;
+@message-icon-inner-padding-left: 40px;
+@message-icon-lateral-width: 30px;
+@message-icon-lateral-arrow-size: 5px;
+
+@message-border-width: 0;
+@message-border-color: transparent;
+@message-border-style: none;
+@message-border-radius: 0;
+
+// Information message
+@message-info-color: #6f4400;
+@message-info-background: #fdf0d5;
+@message-info-link-color: @link-color;
+@message-info-link-color-hover: @link-color-hover;
+@message-info-link-color-active: @link-color-hover;
+@message-info-border-color: none;
+@message-info-icon: @icon-warning;
+@message-info-icon-color-inner: #c07600;
+@message-info-icon-color-lateral: #fff;
+@message-info-icon-background: #6f4400;
+
+// Warning message
+@message-warning-color: @message-info-color;
+@message-warning-background: @message-info-background;
+@message-warning-link-color: @message-info-link-color;
+@message-warning-link-color-hover: @message-info-link-color-hover;
+@message-warning-link-color-active: @message-info-link-color-active;
+@message-warning-border-color: @message-info-border-color;
+@message-warning-icon: @message-info-icon;
+@message-warning-icon-color-inner: @message-info-icon-color-inner;
+@message-warning-icon-color-lateral: @message-info-icon-color-lateral;
+@message-warning-icon-background: @message-info-icon-background;
+
+// Error message
+@message-error-color: @color-error;
+@message-error-background: #fae5e5;
+@message-error-link-color: @link-color;
+@message-error-link-color-hover: @link-color-hover;
+@message-error-link-color-active: @link-color-hover;
+@message-error-border-color: none;
+@message-error-icon: @icon-warning;
+@message-error-icon-color-inner: #b30000;
+@message-error-icon-color-lateral: #fff;
+@message-error-icon-background: #b30000;
+
+// Success message
+@message-success-color: #006400;
+@message-success-background: #e5efe5;
+@message-success-link-color: @link-color;
+@message-success-link-color-hover: @link-color-hover;
+@message-success-link-color-active: @link-color-hover;
+@message-success-border-color: none;
+@message-success-icon: @icon-checkmark;
+@message-success-icon-color-inner: #006400;
+@message-success-icon-color-lateral: #fff;
+@message-success-icon-background: #006400;
+
+// Notice message
+@message-notice-color: @message-info-color;
+@message-notice-background: @message-info-background;
+@message-notice-link-color: @message-info-link-color;
+@message-notice-link-color-hover: @message-info-link-color-hover;
+@message-notice-link-color-active: @message-info-link-color-active;
+@message-notice-border-color: @message-info-border-color;
+@message-notice-icon: @message-info-icon;
+@message-notice-icon-color-inner: @message-info-icon-color-inner;
+@message-notice-icon-color-lateral: @message-info-icon-color-lateral;
+@message-notice-icon-background: @message-info-icon-background;
+
+//
+//    Tooltips variables
+//--------------------------------------
+@tooltip-border-color: #bbb;
+@tooltip-border-width: 1px;
+@tooltip-background: #fff;
+@tooltip-cursor: help;
+@tooltip-border-radius: '';
+@tooltip-arrow-size: 5px;
+@tooltip-arrow-offset: 10px;
+@tooltip-color: #333;
+@tooltip-font-size: 14px;
+@tooltip-font-family: @font-family-base;
+@tooltip-font-weight: @font-weight-base;
+@tooltip-line-height: 1.4;
+@tooltip-font-style: @font-style-base;
+@tooltip-margin: '';
+@tooltip-padding: 12px 16px;
+@tooltip-min-width: 210px;
+@tooltip-max-width: 360px;
+@tooltip-z-index: 100;
+
+//
+//    Loaders variables
+//--------------------------------------
+@loader-overlay-background-color: rgba(255, 255, 255, 0.5); // also used in: @loading-background-color
+@loader-overlay-z-index: 9999;
+@loader-icon-width: 160px;
+@loader-icon-height: 160px;
+@loader-icon-background-color: transparent;
+@loader-icon-background-image: url('@{baseDir}images/loader-2.gif'); // also used in: @loading-background-image
+@loader-icon-background-position: 50% 50%;
+@loader-icon-border-radius: 5px;
+@loader-icon-padding: '';
+@loader-text: false;
+@loader-text-color: @color-primary;
+@loader-text-font-size: @font-size-base;
+@loader-text-font-family: @font-family-base;
+@loader-text-font-weight: @font-weight-base;
+@loader-text-font-style: @font-style-base;
+@loader-text-padding: 130px 0 0;
+@loading-background-color: @loader-overlay-background-color;
+@loading-background-image: @loader-icon-background-image;
+
+//
+//    Forms variables
+//--------------------------------------
+// Form elements inputs default variables
+@form-element-input-type: ''; // input-text, select, textarea, input-radio, input-checkbox
+@form-element-input-background: #fff;
+@form-element-input-border-color: #c2c2c2;
+@form-element-input-border: 1px solid @form-element-input-border-color;
+@form-element-input-border-radius: 1px;
+@form-element-input-height: 32px;
+@form-element-input-width: 100%;
+@form-element-input-padding: 0 10px;
+@form-element-input-margin: false;
+@form-element-input-vertical-align: baseline;
+@form-element-input-background-clip: padding-box; // border-box, content-box
+@form-element-input-outline: true; // false
+@form-element-input-font-size: @font-size-base;
+@form-element-input-color: @text-color;
+@form-element-input-font-family: @font-family-base;
+@form-element-input-font-weight: @font-weight-base;
+@form-element-input-line-height: @line-height-base;
+@form-element-input-font-style: @font-style-base;
+// Placeholder
+@form-element-input-placeholder-color: false;
+@form-element-input-placeholder-font-style: @form-element-input-font-style;
+// Disabled state
+@form-element-input-disabled-background: @form-element-input-background;
+@form-element-input-disabled-border: @form-element-input-border;
+@form-element-input-disabled-opacity: 0.5;
+@form-element-input-disabled-color: @form-element-input-color;
+@form-element-input-disabled-font-style: @form-element-input-font-style;
+// Focus state
+@form-element-input-focus-background: @form-element-input-background;
+@form-element-input-focus-border: @form-element-input-border;
+@form-element-input-focus-color: @form-element-input-color;
+@form-element-input-focus-font-style: @form-element-input-font-style;
+
+// Form elements choice default variables
+@form-element-choice-type: ''; //radio, checkbox
+@form-element-choice-vertical-align: top;
+@form-element-choice-margin: 2px 5px 0 0;
+@form-element-choice-disabled-opacity: @form-element-input-disabled-opacity;
+
+// Input-text
+@input-text-background: @form-element-input-background;
+@input-text-border: @form-element-input-border;
+@input-text-border-radius: @form-element-input-border-radius;
+@input-text-height: @form-element-input-height;
+@input-text-width: @form-element-input-width;
+@input-text-padding: @form-element-input-padding;
+@input-text-margin: @form-element-input-margin;
+@input-text-vertical-align: @form-element-input-vertical-align;
+@input-text-background-clip: @form-element-input-background-clip; // border-box, content-box
+@input-text-outline: @form-element-input-outline; // false
+@input-text-font-size: @form-element-input-font-size;
+@input-text-color: @form-element-input-color;
+@input-text-font-family: @form-element-input-font-family;
+@input-text-font-weight: @form-element-input-font-weight;
+@input-text-line-height: @form-element-input-line-height;
+@input-text-font-style: @form-element-input-font-style;
+// Placeholder
+@input-text-placeholder-color: @form-element-input-placeholder-color;
+@input-text-placeholder-font-style: @form-element-input-placeholder-font-style;
+// Disabled state
+@input-text-disabled-background: @form-element-input-disabled-background;
+@input-text-disabled-border: @form-element-input-disabled-border;
+@input-text-disabled-opacity: @form-element-input-disabled-opacity;
+@input-text-disabled-color: @form-element-input-disabled-color;
+@input-text-disabled-font-style: @form-element-input-disabled-font-style;
+// Focus state
+@input-text-focus-background: @form-element-input-focus-background;
+@input-text-focus-border: @form-element-input-focus-border;
+@input-text-focus-color: @form-element-input-focus-color;
+@input-text-focus-font-style: @form-element-input-focus-font-style;
+
+// Select
+@select-background: @form-element-input-background;
+@select-border: @form-element-input-border;
+@select-border-radius: @form-element-input-border-radius;
+@select-height: @form-element-input-height;
+@select-width: @form-element-input-width;
+@select-padding: 5px 10px 4px;
+@select-margin: @form-element-input-margin;
+@select-vertical-align: @form-element-input-vertical-align;
+@select-background-clip: @form-element-input-background-clip; // border-box, content-box
+@select-outline: @form-element-input-outline; // false
+@select-font-size: @form-element-input-font-size;
+@select-color: @form-element-input-color;
+@select-font-family: @form-element-input-font-family;
+@select-font-weight: @form-element-input-font-weight;
+@select-line-height: @form-element-input-line-height;
+@select-font-style: @form-element-input-font-style;
+// Placeholder
+@select-placeholder-color: false;
+@select-placeholder-font-style: false;
+// Disabled state
+@select-disabled-background: @form-element-input-disabled-background;
+@select-disabled-border: @form-element-input-disabled-border;
+@select-disabled-opacity: @form-element-input-disabled-opacity;
+@select-disabled-color: @form-element-input-disabled-color;
+@select-disabled-font-style: @form-element-input-disabled-font-style;
+// Focus state
+@select-focus-background: @form-element-input-focus-background;
+@select-focus-border: @form-element-input-focus-border;
+@select-focus-color: @form-element-input-focus-color;
+@select-focus-font-style: @form-element-input-focus-font-style;
+
+// Textarea
+@textarea-background: @form-element-input-background;
+@textarea-border: @form-element-input-border;
+@textarea-border-radius: @form-element-input-border-radius;
+@textarea-height: auto;
+@textarea-width: @form-element-input-width;
+@textarea-padding: 10px;
+@textarea-margin: @form-element-input-margin;
+@textarea-vertical-align: @form-element-input-vertical-align;
+@textarea-background-clip: @form-element-input-background-clip; // border-box, content-box
+@textarea-outline: @form-element-input-outline; // false
+@textarea-font-size: @form-element-input-font-size;
+@textarea-color: @form-element-input-color;
+@textarea-font-family: @form-element-input-font-family;
+@textarea-font-weight: @form-element-input-font-weight;
+@textarea-line-height: @form-element-input-line-height;
+@textarea-font-style: @form-element-input-font-style;
+@textarea-resize: vertical; //none | both | horizontal | vertical | inherit
+// Placeholder
+@textarea-placeholder-color: @form-element-input-placeholder-color;
+@textarea-placeholder-font-style: @form-element-input-placeholder-font-style;
+// Disabled state
+@textarea-disabled-background: @form-element-input-disabled-background;
+@textarea-disabled-border: @form-element-input-disabled-border;
+@textarea-disabled-opacity: @form-element-input-disabled-opacity;
+@textarea-disabled-color: @form-element-input-disabled-color;
+@textarea-disabled-font-style: @form-element-input-disabled-font-style;
+// Focus state
+@textarea-focus-background: @form-element-input-focus-background;
+@textarea-focus-border: @form-element-input-focus-border;
+@textarea-focus-color: @form-element-input-focus-color;
+@textarea-focus-font-style: @form-element-input-focus-font-style;
+
+// Radio
+@input-radio-vertical-align: @form-element-choice-vertical-align;
+@input-radio-margin: @form-element-choice-margin;
+@input-radio-disabled-opacity: @form-element-choice-disabled-opacity;
+
+// Checkbox
+@input-checkbox-vertical-align: @form-element-choice-vertical-align;
+@input-checkbox-margin: @form-element-choice-margin;
+@input-checkbox-disabled-opacity: @form-element-choice-disabled-opacity;
+
+// Validation variables
+@form-validation-note-font-size: @font-size-s;
+@form-validation-note-color-error: @color-error;
+@form-validation-note-font-family: '';
+@form-validation-note-font-weight: '';
+@form-validation-note-line-height: '';
+@form-validation-note-font-style: '';
+@form-validation-note-margin: 3px 0 0;
+@form-validation-note-padding: '';
+
+@form-validation-note-icon-use: false;
+@form-validation-note-icon-font-content: @icon-pointer-up;
+@form-validation-note-icon-font: @icon-font;
+@form-validation-note-icon-font-size: @form-validation-note-font-size * 2;
+@form-validation-note-icon-font-line-height: @form-validation-note-font-size;
+@form-validation-note-icon-font-color: @form-validation-note-color-error;
+@form-validation-note-icon-font-color-hover: '';
+@form-validation-note-icon-font-color-active: '';
+@form-validation-note-icon-font-margin: '';
+@form-validation-note-icon-font-vertical-align: @icon-font-vertical-align;
+@form-validation-note-icon-font-position: @icon-font-position;
+@form-validation-note-icon-font-text-hide: @icon-font-text-hide;
+
+@form-element-validation-color-error: '';
+@form-element-validation-color-valid: '';
+@form-element-validation-border-error: lighten(@form-validation-note-color-error, 20%); //darken(@form-element-validation-color-error, 5%)
+@form-element-validation-border-valid: ''; //darken(@form-element-validation-color-valid, 5%)
+@form-element-validation-background-error: ''; //lighten(@form-element-validation-color-error, 50%)
+@form-element-validation-background-valid: ''; //lighten(@form-element-validation-color-valid, 50%)
+
+// Fieldset
+@form-fieldset-border: 0;
+@form-fieldset-margin: 0 0 40px; //30px 10px 30px 30px
+@form-fieldset-padding: 0;
+@form-fieldset-legend-color: inherit;
+@form-fieldset-legend-font-size: 20px;
+@form-fieldset-legend-font-family: @font-family-base;
+@form-fieldset-legend-font-weight: @font-weight-base;
+@form-fieldset-legend-font-style: normal;
+@form-fieldset-legend-line-height: 1.2;
+@form-fieldset-legend-margin: 0 0 25px @form-field-type-inline-label-width; //-30px 30px 50px -30px
+@form-fieldset-legend-padding: 0;
+@form-fieldset-legend-width: @form-field-type-inline-control-width; //100%
+
+// Field
+@form-field-type: inline; //block
+@form-field-border: none;
+@form-field-column: false;
+@form-field-column-padding: 0 20px 0 0;
+@form-field-column-width: 50%;
+@form-field-type-block-margin: 0 0 20px;
+@form-field-type-inline-vertical-margin: 29px;
+@form-field-type-inline-margin: 0 0 @form-field-type-inline-vertical-margin;
+// form field label
+@form-field-label-color: '';
+@form-field-label-font-size: @font-size-base;
+@form-field-label-font-family: '';
+@form-field-label-font-weight: @font-weight-bold;
+@form-field-label-font-style: '';
+@form-field-label-line-height: '';
+@form-field-type-block-label-margin: 0 0 5px;
+@form-field-type-inline-label-padding: 6px 15px 0 0;
+@form-field-type-inline-label-width: 25.8%;
+// form field control
+@form-field-type-inline-control-width: 74.2%;
+// form field label asterisk
+@form-field-label-asterisk-color: #e02b27; // also used in: @form-hasrequired-color
+@form-field-label-asterisk-font-size: @font-size-s;
+@form-field-label-asterisk-font-family: '';
+@form-field-label-asterisk-font-weight: '';
+@form-field-label-asterisk-font-style: '';
+@form-field-label-asterisk-line-height: '';
+@form-field-label-asterisk-margin: 0 0 0 5px;
+// form field note
+@form-field-note-color: '';
+@form-field-note-font-size: @font-size-s;
+@form-field-note-font-family: '';
+@form-field-note-font-weight: '';
+@form-field-note-line-height: '';
+@form-field-note-font-style: '';
+@form-field-note-margin: 3px 0 0;
+@form-field-note-padding: 0;
+// form field note icon
+@form-field-note-icon-font-content: @icon-pointer-up;
+@form-field-note-icon-font: @icon-font;
+@form-field-note-icon-font-size: @form-field-note-font-size * 2;
+@form-field-note-icon-font-line-height: @form-field-note-font-size;
+@form-field-note-icon-font-color: @form-field-note-color;
+@form-field-note-icon-font-color-hover: '';
+@form-field-note-icon-font-color-active: '';
+@form-field-note-icon-font-margin: '';
+@form-field-note-icon-font-vertical-align: @icon-font-vertical-align;
+@form-field-note-icon-font-position: @icon-font-position;
+@form-field-note-icon-font-text-hide: @icon-font-text-hide;
+
+// Hasrequired
+@form-hasrequired-position: top; // top | bottom
+@form-hasrequired-color: @form-field-label-asterisk-color;
+@form-hasrequired-font-size: @font-size-s;
+@form-hasrequired-font-family: '';
+@form-hasrequired-font-weight: '';
+@form-hasrequired-font-style: '';
+@form-hasrequired-line-height: '';
+@form-hasrequired-border: '';
+@form-hasrequired-margin: 10px 0 0;
+@form-hasrequired-padding: '';
+
+//
+//    Pager variables
+//--------------------------------------
+@pager-label-display: none;
+@pager-item-display: inline-block;
+@pager-reset-spaces: true;  // reset spaces between inline-block elements
+
+@pager-font-size: @font-size-s;
+@pager-font-weight: @font-weight-base;
+@pager-line-height: 32px;
+@pager-item-margin: 0 1px;
+@pager-item-padding: 0 10px;
+@pager-actions-padding: 0;
+
+// Pager current page
+@pager-current-font-weight: @font-weight-bold;
+@pager-current-color: @color-primary;
+@pager-current-border: '';
+@pager-current-background: '';
+
+@pager-current-gradient: false;
+@pager-current-gradient-direction: '';
+
+@pager-current-gradient-start-color: '';
+@pager-current-gradient-end-color: '';
+
+// Pager link page
+@pager-gradient: false;
+@pager-gradient-direction: '';
+
+// Pager link default
+@pager-color: @link-color;
+@pager-border: '';
+@pager-text-decoration: none;
+@pager-background: '';
+@pager-gradient-start-color: '';
+@pager-gradient-end-color: '';
+
+// Pager link visited
+@pager-color-visited: @link-color-visited;
+@pager-border-visited: '';
+@pager-background-visited: '';
+@pager-gradient-start-color-visited: '';
+@pager-gradient-end-color-visited: '';
+
+// Pager link hover
+@pager-color-hover: @link-color-hover;
+@pager-border-hover: '';
+@pager-text-decoration-hover: none;
+@pager-background-hover: '';
+@pager-gradient-start-color-hover: '';
+@pager-gradient-end-color-hover: '';
+
+// Pager link active
+@pager-color-active: @link-color-active;
+@pager-border-active: '';
+@pager-background-active: '';
+@pager-gradient-start-color-active: '';
+@pager-gradient-end-color-active: '';
+
+// Pager link.action
+@pager-icon-use: true;
+@pager-icon-previous-content: @icon-prev;
+@pager-icon-next-content: @icon-next;
+@pager-icon-text-hide: true;
+@pager-icon-position: before;
+@pager-icon-font: @icon-font;
+@pager-icon-font-margin: @icon-margin;
+@pager-icon-font-vertical-align: top;
+@pager-icon-font-size: 32px;
+@pager-icon-font-line-height: @icon-font-line-height;
+
+// Pager link.action gradient: does element have gradient background
+@pager-action-gradient: false;
+@pager-action-gradient-direction: '';
+
+// Pager link.action default
+@pager-action-color: @text-color-muted;
+@pager-action-border: @border-width-base solid @border-color-base;
+@pager-action-text-decoration: @pager-text-decoration;
+@pager-action-background: @pager-background;
+@pager-action-gradient-start-color: '';
+@pager-action-gradient-end-color: '';
+
+// Pager link.action visited
+@pager-action-color-visited: @text-color-muted;
+@pager-action-border-visited: '';
+@pager-action-background-visited: '';@pager-action-gradient-start-color-visited: '';
+@pager-action-gradient-end-color-visited: '';
+
+// Pager link.action hover
+@pager-action-color-hover: @text-color-muted;
+@pager-action-border-hover: '';
+@pager-action-background-hover: '';
+@pager-action-text-decoration-hover: @pager-text-decoration-hover;
+@pager-action-gradient-start-color-hover: '';
+@pager-action-gradient-end-color-hover: '';
+
+// Pager link.action active
+@pager-action-color-active: @text-color-muted;
+@pager-action-border-active: '';
+@pager-action-background-active: '';
+@pager-action-gradient-start-color-active: '';
+@pager-action-gradient-end-color-active: '';
+
+//
+//    Ratings variables
+//--------------------------------------
+@rating-icon-count: 5;
+@rating-icon-content: @icon-star;
+@rating-icon-font: @icon-font;
+@rating-icon-font-size: 28px;
+@rating-icon-letter-spacing: -10px;
+@rating-icon-color: #ccc;
+@rating-icon-color-active: #ff5601;
+@rating-label-hide: false;
+
+//
+//    Dropdowns variables
+//--------------------------------------
+// Variables simple dropdown
+@dropdown-actions-padding: '';
+@dropdown-list-position-top: '';
+@dropdown-list-position-bottom: '';
+@dropdown-list-position-left: '';
+@dropdown-list-position-right: '';
+@dropdown-list-pointer: true; // true | false
+@dropdown-list-background: #fff;
+@dropdown-list-border: 1px solid #bbb;
+@dropdown-list-pointer-border: #bbb;
+@dropdown-list-item-border: 0;
+@dropdown-list-item-padding: 3px 5px;
+@dropdown-list-item-margin: 0;
+@dropdown-list-item-hover: #e8e8e8;
+@dropdown-list-shadow: 0 3px 3px rgba(0,0,0,.15); // '' | none
+@dropdown-list-z-index: 100;
+
+@dropdown-toggle-icon-content: @icon-pointer-down;
+@dropdown-toggle-active-icon-content: @icon-pointer-up;
+@dropdown-toggle-icon-font: @button-icon-font;
+@dropdown-toggle-icon-font-size: @button-icon-font-size;
+@dropdown-toggle-icon-font-line-height: @button-icon-font-line-height;
+@dropdown-toggle-icon-font-color: @button-icon-font-color;
+@dropdown-toggle-icon-font-color-hover: @button-icon-font-color-hover;
+@dropdown-toggle-icon-font-color-active: @button-icon-font-color-active;
+@dropdown-toggle-icon-font-margin: @button-icon-font-margin;
+@dropdown-toggle-icon-position: after;
+@dropdown-toggle-icon-font-vertical-align: @button-icon-font-vertical-align;
+@dropdown-toggle-icon-text-hide: @button-icon-font-text-hide;
+
+// Variables split dropdown
+@dropdown-split-actions-padding: 0 5px;
+@dropdown-split-toggle-position: right;
+@dropdown-split-list-position-top: @dropdown-list-position-top;
+@dropdown-split-list-position-bottom: @dropdown-list-position-bottom;
+@dropdown-split-list-position-left: @dropdown-list-position-left;
+@dropdown-split-list-position-right: @dropdown-list-position-right;
+@dropdown-split-list-background: @dropdown-list-background;
+@dropdown-split-list-border: @dropdown-list-border;
+@dropdown-split-list-pointer: @dropdown-list-pointer;
+@dropdown-split-list-pointer-border: @dropdown-list-pointer-border;
+@dropdown-split-list-item-border: @dropdown-list-item-border;
+@dropdown-split-list-item-padding: @dropdown-list-item-padding;
+@dropdown-split-list-item-margin: @dropdown-list-item-margin;
+@dropdown-split-list-item-hover: @dropdown-list-item-hover;
+@dropdown-split-button-border-radius-fix: false;
+@dropdown-split-list-shadow: @dropdown-list-shadow; // '', none
+@dropdown-split-list-z-index: @dropdown-list-z-index;
+
+@dropdown-split-toggle-icon-content: @dropdown-toggle-icon-content;
+@dropdown-split-toggle-active-icon-content: @dropdown-toggle-active-icon-content;
+@dropdown-split-toggle-icon-font: @button-icon-font;
+@dropdown-split-toggle-icon-font-size: @button-icon-font-size;
+@dropdown-split-toggle-icon-font-line-height: @button-icon-font-line-height;
+@dropdown-split-toggle-icon-font-color: @button-icon-font-color;
+@dropdown-split-toggle-icon-font-color-hover: @button-icon-font-color-hover;
+@dropdown-split-toggle-icon-font-color-active: @button-icon-font-color-active;
+@dropdown-split-toggle-icon-font-margin: @button-icon-font-margin;
+@dropdown-split-toggle-icon-font-vertical-align: @button-icon-font-vertical-align;
+@dropdown-split-toggle-icon-position: @dropdown-toggle-icon-position;
+@dropdown-split-toggle-icon-text-hide: true; // false
+
+//
+//    Actions-toolbar variables
+//--------------------------------------
+@actions-toolbar-actions-position: justify; // left, right, center
+// Also used in: @popup-actions-toolbar-actions-position
+@actions-toolbar-actions-reverse: false; // true
+// Also used in: @popup-actions-toolbar-actions-position-reverse
+@actions-toolbar-margin: ''; // Also used in: @popup-actions-toolbar-margins
+@actions-toolbar-padding: ''; // Also used in: @popup-actions-toolbar-padding
+@actions-toolbar-actions-margin: ''; // Also used in: @popup-actions-toolbar-actions-margin
+@actions-toolbar-primary-actions-margin: 0 5px 0 0; // Also used in: @popup-actions-toolbar-primary-actions-margin
+@actions-toolbar-secondary-actions-margin: ''; // Also used in: @popup-actions-toolbar-secondary-actions-margin
+@actions-toolbar-actions-links-margin-top: ''; // Also used in: @popup-actions-toolbar-actions-links-margin-top
+@actions-toolbar-primary-actions-links-margin-top: ''; // Also used in: @popup-actions-primary-toolbar-actions-links-margin-top
+@actions-toolbar-secondary-actions-links-margin-top: 6px; // Also used in: @popup-actions-secondary-toolbar-actions-links-margin-top
+
+//
+//    Breadcrumbs variables
+//--------------------------------------
+@breadcrumbs-font-size: @font-size-s;
+
+@breadcrumbs-separator-symbol: '>';
+@breadcrumbs-separator-color: @breadcrumbs-current-color;
+
+@breadcrumbs-display: '';
+@breadcrumbs-padding: '';
+@breadcrumbs-hide-label: true;
+
+// Breadcrumbs - current page
+@breadcrumbs-current-color: #a3a3a3;
+@breadcrumbs-current-font-weight: @font-weight-base;
+@breadcrumbs-current-background: '';
+@breadcrumbs-current-border: '';
+
+// Breadcrumbs - current page - gradient background
+@breadcrumbs-current-gradient: false;
+@breadcrumbs-current-gradient-direction: vertical;
+@breadcrumbs-current-gradient-start-color: '';
+@breadcrumbs-current-gradient-end-color: '';
+
+// Breadcrumbs - link
+// Breadcrumbs link - gradient
+@breadcrumbs-link-gradient: false;
+@breadcrumbs-link-gradient-direction: '';
+
+@breadcrumbs-link-color: @color-primary;
+@breadcrumbs-link-background: '';
+@breadcrumbs-link-border: '';
+@breadcrumbs-link-text-decoration: none;
+@breadcrumbs-link-gradient-start-color: '';
+@breadcrumbs-link-gradient-end-color: '';
+
+// Breadcrumbs link - visited
+@breadcrumbs-link-color-visited: @color-primary;
+@breadcrumbs-link-background-visited: @breadcrumbs-link-background;
+@breadcrumbs-link-border-visited: @breadcrumbs-link-border;
+@breadcrumbs-link-text-decoration-visited: none;
+@breadcrumbs-link-gradient-start-color-visited: '';
+@breadcrumbs-link-gradient-end-color-visited: '';
+
+// Breadcrumbs link - hover
+@breadcrumbs-link-color-hover: @color-primary;
+@breadcrumbs-link-background-hover: '';
+@breadcrumbs-link-border-hover: @breadcrumbs-link-border;
+@breadcrumbs-link-text-decoration-hover: underline;
+@breadcrumbs-link-gradient-start-color-hover: '';
+@breadcrumbs-link-gradient-end-color-hover: '';
+
+// Breadcrumbs link - active
+@breadcrumbs-link-color-active: @color-primary;
+@breadcrumbs-link-background-active: @breadcrumbs-link-background;
+@breadcrumbs-link-border-active: @breadcrumbs-link-border;
+@breadcrumbs-link-text-decoration-active: none;
+@breadcrumbs-link-gradient-start-color-active: '';
+@breadcrumbs-link-gradient-end-color-active: '';
+
+//
+// Popups variables
+//--------------------------------------
+@popup-width: 380px;
+@popup-height: auto;
+@popup-padding: 22px;
+@popup-background: #fff;
+@popup-border: 1px solid #aeaeae;
+@popup-shadow: 0 3px 3px rgba(0,0,0,.15);
+@popup-fade: opacity 0.3s linear;
+@popup-z-index: 1001;
+
+@popup-position: fixed;
+@popup-position-top: 20%;
+@popup-position-right: '';
+@popup-position-bottom: '';
+@popup-position-left: 50%;
+
+@popup-margin-top: '';
+@popup-margin-right: '';
+@popup-margin-bottom: '';
+@popup-margin-left: -((@popup-width+(@popup-padding*2))/2);
+
+@popup-content-height: auto;
+@popup-header-margin: '';
+@popup-content-margin: '';
+@popup-footer-margin: '';
+
+@popup-title-headings: true; //false
+@popup-title-headings-level: h3; // h1, h2, h3, h4, h5, h6
+
+@popup-action-toolbar: false; //true
+
+@popup-button-close-icon: true; //false
+@popup-button-close-reset: true; //false
+@popup-button-close-position: absolute;
+@popup-button-close-position-top: 10px;
+@popup-button-close-position-right: 10px;
+@popup-button-close-position-bottom: '';
+@popup-button-close-position-left: '';
+
+//Actions toolbar variables
+@popup-actions-toolbar-actions-position: @actions-toolbar-actions-position;
+@popup-actions-toolbar-actions-reverse: @actions-toolbar-actions-reverse;
+@popup-actions-toolbar-margin: @actions-toolbar-margin;
+@popup-actions-toolbar-padding: @actions-toolbar-padding;
+@popup-actions-toolbar-actions-margin: @actions-toolbar-actions-margin;
+@popup-actions-toolbar-primary-actions-margin: @actions-toolbar-primary-actions-margin;
+@popup-actions-toolbar-secondary-actions-margin: @actions-toolbar-secondary-actions-margin;
+@popup-actions-toolbar-actions-links-margin-top: @actions-toolbar-actions-links-margin-top;
+@popup-actions-toolbar-primary-actions-links-margin-top: @actions-toolbar-primary-actions-links-margin-top;
+@popup-actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-secondary-actions-links-margin-top;
+
+//  Popup Icons variables
+@popup-icon-font-content: @icon-remove;
+@popup-icon-font: @button-icon-font;
+@popup-icon-font-size: @button-icon-font-size;
+@popup-icon-font-line-height: @button-icon-font-line-height;
+@popup-icon-font-color: @button-icon-font-color;
+@popup-icon-font-color-hover: @button-icon-font-color-hover;
+@popup-icon-font-color-active: @button-icon-font-color-active;
+@popup-icon-font-margin: @button-icon-font-margin;
+@popup-icon-font-vertical-align: @button-icon-font-vertical-align;
+@popup-icon-font-position: @button-icon-font-position;
+@popup-icon-font-text-hide: true;
+
+//  Window overlay variables
+@overlay-background: #000;
+@overlay-opacity: 0.5;
+@overlay-opacity-old: 50;
+@overlay-fade: opacity 0.15s linear;
+@overlay-z-index: 1000;

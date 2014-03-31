@@ -35,7 +35,6 @@ namespace Magento\Backend\Block\Page;
 
 class Notices extends \Magento\Backend\Block\Template
 {
-
     /**
      * Check if noscript notice should be displayed
      *
@@ -55,5 +54,4 @@ class Notices extends \Magento\Backend\Block\Template
     {
         return $this->_storeConfig->getConfig('design/head/demonotice');
     }
-
 }

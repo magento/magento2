@@ -39,13 +39,13 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_dateTime = new \Magento\Stdlib\DateTime;
+        $this->_dateTime = new \Magento\Stdlib\DateTime();
     }
 
     public function testToTimestamp()
     {
-        $date = new \Zend_Date();
-        $dateTime = new \Magento\Stdlib\DateTime;
+        $date = new \Magento\Stdlib\DateTime\Date();
+        $dateTime = new \Magento\Stdlib\DateTime();
         $this->assertEquals($date->getTimestamp(), $dateTime->toTimestamp($date));
 
         $this->assertEquals(time(), $dateTime->toTimestamp(true));
@@ -68,7 +68,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFormatDate($date, $includeTime, $expectedFormat, $expectedResult = null)
     {
-        $dateTime = new \Magento\Stdlib\DateTime;
+        $dateTime = new \Magento\Stdlib\DateTime();
         $actual = $dateTime->formatDate($date, $includeTime);
         if ($expectedFormat != '') {
             $expectedResult = date($expectedFormat);
@@ -87,7 +87,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     {
         // Take care when calling date here as it can be called much earlier than when testFormatDate
         // executes thus causing a discrepancy in the actual vs expected time. See MAGETWO-10296
-        $date = new \Zend_Date();
+        $date = new \Magento\Stdlib\DateTime\Date();
         return array(
             'null' => array(null, false, ''),
             'null including Time' => array(null, true, ''),
@@ -96,7 +96,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
             'Bool false' => array(false, false, ''),
             'Bool false including Time' => array(false, true, ''),
             'Zend Date' => array($date, false, date('Y-m-d', $date->getTimestamp())),
-            'Zend Date including Time' => array($date, true, date('Y-m-d H:i:s', $date->getTimestamp())),
+            'Zend Date including Time' => array($date, true, date('Y-m-d H:i:s', $date->getTimestamp()))
         );
     }
 
@@ -123,7 +123,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
             array('0000-00-00', true),
             array('0000-00-00 00:00:00', true),
             array('2000-10-10', false),
-            array('2000-10-10 10:10:10', false),
+            array('2000-10-10 10:10:10', false)
         );
     }
 }

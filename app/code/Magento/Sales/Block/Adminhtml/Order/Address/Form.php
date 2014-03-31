@@ -21,21 +21,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Address;
 
 /**
  * Adminhtml sales order address block
  */
-class Form
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
+    /**
+     * Address form template
+     *
+     * @var string
+     */
     protected $_template = 'order/address/form.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -50,7 +53,7 @@ class Form
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -65,7 +68,7 @@ class Form
         \Magento\Customer\Helper\Data $customerHelper,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -97,7 +100,7 @@ class Form
     /**
      * Define form attributes (id, method, action)
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address
+     * @return $this
      */
     protected function _prepareForm()
     {

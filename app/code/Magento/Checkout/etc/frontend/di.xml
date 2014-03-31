@@ -23,27 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Checkout\Model\Session">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="checkout_onepage"><value>/checkout/onepage</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="checkout_onepage" xsi:type="string">/checkout/onepage</item>
+            </argument>
+        </arguments>
     </type>
-    <virtualType name="checkoutCartInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <param name="cookieCheckActions">
-            <array>
-                <item key="checkoutCartAdd"><value>add</value></item>
-            </array>
-        </param>
-    </virtualType>
-    <type name="Magento\Checkout\Controller\Cart">
-        <plugin name="sessionInitializer" type="checkoutCartInitSession" />
+    <type name="Magento\Core\Model\Layout">
+        <plugin name="checkout-session-depersonalize"
+                type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
 </config>

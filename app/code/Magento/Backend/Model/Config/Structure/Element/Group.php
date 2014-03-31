@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Group
-    extends \Magento\Backend\Model\Config\Structure\Element\AbstractComposite
+class Group extends AbstractComposite
 {
     /**
      * Group clone model factory
@@ -66,19 +64,19 @@ class Group
      */
     public function shouldCloneFields()
     {
-        return (isset($this->_data['clone_fields']) && !empty($this->_data['clone_fields']));
+        return isset($this->_data['clone_fields']) && !empty($this->_data['clone_fields']);
     }
 
     /**
      * Retrieve clone model
      *
-     * @return \Magento\Core\Model\AbstractModel
-     * @throws \Magento\Core\Exception
+     * @return \Magento\Model\AbstractModel
+     * @throws \Magento\Model\Exception
      */
     public function getCloneModel()
     {
         if (!isset($this->_data['clone_model']) || !$this->_data['clone_model']) {
-            throw new \Magento\Core\Exception('Config form fieldset clone model required to be able to clone fields');
+            throw new \Magento\Model\Exception('Config form fieldset clone model required to be able to clone fields');
         }
         return $this->_cloneModelFactory->create($this->_data['clone_model']);
     }
@@ -87,6 +85,7 @@ class Group
      * Populate form fieldset with group data
      *
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @return void
      */
     public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
     {
@@ -106,7 +105,7 @@ class Group
      */
     public function isExpanded()
     {
-        return (bool) (isset($this->_data['expanded']) ? (int) $this->_data['expanded'] : false);
+        return (bool)(isset($this->_data['expanded']) ? (int)$this->_data['expanded'] : false);
     }
 
     /**
@@ -122,7 +121,7 @@ class Group
     /**
      * Retrieve field dependencies
      *
-     * @param $storeCode
+     * @param string $storeCode
      * @return array
      */
     public function getDependencies($storeCode)

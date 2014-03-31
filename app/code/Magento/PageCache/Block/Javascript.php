@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Block;
 
 /**
@@ -33,6 +32,27 @@ namespace Magento\PageCache\Block;
 class Javascript extends \Magento\View\Element\Template
 {
     /**
+     * @var \Magento\PageCache\Helper\Data
+     */
+    protected $helper;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\PageCache\Helper\Data         $helper
+     * @param array                                  $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\PageCache\Helper\Data $helper,
+        array $data = array()
+    ) {
+        $this->helper = $helper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Retrieve script options encoded to json
      *
      * @return string
@@ -41,8 +61,8 @@ class Javascript extends \Magento\View\Element\Template
     {
         $params = array(
             'url' => $this->getUrl('page_cache/block/render/'),
-            'handles' => $this->getLayout()->getUpdate()->getHandles(),
-            'versionCookieName' => \Magento\PageCache\Model\Version::COOKIE_NAME
+            'handles' => $this->helper->getActualHandles(),
+            'versionCookieName' => \Magento\App\PageCache\Version::COOKIE_NAME
         );
         return json_encode($params);
     }

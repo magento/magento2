@@ -27,40 +27,71 @@ namespace Magento\Xml;
 
 class Parser
 {
+    /**
+     * @var \DOMDocument|null
+     */
     protected $_dom = null;
+
+    /**
+     * @var \DOMDocument
+     */
     protected $_currentDom;
+
+    /**
+     * @var array
+     */
     protected $_content = array();
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->_dom = new \DOMDocument;
+        $this->_dom = new \DOMDocument();
         $this->_currentDom = $this->_dom;
         return $this;
     }
 
+    /**
+     * @return \DOMDocument|null
+     */
     public function getDom()
     {
         return $this->_dom;
     }
 
+    /**
+     * @return \DOMDocument
+     */
     protected function _getCurrentDom()
     {
         return $this->_currentDom;
     }
 
+    /**
+     * @param \DOMDocument $node
+     * @return $this
+     */
     protected function _setCurrentDom($node)
     {
         $this->_currentDom = $node;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function xmlToArray()
     {
         $this->_content = $this->_xmlToArray();
         return $this->_content;
     }
 
-    protected function _xmlToArray($currentNode=false)
+    /**
+     * @param bool $currentNode
+     * @return array
+     */
+    protected function _xmlToArray($currentNode = false)
     {
         if (!$currentNode) {
             $currentNode = $this->getDom();
@@ -76,10 +107,10 @@ class Parser
                     }
                     $attributes = array();
                     if ($node->hasAttributes()) {
-                        foreach($node->attributes as $attribute) {
-                            $attributes += array($attribute->name=>$attribute->value);
+                        foreach ($node->attributes as $attribute) {
+                            $attributes += array($attribute->name => $attribute->value);
                         }
-                        $value = array('_value'=>$value, '_attribute'=>$attributes);
+                        $value = array('_value' => $value, '_attribute' => $attributes);
                     }
                     if (isset($content[$node->nodeName])) {
                         if (!isset($content[$node->nodeName][0]) || !is_array($content[$node->nodeName][0])) {
@@ -102,16 +133,23 @@ class Parser
         return $content;
     }
 
+    /**
+     * @param string $file
+     * @return $this
+     */
     public function load($file)
     {
         $this->getDom()->load($file);
         return $this;
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function loadXML($string)
     {
         $this->getDom()->loadXML($string);
         return $this;
     }
-
 }

@@ -43,21 +43,25 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Core\Model\Config\FileResolver', array('get'), array(), '', false
+            'Magento\Core\Model\Config\FileResolver',
+            array('get'),
+            array(),
+            '',
+            false
         );
 
-        $this->_converter = $this->getMock(
-            'Magento\Mview\Config\Converter', array('convert')
-        );
+        $this->_converter = $this->getMock('Magento\Mview\Config\Converter', array('convert'));
 
-        $fsDirList = $this->getMock(
-            '\Magento\Filesystem\DirectoryList', array('getDir'), array(), '', false
+        $fsDirList = $this->getMock('\Magento\Filesystem\DirectoryList', array('getDir'), array(), '', false);
+        $fsDirList->expects(
+            $this->once()
+        )->method(
+            'getDir'
+        )->with(
+            \Magento\App\Filesystem::LIB_DIR
+        )->will(
+            $this->returnValue('stub')
         );
-        $fsDirList->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Filesystem::LIB_DIR)
-            ->will($this->returnValue('stub'))
-        ;
         $schemaLocator = new \Magento\Mview\Config\SchemaLocator($fsDirList);
 
         $validationState = $this->getMock('Magento\Config\ValidationStateInterface');
@@ -76,10 +80,16 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadValidConfig($files, $expectedFile)
     {
-        $this->_fileResolverMock->expects($this->once())
-            ->method('get')
-            ->with('mview.xml', 'scope')
-            ->will($this->returnValue($files));
+        $this->_fileResolverMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'mview.xml',
+            'scope'
+        )->will(
+            $this->returnValue($files)
+        );
 
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
             try {
@@ -91,12 +101,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             }
         };
         $expectedResult = new \stdClass();
-        $this->_converter
-            ->expects($this->once())
-            ->method('convert')
-            ->with($this->callback($constraint))
-            ->will($this->returnValue($expectedResult))
-        ;
+        $this->_converter->expects(
+            $this->once()
+        )->method(
+            'convert'
+        )->with(
+            $this->callback($constraint)
+        )->will(
+            $this->returnValue($expectedResult)
+        );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }
@@ -110,17 +123,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'mview_merged_one' => array(
                 array(
                     'mview_one.xml' => file_get_contents(__DIR__ . '/../_files/mview_one.xml'),
-                    'mview_two.xml' => file_get_contents(__DIR__ . '/../_files/mview_two.xml'),
+                    'mview_two.xml' => file_get_contents(__DIR__ . '/../_files/mview_two.xml')
                 ),
-                'mview_merged_one.xml',
+                'mview_merged_one.xml'
             ),
             'mview_merged_two' => array(
                 array(
                     'mview_one.xml' => file_get_contents(__DIR__ . '/../_files/mview_one.xml'),
-                    'mview_three.xml' => file_get_contents(__DIR__ . '/../_files/mview_three.xml'),
+                    'mview_three.xml' => file_get_contents(__DIR__ . '/../_files/mview_three.xml')
                 ),
-                'mview_merged_two.xml',
-            ),
+                'mview_merged_two.xml'
+            )
         );
     }
 }

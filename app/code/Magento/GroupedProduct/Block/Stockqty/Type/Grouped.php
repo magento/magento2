@@ -23,10 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
 
-class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite
+class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite implements
+    \Magento\View\Block\IdentityInterface
 {
     /**
      * Retrieve child products
@@ -36,5 +36,19 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite
     protected function _getChildProducts()
     {
         return $this->getProduct()->getTypeInstance()->getAssociatedProducts($this->getProduct());
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getChildProducts() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+        return $identities;
     }
 }

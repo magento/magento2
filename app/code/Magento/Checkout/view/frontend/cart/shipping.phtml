@@ -96,9 +96,10 @@
                     <dt class="item title"><span><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></span></dt>
                     <dd class="item options">
                     <?php foreach ($_rates as $_rate): ?>
-                        <div class="field choice item<?php if ($_rate->getErrorMessage()) echo ' error-msg';?>">
+                        <div
+                            class="<?php if ($_rate->getErrorMessage()): echo ' message error'; else: echo 'field choice item'; endif; ?>">
                            <?php if ($_rate->getErrorMessage()): ?>
-                                <?php echo $this->escapeHtml($_rate->getErrorMessage()) ?>
+                                <div><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></div>
                            <?php else: ?>
                                 <input name="estimate_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio" />
                                 <label class="label" for="s_method_<?php echo $_rate->getCode() ?>">

@@ -29,6 +29,7 @@ interface ListInterface
      * Allow or disallow single store mode
      *
      * @param bool $value
+     * @return void
      */
     public function setIsSingleStoreModeAllowed($value);
 
@@ -62,7 +63,7 @@ interface ListInterface
      *
      * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
      * @return \Magento\Core\Model\Website
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getWebsite($websiteId = null);
 
@@ -77,6 +78,8 @@ interface ListInterface
 
     /**
      * Reinitialize store list
+     *
+     * @return void
      */
     public function reinitStores();
 
@@ -92,7 +95,7 @@ interface ListInterface
      *
      * @param null|\Magento\Core\Model\Store\Group|string $groupId
      * @return \Magento\Core\Model\Store\Group
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getGroup($groupId = null);
 
@@ -111,6 +114,7 @@ interface ListInterface
      *  Unset website by id from app cache
      *
      * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
+     * @return void
      */
     public function clearWebsiteCache($websiteId = null);
 
@@ -125,6 +129,7 @@ interface ListInterface
      * Set current default store
      *
      * @param string $store
+     * @return void
      */
     public function setCurrentStore($store);
 
@@ -136,6 +141,7 @@ interface ListInterface
     public function getCurrentStore();
 
     /**
+     * @return void
      * @throws \Magento\Core\Model\Store\Exception
      */
     public function throwStoreException();

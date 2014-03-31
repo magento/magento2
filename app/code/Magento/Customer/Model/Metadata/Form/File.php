@@ -20,12 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class File extends AbstractData
@@ -55,38 +52,37 @@ class File extends AbstractData
     protected $_fileSystem;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param null $value
-     * @param $entityTypeCode
+     * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\App\Filesystem $fileSystem
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
-        $value = null,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        $value,
         $entityTypeCode,
-        $isAjax = false,
+        $isAjax,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
         \Magento\App\Filesystem $fileSystem
     ) {
-        parent::__construct($locale, $logger, $attribute, $value, $entityTypeCode, $isAjax);
+        parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->_coreData = $coreData;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
     }
 
     /**
-     * Extract data from request and return value
-     *
-     * @param \Magento\App\RequestInterface $request
-     * @return array|string
+     * {@inheritdoc}
      */
     public function extractValue(\Magento\App\RequestInterface $request)
     {
@@ -96,15 +92,15 @@ class File extends AbstractData
 
         $extend = $this->_getRequestValue($request);
 
-        $attrCode  = $this->getAttribute()->getAttributeCode();
+        $attrCode = $this->getAttribute()->getAttributeCode();
         if ($this->_requestScope) {
-            $value  = array();
+            $value = array();
             if (strpos($this->_requestScope, '/') !== false) {
                 $scopes = explode('/', $this->_requestScope);
-                $mainScope  = array_shift($scopes);
+                $mainScope = array_shift($scopes);
             } else {
-                $mainScope  = $this->_requestScope;
-                $scopes     = array();
+                $mainScope = $this->_requestScope;
+                $scopes = array();
             }
 
             if (!empty($_FILES[$mainScope])) {
@@ -144,21 +140,19 @@ class File extends AbstractData
      * Return array of errors
      *
      * @param array $value
-     * @return array
+     * @return string[]
      */
     protected function _validateByRules($value)
     {
-        $label  = $this->getAttribute()->getStoreLabel();
-        $rules  = $this->getAttribute()->getValidationRules();
-        $extension  = pathinfo($value['name'], PATHINFO_EXTENSION);
+        $label = $value['name'];
+        $rules = $this->getAttribute()->getValidationRules();
+        $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
 
         if (!empty($rules['file_extensions'])) {
             $extensions = explode(',', $rules['file_extensions']);
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
-                return array(
-                    __('"%1" is not a valid file extension.', $label)
-                );
+                return array(__('"%1" is not a valid file extension.', $extension));
             }
         }
 
@@ -169,30 +163,35 @@ class File extends AbstractData
             return $this->_fileValidator->getMessages();
         }
 
-        if (!is_uploaded_file($value['tmp_name'])) {
-            return array(
-                __('"%1" is not a valid file.', $label)
-            );
+        if (!$this->_isUploadedFile($value['tmp_name'])) {
+            return array(__('"%1" is not a valid file.', $label));
         }
 
         if (!empty($rules['max_file_size'])) {
             $size = $value['size'];
             if ($rules['max_file_size'] < $size) {
-                return array(
-                    __('"%1" exceeds the allowed file size.', $label)
-                );
-            };
+                return array(__('"%1" exceeds the allowed file size.', $label));
+            }
         }
 
         return array();
     }
 
     /**
-     * Validate data
+     * Helper function that checks if the file was uploaded.
      *
-     * @param array|string $value
-     * @throws \Magento\Core\Exception
-     * @return boolean
+     * This helper function is needed for testing.
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function _isUploadedFile($filename)
+    {
+        return is_uploaded_file($filename);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function validateValue($value)
     {
@@ -200,12 +199,12 @@ class File extends AbstractData
             return true;
         }
 
-        $errors     = array();
-        $attribute  = $this->getAttribute();
-        $label      = $attribute->getStoreLabel();
+        $errors = array();
+        $attribute = $this->getAttribute();
+        $label = $attribute->getStoreLabel();
 
-        $toDelete   = !empty($value['delete']) ? true : false;
-        $toUpload   = !empty($value['tmp_name']) ? true : false;
+        $toDelete = !empty($value['delete']) ? true : false;
+        $toUpload = !empty($value['tmp_name']) ? true : false;
 
         if (!$toUpload && !$toDelete && $this->_value) {
             return true;
@@ -231,11 +230,9 @@ class File extends AbstractData
     }
 
     /**
-     * Export attribute value to entity model
+     * {@inheritdoc}
      *
-     * @param \Magento\Core\Model\AbstractModel $entity
-     * @param array|string $value
-     * @return string
+     * @return $this|string
      */
     public function compactValue($value)
     {
@@ -244,14 +241,14 @@ class File extends AbstractData
         }
 
         $attribute = $this->getAttribute();
-        $original  = $this->_value;
-        $toDelete  = false;
+        $original = $this->_value;
+        $toDelete = false;
         if ($original) {
             if (!$attribute->isRequired() && !empty($value['delete'])) {
-                $toDelete  = true;
+                $toDelete = true;
             }
             if (!empty($value['tmp_name'])) {
-                $toDelete  = true;
+                $toDelete = true;
             }
         }
 
@@ -286,31 +283,23 @@ class File extends AbstractData
     }
 
     /**
-     * Restore attribute value from SESSION to entity model
-     *
-     * @param array|string $value
-     * @return \Magento\Customer\Model\Metadata\Form\File
+     * {@inheritdoc}
      */
     public function restoreValue($value)
     {
-        return $this;
+        return $this->_value;
     }
 
     /**
-     * Return formated attribute value from entity model
-     *
-     * @return string|array
+     * {@inheritdoc}
      */
-    public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $output = '';
         if ($this->_value) {
             switch ($format) {
-                case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON:
-                    $output = array(
-                        'value'     => $this->_value,
-                        'url_key'   => $this->_coreData->urlEncode($this->_value)
-                    );
+                case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_JSON:
+                    $output = array('value' => $this->_value, 'url_key' => $this->_coreData->urlEncode($this->_value));
                     break;
             }
         }

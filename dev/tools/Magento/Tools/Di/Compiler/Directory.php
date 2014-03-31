@@ -22,8 +22,9 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\Di\Compiler;
-use \Zend\Code\Scanner\FileScanner,
-    Magento\Tools\Di\Compiler\Log\Log;
+
+use Zend\Code\Scanner\FileScanner;
+use Magento\Tools\Di\Compiler\Log\Log;
 
 class Directory
 {
@@ -71,7 +72,7 @@ class Directory
     /**
      * @param int $errno
      * @param string $errstr
-     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function errorHandler($errno, $errstr)
@@ -80,9 +81,13 @@ class Directory
     }
 
     /**
+     * Compile class definitions
+     *
      * @param string $path
+     * @param bool $validate
+     * @return void
      */
-    public function compile($path)
+    public function compile($path, $validate = true)
     {
         $rdi = new \RecursiveDirectoryIterator(realpath($path));
         $recursiveIterator = new \RecursiveIteratorIterator($rdi, 1);
@@ -97,7 +102,9 @@ class Directory
                         require_once $item->getRealPath();
                     }
                     try {
-                        $this->_validator->validate($className);
+                        if ($validate) {
+                            $this->_validator->validate($className);
+                        }
                         $signatureReader = new \Magento\Code\Reader\ClassReader();
                         $this->_definitions[$className] = $signatureReader->getConstructor($className);
                         $this->_relations[$className] = $signatureReader->getParents($className);

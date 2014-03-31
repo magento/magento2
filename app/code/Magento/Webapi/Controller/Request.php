@@ -55,6 +55,7 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\App\Requ
      * Set consumer ID.
      *
      * @param int $consumerId
+     * @return void
      */
     public function setConsumerId($consumerId)
     {

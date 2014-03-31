@@ -33,12 +33,15 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Related extends \Magento\Backend\Block\Widget\Grid\Extended
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
+
+class Related extends Extended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -63,7 +66,7 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_type;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Status
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_status;
 
@@ -79,11 +82,11 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
-     * @param \Magento\Catalog\Model\Product\Status $status
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,9 +96,9 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
-        \Magento\Catalog\Model\Product\Status $status,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_linkFactory = $linkFactory;
@@ -111,6 +114,7 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Set grid params
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -118,7 +122,7 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setId('related_product_grid');
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);
-        if ($this->getProduct()&& $this->getProduct()->getId()) {
+        if ($this->getProduct() && $this->getProduct()->getId()) {
             $this->setDefaultFilter(array('in_products' => 1));
         }
         if ($this->isReadonly()) {
@@ -127,9 +131,9 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retirve currently edited product model
+     * Retrieve currently edited product model
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return array|null
      */
     public function getProduct()
     {
@@ -139,8 +143,8 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add filter
      *
-     * @param object $column
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Related
+     * @param Column $column
+     * @return $this
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -153,7 +157,7 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($column->getFilter()->getValue()) {
                 $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
             } else {
-                if($productIds) {
+                if ($productIds) {
                     $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
                 }
             }
@@ -166,14 +170,15 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_linkFactory->create()->useRelatedLinks()
-            ->getProductCollection()
-            ->setProduct($this->getProduct())
-            ->addAttributeToSelect('*');
+        $collection = $this->_linkFactory->create()->useRelatedLinks()->getProductCollection()->setProduct(
+            $this->getProduct()
+        )->addAttributeToSelect(
+            '*'
+        );
 
         if ($this->isReadonly()) {
             $productIds = $this->_getSelectedProducts();
@@ -190,7 +195,7 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Checks when this block is readonly
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadonly()
     {
@@ -200,105 +205,136 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add columns to grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
         if (!$this->isReadonly()) {
-            $this->addColumn('in_products', array(
-                'type'              => 'checkbox',
-                'name'              => 'in_products',
-                'values'            => $this->_getSelectedProducts(),
-                'align'             => 'center',
-                'index'             => 'entity_id',
-                'header_css_class'  => 'col-select',
-                'column_css_class'  => 'col-select'
-            ));
+            $this->addColumn(
+                'in_products',
+                array(
+                    'type' => 'checkbox',
+                    'name' => 'in_products',
+                    'values' => $this->_getSelectedProducts(),
+                    'align' => 'center',
+                    'index' => 'entity_id',
+                    'header_css_class' => 'col-select',
+                    'column_css_class' => 'col-select'
+                )
+            );
         }
 
-        $this->addColumn('entity_id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'index'     => 'entity_id',
-            'header_css_class'  => 'col-id',
-            'column_css_class'  => 'col-id'
-        ));
+        $this->addColumn(
+            'entity_id',
+            array(
+                'header' => __('ID'),
+                'sortable' => true,
+                'index' => 'entity_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
-        $this->addColumn('name', array(
-            'header'    => __('Name'),
-            'index'     => 'name',
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'name',
+            array(
+                'header' => __('Name'),
+                'index' => 'name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('type', array(
-            'header'    => __('Type'),
-            'index'     => 'type_id',
-            'type'      => 'options',
-            'options'   => $this->_type->getOptionArray(),
-            'header_css_class'  => 'col-type',
-            'column_css_class'  => 'col-type'
-        ));
+        $this->addColumn(
+            'type',
+            array(
+                'header' => __('Type'),
+                'index' => 'type_id',
+                'type' => 'options',
+                'options' => $this->_type->getOptionArray(),
+                'header_css_class' => 'col-type',
+                'column_css_class' => 'col-type'
+            )
+        );
 
-        $sets = $this->_setsFactory->create()
-            ->setEntityTypeFilter($this->_productFactory->create()->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
+        $sets = $this->_setsFactory->create()->setEntityTypeFilter(
+            $this->_productFactory->create()->getResource()->getTypeId()
+        )->load()->toOptionHash();
 
-        $this->addColumn('set_name', array(
-            'header'    => __('Attribute Set'),
-            'index'     => 'attribute_set_id',
-            'type'      => 'options',
-            'options'   => $sets,
-            'header_css_class'  => 'col-attr-name',
-            'column_css_class'  => 'col-attr-name'
-        ));
+        $this->addColumn(
+            'set_name',
+            array(
+                'header' => __('Attribute Set'),
+                'index' => 'attribute_set_id',
+                'type' => 'options',
+                'options' => $sets,
+                'header_css_class' => 'col-attr-name',
+                'column_css_class' => 'col-attr-name'
+            )
+        );
 
-        $this->addColumn('status', array(
-            'header'    => __('Status'),
-            'index'     => 'status',
-            'type'      => 'options',
-            'options'   => $this->_status->getOptionArray(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'status',
+            array(
+                'header' => __('Status'),
+                'index' => 'status',
+                'type' => 'options',
+                'options' => $this->_status->getOptionArray(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
-        $this->addColumn('visibility', array(
-            'header'    => __('Visibility'),
-            'index'     => 'visibility',
-            'type'      => 'options',
-            'options'   => $this->_visibility->getOptionArray(),
-            'header_css_class'  => 'col-visibility',
-            'column_css_class'  => 'col-visibility'
-        ));
+        $this->addColumn(
+            'visibility',
+            array(
+                'header' => __('Visibility'),
+                'index' => 'visibility',
+                'type' => 'options',
+                'options' => $this->_visibility->getOptionArray(),
+                'header_css_class' => 'col-visibility',
+                'column_css_class' => 'col-visibility'
+            )
+        );
 
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'index'     => 'sku',
-            'header_css_class'  => 'col-sku',
-            'column_css_class'  => 'col-sku'
-        ));
+        $this->addColumn(
+            'sku',
+            array(
+                'header' => __('SKU'),
+                'index' => 'sku',
+                'header_css_class' => 'col-sku',
+                'column_css_class' => 'col-sku'
+            )
+        );
 
-        $this->addColumn('price', array(
-            'header'        => __('Price'),
-            'type'          => 'currency',
-            'currency_code' => (string) $this->_storeConfig->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE),
-            'index'         => 'price',
-            'header_css_class'  => 'col-price',
-            'column_css_class'  => 'col-price'
-        ));
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'type' => 'currency',
+                'currency_code' => (string)$this->_storeConfig->getConfig(
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE
+                ),
+                'index' => 'price',
+                'header_css_class' => 'col-price',
+                'column_css_class' => 'col-price'
+            )
+        );
 
-        $this->addColumn('position', array(
-            'header'            => __('Position'),
-            'name'              => 'position',
-            'type'              => 'number',
-            'validate_class'    => 'validate-number',
-            'index'             => 'position',
-            'editable'          => !$this->getProduct()->getRelatedReadonly(),
-            'edit_only'         => !$this->getProduct()->getId(),
-            'header_css_class'  => 'col-position',
-            'column_css_class'  => 'col-position'
-        ));
+        $this->addColumn(
+            'position',
+            array(
+                'header' => __('Position'),
+                'name' => 'position',
+                'type' => 'number',
+                'validate_class' => 'validate-number',
+                'index' => 'position',
+                'editable' => !$this->getProduct()->getRelatedReadonly(),
+                'edit_only' => !$this->getProduct()->getId(),
+                'header_css_class' => 'col-position',
+                'column_css_class' => 'col-position'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -310,9 +346,14 @@ class Related extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getData('grid_url')
-            ? $this->getData('grid_url')
-            : $this->getUrl('catalog/*/relatedGrid', array('_current' => true));
+        return $this->getData(
+            'grid_url'
+        ) ? $this->getData(
+            'grid_url'
+        ) : $this->getUrl(
+            'catalog/*/relatedGrid',
+            array('_current' => true)
+        );
     }
 
     /**

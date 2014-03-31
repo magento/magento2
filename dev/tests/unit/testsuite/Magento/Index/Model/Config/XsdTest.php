@@ -102,7 +102,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidIndexersXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidIndexersXmlArray.php');
+        return include __DIR__ . '/_files/invalidIndexersXmlArray.php';
     }
 
     /**
@@ -110,6 +110,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidIndexersMergedXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidIndexersXmlMergedArray.php');
+        return include __DIR__ . '/_files/invalidIndexersXmlMergedArray.php';
     }
 }

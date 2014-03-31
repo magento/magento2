@@ -38,18 +38,18 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
     /**
      * Registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -65,18 +65,17 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->_registry->registry('current_product');
-        $associatedProducts = $product->getTypeInstance()
-            ->getAssociatedProducts($product);
+        $associatedProducts = $product->getTypeInstance()->getAssociatedProducts($product);
         $products = array();
 
         foreach ($associatedProducts as $product) {
             $products[] = array(
-                'id'        => $product->getId(),
-                'sku'       => $product->getSku(),
-                'name'      => $product->getName(),
-                'price'     => $this->_storeManager->getStore()->formatPrice($product->getPrice(), false),
-                'qty'       => $product->getQty(),
-                'position'  => $product->getPosition(),
+                'id' => $product->getId(),
+                'sku' => $product->getSku(),
+                'name' => $product->getName(),
+                'price' => $this->_storeManager->getStore()->formatPrice($product->getPrice(), false),
+                'qty' => $product->getQty(),
+                'position' => $product->getPosition()
             );
         }
         return $products;

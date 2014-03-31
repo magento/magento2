@@ -121,7 +121,7 @@ class Size
     {
         if (!is_numeric($size)) {
             $type = strtoupper(substr($size, -1));
-            $size = (integer)$size;
+            $size = (int)$size;
 
             switch ($type) {
                 case 'K':
@@ -140,7 +140,7 @@ class Size
                     break;
             }
         }
-        return (integer)$size;
+        return (int)$size;
     }
 
     /**

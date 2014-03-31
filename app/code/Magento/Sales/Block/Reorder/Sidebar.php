@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Reorder;
 
 /**
  * Sales order view block
  */
-namespace Magento\Sales\Block\Reorder;
-
-class Sidebar extends \Magento\View\Element\Template
+class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
      * @var string
@@ -52,10 +51,16 @@ class Sidebar extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -63,41 +68,56 @@ class Sidebar extends \Magento\View\Element\Template
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
         $this->_customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
 
     /**
      * Init orders
+     *
+     * @return void
      */
     protected function _construct()
     {
         parent::_construct();
-        if ($this->_customerSession->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             $this->initOrders();
         }
     }
 
     /**
      * Init customer order for display on front
+     *
+     * @return void
      */
     public function initOrders()
     {
-        $customerId = $this->getCustomerId() ? $this->getCustomerId()
-            : $this->_customerSession->getCustomer()->getId();
+        $customerId = $this->getCustomerId() ? $this
+            ->getCustomerId() : $this
+            ->_customerSession
+            ->getCustomer()
+            ->getId();
 
-        $orders = $this->_orderCollectionFactory->create()
-            ->addAttributeToFilter('customer_id', $customerId)
-            ->addAttributeToFilter('state',
-                array('in' => $this->_orderConfig->getVisibleOnFrontStates())
-            )
-            ->addAttributeToSort('created_at', 'desc')
-            ->setPage(1, 1);
+        $orders = $this->_orderCollectionFactory->create()->addAttributeToFilter(
+            'customer_id',
+            $customerId
+        )->addAttributeToFilter(
+            'state',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+        )->addAttributeToSort(
+            'created_at',
+            'desc'
+        )->setPage(
+            1,
+            1
+        );
         //TODO: add filter by current website
 
         $this->setOrders($orders);
@@ -158,8 +178,10 @@ class Sidebar extends \Magento\View\Element\Template
      */
     public function getLastOrder()
     {
-        foreach ($this->getOrders() as $order) {
-            return $order;
+        if ($this->getOrders()) {
+            foreach ($this->getOrders() as $order) {
+                return $order;
+            }
         }
         return false;
     }
@@ -171,6 +193,21 @@ class Sidebar extends \Magento\View\Element\Template
      */
     protected function _toHtml()
     {
-        return $this->_customerSession->isLoggedIn() || $this->getCustomerId() ? parent::_toHtml() : '';
+        $isValid = $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH) || $this->getCustomerId();
+        return $isValid ? parent::_toHtml() : '';
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getItems() as $item) {
+            $identities = array_merge($identities, $item->getProduct()->getIdentities());
+        }
+        return $identities;
     }
 }

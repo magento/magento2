@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Product\Type;
 
 /**
  * Export entity product type simple model
@@ -31,10 +32,7 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export\Entity\Product\Type;
-
-class Simple
-    extends \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType
+class Simple extends \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType
 {
     /**
      * Overridden attributes parameters.
@@ -42,20 +40,20 @@ class Simple
      * @var array
      */
     protected $_attributeOverrides = array(
-        'has_options'      => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
+        'has_options' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
         'required_options' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
-        'created_at'       => array('backend_type' => 'datetime'),
-        'updated_at'       => array('backend_type' => 'datetime')
+        'created_at' => array('backend_type' => 'datetime'),
+        'updated_at' => array('backend_type' => 'datetime')
     );
 
     /**
      * Array of attributes codes which are disabled for export.
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttrs = array(
         'old_id',
-        'recurring_profile',
+        'recurring_payment',
         'is_recurring',
         'tier_price',
         'group_price',

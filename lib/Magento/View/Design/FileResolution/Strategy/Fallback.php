@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\FileResolution\Strategy;
 
 use Magento\App\Filesystem;
@@ -38,21 +37,29 @@ use Magento\Filesystem\Directory\Read;
 class Fallback implements FileInterface, LocaleInterface, ViewInterface
 {
     /**
+     * Fallback factory
+     *
      * @var Factory
      */
     protected $fallbackFactory;
 
     /**
+     * Rule file
+     *
      * @var RuleInterface
      */
     protected $ruleFile;
 
     /**
+     * Rule locale file
+     *
      * @var RuleInterface
      */
     protected $ruleLocaleFile;
 
     /**
+     * Rule view file
+     *
      * @var RuleInterface
      */
     protected $ruleViewFile;
@@ -65,6 +72,8 @@ class Fallback implements FileInterface, LocaleInterface, ViewInterface
     protected $rootDirectory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fallbackFactory
      */
@@ -120,7 +129,11 @@ class Fallback implements FileInterface, LocaleInterface, ViewInterface
     public function getViewFile($area, ThemeInterface $themeModel, $locale, $file, $module = null)
     {
         $params = array(
-            'area' => $area, 'theme' => $themeModel, 'locale' => $locale, 'namespace' => null, 'module' => null
+            'area' => $area,
+            'theme' => $themeModel,
+            'locale' => $locale,
+            'namespace' => null,
+            'module' => null
         );
         if ($module) {
             list($params['namespace'], $params['module']) = explode('_', $module, 2);

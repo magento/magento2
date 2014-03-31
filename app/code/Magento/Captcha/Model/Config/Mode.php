@@ -33,7 +33,7 @@
  */
 namespace Magento\Captcha\Model\Config;
 
-class Mode implements \Magento\Core\Model\Option\ArrayInterface
+class Mode implements \Magento\Option\ArrayInterface
 {
     /**
      * Get options for captcha mode selection field
@@ -43,14 +43,11 @@ class Mode implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'label' => __('Always'),
-                'value' => \Magento\Captcha\Helper\Data::MODE_ALWAYS
-            ),
+            array('label' => __('Always'), 'value' => \Magento\Captcha\Helper\Data::MODE_ALWAYS),
             array(
                 'label' => __('After number of attempts to login'),
                 'value' => \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
-            ),
+            )
         );
     }
 }

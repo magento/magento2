@@ -34,7 +34,7 @@
  */
 namespace Magento\Eav\Model\Resource\Form;
 
-abstract class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
+abstract class Attribute extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Return form attribute IDs by form code
@@ -44,10 +44,13 @@ abstract class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getFormAttributeIds($formCode)
     {
-        $bind   = array('form_code' => $formCode);
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), 'attribute_id')
-            ->where('form_code = :form_code');
+        $bind = array('form_code' => $formCode);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            'attribute_id'
+        )->where(
+            'form_code = :form_code'
+        );
 
         return $this->_getReadAdapter()->fetchCol($select, $bind);
     }

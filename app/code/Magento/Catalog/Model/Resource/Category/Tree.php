@@ -25,16 +25,19 @@ namespace Magento\Catalog\Model\Resource\Category;
 
 class Tree extends \Magento\Data\Tree\Dbp
 {
-    const ID_FIELD    = 'id';
-    const PATH_FIELD  = 'path';
+    const ID_FIELD = 'id';
+
+    const PATH_FIELD = 'path';
+
     const ORDER_FIELD = 'order';
+
     const LEVEL_FIELD = 'level';
 
     /**
      * @var \Magento\Event\ManagerInterface
      */
     private $_eventManager;
-    
+
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
@@ -48,7 +51,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Categories resource collection
      *
-     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     * @var Collection
      */
     protected $_collection;
 
@@ -57,28 +60,28 @@ class Tree extends \Magento\Data\Tree\Dbp
      *
      * @var int
      */
-    protected $_isActiveAttributeId              = null;
+    protected $_isActiveAttributeId = null;
 
     /**
      * Join URL rewrites data to collection flag
      *
      * @var boolean
      */
-    protected $_joinUrlRewriteIntoCollection     = false;
+    protected $_joinUrlRewriteIntoCollection = false;
 
     /**
      * Inactive categories ids
      *
      * @var array
      */
-    protected $_inactiveCategoryIds              = null;
+    protected $_inactiveCategoryIds = null;
 
     /**
-     * store id
+     * Store id
      *
      * @var integer
      */
-    protected $_storeId                          = null;
+    protected $_storeId = null;
 
     /**
      * @var \Magento\App\Resource
@@ -134,10 +137,10 @@ class Tree extends \Magento\Data\Tree\Dbp
             $resource->getConnection('catalog_write'),
             $resource->getTableName('catalog_category_entity'),
             array(
-                \Magento\Data\Tree\Dbp::ID_FIELD       => 'entity_id',
-                \Magento\Data\Tree\Dbp::PATH_FIELD     => 'path',
-                \Magento\Data\Tree\Dbp::ORDER_FIELD    => 'position',
-                \Magento\Data\Tree\Dbp::LEVEL_FIELD    => 'level',
+                \Magento\Data\Tree\Dbp::ID_FIELD => 'entity_id',
+                \Magento\Data\Tree\Dbp::PATH_FIELD => 'path',
+                \Magento\Data\Tree\Dbp::ORDER_FIELD => 'position',
+                \Magento\Data\Tree\Dbp::LEVEL_FIELD => 'level'
             )
         );
         $this->_eventManager = $eventManager;
@@ -149,11 +152,11 @@ class Tree extends \Magento\Data\Tree\Dbp
      * Set store id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @return $this
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = (int) $storeId;
+        $this->_storeId = (int)$storeId;
         return $this;
     }
 
@@ -173,14 +176,18 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Enter description here...
      *
-     * @param \Magento\Catalog\Model\Resource\Category\Collection $collection
+     * @param Collection $collection
      * @param boolean $sorted
      * @param array $exclude
      * @param boolean $toLoad
      * @param boolean $onlyActive
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @return $this
      */
-    public function addCollectionData($collection = null, $sorted = false, $exclude = array(), $toLoad = true,
+    public function addCollectionData(
+        $collection = null,
+        $sorted = false,
+        $exclude = array(),
+        $toLoad = true,
         $onlyActive = false
     ) {
         if (is_null($collection)) {
@@ -220,8 +227,7 @@ class Tree extends \Magento\Data\Tree\Dbp
 
             foreach ($collection as $category) {
                 if ($this->getNodeById($category->getId())) {
-                    $this->getNodeById($category->getId())
-                        ->addData($category->getData());
+                    $this->getNodeById($category->getId())->addData($category->getData());
                 }
             }
 
@@ -238,8 +244,8 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Add inactive categories ids
      *
-     * @param unknown_type $ids
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @param mixed $ids
+     * @return $this
      */
     public function addInactiveCategoryIds($ids)
     {
@@ -253,7 +259,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Retrieve inactive categories ids
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @return $this
      */
     protected function _initInactiveCategoryIds()
     {
@@ -279,7 +285,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Return disable category ids
      *
-     * @param \Magento\Catalog\Model\Resource\Category\Collection $collection
+     * @param Collection $collection
      * @return array
      */
     protected function _getDisabledIds($collection)
@@ -289,10 +295,7 @@ class Tree extends \Magento\Data\Tree\Dbp
         $this->_inactiveItems = $this->getInactiveCategoryIds();
 
 
-        $this->_inactiveItems = array_merge(
-            $this->_getInactiveItemIds($collection, $storeId),
-            $this->_inactiveItems
-        );
+        $this->_inactiveItems = array_merge($this->_getInactiveItemIds($collection, $storeId), $this->_inactiveItems);
 
 
         $allIds = $collection->getAllIds();
@@ -301,7 +304,7 @@ class Tree extends \Magento\Data\Tree\Dbp
         foreach ($allIds as $id) {
             $parents = $this->getNodeById($id)->getPath();
             foreach ($parents as $parent) {
-                if (!$this->_getItemIsActive($parent->getId(), $storeId)){
+                if (!$this->_getItemIsActive($parent->getId(), $storeId)) {
                     $disabledIds[] = $id;
                     continue;
                 }
@@ -320,14 +323,19 @@ class Tree extends \Magento\Data\Tree\Dbp
         if (is_null($this->_isActiveAttributeId)) {
             $bind = array(
                 'entity_type_code' => \Magento\Catalog\Model\Category::ENTITY,
-                'attribute_code'   => 'is_active'
+                'attribute_code' => 'is_active'
             );
-            $select = $this->_conn->select()
-                ->from(array('a' => $this->_coreResource->getTableName('eav_attribute')), array('attribute_id'))
-                ->join(array('t' => $this->_coreResource->getTableName('eav_entity_type')),
-                    'a.entity_type_id = t.entity_type_id')
-                ->where('entity_type_code = :entity_type_code')
-                ->where('attribute_code = :attribute_code');
+            $select = $this->_conn->select()->from(
+                array('a' => $this->_coreResource->getTableName('eav_attribute')),
+                array('attribute_id')
+            )->join(
+                array('t' => $this->_coreResource->getTableName('eav_entity_type')),
+                'a.entity_type_id = t.entity_type_id'
+            )->where(
+                'entity_type_code = :entity_type_code'
+            )->where(
+                'attribute_code = :attribute_code'
+            );
 
             $this->_isActiveAttributeId = $this->_conn->fetchOne($select, $bind);
         }
@@ -337,7 +345,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Retrieve inactive category item ids
      *
-     * @param \Magento\Catalog\Model\Resource\Category\Collection $collection
+     * @param Collection $collection
      * @param int $storeId
      * @return array
      */
@@ -348,24 +356,24 @@ class Tree extends \Magento\Data\Tree\Dbp
 
         $conditionSql = $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $table = $this->_coreResource->getTableName('catalog_category_entity_int');
-        $bind = array(
-            'attribute_id' => $attributeId,
-            'store_id'     => $storeId,
-            'zero_store_id'=> 0,
-            'cond'         => 0,
-
+        $bind = array('attribute_id' => $attributeId, 'store_id' => $storeId, 'zero_store_id' => 0, 'cond' => 0);
+        $select = $this->_conn->select()->from(
+            array('d' => $table),
+            array('d.entity_id')
+        )->where(
+            'd.attribute_id = :attribute_id'
+        )->where(
+            'd.store_id = :zero_store_id'
+        )->where(
+            'd.entity_id IN (?)',
+            new \Zend_Db_Expr($filter)
+        )->joinLeft(
+            array('c' => $table),
+            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = d.entity_id',
+            array()
+        )->where(
+            $conditionSql . ' = :cond'
         );
-        $select = $this->_conn->select()
-            ->from(array('d'=>$table), array('d.entity_id'))
-            ->where('d.attribute_id = :attribute_id')
-            ->where('d.store_id = :zero_store_id')
-            ->where('d.entity_id IN (?)', new \Zend_Db_Expr($filter))
-            ->joinLeft(
-                array('c'=>$table),
-                'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = d.entity_id',
-                array()
-            )
-            ->where($conditionSql . ' = :cond');
 
         return $this->_conn->fetchCol($select, $bind);
     }
@@ -388,7 +396,7 @@ class Tree extends \Magento\Data\Tree\Dbp
      * Get categories collection
      *
      * @param boolean $sorted
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return Collection
      */
     public function getCollection($sorted = false)
     {
@@ -401,7 +409,8 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Clean unneeded collection
      *
-     * @param \Magento\Catalog\Model\Resource\Category\Collection|array $object
+     * @param Collection|array $object
+     * @return void
      */
     protected function _clean($object)
     {
@@ -416,8 +425,8 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Enter description here...
      *
-     * @param \Magento\Catalog\Model\Resource\Category\Collection $collection
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @param Collection $collection
+     * @return $this
      */
     public function setCollection($collection)
     {
@@ -432,7 +441,7 @@ class Tree extends \Magento\Data\Tree\Dbp
      * Enter description here...
      *
      * @param boolean $sorted
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return Collection
      */
     protected function _getDefaultCollection($sorted = false)
     {
@@ -456,14 +465,14 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Executing parents move method and cleaning cache after it
      *
-     * @param unknown_type $category
-     * @param unknown_type $newParent
-     * @param unknown_type $prevNode
+     * @param mixed $category
+     * @param mixed $newParent
+     * @param mixed $prevNode
+     * @return void
      */
     public function move($category, $newParent, $prevNode = null)
     {
-        $this->_catalogCategory
-            ->move($category->getId(), $newParent->getId());
+        $this->_catalogCategory->move($category->getId(), $newParent->getId());
         parent::move($category, $newParent, $prevNode);
 
         $this->_afterMove();
@@ -472,7 +481,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Move tree after
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @return $this
      */
     protected function _afterMove()
     {
@@ -486,17 +495,15 @@ class Tree extends \Magento\Data\Tree\Dbp
      * @param array $ids
      * @param bool $addCollectionData
      * @param bool $updateAnchorProductCount
-     * @return \Magento\Catalog\Model\Resource\Category\Tree
+     * @return $this|bool
      */
     public function loadByIds($ids, $addCollectionData = true, $updateAnchorProductCount = true)
     {
         $levelField = $this->_conn->quoteIdentifier('level');
-        $pathField  = $this->_conn->quoteIdentifier('path');
+        $pathField = $this->_conn->quoteIdentifier('path');
         // load first two levels, if no ids specified
         if (empty($ids)) {
-            $select = $this->_conn->select()
-                ->from($this->_table, 'entity_id')
-                ->where($levelField . ' <= 2');
+            $select = $this->_conn->select()->from($this->_table, 'entity_id')->where($levelField . ' <= 2');
             $ids = $this->_conn->fetchCol($select);
         }
         if (!is_array($ids)) {
@@ -507,18 +514,16 @@ class Tree extends \Magento\Data\Tree\Dbp
         }
 
         // collect paths of specified IDs and prepare to collect all their parents and neighbours
-        $select = $this->_conn->select()
-            ->from($this->_table, array('path', 'level'))
-            ->where('entity_id IN (?)', $ids);
+        $select = $this->_conn->select()->from($this->_table, array('path', 'level'))->where('entity_id IN (?)', $ids);
         $where = array($levelField . '=0' => true);
 
         foreach ($this->_conn->fetchAll($select) as $item) {
-            $pathIds  = explode('/', $item['path']);
+            $pathIds = explode('/', $item['path']);
             $level = (int)$item['level'];
             while ($level > 0) {
                 $pathIds[count($pathIds) - 1] = '%';
                 $path = implode('/', $pathIds);
-                $where["$levelField=$level AND $pathField LIKE '$path'"] = true;
+                $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
                 array_pop($pathIds);
                 $level--;
             }
@@ -574,9 +579,12 @@ class Tree extends \Magento\Data\Tree\Dbp
             } else {
                 $select = clone $this->_select;
             }
-            $select
-                ->where('e.entity_id IN(?)', $pathIds)
-                ->order($this->_conn->getLengthSql('e.path') . ' ' . \Magento\DB\Select::SQL_ASC);
+            $select->where(
+                'e.entity_id IN(?)',
+                $pathIds
+            )->order(
+                $this->_conn->getLengthSql('e.path') . ' ' . \Magento\DB\Select::SQL_ASC
+            );
             $result = $this->_conn->fetchAll($select);
             $this->_updateAnchorProductCount($result);
         }
@@ -586,7 +594,8 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Replace products count with self products count, if category is non-anchor
      *
-     * @param array $data
+     * @param array &$data
+     * @return void
      */
     protected function _updateAnchorProductCount(&$data)
     {
@@ -609,8 +618,7 @@ class Tree extends \Magento\Data\Tree\Dbp
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = array())
     {
-        $select = $this->_getDefaultCollection($sorted ? $this->_orderField : false)
-            ->getSelect();
+        $select = $this->_getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
         // add attributes to select
         $attributes = array('name', 'is_active', 'is_anchor');
         if ($optionalAttributes) {
@@ -622,46 +630,64 @@ class Tree extends \Magento\Data\Tree\Dbp
             $attribute = $resource->getAttribute($attributeCode);
             // join non-static attribute table
             if (!$attribute->getBackend()->isStatic()) {
-                $tableDefault   = sprintf('d_%s', $attributeCode);
-                $tableStore     = sprintf('s_%s', $attributeCode);
-                $valueExpr      = $this->_conn
-                    ->getCheckSql("{$tableStore}.value_id > 0", "{$tableStore}.value", "{$tableDefault}.value");
+                $tableDefault = sprintf('d_%s', $attributeCode);
+                $tableStore = sprintf('s_%s', $attributeCode);
+                $valueExpr = $this->_conn->getCheckSql(
+                    "{$tableStore}.value_id > 0",
+                    "{$tableStore}.value",
+                    "{$tableDefault}.value"
+                );
 
-                $select
-                    ->joinLeft(
-                        array($tableDefault => $attribute->getBackend()->getTable()),
-                        sprintf('%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d'
-                            . ' AND %1$s.entity_type_id=e.entity_type_id AND %1$s.store_id=%3$d',
-                            $tableDefault, $attribute->getId(), \Magento\Core\Model\Store::DEFAULT_STORE_ID),
-                        array($attributeCode => 'value'))
-                    ->joinLeft(
-                        array($tableStore => $attribute->getBackend()->getTable()),
-                        sprintf('%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d'
-                            . ' AND %1$s.entity_type_id=e.entity_type_id AND %1$s.store_id=%3$d',
-                            $tableStore, $attribute->getId(), $this->getStoreId()),
-                        array($attributeCode => $valueExpr)
-                    );
+                $select->joinLeft(
+                    array($tableDefault => $attribute->getBackend()->getTable()),
+                    sprintf(
+                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d' .
+                        ' AND %1$s.entity_type_id=e.entity_type_id AND %1$s.store_id=%3$d',
+                        $tableDefault,
+                        $attribute->getId(),
+                        \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                    ),
+                    array($attributeCode => 'value')
+                )->joinLeft(
+                    array($tableStore => $attribute->getBackend()->getTable()),
+                    sprintf(
+                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d' .
+                        ' AND %1$s.entity_type_id=e.entity_type_id AND %1$s.store_id=%3$d',
+                        $tableStore,
+                        $attribute->getId(),
+                        $this->getStoreId()
+                    ),
+                    array($attributeCode => $valueExpr)
+                );
             }
         }
 
         // count children products qty plus self products qty
-        $categoriesTable         = $this->_coreResource->getTableName('catalog_category_entity');
+        $categoriesTable = $this->_coreResource->getTableName('catalog_category_entity');
         $categoriesProductsTable = $this->_coreResource->getTableName('catalog_category_product');
 
         $subConcat = $this->_conn->getConcatSql(array('e.path', $this->_conn->quote('/%')));
-        $subSelect = $this->_conn->select()
-            ->from(array('see' => $categoriesTable), null)
-            ->joinLeft(
-                array('scp' => $categoriesProductsTable),
-                'see.entity_id=scp.category_id',
-                array('COUNT(DISTINCT scp.product_id)'))
-            ->where('see.entity_id = e.entity_id')
-            ->orWhere('see.path LIKE ?', $subConcat);
+        $subSelect = $this->_conn->select()->from(
+            array('see' => $categoriesTable),
+            null
+        )->joinLeft(
+            array('scp' => $categoriesProductsTable),
+            'see.entity_id=scp.category_id',
+            array('COUNT(DISTINCT scp.product_id)')
+        )->where(
+            'see.entity_id = e.entity_id'
+        )->orWhere(
+            'see.path LIKE ?',
+            $subConcat
+        );
         $select->columns(array('product_count' => $subSelect));
 
-        $subSelect = $this->_conn->select()
-            ->from(array('cp' => $categoriesProductsTable), 'COUNT(cp.product_id)')
-            ->where('cp.category_id = e.entity_id');
+        $subSelect = $this->_conn->select()->from(
+            array('cp' => $categoriesProductsTable),
+            'COUNT(cp.product_id)'
+        )->where(
+            'cp.category_id = e.entity_id'
+        );
 
         $select->columns(array('self_product_count' => $subSelect));
 
@@ -682,9 +708,7 @@ class Tree extends \Magento\Data\Tree\Dbp
         if (!is_array($ids)) {
             $ids = array($ids);
         }
-        $select = $this->_conn->select()
-            ->from($this->_table, array('entity_id'))
-            ->where('entity_id IN (?)', $ids);
+        $select = $this->_conn->select()->from($this->_table, array('entity_id'))->where('entity_id IN (?)', $ids);
         return $this->_conn->fetchCol($select);
     }
 }

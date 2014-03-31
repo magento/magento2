@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class FrontControllerTest extends \PHPUnit_Framework_TestCase
@@ -49,11 +48,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_router = $this->getMock('Magento\App\Router\AbstractRouter',
-            array('match'), array(), '', false);
+        $this->_router = $this->getMock('Magento\App\Router\AbstractRouter', array('match'), array(), '', false);
         $this->_routerList = $this->getMock('Magento\App\RouterList', array(), array(), '', false);
-        $this->_routerList->expects($this->any())
-            ->method('getIterator')->will($this->returnValue($this->_routerList));
+        $this->_routerList->expects($this->any())->method('getIterator')->will($this->returnValue($this->_routerList));
         $this->_model = new \Magento\App\FrontController($this->_routerList);
     }
 
@@ -77,8 +74,10 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->_routerList->expects($this->atLeastOnce())->method('valid')->will($this->returnValue(true));
         $this->_routerList->expects($this->atLeastOnce())->method('current')->will($this->returnValue($this->_router));
         $controllerInstance = $this->getMock('Magento\App\ActionInterface');
+        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $controllerInstance->expects($this->any())->method('getResponse')->will($this->returnValue($response));
         $this->_router->expects($this->atLeastOnce())->method('match')->will($this->returnValue($controllerInstance));
-        $controllerInstance->expects($this->atLeastOnce())->method('dispatch')->with($this->_request);
+        $controllerInstance->expects($this->any())->method('dispatch')->with($this->_request);
         $this->_model->dispatch($this->_request);
     }
 }

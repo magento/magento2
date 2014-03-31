@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model;
 
 /**
  * Custom variable model
@@ -38,13 +39,15 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model;
-
-class Variable extends \Magento\Core\Model\AbstractModel
+class Variable extends \Magento\Model\AbstractModel
 {
     const TYPE_TEXT = 'text';
+
     const TYPE_HTML = 'html';
 
+    /**
+     * @var int
+     */
     protected $_storeId = 0;
 
     /**
@@ -53,16 +56,16 @@ class Variable extends \Magento\Core\Model\AbstractModel
     protected $_escaper = null;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Resource\Variable $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\Core\Model\Resource\Variable $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -74,6 +77,8 @@ class Variable extends \Magento\Core\Model\AbstractModel
 
     /**
      * Internal Constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -85,7 +90,7 @@ class Variable extends \Magento\Core\Model\AbstractModel
      * Setter
      *
      * @param integer $storeId
-     * @return \Magento\Core\Model\Variable
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -107,7 +112,7 @@ class Variable extends \Magento\Core\Model\AbstractModel
      * Load variable by code
      *
      * @param string $code
-     * @return \Magento\Core\Model\Variable
+     * @return $this
      */
     public function loadByCode($code)
     {
@@ -126,7 +131,7 @@ class Variable extends \Magento\Core\Model\AbstractModel
         if ($type === null) {
             $type = self::TYPE_HTML;
         }
-        if ($type == self::TYPE_TEXT || !(strlen((string)$this->getData('html_value')))) {
+        if ($type == self::TYPE_TEXT || !strlen((string)$this->getData('html_value'))) {
             $value = $this->getData('plain_value');
             //escape html if type is html, but html value is not defined
             if ($type == self::TYPE_HTML) {
@@ -140,7 +145,7 @@ class Variable extends \Magento\Core\Model\AbstractModel
     /**
      * Validation of object data. Checking for unique variable code
      *
-     * @return boolean | string
+     * @return bool|string
      */
     public function validate()
     {
@@ -157,7 +162,7 @@ class Variable extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve variables option array
      *
-     * @param boolean $withValues
+     * @param bool $withGroup
      * @return array
      */
     public function getVariablesOptionArray($withGroup = false)
@@ -172,12 +177,8 @@ class Variable extends \Magento\Core\Model\AbstractModel
             );
         }
         if ($withGroup && $variables) {
-            $variables = array(
-                'label' => __('Custom Variables'),
-                'value' => $variables
-            );
+            $variables = array('label' => __('Custom Variables'), 'value' => $variables);
         }
         return $variables;
     }
-
 }

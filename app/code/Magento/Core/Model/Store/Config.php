@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Store;
 
 class Config implements \Magento\Core\Model\Store\ConfigInterface
@@ -67,8 +66,8 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
      * Retrieve store config value
      *
      * @param string $path
-     * @param mixed $store
-     * @return mixed
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @return string|null
      */
     public function getConfig($path, $store = null)
     {
@@ -79,7 +78,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
      * Retrieve store config flag
      *
      * @param string $path
-     * @param mixed $store
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
      * @return bool
      */
     public function getConfigFlag($path, $store = null)
@@ -91,7 +90,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
     /**
      * Retrieve store Ids for $path with checking
      *
-     * if empty $allowValues then retrieve all stores values
+     * If empty $allowValues then retrieve all stores values
      *
      * return array($storeId => $pathValue)
      *

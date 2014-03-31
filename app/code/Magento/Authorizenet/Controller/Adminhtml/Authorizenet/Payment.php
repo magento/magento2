@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet;
 
 /**
  * Authorize Payment Controller
  *
- * @category   Magento
- * @package    Magento_Authorizenet
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet;
-
 class Payment extends \Magento\Backend\App\Action
 {
     /**
@@ -54,30 +51,33 @@ class Payment extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
-
     /**
-     * Cancel active partail authorizations
+     * Cancel active partial authorizations
+     *
+     * @return void
      */
     public function cancelAction()
     {
         $result['success'] = false;
         try {
-            $paymentMethod = $this->_objectManager->get('Magento\Payment\Helper\Data')
-                ->getMethodInstance(\Magento\Authorizenet\Model\Authorizenet::METHOD_CODE);
+            $paymentMethod = $this->_objectManager->get(
+                'Magento\Payment\Helper\Data'
+            )->getMethodInstance(
+                \Magento\Authorizenet\Model\Authorizenet::METHOD_CODE
+            );
 
             if ($paymentMethod) {
-                $paymentMethod->setStore(
-                    $this->_sessionQuote->getQuote()->getStoreId()
-                );
-                $paymentMethod->cancelPartialAuthorization(
-                    $this->_sessionQuote->getQuote()->getPayment()
-                );
+                $paymentMethod->setStore($this->_sessionQuote->getQuote()->getStoreId());
+                $paymentMethod->cancelPartialAuthorization($this->_sessionQuote->getQuote()->getPayment());
             }
 
-            $result['success']  = true;
-            $result['update_html'] = $this->_objectManager->get('Magento\Authorizenet\Helper\Data')
-                ->getPaymentMethodsHtml($this->_view);
-        } catch (\Magento\Core\Exception $e) {
+            $result['success'] = true;
+            $result['update_html'] = $this->_objectManager->get(
+                'Magento\Authorizenet\Helper\Data'
+            )->getPaymentMethodsHtml(
+                $this->_view
+            );
+        } catch (\Magento\Model\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['error_message'] = $e->getMessage();
         } catch (\Exception $e) {

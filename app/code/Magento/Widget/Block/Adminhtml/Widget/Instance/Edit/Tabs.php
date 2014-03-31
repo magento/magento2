@@ -38,6 +38,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Internal constructor
      *
+     * @return void
      */
     protected function _construct()
     {

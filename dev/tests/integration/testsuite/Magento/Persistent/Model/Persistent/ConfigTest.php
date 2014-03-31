@@ -37,18 +37,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(
-                'Magento\App\Filesystem\DirectoryList',
-                array(
-                    'root' => \Magento\App\Filesystem::ROOT_DIR,
-                    'directories' => array(
-                        \Magento\App\Filesystem::MODULES_DIR => array('path' => dirname(__DIR__))
-                    ),
-                )
-            );
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Filesystem\DirectoryList',
+            array(
+                'root' => \Magento\App\Filesystem::ROOT_DIR,
+                'directories' => array(\Magento\App\Filesystem::MODULES_DIR => array('path' => dirname(__DIR__)))
+            )
+        );
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Filesystem',
+            array('directoryList' => $directoryList)
+        );
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create(
@@ -79,5 +78,4 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $blocks = $this->_model->getBlockConfigInfo('Magento\Catalog\Block\Product\Compare\ListCompare');
         $this->assertEquals(array(), $blocks);
     }
-
 }

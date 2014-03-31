@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Rule;
 
 /**
  * SalesRule Rule Customer Model Resource
@@ -32,13 +32,12 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Rule;
-
-class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Customer extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
-     * constructor
+     * Constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -51,14 +50,18 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\SalesRule\Model\Rule\Customer $rule
      * @param int $customerId
      * @param int $ruleId
-     * @return \Magento\SalesRule\Model\Resource\Rule\Customer
+     * @return $this
      */
     public function loadByCustomerRule($rule, $customerId, $ruleId)
     {
         $read = $this->_getReadAdapter();
-        $select = $read->select()->from($this->getMainTable())
-            ->where('customer_id = :customer_id')
-            ->where('rule_id = :rule_id');
+        $select = $read->select()->from(
+            $this->getMainTable()
+        )->where(
+            'customer_id = :customer_id'
+        )->where(
+            'rule_id = :rule_id'
+        );
         $data = $read->fetchRow($select, array(':rule_id' => $ruleId, ':customer_id' => $customerId));
         if (false === $data) {
             // set empty data, as an existing rule object might be used

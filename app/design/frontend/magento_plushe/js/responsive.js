@@ -35,11 +35,10 @@
                 $('.action.showcart').addClass('is-disabled');
 
                 $('.action.showcart').on( "click", function() {
-                if ($(this).hasClass('is-disabled')) {
-                    window.location = $(this).attr("href");
-                }
+                    if ($(this).hasClass('is-disabled')) {
+                        window.location = $(this).attr("href");
+                    }
                 });
-
 
                 $('.action.toggle.checkout.progress')
                     .on('click.gotoCheckoutProgress', function(e){
@@ -59,7 +58,7 @@
                     var productInfoMain = $('.product.info.main'),
                         productInfoAdditional = $("#product-info-additional");
 
-                    if(!productInfoAdditional.length) {
+                    if (!productInfoAdditional.length) {
 
                         var productTitle = productInfoMain.find(".page.title.product").clone(),
                             productStock = productInfoMain.find(".stock:not(.alert)").clone();
@@ -83,7 +82,18 @@
                     productInfoMain.addClass("responsive");
 
                 })();
-
+                var galleryElement = $('[data-role=media-gallery]');
+                setTimeout(function(){
+                    if (galleryElement.length && galleryElement.data('zoom')) {
+                        galleryElement.zoom('disable');
+                    }
+                    if (galleryElement.length && galleryElement.data('gallery')) {
+                        galleryElement.gallery("option","disableLinks",false);
+                    }
+                    if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
+                        galleryElement.galleryFullScreen('disable');
+                    }
+                }, 2000);
 
             },
 
@@ -104,6 +114,16 @@
 
                 })();
 
+                var galleryElement = $('[data-role=media-gallery]');
+                if (galleryElement.length && galleryElement.data('zoom')) {
+                    galleryElement.zoom('enable');
+                                    }
+                if (galleryElement.length && galleryElement.data('gallery')) {
+                    galleryElement.gallery("option","disableLinks",true);
+                }
+                if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
+                    galleryElement.galleryFullScreen('enable');
+                }
             }
         });
     });

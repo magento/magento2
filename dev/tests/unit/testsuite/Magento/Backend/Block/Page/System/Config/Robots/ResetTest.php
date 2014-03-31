@@ -44,9 +44,7 @@ class ResetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->coreConfigMock = $this->getMock(
-            'Magento\App\ConfigInterface', array(), array(), '', false
-        );
+        $this->coreConfigMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
 
         $this->_resetRobotsBlock = new Reset(
             $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false),
@@ -61,9 +59,13 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     public function testGetRobotsDefaultCustomInstructions()
     {
         $expectedInstructions = 'User-agent: *';
-        $this->coreConfigMock->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue($expectedInstructions));
+        $this->coreConfigMock->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->will(
+            $this->returnValue($expectedInstructions)
+        );
         $this->assertEquals($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
     }
 }

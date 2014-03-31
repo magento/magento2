@@ -24,13 +24,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource;
 
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\Helper
+     * @var \Magento\DB\Helper
      */
     protected $_model;
 
@@ -42,11 +41,12 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Helper',
+            'Magento\DB\Helper',
             array('modulePrefix' => 'core')
         );
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Store\Collection');
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Resource\Store\Collection'
+        );
         $this->_select = $collection->getSelect();
     }
 
@@ -67,13 +67,13 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $diff = $this->_model->getDateDiff('2011-01-01', '2011-01-01');
         $this->assertInstanceOf('Zend_Db_Expr', $diff);
-        $this->assertContains('TO_DAYS', (string) $diff);
+        $this->assertContains('TO_DAYS', (string)$diff);
     }
 
     public function testAddLikeEscape()
     {
         $value = $this->_model->addLikeEscape('test');
         $this->assertInstanceOf('Zend_Db_Expr', $value);
-        $this->assertContains('test', (string) $value);
+        $this->assertContains('test', (string)$value);
     }
 }

@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Model\Resource;
 
+use Magento\Model\AbstractModel;
 
 /**
  * SalesRule Resource Coupon
@@ -32,34 +34,33 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource;
-
-class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Coupon extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Constructor adds unique fields
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('salesrule_coupon', 'coupon_id');
-        $this->addUniqueField(array(
-            'field' => 'code',
-            'title' => __('Coupon with the same code')
-        ));
+        $this->addUniqueField(array('field' => 'code', 'title' => __('Coupon with the same code')));
     }
 
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param AbstractModel $object
+     * @return $this
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(AbstractModel $object)
     {
         if (!$object->getExpirationDate()) {
             $object->setExpirationDate(null);
         } else if ($object->getExpirationDate() instanceof \Zend_Date) {
-            $object->setExpirationDate($object->getExpirationDate()->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+            $object->setExpirationDate(
+                $object->getExpirationDate()->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+            );
         }
 
         // maintain single primary coupon per rule
@@ -74,7 +75,7 @@ class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\SalesRule\Model\Coupon $object
      * @param \Magento\SalesRule\Model\Rule|int $rule
-     * @return unknown
+     * @return bool
      */
     public function loadPrimaryByRule(\Magento\SalesRule\Model\Coupon $object, $rule)
     {
@@ -86,9 +87,13 @@ class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
             $ruleId = (int)$rule;
         }
 
-        $select = $read->select()->from($this->getMainTable())
-            ->where('rule_id = :rule_id')
-            ->where('is_primary = :is_primary');
+        $select = $read->select()->from(
+            $this->getMainTable()
+        )->where(
+            'rule_id = :rule_id'
+        )->where(
+            'is_primary = :is_primary'
+        );
 
         $data = $read->fetchRow($select, array(':rule_id' => $ruleId, ':is_primary' => 1));
 
@@ -125,7 +130,7 @@ class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Update auto generated Specific Coupon if it's rule changed
      *
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @return \Magento\SalesRule\Model\Resource\Coupon
+     * @return $this
      */
     public function updateSpecificCoupons(\Magento\SalesRule\Model\Rule $rule)
     {
@@ -142,8 +147,8 @@ class Coupon extends \Magento\Core\Model\Resource\Db\AbstractDb
             $updateArray['usage_per_customer'] = $rule->getUsesPerCustomer();
         }
 
-        $ruleNewDate = new \Zend_Date($rule->getToDate());
-        $ruleOldDate = new \Zend_Date($rule->getOrigData('to_date'));
+        $ruleNewDate = new \Magento\Stdlib\DateTime\Date($rule->getToDate());
+        $ruleOldDate = new \Magento\Stdlib\DateTime\Date($rule->getOrigData('to_date'));
 
         if ($ruleNewDate->compare($ruleOldDate)) {
             $updateArray['expiration_date'] = $rule->getToDate();

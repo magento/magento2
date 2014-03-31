@@ -23,8 +23,8 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use Magento\Webapi\Model\Config\Converter,
-    Magento\Filesystem\Directory\ReadInterface;
+use Magento\Webapi\Model\Config\Converter;
+use Magento\Filesystem\Directory\ReadInterface;
 
 /**
  * Webapi Config Model for Soap.
@@ -35,10 +35,15 @@ class Config
      * Keys that a used for service config internal representation.
      */
     const KEY_CLASS = 'class';
+
     const KEY_IS_SECURE = 'isSecure';
+
     const KEY_METHOD = 'method';
+
     const KEY_IS_REQUIRED = 'inputRequired';
+
     const KEY_ACL_RESOURCES = 'resources';
+
     /**#@-*/
 
     /** @var ReadInterface */
@@ -154,7 +159,7 @@ class Config
                         self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES]
                     );
                     $this->_soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
-                };
+                }
                 $reflectedMethodsMetadata = $this->_classReflector->reflectClassMethods(
                     $serviceClass,
                     $this->_soapServices[$serviceName]['methods']
@@ -164,7 +169,7 @@ class Config
                     $this->_soapServices[$serviceName]['methods'],
                     $reflectedMethodsMetadata
                 );
-            };
+            }
         }
         return $this->_soapServices;
     }

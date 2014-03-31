@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Collection;
 
 class DbTest extends \PHPUnit_Framework_TestCase
@@ -32,41 +31,70 @@ class DbTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Data\Collection\Db
      */
-    protected $_collection;
+    protected $collection;
+
+    /**
+     * @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityFactoryMock;
+
+    /**
+     * @var \Magento\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fetchStrategyMock;
 
     protected function setUp()
     {
-        $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_collection = new \Magento\Data\Collection\Db($entityFactory, $logger, $fetchStrategy);
+        $this->fetchStrategyMock = $this->getMock(
+            'Magento\Data\Collection\Db\FetchStrategy\Query', array('fetchAll'), array(), '', false
+        );
+        $this->entityFactoryMock = $this->getMock(
+            'Magento\Core\Model\EntityFactory', array('create'), array(), '', false
+        );
+        $this->loggerMock = $this->getMock('Magento\Logger', array('log'), array(), '', false);
+        $this->collection = new \Magento\Data\Collection\Db(
+            $this->entityFactoryMock,
+            $this->loggerMock,
+            $this->fetchStrategyMock
+        );
     }
 
     protected function tearDown()
     {
-        unset($this->_collection);
+        unset($this->collection);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Zend_Db_Adapter_Abstract
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Adapter_Abstract
      */
     public function testSetAddOrder()
     {
         $adapter = $this->getMockForAbstractClass(
-            'Zend_Db_Adapter_Abstract', array(), '', false, true, true, array('fetchAll')
+            'Zend_Db_Adapter_Abstract',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('fetchAll')
         );
-        $this->_collection->setConnection($adapter);
+        $this->collection->setConnection($adapter);
 
-        $select = $this->_collection->getSelect();
+        $select = $this->collection->getSelect();
         $this->assertEmpty($select->getPart(\Zend_Db_Select::ORDER));
 
         /* Direct access to select object is available and many places are using it for sort order declaration */
         $select->order('select_field', \Magento\Data\Collection::SORT_ORDER_ASC);
-        $this->_collection->addOrder('some_field', \Magento\Data\Collection::SORT_ORDER_ASC);
-        $this->_collection->setOrder('other_field', \Magento\Data\Collection::SORT_ORDER_ASC);
-        $this->_collection->addOrder('other_field', \Magento\Data\Collection::SORT_ORDER_DESC);
+        $this->collection->addOrder('some_field', \Magento\Data\Collection::SORT_ORDER_ASC);
+        $this->collection->setOrder('other_field', \Magento\Data\Collection::SORT_ORDER_ASC);
+        $this->collection->addOrder('other_field', \Magento\Data\Collection::SORT_ORDER_DESC);
 
-        $this->_collection->load();
+        $this->collection->load();
         $selectOrders = $select->getPart(\Zend_Db_Select::ORDER);
         $this->assertEquals(array('select_field', 'ASC'), array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
@@ -82,12 +110,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnshiftOrder($adapter)
     {
-        $this->_collection->setConnection($adapter);
-        $this->_collection->addOrder('some_field', \Magento\Data\Collection::SORT_ORDER_ASC);
-        $this->_collection->unshiftOrder('other_field', \Magento\Data\Collection::SORT_ORDER_ASC);
+        $this->collection->setConnection($adapter);
+        $this->collection->addOrder('some_field', \Magento\Data\Collection::SORT_ORDER_ASC);
+        $this->collection->unshiftOrder('other_field', \Magento\Data\Collection::SORT_ORDER_ASC);
 
-        $this->_collection->load();
-        $selectOrders = $this->_collection->getSelect()->getPart(\Zend_Db_Select::ORDER);
+        $this->collection->load();
+        $selectOrders = $this->collection->getSelect()->getPart(\Zend_Db_Select::ORDER);
         $this->assertEquals('other_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
@@ -99,14 +127,20 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testAddFieldToFilter()
     {
         $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('prepareSqlCondition'), array(), '', false);
-        $adapter->expects($this->any())
-            ->method('prepareSqlCondition')
-            ->with($this->stringContains('is_imported'), $this->anything())
-            ->will($this->returnValue('is_imported = 1'));
-        $this->_collection->setConnection($adapter);
-        $select = $this->_collection->getSelect()->from('test');
+        $adapter->expects(
+            $this->any()
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            $this->stringContains('is_imported'),
+            $this->anything()
+        )->will(
+            $this->returnValue('is_imported = 1')
+        );
+        $this->collection->setConnection($adapter);
+        $select = $this->collection->getSelect()->from('test');
 
-        $this->_collection->addFieldToFilter('is_imported', array('eq' => '1'));
+        $this->collection->addFieldToFilter('is_imported', array('eq' => '1'));
         $this->assertEquals('SELECT `test`.* FROM `test` WHERE (is_imported = 1)', $select->assemble());
     }
 
@@ -117,18 +151,30 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testAddFieldToFilterWithMultipleParams()
     {
         $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('prepareSqlCondition'), array(), '', false);
-        $adapter->expects($this->at(0))
-            ->method('prepareSqlCondition')
-            ->with('`weight`', array('in' => array(1, 3)))
-            ->will($this->returnValue('weight in (1, 3)'));
-        $adapter->expects($this->at(1))
-            ->method('prepareSqlCondition')
-            ->with('`name`', array('like' => 'M%'))
-            ->will($this->returnValue("name like 'M%'"));
-        $this->_collection->setConnection($adapter);
-        $select = $this->_collection->getSelect()->from("test");
+        $adapter->expects(
+            $this->at(0)
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            '`weight`',
+            array('in' => array(1, 3))
+        )->will(
+            $this->returnValue('weight in (1, 3)')
+        );
+        $adapter->expects(
+            $this->at(1)
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            '`name`',
+            array('like' => 'M%')
+        )->will(
+            $this->returnValue("name like 'M%'")
+        );
+        $this->collection->setConnection($adapter);
+        $select = $this->collection->getSelect()->from("test");
 
-        $this->_collection->addFieldToFilter(
+        $this->collection->addFieldToFilter(
             array('weight', 'name'),
             array(array('in' => array(1, 3)), array('like' => 'M%'))
         );
@@ -138,15 +184,18 @@ class DbTest extends \PHPUnit_Framework_TestCase
             $select->assemble()
         );
 
-        $adapter->expects($this->at(0))
-            ->method('prepareSqlCondition')
-            ->with(
-                '`is_imported`',
-                $this->anything()
-            )
-            ->will($this->returnValue('is_imported = 1'));
+        $adapter->expects(
+            $this->at(0)
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            '`is_imported`',
+            $this->anything()
+        )->will(
+            $this->returnValue('is_imported = 1')
+        );
 
-        $this->_collection->addFieldToFilter('is_imported', array('eq' => '1'));
+        $this->collection->addFieldToFilter('is_imported', array('eq' => '1'));
         $this->assertEquals(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%')) AND (is_imported = 1)",
             $select->assemble()
@@ -158,20 +207,28 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilterValueContainsQuestionMark()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'prepareSqlCondition', 'supportStraightJoin'), array(), '', false
+        $adapter = $this->getMock(
+            'Zend_Db_Adapter_Pdo_Mysql',
+            array('select', 'prepareSqlCondition', 'supportStraightJoin'),
+            array(),
+            '',
+            false
         );
-        $adapter->expects($this->once())
-            ->method('prepareSqlCondition')
-            ->with('`email`', array('like' => 'value?'))
-            ->will($this->returnValue('email LIKE \'%value?%\''));
-        $adapter->expects($this->once())
-            ->method('select')
-            ->will($this->returnValue(new \Magento\DB\Select($adapter)));
-        $this->_collection->setConnection($adapter);
+        $adapter->expects(
+            $this->once()
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            '`email`',
+            array('like' => 'value?')
+        )->will(
+            $this->returnValue('email LIKE \'%value?%\'')
+        );
+        $adapter->expects($this->once())->method('select')->will($this->returnValue(new \Magento\DB\Select($adapter)));
+        $this->collection->setConnection($adapter);
 
-        $select = $this->_collection->getSelect()->from('test');
-        $this->_collection->addFieldToFilter('email', array('like' => 'value?'));
+        $select = $this->collection->getSelect()->from('test');
+        $this->collection->addFieldToFilter('email', array('like' => 'value?'));
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
     }
 
@@ -180,20 +237,36 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilterFieldIsQuoted()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
-            array('quoteIdentifier', 'prepareSqlCondition'), array(), '', false);
-        $adapter->expects($this->once())
-            ->method('quoteIdentifier')
-            ->with('email')
-            ->will($this->returnValue('`email`'));
-        $adapter->expects($this->any())
-            ->method('prepareSqlCondition')
-            ->with($this->stringContains('`email`'), $this->anything())
-            ->will($this->returnValue('`email` = "foo@example.com"'));
-        $this->_collection->setConnection($adapter);
-        $select = $this->_collection->getSelect()->from('test');
+        $adapter = $this->getMock(
+            'Zend_Db_Adapter_Pdo_Mysql',
+            array('quoteIdentifier', 'prepareSqlCondition'),
+            array(),
+            '',
+            false
+        );
+        $adapter->expects(
+            $this->once()
+        )->method(
+            'quoteIdentifier'
+        )->with(
+            'email'
+        )->will(
+            $this->returnValue('`email`')
+        );
+        $adapter->expects(
+            $this->any()
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            $this->stringContains('`email`'),
+            $this->anything()
+        )->will(
+            $this->returnValue('`email` = "foo@example.com"')
+        );
+        $this->collection->setConnection($adapter);
+        $select = $this->collection->getSelect()->from('test');
 
-        $this->_collection->addFieldToFilter('email', array('eq' => 'foo@example.com'));
+        $this->collection->addFieldToFilter('email', array('eq' => 'foo@example.com'));
         $this->assertEquals('SELECT `test`.* FROM `test` WHERE (`email` = "foo@example.com")', $select->assemble());
     }
 
@@ -206,13 +279,15 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testClone()
     {
         $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', array(), '', false);
-        $this->_collection->setConnection($adapter);
-        $this->assertInstanceOf('Zend_Db_Select', $this->_collection->getSelect());
+        $this->collection->setConnection($adapter);
+        $this->assertInstanceOf('Zend_Db_Select', $this->collection->getSelect());
 
-        $clonedCollection = clone $this->_collection;
+        $clonedCollection = clone $this->collection;
 
         $this->assertInstanceOf('Zend_Db_Select', $clonedCollection->getSelect());
-        $this->assertNotSame($clonedCollection->getSelect(), $this->_collection->getSelect(),
+        $this->assertNotSame(
+            $clonedCollection->getSelect(),
+            $this->collection->getSelect(),
             'Collection was cloned but $this->_select in both initial and cloned collections reference the same object'
         );
     }
@@ -228,16 +303,16 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testPrintLogQueryPrinting($printQuery, $printFlag, $query, $expected)
     {
         $this->expectOutputString($expected);
-        $this->_collection->setFlag('print_query', $printFlag);
-        $this->_collection->printLogQuery($printQuery, false, $query);
+        $this->collection->setFlag('print_query', $printFlag);
+        $this->collection->printLogQuery($printQuery, false, $query);
     }
 
     public function printLogQueryPrintingDataProvider()
     {
         return array(
             array(false, false, 'some_query', ''),
-            array(true,  false, 'some_query', 'some_query'),
-            array(false,  true, 'some_query', 'some_query'),
+            array(true, false, 'some_query', 'some_query'),
+            array(false, true, 'some_query', 'some_query')
         );
     }
 
@@ -250,17 +325,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrintLogQueryLogging($logQuery, $logFlag, $expectedCalls)
     {
-        $fetchStrategy = $this->getMock('Magento\Data\Collection\Db\FetchStrategyInterface');
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $collection = $this->getMock(
-            'Magento\Data\Collection\Db',
-            array('_logQuery'),
-            array($entityFactory, $logger, $fetchStrategy)
-        );
-        $collection->setFlag('log_query', $logFlag);
-        $collection->expects($this->exactly($expectedCalls))->method('_logQuery');
-        $collection->printLogQuery(false, $logQuery, 'some_query');
+        $this->collection->setFlag('log_query', $logFlag);
+        $this->loggerMock->expects($this->exactly($expectedCalls))->method('log');
+        $this->collection->printLogQuery(false, $logQuery, 'some_query');
     }
 
     public function printLogQueryLoggingDataProvider()
@@ -270,5 +337,226 @@ class DbTest extends \PHPUnit_Framework_TestCase
             array(false, true, 1),
             array(false, false, 0),
         );
+    }
+
+    /**
+     * @expectedException \Zend_Exception
+     * @expectedExceptionMessage dbModel read resource does not implement \Zend_Db_Adapter_Abstract
+     */
+    public function testSetConnectionException()
+    {
+        $adapter = new \stdClass();
+        $this->collection->setConnection($adapter);
+    }
+
+    public function testFetchItem()
+    {
+        $data = array(1 => 'test');
+        $counter = 0;
+        $statementMock = $this->getMock('Zend_Db_Statement_Pdo', array('fetch'), array(), '', false);
+        $statementMock->expects($this->exactly(2))
+            ->method('fetch')
+            ->will($this->returnCallback(function () use (&$counter, $data) {
+                return ++$counter % 2 ? array() : $data;
+            }));
+
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
+            array('select', 'query'), array(), '', false);
+        $selectMock = $this->getMock(
+            'Magento\DB\Select', array(), array('adapter' => $adapterMock)
+        );
+        $adapterMock->expects($this->once())
+            ->method('query')
+            ->with($selectMock, $this->anything())
+            ->will($this->returnValue($statementMock));
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+
+        $this->collection->setConnection($adapterMock);
+        $this->assertFalse($this->collection->fetchItem());
+
+        $objectMock = $this->getMock('Magento\Object', array('setData'), array());
+        $objectMock->expects($this->once())
+            ->method('setData')
+            ->with($data);
+        $this->entityFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Object')
+            ->will($this->returnValue($objectMock));
+
+        $this->assertEquals($objectMock, $this->collection->fetchItem());
+    }
+
+    public function testGetSize()
+    {
+        $countSql = 500;
+        $adapterMock = $this->getMock(
+            'Zend_Db_Adapter_Pdo_Mysql',
+            array('select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'),
+            array(),
+            '',
+            false
+        );
+        $selectMock = $this->getMock(
+            'Magento\DB\Select', array('orWhere', 'where', 'reset', 'columns'), array('adapter' => $adapterMock)
+        );
+        $selectMock->expects($this->exactly(4))
+            ->method('reset');
+        $selectMock->expects($this->once())
+            ->method('columns')
+            ->with('COUNT(*)');
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+        $adapterMock->expects($this->exactly(2))
+            ->method('quoteInto')
+            ->will($this->returnValueMap(array(
+                        array('testField1=?', 'testValue1', null, null, 'testField1=testValue1'),
+                        array('testField4=?', 'testValue4', null, null, 'testField4=testValue4'),
+                    )));
+        $selectMock->expects($this->once())
+            ->method('orWhere')
+            ->with('testField1=testValue1');
+        $selectMock->expects($this->exactly(3))
+            ->method('where')
+            ->will($this->returnValueMap(array(
+                array('testValue2', $this->returnSelf()),
+                array('testField3 = testValue3', null, \Magento\DB\Select::TYPE_CONDITION, $this->returnSelf()),
+                array('testField4=testValue4', $this->returnSelf()),
+            )));
+        $adapterMock->expects($this->once())
+            ->method('prepareSqlCondition')
+            ->with('testField3', 'testValue3')
+            ->will($this->returnValue('testField3 = testValue3'));
+        $adapterMock->expects($this->once())
+            ->method('fetchOne')
+            ->with($selectMock, array())
+            ->will($this->returnValue($countSql));
+
+        $this->collection->addFilter('testField1', 'testValue1', 'or');
+        $this->collection->addFilter('testField2', 'testValue2', 'string');
+        $this->collection->addFilter('testField3', 'testValue3', 'public');
+        $this->collection->addFilter('testField4', 'testValue4');
+        $this->collection->setConnection($adapterMock);
+        $this->assertEquals($countSql, $this->collection->getSize());
+        $this->assertEquals($countSql, $this->collection->getSize());
+    }
+
+    public function testGetSelectSql()
+    {
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('select'), array(), '', false);
+        $selectMock = $this->getMock(
+            'Magento\DB\Select', array('__toString'), array('adapter' => $adapterMock)
+        );
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+
+        $sql = 'query';
+        $selectMock->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue($sql));
+
+        $this->collection->setConnection($adapterMock);
+        $this->assertEquals($sql, $this->collection->getSelectSql(true));
+        $this->assertEquals($selectMock, $this->collection->getSelectSql());
+    }
+
+    public function testGetData()
+    {
+        $adapterMock = $this->getMock(
+            'Zend_Db_Adapter_Pdo_Mysql',
+            array('select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'),
+            array(),
+            '',
+            false
+        );
+        $selectMock = $this->getMock(
+            'Magento\DB\Select', array('orWhere', 'where', 'reset', 'columns'), array('adapter' => $adapterMock)
+        );
+        $selectMock->expects($this->once())
+            ->method('where')
+            ->with('aliasField3 = testValue3', null, \Magento\DB\Select::TYPE_CONDITION)
+            ->will($this->returnSelf());
+
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+        $adapterMock->expects($this->once())
+            ->method('prepareSqlCondition')
+            ->with('aliasField3', 'testValue3')
+            ->will($this->returnValue('aliasField3 = testValue3'));
+
+        $this->collection->addFilter('testField3', 'testValue3', 'public');
+        $this->collection->addFilterToMap('testFilter', 'testAlias', 'testGroup');
+        $this->collection->addFilterToMap('testField3', 'aliasField3');
+
+        $this->collection->setConnection($adapterMock);
+        $this->assertNull($this->collection->getData());
+    }
+
+    /**
+     * @dataProvider distinctDataProvider
+     */
+    public function testDistinct($flag, $expectedFlag)
+    {
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('select'), array(), '', false);
+        $selectMock = $this->getMock('Magento\DB\Select', array('distinct'), array('adapter' => $adapterMock));
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())
+            ->method('distinct')
+            ->with($expectedFlag);
+
+        $this->collection->setConnection($adapterMock);
+        $this->collection->distinct($flag);
+    }
+
+    public function distinctDataProvider()
+    {
+        return array(
+            array(true, true),
+            array(false, false),
+        );
+    }
+
+    public function testToOptionHash()
+    {
+        $data = array(10 => 'test');
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
+            array('select', 'query'), array(), '', false);
+        $selectMock = $this->getMock(
+            'Magento\DB\Select', array(), array('adapter' => $adapterMock)
+        );
+        $adapterMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+
+        $this->fetchStrategyMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($selectMock, array())
+            ->will($this->returnValue(array($data)));
+
+        $objectMock = $this->getMock('Magento\Object', array('addData', 'setIdFieldName', 'getData'), array());
+        $objectMock->expects($this->once())
+            ->method('addData')
+            ->with($data);
+        $objectMock->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValueMap(array(
+                array(null, null, 10),
+                array('name', null, 'test'),
+            )));
+        $this->entityFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Object')
+            ->will($this->returnValue($objectMock));
+
+        $this->collection->setConnection($adapterMock);
+        $this->collection->loadData(false, false);
+        $this->collection->loadData(false, false);
+        $this->assertEquals($data, $this->collection->toOptionHash());
     }
 }

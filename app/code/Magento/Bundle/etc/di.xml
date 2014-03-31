@@ -23,29 +23,29 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Bundle\Model\Source\Option\Type">
-        <param name="options">
-            <array>
-                <item key="select"><value>Drop-down</value></item>
-                <item key="radio"><value>Radio Buttons</value></item>
-                <item key="checkbox"><value>Checkbox</value></item>
-                <item key="multi"><value>Multiple Select</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="select" xsi:type="string">Drop-down</item>
+                <item name="radio" xsi:type="string">Radio Buttons</item>
+                <item name="checkbox" xsi:type="string">Checkbox</item>
+                <item name="multi" xsi:type="string">Multiple Select</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="bundle_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="bundle_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CatalogPrice">
-        <param name="priceModelPool">
-            <array>
-                <item key="bundle"><value>Magento\Bundle\Model\Product\CatalogPrice</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="priceModelPool" xsi:type="array">
+                <item name="bundle" xsi:type="string">Magento\Bundle\Model\Product\CatalogPrice</item>
+            </argument>
+        </arguments>
     </type>
 </config>

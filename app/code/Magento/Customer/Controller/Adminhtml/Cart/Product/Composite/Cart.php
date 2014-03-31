@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
+
+use Magento\Model\Exception;
 
 /**
  * Catalog composite product configuration controller
@@ -31,16 +34,14 @@
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
-
 class Cart extends \Magento\Backend\App\Action
 {
     /**
      * Customer we're working with
      *
-     * @var \Magento\Customer\Model\Customer
+     * @var int id of the customer
      */
-    protected $_customer = null;
+    protected $_customerId;
 
     /**
      * Quote we're working with
@@ -59,28 +60,30 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Loads customer, quote and quote item by request params
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     protected function _initData()
     {
-        $customerId = (int) $this->getRequest()->getParam('customer_id');
-        if (!$customerId) {
-            throw new \Magento\Core\Exception(__('No customer ID defined.'));
+        $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
+        if (!$this->_customerId) {
+            throw new \Magento\Model\Exception(__('No customer ID defined.'));
         }
 
-        $this->_customer = $this->_objectManager->create('Magento\Customer\Model\Customer')
-            ->load($customerId);
+        $quoteItemId = (int)$this->getRequest()->getParam('id');
+        $websiteId = (int)$this->getRequest()->getParam('website_id');
 
-        $quoteItemId = (int) $this->getRequest()->getParam('id');
-        $websiteId = (int) $this->getRequest()->getParam('website_id');
-
-        $this->_quote = $this->_objectManager->create('Magento\Sales\Model\Quote')
-            ->setWebsite($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId))
-            ->loadByCustomer($this->_customer);
+        $this->_quote = $this->_objectManager->create(
+            'Magento\Sales\Model\Quote'
+        )->setWebsite(
+            $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId)
+        )->loadByCustomer(
+            $this->_customerId
+        );
 
         $this->_quoteItem = $this->_quote->getItemById($quoteItemId);
         if (!$this->_quoteItem) {
-            throw new \Magento\Core\Exception(__('Please correct the quote items and try again.'));
+            throw new Exception(__('Please correct the quote items and try again.'));
         }
 
         return $this;
@@ -89,7 +92,7 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Ajax handler to response configuration fieldset of composite product in customer's cart
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return void
      */
     public function configureAction()
     {
@@ -99,29 +102,34 @@ class Cart extends \Magento\Backend\App\Action
 
             $quoteItem = $this->_quoteItem;
 
-            $optionCollection = $this->_objectManager->create('Magento\Sales\Model\Quote\Item\Option')
-                ->getCollection()
-                ->addItemFilter($quoteItem);
+            $optionCollection = $this->_objectManager->create(
+                'Magento\Sales\Model\Quote\Item\Option'
+            )->getCollection()->addItemFilter(
+                $quoteItem
+            );
             $quoteItem->setOptions($optionCollection->getOptionsByItem($quoteItem));
 
             $configureResult->setOk(true);
             $configureResult->setProductId($quoteItem->getProductId());
             $configureResult->setBuyRequest($quoteItem->getBuyRequest());
             $configureResult->setCurrentStoreId($quoteItem->getStoreId());
-            $configureResult->setCurrentCustomer($this->_customer);
+            $configureResult->setCurrentCustomerId($this->_customerId);
         } catch (\Exception $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());
         }
 
-        $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-            ->renderConfigureResult($configureResult);
+        $this->_objectManager->get(
+            'Magento\Catalog\Helper\Product\Composite'
+        )->renderConfigureResult(
+            $configureResult
+        );
     }
 
     /**
      * IFrame handler for submitted configuration for quote item
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return void
      */
     public function updateAction()
     {
@@ -131,8 +139,7 @@ class Cart extends \Magento\Backend\App\Action
 
             $buyRequest = new \Magento\Object($this->getRequest()->getParams());
             $this->_quote->updateItem($this->_quoteItem->getId(), $buyRequest);
-            $this->_quote->collectTotals()
-                ->save();
+            $this->_quote->collectTotals()->save();
 
             $updateResult->setOk(true);
         } catch (\Exception $e) {

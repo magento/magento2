@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Rule\Model\Action;
 
-class Collection extends \Magento\Rule\Model\Action\AbstractAction
+class Collection extends AbstractAction
 {
     /**
      * @var \Magento\Rule\Model\ActionFactory
@@ -78,6 +76,10 @@ class Collection extends \Magento\Rule\Model\Action\AbstractAction
         return $out;
     }
 
+    /**
+     * @param array $arr
+     * @return $this
+     */
     public function loadArray(array $arr)
     {
         if (!empty($arr['actions']) && is_array($arr['actions'])) {
@@ -93,7 +95,11 @@ class Collection extends \Magento\Rule\Model\Action\AbstractAction
         return $this;
     }
 
-    public function addAction(\Magento\Rule\Model\Action\ActionInterface $action)
+    /**
+     * @param ActionInterface $action
+     * @return $this
+     */
+    public function addAction(ActionInterface $action)
     {
         $actions = $this->getActions();
 
@@ -101,29 +107,41 @@ class Collection extends \Magento\Rule\Model\Action\AbstractAction
 
         $actions[] = $action;
         if (!$action->getId()) {
-            $action->setId($this->getId().'.'.sizeof($actions));
+            $action->setId($this->getId() . '.' . sizeof($actions));
         }
 
         $this->setActions($actions);
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function asHtml()
     {
-        $html = $this->getTypeElement()->toHtml().'Perform following actions: ';
-        if ($this->getId()!='1') {
-            $html.= $this->getRemoveLinkHtml();
+        $html = $this->getTypeElement()->toHtml() . 'Perform following actions: ';
+        if ($this->getId() != '1') {
+            $html .= $this->getRemoveLinkHtml();
         }
         return $html;
     }
 
+    /**
+     * @return $this
+     */
     public function getNewChildElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':new_child', 'select', array(
-            'name' => 'rule[actions][' . $this->getId() . '][new_child]',
-            'values' => $this->getNewChildSelectOptions(),
-            'value_name' => $this->getNewChildName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':new_child',
+            'select',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][new_child]',
+                'values' => $this->getNewChildSelectOptions(),
+                'value_name' => $this->getNewChildName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild')
+        );
     }
 
     /**

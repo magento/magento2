@@ -35,11 +35,34 @@ namespace Magento\Backend\Block;
 
 class Page extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'admin/page.phtml';
+
+    /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
 
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -51,12 +74,12 @@ class Page extends \Magento\Backend\Block\Template
     /**
      * Get current language
      *
-     * @return unknown
+     * @return string
      */
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_locale->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
         }
         return $this->getData('lang');
     }
@@ -65,7 +88,7 @@ class Page extends \Magento\Backend\Block\Template
      * Add CSS class to page body tag
      *
      * @param string $className
-     * @return \Magento\Backend\Block\Page
+     * @return $this
      */
     public function addBodyClass($className)
     {

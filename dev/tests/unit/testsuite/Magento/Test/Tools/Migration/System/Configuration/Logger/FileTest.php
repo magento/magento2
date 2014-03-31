@@ -23,20 +23,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Configuration\Logger;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration//Acl/Db/AbstractLogger.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration//Acl/Db/Logger/File.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration//System/Configuration/AbstractLogger.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration//System/Configuration/Logger/File.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration//System/FileManager.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration//Acl/Db/AbstractLogger.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration//Acl/Db/Logger/File.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration//System/Configuration/AbstractLogger.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration//System/Configuration/Logger/File.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration//System/FileManager.php';
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,7 +51,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileManagerMock = $this->getMock(
-            'Magento\Tools\Migration\System\FileManager', array(), array(), '', false);
+            'Magento\Tools\Migration\System\FileManager',
+            array(),
+            array(),
+            '',
+            false
+        );
     }
 
     protected function tearDown()

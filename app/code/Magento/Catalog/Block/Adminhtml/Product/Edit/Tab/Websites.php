@@ -35,14 +35,20 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 class Websites extends \Magento\Backend\Block\Store\Switcher
 {
+    /**
+     * @var string
+     */
     protected $_storeFromHtml;
 
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit/websites.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -51,7 +57,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      * @param \Magento\Core\Model\Website\Factory $websiteFactory
      * @param \Magento\Core\Model\Store\Group\Factory $storeGroupFactory
      * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -59,7 +65,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
         \Magento\Core\Model\Website\Factory $websiteFactory,
         \Magento\Core\Model\Store\Group\Factory $storeGroupFactory,
         \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -148,7 +154,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     {
         if (!$this->_storeFromHtml) {
             $this->_storeFromHtml = '<select name="copy_to_stores[__store_identifier__]" disabled="disabled">';
-            $this->_storeFromHtml.= '<option value="0">'.__('Default Values').'</option>';
+            $this->_storeFromHtml .= '<option value="0">' . __('Default Values') . '</option>';
             foreach ($this->getWebsiteCollection() as $_website) {
                 if (!$this->hasWebsite($_website->getId())) {
                     continue;

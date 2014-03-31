@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\DB\Statement;
 
 /**
  * Magento DB Statement Parameter
@@ -37,8 +37,6 @@
  * @package     Magento_DB
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\DB\Statement;
-
 class Parameter
 {
     /**
@@ -86,7 +84,6 @@ class Parameter
      * Inits instance
      *
      * @param mixed $value
-     * @return $this
      */
     public function __construct($value)
     {
@@ -242,7 +239,7 @@ class Parameter
      */
     public function __toString()
     {
-        return (string) $this->_value;
+        return (string)$this->_value;
     }
 
     /**

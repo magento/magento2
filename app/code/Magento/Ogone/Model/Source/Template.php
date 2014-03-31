@@ -29,7 +29,7 @@
  */
 namespace Magento\Ogone\Model\Source;
 
-class Template implements \Magento\Core\Model\Option\ArrayInterface
+class Template implements \Magento\Option\ArrayInterface
 {
     /**
      * Prepare ogone template mode list as option array
@@ -40,7 +40,7 @@ class Template implements \Magento\Core\Model\Option\ArrayInterface
     {
         return array(
             array('value' => \Magento\Ogone\Model\Api::TEMPLATE_OGONE, 'label' => __('Ogone')),
-            array('value' => \Magento\Ogone\Model\Api::TEMPLATE_MAGENTO, 'label' => __('Magento')),
+            array('value' => \Magento\Ogone\Model\Api::TEMPLATE_MAGENTO, 'label' => __('Magento'))
         );
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 /**
@@ -30,31 +29,36 @@ namespace Magento\View\Asset;
 class ViewFile implements MergeableInterface
 {
     /**
+     * View URL
+     *
      * @var \Magento\View\Url
      */
     protected $viewUrl;
 
     /**
+     * File
+     *
      * @var string
      */
     protected $file;
 
     /**
+     * Content type
+     *
      * @var string
      */
     protected $contentType;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Url $viewUrl
      * @param string $file
      * @param string $contentType
      * @throws \InvalidArgumentException
      */
-    public function __construct(
-        \Magento\View\Url $viewUrl,
-        $file,
-        $contentType
-    ) {
+    public function __construct(\Magento\View\Url $viewUrl, $file, $contentType)
+    {
         if (empty($file)) {
             throw new \InvalidArgumentException("Parameter 'file' must not be empty");
         }

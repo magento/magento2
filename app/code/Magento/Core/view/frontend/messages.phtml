@@ -25,23 +25,21 @@
  */
 ?>
 <?php  foreach ($types as $type) {
-            if ( $messages = $this->getMessages($type) ) {
-                if ( !$html ) {
-                    $html .= '<ul class="messages">';
-                }
-                $html .= '<li class="' . $type . '-msg">';
-                $html .= '<ul>';
+    if ( $messages = $this->getMessages($type) ) {
+        if ( !$html ) {
+            $html .= '<div class="messages">';
+        }
+        $html .= '<div class="message ' . $type . '">';
 
-                foreach ( $messages as $message ) {
-                    $html.= '<li>';
-                    $html.= $message->getText();
-                    $html.= '</li>';
-                }
-                $html .= '</ul>';
-                $html .= '</li>';
-            }
+        foreach ( $messages as $message ) {
+            $html.= '<div>';
+            $html.= $message->getText();
+            $html.= '</div>';
         }
-        if ( $html) {
-            $html .= '</ul>';
-        }
+        $html .= '</div>';
+    }
+}
+if ( $html) {
+    $html .= '</div>';
+}
 ?>

@@ -29,15 +29,16 @@ namespace Magento\Customer\Model\Resource\Address;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSetCustomerFilter()
     {
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Address\Collection');
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Address\Collection'
+        );
         $select = $collection->getSelect();
         $this->assertSame($collection, $collection->setCustomerFilter(array(1, 2)));
-        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer');
+        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Customer'
+        );
         $collection->setCustomerFilter($customer);
         $customer->setId(3);
         $collection->setCustomerFilter($customer);

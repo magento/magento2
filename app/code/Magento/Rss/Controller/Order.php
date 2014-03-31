@@ -23,40 +23,42 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Controller;
 
 /**
  * RSS Controller for Order feed
  */
-namespace Magento\Rss\Controller;
-
 class Order extends \Magento\App\Action\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
     /**
      * Order status action
+     *
+     * @return void
      */
     public function statusAction()
     {
-        $order = $this->_objectManager->get('Magento\Rss\Helper\Order')
-            ->getOrderByStatusUrlKey((string)$this->getRequest()->getParam('data'));
+        $order = $this->_objectManager->get(
+            'Magento\Rss\Helper\Order'
+        )->getOrderByStatusUrlKey(
+            (string)$this->getRequest()->getParam('data')
+        );
 
         if (!is_null($order)) {
             $this->_coreRegistry->register('current_order', $order);

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model\Resource;
 
 use Magento\User\Model\Acl\Role\User as RoleUser;
@@ -29,7 +28,7 @@ use Magento\User\Model\Acl\Role\User as RoleUser;
 /**
  * Admin role resource model
  */
-class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Role extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Users table
@@ -75,6 +74,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,10 +87,10 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Process role before saving
      *
-     * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @param \Magento\Model\AbstractModel $role
+     * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $role)
+    protected function _beforeSave(\Magento\Model\AbstractModel $role)
     {
         if (!$role->getId()) {
             $role->setCreated($this->dateTime->formatDate(true));
@@ -107,13 +107,14 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         if (!$role->getTreeLevel()) {
             if ($role->getPid() > 0) {
-                $select = $this->_getReadAdapter()->select()
-                    ->from($this->getMainTable(), array('tree_level'))
-                    ->where("{$this->getIdFieldName()} = :pid");
-
-                $binds = array(
-                    'pid' => (int) $role->getPid(),
+                $select = $this->_getReadAdapter()->select()->from(
+                    $this->getMainTable(),
+                    array('tree_level')
+                )->where(
+                    "{$this->getIdFieldName()} = :pid"
                 );
+
+                $binds = array('pid' => (int)$role->getPid());
 
                 $treeLevel = $this->_getReadAdapter()->fetchOne($select, $binds);
             } else {
@@ -133,36 +134,29 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Process role after saving
      *
-     * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @param \Magento\Model\AbstractModel $role
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $role)
+    protected function _afterSave(\Magento\Model\AbstractModel $role)
     {
         $this->_updateRoleUsersAcl($role);
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            array(\Magento\Backend\Block\Menu::CACHE_TAGS));
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(\Magento\Backend\Block\Menu::CACHE_TAGS));
         return $this;
     }
 
     /**
      * Process role after deleting
      *
-     * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @param \Magento\Model\AbstractModel $role
+     * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $role)
+    protected function _afterDelete(\Magento\Model\AbstractModel $role)
     {
         $adapter = $this->_getWriteAdapter();
 
-        $adapter->delete(
-            $this->getMainTable(),
-            array('parent_id = ?' => (int) $role->getId())
-        );
+        $adapter->delete($this->getMainTable(), array('parent_id = ?' => (int)$role->getId()));
 
-        $adapter->delete(
-            $this->_ruleTable,
-            array('role_id = ?' => (int) $role->getId())
-        );
+        $adapter->delete($this->_ruleTable, array('role_id = ?' => (int)$role->getId()));
 
         return $this;
     }
@@ -177,16 +171,18 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $read = $this->_getReadAdapter();
 
-        $binds = array(
-            'role_id'   => $role->getId(),
-            'role_type' => RoleUser::ROLE_TYPE
-        );
+        $binds = array('role_id' => $role->getId(), 'role_type' => RoleUser::ROLE_TYPE);
 
-        $select = $read->select()
-            ->from($this->getMainTable(), array('user_id'))
-            ->where('parent_id = :role_id')
-            ->where('role_type = :role_type')
-            ->where('user_id > 0');
+        $select = $read->select()->from(
+            $this->getMainTable(),
+            array('user_id')
+        )->where(
+            'parent_id = :role_id'
+        )->where(
+            'role_type = :role_type'
+        )->where(
+            'user_id > 0'
+        );
 
         return $read->fetchCol($select, $binds);
     }
@@ -199,12 +195,12 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     private function _updateRoleUsersAcl(\Magento\User\Model\Role $role)
     {
-        $write  = $this->_getWriteAdapter();
-        $users  = $this->getRoleUsers($role);
+        $write = $this->_getWriteAdapter();
+        $users = $this->getRoleUsers($role);
         $rowsCount = 0;
 
         if (sizeof($users) > 0) {
-            $bind  = array('reload_acl_flag' => 1);
+            $bind = array('reload_acl_flag' => 1);
             $where = array('user_id IN(?)' => $users);
             $rowsCount = $write->update($this->_usersTable, $bind, $where);
         }

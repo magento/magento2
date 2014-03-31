@@ -45,12 +45,15 @@ class CopierTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
-    
     protected function setUp()
     {
         $this->copyConstructorMock = $this->getMock('\Magento\Catalog\Model\Product\CopyConstructorInterface');
         $this->productFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ProductFactory', array('create'), array(), '', false
+            '\Magento\Catalog\Model\ProductFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->productMock->expects($this->any())->method('getId')->will($this->returnValue('1'));
@@ -66,15 +69,23 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
         $resourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', array(), array(), '', false);
         $optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', array(), array(), '', false);
-        $this->productMock->expects($this->once())
-            ->method('getResource')->will($this->returnValue($resourceMock));
-        $this->productMock->expects($this->once())
-            ->method('getOptionInstance')->will($this->returnValue($optionMock));
+        $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->once())->method('getOptionInstance')->will($this->returnValue($optionMock));
 
         $duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('__wakeup', 'setData', 'setIsDuplicate', 'setOriginalId', 'setStatus', 'setCreatedAt', 'setUpdatedAt',
-                'setId', 'setStoreId', 'getId', 'save'
+            array(
+                '__wakeup',
+                'setData',
+                'setIsDuplicate',
+                'setOriginalId',
+                'setStatus',
+                'setCreatedAt',
+                'setUpdatedAt',
+                'setId',
+                'setStoreId',
+                'getId',
+                'save'
             ),
             array(),
             '',
@@ -84,12 +95,23 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
         $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
-        $duplicateMock->expects($this->once())->method('setStatus')
-            ->with(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
+        $duplicateMock->expects(
+            $this->once()
+        )->method(
+            'setStatus'
+        )->with(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
+        );
         $duplicateMock->expects($this->once())->method('setCreatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setUpdatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setId')->with(null);
-        $duplicateMock->expects($this->once())->method('setStoreId')->with(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
+        $duplicateMock->expects(
+            $this->once()
+        )->method(
+            'setStoreId'
+        )->with(
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        );
         $duplicateMock->expects($this->once())->method('setData')->with('product data');
 
 

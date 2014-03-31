@@ -59,11 +59,11 @@ return array(
                 'route' => '/:id',
                 'isSecure' => true,
                 'resources' => array('Magento_Test1::resource2')
-            ),
+            )
         )
     ),
     '\Magento\TestModule1\Service\V3\AllSoapAndRestInterface' => array(
         'class' => '\Magento\TestModule1\Service\V3\AllSoapAndRestInterface',
         'methods' => array()
-    ),
+    )
 );

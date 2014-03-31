@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class for convertiong old magento PEAR packages to new one
@@ -31,11 +32,11 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 final class Converter
 {
+    /**
+     * @var \Magento\Archive
+     */
     protected $_archiver;
 
     /**
@@ -44,12 +45,15 @@ final class Converter
      */
     public function arc()
     {
-        if(!$this->_archiver) {
+        if (!$this->_archiver) {
             $this->_archiver = new \Magento\Archive();
         }
         return $this->_archiver;
     }
 
+    /**
+     * @return Package
+     */
     public function newPackage()
     {
         return new \Magento\Connect\Package();
@@ -64,13 +68,17 @@ final class Converter
         return new Pear_Package_Parser_v2();
     }
 
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-
     }
 
-
+    /**
+     * @param string $channel
+     * @return string
+     */
     public function convertChannelName($channel)
     {
         return str_replace("connect.magentocommerce.com/", "", $channel);
@@ -78,58 +86,67 @@ final class Converter
 
     /**
      * Convert package dependencies - urls - by ref
-     * @param array $deps  ref to array
-     * @return void
+     * @param array $oldDeps  ref to array
+     * @return array
      */
     public function convertPackageDependencies($oldDeps)
     {
         $out = array();
-        if(empty($oldDeps['required']['package'])) {
+        if (empty($oldDeps['required']['package'])) {
             return $out;
         }
         $deps = $oldDeps['required']['package'];
-        if(!isset($deps[0])) {
+        if (!isset($deps[0])) {
             $deps = array($deps);
         }
-        for($i=0, $c=count($deps); $i<$c; $i++) {
+        for ($i = 0,$c = count($deps); $i < $c; $i++) {
             $deps[$i]['min_version'] = isset($deps[$i]['min']) ? $deps[$i]['min'] : false;
             $deps[$i]['max_version'] = isset($deps[$i]['max']) ? $deps[$i]['max'] : false;
             $deps[$i]['channel'] = $this->convertChannelName($deps[$i]['channel']);
             $out[] = $deps[$i];
         }
-         
+
         return $out;
     }
 
+    /**
+     * @param array $oldLicense
+     * @return array|bool|float|int|string
+     */
     public function convertLicense($oldLicense)
     {
-        if(is_scalar($oldLicense)) {
+        if (is_scalar($oldLicense)) {
             return $oldLicense;
         }
         return array($oldLicense['_content'], $oldLicense['attribs']['uri']);
     }
 
+    /**
+     * @param array $maintainers
+     * @return array
+     */
     public function convertMaintainers($maintainers)
     {
-        if(!is_array($maintainers) || !count($maintainers)) {
+        if (!is_array($maintainers) || !count($maintainers)) {
             return array();
         }
         $out = array();
-        foreach($maintainers as $row) {
-            $out[] = array('name'=>$row['name'], 'email'=>$row['email'], 'user'=>'auto-converted');
+        foreach ($maintainers as $row) {
+            $out[] = array('name' => $row['name'], 'email' => $row['email'], 'user' => 'auto-converted');
         }
         return $out;
     }
 
+    /**
+     * @var array
+     */
     protected $fileMap = array();
 
-    
     /**
      * Conver pear package object to magento object
      * @param Pear_Package_V2 $pearObject
      * @return \Magento\Connect\Package
      */
-
     public function convertPackageObject($pearObject)
     {
         $data = array();
@@ -137,85 +154,75 @@ final class Converter
 
 
 
-        $map = array (
-            'name'         => null,
-            'version'      => array('getterArgs' => array('release')
-        ),
-            'package_deps' => array( 'getter'=>'getDependencies', 
-                                     'converter'=>'convertPackageDependencies', 
-                                     'setter'=>'setDependencyPackages',
-        ),
-            'stability'    => array( 'getter'=>'getState',
-                                     'getterArgs' => array('release'), 
-        ),
-            'license'      => array( 'getterArgs' => array(true),
-                                     'converter' => 'convertLicense',
-                                     'noArrayWrap' => true,                                    
-        ),
-            'summary'      => null,
-            'description'  => null,                              
-            'notes'        => null,                              
-            'date'         => null,                              
-            'time'         => null,         
-            'authors'      => array( 'converter' => 'convertMaintainers',
-                                     'getter' => 'getMaintainers',
-        ),
-            'channel'      => array( 'converter' => 'convertChannelName',
-
-        ),
-
+        $map = array(
+            'name' => null,
+            'version' => array('getterArgs' => array('release')),
+            'package_deps' => array(
+                'getter' => 'getDependencies',
+                'converter' => 'convertPackageDependencies',
+                'setter' => 'setDependencyPackages'
+            ),
+            'stability' => array('getter' => 'getState', 'getterArgs' => array('release')),
+            'license' => array('getterArgs' => array(true), 'converter' => 'convertLicense', 'noArrayWrap' => true),
+            'summary' => null,
+            'description' => null,
+            'notes' => null,
+            'date' => null,
+            'time' => null,
+            'authors' => array('converter' => 'convertMaintainers', 'getter' => 'getMaintainers'),
+            'channel' => array('converter' => 'convertChannelName')
         );
-        foreach($map as $field=>$rules) {
+        foreach ($map as $field => $rules) {
 
-            if(empty($rules)) {
-                $rules = array('setter'=> '', 'getter'=> '');
+            if (empty($rules)) {
+                $rules = array('setter' => '', 'getter' => '');
             }
 
-            if(empty($rules['getter'])) {
-                $rules['getter'] = 'get'. ucfirst($field);
+            if (empty($rules['getter'])) {
+                $rules['getter'] = 'get' . ucfirst($field);
             }
 
             $useSetter = empty($rules['noSetter']);
             $useGetter = empty($rules['noGetter']);
 
 
-            if(empty($rules['setter'])) {
-                $rules['setter'] = 'set'. ucfirst($field);
+            if (empty($rules['setter'])) {
+                $rules['setter'] = 'set' . ucfirst($field);
             }
-            if(empty($rules['getterArgs'])) {
+            if (empty($rules['getterArgs'])) {
                 $rules['getterArgs'] = array();
-            } elseif(!is_array($rules['getterArgs'])) {
+            } elseif (!is_array($rules['getterArgs'])) {
                 throw new \Exception("Invalid 'getterArgs' for '{$field}', should be array");
             }
 
-            if($useGetter && !method_exists($pearObject, $rules['getter'])) {
-                $mName = get_class($pearObject)."::".$rules['getter'];
-                throw new \Exception('No getter method exists: '.$mName);
+            if ($useGetter && !method_exists($pearObject, $rules['getter'])) {
+                $mName = get_class($pearObject) . "::" . $rules['getter'];
+                throw new \Exception('No getter method exists: ' . $mName);
             }
 
-            if($useSetter && !method_exists($mageObject, $rules['setter'])) {
-                $mName = get_class($mageObject)."::".$rules['setter'];
-                throw new \Exception('No setter method exists: '.$mName);
+            if ($useSetter && !method_exists($mageObject, $rules['setter'])) {
+                $mName = get_class($mageObject) . "::" . $rules['setter'];
+                throw new \Exception('No setter method exists: ' . $mName);
             }
 
             $useConverter = !empty($rules['converter']);
 
-            if($useConverter && false === method_exists($this, $rules['converter'])) {
-                $mName = get_class($this)."::".$rules['converter'];
-                throw new \Exception('No converter method exists: '.$mName);
+            if ($useConverter && false === method_exists($this, $rules['converter'])) {
+                $mName = get_class($this) . "::" . $rules['converter'];
+                throw new \Exception('No converter method exists: ' . $mName);
             }
 
-            if($useGetter) {
+            if ($useGetter) {
                 $getData = call_user_func_array(array($pearObject, $rules['getter']), $rules['getterArgs']);
             } else {
                 $getData = array();
             }
 
-            if($useConverter) {
+            if ($useConverter) {
                 $args = array();
-                if(!$useGetter && !$useSetter) {
+                if (!$useGetter && !$useSetter) {
                     $args = array($pearObject, $mageObject);
-                } elseif(!$useSetter) {
+                } elseif (!$useSetter) {
                     $args = array($mageObject, $getData);
                 } else {
                     $args = array($getData);
@@ -224,8 +231,11 @@ final class Converter
             }
 
             $noWrap = !empty($rules['noArrayWrap']);
-            if($useSetter) {
-                $setData = call_user_func_array(array($mageObject, $rules['setter']), $noWrap ? $getData : array($getData));
+            if ($useSetter) {
+                $setData = call_user_func_array(
+                    array($mageObject, $rules['setter']),
+                    $noWrap ? $getData : array($getData)
+                );
             }
         }
         return $mageObject;
@@ -240,24 +250,24 @@ final class Converter
     public function convertPearToMage($sourceFile, $destFile = false)
     {
         try {
-            if(!file_exists($sourceFile)) {
+            if (!file_exists($sourceFile)) {
                 throw new \Exception("File doesn't exist: {$sourceFile}");
             }
             $arc = $this->arc();
-            $tempDir = "tmp-".basename($sourceFile).uniqid();
-            $outDir = "out-".basename($sourceFile).uniqid();
+            $tempDir = "tmp-" . basename($sourceFile) . uniqid();
+            $outDir = "out-" . basename($sourceFile) . uniqid();
             $outDir = rtrim($outDir, "\\/");
             \Magento\System\Dirs::mkdirStrict($outDir);
             \Magento\System\Dirs::mkdirStrict($tempDir);
 
             $result = $arc->unpack($sourceFile, $tempDir);
-            if(!$result) {
+            if (!$result) {
                 throw new \Exception("'{$sourceFile}' was not unpacked");
             }
 
             $result = rtrim($result, "\\/");
             $packageXml = $result . '/package.xml';
-            if(!file_exists($packageXml)) {
+            if (!file_exists($packageXml)) {
                 throw new \Exception("No package.xml found inside '{$sourceFile}'");
             }
 
@@ -266,74 +276,71 @@ final class Converter
 
             $pearObject = $reader->parsePackage($data, $packageXml);
             $mageObject = $this->convertPackageObject($pearObject);
-            if(!$mageObject->validate()) {
-                throw new \Exception("Package validation failed.\n". implode("\n", $mageObject->getErrors()));
+            if (!$mageObject->validate()) {
+                throw new \Exception("Package validation failed.\n" . implode("\n", $mageObject->getErrors()));
             }
 
             /**
              * Calculate destination file if false
              */
-            if(false === $destFile) {
+            if (false === $destFile) {
                 $pathinfo = pathinfo($sourceFile);
                 $destFile = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-converted';
-                if(isset($pathinfo['extension'])) {
-                    $destFile .= ".".$pathinfo['extension'];
+                if (isset($pathinfo['extension'])) {
+                    $destFile .= "." . $pathinfo['extension'];
                 }
             }
-            
+
             $target = new \Magento\Connect\Package\Target("target.xml");
-            $targets = $target->getTargets();                        
-            $mageObject->setTarget($target);            
+            $targets = $target->getTargets();
+            $mageObject->setTarget($target);
             $validRoles = array_keys($targets);
             $data = $pearObject->getFilelist();
-            $pathSource = dirname($pearObject->getPackageFile())
-                . '/' . $pearObject->getName() . "-" . $pearObject->getVersion();
+            $pathSource = dirname(
+                $pearObject->getPackageFile()
+            ) . '/' . $pearObject->getName() . "-" . $pearObject->getVersion();
 
             $filesToDo = array();
-            foreach($data as $file =>$row) {
+            foreach ($data as $file => $row) {
                 $name = $row['name'];
                 $role = $row['role'];
-                if(!in_array($role, $validRoles)) {
+                if (!in_array($role, $validRoles)) {
                     $role = 'mage';
                 }
                 $baseName = ltrim($targets[$role], "\\/.");
                 $baseName = rtrim($baseName, "\\/");
                 $sourceFile = $pathSource . '/' . $name;
                 $targetFile = $outDir . '/' . $baseName . '/' . $name;
-                if(file_exists($sourceFile)) {
+                if (file_exists($sourceFile)) {
                     \Magento\System\Dirs::mkdirStrict(dirname($targetFile));
                     $copy = @copy($sourceFile, $targetFile);
-                    if(false === $copy) {
+                    if (false === $copy) {
                         throw new \Exception("Cannot copy '{$sourceFile}' to '{$targetFile}'");
                     }
                 }
-                $filesToDo[] = array ('name'=> $name, 'role'=>$role);
-            }                        
+                $filesToDo[] = array('name' => $name, 'role' => $role);
+            }
             $cwd = getcwd();
             @chdir($outDir);
-            foreach($filesToDo as $fileToDo) {
+            foreach ($filesToDo as $fileToDo) {
                 $mageObject->addContent($fileToDo['name'], $fileToDo['role']);
             }
             $mageObject->save(getcwd());
-            @chdir($cwd);            
+            @chdir($cwd);
             $filename = $outDir . '/' . $mageObject->getReleaseFilename() . ".tgz";
-            if(@file_exists($targetArchive)) {
+            if (@file_exists($targetArchive)) {
                 @unlink($targetArchive);
             }
             \Magento\System\Dirs::mkdirStrict(dirname($destFile));
             $copy = @copy($filename, $destFile);
-            if(false === $copy) {
+            if (false === $copy) {
                 throw new \Exception("Cannot copy '{$filename}' to '{$targetArchive}'");
             }
             \Magento\System\Dirs::rm($tempDir);
             \Magento\System\Dirs::rm($outDir);
-
         } catch (\Exception $e) {
             throw $e;
         }
         return $destFile;
     }
-
-
-
 }

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Shipment\Comment;
 
 /**
  * Flat sales order shipment comments collection
@@ -32,39 +32,40 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Shipment\Comment;
-
-class Collection
-    extends \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
+class Collection extends \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_comment_collection';
+    protected $_eventPrefix = 'sales_order_shipment_comment_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_shipment_comment_collection';
+    protected $_eventObject = 'order_shipment_comment_collection';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Shipment\Comment', 'Magento\Sales\Model\Resource\Order\Shipment\Comment');
+        $this->_init(
+            'Magento\Sales\Model\Order\Shipment\Comment',
+            'Magento\Sales\Model\Resource\Order\Shipment\Comment'
+        );
     }
 
     /**
      * Set shipment filter
      *
      * @param int $shipmentId
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Comment\Collection
+     * @return $this
      */
     public function setShipmentFilter($shipmentId)
     {

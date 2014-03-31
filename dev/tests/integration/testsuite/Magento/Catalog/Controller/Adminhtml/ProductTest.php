@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml;
 
 /**
@@ -32,55 +31,13 @@ namespace Magento\Catalog\Controller\Adminhtml;
  */
 class ProductTest extends \Magento\Backend\Utility\Controller
 {
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/product_configurable.php
-     */
-    public function testSaveActionAssociatedProductIds()
-    {
-        $associatedProductIds = array(3, 14, 15, 92);
-        $this->getRequest()->setPost(array(
-            'attributes' => array($this->_getConfigurableAttribute()->getId()),
-            'associated_product_ids' => $associatedProductIds,
-        ));
-
-        $this->dispatch('backend/catalog/product/save');
-
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $objectManager->get('Magento\Core\Model\Registry')->registry('current_product');
-        $this->assertEquals($associatedProductIds, $product->getAssociatedProductIds());
-
-        /** @see \Magento\Backend\Utility\Controller::assertPostConditions() */
-        $this->markTestIncomplete('Suppressing admin error messages validation until the bug MAGETWO-7044 is fixed.');
-    }
-
-    /**
-     * Retrieve configurable attribute instance
-     *
-     * @return \Magento\Catalog\Model\Entity\Attribute
-     */
-    protected function _getConfigurableAttribute()
-    {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Entity\Attribute')->loadByCode(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
-                    ->getEntityType('catalog_product')->getId(),
-                'test_configurable'
-            );
-    }
-
     public function testSaveActionWithDangerRequest()
     {
-        $this->getRequest()->setPost(array(
-            'product' => array(
-                'entity_id' => 15
-            ),
-        ));
+        $this->getRequest()->setPost(array('product' => array('entity_id' => 15)));
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
-            $this->equalTo(array('Unable to save product')), \Magento\Message\MessageInterface::TYPE_ERROR
+            $this->equalTo(array('Unable to save product')),
+            \Magento\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringContains('/backend/catalog/product/edit'));
     }
@@ -94,7 +51,8 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product/save/id/1');
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
-            $this->contains('You saved the product.'), \Magento\Message\MessageInterface::TYPE_SUCCESS
+            $this->contains('You saved the product.'),
+            \Magento\Message\MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -105,17 +63,17 @@ class ProductTest extends \Magento\Backend\Utility\Controller
     {
         $this->getRequest()->setPost(array('back' => 'duplicate'));
         $this->dispatch('backend/catalog/product/save/id/1');
+        $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
-            $this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/')
-        );
-        $this->assertRedirect($this->logicalNot(
-            $this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/id/1/')
-        ));
-        $this->assertSessionMessages(
-            $this->contains('You saved the product.'), \Magento\Message\MessageInterface::TYPE_SUCCESS
+            $this->logicalNot($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/id/1/'))
         );
         $this->assertSessionMessages(
-            $this->contains('You duplicated the product.'), \Magento\Message\MessageInterface::TYPE_SUCCESS
+            $this->contains('You saved the product.'),
+            \Magento\Message\MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertSessionMessages(
+            $this->contains('You duplicated the product.'),
+            \Magento\Message\MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -124,14 +82,30 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product');
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#add_new_product', 1, $body,
-            '"Add Product" button container should be present on Manage Products page, if the limit is not  reached');
-        $this->assertSelectCount('#add_new_product-button', 1, $body,
-            '"Add Product" button should be present on Manage Products page, if the limit is not reached');
-        $this->assertSelectCount('#add_new_product-button.disabled', 0, $body,
-            '"Add Product" button should be enabled on Manage Products page, if the limit is not reached');
-        $this->assertSelectCount('#add_new_product .action-toggle', 1, $body,
-            '"Add Product" button split should be present on Manage Products page, if the limit is not reached');
+        $this->assertSelectCount(
+            '#add_new_product',
+            1,
+            $body,
+            '"Add Product" button container should be present on Manage Products page, if the limit is not  reached'
+        );
+        $this->assertSelectCount(
+            '#add_new_product-button',
+            1,
+            $body,
+            '"Add Product" button should be present on Manage Products page, if the limit is not reached'
+        );
+        $this->assertSelectCount(
+            '#add_new_product-button.disabled',
+            0,
+            $body,
+            '"Add Product" button should be enabled on Manage Products page, if the limit is not reached'
+        );
+        $this->assertSelectCount(
+            '#add_new_product .action-toggle',
+            1,
+            $body,
+            '"Add Product" button split should be present on Manage Products page, if the limit is not reached'
+        );
     }
 
     /**
@@ -142,12 +116,19 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product/edit/id/1');
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#save-split-button', 1, $body,
-            '"Save" button isn\'t present on Edit Product page');
-        $this->assertSelectCount('#save-split-button-new-button', 1, $body,
-            '"Save & New" button isn\'t present on Edit Product page');
-        $this->assertSelectCount('#save-split-button-duplicate-button', 1, $body,
-            '"Save & Duplicate" button isn\'t present on Edit Product page');
+        $this->assertSelectCount('#save-split-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
+        $this->assertSelectCount(
+            '#save-split-button-new-button',
+            1,
+            $body,
+            '"Save & New" button isn\'t present on Edit Product page'
+        );
+        $this->assertSelectCount(
+            '#save-split-button-duplicate-button',
+            1,
+            $body,
+            '"Save & Duplicate" button isn\'t present on Edit Product page'
+        );
     }
 
     /**

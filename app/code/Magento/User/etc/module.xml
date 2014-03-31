@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_User" version="1.6.1.5" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Module/etc/module.xsd">
+    <module name="Magento_User" version="1.6.1.6" active="true">
         <sequence>
             <module name="Magento_Backend"/>
         </sequence>
@@ -46,7 +46,6 @@
             <module name="Magento_Customer"/>
             <module name="Magento_DesignEditor"/>
             <module name="Magento_Downloadable"/>
-            <module name="Magento_GoogleCheckout"/>
             <module name="Magento_GoogleShopping"/>
             <module name="Magento_ImportExport"/>
             <module name="Magento_Index"/>

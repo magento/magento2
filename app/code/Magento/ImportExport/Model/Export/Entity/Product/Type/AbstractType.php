@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Product\Type;
+
+use Magento\Catalog\Model\Resource\Eav\Attribute;
 
 /**
  * Export entity product type abstract model
@@ -31,8 +34,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export\Entity\Product\Type;
-
 abstract class AbstractType
 {
     /**
@@ -45,21 +46,21 @@ abstract class AbstractType
     /**
      * Array of attributes codes which are disabled for export.
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttrs = array();
 
     /**
      * Attributes with index (not label) value.
      *
-     * @var array
+     * @var string[]
      */
     protected $_indexValueAttributes = array();
 
     /**
      * Return disabled attributes codes.
      *
-     * @return array
+     * @return string[]
      */
     public function getDisabledAttrs()
     {
@@ -69,7 +70,7 @@ abstract class AbstractType
     /**
      * Get attribute codes with index (not label) value.
      *
-     * @return array
+     * @return string[]
      */
     public function getIndexValueAttributes()
     {
@@ -89,16 +90,16 @@ abstract class AbstractType
     /**
      * Add additional data to attribute.
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return boolean
+     * @param Attribute $attribute
+     * @return bool
      */
-    public function overrideAttribute(\Magento\Catalog\Model\Resource\Eav\Attribute $attribute)
+    public function overrideAttribute(Attribute $attribute)
     {
         if (!empty($this->_attributeOverrides[$attribute->getAttributeCode()])) {
             $data = $this->_attributeOverrides[$attribute->getAttributeCode()];
 
             if (isset($data['options_method']) && method_exists($this, $data['options_method'])) {
-                $data['filter_options'] = $this->$data['options_method']();
+                $data['filter_options'] = $this->{$data['options_method']}();
             }
             $attribute->addData($data);
 

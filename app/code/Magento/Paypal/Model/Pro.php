@@ -23,19 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model;
+
+use Magento\Paypal\Model\Api\AbstractApi;
 
 /**
  * PayPal Website Payments Pro implementation for payment method instances
  * This model was created because right now PayPal Direct and PayPal Express payment methods cannot have same abstract
  */
-namespace Magento\Paypal\Model;
-
 class Pro
 {
     /**
      * Possible payment review actions (for FMF only)
      */
     const PAYMENT_REVIEW_ACCEPT = 'accept';
+
     const PAYMENT_REVIEW_DENY = 'deny';
 
     /**
@@ -131,7 +133,7 @@ class Pro
      * Config instance setter
      *
      * @param \Magento\Paypal\Model\Config $instace
-     * @param int $storeId
+     * @param int|null $storeId
      * @return $this
      */
     public function setConfig(\Magento\Paypal\Model\Config $instace, $storeId = null)
@@ -171,7 +173,7 @@ class Pro
     /**
      * Destroy existing NVP Api object
      *
-     * @return \Magento\Paypal\Model\Pro
+     * @return $this
      */
     public function resetApi()
     {
@@ -196,9 +198,9 @@ class Pro
     /**
      * Transfer transaction/payment information from API instance to order payment
      *
-     * @param \Magento\Object|\Magento\Paypal\Model\Api\AbstractApi $from
+     * @param \Magento\Object|AbstractApi $from
      * @param \Magento\Payment\Model\Info $to
-     * @return \Magento\Paypal\Model\Pro
+     * @return $this
      */
     public function importPaymentInfo(\Magento\Object $from, \Magento\Payment\Model\Info $to)
     {
@@ -230,7 +232,8 @@ class Pro
      * Void transaction
      *
      * @param \Magento\Object $payment
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      */
     public function void(\Magento\Object $payment)
     {
@@ -240,7 +243,7 @@ class Pro
             $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
             $this->importPaymentInfo($api, $payment);
         } else {
-            throw new \Magento\Core\Exception(__('You need an authorization transaction to void.'));
+            throw new \Magento\Model\Exception(__('You need an authorization transaction to void.'));
         }
     }
 
@@ -258,13 +261,18 @@ class Pro
         if (!$authTransactionId) {
             return false;
         }
-        $api = $this->getApi()
-            ->setAuthorizationId($authTransactionId)
-            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
-            ->setAmount($amount)
-            ->setCurrencyCode($payment->getOrder()->getBaseCurrencyCode())
-            ->setInvNum($payment->getOrder()->getIncrementId());
-            // TODO: pass 'NOTE' to API
+        $api = $this->getApi()->setAuthorizationId(
+            $authTransactionId
+        )->setIsCaptureComplete(
+            $payment->getShouldCloseParentTransaction()
+        )->setAmount(
+            $amount
+        )->setCurrencyCode(
+            $payment->getOrder()->getBaseCurrencyCode()
+        )->setInvNum(
+            $payment->getOrder()->getIncrementId()
+        );
+        // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
         $this->_importCaptureResultToPayment($api, $payment);
@@ -275,7 +283,8 @@ class Pro
      *
      * @param \Magento\Object $payment
      * @param float $amount
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      */
     public function refund(\Magento\Object $payment, $amount)
     {
@@ -283,20 +292,27 @@ class Pro
         if ($captureTxnId) {
             $api = $this->getApi();
             $order = $payment->getOrder();
-            $api->setPayment($payment)
-                ->setTransactionId($captureTxnId)
-                ->setAmount($amount)
-                ->setCurrencyCode($order->getBaseCurrencyCode());
+            $api->setPayment(
+                $payment
+            )->setTransactionId(
+                $captureTxnId
+            )->setAmount(
+                $amount
+            )->setCurrencyCode(
+                $order->getBaseCurrencyCode()
+            );
             $canRefundMore = $payment->getCreditmemo()->getInvoice()->canRefund();
-            $isFullRefund = !$canRefundMore
-                && (0 == ((float)$order->getBaseTotalOnlineRefunded() + (float)$order->getBaseTotalOfflineRefunded()));
-            $api->setRefundType($isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL
-                : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
+            $isFullRefund = !$canRefundMore &&
+                0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
+            $api->setRefundType(
+                $isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
             );
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            throw new \Magento\Core\Exception(__('We can\'t issue a refund transaction because there is no capture transaction.'));
+            throw new \Magento\Model\Exception(
+                __('We can\'t issue a refund transaction because there is no capture transaction.')
+            );
         }
     }
 
@@ -304,6 +320,7 @@ class Pro
      * Cancel payment
      *
      * @param \Magento\Object $payment
+     * @return void
      */
     public function cancel(\Magento\Object $payment)
     {
@@ -321,8 +338,9 @@ class Pro
     public function canReviewPayment(\Magento\Payment\Model\Info $payment)
     {
         $pendingReason = $payment->getAdditionalInformation(\Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL);
-        return $this->_isPaymentReviewRequired($payment)
-            && $pendingReason != \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVIEW;
+        return $this->_isPaymentReviewRequired(
+            $payment
+        ) && $pendingReason != \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVIEW;
     }
 
     /**
@@ -370,122 +388,19 @@ class Pro
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
-        $api = $this->getApi()
-            ->setTransactionId($transactionId)
-            ->setRawResponseNeeded(true);
+        $api = $this->getApi()->setTransactionId($transactionId)->setRawResponseNeeded(true);
         $api->callGetTransactionDetails();
         $this->importPaymentInfo($api, $payment);
         $data = $api->getRawSuccessResponseData();
-        return ($data) ? $data : array();
-    }
-
-    /**
-     * Validate RP data
-     *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
-     * @throws \Magento\Core\Exception
-     */
-    public function validateRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile)
-    {
-        $errors = array();
-        if (strlen($profile->getSubscriberName()) > 32) { // up to 32 single-byte chars
-            $errors[] = __('The subscriber name is too long.');
-        }
-        $refId = $profile->getInternalReferenceId(); // up to 127 single-byte alphanumeric
-        if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $refId)
-            $errors[] = __('The merchant\'s reference ID format is not supported.');
-        }
-        $profile->getScheduleDescription(); // up to 127 single-byte alphanumeric
-        if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $scheduleDescr)
-            $errors[] = __('The schedule description is too long.');
-        }
-        if ($errors) {
-            throw new \Magento\Core\Exception(implode(' ', $errors));
-        }
-    }
-
-    /**
-     * Submit RP to the gateway
-     *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
-     * @param \Magento\Payment\Model\Info $paymentInfo
-     * @throws \Magento\Core\Exception
-     */
-    public function submitRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile,
-        \Magento\Payment\Model\Info $paymentInfo
-    ) {
-        $api = $this->getApi();
-        \Magento\Object\Mapper::accumulateByMap($profile, $api, array(
-            'token', // EC fields
-            // TODO: DP fields
-            // profile fields
-            'subscriber_name', 'start_datetime', 'internal_reference_id', 'schedule_description',
-            'suspension_threshold', 'bill_failed_later', 'period_unit', 'period_frequency', 'period_max_cycles',
-            'billing_amount' => 'amount', 'trial_period_unit', 'trial_period_frequency', 'trial_period_max_cycles',
-            'trial_billing_amount', 'currency_code', 'shipping_amount', 'tax_amount', 'init_amount', 'init_may_fail',
-        ));
-        $api->callCreateRecurringPaymentsProfile();
-        $profile->setReferenceId($api->getRecurringProfileId());
-        if ($api->getIsProfileActive()) {
-            $profile->setState(\Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE);
-        } elseif ($api->getIsProfilePending()) {
-            $profile->setState(\Magento\Sales\Model\Recurring\Profile::STATE_PENDING);
-        }
-    }
-
-    /**
-     * Fetch RP details
-     *
-     * @param string $referenceId
-     * @param \Magento\Object $result
-     */
-    public function getRecurringProfileDetails($referenceId, \Magento\Object $result)
-    {
-        $api = $this->getApi();
-        $api->setRecurringProfileId($referenceId)
-            ->callGetRecurringPaymentsProfileDetails($result)
-        ;
-    }
-
-    /**
-     * Update RP data
-     *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
-     */
-    public function updateRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile)
-    {
-
-    }
-
-    /**
-     * Manage status
-     *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
-     */
-    public function updateRecurringProfileStatus(\Magento\Payment\Model\Recurring\Profile $profile)
-    {
-        $api = $this->getApi();
-        $action = null;
-        switch ($profile->getNewState()) {
-            case \Magento\Sales\Model\Recurring\Profile::STATE_CANCELED: $action = 'cancel'; break;
-            case \Magento\Sales\Model\Recurring\Profile::STATE_SUSPENDED: $action = 'suspend'; break;
-            case \Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE: $action = 'activate'; break;
-        }
-        $state = $profile->getState();
-        $api->setRecurringProfileId($profile->getReferenceId())
-            ->setIsAlreadyCanceled($state == \Magento\Sales\Model\Recurring\Profile::STATE_CANCELED)
-            ->setIsAlreadySuspended($state == \Magento\Sales\Model\Recurring\Profile::STATE_SUSPENDED)
-            ->setIsAlreadyActive($state == \Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE)
-            ->setAction($action)
-            ->callManageRecurringPaymentsProfileStatus()
-        ;
+        return $data ? $data : array();
     }
 
     /**
      * Import capture results to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return void
      */
     protected function _importCaptureResultToPayment($api, $payment)
     {
@@ -496,15 +411,20 @@ class Pro
     /**
      * Import refund results to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
      * @param bool $canRefundMore
+     * @return void
      */
     protected function _importRefundResultToPayment($api, $payment, $canRefundMore)
     {
-        $payment->setTransactionId($api->getRefundTransactionId())
-                ->setIsTransactionClosed(1) // refund initiated by merchant
-                ->setShouldCloseParentTransaction(!$canRefundMore);
+        $payment->setTransactionId(
+            $api->getRefundTransactionId()
+        )->setIsTransactionClosed(
+            1 // refund initiated by merchant
+        )->setShouldCloseParentTransaction(
+            !$canRefundMore
+        );
         $this->importPaymentInfo($api, $payment);
     }
 

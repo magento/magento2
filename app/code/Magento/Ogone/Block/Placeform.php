@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Ogone\Block;
 
 class Placeform extends \Magento\View\Element\Template
@@ -83,7 +82,7 @@ class Placeform extends \Magento\View\Element\Template
     {
         if ($this->getOrder()) {
             $order = $this->getOrder();
-        } else if ($this->_checkoutSession->getLastRealOrderId()) {
+        } elseif ($this->_checkoutSession->getLastRealOrderId()) {
             $order = $this->_salesOrderFactory->create()
                 ->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
         } else {

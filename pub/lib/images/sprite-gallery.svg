@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Tiny//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd">
+<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" width="73px" height="57px" viewBox="0 0 73 57" xml:space="preserve">
+  <filter id="pictureFilter">
+    <feColorMatrix in="SourceGraphic"
+      type="matrix"
+      values="0 0 0 0 0
+              1 1 1 1 0
+              0 0 0 0 0
+              0 0 0 1 0" />
+  </filter>
+
+<polygon fill-rule="evenodd" points="73,0.707 72.293,0 66.646,5.646 61,0 60.293,0.707 65.939,6.354 60.293,12 61,12.708 
+	66.646,7.061 72.293,12.708 73,12 67.354,6.354 "/>
+<g>
+	<polygon fill-rule="evenodd" points="58.438,28.498 30.438,0.502 29.731,1.209 57.022,28.5 29.731,55.791 30.438,56.498 
+		58.438,28.502 58.437,28.5 	"/>
+</g>
+<g>
+	<polygon fill-rule="evenodd" points="0,28.498 28,0.502 28.707,1.209 1.416,28.5 28.707,55.791 28,56.498 0,28.502 0.002,28.5 	"/>
+</g>
+</svg>

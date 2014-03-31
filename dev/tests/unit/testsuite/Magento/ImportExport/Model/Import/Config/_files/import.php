@@ -30,10 +30,5 @@ return array(
             'model' => 'Model_One'
         )
     ),
-    'productTypes' => array(
-        'name_two' => array(
-            'name' => 'name_two',
-            'model' => 'Model_Two'
-        )
-    ),
+    'productTypes' => array('name_two' => array('name' => 'name_two', 'model' => 'Model_Two'))
 );

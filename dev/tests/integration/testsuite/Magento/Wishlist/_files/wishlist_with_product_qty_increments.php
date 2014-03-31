@@ -33,13 +33,10 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Model\Product $product */
 $product->load(1);
-$product->setStockData(array(
-    'enable_qty_increments' => 1,
-    'qty_increments' => 5,
-))->save();
+$product->setStockData(array('enable_qty_increments' => 1, 'qty_increments' => 5))->save();
 
 /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
 $wishlist = $objectManager->create('Magento\Wishlist\Model\Wishlist');
-$wishlist->loadByCustomer($customer->getId(), true);
+$wishlist->loadByCustomerId($customer->getId(), true);
 $wishlist->addNewItem($product);
 $wishlist->save();

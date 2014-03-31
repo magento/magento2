@@ -34,11 +34,12 @@
  */
 namespace Magento\Wishlist\Model\Resource;
 
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -52,21 +53,18 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $wishlistId
      * @param int $productId
      * @param array $sharedStores
-     * @return \Magento\Wishlist\Model\Resource\Item
+     * @return $this
      */
     public function loadByProductWishlist($object, $wishlistId, $productId, $sharedStores)
     {
         $adapter = $this->_getReadAdapter();
         $storeWhere = $adapter->quoteInto('store_id IN (?)', $sharedStores);
-        $select  = $adapter->select()
-            ->from($this->getMainTable())
-            ->where('wishlist_id=:wishlist_id AND '
-                . 'product_id=:product_id AND '
-                . $storeWhere);
-        $bind = array(
-            'wishlist_id' => $wishlistId,
-            'product_id'  => $productId
+        $select = $adapter->select()->from(
+            $this->getMainTable()
+        )->where(
+            'wishlist_id=:wishlist_id AND ' . 'product_id=:product_id AND ' . $storeWhere
         );
+        $bind = array('wishlist_id' => $wishlistId, 'product_id' => $productId);
         $data = $adapter->fetchRow($select, $bind);
         if ($data) {
             $object->setData($data);

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Model\System\Config\Source;
 
 /**
  * Downloadable Content Disposition Source
@@ -31,22 +32,16 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\System\Config\Source;
-
-class Contentdisposition implements \Magento\Core\Model\Option\ArrayInterface
+class Contentdisposition implements \Magento\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => 'attachment',
-                'label' => __('attachment')
-            ),
-            array(
-                'value' => 'inline',
-                'label' => __('inline')
-            )
+            array('value' => 'attachment', 'label' => __('attachment')),
+            array('value' => 'inline', 'label' => __('inline'))
         );
     }
 }
-

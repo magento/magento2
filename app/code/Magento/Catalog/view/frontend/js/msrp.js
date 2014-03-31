@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-/*jshint evil:true browser:true jquery:true*/
+/*jshint browser:true jquery:true*/
 (function($) {
     $.widget('mage.addToCart', {
         options: {
@@ -31,11 +31,11 @@
         },
 
         _create: function() {
-            $(this.options.cartButtonId).on('click', $.proxy(function() {
+            $(document).on('click', this.options.cartButtonId, $.proxy(function() {
                 this._addToCartSubmit();
             }, this));
 
-            $(this.options.popupId).on('click', $.proxy(function(e) {
+            $(document).on('click', this.options.popupId, $.proxy(function(e) {
                 if (this.options.submitUrl) {
                     location.href = this.options.submitUrl;
                 } else {
@@ -49,30 +49,30 @@
                     this.element.trigger('reloadPrice');
                     var width = $('#map-popup').width();
                     var offsetX = e.pageX - (width / 2) + "px";
-                    $('#map-popup').css({left: offsetX, top: e.pageY}).show();
+                    $('#map-popup').addClass('active').css({left: offsetX, top: e.pageY}).show();
                     if (!this.options.showAddToCart) {
                         $('#map-popup-content > .map-popup-checkout').hide();
                     }
                     $('#map-popup-content').show();
-                    $('#map-popup-text').addClass('map-popup-only-text').show();
+                    $('#map-popup-text').show();
                     $('#map-popup-text-what-this').hide();
                     return false;
                 }
             }, this));
 
-            $(this.options.helpLinkId).on('click', $.proxy(function(e) {
+            $(document).on('click', this.options.helpLinkId, $.proxy(function(e) {
                 $('#map-popup-heading').text(this.options.productName);
                 var width = $('#map-popup').width();
                 var offsetX = e.pageX - (width / 2) + "px";
-                $('#map-popup').css({left: offsetX, top: e.pageY}).show();
+                $('#map-popup').addClass('active').css({left: offsetX, top: e.pageY}).show();
                 $('#map-popup-content').hide();
                 $('#map-popup-text').hide();
                 $('#map-popup-text-what-this').show();
                 return false;
             }, this));
 
-            $(this.options.closeButtonId).on('click', $.proxy(function() {
-                $('#map-popup').hide();
+            $(document).on('click', $.proxy(function() {
+                $('#map-popup').removeClass('active').hide();
                 return false;
             }, this));
 
@@ -82,7 +82,7 @@
             this.element.trigger('addToCart', this.element);
             if (this.options.addToCartUrl) {
                 $('#map-popup').hide();
-                if (opener !== null) {
+                if (opener) {
                     opener.location.href = this.options.addToCartUrl;
                 } else {
                     location.href = this.options.addToCartUrl;

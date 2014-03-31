@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
@@ -38,13 +37,15 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factory = $this->getMock('Magento\View\Asset\PropertyGroupFactory',
-            array(), array(), '', false, false);
-        $factory = $this->getMock('Magento\View\Asset\PropertyGroupFactory',
-            array(), array(), '', false, false);
-        $factory->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback(array($this, 'createAssetGroup')));
+        $factory = $this->getMock('Magento\View\Asset\PropertyGroupFactory', array(), array(), '', false, false);
+        $factory = $this->getMock('Magento\View\Asset\PropertyGroupFactory', array(), array(), '', false, false);
+        $factory->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnCallback(array($this, 'createAssetGroup'))
+        );
         $this->_object = new \Magento\View\Asset\GroupedCollection($factory);
         $this->_asset = new \Magento\View\Asset\Remote('http://127.0.0.1/magento/test.css');
         $this->_object->add('asset', $this->_asset);
@@ -80,10 +81,7 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
         /** @var $actualGroup \Magento\View\Asset\PropertyGroup */
         foreach ($actualGroupObjects as $actualGroup) {
             $this->assertInstanceOf('Magento\View\Asset\PropertyGroup', $actualGroup);
-            $actualGroups[] = array(
-                'properties' => $actualGroup->getProperties(),
-                'assets' => $actualGroup->getAll(),
-            );
+            $actualGroups[] = array('properties' => $actualGroup->getProperties(), 'assets' => $actualGroup->getAll());
         }
         $this->assertEquals($expectedGroups, $actualGroups);
     }
@@ -130,34 +128,37 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
         $expectedGroups = array(
             array(
                 'properties' => array('content_type' => 'unknown', 'can_merge' => false),
-                'assets' => array('asset' => $this->_asset),
+                'assets' => array('asset' => $this->_asset)
             ),
             array(
                 'properties' => array('property' => 'test_value', 'content_type' => 'css', 'can_merge' => false),
-                'assets' => array('css_asset_one' => $cssAsset, 'css_asset_two' => $cssAsset),
+                'assets' => array('css_asset_one' => $cssAsset, 'css_asset_two' => $cssAsset)
             ),
             array(
                 'properties' => array('property' => 'test_value2', 'content_type' => 'css', 'can_merge' => false),
-                'assets' => array('css_asset_four' => $cssAsset, 'css_asset_five' => $cssAsset),
+                'assets' => array('css_asset_four' => $cssAsset, 'css_asset_five' => $cssAsset)
             ),
             array(
                 'properties' => array('property' => 'different_value', 'content_type' => 'css', 'can_merge' => false),
-                'assets' => array('css_asset_three' => $cssAsset),
+                'assets' => array('css_asset_three' => $cssAsset)
             ),
             array(
                 'properties' => array('property' => 'test_value', 'content_type' => 'js', 'can_merge' => false),
-                'assets' => array('js_asset_one' => $jsAsset),
+                'assets' => array('js_asset_one' => $jsAsset)
             ),
             array(
                 'properties' => array(
-                    'property1' => 'value1', 'property2' => 'value2', 'content_type' => 'js', 'can_merge' => false,
+                    'property1' => 'value1',
+                    'property2' => 'value2',
+                    'content_type' => 'js',
+                    'can_merge' => false
                 ),
-                'assets' => array('js_asset_two' => $jsAsset, 'js_asset_three' => $jsAsset),
+                'assets' => array('js_asset_two' => $jsAsset, 'js_asset_three' => $jsAsset)
             ),
             array(
                 'properties' => array('property' => 'test_value', 'content_type' => 'js', 'can_merge' => true),
-                'assets' => array('asset_allowing_merge' => $jsAssetAllowingMerge),
-            ),
+                'assets' => array('asset_allowing_merge' => $jsAssetAllowingMerge)
+            )
         );
 
         $this->_assertGroups($expectedGroups, $this->_object->getGroups());

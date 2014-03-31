@@ -23,13 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Widget\Model\Widget\Instance">
-        <param name="relatedCacheTypes">
-            <array>
-                <item key="blockCache"><value>block_html</value></item>
-                <item key="layoutCache"><value>layout</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="relatedCacheTypes" xsi:type="array">
+                <item name="blockCache" xsi:type="string">block_html</item>
+                <item name="layoutCache" xsi:type="string">layout</item>
+            </argument>
+        </arguments>
     </type>
 </config>

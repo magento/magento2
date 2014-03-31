@@ -32,10 +32,11 @@ $customerData = array(
     'website_id' => 1,
     'firstname' => 'test firstname',
     'lastname' => 'test lastname',
-    'email' => 'exmaple@domain.com',
-    'default_billing' => '_item1',
-    'password' => '123123q'
- );
+    'email' => 'example@domain.com',
+    'default_billing' => 1,
+    'password' => '123123q',
+    'attribute_set_id' => 1
+);
 $customer->setData($customerData);
 $customer->setId(1);
 

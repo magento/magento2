@@ -24,10 +24,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block\Cart\Item;
 
-use Magento\Checkout\Block\Cart\Item\Renderer as Renderer;
+use Magento\Checkout\Block\Cart\Item\Renderer;
 
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +43,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->_imageHelper = $this->getMock('Magento\Catalog\Helper\Image', array(), array(), '', false);
         $this->_renderer = $objectManagerHelper->getObject(
             'Magento\Checkout\Block\Cart\Item\Renderer',
-            ['imageHelper' => $this->_imageHelper]
+            array('imageHelper' => $this->_imageHelper)
         );
     }
 
@@ -59,10 +58,16 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $productForThumbnail = $this->_initProduct();
         /** Ensure that image helper was initialized with correct arguments */
-        $this->_imageHelper->expects($this->once())
-            ->method('init')
-            ->with($productForThumbnail, 'thumbnail')
-            ->will($this->returnSelf());
+        $this->_imageHelper->expects(
+            $this->once()
+        )->method(
+            'init'
+        )->with(
+            $productForThumbnail,
+            'thumbnail'
+        )->will(
+            $this->returnSelf()
+        );
         $productThumbnail = $this->_renderer->getProductThumbnail();
         $this->assertSame($this->_imageHelper, $productThumbnail, 'Invalid product thumbnail is returned.');
     }
@@ -75,7 +80,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected function _initProduct()
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getName', '__wakeup', 'getIdentities'),
+            array(), '', false
+        );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 
         /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
@@ -84,5 +93,21 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->_renderer->setItem($item);
         return $product;
+    }
+
+    public function testGetIdentities()
+    {
+        $product = $this->_initProduct();
+        $identities = [1 => 1, 2 => 2, 3 => 3];
+        $product->expects($this->exactly(2))
+            ->method('getIdentities')
+            ->will($this->returnValue($identities));
+
+        $this->assertEquals($product->getIdentities(), $this->_renderer->getIdentities());
+    }
+
+    public function testGetIdentitiesFromEmptyItem()
+    {
+        $this->assertEmpty($this->_renderer->getIdentities());
     }
 }

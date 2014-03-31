@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
 /**
  * Import behavior source model used for customers' components import entities.
@@ -32,32 +33,22 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Source\Import\Behavior;
-
-class Custom
-    extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
+class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
     /**
-     * Get possible behaviours
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {
         return array(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE
-                => __('Add/Update Complex Data'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-                => __('Delete Entities'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM
-                => __('Custom Action'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE => __('Add/Update Complex Data'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE => __('Delete Entities'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM => __('Custom Action')
         );
     }
 
     /**
-     * Get current behaviour code
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCode()
     {

@@ -44,6 +44,14 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_coreConfig;
 
     /**
+     * List of required request parameters
+     * Order sensitive
+     *
+     * @var string[]
+     */
+    protected $_requiredParams = array('areaFrontName', 'moduleFrontName', 'controllerName', 'actionName');
+
+    /**
      * @param \Magento\App\ActionFactory $actionFactory
      * @param \Magento\App\DefaultPathInterface $defaultPath
      * @param \Magento\App\ResponseFactory $responseFactory
@@ -56,7 +64,8 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      * @param string $routerId
      * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * 
+     * @param \Magento\Code\NameBuilder $nameBuilder
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -70,6 +79,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
+        \Magento\Code\NameBuilder $nameBuilder,
         \Magento\App\ConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
@@ -83,24 +93,13 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
             $storeManager,
             $storeConfig,
             $urlSecurityInfo,
-            $routerId
+            $routerId,
+            $nameBuilder
         );
         $this->_coreConfig = $coreConfig;
         $this->_backendConfig = $backendConfig;
         $this->_url = $url;
     }
-
-    /**
-     * List of required request parameters
-     * Order sensitive
-     * @var array
-     */
-    protected $_requiredParams = array(
-        'areaFrontName',
-        'moduleFrontName',
-        'controllerName',
-        'actionName',
-    );
 
     /**
      * Get router default request path
@@ -131,9 +130,17 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     protected function _shouldBeSecure($path)
     {
-        return substr((string)$this->_coreConfig->getValue('web/unsecure/base_url', 'default'), 0, 5) === 'https'
-            || $this->_backendConfig->isSetFlag('web/secure/use_in_adminhtml')
-            && substr((string)$this->_coreConfig->getValue('web/secure/base_url', 'default'), 0, 5) === 'https';
+        return substr(
+            (string)$this->_coreConfig->getValue('web/unsecure/base_url', 'default'),
+            0,
+            5
+        ) === 'https' || $this->_backendConfig->isSetFlag(
+            'web/secure/use_in_adminhtml'
+        ) && substr(
+            (string)$this->_coreConfig->getValue('web/secure/base_url', 'default'),
+            0,
+            5
+        ) === 'https';
     }
 
     /**
@@ -166,19 +173,12 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     public function getControllerClassName($module, $controller)
     {
-        /**
-         * TODO: Delete these lines after adminhtml module is removed
-         */
-        if ($module == 'Magento_Adminhtml') {
-            return parent::getControllerClassName($module, $controller);
-        }
-
         $parts = explode('_', $module);
         $parts = array_splice($parts, 0, 2);
         $parts[] = 'Controller';
         $parts[] = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
         $parts[] = $controller;
 
-        return \Magento\Core\Helper\String::buildClassName($parts);
+        return $this->nameBuilder->buildClassName($parts);
     }
 }

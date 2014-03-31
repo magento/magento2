@@ -29,7 +29,7 @@
  */
 namespace Magento\Ogone\Model\Source;
 
-class PaymentAction implements \Magento\Core\Model\Option\ArrayInterface
+class PaymentAction implements \Magento\Option\ArrayInterface
 {
     /**
      * Prepare payment action list as optional array
@@ -40,8 +40,14 @@ class PaymentAction implements \Magento\Core\Model\Option\ArrayInterface
     {
         return array(
             array('value' => '', 'label' => __('Ogone Default Operation')),
-            array('value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE, 'label' => __('Authorization')),
-            array('value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE, 'label' => __('Direct Sale')),
+            array(
+                'value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE,
+                'label' => __('Authorization')
+            ),
+            array(
+                'value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE,
+                'label' => __('Direct Sale')
+            )
         );
     }
 }

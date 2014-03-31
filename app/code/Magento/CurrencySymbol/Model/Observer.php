@@ -45,9 +45,8 @@ class Observer
     /**
      * @param \Magento\CurrencySymbol\Helper\Data $currencySymbolData
      */
-    public function __construct(
-        \Magento\CurrencySymbol\Helper\Data $currencySymbolData
-    ) {
+    public function __construct(\Magento\CurrencySymbol\Helper\Data $currencySymbolData)
+    {
         $this->_currencySymbolData = $currencySymbolData;
     }
 
@@ -55,7 +54,7 @@ class Observer
      * Generate options for currency displaying with custom currency symbol
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\CurrencySymbol\Model\Observer
+     * @return $this
      */
     public function currencyDisplayOptions(\Magento\Event\Observer $observer)
     {

@@ -55,32 +55,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_scopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
 
-        $this->_readerMock = $this->getMock(
-            'Magento\App\Resource\Config\Reader', array(), array(), '', false
-        );
+        $this->_readerMock = $this->getMock('Magento\App\Resource\Config\Reader', array(), array(), '', false);
 
         $this->_resourcesConfig = array(
-            'mainResourceName' => array(
-                'name' => 'mainResourceName',
-                'extends' => 'anotherResourceName',
-            ),
-            'otherResourceName' => array(
-                'name' => 'otherResourceName',
-                'connection' => 'otherConnectionName',
-            ),
-            'anotherResourceName' => array(
-                'name' => 'anotherResourceName',
-                'connection' => 'anotherConnection'
-            ),
-            'brokenResourceName' => array(
-                'name' => 'brokenResourceName',
-                'extends' => 'absentResourceName',
-            ),
+            'mainResourceName' => array('name' => 'mainResourceName', 'extends' => 'anotherResourceName'),
+            'otherResourceName' => array('name' => 'otherResourceName', 'connection' => 'otherConnectionName'),
+            'anotherResourceName' => array('name' => 'anotherResourceName', 'connection' => 'anotherConnection'),
+            'brokenResourceName' => array('name' => 'brokenResourceName', 'extends' => 'absentResourceName')
         );
 
-        $this->_cacheMock->expects($this->once())
-            ->method('load')
-            ->will($this->returnValue(serialize($this->_resourcesConfig)));
+        $this->_cacheMock->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->will(
+            $this->returnValue(serialize($this->_resourcesConfig))
+        );
 
         $this->_model = new \Magento\App\Resource\Config(
             $this->_readerMock,
@@ -106,17 +96,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function getConnectionNameDataProvider()
     {
         return array(
-            array(
-                'resourceName' => 'otherResourceName',
-                'connectionName' => 'otherConnectionName',
-            ),
-            array(
-                'resourceName' => 'mainResourceName',
-                'connectionName' => 'anotherConnection',
-            ),
+            array('resourceName' => 'otherResourceName', 'connectionName' => 'otherConnectionName'),
+            array('resourceName' => 'mainResourceName', 'connectionName' => 'anotherConnection'),
             array(
                 'resourceName' => 'brokenResourceName',
-                'connectionName' => \Magento\App\Resource\Config::DEFAULT_SETUP_CONNECTION,
+                'connectionName' => \Magento\App\Resource\Config::DEFAULT_SETUP_CONNECTION
             )
         );
     }

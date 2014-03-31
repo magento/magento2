@@ -23,22 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="newsletter_setup"><value>Magento\Newsletter\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="newsletter_setup" xsi:type="string">Magento\Newsletter\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>newsletter</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">newsletter</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Newsletter\Model\Session">
-        <param name="storage">
-            <instance type="Magento\Newsletter\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
+        </arguments>
     </type>
 </config>

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\Source\Decorator;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -35,23 +34,27 @@ use Magento\View\Design\ThemeInterface;
 class ModuleOutput implements SourceInterface
 {
     /**
+     * Subject
+     *
      * @var SourceInterface
      */
     private $subject;
 
     /**
+     * Module manager
+     *
      * @var \Magento\Module\Manager
      */
     private $moduleManager;
 
     /**
+     * Constructor
+     *
      * @param SourceInterface $subject
      * @param Manager $moduleManager
      */
-    public function __construct(
-        SourceInterface $subject,
-        Manager $moduleManager
-    ) {
+    public function __construct(SourceInterface $subject, Manager $moduleManager)
+    {
         $this->subject = $subject;
         $this->moduleManager = $moduleManager;
     }

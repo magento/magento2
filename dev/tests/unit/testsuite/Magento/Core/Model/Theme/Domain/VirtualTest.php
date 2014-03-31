@@ -60,7 +60,10 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $customizationConfig = $this->getMock('Magento\Theme\Model\Config\Customization', array(), array(), '', false);
 
         $object = new \Magento\Core\Model\Theme\Domain\Virtual(
-            $theme, $themeFactory, $themeCopyService, $customizationConfig
+            $theme,
+            $themeFactory,
+            $themeCopyService,
+            $customizationConfig
         );
 
         $this->assertSame($themeStaging, $object->getStagingTheme());
@@ -88,14 +91,16 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $appStateProperty = new \ReflectionProperty('Magento\Core\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
         /** @var $theme \Magento\Object */
-        $theme->setData(array(
-            'id'                    => 'fixture_theme_id',
-            'theme_version'         => 'fixture_theme_version',
-            'theme_title'           => 'fixture_theme_title',
-            'preview_image'         => 'fixture_preview_image',
-            'is_featured'           => 'fixture_is_featured',
-            'type'                  => \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
-        ));
+        $theme->setData(
+            array(
+                'id' => 'fixture_theme_id',
+                'theme_version' => 'fixture_theme_version',
+                'theme_title' => 'fixture_theme_title',
+                'preview_image' => 'fixture_preview_image',
+                'is_featured' => 'fixture_is_featured',
+                'type' => \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            )
+        );
         $appStateProperty->setValue($theme, $appState);
 
         $themeStaging = $this->getMock(
@@ -106,15 +111,21 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $themeStaging->expects($this->at(0))->method('setData')->with(array(
-            'parent_id'             => 'fixture_theme_id',
-            'theme_path'            => null,
-            'theme_version'         => 'fixture_theme_version',
-            'theme_title'           => 'fixture_theme_title - Staging',
-            'preview_image'         => 'fixture_preview_image',
-            'is_featured'           => 'fixture_is_featured',
-            'type'                  => \Magento\View\Design\ThemeInterface::TYPE_STAGING,
-        ));
+        $themeStaging->expects(
+            $this->at(0)
+        )->method(
+            'setData'
+        )->with(
+            array(
+                'parent_id' => 'fixture_theme_id',
+                'theme_path' => null,
+                'theme_version' => 'fixture_theme_version',
+                'theme_title' => 'fixture_theme_title - Staging',
+                'preview_image' => 'fixture_preview_image',
+                'is_featured' => 'fixture_is_featured',
+                'type' => \Magento\View\Design\ThemeInterface::TYPE_STAGING
+            )
+        );
         $appStateProperty->setValue($themeStaging, $appState);
         $themeStaging->expects($this->at(1))->method('save');
 
@@ -127,7 +138,10 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $customizationConfig = $this->getMock('Magento\Theme\Model\Config\Customization', array(), array(), '', false);
 
         $object = new \Magento\Core\Model\Theme\Domain\Virtual(
-            $theme, $themeFactory, $themeCopyService, $customizationConfig
+            $theme,
+            $themeFactory,
+            $themeCopyService,
+            $customizationConfig
         );
 
         $this->assertSame($themeStaging, $object->getStagingTheme());
@@ -142,7 +156,11 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     public function testIsAssigned()
     {
         $customizationConfig = $this->getMock(
-            'Magento\Theme\Model\Config\Customization', array('isThemeAssignedToStore'), array(), '', false
+            'Magento\Theme\Model\Config\Customization',
+            array('isThemeAssignedToStore'),
+            array(),
+            '',
+            false
         );
         $themeMock = $this->getMock(
             'Magento\Core\Model\Theme',
@@ -152,15 +170,19 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $customizationConfig->expects($this->atLeastOnce())->method('isThemeAssignedToStore')
-            ->with($themeMock)
-            ->will($this->returnValue(true));
+        $customizationConfig->expects(
+            $this->atLeastOnce()
+        )->method(
+            'isThemeAssignedToStore'
+        )->with(
+            $themeMock
+        )->will(
+            $this->returnValue(true)
+        );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $constructArguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\Theme\Domain\Virtual',
-            array(
-                 'theme' => $themeMock,
-                 'customizationConfig' => $customizationConfig,
-            )
+        $constructArguments = $objectManagerHelper->getConstructArguments(
+            'Magento\Core\Model\Theme\Domain\Virtual',
+            array('theme' => $themeMock, 'customizationConfig' => $customizationConfig)
         );
         /** @var $model \Magento\Core\Model\Theme\Domain\Virtual */
         $model = $objectManagerHelper->getObject('Magento\Core\Model\Theme\Domain\Virtual', $constructArguments);

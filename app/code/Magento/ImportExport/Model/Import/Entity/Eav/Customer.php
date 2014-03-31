@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Entity\Eav;
 
 /**
  * Import entity customer model
@@ -34,10 +35,7 @@
  * @todo finish moving dependencies to constructor in the scope of
  * @todo https://wiki.magento.com/display/MAGE2/Technical+Debt+%28Team-Donetsk-B%29
  */
-namespace Magento\ImportExport\Model\Import\Entity\Eav;
-
-class Customer
-    extends \Magento\ImportExport\Model\Import\Entity\Eav\AbstractCustomer
+class Customer extends \Magento\ImportExport\Model\Import\Entity\Eav\AbstractCustomer
 {
     /**
      * Attribute collection name
@@ -50,26 +48,36 @@ class Customer
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL   = 'email';
-    const COLUMN_STORE   = '_store';
+    const COLUMN_EMAIL = 'email';
+
+    const COLUMN_STORE = '_store';
+
     /**#@-*/
 
     /**#@+
      * Error codes
      */
     const ERROR_DUPLICATE_EMAIL_SITE = 'duplicateEmailSite';
-    const ERROR_ROW_IS_ORPHAN        = 'rowIsOrphan';
-    const ERROR_INVALID_STORE        = 'invalidStore';
+
+    const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
+
+    const ERROR_INVALID_STORE = 'invalidStore';
+
     const ERROR_EMAIL_SITE_NOT_FOUND = 'emailSiteNotFound';
-    const ERROR_PASSWORD_LENGTH      = 'passwordLength';
+
+    const ERROR_PASSWORD_LENGTH = 'passwordLength';
+
     /**#@-*/
 
     /**#@+
      * Keys which used to build result data array for future update
      */
     const ENTITIES_TO_CREATE_KEY = 'entities_to_create';
+
     const ENTITIES_TO_UPDATE_KEY = 'entities_to_update';
+
     const ATTRIBUTES_TO_SAVE_KEY = 'attributes_to_save';
+
     /**#@-*/
 
     /**
@@ -94,7 +102,7 @@ class Customer
      * For example, when entity attribute has own validation and import procedures
      * or just to deny this attribute processing.
      *
-     * @var array
+     * @var string[]
      */
     protected $_ignoredAttributes = array('website_id', 'store_id');
 
@@ -172,30 +180,37 @@ class Customer
             $data['attribute_collection'] = $this->_attributeCollection;
         }
 
-        parent::__construct($coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource,
-            $storeManager, $collectionFactory, $eavConfig, $storageFactory, $data);
+        parent::__construct(
+            $coreData,
+            $string,
+            $coreStoreConfig,
+            $importFactory,
+            $resourceHelper,
+            $resource,
+            $storeManager,
+            $collectionFactory,
+            $eavConfig,
+            $storageFactory,
+            $data
+        );
 
         $this->_specialAttributes[] = self::COLUMN_WEBSITE;
         $this->_specialAttributes[] = self::COLUMN_STORE;
-        $this->_permanentAttributes[]  = self::COLUMN_EMAIL;
-        $this->_permanentAttributes[]  = self::COLUMN_WEBSITE;
+        $this->_permanentAttributes[] = self::COLUMN_EMAIL;
+        $this->_permanentAttributes[] = self::COLUMN_WEBSITE;
         $this->_indexValueAttributes[] = 'group_id';
 
-        $this->addMessageTemplate(self::ERROR_DUPLICATE_EMAIL_SITE,
-            __('E-mail is duplicated in import file')
-        );
-        $this->addMessageTemplate(self::ERROR_ROW_IS_ORPHAN,
+        $this->addMessageTemplate(self::ERROR_DUPLICATE_EMAIL_SITE, __('E-mail is duplicated in import file'));
+        $this->addMessageTemplate(
+            self::ERROR_ROW_IS_ORPHAN,
             __('Orphan rows that will be skipped due default row errors')
         );
-        $this->addMessageTemplate(self::ERROR_INVALID_STORE,
+        $this->addMessageTemplate(
+            self::ERROR_INVALID_STORE,
             __('Invalid value in Store column (store does not exists?)')
         );
-        $this->addMessageTemplate(self::ERROR_EMAIL_SITE_NOT_FOUND,
-            __('E-mail and website combination is not found')
-        );
-        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH,
-            __('Invalid password length')
-        );
+        $this->addMessageTemplate(self::ERROR_EMAIL_SITE_NOT_FOUND, __('E-mail and website combination is not found'));
+        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Invalid password length'));
 
         $this->_initStores(true)->_initAttributes();
 
@@ -210,7 +225,7 @@ class Customer
      *
      * @param array $entitiesToCreate Rows for insert
      * @param array $entitiesToUpdate Rows for update
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _saveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
@@ -233,7 +248,7 @@ class Customer
      * Save customer attributes.
      *
      * @param array $attributesData
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _saveCustomerAttributes(array $attributesData)
     {
@@ -243,10 +258,10 @@ class Customer
             foreach ($data as $customerId => $attributeData) {
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = array(
-                        'entity_id'      => $customerId,
+                        'entity_id' => $customerId,
                         'entity_type_id' => $this->getEntityTypeId(),
-                        'attribute_id'   => $attributeId,
-                        'value'          => $value
+                        'attribute_id' => $attributeId,
+                        'value' => $value
                     );
                 }
             }
@@ -259,7 +274,7 @@ class Customer
      * Delete list of customers
      *
      * @param array $entitiesToDelete customers id list
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _deleteCustomerEntities(array $entitiesToDelete)
     {
@@ -307,21 +322,19 @@ class Customer
             $createdAt = new \DateTime('@' . strtotime($rowData['created_at']));
         }
         $entityRow = array(
-            'group_id'   => empty($rowData['group_id'])
-                ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
-
-            'store_id'   => empty($rowData[self::COLUMN_STORE])
-                ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
-
+            'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
+            'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
             'created_at' => $createdAt->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => $now->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT)
         );
 
         $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
-        if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) { // edit
+        if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) {
+            // edit
             $entityRow['entity_id'] = $entityId;
             $entitiesToUpdate[] = $entityRow;
-        } else { // create
+        } else {
+            // create
             $entityId = $this->_getNextEntityId();
             $entityRow['entity_id'] = $entityId;
             $entityRow['entity_type_id'] = $this->getEntityTypeId();
@@ -351,8 +364,8 @@ class Customer
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
                 }
-                $attributesToSave[$attribute->getBackend()->getTable()][$entityId][$attributeParameters['id']]
-                    = $value;
+                $attributesToSave[$attribute->getBackend()
+                    ->getTable()][$entityId][$attributeParameters['id']] = $value;
 
                 // restore 'backend_model' to avoid default setting
                 $attribute->setBackendModel($backendModel);
@@ -361,8 +374,10 @@ class Customer
 
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
-            $attributesToSave[$passwordStorageTable][$entityId][$passwordAttributeId]
-                = $this->_customerModel->hashPassword($rowData['password']);
+            $attributesToSave[$passwordStorageTable][$entityId][$passwordAttributeId] = $this->_customerModel
+                ->hashPassword(
+                    $rowData['password']
+                );
         }
 
         return array(
@@ -375,7 +390,7 @@ class Customer
     /**
      * Import data rows
      *
-     * @return boolean
+     * @return bool
      */
     protected function _importData()
     {
@@ -403,8 +418,10 @@ class Customer
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = array();
                         }
-                        $attributesToSave[$tableName] =
-                            array_diff_key($attributesToSave[$tableName], $customerAttributes) + $customerAttributes;
+                        $attributesToSave[$tableName] = array_diff_key(
+                            $attributesToSave[$tableName],
+                            $customerAttributes
+                        ) + $customerAttributes;
                     }
                 }
             }
@@ -440,12 +457,12 @@ class Customer
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return null
+     * @return void
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
         if ($this->_checkUniqueKey($rowData, $rowNumber)) {
-            $email   = strtolower($rowData[self::COLUMN_EMAIL]);
+            $email = strtolower($rowData[self::COLUMN_EMAIL]);
             $website = $rowData[self::COLUMN_WEBSITE];
 
             if (isset($this->_newCustomers[strtolower($rowData[self::COLUMN_EMAIL])][$website])) {
@@ -457,8 +474,13 @@ class Customer
                 $this->addRowError(self::ERROR_INVALID_STORE, $rowNumber);
             }
             // check password
-            if (isset($rowData['password']) && strlen($rowData['password'])
-                && $this->string->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
+            if (isset(
+                $rowData['password']
+            ) && strlen(
+                $rowData['password']
+            ) && $this->string->strlen(
+                $rowData['password']
+            ) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }
@@ -481,7 +503,7 @@ class Customer
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return null
+     * @return void
      */
     protected function _validateRowForDelete(array $rowData, $rowNumber)
     {

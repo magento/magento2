@@ -35,8 +35,7 @@ namespace Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
-class Authors
-    extends \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\AbstractTab
+class Authors extends \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\AbstractTab
 {
     /**
      * @var \Magento\Json\EncoderInterface
@@ -46,14 +45,14 @@ class Authors
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Connect\Model\Session $session
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Connect\Model\Session $session,
         \Magento\Json\EncoderInterface $jsonEncoder,
@@ -90,18 +89,23 @@ class Authors
      */
     public function getAddAuthorButtonHtml()
     {
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setType('button')
-            ->setClass('add')
-            ->setLabel(__('Add Author'))
-            ->setOnClick('addAuthor()')
-            ->toHtml();
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setType(
+            'button'
+        )->setClass(
+            'add'
+        )->setLabel(
+            __('Add Author')
+        )->setOnClick(
+            'addAuthor()'
+        )->toHtml();
     }
 
     /**
      * Return array of authors
      *
-     * @return array
+     * @return string[]
      */
     public function getAuthors()
     {
@@ -111,7 +115,7 @@ class Authors
             foreach ($this->getData('authors') as $param => $values) {
                 if (is_array($values)) {
                     foreach ($values as $key => $value) {
-                        $temp[$key][$param] =$value;
+                        $temp[$key][$param] = $value;
                     }
                 }
             }

@@ -56,10 +56,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
         $this->_configScopeMock = $this->getMock('\Magento\Config\ScopeInterface');
         $this->_areaList = $this->getMock('\Magento\App\AreaList', array(), array(), '', false);
-        $this->_configScopeMock
-            ->expects($this->any())
-            ->method('getCurrentScope')
-            ->will($this->returnValue('areaCode'));
+        $this->_configScopeMock->expects(
+            $this->any()
+        )->method(
+            'getCurrentScope'
+        )->will(
+            $this->returnValue('areaCode')
+        );
         $this->_config = new \Magento\App\Route\Config(
             $this->_readerMock,
             $this->_cacheMock,
@@ -70,10 +73,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteFrontNameIfCacheIfRouterIdNotExist()
     {
-        $this->_cacheMock->expects($this->once())
-            ->method('load')->with('areaCode::RoutesConfig')
-            ->will($this->returnValue(serialize(array('expected'))));
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'areaCode::RoutesConfig'
+        )->will(
+            $this->returnValue(serialize(array('expected')))
+        );
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
-
 }

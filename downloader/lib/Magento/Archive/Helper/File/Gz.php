@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Archive\Helper\File;
 
 /**
 * Helper class that simplifies gz files stream reading and writing
@@ -31,11 +32,11 @@
 * @package     Magento_Archive
 * @author      Magento Core Team <core@magentocommerce.com>
 */
-namespace Magento\Archive\Helper\File;
-
 class Gz extends \Magento\Archive\Helper\File
 {
     /**
+     * @param string $mode
+     * @return void
      * @see \Magento\Archive\Helper\File::_open()
      */
     protected function _open($mode)
@@ -48,6 +49,8 @@ class Gz extends \Magento\Archive\Helper\File
     }
 
     /**
+     * @param string $data
+     * @return void
      * @see \Magento\Archive\Helper\File::_write()
      */
     protected function _write($data)
@@ -60,6 +63,8 @@ class Gz extends \Magento\Archive\Helper\File
     }
 
     /**
+     * @param int $length
+     * @return string
      * @see \Magento\Archive\Helper\File::_read()
      */
     protected function _read($length)
@@ -68,6 +73,7 @@ class Gz extends \Magento\Archive\Helper\File
     }
 
     /**
+     * @return int|false
      * @see \Magento\Archive\Helper\File::_eof()
      */
     protected function _eof()
@@ -76,6 +82,7 @@ class Gz extends \Magento\Archive\Helper\File
     }
 
     /**
+     * @return void
      * @see \Magento\Archive\Helper\File::_close()
      */
     protected function _close()

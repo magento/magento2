@@ -23,7 +23,7 @@
  */
 namespace Magento\App\Cache;
 
-class TypeList implements \Magento\App\Cache\TypeListInterface
+class TypeList implements TypeListInterface
 {
     const INVALIDATED_TYPES = 'core_cache_invalidate';
 
@@ -33,12 +33,12 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
     protected $_config;
 
     /**
-     * @var \Magento\App\Cache\InstanceFactory
+     * @var InstanceFactory
      */
     protected $_factory;
 
     /**
-     * @var \Magento\App\Cache\StateInterface
+     * @var StateInterface
      */
     protected $_cacheState;
 
@@ -49,14 +49,14 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
 
     /**
      * @param \Magento\Cache\ConfigInterface $config
-     * @param \Magento\App\Cache\StateInterface $cacheState
-     * @param \Magento\App\Cache\InstanceFactory $factory
+     * @param StateInterface $cacheState
+     * @param InstanceFactory $factory
      * @param \Magento\App\CacheInterface $cache
      */
     public function __construct(
         \Magento\Cache\ConfigInterface $config,
-        \Magento\App\Cache\StateInterface $cacheState,
-        \Magento\App\Cache\InstanceFactory $factory,
+        StateInterface $cacheState,
+        InstanceFactory $factory,
         \Magento\App\CacheInterface $cache
     ) {
         $this->_config = $config;
@@ -125,13 +125,15 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
             } else {
                 $typeTags = '';
             }
-            $types[$type] = new \Magento\Object(array(
-                'id'            => $type,
-                'cache_type'    => $node['label'],
-                'description'   => $node['description'],
-                'tags'          => $typeTags,
-                'status'        => (int)$this->_cacheState->isEnabled($type),
-            ));
+            $types[$type] = new \Magento\Object(
+                array(
+                    'id' => $type,
+                    'cache_type' => $node['label'],
+                    'description' => $node['description'],
+                    'tags' => $typeTags,
+                    'status' => (int)$this->_cacheState->isEnabled($type)
+                )
+            );
         }
         return $types;
     }

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="customer_account"/>
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
@@ -31,9 +31,9 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Account\Dashboard\Hello" name="customer_account_dashboard_hello" as="hello" template="account/dashboard/hello.phtml" cacheable="false"/>
+        <block class="Magento\Customer\Block\Account\Dashboard\Hello" name="customer_account_dashboard_hello" as="hello" template="account/dashboard/hello.phtml"/>
         <block class="Magento\View\Element\Template" name="customer_account_dashboard_top" as="top"/>
-        <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="account/dashboard/info.phtml" cacheable="false"/>
-        <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="account/dashboard/address.phtml" cacheable="false"/>
+        <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="account/dashboard/info.phtml"/>
+        <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="account/dashboard/address.phtml"/>
     </referenceContainer>
 </layout>

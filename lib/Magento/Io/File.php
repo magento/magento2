@@ -21,17 +21,11 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Io;
 
 /**
  * Filesystem client
- *
- * @category   Magento
- * @package    Magento_Io
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Io;
-
 class File extends AbstractIo
 {
     /**
@@ -555,7 +549,7 @@ class File extends AbstractIo
      * Get destination folder
      *
      * @param string $filePath
-     * @return bool
+     * @return bool|string
      */
     public function getDestinationFolder($filePath)
     {
@@ -706,9 +700,9 @@ class File extends AbstractIo
      */
     public function ls($grep = null)
     {
-        $ignoredDirectories = Array('.', '..');
+        $ignoredDirectories = array('.', '..');
 
-        if ( is_dir($this->_cwd)) {
+        if (is_dir($this->_cwd)) {
             $dir = $this->_cwd;
         } elseif (is_dir($this->_iwd)) {
             $dir = $this->_iwd;
@@ -716,25 +710,25 @@ class File extends AbstractIo
             throw new \Exception('Unable to list current working directory.');
         }
 
-        $list = Array();
+        $list = array();
 
         $dirHandler = opendir($dir);
         if ($dirHandler) {
             while (($entry = readdir($dirHandler)) !== false) {
-                $listItem = Array();
+                $listItem = array();
 
                 $fullPath = $dir . '/' . $entry;
 
-                if (($grep == self::GREP_DIRS) && (!is_dir($fullPath))) {
+                if ($grep == self::GREP_DIRS && !is_dir($fullPath)) {
                     continue;
-                } elseif (($grep == self::GREP_FILES) && (!is_file($fullPath))) {
+                } elseif ($grep == self::GREP_FILES && !is_file($fullPath)) {
                     continue;
                 } elseif (in_array($entry, $ignoredDirectories)) {
                     continue;
                 }
 
                 $listItem['text'] = $entry;
-                $listItem['mod_date'] = date ('Y-m-d H:i:s', filectime($fullPath));
+                $listItem['mod_date'] = date('Y-m-d H:i:s', filectime($fullPath));
                 $listItem['permissions'] = $this->_parsePermissions(fileperms($fullPath));
                 $listItem['owner'] = $this->_getFileOwner($fullPath);
 
@@ -742,9 +736,12 @@ class File extends AbstractIo
                     $pathInfo = pathinfo($fullPath);
                     $listItem['size'] = filesize($fullPath);
                     $listItem['leaf'] = true;
-                    if (isset($pathInfo['extension'])
-                        && in_array(strtolower($pathInfo['extension']), array('jpg', 'jpeg', 'gif', 'bmp', 'png'))
-                        && $listItem['size'] > 0
+                    if (isset(
+                        $pathInfo['extension']
+                    ) && in_array(
+                        strtolower($pathInfo['extension']),
+                        array('jpg', 'jpeg', 'gif', 'bmp', 'png')
+                    ) && $listItem['size'] > 0
                     ) {
                         $listItem['is_image'] = true;
                         $listItem['filetype'] = $pathInfo['extension'];
@@ -825,25 +822,25 @@ class File extends AbstractIo
         }
 
         /* Determine permissions */
-        $owner['read'] = ($mode & 00400) ? 'r' : '-';
-        $owner['write'] = ($mode & 00200) ? 'w' : '-';
-        $owner['execute'] = ($mode & 00100) ? 'x' : '-';
-        $group['read'] = ($mode & 00040) ? 'r' : '-';
-        $group['write'] = ($mode & 00020) ? 'w' : '-';
-        $group['execute'] = ($mode & 00010) ? 'x' : '-';
-        $world['read'] = ($mode & 00004) ? 'r' : '-';
-        $world['write'] = ($mode & 00002) ? 'w' : '-';
-        $world['execute'] = ($mode & 00001) ? 'x' : '-';
+        $owner['read'] = $mode & 00400 ? 'r' : '-';
+        $owner['write'] = $mode & 00200 ? 'w' : '-';
+        $owner['execute'] = $mode & 00100 ? 'x' : '-';
+        $group['read'] = $mode & 00040 ? 'r' : '-';
+        $group['write'] = $mode & 00020 ? 'w' : '-';
+        $group['execute'] = $mode & 00010 ? 'x' : '-';
+        $world['read'] = $mode & 00004 ? 'r' : '-';
+        $world['write'] = $mode & 00002 ? 'w' : '-';
+        $world['execute'] = $mode & 00001 ? 'x' : '-';
 
         /* Adjust for SUID, SGID and sticky bit */
         if ($mode & 0x800) {
-            $owner["execute"] = ($owner['execute'] == 'x') ? 's' : 'S';
+            $owner["execute"] = $owner['execute'] == 'x' ? 's' : 'S';
         }
         if ($mode & 0x400) {
-            $group["execute"] = ($group['execute'] == 'x') ? 's' : 'S';
+            $group["execute"] = $group['execute'] == 'x' ? 's' : 'S';
         }
         if ($mode & 0x200) {
-            $world["execute"] = ($world['execute'] == 'x') ? 't' : 'T';
+            $world["execute"] = $world['execute'] == 'x' ? 't' : 'T';
         }
 
         $s = sprintf('%1s', $type);
@@ -865,7 +862,7 @@ class File extends AbstractIo
             return 'n/a';
         }
 
-        $owner     = posix_getpwuid(fileowner($filename));
+        $owner = posix_getpwuid(fileowner($filename));
         $groupInfo = posix_getgrnam(filegroup($filename));
 
         return $owner['name'] . ' / ' . $groupInfo;

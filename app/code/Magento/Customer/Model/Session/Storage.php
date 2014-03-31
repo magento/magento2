@@ -25,7 +25,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Session;
 
 class Storage extends \Magento\Session\Storage
@@ -43,9 +42,8 @@ class Storage extends \Magento\Session\Storage
         array $data = array()
     ) {
         if ($configShare->isWebsiteScope()) {
-            $namespace .= '_' . ($storeManager->getWebsite()->getCode());
+            $namespace .= '_' . $storeManager->getWebsite()->getCode();
         }
         parent::__construct($namespace, $data);
     }
 }
-

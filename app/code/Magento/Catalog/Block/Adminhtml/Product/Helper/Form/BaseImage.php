@@ -119,7 +119,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
         /** @var $product \Magento\Catalog\Model\Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"
-    data-mage-init="{baseImage:{}}"
+    data-mage-init='{"baseImage":{}}'
     data-max-file-size="{$this->_getFileMaxSize()}"
     >
     <div class="image image-placeholder">

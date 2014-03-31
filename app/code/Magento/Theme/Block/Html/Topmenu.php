@@ -21,14 +21,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
 
 /**
  * Html page top menu block
  */
-class Topmenu extends \Magento\View\Element\Template
+class Topmenu extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
+    /**
+     * Cache identities
+     *
+     * @var array
+     */
+    protected $identities = array();
+
     /**
      * Top menu data tree
      *
@@ -38,6 +44,8 @@ class Topmenu extends \Magento\View\Element\Template
 
     /**
      * Init top menu tree structure
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -54,9 +62,10 @@ class Topmenu extends \Magento\View\Element\Template
      */
     public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
     {
-        $this->_eventManager->dispatch('page_block_html_topmenu_gethtml_before', array(
-            'menu' => $this->_menu,
-        ));
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_before',
+            array('menu' => $this->_menu, 'block' => $this)
+        );
 
         $this->_menu->setOutermostClass($outermostClass);
         $this->_menu->setChildrenWrapClass($childrenWrapClass);
@@ -64,10 +73,10 @@ class Topmenu extends \Magento\View\Element\Template
         $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
 
         $transportObject = new \Magento\Object(array('html' => $html));
-        $this->_eventManager->dispatch('page_block_html_topmenu_gethtml_after', array(
-            'menu' => $this->_menu,
-            'transportObject' => $transportObject,
-        ));
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_after',
+            array('menu' => $this->_menu, 'transportObject' => $transportObject)
+        );
 
         return $html;
     }
@@ -95,7 +104,7 @@ class Topmenu extends \Magento\View\Element\Template
      *
      * @param \Magento\Backend\Model\Menu $items
      * @param int $limit
-     * @return array
+     * @return array|void
      *
      * @todo: Add Depth Level limit, and better logic for columns
      */
@@ -106,10 +115,7 @@ class Topmenu extends \Magento\View\Element\Template
             return;
         }
 
-        $result[] = array(
-            'total' => $total,
-            'max' => (int)ceil($total / ceil($total / $limit)),
-        );
+        $result[] = array('total' => $total, 'max' => (int)ceil($total / ceil($total / $limit)));
 
         $count = 0;
         $firstCol = true;
@@ -128,10 +134,7 @@ class Topmenu extends \Magento\View\Element\Template
                 $colbrake = false;
             }
 
-            $result[] = array(
-                'place' => $place,
-                'colbrake' => $colbrake,
-            );
+            $result[] = array('place' => $place, 'colbrake' => $colbrake);
 
             $firstCol = false;
         }
@@ -178,14 +181,14 @@ class Topmenu extends \Magento\View\Element\Template
     /**
      * Recursively generates top menu html from data that is specified in $menuTree
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param \Magento\Data\Tree\Node $menuTree
      * @param string $childrenWrapClass
      * @param int $limit
      * @param array $colBrakes
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getHtml(\Magento\Data\Tree\Node $menuTree, $childrenWrapClass, $limit, $colBrakes = array())
     {
@@ -221,10 +224,14 @@ class Topmenu extends \Magento\View\Element\Template
             }
 
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
-            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
-                . $this->escapeHtml($child->getName()) . '</span></a>'
-                . $this->_addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
-                . '</li>';
+            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $this->escapeHtml(
+                $child->getName()
+            ) . '</span></a>' . $this->_addSubMenu(
+                $child,
+                $childLevel,
+                $childrenWrapClass,
+                $limit
+            ) . '</li>';
             $itemPosition++;
             $counter++;
         }
@@ -298,5 +305,26 @@ class Topmenu extends \Magento\View\Element\Template
         }
 
         return $classes;
+    }
+
+    /**
+     * Add identity
+     *
+     * @param array $identity
+     * @return void
+     */
+    public function addIdentity($identity)
+    {
+        $this->identities[] = $identity;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->identities;
     }
 }

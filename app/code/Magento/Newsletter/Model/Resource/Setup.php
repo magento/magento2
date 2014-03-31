@@ -49,9 +49,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
         $connectionName = ''
     ) {
         parent::__construct($context, $resourceName, $moduleName, $connectionName);
-        $this->_setupMigration = $this->_migrationFactory->create(
-            array('resourceName' => 'core_setup')
-        );
+        $this->_setupMigration = $this->_migrationFactory->create(array('resourceName' => 'core_setup'));
     }
 
     /**

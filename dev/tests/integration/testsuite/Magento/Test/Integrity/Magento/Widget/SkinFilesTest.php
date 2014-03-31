@@ -34,11 +34,12 @@ class SkinFilesTest extends \PHPUnit_Framework_TestCase
     public function testWidgetPlaceholderImages($skinImage)
     {
         $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                ->get('Magento\View\FileSystem')->getViewFile(
-                    $skinImage,
-                    array('area' => 'adminhtml')
-                )
+            \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
+                'Magento\View\FileSystem'
+            )->getViewFile(
+                $skinImage,
+                array('area' => 'adminhtml')
+            )
         );
     }
 
@@ -49,12 +50,12 @@ class SkinFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         /** @var $model \Magento\Widget\Model\Widget */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Widget\Model\Widget');
         foreach ($model->getWidgetsArray() as $row) {
             /** @var $instance \Magento\Widget\Model\Widget\Instance */
-            $instance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+            $instance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Widget\Model\Widget\Instance'
+            );
             $config = $instance->setType($row['type'])->getWidgetConfigAsArray();
             if (isset($config['placeholder_image'])) {
                 $result[] = array((string)$config['placeholder_image']);

@@ -40,56 +40,56 @@ class Profiler
      *
      * @var bool
      */
-    static private $_enabled = false;
+    private static $_enabled = false;
 
     /**
      * Nesting path that represents namespace to resolve timer names
      *
      * @var string[]
      */
-    static private $_currentPath = array();
+    private static $_currentPath = array();
 
     /**
      * Count of elements in $_currentPath
      *
      * @var int
      */
-    static private $_pathCount = 0;
+    private static $_pathCount = 0;
 
     /**
      * Index for counting of $_pathCount for timer names
      *
      * @var array
      */
-    static private $_pathIndex = array();
+    private static $_pathIndex = array();
 
     /**
      * Collection for profiler drivers.
      *
      * @var DriverInterface[]
      */
-    static private $_drivers = array();
+    private static $_drivers = array();
 
     /**
      * List of default tags.
      *
      * @var array
      */
-    static private $_defaultTags = array();
+    private static $_defaultTags = array();
 
     /**
      * Collection of tag filters.
      *
      * @var array
      */
-    static private $_tagFilters = array();
+    private static $_tagFilters = array();
 
     /**
      * Has tag filters flag for faster checks of filters availability.
      *
      * @var bool
      */
-    static private $_hasTagFilters = false;
+    private static $_hasTagFilters = false;
 
     /**
      * Set default tags
@@ -367,26 +367,19 @@ class Profiler
      */
     protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
-        $config = array(
-            'baseDir' => $baseDir,
-            'tagFilters' => array()
-        );
+        $config = array('baseDir' => $baseDir, 'tagFilters' => array());
 
         if (is_scalar($profilerConfig)) {
             $config['drivers'] = array(
-                array(
-                    'output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)
-                )
+                array('output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig))
             );
         } else {
             $config = array_merge($config, $profilerConfig);
         }
 
-        $driverConfigs = (array) (isset($config['drivers']) ? $config['drivers'] : array());
-        $driverFactory = isset($config['driverFactory'])
-            ? $config['driverFactory']
-            : new Factory();
-        $tagFilters = (array) (isset($config['tagFilters']) ? $config['tagFilters'] : array());
+        $driverConfigs = (array)(isset($config['drivers']) ? $config['drivers'] : array());
+        $driverFactory = isset($config['driverFactory']) ? $config['driverFactory'] : new Factory();
+        $tagFilters = (array)(isset($config['tagFilters']) ? $config['tagFilters'] : array());
 
         $result = array(
             'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),
@@ -438,9 +431,7 @@ class Profiler
             if (is_numeric($driverConfig)) {
                 $result = array();
             } else {
-                $result = array(
-                    'type' => $driverConfig
-                );
+                $result = array('type' => $driverConfig);
             }
         }
         return $result;

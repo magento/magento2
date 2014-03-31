@@ -37,11 +37,7 @@ class StaticProperties
      *
      * @var array
      */
-    protected static $_cleanableFolders = array(
-        '/app/code/',
-        '/dev/tests/',
-        '/lib/',
-    );
+    protected static $_cleanableFolders = array('/app/code/', '/dev/tests/', '/lib/');
 
     /**
      * Classes to exclude from static variables cleaning
@@ -55,7 +51,7 @@ class StaticProperties
         'Magento\TestFramework\Event\Magento',
         'Magento\TestFramework\Event\PhpUnit',
         'Magento\TestFramework\Annotation\AppIsolation',
-        'Magento\Phrase',
+        'Magento\Phrase'
     );
 
     /**
@@ -73,8 +69,10 @@ class StaticProperties
 
         // 2. do not process blacklisted classes from integration framework
         foreach (self::$_classesToSkip as $notCleanableClass) {
-            if ($reflectionClass->getName() == $notCleanableClass
-                || is_subclass_of($reflectionClass->getName(), $notCleanableClass)
+            if ($reflectionClass->getName() == $notCleanableClass || is_subclass_of(
+                $reflectionClass->getName(),
+                $notCleanableClass
+            )
             ) {
                 return false;
             }
@@ -109,7 +107,7 @@ class StaticProperties
                 foreach ($staticProperties as $staticProperty) {
                     $staticProperty->setAccessible(true);
                     $value = $staticProperty->getValue();
-                    if (is_object($value) || (is_array($value) && is_object(current($value)))) {
+                    if (is_object($value) || is_array($value) && is_object(current($value))) {
                         $staticProperty->setValue(null);
                     }
                     unset($value);

@@ -32,7 +32,7 @@ namespace Magento\Wishlist\Model\Resource\Item\Collection;
 class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registryManager;
 
@@ -44,7 +44,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\App\Resource $coreResource
@@ -54,9 +54,9 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Registry $registry
-     * @param mixed $connection
-     * 
+     * @param \Magento\Registry $registry
+     * @param \Zend_Db_Adapter_Abstract $connection
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -67,7 +67,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\App\Resource $coreResource,
@@ -77,7 +77,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
         \Magento\App\State $appState,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         $connection = null
     ) {
         $this->_registryManager = $registry;
@@ -106,15 +106,14 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Initialize db select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addCustomerIdFilter($this->_registryManager->registry('current_customer')->getId())
-        ->resetSortOrder()
-        ->addDaysInWishlist()
-        ->addStoreData();
+        $this->addCustomerIdFilter(
+            $this->_registryManager->registry('current_customer')->getId()
+        )->resetSortOrder()->addDaysInWishlist()->addStoreData();
         return $this;
     }
 
@@ -141,17 +140,16 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string|array $field
      * @param null|string|array $condition
+     * @see self::_getConditionSql for $condition
      * @return \Magento\Data\Collection\Db
      */
     public function addFieldToFilter($field, $condition = null)
     {
         switch ($field) {
             case 'product_name':
-                $value = (string) $condition['like'];
+                $value = (string)$condition['like'];
                 $value = trim(trim($value, "'"), "%");
                 return $this->addProductNameFilter($value);
             case 'store_id':

@@ -44,10 +44,8 @@ class ReverseResolver
      * @param ModuleListInterface $moduleList
      * @param ModuleDir $moduleDirs
      */
-    public function __construct(
-        ModuleListInterface $moduleList,
-        ModuleDir $moduleDirs
-    ) {
+    public function __construct(ModuleListInterface $moduleList, ModuleDir $moduleDirs)
+    {
         $this->_moduleList = $moduleList;
         $this->_moduleDirs = $moduleDirs;
     }

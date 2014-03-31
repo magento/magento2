@@ -72,38 +72,42 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     protected function _getModelDependencies($tableRowsCount = 0, $tableData = array(), $aliasesMap = array())
     {
         $this->_selectMock = $this->getMock('Magento\DB\Select', array(), array(), '', false);
-        $this->_selectMock->expects($this->any())
-                    ->method('from')
-                    ->will($this->returnSelf());
-        $this->_selectMock->expects($this->any())
-                    ->method('where')
-                    ->will($this->returnCallback(array($this, 'whereCallback')));
-
-        $adapterMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql',
-            array('select', 'update', 'fetchAll', 'fetchOne'), array(), '', false
+        $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->_selectMock->expects(
+            $this->any()
+        )->method(
+            'where'
+        )->will(
+            $this->returnCallback(array($this, 'whereCallback'))
         );
-        $adapterMock->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($this->_selectMock));
-        $adapterMock->expects($this->any())
-            ->method('update')
-            ->will($this->returnCallback(array($this, 'updateCallback')));
-        $adapterMock->expects($this->any())
-            ->method('fetchAll')
-            ->will($this->returnValue($tableData));
-        $adapterMock->expects($this->any())
-            ->method('fetchOne')
-            ->will($this->returnValue($tableRowsCount));
+
+        $adapterMock = $this->getMock(
+            'Magento\DB\Adapter\Pdo\Mysql',
+            array('select', 'update', 'fetchAll', 'fetchOne'),
+            array(),
+            '',
+            false
+        );
+        $adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
+        $adapterMock->expects(
+            $this->any()
+        )->method(
+            'update'
+        )->will(
+            $this->returnCallback(array($this, 'updateCallback'))
+        );
+        $adapterMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
+        $adapterMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
 
         return array(
-            'resource_config'   => 'not_used',
+            'resource_config' => 'not_used',
             'connection_config' => 'not_used',
-            'module_config'     => 'not_used',
-            'base_dir'          => 'not_used',
-            'path_to_map_file'  => 'not_used',
-            'connection'        => $adapterMock,
-            'core_helper'       => $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false),
-            'aliases_map'       => $aliasesMap
+            'module_config' => 'not_used',
+            'base_dir' => 'not_used',
+            'path_to_map_file' => 'not_used',
+            'connection' => $adapterMock,
+            'core_helper' => $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false),
+            'aliases_map' => $aliasesMap
         );
     }
 
@@ -138,8 +142,13 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         if (null === $this->_actualWhere) {
             $this->_actualWhere = array();
         }
-        if (!empty($condition) && false === strpos($condition, ' IS NOT NULL')
-            && !in_array($condition, $this->_actualWhere)
+        if (!empty($condition) && false === strpos(
+            $condition,
+            ' IS NOT NULL'
+        ) && !in_array(
+            $condition,
+            $this->_actualWhere
+        )
         ) {
             $this->_actualWhere[] = $condition;
         }
@@ -152,37 +161,43 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     public function testAppendClassAliasReplace()
     {
         $moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
-        $moduleListMock->expects($this->once())
-            ->method('getModule')
-            ->will($this->returnValue(array()));
+        $moduleListMock->expects($this->once())->method('getModule')->will($this->returnValue(array()));
 
         $contextMock = $this->getMock('Magento\Core\Model\Resource\Setup\Context', array(), array(), '', false);
         $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $contextMock->expects($this->any())
-            ->method('getFilesystem')
-            ->will($this->returnValue($filesystemMock));
+        $contextMock->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystemMock));
         $modulesDirMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($modulesDirMock));
+        $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirMock));
 
-        $contextMock->expects($this->once())
-            ->method('getEventManager')
-            ->will($this->returnValue($this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)));
-        $contextMock->expects($this->once())
-            ->method('getResourceModel')
-            ->will($this->returnValue($this->getMock('Magento\App\Resource', array(), array(), '', false)));
-        $contextMock->expects($this->once())
-            ->method('getLogger')
-            ->will($this->returnValue($this->getMock('Magento\Logger', array(), array(), '', false)));
-        $contextMock->expects($this->once())
-            ->method('getModulesReader')
-            ->will($this->returnValue(
-                $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false)
-            ));
-        $contextMock->expects($this->once())
-            ->method('getModuleList')
-            ->will($this->returnValue($moduleListMock));
+        $contextMock->expects(
+            $this->once()
+        )->method(
+            'getEventManager'
+        )->will(
+            $this->returnValue($this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false))
+        );
+        $contextMock->expects(
+            $this->once()
+        )->method(
+            'getResourceModel'
+        )->will(
+            $this->returnValue($this->getMock('Magento\App\Resource', array(), array(), '', false))
+        );
+        $contextMock->expects(
+            $this->once()
+        )->method(
+            'getLogger'
+        )->will(
+            $this->returnValue($this->getMock('Magento\Logger', array(), array(), '', false))
+        );
+        $contextMock->expects(
+            $this->once()
+        )->method(
+            'getModulesReader'
+        )->will(
+            $this->returnValue($this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false))
+        );
+        $contextMock->expects($this->once())->method('getModuleList')->will($this->returnValue($moduleListMock));
 
         $setupModel = new \Magento\Core\Model\Resource\Setup\Migration(
             $contextMock,
@@ -192,16 +207,21 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             ''
         );
 
-        $setupModel->appendClassAliasReplace('tableName', 'fieldName', 'entityType', 'fieldContentType',
-            array('pk_field1', 'pk_field2'), 'additionalWhere'
+        $setupModel->appendClassAliasReplace(
+            'tableName',
+            'fieldName',
+            'entityType',
+            'fieldContentType',
+            array('pk_field1', 'pk_field2'),
+            'additionalWhere'
         );
 
-        $expectedRulesList = array (
+        $expectedRulesList = array(
             'tableName' => array(
                 'fieldName' => array(
-                    'entity_type'      => 'entityType',
-                    'content_type'     => 'fieldContentType',
-                    'pk_fields'        => array('pk_field1', 'pk_field2'),
+                    'entity_type' => 'entityType',
+                    'content_type' => 'fieldContentType',
+                    'pk_fields' => array('pk_field1', 'pk_field2'),
                     'additional_where' => 'additionalWhere'
                 )
             )
@@ -284,12 +304,12 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     public function updateClassAliasesDataProvider()
     {
         return array(
-            'plain text replace model'         => include __DIR__ . '/_files/data_content_plain_model.php',
-            'plain text replace resource'      => include __DIR__ . '/_files/data_content_plain_resource.php',
+            'plain text replace model' => include __DIR__ . '/_files/data_content_plain_model.php',
+            'plain text replace resource' => include __DIR__ . '/_files/data_content_plain_resource.php',
             'plain text replace with pk field' => include __DIR__ . '/_files/data_content_plain_pk_fields.php',
-            'xml replace'                      => include __DIR__ . '/_files/data_content_xml.php',
-            'wiki markup replace'              => include __DIR__ . '/_files/data_content_wiki.php',
-            'serialized php replace'           => include __DIR__ . '/_files/data_content_serialized.php',
+            'xml replace' => include __DIR__ . '/_files/data_content_xml.php',
+            'wiki markup replace' => include __DIR__ . '/_files/data_content_wiki.php',
+            'serialized php replace' => include __DIR__ . '/_files/data_content_serialized.php'
         );
     }
 
@@ -314,9 +334,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFilesystemMock()
     {
-        $mock = $this->getMockBuilder('Magento\App\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         return $mock;
     }
 }

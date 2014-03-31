@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Setup;
 
 /**
@@ -36,29 +35,40 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**#@+
      * Type of field content where class alias is used
      */
-    const FIELD_CONTENT_TYPE_PLAIN       = 'plain';
-    const FIELD_CONTENT_TYPE_XML         = 'xml';
-    const FIELD_CONTENT_TYPE_WIKI        = 'wiki';
-    const FIELD_CONTENT_TYPE_SERIALIZED  = 'serialized';
+    const FIELD_CONTENT_TYPE_PLAIN = 'plain';
+
+    const FIELD_CONTENT_TYPE_XML = 'xml';
+
+    const FIELD_CONTENT_TYPE_WIKI = 'wiki';
+
+    const FIELD_CONTENT_TYPE_SERIALIZED = 'serialized';
+
     /**#@-*/
 
     /**#@+
      *  Entity type of alias
      */
-    const ENTITY_TYPE_MODEL    = 'Model';
-    const ENTITY_TYPE_BLOCK    = 'Block';
+    const ENTITY_TYPE_MODEL = 'Model';
+
+    const ENTITY_TYPE_BLOCK = 'Block';
+
     const ENTITY_TYPE_RESOURCE = 'Model_Resource';
+
     /**#@-*/
 
     /**#@+
      *  Find/replace patterns
      */
-    const PLAIN_FIND_PATTERN         = '/^(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)::.*?$/sui';
-    const WIKI_FIND_PATTERN
-        = '/{{(block|widget).*?(class|type)=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?}}/sui';
-    const XML_FIND_PATTERN           = '/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui';
-    const SERIALIZED_FIND_PATTERN    = '#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui';
+    const PLAIN_FIND_PATTERN = '/^(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)::.*?$/sui';
+
+    const WIKI_FIND_PATTERN = '/{{(block|widget).*?(class|type)=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?}}/sui';
+
+    const XML_FIND_PATTERN = '/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui';
+
+    const SERIALIZED_FIND_PATTERN = '#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui';
+
     const SERIALIZED_REPLACE_PATTERN = 's:%d:"%s"';
+
     /**#@-*/
 
     /**
@@ -115,7 +125,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      */
     protected $_replacePatterns = array(
         self::FIELD_CONTENT_TYPE_WIKI => self::WIKI_FIND_PATTERN,
-        self::FIELD_CONTENT_TYPE_XML  => self::XML_FIND_PATTERN,
+        self::FIELD_CONTENT_TYPE_XML => self::XML_FIND_PATTERN
     );
 
     /**
@@ -175,8 +185,13 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $additionalWhere additional where condition
      * @return void
      */
-    public function appendClassAliasReplace($tableName, $fieldName, $entityType = '',
-        $fieldContentType = self::FIELD_CONTENT_TYPE_PLAIN, array $primaryKeyFields = array(), $additionalWhere = ''
+    public function appendClassAliasReplace(
+        $tableName,
+        $fieldName,
+        $entityType = '',
+        $fieldContentType = self::FIELD_CONTENT_TYPE_PLAIN,
+        array $primaryKeyFields = array(),
+        $additionalWhere = ''
     ) {
         if (!isset($this->_replaceRules[$tableName])) {
             $this->_replaceRules[$tableName] = array();
@@ -184,16 +199,18 @@ class Migration extends \Magento\Core\Model\Resource\Setup
 
         if (!isset($this->_replaceRules[$tableName][$fieldName])) {
             $this->_replaceRules[$tableName][$fieldName] = array(
-                'entity_type'      => $entityType,
-                'content_type'     => $fieldContentType,
-                'pk_fields'        => $primaryKeyFields,
-                'additional_where' => $additionalWhere,
+                'entity_type' => $entityType,
+                'content_type' => $fieldContentType,
+                'pk_fields' => $primaryKeyFields,
+                'additional_where' => $additionalWhere
             );
         }
     }
 
     /**
      * Start process of replacing aliases with class names using rules
+     *
+     * @return void
      */
     public function doUpdateClassAliases()
     {
@@ -207,6 +224,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $tableName name of table to replace aliases in
      * @param array $tableRules replacing rules for table
+     * @return void
      */
     protected function _updateClassAliasesInTable($tableName, array $tableRules)
     {
@@ -227,22 +245,24 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $tableName name of table to replace aliases in
      * @param string $fieldName name of table column to replace aliases in
      * @param string $additionalWhere additional where condition
-     *
      * @return int
      */
     protected function _getRowsCount($tableName, $fieldName, $additionalWhere = '')
     {
         $adapter = $this->getConnection();
 
-        $query = $adapter->select()
-            ->from($this->getTable($tableName), array('rows_count' => new \Zend_Db_Expr('COUNT(*)')))
-            ->where($fieldName . ' IS NOT NULL');
+        $query = $adapter->select()->from(
+            $this->getTable($tableName),
+            array('rows_count' => new \Zend_Db_Expr('COUNT(*)'))
+        )->where(
+            $fieldName . ' IS NOT NULL'
+        );
 
         if (!empty($additionalWhere)) {
             $query->where($additionalWhere);
         }
 
-        return (int) $adapter->fetchOne($query);
+        return (int)$adapter->fetchOne($query);
     }
 
     /**
@@ -252,6 +272,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $fieldName name of table column to replace aliases in
      * @param array $fieldRule
      * @param int $currentPage
+     * @return void
      */
     protected function _applyFieldRule($tableName, $fieldName, array $fieldRule, $currentPage = 0)
     {
@@ -259,19 +280,23 @@ class Migration extends \Magento\Core\Model\Resource\Setup
         if (!empty($fieldRule['pk_fields'])) {
             $fieldsToSelect = array_merge($fieldsToSelect, $fieldRule['pk_fields']);
         }
-        $tableData = $this->_getTableData($tableName, $fieldName, $fieldsToSelect, $fieldRule['additional_where'],
+        $tableData = $this->_getTableData(
+            $tableName,
+            $fieldName,
+            $fieldsToSelect,
+            $fieldRule['additional_where'],
             $currentPage
         );
 
         $fieldReplacements = array();
         foreach ($tableData as $rowData) {
-            $replacement = $this->_getReplacement($rowData[$fieldName], $fieldRule['content_type'],
+            $replacement = $this->_getReplacement(
+                $rowData[$fieldName],
+                $fieldRule['content_type'],
                 $fieldRule['entity_type']
             );
             if ($replacement !== $rowData[$fieldName]) {
-                $fieldReplacement = array(
-                    'to' => $replacement
-                );
+                $fieldReplacement = array('to' => $replacement);
                 if (empty($fieldRule['pk_fields'])) {
                     $fieldReplacement['where_fields'] = array($fieldName => $rowData[$fieldName]);
                 } else {
@@ -293,6 +318,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $tableName
      * @param string $fieldName
      * @param array $fieldReplacements
+     * @return void
      */
     protected function _updateRowsData($tableName, $fieldName, array $fieldReplacements)
     {
@@ -304,11 +330,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
                 foreach ($fieldReplacement['where_fields'] as $whereFieldName => $value) {
                     $where[$adapter->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
                 }
-                $adapter->update(
-                    $this->getTable($tableName),
-                    array($fieldName => $fieldReplacement['to']),
-                    $where
-                );
+                $adapter->update($this->getTable($tableName), array($fieldName => $fieldReplacement['to']), $where);
             }
         }
     }
@@ -321,17 +343,23 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param array $fieldsToSelect array of fields to select
      * @param string $additionalWhere additional where condition
      * @param int $currPage
-     *
      * @return array
      */
-    protected function _getTableData($tableName, $fieldName, array $fieldsToSelect, $additionalWhere = '',
+    protected function _getTableData(
+        $tableName,
+        $fieldName,
+        array $fieldsToSelect,
+        $additionalWhere = '',
         $currPage = 0
     ) {
         $adapter = $this->getConnection();
 
-        $query = $adapter->select()
-            ->from($this->getTable($tableName), $fieldsToSelect)
-            ->where($fieldName . ' IS NOT NULL');
+        $query = $adapter->select()->from(
+            $this->getTable($tableName),
+            $fieldsToSelect
+        )->where(
+            $fieldName . ' IS NOT NULL'
+        );
 
         if (!empty($additionalWhere)) {
             $query->where($additionalWhere);
@@ -350,7 +378,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $data
      * @param string $contentType type of data (field content)
      * @param string $entityType entity type of alias
-     *
      * @return string
      */
     protected function _getReplacement($data, $contentType, $entityType = '')
@@ -359,7 +386,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
             case self::FIELD_CONTENT_TYPE_SERIALIZED:
                 $data = $this->_getAliasInSerializedStringReplacement($data, $entityType);
                 break;
-            // wiki and xml content types use the same replacement method
+                // wiki and xml content types use the same replacement method
             case self::FIELD_CONTENT_TYPE_WIKI:
             case self::FIELD_CONTENT_TYPE_XML:
                 $data = $this->_getPatternReplacement($data, $contentType, $entityType);
@@ -378,7 +405,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $alias
      * @param string $entityType entity type of alias
-     *
      * @return string
      */
     protected function _getCorrespondingClassName($alias, $entityType = '')
@@ -454,7 +480,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
         }
 
         $replacements = array();
-        $pattern      = $this->_replacePatterns[$contentType];
+        $pattern = $this->_replacePatterns[$contentType];
         preg_match_all($pattern, $data, $matches, PREG_PATTERN_ORDER);
         if (isset($matches['alias'])) {
             $matches = array_unique($matches['alias']);
@@ -479,7 +505,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $module
      * @param string $type
      * @param string $name
-     *
      * @return string
      */
     protected function _getClassName($module, $type, $name = null)
@@ -497,7 +522,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Whether the given class name is a factory name
      *
      * @param string $factoryName
-     *
      * @return bool
      */
     protected function _isFactoryName($factoryName)
@@ -509,7 +533,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Transform factory name into a pair of module and name
      *
      * @param string $factoryName
-     *
      * @return array
      */
     protected function _getModuleName($factoryName)
@@ -532,8 +555,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Get composite module name by module alias
      *
-     * @param $moduleAlias
-     *
+     * @param string $moduleAlias
      * @return string|null
      */
     protected function _getCompositeModuleName($moduleAlias)
@@ -552,7 +574,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $alias
      * @param string $entityType
-     *
      * @return string
      */
     protected function _getAliasFromMap($alias, $entityType = '')
@@ -581,9 +602,10 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Store already generated class name for alias
      *
-     * @param $entityType
-     * @param $alias
-     * @param $className
+     * @param string $entityType
+     * @param string $alias
+     * @param string $className
+     * @return void
      */
     protected function _pushToMap($entityType, $alias, $className)
     {
@@ -623,7 +645,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Load aliases to classes map from file
      *
      * @param string $pathToMapFile
-     *
      * @return string
      */
     protected function _loadMap($pathToMapFile)
@@ -638,7 +659,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * @param string $data
      * @param string $entityType
-     * @return mixed
+     * @return string
      */
     protected function _getAliasInSerializedStringReplacement($data, $entityType = '')
     {
@@ -660,7 +681,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Parse class aliases from serialized string
      *
-     * @param $string
+     * @param string $string
      * @return array
      */
     protected function _parseSerializedString($string)
@@ -683,18 +704,17 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     {
         return array(
             'adminnotification' => 'Magento_AdminNotification',
-            'catalogindex'      => 'Magento_CatalogIndex',
-            'cataloginventory'  => 'Magento_CatalogInventory',
-            'catalogrule'       => 'Magento_CatalogRule',
-            'catalogsearch'     => 'Magento_CatalogSearch',
-            'currencysymbol'    => 'Magento_CurrencySymbol',
-            'giftmessage'       => 'Magento_GiftMessage',
-            'googleanalytics'   => 'Magento_GoogleAnalytics',
-            'googlebase'        => 'Magento_GoogleBase',
-            'googlecheckout'    => 'Magento_GoogleCheckout',
-            'importexport'      => 'Magento_ImportExport',
-            'productalert'      => 'Magento_ProductAlert',
-            'salesrule'         => 'Magento_SalesRule',
+            'catalogindex' => 'Magento_CatalogIndex',
+            'cataloginventory' => 'Magento_CatalogInventory',
+            'catalogrule' => 'Magento_CatalogRule',
+            'catalogsearch' => 'Magento_CatalogSearch',
+            'currencysymbol' => 'Magento_CurrencySymbol',
+            'giftmessage' => 'Magento_GiftMessage',
+            'googleanalytics' => 'Magento_GoogleAnalytics',
+            'googlebase' => 'Magento_GoogleBase',
+            'importexport' => 'Magento_ImportExport',
+            'productalert' => 'Magento_ProductAlert',
+            'salesrule' => 'Magento_SalesRule'
         );
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\TemplateEngine;
 
 use Magento\View\TemplateEngineInterface;
@@ -33,16 +32,22 @@ use Magento\View\Element\BlockInterface;
 class Php implements TemplateEngineInterface
 {
     /**
+     * Current block
+     *
      * @var BlockInterface
      */
     protected $_currentBlock;
 
     /**
-     * @var
+     * Helper factory
+     *
+     * @var \Magento\ObjectManager
      */
     protected $_helperFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $helperFactory
      */
     public function __construct(\Magento\ObjectManager $helperFactory)
@@ -60,7 +65,7 @@ class Php implements TemplateEngineInterface
      * @param string                   $fileName
      * @param array                    $dictionary
      * @return string
-     * @throws \Exception any exception that the template may throw
+     * @throws \Exception
      */
     public function render(BlockInterface $block, $fileName, array $dictionary = array())
     {
@@ -106,7 +111,7 @@ class Php implements TemplateEngineInterface
      */
     public function __isset($name)
     {
-        return isset($this->_currentBlock->$name);
+        return isset($this->_currentBlock->{$name});
     }
 
     /**
@@ -120,7 +125,7 @@ class Php implements TemplateEngineInterface
      */
     public function __get($name)
     {
-        return $this->_currentBlock->$name;
+        return $this->_currentBlock->{$name};
     }
 
     /**
@@ -133,10 +138,8 @@ class Php implements TemplateEngineInterface
     public function helper($className)
     {
         $helper = $this->_helperFactory->get($className);
-        if (false === ($helper instanceof \Magento\App\Helper\AbstractHelper)) {
-            throw new \LogicException(
-                $className . ' doesn\'t extends Magento\App\Helper\AbstractHelper'
-            );
+        if (false === $helper instanceof \Magento\App\Helper\AbstractHelper) {
+            throw new \LogicException($className . ' doesn\'t extends Magento\App\Helper\AbstractHelper');
         }
 
         return $helper;

@@ -35,10 +35,7 @@ class Converter implements \Magento\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $result = array(
-            'renderers' => array(),
-            'totals' => array(),
-        );
+        $result = array('renderers' => array(), 'totals' => array());
 
         $pageTypes = $source->getElementsByTagName('page');
         foreach ($pageTypes as $pageType) {

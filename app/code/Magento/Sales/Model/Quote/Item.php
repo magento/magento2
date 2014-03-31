@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote;
 
 /**
  * Sales Quote Item Model
@@ -129,8 +130,6 @@
  * @method \Magento\Sales\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Sales\Model\Quote\Item unsHasConfigurationUnavailableError()
  */
-namespace Magento\Sales\Model\Quote;
-
 class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
 {
     /**
@@ -161,14 +160,14 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *
      * @var array
      */
-    protected $_options             = array();
+    protected $_options = array();
 
     /**
      * Item options by code cache
      *
      * @var array
      */
-    protected $_optionsByCode       = array();
+    protected $_optionsByCode = array();
 
     /**
      * Not Represent options
@@ -191,9 +190,9 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     protected $_errorInfos;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\FormatInterface
      */
-    protected $_locale;
+    protected $_localeFormat;
 
     /**
      * @var \Magento\Sales\Model\Quote\Item\OptionFactory
@@ -201,39 +200,39 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     protected $_itemOptionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_errorInfos = $statusListFactory->create();
-        $this->_locale = $locale;
+        $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         parent::__construct($context, $registry, $productFactory, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -243,7 +242,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Quote Item Before Save prepare data process
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -275,7 +274,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * Declare quote model object
      *
      * @param   \Magento\Sales\Model\Quote $quote
-     * @return  \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function setQuote(\Magento\Sales\Model\Quote $quote)
     {
@@ -302,8 +301,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      */
     protected function _prepareQty($qty)
     {
-        $qty = $this->_locale->getNumber($qty);
-        $qty = ($qty > 0) ? $qty : 1;
+        $qty = $this->_localeFormat->getNumber($qty);
+        $qty = $qty > 0 ? $qty : 1;
         return $qty;
     }
 
@@ -311,7 +310,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * Adding quantity to quote item
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function addQty($qty)
     {
@@ -324,7 +323,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
          */
         if (!$this->getParentItem() || !$this->getId()) {
             $this->setQtyToAdd($qty);
-            $this->setQty($oldQty+$qty);
+            $this->setQty($oldQty + $qty);
         }
         return $this;
     }
@@ -333,11 +332,11 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * Declare quote item quantity
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function setQty($qty)
     {
-        $qty    = $this->_prepareQty($qty);
+        $qty = $this->_prepareQty($qty);
         $oldQty = $this->_getData('qty');
         $this->setData('qty', $qty);
 
@@ -370,8 +369,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
             $qtyOptions = array();
             foreach ($this->getOptions() as $option) {
                 /** @var $option \Magento\Sales\Model\Quote\Item\Option */
-                if (is_object($option->getProduct())
-                    && $option->getProduct()->getId() != $this->getProduct()->getId()
+                if (is_object($option->getProduct()) && $option->getProduct()->getId() != $this->getProduct()->getId()
                 ) {
                     $productIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
                 }
@@ -393,8 +391,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Set option product with Qty
      *
-     * @param  $qtyOptions
-     * @return \Magento\Sales\Model\Quote\Item
+     * @param array $qtyOptions
+     * @return $this
      */
     public function setQtyOptions($qtyOptions)
     {
@@ -404,8 +402,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Setup product for quote item
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Sales\Model\Quote\Item
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this
      */
     public function setProduct($product)
     {
@@ -413,24 +411,33 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
             $product->setStoreId($this->getQuote()->getStoreId());
             $product->setCustomerGroupId($this->getQuote()->getCustomerGroupId());
         }
-        $this->setData('product', $product)
-            ->setProductId($product->getId())
-            ->setProductType($product->getTypeId())
-            ->setSku($this->getProduct()->getSku())
-            ->setName($product->getName())
-            ->setWeight($this->getProduct()->getWeight())
-            ->setTaxClassId($product->getTaxClassId())
-            ->setBaseCost($product->getCost())
-            ->setIsRecurring($product->getIsRecurring());
+        $this->setData(
+            'product',
+            $product
+        )->setProductId(
+            $product->getId()
+        )->setProductType(
+            $product->getTypeId()
+        )->setSku(
+            $this->getProduct()->getSku()
+        )->setName(
+            $product->getName()
+        )->setWeight(
+            $this->getProduct()->getWeight()
+        )->setTaxClassId(
+            $product->getTaxClassId()
+        )->setBaseCost(
+            $product->getCost()
+        );
 
         if ($product->getStockItem()) {
             $this->setIsQtyDecimal($product->getStockItem()->getIsQtyDecimal());
         }
 
-        $this->_eventManager->dispatch('sales_quote_item_set_product', array(
-            'product' => $product,
-            'quote_item'=>$this
-        ));
+        $this->_eventManager->dispatch(
+            'sales_quote_item_set_product',
+            array('product' => $product, 'quote_item' => $this)
+        );
 
         return $this;
     }
@@ -460,7 +467,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         }
 
         // Check options
-        $itemOptions    = $this->getOptionsByCode();
+        $itemOptions = $this->getOptionsByCode();
         $productOptions = $product->getCustomOptions();
 
         if (!$this->compareOptions($itemOptions, $productOptions)) {
@@ -488,9 +495,9 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
             if (in_array($code, $this->_notRepresentOptions)) {
                 continue;
             }
-            if (!isset($options2[$code])
-                || ($options2[$code]->getValue() === null)
-                || $options2[$code]->getValue() != $option->getValue()
+            if (!isset(
+                $options2[$code]
+            ) || $options2[$code]->getValue() === null || $options2[$code]->getValue() != $option->getValue()
             ) {
                 return false;
             }
@@ -516,15 +523,15 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
             $itemOption = $item->getOptionByCode($option->getCode());
             if ($itemOption) {
                 $itemOptionValue = $itemOption->getValue();
-                $optionValue     = $option->getValue();
+                $optionValue = $option->getValue();
 
                 // dispose of some options params, that can cramp comparing of arrays
                 if (is_string($itemOptionValue) && is_string($optionValue)) {
                     $_itemOptionValue = @unserialize($itemOptionValue);
-                    $_optionValue     = @unserialize($optionValue);
+                    $_optionValue = @unserialize($optionValue);
                     if (is_array($_itemOptionValue) && is_array($_optionValue)) {
                         $itemOptionValue = $_itemOptionValue;
-                        $optionValue     = $_optionValue;
+                        $optionValue = $_optionValue;
                         // looks like it does not break bundle selection qty
                         unset($itemOptionValue['qty'], $itemOptionValue['uenc']);
                         unset($optionValue['qty'], $optionValue['uenc']);
@@ -589,8 +596,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Initialize quote item options
      *
-     * @param   array $options
-     * @return  \Magento\Sales\Model\Quote\Item
+     * @param array $options
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -623,23 +630,26 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Add option to item
      *
-     * @param   \Magento\Sales\Model\Quote\Item\Option|\Magento\Object $option
-     * @return  \Magento\Sales\Model\Quote\Item
-     * @throws \Magento\Core\Exception
+     * @param \Magento\Sales\Model\Quote\Item\Option|\Magento\Object $option
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     public function addOption($option)
     {
         if (is_array($option)) {
-            $option = $this->_itemOptionFactory->create()->setData($option)
-                ->setItem($this);
-        } elseif (($option instanceof \Magento\Object) && !($option instanceof \Magento\Sales\Model\Quote\Item\Option)) {
-            $option = $this->_itemOptionFactory->create()->setData($option->getData())
-               ->setProduct($option->getProduct())
-               ->setItem($this);
+            $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
+        } elseif ($option instanceof \Magento\Object && !$option instanceof \Magento\Sales\Model\Quote\Item\Option) {
+            $option = $this->_itemOptionFactory->create()->setData(
+                $option->getData()
+            )->setProduct(
+                $option->getProduct()
+            )->setItem(
+                $this
+            );
         } elseif ($option instanceof \Magento\Sales\Model\Quote\Item\Option) {
             $option->setItem($this);
         } else {
-            throw new \Magento\Core\Exception(__('We found an invalid item option format.'));
+            throw new \Magento\Model\Exception(__('We found an invalid item option format.'));
         }
 
         $exOption = $this->getOptionByCode($option->getCode());
@@ -659,19 +669,23 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *
      * @param \Magento\Object $option
      * @param int|float|null $value
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function updateQtyOption(\Magento\Object $option, $value)
     {
-        $optionProduct  = $option->getProduct();
-        $options        = $this->getQtyOptions();
+        $optionProduct = $option->getProduct();
+        $options = $this->getQtyOptions();
 
         if (isset($options[$optionProduct->getId()])) {
             $options[$optionProduct->getId()]->setValue($value);
         }
 
-        $this->getProduct()->getTypeInstance()
-            ->updateQtyOption($this->getOptions(), $option, $value, $this->getProduct());
+        $this->getProduct()->getTypeInstance()->updateQtyOption(
+            $this->getOptions(),
+            $option,
+            $value,
+            $this->getProduct()
+        );
 
         return $this;
     }
@@ -680,7 +694,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *Remove option from item options
      *
      * @param string $code
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function removeOption($code)
     {
@@ -694,16 +708,16 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Register option code
      *
-     * @param   \Magento\Sales\Model\Quote\Item\Option $option
-     * @return  \Magento\Sales\Model\Quote\Item
-     * @throws \Magento\Core\Exception
+     * @param \Magento\Sales\Model\Quote\Item\Option $option
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     protected function _addOptionCode($option)
     {
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Core\Exception(__('An item option with code %1 already exists.', $option->getCode()));
+            throw new \Magento\Model\Exception(__('An item option with code %1 already exists.', $option->getCode()));
         }
         return $this;
     }
@@ -740,7 +754,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Save item options
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     protected function _saveItemOptions()
     {
@@ -754,7 +768,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
             }
         }
 
-        $this->_flagOptionsSaved = true; // Report to watchers that options were saved
+        $this->_flagOptionsSaved = true;
+        // Report to watchers that options were saved
 
         return $this;
     }
@@ -762,6 +777,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Save model plus its options
      * Ensures saving options in case when resource model was not changed
+     *
+     * @return $this
      */
     public function save()
     {
@@ -789,15 +806,15 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Clone quote item
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function __clone()
     {
         parent::__clone();
         $options = $this->getOptions();
-        $this->_quote           = null;
-        $this->_options         = array();
-        $this->_optionsByCode   = array();
+        $this->_quote = null;
+        $this->_options = array();
+        $this->_optionsByCode = array();
         foreach ($options as $option) {
             $this->addOption(clone $option);
         }
@@ -816,8 +833,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         $buyRequest = new \Magento\Object($option ? unserialize($option->getValue()) : null);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
-        $buyRequest->setOriginalQty($buyRequest->getQty())
-            ->setQty($this->getQty() * 1);
+        $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
 
         return $buyRequest;
     }
@@ -840,7 +856,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * It's recommended to use addErrorInfo() instead - to be able to remove error statuses later.
      *
      * @param bool $flag
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      * @see addErrorInfo()
      */
     public function setHasError($flag)
@@ -857,7 +873,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * Clears list of errors, associated with this quote item.
      * Also automatically removes error-flag from oneself.
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     protected function _clearErrorInfo()
     {
@@ -874,7 +890,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * @param int|null $code Error code, unique for origin, that sets it
      * @param string|null $message Error message
      * @param \Magento\Object|null $additionalData Any additional data, that caller would like to store
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function addErrorInfo($origin = null, $code = null, $message = null, $additionalData = null)
     {
@@ -903,7 +919,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *   'origin', 'code', 'message'
      *
      * @param array $params
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return $this
      */
     public function removeErrorInfosByParams($params)
     {

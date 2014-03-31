@@ -21,18 +21,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Create order form header
  */
-class Header extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
+class Header extends AbstractCreate
 {
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
-    protected $_customerService;
+    /** @var CustomerAccountServiceInterface */
+    protected $_customerAccountService;
 
-    /** @var \Magento\Customer\Helper\View */
+    /**
+     * Customer view helper
+     *
+     * @var \Magento\Customer\Helper\View
+     */
     protected $_customerViewHelper;
 
     /**
@@ -41,7 +46,7 @@ class Header extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
      */
@@ -49,11 +54,11 @@ class Header extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Helper\View $customerViewHelper,
         array $data = array()
     ) {
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         $this->_customerViewHelper = $customerViewHelper;
         parent::__construct($context, $sessionQuote, $orderCreate, $data);
     }
@@ -108,7 +113,7 @@ class Header extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     protected function _getCustomerName($customerId)
     {
-        $customerData = $this->_customerService->getCustomer($customerId);
+        $customerData = $this->_customerAccountService->getCustomer($customerId);
         return $this->_customerViewHelper->getCustomerName($customerData);
     }
 }

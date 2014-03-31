@@ -23,7 +23,10 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data;
 
+use Magento\Data\Tree\Node;
+use Magento\Data\Tree\Node\Collection as NodeCollection;
 
 /**
  * Data tree
@@ -32,14 +35,8 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data;
-
-use Magento\Data\Tree\Node;
-use Magento\Data\Tree\Node\Collection as NodeCollection;
-
 class Tree
 {
-
     /**
      * Nodes collection
      *
@@ -72,14 +69,14 @@ class Tree
      * @param Node $parentNode
      * @return void
      */
-    public function load($parentNode=null)
+    public function load($parentNode = null)
     {
     }
 
     /**
      * Enter description here...
      *
-     * @param unknown_type $nodeId
+     * @param int|string $nodeId
      * @return void
      */
     public function loadNode($nodeId)
@@ -94,13 +91,10 @@ class Tree
      * @param Node $prevNode
      * @return Node
      */
-    public function appendChild($data, $parentNode, $prevNode=null)
+    public function appendChild($data, $parentNode, $prevNode = null)
     {
         if (is_array($data)) {
-            $node = $this->addNode(
-                new Node($data, $parentNode->getIdField(), $this),
-                $parentNode
-            );
+            $node = $this->addNode(new Node($data, $parentNode->getIdField(), $this), $parentNode);
         } elseif ($data instanceof Node) {
             $node = $this->addNode($data, $parentNode);
         }
@@ -114,11 +108,11 @@ class Tree
      * @param Node $parent
      * @return Node
      */
-    public function addNode($node, $parent=null)
+    public function addNode($node, $parent = null)
     {
         $this->_nodes->add($node);
         $node->setParent($parent);
-        if (!is_null($parent) && ($parent instanceof Node) ) {
+        if (!is_null($parent) && $parent instanceof Node) {
             $parent->addChild($node);
         }
         return $node;
@@ -132,7 +126,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      */
-    public function moveNodeTo($node, $parentNode, $prevNode=null)
+    public function moveNodeTo($node, $parentNode, $prevNode = null)
     {
     }
 
@@ -144,7 +138,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      */
-    public function copyNodeTo($node, $parentNode, $prevNode=null)
+    public function copyNodeTo($node, $parentNode, $prevNode = null)
     {
     }
 
@@ -171,7 +165,7 @@ class Tree
      * @param Node $prevNode
      * @return void
      */
-    public function createNode($parentNode, $prevNode=null)
+    public function createNode($parentNode, $prevNode = null)
     {
     }
 
@@ -208,7 +202,7 @@ class Tree
     /**
      * Enter description here...
      *
-     * @param unknown_type $nodeId
+     * @param Node $nodeId
      * @return Node
      */
     public function getNodeById($nodeId)
@@ -224,8 +218,7 @@ class Tree
      */
     public function getPath($node)
     {
-        if ($node instanceof Node ) {
-
+        if ($node instanceof Node) {
         } elseif (is_numeric($node)) {
             if ($_node = $this->getNodeById($node)) {
                 return $_node->getPath();
@@ -233,5 +226,4 @@ class Tree
         }
         return array();
     }
-
 }

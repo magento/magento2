@@ -33,10 +33,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/service' => 'class',
-        '/config/service/rest-route' => 'method',
-    );
+    protected $_idAttributes = array('/config/service' => 'class', '/config/service/rest-route' => 'method');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
@@ -50,8 +47,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Webapi\Model\Config\Converter $converter,
-        \Magento\Webapi\Model\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'webapi.xml',
         $idAttributes = array(),

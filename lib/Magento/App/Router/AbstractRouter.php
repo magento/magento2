@@ -25,7 +25,7 @@
  */
 namespace Magento\App\Router;
 
-use \Magento\App\ActionFactory;
+use Magento\App\ActionFactory;
 
 abstract class AbstractRouter implements \Magento\App\RouterInterface
 {

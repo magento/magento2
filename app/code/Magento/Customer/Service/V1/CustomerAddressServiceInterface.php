@@ -21,22 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1;
-use Magento\Customer\Service\Entity\V1\AggregateException;
-use Magento\Customer\Service\Entity\V1\Exception;
 
 /**
- * Manipulate Customer Address Entities *
+ * Interface CustomerAddressServiceInterface
  */
 interface CustomerAddressServiceInterface
 {
     /**
      * Retrieve all Customer Addresses
      *
-     * @param int $customerId,
-     * @return \Magento\Customer\Service\V1\Dto\Address[]
-     * @throws Exception
+     * @param int $customerId
+     * @return \Magento\Customer\Service\V1\Data\Address[]
+     * @throws \Magento\Exception\NoSuchEntityException If the customer Id is invalid
      */
     public function getAddresses($customerId);
 
@@ -44,8 +41,8 @@ interface CustomerAddressServiceInterface
      * Retrieve default billing address
      *
      * @param int $customerId
-     * @return \Magento\Customer\Service\V1\Dto\Address
-     * @throws Exception
+     * @return \Magento\Customer\Service\V1\Data\Address
+     * @throws \Magento\Exception\NoSuchEntityException If the customer Id is invalid
      */
     public function getDefaultBillingAddress($customerId);
 
@@ -53,29 +50,28 @@ interface CustomerAddressServiceInterface
      * Retrieve default shipping address
      *
      * @param int $customerId
-     * @return \Magento\Customer\Service\V1\Dto\Address
-     * @throws Exception
+     * @return \Magento\Customer\Service\V1\Data\Address
+     * @throws \Magento\Exception\NoSuchEntityException If the customer Id is invalid
      */
     public function getDefaultShippingAddress($customerId);
 
     /**
      * Retrieve address by id
      *
-     * @param int $customerId
      * @param int $addressId
-     * @return \Magento\Customer\Service\V1\Dto\Address
-     * @throws Exception
+     * @return \Magento\Customer\Service\V1\Data\Address
+     * @throws \Magento\Exception\NoSuchEntityException If no address can be found for the provided id.
      */
-    public function getAddressById($customerId, $addressId);
+    public function getAddress($addressId);
 
     /**
      * Removes an address by id.
      *
-     * @param int $customerId
      * @param int $addressId
-     * @throws Exception if the address does not belong to the given customer
+     * @return void
+     * @throws \Magento\Exception\NoSuchEntityException If no address can be found for the provided id.
      */
-    public function deleteAddressFromCustomer($customerId, $addressId);
+    public function deleteAddress($addressId);
 
     /**
      * Insert and/or update a list of addresses.
@@ -89,13 +85,21 @@ interface CustomerAddressServiceInterface
      * This doesn't support partial updates to addresses, meaning
      * that a full set of data must be provided with each Address
      *
-     * @param int                 $customerId
-     * @param \Magento\Customer\Service\V1\Dto\Address[] $addresses
-     *
-     * @throws AggregateException if there are validation errors.
-     * @throws Exception If customerId is not found or other error occurs.
+     * @param int $customerId
+     * @param \Magento\Customer\Service\V1\Data\Address[] $addresses
+     * @throws \Magento\Exception\InputException If there are validation errors.
+     * @throws \Magento\Exception\NoSuchEntityException If customer with customerId is not found.
+     * @throws \Exception If there were issues during the save operation
      * @return int[] address ids
      */
-    public function saveAddresses($customerId, array $addresses);
+    public function saveAddresses($customerId, $addresses);
 
+    /**
+     * Validate a list of addresses.
+     *
+     * @param \Magento\Customer\Service\V1\Data\Address[] $addresses
+     * @return bool true All addresses passed validation.
+     * @throws \Magento\Exception\InputException If there are validation errors.
+     */
+    public function validateAddresses($addresses);
 }

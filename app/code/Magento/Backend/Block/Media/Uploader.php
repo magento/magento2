@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Media;
 
 /**
  * Adminhtml media library uploader
  */
-namespace Magento\Backend\Block\Media;
-
 class Uploader extends \Magento\Backend\Block\Widget
 {
     /**
@@ -60,6 +59,9 @@ class Uploader extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -70,20 +72,19 @@ class Uploader extends \Magento\Backend\Block\Widget
         $this->getConfig()->setUrl($uploadUrl);
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('file');
-        $this->getConfig()->setFilters(array(
-            'images' => array(
-                'label' => __('Images (.gif, .jpg, .png)'),
-                'files' => array('*.gif', '*.jpg', '*.png')
-            ),
-            'media' => array(
-                'label' => __('Media (.avi, .flv, .swf)'),
-                'files' => array('*.avi', '*.flv', '*.swf')
-            ),
-            'all' => array(
-                'label' => __('All Files'),
-                'files' => array('*.*')
+        $this->getConfig()->setFilters(
+            array(
+                'images' => array(
+                    'label' => __('Images (.gif, .jpg, .png)'),
+                    'files' => array('*.gif', '*.jpg', '*.png')
+                ),
+                'media' => array(
+                    'label' => __('Media (.avi, .flv, .swf)'),
+                    'files' => array('*.avi', '*.flv', '*.swf')
+                ),
+                'all' => array('label' => __('All Files'), 'files' => array('*.*'))
             )
-        ));
+        );
     }
 
     /**
@@ -99,7 +100,7 @@ class Uploader extends \Magento\Backend\Block\Widget
     /**
      * Prepares layout and set element renderer
      *
-     * @return \Magento\Backend\Block\Media\Uploader
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -108,9 +109,7 @@ class Uploader extends \Magento\Backend\Block\Widget
             $head->addChild(
                 'jquery-fileUploader-css-jquery-fileupload-ui-css',
                 'Magento\Theme\Block\Html\Head\Css',
-                array(
-                    'file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css'
-                )
+                array('file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css')
             );
         }
         return parent::_prepareLayout();
@@ -156,7 +155,6 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Now uploader can be only in the same URL where backend located
      *
      * @param string $url url to uploader in current theme
-     *
      * @return string full URL
      */
     public function getUploaderUrl($url)

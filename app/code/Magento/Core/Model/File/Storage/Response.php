@@ -40,15 +40,25 @@ class Response extends Http
     protected $_filePath;
 
     /**
+     * Constructor
+     *
+     * @param \Magento\Stdlib\Cookie              $cookie
+     * @param \Magento\App\Http\Context           $context
      * @param \Magento\File\Transfer\Adapter\Http $transferAdapter
      */
-    public function __construct(\Magento\File\Transfer\Adapter\Http $transferAdapter)
-    {
+    public function __construct(
+        \Magento\Stdlib\Cookie $cookie,
+        \Magento\App\Http\Context $context,
+        \Magento\File\Transfer\Adapter\Http $transferAdapter
+    ) {
+        parent::__construct($cookie, $context);
         $this->_transferAdapter = $transferAdapter;
     }
 
     /**
      * Send response
+     *
+     * @return void
      */
     public function sendResponse()
     {
@@ -61,6 +71,7 @@ class Response extends Http
 
     /**
      * @param string $path
+     * @return void
      */
     public function setFilePath($path)
     {

@@ -66,7 +66,7 @@ class Less_Autoloader {
 		}
 
 		$className = substr($className,5);
-		$fileName = self::$libDir . '/' . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+		$fileName = self::$libDir . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
 		if(file_exists($fileName)){
 			require $fileName;

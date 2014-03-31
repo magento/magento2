@@ -46,8 +46,8 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema =  $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment.xsd';
-        $this->_perFileSchema =  $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment_file.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment.xsd';
+        $this->_perFileSchema = $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment_file.xsd';
     }
 
     /**

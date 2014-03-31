@@ -38,7 +38,8 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
             'Message',
             $code,
             \Magento\Webapi\Exception::HTTP_UNAUTHORIZED,
-            $details);
+            $details
+        );
         $this->assertEquals(
             $apiException->getHttpCode(),
             \Magento\Webapi\Exception::HTTP_UNAUTHORIZED,
@@ -49,16 +50,8 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
             'Message',
             'Exception message is set incorrectly in construct.'
         );
-        $this->assertEquals(
-            $apiException->getCode(),
-            $code,
-            'Exception code is set incorrectly in construct.'
-        );
-        $this->assertEquals(
-            $apiException->getDetails(),
-            $details,
-            'Details are set incorrectly in construct.'
-        );
+        $this->assertEquals($apiException->getCode(), $code, 'Exception code is set incorrectly in construct.');
+        $this->assertEquals($apiException->getDetails(), $details, 'Details are set incorrectly in construct.');
     }
 
     /**
@@ -103,10 +96,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function providerForTestConstructInvalidHttpCode()
     {
-        return array(
-            //Each array contains invalid \Exception code.
-            array(300),
-            array(600),
-        );
+        //Each array contains invalid \Exception code.
+        return array(array(300), array(600));
     }
 }

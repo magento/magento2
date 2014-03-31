@@ -45,21 +45,9 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_routerList = array(
-            'adminRouter' => array(
-                'instance'     => 'AdminClass',
-                'disable'   => true,
-                'sortOrder' => 10
-            ),
-            'frontendRouter' => array(
-                'instance'     => 'FrontClass',
-                'disable'   => false,
-                'sortOrder' => 10
-            ),
-            'default' => array(
-                'instance'     => 'DefaultClass',
-                'disable'   => false,
-                'sortOrder' => 5
-            ),
+            'adminRouter' => array('instance' => 'AdminClass', 'disable' => true, 'sortOrder' => 10),
+            'frontendRouter' => array('instance' => 'FrontClass', 'disable' => false, 'sortOrder' => 10),
+            'default' => array('instance' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5)
         );
 
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
@@ -69,10 +57,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
     public function testGetRoutes()
     {
         $expectedClass = new FrontClass();
-        $this->_objectManagerMock
-            ->expects($this->at(0))
-            ->method('create')
-            ->will($this->returnValue($expectedClass));
+        $this->_objectManagerMock->expects($this->at(0))->method('create')->will($this->returnValue($expectedClass));
 
         $this->assertEquals($expectedClass, $this->_model->current('frontendRouter'));
     }

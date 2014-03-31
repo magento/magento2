@@ -25,14 +25,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Acl/etc/acl.xsd">
     <acl>
         <resources>
             <resource id="Magento_Adminhtml::admin">
                 <resource id="Magento_Adminhtml::stores">
                     <resource id="Magento_Adminhtml::stores_settings">
                         <resource id="Magento_Adminhtml::config">
-                            <resource id="Magento_GoogleCheckout::google" title="Google API" />
+                            <resource id="Magento_GoogleAnalytics::google" title="Google API" />
                         </resource>
                     </resource>
                 </resource>

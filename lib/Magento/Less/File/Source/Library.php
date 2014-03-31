@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -61,11 +60,8 @@ class Library implements SourceInterface
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
-    public function __construct(
-        FileListFactory $fileListFactory,
-        Filesystem $filesystem,
-        Factory $fileFactory
-    ) {
+    public function __construct(FileListFactory $fileListFactory, Filesystem $filesystem, Factory $fileFactory)
+    {
         $this->fileListFactory = $fileListFactory;
         $this->libraryDirectory = $filesystem->getDirectoryRead(Filesystem::PUB_LIB_DIR);
         $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES_DIR);
@@ -105,7 +101,7 @@ class Library implements SourceInterface
         $result = array();
         foreach ($files as $file) {
             $filename = $reader->getAbsolutePath($file);
-            $result[] = $this->fileFactory->create($filename, 'lib', $theme);
+            $result[] = $this->fileFactory->create($filename, false, $theme);
         }
         return $result;
     }

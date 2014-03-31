@@ -33,13 +33,11 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
-class Element
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * Initialize block template
      */
-
     protected $_template = 'Magento_Catalog::catalog/form/renderer/fieldset/element.phtml';
 
     /**
@@ -80,10 +78,11 @@ class Element
     public function canDisplayUseDefault()
     {
         if ($attribute = $this->getAttribute()) {
-            if (!$attribute->isScopeGlobal()
-                && $this->getDataObject()
-                && $this->getDataObject()->getId()
-                && $this->getDataObject()->getStoreId()) {
+            if (!$attribute->isScopeGlobal() &&
+                $this->getDataObject() &&
+                $this->getDataObject()->getId() &&
+                $this->getDataObject()->getStoreId()
+            ) {
                 return true;
             }
         }

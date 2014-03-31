@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sendfriend\Model\Resource;
 
 /**
  * SendFriend Log Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sendfriend\Model\Resource;
-
-class Sendfriend extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Sendfriend extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -57,16 +56,15 @@ class Sendfriend extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('count' => new \Zend_Db_Expr('count(*)')))
-            ->where('ip=:ip
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array('count' => new \Zend_Db_Expr('count(*)'))
+        )->where(
+            'ip=:ip
                 AND  time>=:time
-                AND  website_id=:website_id');
-        $bind = array(
-            'ip'      => $ip,
-            'time'    => $startTime,
-            'website_id' => (int)$websiteId,
+                AND  website_id=:website_id'
         );
+        $bind = array('ip' => $ip, 'time' => $startTime, 'website_id' => (int)$websiteId);
 
         $row = $adapter->fetchRow($select, $bind);
         return $row['count'];
@@ -78,17 +76,13 @@ class Sendfriend extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $ip
      * @param int $startTime
      * @param int $websiteId
-     * @return \Magento\Sendfriend\Model\Resource\Sendfriend
+     * @return $this
      */
     public function addSendItem($ip, $startTime, $websiteId)
     {
         $this->_getWriteAdapter()->insert(
             $this->getMainTable(),
-            array(
-                'ip'         => $ip,
-                'time'       => $startTime,
-                'website_id' => $websiteId
-             )
+            array('ip' => $ip, 'time' => $startTime, 'website_id' => $websiteId)
         );
         return $this;
     }
@@ -97,7 +91,7 @@ class Sendfriend extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete Old logs
      *
      * @param int $time
-     * @return \Magento\Sendfriend\Model\Resource\Sendfriend
+     * @return $this
      */
     public function deleteLogsBefore($time)
     {

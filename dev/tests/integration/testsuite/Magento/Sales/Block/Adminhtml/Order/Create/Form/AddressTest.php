@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 /**
@@ -43,18 +42,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_addressService = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerAddressServiceInterface'
-        );
+        $this->_addressService = $this->getMock('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
         /** @var \Magento\View\LayoutInterface $layout */
         $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
-        $sessionQuoteMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
-            ->getMock();
-        $sessionQuoteMock->expects($this->any())
-            ->method('getCustomerId')
-            ->will($this->returnValue(1));
+        $sessionQuoteMock = $this->getMockBuilder(
+            'Magento\Backend\Model\Session\Quote'
+        )->disableOriginalConstructor()->setMethods(
+            array('getCustomerId', 'getStore', 'getStoreId', 'getQuote')
+        )->getMock();
+        $sessionQuoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
         $this->_addressBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address',
@@ -66,15 +62,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddressCollection()
     {
-        $addressDtos = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressDtos));
-        $this->assertEquals($addressDtos, $this->_addressBlock->getAddressCollection());
+        $addressData = $this->_getAddresses();
+        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
+        $this->assertEquals($addressData, $this->_addressBlock->getAddressCollection());
     }
 
     public function testGetAddressCollectionJson()
     {
-        $addressDtos = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressDtos));
+        $addressData = $this->_getAddresses();
+        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
         $expectedOutput = '[
             {
                 "firstname": false,
@@ -137,8 +133,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetForm()
     {
-        $expectedFields = ['prefix', 'firstname', 'middlename', 'lastname', 'suffix', 'company', 'street', 'city',
-            'country_id', 'region', 'region_id', 'postcode', 'telephone', 'fax', 'vat_id'];
+        $expectedFields = array(
+            'prefix',
+            'firstname',
+            'middlename',
+            'lastname',
+            'suffix',
+            'company',
+            'street',
+            'city',
+            'country_id',
+            'region',
+            'region_id',
+            'postcode',
+            'telephone',
+            'fax',
+            'vat_id'
+        );
         $form = $this->_addressBlock->getForm();
         $this->assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
         /** @var \Magento\Data\Form\Element\Fieldset $fieldset */
@@ -162,20 +173,20 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Customer\Service\V1\Dto\Address[]
+     * @return \Magento\Customer\Service\V1\Data\Address[]
      */
     protected function _getAddresses()
     {
-        /** @var \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Dto\AddressBuilder');
+        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
+        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
         $addressBuilder->populateWithArray(
             array('id' => 1, 'street' => 'Street1', 'firstname' => 'FirstName1', 'lastname' => 'LastName1')
         );
-        $addressDtos[] = $addressBuilder->create();
+        $addressData[] = $addressBuilder->create();
         $addressBuilder->populateWithArray(
             array('id' => 2, 'street' => 'Street2', 'firstname' => 'FirstName2', 'lastname' => 'LastName2')
         );
-        $addressDtos[] = $addressBuilder->create();
-        return $addressDtos;
+        $addressData[] = $addressBuilder->create();
+        return $addressData;
     }
 }

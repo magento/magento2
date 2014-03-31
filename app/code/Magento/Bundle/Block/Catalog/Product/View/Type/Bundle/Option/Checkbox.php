@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
 
 /**
  * Bundle option checkbox type renderer
@@ -32,10 +32,10 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
-
-class Checkbox
-    extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
+class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/view/type/bundle/option/checkbox.phtml';
 }

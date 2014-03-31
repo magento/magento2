@@ -25,13 +25,22 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingType implements \Magento\Core\Model\Option\ArrayInterface
+class HandlingType implements \Magento\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
-            array('value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED, 'label' => __('Fixed')),
-            array('value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_PERCENT, 'label' => __('Percent')),
+            array(
+                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED,
+                'label' => __('Fixed')
+            ),
+            array(
+                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_PERCENT,
+                'label' => __('Percent')
+            )
         );
     }
 }

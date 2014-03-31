@@ -24,11 +24,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento;
 
 class ShellTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\OSInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $osInfo;
+
+    public function setUp()
+    {
+        $this->osInfo = $this->getMockBuilder('Magento\OSInfo')->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * Test that a command with input arguments returns an expected result
      *
@@ -39,7 +48,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testExecuteCommand(\Magento\Shell $shell, $command, $commandArgs, $expectedResult)
     {
-        $this->expectOutputString(''); // nothing is expected to be ever printed to the standard output
+        $this->expectOutputString('');
+        // nothing is expected to be ever printed to the standard output
         $actualResult = $shell->execute($command, $commandArgs);
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -52,7 +62,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($command, $commandArgs, $expectedResult)
     {
-        $this->_testExecuteCommand(new \Magento\Shell(), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(new \Magento\Shell($this->osInfo), $command, $commandArgs, $expectedResult);
     }
 
     /**
@@ -64,40 +74,45 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteLog($command, $commandArgs, $expectedResult, $expectedLogRecords)
     {
-        $quoteChar = substr(escapeshellarg(' '), 0, 1); // environment-dependent quote character
+        $quoteChar = substr(escapeshellarg(' '), 0, 1);
+        // environment-dependent quote character
         $logger = $this->getMock('Zend_Log', array('log'));
         foreach ($expectedLogRecords as $logRecordIndex => $expectedLogMessage) {
             $expectedLogMessage = str_replace('`', $quoteChar, $expectedLogMessage);
-            $logger
-                ->expects($this->at($logRecordIndex))
-                ->method('log')
-                ->with($expectedLogMessage, \Zend_Log::INFO)
-            ;
+            $logger->expects($this->at($logRecordIndex))->method('log')->with($expectedLogMessage, \Zend_Log::INFO);
         }
-        $this->_testExecuteCommand(new \Magento\Shell($logger), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(
+            new \Magento\Shell($this->osInfo, $logger),
+            $command,
+            $commandArgs,
+            $expectedResult
+        );
     }
 
     public function executeDataProvider()
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character
         return array(
-            'STDOUT' => array(
-                'php -r %s', array('echo 27181;'), '27181',
-                array('php -r `echo 27181;` 2>&1', '27181'),
-            ),
+            'STDOUT' => array('php -r %s', array('echo 27181;'), '27181', array('php -r `echo 27181;` 2>&1', '27181')),
             'STDERR' => array(
-                'php -r %s', array('fwrite(STDERR, 27182);'), '27182',
-                array('php -r `fwrite(STDERR, 27182);` 2>&1', '27182'),
+                'php -r %s',
+                array('fwrite(STDERR, 27182);'),
+                '27182',
+                array('php -r `fwrite(STDERR, 27182);` 2>&1', '27182')
             ),
             'piping STDERR -> STDOUT' => array(
                 // intentionally no spaces around the pipe symbol
-                'php -r %s|php -r %s', array('fwrite(STDERR, 27183);', 'echo fgets(STDIN);'), '27183',
-                array('php -r `fwrite(STDERR, 27183);` 2>&1|php -r `echo fgets(STDIN);` 2>&1', '27183'),
+                'php -r %s|php -r %s',
+                array('fwrite(STDERR, 27183);', 'echo fgets(STDIN);'),
+                '27183',
+                array('php -r `fwrite(STDERR, 27183);` 2>&1|php -r `echo fgets(STDIN);` 2>&1', '27183')
             ),
             'piping STDERR -> STDERR' => array(
-                'php -r %s | php -r %s', array('fwrite(STDERR, 27184);', 'fwrite(STDERR, fgets(STDIN));'), '27184',
-                array('php -r `fwrite(STDERR, 27184);` 2>&1 | php -r `fwrite(STDERR, fgets(STDIN));` 2>&1', '27184'),
-            ),
+                'php -r %s | php -r %s',
+                array('fwrite(STDERR, 27184);', 'fwrite(STDERR, fgets(STDIN));'),
+                '27184',
+                array('php -r `fwrite(STDERR, 27184);` 2>&1 | php -r `fwrite(STDERR, fgets(STDIN));` 2>&1', '27184')
+            )
         );
     }
 
@@ -108,7 +123,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteFailure()
     {
-        $shell = new \Magento\Shell();
+        $shell = new \Magento\Shell($this->osInfo);
         $shell->execute('non_existing_command');
     }
 

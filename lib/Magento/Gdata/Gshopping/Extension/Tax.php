@@ -91,7 +91,7 @@ class Tax extends \Zend_Gdata_App_Extension_Element
     protected function takeChildFromDOM($child)
     {
         if ($child->nodeType == XML_ELEMENT_NODE) {
-            $name = ('attribute' == $child->localName) ? $child->getAttribute('name') : $child->localName;
+            $name = 'attribute' == $child->localName ? $child->getAttribute('name') : $child->localName;
             $this->_taxInfo[$name] = $child->textContent;
         }
         parent::takeChildFromDOM($child);

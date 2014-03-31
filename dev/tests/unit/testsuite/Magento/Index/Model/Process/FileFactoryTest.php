@@ -35,7 +35,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Bogus string to return from object manager's create() method
      */
-    const CREATE_RESULT       = 'create_result';
+    const CREATE_RESULT = 'create_result';
 
     /**
      * Expected class name
@@ -45,17 +45,21 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_arguments = array(
-        'key' => 'value'
-    );
+    protected $_arguments = array('key' => 'value');
 
     public function testCreate()
     {
         $objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
-        $objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(self::EXPECTED_CLASS_NAME, $this->_arguments)
-            ->will($this->returnValue(self::CREATE_RESULT));
+        $objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            self::EXPECTED_CLASS_NAME,
+            $this->_arguments
+        )->will(
+            $this->returnValue(self::CREATE_RESULT)
+        );
 
         $factory = new \Magento\Index\Model\Process\FileFactory($objectManagerMock);
         $this->assertEquals(self::CREATE_RESULT, $factory->create($this->_arguments));

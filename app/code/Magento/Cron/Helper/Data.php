@@ -31,5 +31,4 @@ namespace Magento\Cron\Helper;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-
 }

@@ -54,12 +54,11 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock =
-            $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 
         $arguments = array(
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false),
-            'layout' => $this->_layoutMock,
+            'layout' => $this->_layoutMock
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -87,36 +86,22 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array(
-                    'data_attribute' => array(
-                        'validation' => array(
-                            'required' => true
-                        ),
-                    ),
-                ),
+                array('data_attribute' => array('validation' => array('required' => true))),
                 '/data-validation="[^"]*" /'
             ),
             array(
-                array(
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array('someKey' => 'someValue')
-                        ),
-                    ),
-                ),
+                array('data_attribute' => array('mage-init' => array('button' => array('someKey' => 'someValue')))),
                 '/data-mage-init="[^"]*" /'
             ),
             array(
                 array(
                     'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array('someKey' => 'someValue')
-                        ),
-                        'validation' => array('required' => true),
-                    ),
+                        'mage-init' => array('button' => array('someKey' => 'someValue')),
+                        'validation' => array('required' => true)
+                    )
                 ),
                 '/data-mage-init="[^"]*" data-validation="[^"]*" /'
-            ),
+            )
         );
     }
 }

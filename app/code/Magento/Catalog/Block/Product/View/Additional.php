@@ -36,12 +36,19 @@ namespace Magento\Catalog\Block\Product\View;
 
 class Additional extends \Magento\View\Element\Template
 {
-
+    /**
+     * @var array
+     */
     protected $_list;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/view/additional.phtml';
 
-
+    /**
+     * @return array
+     */
     public function getChildHtmlList()
     {
         if (is_null($this->_list)) {
@@ -53,5 +60,4 @@ class Additional extends \Magento\View\Element\Template
         }
         return $this->_list;
     }
-
 }

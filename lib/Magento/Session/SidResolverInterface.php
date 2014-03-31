@@ -25,7 +25,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session;
 
 interface SidResolverInterface
@@ -36,6 +35,8 @@ interface SidResolverInterface
     const SESSION_ID_QUERY_PARAM = 'SID';
 
     /**
+     * Get SID
+     *
      * @param \Magento\Session\SessionManagerInterface $session
      * @return string
      */
@@ -53,7 +54,7 @@ interface SidResolverInterface
      * Set use session var instead of SID for URL
      *
      * @param bool $var
-     * @return \Magento\Session\SidResolverInterface
+     * @return $this
      */
     public function setUseSessionVar($var);
 
@@ -68,7 +69,7 @@ interface SidResolverInterface
      * Set Use session in URL flag
      *
      * @param bool $flag
-     * @return \Magento\Session\SidResolverInterface
+     * @return $this
      */
     public function setUseSessionInUrl($flag = true);
 

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Fallback;
 
 /**
@@ -46,24 +45,29 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filesystemMock = $this->getMock(
             '\Magento\App\Filesystem',
             array('getPath', 'getDirectoryRead', '__wakeup'),
-            array('dir' => array(
-                \Magento\App\Filesystem::THEMES_DIR => 'themes',
-                \Magento\App\Filesystem::MODULES_DIR => 'modules',
-                \Magento\App\Filesystem::PUB_LIB_DIR => 'pub_lib',
+            array(
+                'dir' => array(
+                    \Magento\App\Filesystem::THEMES_DIR => 'themes',
+                    \Magento\App\Filesystem::MODULES_DIR => 'modules',
+                    \Magento\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
                 )
             ),
             '',
             false
         );
-        $filesystemMock ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap(
+        $filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getPath'
+        )->will(
+            $this->returnValueMap(
                 array(
-                    (\Magento\App\Filesystem::THEMES_DIR) => 'themes',
-                    (\Magento\App\Filesystem::MODULES_DIR) => 'modules',
-                    (\Magento\App\Filesystem::PUB_LIB_DIR) => 'pub_lib',
-                ))
-            );
+                    \Magento\App\Filesystem::THEMES_DIR => 'themes',
+                    \Magento\App\Filesystem::MODULES_DIR => 'modules',
+                    \Magento\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
+                )
+            )
+        );
 
         $this->model = new Factory($filesystemMock);
 
@@ -75,11 +79,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
         $this->defaultParams = array(
-            'area'      => 'area',
-            'theme'     => $theme,
+            'area' => 'area',
+            'theme' => $theme,
             'namespace' => 'namespace',
-            'module'    => 'module',
-            'locale'    => 'en_US',
+            'module' => 'module',
+            'locale' => 'en_US'
         );
     }
 
@@ -98,14 +102,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateLocaleFileRuleGetPatternDirs()
     {
-        $expectedResult = array(
-            '/area/current_theme_path/i18n/en_US',
-            '/area/parent_theme_path/i18n/en_US',
-        );
-        $this->assertSame(
-            $expectedResult,
-            $this->model->createLocaleFileRule()->getPatternDirs($this->defaultParams)
-        );
+        $expectedResult = array('/area/current_theme_path/i18n/en_US', '/area/parent_theme_path/i18n/en_US');
+        $this->assertSame($expectedResult, $this->model->createLocaleFileRule()->getPatternDirs($this->defaultParams));
     }
 
     /**
@@ -127,16 +125,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             'no theme' => array(
                 array('theme' => null),
-                'Parameter "theme" should be specified and should implement the theme interface',
+                'Parameter "theme" should be specified and should implement the theme interface'
             ),
-            'no area' => array(
-                array('area' => null),
-                "Required parameter 'area' was not passed",
-            ),
-            'no locale' => array(
-                array('locale' => null),
-                "Required parameter 'locale' was not passed",
-            ),
+            'no area' => array(array('area' => null), "Required parameter 'area' was not passed"),
+            'no locale' => array(array('locale' => null), "Required parameter 'locale' was not passed")
         );
     }
 
@@ -169,16 +161,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 array(
                     '/area/current_theme_path/namespace_module',
                     '/area/parent_theme_path/namespace_module',
-                    '/namespace/module/view/area',
-                ),
+                    '/namespace/module/view/area'
+                )
             ),
             'non-modular' => array(
                 array('namespace' => null, 'module' => null),
-                array(
-                    '/area/current_theme_path',
-                    '/area/parent_theme_path',
-                ),
-            ),
+                array('/area/current_theme_path', '/area/parent_theme_path')
+            )
         );
     }
 
@@ -225,16 +214,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                     '/area/parent_theme_path/i18n/en_US/namespace_module',
                     '/area/parent_theme_path/namespace_module',
                     '/namespace/module/view/area/i18n/en_US',
-                    '/namespace/module/view/area',
-                ),
+                    '/namespace/module/view/area'
+                )
             ),
             'modular non-localized' => array(
                 array('locale' => null),
                 array(
                     '/area/current_theme_path/namespace_module',
                     '/area/parent_theme_path/namespace_module',
-                    '/namespace/module/view/area',
-                ),
+                    '/namespace/module/view/area'
+                )
             ),
             'non-modular localized' => array(
                 array('module' => null, 'namespace' => null),
@@ -243,17 +232,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                     '/area/current_theme_path',
                     '/area/parent_theme_path/i18n/en_US',
                     '/area/parent_theme_path',
-                    '',
-                ),
+                    ''
+                )
             ),
             'non-modular non-localized' => array(
                 array('module' => null, 'namespace' => null, 'locale' => null),
-                array(
-                    '/area/current_theme_path',
-                    '/area/parent_theme_path',
-                    '',
-                ),
-            ),
+                array('/area/current_theme_path', '/area/parent_theme_path', '')
+            )
         );
     }
 
@@ -276,20 +261,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             'no theme' => array(
                 array('theme' => null),
-                'Parameter "theme" should be specified and should implement the theme interface',
+                'Parameter "theme" should be specified and should implement the theme interface'
             ),
-            'no area' => array(
-                array('area' => null),
-                "Required parameter 'area' was not passed",
-            ),
+            'no area' => array(array('area' => null), "Required parameter 'area' was not passed"),
             'no namespace' => array(
                 array('namespace' => null),
-                "Parameters 'namespace' and 'module' should either be both set or unset",
+                "Parameters 'namespace' and 'module' should either be both set or unset"
             ),
             'no module' => array(
                 array('module' => null),
-                "Parameters 'namespace' and 'module' should either be both set or unset",
-            ),
+                "Parameters 'namespace' and 'module' should either be both set or unset"
+            )
         );
     }
 }

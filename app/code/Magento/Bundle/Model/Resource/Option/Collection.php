@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource\Option;
 
 /**
  * Bundle Options Resource Collection
@@ -32,9 +32,7 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource\Option;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * All item ids cache
@@ -48,11 +46,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @var bool
      */
-    protected $_selectionsAppended   = false;
+    protected $_selectionsAppended = false;
 
     /**
      * Init model and resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -63,17 +62,17 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Joins values to options
      *
      * @param int $storeId
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function joinValues($storeId)
     {
-        $this->getSelect()
-            ->joinLeft(
-                array('option_value_default' => $this->getTable('catalog_product_bundle_option_value')),
-                'main_table.option_id = option_value_default.option_id and option_value_default.store_id = 0',
-                array()
-            )
-            ->columns(array('default_title' => 'option_value_default.title'));
+        $this->getSelect()->joinLeft(
+            array('option_value_default' => $this->getTable('catalog_product_bundle_option_value')),
+            'main_table.option_id = option_value_default.option_id and option_value_default.store_id = 0',
+            array()
+        )->columns(
+            array('default_title' => 'option_value_default.title')
+        );
 
         $title = $this->getConnection()->getCheckSql(
             'option_value.title IS NOT NULL',
@@ -81,15 +80,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             'option_value_default.title'
         );
         if ($storeId !== null) {
-            $this->getSelect()
-                ->columns(array('title' => $title))
-                ->joinLeft(array('option_value' => $this->getTable('catalog_product_bundle_option_value')),
-                    $this->getConnection()->quoteInto(
-                        'main_table.option_id = option_value.option_id and option_value.store_id = ?',
-                        $storeId
-                    ),
-                    array()
-                );
+            $this->getSelect()->columns(
+                array('title' => $title)
+            )->joinLeft(
+                array('option_value' => $this->getTable('catalog_product_bundle_option_value')),
+                $this->getConnection()->quoteInto(
+                    'main_table.option_id = option_value.option_id and option_value.store_id = ?',
+                    $storeId
+                ),
+                array()
+            );
         }
         return $this;
     }
@@ -98,7 +98,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets product id filter
      *
      * @param int $productId
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setProductIdFilter($productId)
     {
@@ -109,12 +109,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Sets order by position
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setPositionOrder()
     {
-        $this->getSelect()->order('main_table.position asc')
-            ->order('main_table.option_id asc');
+        $this->getSelect()->order('main_table.position asc')->order('main_table.option_id asc');
         return $this;
     }
 
@@ -126,7 +125,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Bundle\Model\Resource\Selection\Collection $selectionsCollection
      * @param bool $stripBefore
      * @param bool $appendAll
-     * @return array
+     * @return \Magento\Object[]
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
     {
@@ -137,7 +136,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         if (!$this->_selectionsAppended) {
             foreach ($selectionsCollection->getItems() as $key => $_selection) {
                 if ($_option = $this->getItemById($_selection->getOptionId())) {
-                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions())) {
+                    if ($appendAll || $_selection->isSalable() && !$_selection->getRequiredOptions()) {
                         $_selection->setOption($_option);
                         $_option->addSelection($_selection);
                     } else {
@@ -154,7 +153,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Removes appended selections before
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     protected function _stripSelections()
     {
@@ -169,7 +168,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets filter by option id
      *
      * @param array|int $ids
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setIdFilter($ids)
     {
@@ -184,7 +183,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Reset all item ids cache
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function resetAllIds()
     {
@@ -205,4 +204,3 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         return $this->_itemIds;
     }
 }
-

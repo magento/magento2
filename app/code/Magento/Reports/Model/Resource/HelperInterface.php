@@ -36,6 +36,7 @@ interface HelperInterface
      *
      * @param string $mainTable
      * @param array $data
+     * @param mixed $matchFields
      * @return string
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields);
@@ -47,7 +48,7 @@ interface HelperInterface
      * @param string $column
      * @param string $mainTable
      * @param string $aggregationTable
-     * @return \Magento\Core\Model\Resource\Helper\AbstractHelper
+     * @return \Magento\DB\Helper\AbstractHelper
      */
     public function updateReportRatingPos($type, $column, $mainTable, $aggregationTable);
 }

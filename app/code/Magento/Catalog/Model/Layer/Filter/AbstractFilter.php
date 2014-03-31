@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer category filter abstract model
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Layer\Filter;
-
 abstract class AbstractFilter extends \Magento\Object
 {
     /**
@@ -75,19 +74,22 @@ abstract class AbstractFilter extends \Magento\Object
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer $layer,
         array $data = array()
     ) {
         $this->_filterItemFactory = $filterItemFactory;
         $this->_storeManager = $storeManager;
-        $this->_catalogLayer = $catalogLayer;
+        $this->_catalogLayer = $layer;
         parent::__construct($data);
+        if ($this->hasAttributeModel()) {
+            $this->_requestVar = $this->getAttributeModel()->getAttributeCode();
+        }
     }
 
     /**
@@ -135,9 +137,10 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Apply filter to collection
      *
-     * @param  \Zend_Controller_Request_Abstract $request
+     * @param \Zend_Controller_Request_Abstract $request
+     * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
         return $this;
     }
@@ -168,7 +171,7 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Get data array for building filter items
      *
-     * result array should have next structure:
+     * Result array should have next structure:
      * array(
      *      $index => array(
      *          'label' => $label,
@@ -192,18 +195,13 @@ abstract class AbstractFilter extends \Magento\Object
     protected function _initItems()
     {
         $data = $this->_getItemsData();
-        $items=array();
+        $items = array();
         foreach ($data as $itemData) {
-            $items[] = $this->_createItem(
-                $itemData['label'],
-                $itemData['value'],
-                $itemData['count']
-            );
+            $items[] = $this->_createItem($itemData['label'], $itemData['value'], $itemData['count']);
         }
         $this->_items = $items;
         return $this;
     }
-
 
     /**
      * Retrieve layer object
@@ -228,13 +226,17 @@ abstract class AbstractFilter extends \Magento\Object
      * @param   int $count
      * @return  \Magento\Catalog\Model\Layer\Filter\Item
      */
-    protected function _createItem($label, $value, $count=0)
+    protected function _createItem($label, $value, $count = 0)
     {
-        return $this->_filterItemFactory->create()
-            ->setFilter($this)
-            ->setLabel($label)
-            ->setValue($value)
-            ->setCount($count);
+        return $this->_filterItemFactory->create()->setFilter(
+            $this
+        )->setLabel(
+            $label
+        )->setValue(
+            $value
+        )->setCount(
+            $count
+        );
     }
 
     /**
@@ -274,13 +276,13 @@ abstract class AbstractFilter extends \Magento\Object
      * Get attribute model associated with filter
      *
      * @return \Magento\Catalog\Model\Resource\Eav\Attribute
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getAttributeModel()
     {
         $attribute = $this->getData('attribute_model');
         if (is_null($attribute)) {
-            throw new \Magento\Core\Exception(__('The attribute model is not defined.'));
+            throw new \Magento\Model\Exception(__('The attribute model is not defined.'));
         }
         return $attribute;
     }
@@ -313,7 +315,7 @@ abstract class AbstractFilter extends \Magento\Object
      * Set store id scope
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -338,7 +340,7 @@ abstract class AbstractFilter extends \Magento\Object
      * Set Website ID scope
      *
      * @param int $websiteId
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {

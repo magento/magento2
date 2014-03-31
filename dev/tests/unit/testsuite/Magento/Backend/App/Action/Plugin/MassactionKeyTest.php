@@ -25,29 +25,34 @@ namespace Magento\Backend\App\Action\Plugin;
 
 class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Backend\App\Action\Plugin\MassactionKey
      */
-    protected $_plugin;
+    protected $plugin;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_invocationChainMock;
+    protected $requestMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    protected $subjectMock;
 
     protected function setUp()
     {
-        $this->_invocationChainMock = $this->getMock(
-            'Magento\Code\Plugin\InvocationChain', array(), array(), '', false
-        );
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_plugin = new \Magento\Backend\App\Action\Plugin\MassactionKey();
+        $this->closureMock = function () {
+            return 'Expected';
+        };
+        $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->plugin = new \Magento\Backend\App\Action\Plugin\MassactionKey();
     }
 
     /**
@@ -60,25 +65,28 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
     {
 
-        $this->_requestMock ->expects($this->at(0))
-            ->method('getPost')->with('massaction_prepare_key')->will($this->returnValue('key'));
-        $this->_requestMock->expects($this->at(1))->method('getPost')->with('key')->will($this->returnValue($postData));
-        $this->_requestMock->expects($this->once())->method('setPost')->with('key', $convertedData);
-        $this->_invocationChainMock->expects($this->once())
-            ->method('proceed')->with(array($this->_requestMock))->will($this->returnValue('Expected'));
-        $this->assertEquals('Expected',
-            $this->_plugin->aroundDispatch(array($this->_requestMock), $this->_invocationChainMock));
+        $this->requestMock->expects(
+            $this->at(0)
+        )->method(
+            'getPost'
+        )->with(
+            'massaction_prepare_key'
+        )->will(
+            $this->returnValue('key')
+        );
+        $this->requestMock->expects($this->at(1))->method('getPost')->with('key')->will($this->returnValue($postData));
+        $this->requestMock->expects($this->once())->method('setPost')->with('key', $convertedData);
+        $this->assertEquals(
+            'Expected',
+            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
     }
 
     public function aroundDispatchDataProvider()
     {
         return array(
-            'post_data_is_array' => array(
-                array('key'),  array('key')
-            ),
-            'post_data_is_string' => array(
-                'key, key_two', array('key', ' key_two')
-            )
+            'post_data_is_array' => array(array('key'), array('key')),
+            'post_data_is_string' => array('key, key_two', array('key', ' key_two'))
         );
     }
 
@@ -88,12 +96,19 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatchWhenMassactionPrepareKeyRequestNotExists()
     {
 
-        $this->_requestMock ->expects($this->once())
-            ->method('getPost')->with('massaction_prepare_key')->will($this->returnValue(false));
-        $this->_requestMock->expects($this->never())->method('setPost');
-        $this->_invocationChainMock->expects($this->once())
-            ->method('proceed')->with(array($this->_requestMock))->will($this->returnValue('Expected'));
-        $this->assertEquals('Expected',
-            $this->_plugin->aroundDispatch(array($this->_requestMock), $this->_invocationChainMock));
+        $this->requestMock->expects(
+            $this->once()
+        )->method(
+            'getPost'
+        )->with(
+            'massaction_prepare_key'
+        )->will(
+            $this->returnValue(false)
+        );
+        $this->requestMock->expects($this->never())->method('setPost');
+        $this->assertEquals(
+            'Expected',
+            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
     }
 }

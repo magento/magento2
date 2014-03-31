@@ -167,4 +167,24 @@ class Bootstrap
     {
         self::$_objectManager = $objectManager;
     }
+
+    /**
+     * Get bootstrap object
+     *
+     * @return \Magento\TestFramework\Bootstrap
+     */
+    public function getBootstrap()
+    {
+        return $this->_bootstrap;
+    }
+
+    /**
+     * Load area
+     * @param string $areaCode
+     */
+    public function loadArea($areaCode)
+    {
+        self::$_objectManager->get('Magento\App\State')->setAreaCode($areaCode);
+        self::$_objectManager->get('Magento\App\AreaList')->getArea($areaCode)->load();
+    }
 }

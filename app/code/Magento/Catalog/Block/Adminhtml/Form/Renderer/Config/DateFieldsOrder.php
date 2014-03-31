@@ -33,21 +33,20 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
-class DateFieldsOrder
-    extends \Magento\Backend\Block\System\Config\Form\Field
+use Magento\Backend\Block\System\Config\Form\Field;
+use Magento\Data\Form\Element\AbstractElement;
+
+class DateFieldsOrder extends Field
 {
-
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
-        $_options = array(
-            'd' => __('Day'),
-            'm' => __('Month'),
-            'y' => __('Year')
-        );
+        $_options = array('d' => __('Day'), 'm' => __('Month'), 'y' => __('Year'));
 
-        $element->setValues($_options)
-            ->setClass('select-date')
-            ->setName($element->getName() . '[]');
+        $element->setValues($_options)->setClass('select-date')->setName($element->getName() . '[]');
         if ($element->getValue()) {
             $values = explode(',', $element->getValue());
         } else {

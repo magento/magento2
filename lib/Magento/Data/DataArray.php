@@ -10,5 +10,4 @@ namespace Magento\Data;
 
 class DataArray extends \Magento\Object
 {
-    //
 }

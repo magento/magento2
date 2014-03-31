@@ -29,14 +29,12 @@
  */
 namespace Magento\Backend\Block\System\Config\Form\Fieldset\Modules;
 
-class DisableOutput
-    extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class DisableOutput extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Object
      */
     protected $_dummyElement;
-
 
     /**
      * @var \Magento\Backend\Block\System\Config\Form\Field
@@ -82,7 +80,8 @@ class DisableOutput
         $modules = array_keys($this->_moduleList->getModules());
 
         $dispatchResult = new \Magento\Object($modules);
-        $this->_eventManager->dispatch('adminhtml_system_config_advanced_disableoutput_render_before',
+        $this->_eventManager->dispatch(
+            'adminhtml_system_config_advanced_disableoutput_render_before',
             array('modules' => $dispatchResult)
         );
         $modules = $dispatchResult->toArray();
@@ -93,7 +92,7 @@ class DisableOutput
             if ($moduleName === 'Magento_Adminhtml' || $moduleName === 'Magento_Backend') {
                 continue;
             }
-            $html.= $this->_getFieldHtml($element, $moduleName);
+            $html .= $this->_getFieldHtml($element, $moduleName);
         }
         $html .= $this->_getFooterHtml($element);
 
@@ -117,7 +116,9 @@ class DisableOutput
     protected function _getFieldRenderer()
     {
         if (empty($this->_fieldRenderer)) {
-            $this->_fieldRenderer = $this->_layout->getBlockSingleton('Magento\Backend\Block\System\Config\Form\Field');
+            $this->_fieldRenderer = $this->_layout->getBlockSingleton(
+                'Magento\Backend\Block\System\Config\Form\Field'
+            );
         }
         return $this->_fieldRenderer;
     }
@@ -130,7 +131,7 @@ class DisableOutput
         if (empty($this->_values)) {
             $this->_values = array(
                 array('label' => __('Enable'), 'value' => 0),
-                array('label' => __('Disable'), 'value' => 1),
+                array('label' => __('Disable'), 'value' => 1)
             );
         }
         return $this->_values;
@@ -144,7 +145,8 @@ class DisableOutput
     protected function _getFieldHtml($fieldset, $moduleName)
     {
         $configData = $this->getConfigData();
-        $path = 'advanced/modules_disable_output/' . $moduleName; //TODO: move as property of form
+        $path = 'advanced/modules_disable_output/' . $moduleName;
+        //TODO: move as property of form
         if (isset($configData[$path])) {
             $data = $configData[$path];
             $inherit = false;
@@ -155,16 +157,21 @@ class DisableOutput
 
         $element = $this->_getDummyElement();
 
-        $field = $fieldset->addField($moduleName, 'select',
+        $field = $fieldset->addField(
+            $moduleName,
+            'select',
             array(
-                'name'          => 'groups[modules_disable_output][fields]['.$moduleName.'][value]',
-                'label'         => $moduleName,
-                'value'         => $data,
-                'values'        => $this->_getValues(),
-                'inherit'       => $inherit,
+                'name' => 'groups[modules_disable_output][fields][' . $moduleName . '][value]',
+                'label' => $moduleName,
+                'value' => $data,
+                'values' => $this->_getValues(),
+                'inherit' => $inherit,
                 'can_use_default_value' => $this->getForm()->canUseDefaultValue($element),
-                'can_use_website_value' => $this->getForm()->canUseWebsiteValue($element),
-            ))->setRenderer($this->_getFieldRenderer());
+                'can_use_website_value' => $this->getForm()->canUseWebsiteValue($element)
+            )
+        )->setRenderer(
+            $this->_getFieldRenderer()
+        );
 
         return $field->toHtml();
     }

@@ -38,8 +38,9 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_xsdSchema = realpath( __DIR__
-            . '/../../../../../../../../../app/code/Magento/ImportExport/etc/import_merged.xsd');
+        $this->_xsdSchema = realpath(
+            __DIR__ . '/../../../../../../../../../app/code/Magento/ImportExport/etc/import_merged.xsd'
+        );
         $this->_xsdValidator = new \Magento\TestFramework\Utility\XsdValidator();
     }
 
@@ -50,7 +51,7 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
      */
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
-        $actualError= $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
         $this->assertEquals($expectedError, $actualError);
     }
 
@@ -67,6 +68,6 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidImportMergedXmlArray.php');
+        return include __DIR__ . '/_files/invalidImportMergedXmlArray.php';
     }
 }

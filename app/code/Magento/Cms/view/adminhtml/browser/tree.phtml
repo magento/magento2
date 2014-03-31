@@ -33,6 +33,6 @@
             <a onclick="jQuery('[data-role=tree]').jstree('open_all');"><?php echo __('Expand All'); ?></a>
         </div>
     </div>
-    <div data-role="tree" data-mage-init="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getTreeWidgetOptions())); ?>">
+    <div data-role="tree" data-mage-init='<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getTreeWidgetOptions())); ?>'>
     </div>
 </div>

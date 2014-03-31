@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Performance\Scenario;
 
 class FailureExceptionTest extends \PHPUnit_Framework_TestCase
@@ -42,8 +41,10 @@ class FailureExceptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_scenario = new \Magento\TestFramework\Performance\Scenario('Title', '', array(), array(), array());
-        $this->_object =
-            new \Magento\TestFramework\Performance\Scenario\FailureException($this->_scenario, 'scenario has failed');
+        $this->_object = new \Magento\TestFramework\Performance\Scenario\FailureException(
+            $this->_scenario,
+            'scenario has failed'
+        );
     }
 
     protected function tearDown()

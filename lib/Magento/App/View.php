@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class View implements ViewInterface
@@ -42,22 +41,22 @@ class View implements ViewInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\TranslateInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $_translateInline;
 
     /**
-     * @var \Magento\App\ActionFlag
+     * @var ActionFlag
      */
     protected $_actionFlag;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
@@ -68,28 +67,28 @@ class View implements ViewInterface
 
     /**
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\ResponseInterface $response
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\TranslateInterface $translator
-     * @param \Magento\App\ActionFlag $actionFlag
+     * @param \Magento\Translate\InlineInterface $translateInline
+     * @param ActionFlag $actionFlag
      */
     public function __construct(
         \Magento\View\LayoutInterface $layout,
-        \Magento\App\RequestInterface $request,
-        \Magento\App\ResponseInterface $response,
+        RequestInterface $request,
+        ResponseInterface $response,
         \Magento\Config\ScopeInterface $configScope,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\TranslateInterface $translator,
-        \Magento\App\ActionFlag $actionFlag
+        \Magento\Translate\InlineInterface $translateInline,
+        ActionFlag $actionFlag
     ) {
         $this->_layout = $layout;
         $this->_request = $request;
         $this->_response = $response;
         $this->_configScope = $configScope;
         $this->_eventManager = $eventManager;
-        $this->_translator = $translator;
+        $this->_translateInline = $translateInline;
         $this->_actionFlag = $actionFlag;
     }
 
@@ -283,7 +282,7 @@ class View implements ViewInterface
         );
 
         $output = $this->getLayout()->getOutput();
-        $this->_translator->processResponseBody($output);
+        $this->_translateInline->processResponseBody($output);
         $this->_response->appendBody($output);
         \Magento\Profiler::stop('layout_render');
 
@@ -300,5 +299,15 @@ class View implements ViewInterface
     public function setIsLayoutLoaded($value)
     {
         $this->_isLayoutLoaded = $value;
+    }
+
+    /**
+     * Returns is layout loaded
+     *
+     * @return bool
+     */
+    public function isLayoutLoaded()
+    {
+        return $this->_isLayoutLoaded;
     }
 }

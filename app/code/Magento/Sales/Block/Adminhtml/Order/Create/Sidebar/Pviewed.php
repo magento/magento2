@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 /**
  * Adminhtml sales order create sidebar recently view block
@@ -31,17 +32,18 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
+     * Product factory
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Event factory
+     *
      * @var \Magento\Reports\Model\EventFactory
      */
     protected $_eventFactory;
@@ -69,6 +71,11 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
         parent::__construct($context, $sessionQuote, $orderCreate, $salesConfig, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -76,6 +83,11 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
         $this->setDataId('pviewed');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Recently Viewed Products');
@@ -96,10 +108,13 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
                 $stores[] = $store->getId();
             }
 
-            $collection = $this->_eventFactory->create()
-                ->getCollection()
-                ->addStoreFilter($stores)
-                ->addRecentlyFiler(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW, $this->getCustomerId(), 0);
+            $collection = $this->_eventFactory->create()->getCollection()->addStoreFilter(
+                $stores
+            )->addRecentlyFiler(
+                \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,
+                $this->getCustomerId(),
+                0
+            );
             $productIds = array();
             foreach ($collection as $event) {
                 $productIds[] = $event->getObjectId();
@@ -107,15 +122,19 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
 
             $productCollection = null;
             if ($productIds) {
-                $productCollection = $this->_productFactory->create()
-                    ->getCollection()
-                    ->setStoreId($this->getQuote()->getStoreId())
-                    ->addStoreFilter($this->getQuote()->getStoreId())
-                    ->addAttributeToSelect('name')
-                    ->addAttributeToSelect('price')
-                    ->addAttributeToSelect('small_image')
-                    ->addIdFilter($productIds)
-                    ->load();
+                $productCollection = $this->_productFactory->create()->getCollection()->setStoreId(
+                    $this->getQuote()->getStoreId()
+                )->addStoreFilter(
+                    $this->getQuote()->getStoreId()
+                )->addAttributeToSelect(
+                    'name'
+                )->addAttributeToSelect(
+                    'price'
+                )->addAttributeToSelect(
+                    'small_image'
+                )->addIdFilter(
+                    $productIds
+                )->load();
             }
             $this->setData('item_collection', $productCollection);
         }
@@ -125,7 +144,7 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     /**
      * Retrieve availability removing items in block
      *
-     * @return bool
+     * @return false
      */
     public function canRemoveItems()
     {

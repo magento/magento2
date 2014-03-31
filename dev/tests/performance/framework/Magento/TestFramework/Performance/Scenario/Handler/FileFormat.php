@@ -29,8 +29,7 @@
  */
 namespace Magento\TestFramework\Performance\Scenario\Handler;
 
-class FileFormat
-    implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
+class FileFormat implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
 {
     /**
      * @var array
@@ -44,7 +43,8 @@ class FileFormat
      * @param \Magento\TestFramework\Performance\Scenario\HandlerInterface $handlerInstance
      * @return \Magento\TestFramework\Performance\Scenario\Handler\FileFormat
      */
-    public function register($fileExtension,
+    public function register(
+        $fileExtension,
         \Magento\TestFramework\Performance\Scenario\HandlerInterface $handlerInstance
     ) {
         $this->_handlers[$fileExtension] = $handlerInstance;

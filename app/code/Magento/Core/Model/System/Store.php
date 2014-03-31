@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\System;
 
 /**
  * Core System Store Model
@@ -32,11 +32,8 @@
  * @package    Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\System;
-
 class Store extends \Magento\Object
 {
-
     /**
      * Website collection
      * websiteId => \Magento\Core\Model\Website
@@ -76,7 +73,6 @@ class Store extends \Magento\Object
      * Load Website, Group and Store collections
      *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @return \Magento\Core\Model\System\Store
      */
     public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
     {
@@ -87,7 +83,7 @@ class Store extends \Magento\Object
     /**
      * Load/Reload Website collection
      *
-     * @return array
+     * @return $this
      */
     protected function _loadWebsiteCollection()
     {
@@ -98,7 +94,7 @@ class Store extends \Magento\Object
     /**
      * Load/Reload Group collection
      *
-     * @return array
+     * @return $this
      */
     protected function _loadGroupCollection()
     {
@@ -114,7 +110,7 @@ class Store extends \Magento\Object
     /**
      * Load/Reload Store collection
      *
-     * @return array
+     * @return $this
      */
     protected function _loadStoreCollection()
     {
@@ -133,16 +129,10 @@ class Store extends \Magento\Object
     {
         $options = array();
         if ($empty) {
-            $options[] = array(
-                'label' => '',
-                'value' => ''
-            );
+            $options[] = array('label' => '', 'value' => '');
         }
         if ($all && $this->_isAdminScopeAllowed) {
-            $options[] = array(
-                'label' => __('All Store Views'),
-                'value' => 0
-            );
+            $options[] = array('label' => __('All Store Views'), 'value' => 0);
         }
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
@@ -159,15 +149,12 @@ class Store extends \Magento\Object
                         continue;
                     }
                     if (!$websiteShow) {
-                        $options[] = array(
-                            'label' => $website->getName(),
-                            'value' => array()
-                        );
+                        $options[] = array('label' => $website->getName(), 'value' => array());
                         $websiteShow = true;
                     }
                     if (!$groupShow) {
                         $groupShow = true;
-                        $values    = array();
+                        $values = array();
                     }
                     $values[] = array(
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $store->getName(),
@@ -200,10 +187,7 @@ class Store extends \Magento\Object
         $websites = $this->getWebsiteCollection();
 
         if ($isAll) {
-            $out[] = array(
-                'value' => 0,
-                'label' => __('All Store Views')
-            );
+            $out[] = array('value' => 0, 'label' => __('All Store Views'));
         }
 
         foreach ($websites as $website) {
@@ -212,10 +196,7 @@ class Store extends \Magento\Object
             if ($websiteIds && !in_array($websiteId, $websiteIds)) {
                 continue;
             }
-            $out[$websiteId] = array(
-                'value' => $websiteId,
-                'label' => $website->getName()
-            );
+            $out[$websiteId] = array('value' => $websiteId, 'label' => $website->getName());
 
             foreach ($website->getGroups() as $group) {
 
@@ -223,10 +204,7 @@ class Store extends \Magento\Object
                 if ($groupIds && !in_array($groupId, $groupIds)) {
                     continue;
                 }
-                $out[$websiteId]['children'][$groupId] = array(
-                    'value' => $groupId,
-                    'label' => $group->getName()
-                );
+                $out[$websiteId]['children'][$groupId] = array('value' => $groupId, 'label' => $group->getName());
 
                 foreach ($group->getStores() as $store) {
 
@@ -261,23 +239,14 @@ class Store extends \Magento\Object
     {
         $options = array();
         if ($empty) {
-            $options[] = array(
-                'label' => __('-- Please Select --'),
-                'value' => ''
-            );
+            $options[] = array('label' => __('-- Please Select --'), 'value' => '');
         }
         if ($all && $this->_isAdminScopeAllowed) {
-            $options[] = array(
-                'label' => __('Admin'),
-                'value' => 0
-            );
+            $options[] = array('label' => __('Admin'), 'value' => 0);
         }
 
         foreach ($this->_websiteCollection as $website) {
-            $options[] = array(
-                'label' => $website->getName(),
-                'value' => $website->getId(),
-            );
+            $options[] = array('label' => $website->getName(), 'value' => $website->getId());
         }
         return $options;
     }
@@ -332,8 +301,8 @@ class Store extends \Magento\Object
     /**
      * Retrieve Website name by Id
      *
-     * @param int websiteId
-     * @return string
+     * @param int $websiteId
+     * @return string|null
      */
     public function getWebsiteName($websiteId)
     {
@@ -348,8 +317,8 @@ class Store extends \Magento\Object
     /**
      * Retrieve Group name by Id
      *
-     * @param int groupId
-     * @return string
+     * @param int $groupId
+     * @return string|null
      */
     public function getGroupName($groupId)
     {
@@ -365,7 +334,7 @@ class Store extends \Magento\Object
      * Retrieve Store name by Id
      *
      * @param int $storeId
-     * @return string
+     * @return string|null
      */
     public function getStoreName($storeId)
     {
@@ -379,8 +348,8 @@ class Store extends \Magento\Object
      * Retrieve store name with website and website store
      *
      * @param  int $storeId
-     * @return \Magento\Core\Model\Store
-     **/
+     * @return \Magento\Core\Model\Store|null
+     */
     public function getStoreData($storeId)
     {
         if (isset($this->_storeCollection[$storeId])) {
@@ -394,23 +363,22 @@ class Store extends \Magento\Object
      *
      * @param  int $storeId
      * @return string
-     **/
+     */
     public function getStoreNameWithWebsite($storeId)
     {
         $name = '';
         if (is_array($storeId)) {
             $names = array();
             foreach ($storeId as $id) {
-                $names[]= $this->getStoreNameWithWebsite($id);
+                $names[] = $this->getStoreNameWithWebsite($id);
             }
             $name = implode(', ', $names);
-        }
-        else {
+        } else {
             if (isset($this->_storeCollection[$storeId])) {
                 $data = $this->_storeCollection[$storeId];
                 $name .= $this->getWebsiteName($data->getWebsiteId());
-                $name .= ($name ? '/' : '').$this->getGroupName($data->getGroupId());
-                $name .= ($name ? '/' : '').$data->getName();
+                $name .= ($name ? '/' : '') . $this->getGroupName($data->getGroupId());
+                $name .= ($name ? '/' : '') . $data->getName();
             }
         }
         return $name;
@@ -451,7 +419,7 @@ class Store extends \Magento\Object
      * Allowed types: website, group, store or null for all
      *
      * @param string $type
-     * @return \Magento\Core\Model\System\Store
+     * @return $this
      */
     public function reload($type = null)
     {
@@ -459,8 +427,7 @@ class Store extends \Magento\Object
             $this->_loadWebsiteCollection();
             $this->_loadGroupCollection();
             $this->_loadStoreCollection();
-        }
-        else {
+        } else {
             switch ($type) {
                 case 'website':
                     $this->_loadWebsiteCollection();
@@ -483,18 +450,17 @@ class Store extends \Magento\Object
      *
      * @param  int $storeId
      * @return string
-     **/
+     */
     public function getStoreNamePath($storeId)
     {
         $name = '';
         if (is_array($storeId)) {
             $names = array();
             foreach ($storeId as $id) {
-                $names[]= $this->getStoreNamePath($id);
+                $names[] = $this->getStoreNamePath($id);
             }
             $name = implode(', ', $names);
-        }
-        else {
+        } else {
             if (isset($this->_storeCollection[$storeId])) {
                 $data = $this->_storeCollection[$storeId];
                 $name .= $this->getWebsiteName($data->getWebsiteId());
@@ -508,7 +474,7 @@ class Store extends \Magento\Object
      * Specify whether to show admin-scope options
      *
      * @param bool $value
-     * @return \Magento\Core\Model\System\Store
+     * @return $this
      */
     public function setIsAdminScopeAllowed($value)
     {

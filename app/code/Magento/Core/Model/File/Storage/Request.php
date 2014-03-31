@@ -45,7 +45,7 @@ class Request
      */
     public function __construct($workingDir, \Zend_Controller_Request_Http $request = null)
     {
-        $request = $request ? : new \Zend_Controller_Request_Http();
+        $request = $request ?: new \Zend_Controller_Request_Http();
         $this->_pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
         $this->_filePath = $workingDir . '/' . $this->_pathInfo;
     }

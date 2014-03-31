@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Layout;
 
 /**
  * Layout structure model
  */
-namespace Magento\Core\Model\Layout;
-
 class ScheduledStructure
 {
     /**
@@ -88,7 +87,6 @@ class ScheduledStructure
         return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledMoves));
     }
 
-
     /**
      * Get elements to remove
      *
@@ -114,7 +112,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @param array $default
-     * @return mixed
+     * @return bool|array
      */
     public function getElement($elementName, $default = array())
     {
@@ -134,8 +132,9 @@ class ScheduledStructure
     /**
      * Add element to scheduled elements list
      *
-     * @param  string $elementName
+     * @param string $elementName
      * @param array $data
+     * @return void
      */
     public function setElement($elementName, array $data)
     {
@@ -156,7 +155,8 @@ class ScheduledStructure
     /**
      * Unset specified element from scheduled elements list
      *
-     * @param $elementName
+     * @param string $elementName
+     * @return void
      */
     public function unsetElement($elementName)
     {
@@ -180,6 +180,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @param array $data
+     * @return void
      */
     public function setElementToMove($elementName, array $data)
     {
@@ -190,6 +191,7 @@ class ScheduledStructure
      * Unset removed element by name
      *
      * @param string $elementName
+     * @return void
      */
     public function unsetElementFromListToRemove($elementName)
     {
@@ -200,6 +202,7 @@ class ScheduledStructure
      * Set removed element value
      *
      * @param string $elementName
+     * @return void
      */
     public function setElementToRemoveList($elementName)
     {
@@ -225,7 +228,7 @@ class ScheduledStructure
      */
     public function getStructureElement($elementName, $default = null)
     {
-        return $this->hasStructureElement($elementName) ?  $this->_scheduledStructure[$elementName] : $default;
+        return $this->hasStructureElement($elementName) ? $this->_scheduledStructure[$elementName] : $default;
     }
 
     /**
@@ -254,6 +257,7 @@ class ScheduledStructure
      *
      * @param  string $elementName
      * @param array $data
+     * @return void
      */
     public function setStructureElement($elementName, array $data)
     {
@@ -264,6 +268,7 @@ class ScheduledStructure
      * Unset scheduled structure element by name
      *
      * @param string $elementName
+     * @return void
      */
     public function unsetStructureElement($elementName)
     {
@@ -308,6 +313,7 @@ class ScheduledStructure
      *
      * @param string $elementName
      * @param string $data
+     * @return void
      */
     public function setPathElement($elementName, $data)
     {
@@ -318,6 +324,7 @@ class ScheduledStructure
      * Unset scheduled paths element by name
      *
      * @param string $elementName
+     * @return void
      */
     public function unsetPathElement($elementName)
     {
@@ -326,6 +333,8 @@ class ScheduledStructure
 
     /**
      * Flush scheduled paths list
+     *
+     * @return void
      */
     public function flushPaths()
     {
@@ -334,6 +343,8 @@ class ScheduledStructure
 
     /**
      * Flush scheduled structure list
+     *
+     * @return void
      */
     public function flushScheduledStructure()
     {

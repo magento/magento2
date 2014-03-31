@@ -25,26 +25,32 @@
 class ClassWithAllArgumentTypes
 {
     const DEFAULT_VALUE = 'Const Value';
+
     /**
      * @var stdClass
      */
     protected $_stdClassObject;
+
     /**
      * @var classWithoutConstruct
      */
     protected $_withoutConstructorClassObject;
+
     /**
      * @var mixed
      */
     protected $_someVariable;
+
     /**
      * @var int
      */
     protected $_optionalNumValue;
+
     /**
      * @var string
      */
     protected $_optionalStringValue;
+
     /**
      * @var array
      */
@@ -82,32 +88,27 @@ class ClassWithAllArgumentTypes
         $this->_constValue = $const;
     }
 }
-
 class ClassWithoutOwnConstruct extends ClassWithAllArgumentTypes
 {
-
 }
-
 class ClassWithoutConstruct
 {
-
 }
-
 class ClassExtendsDefaultPhpType extends \RuntimeException
 {
-
 }
-
 class FirstClassForParentCall
 {
     /**
      * @var stdClass
      */
     protected $_stdClassObject;
+
     /**
      * @var ClassExtendsDefaultPhpType
      */
     protected $_runeTimeException;
+
     /**
      * @var array
      */
@@ -128,13 +129,13 @@ class FirstClassForParentCall
         $this->_arrayVariable = $arrayVariable;
     }
 }
-
 class ThirdClassForParentCall extends firstClassForParentCall
 {
     /**
      * @var stdClass
      */
     protected $_stdClassObject;
+
     /**
      * @var ClassExtendsDefaultPhpType
      */
@@ -144,22 +145,20 @@ class ThirdClassForParentCall extends firstClassForParentCall
      * @param stdClass $stdClassObject
      * @param ClassExtendsDefaultPhpType $secondClass
      */
-    public function __construct(
-        \stdClass $stdClassObject,
-        \ClassExtendsDefaultPhpType $secondClass
-    ) {
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $secondClass)
+    {
         parent::__construct($stdClassObject, $secondClass);
         $this->_stdClassObject = $stdClassObject;
         $this->_secondClass = $secondClass;
     }
 }
-
 class WrongArgumentsOrder extends firstClassForParentCall
 {
     /**
      * @var stdClass
      */
     protected $_stdClassObject;
+
     /**
      * @var ClassExtendsDefaultPhpType
      */
@@ -169,22 +168,20 @@ class WrongArgumentsOrder extends firstClassForParentCall
      * @param stdClass $stdClassObject
      * @param ClassExtendsDefaultPhpType $secondClass
      */
-    public function __construct(
-        \stdClass $stdClassObject,
-        \ClassExtendsDefaultPhpType $secondClass
-    ) {
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $secondClass)
+    {
         parent::__construct($secondClass, $stdClassObject);
         $this->_stdClassObject = $stdClassObject;
         $this->_secondClass = $secondClass;
     }
 }
-
 class ArgumentsOnSeparateLines extends firstClassForParentCall
 {
     /**
      * @var stdClass
      */
     protected $_stdClassObject;
+
     /**
      * @var ClassExtendsDefaultPhpType
      */
@@ -194,19 +191,13 @@ class ArgumentsOnSeparateLines extends firstClassForParentCall
      * @param stdClass $stdClassObject
      * @param ClassExtendsDefaultPhpType $secondClass
      */
-    public function __construct(
-        \stdClass $stdClassObject,
-        \ClassExtendsDefaultPhpType $secondClass
-    ) {
-        parent::__construct(
-            $secondClass,
-            $stdClassObject
-        );
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $secondClass)
+    {
+        parent::__construct($secondClass, $stdClassObject);
         $this->_stdClassObject = $stdClassObject;
         $this->_secondClass = $secondClass;
     }
 }
-
 class ClassWithSuppressWarnings
 {
     /**
@@ -225,12 +216,9 @@ class ClassWithSuppressWarnings
      *
      * @SuppressWarnings(Magento.TypeDuplication)
      */
-    public function __construct(
-        \stdClass $stdClassObject,
-        \ClassExtendsDefaultPhpType $secondClass
-    ) {
+    public function __construct(\stdClass $stdClassObject, \ClassExtendsDefaultPhpType $secondClass)
+    {
         $this->argumentOne = $stdClassObject;
         $this->argumentTwo = $secondClass;
     }
 }
-

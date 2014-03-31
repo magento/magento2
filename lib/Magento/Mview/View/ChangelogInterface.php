@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview\View;
 
 interface ChangelogInterface
@@ -43,8 +42,8 @@ interface ChangelogInterface
     /**
      * Clear changelog by version_id
      *
-     * @param $versionId
-     * @return boolean
+     * @param int $versionId
+     * @return bool
      */
     public function clear($versionId);
 
@@ -82,6 +81,7 @@ interface ChangelogInterface
      * Set view's identifier
      *
      * @param string $viewId
+     * @return ChangelogInterface
      */
     public function setViewId($viewId);
 

@@ -23,17 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
-class Labels
-    extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Prepare content for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -41,9 +37,7 @@ class Labels
     }
 
     /**
-     * Prepare title for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -51,9 +45,7 @@ class Labels
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -61,15 +53,18 @@ class Labels
     }
 
     /**
-     * Returns status flag about this tab hidden or not
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHidden()
     {
         return false;
     }
 
+    /**
+     * Prepare form before rendering HTML
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
@@ -78,17 +73,19 @@ class Labels
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
-        $fieldset = $form->addFieldset('default_label_fieldset', array(
-            'legend' => __('Default Label')
-        ));
+        $fieldset = $form->addFieldset('default_label_fieldset', array('legend' => __('Default Label')));
         $labels = $rule->getStoreLabels();
 
-        $fieldset->addField('store_default_label', 'text', array(
-            'name'      => 'store_labels[0]',
-            'required'  => false,
-            'label'     => __('Default Rule Label for All Store Views'),
-            'value'     => isset($labels[0]) ? $labels[0] : '',
-        ));
+        $fieldset->addField(
+            'store_default_label',
+            'text',
+            array(
+                'name' => 'store_labels[0]',
+                'required' => false,
+                'label' => __('Default Rule Label for All Store Views'),
+                'value' => isset($labels[0]) ? $labels[0] : ''
+            )
+        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset = $this->_createStoreSpecificFieldset($form, $labels);
@@ -109,39 +106,45 @@ class Labels
      *
      * @param \Magento\Data\Form $form
      * @param array $labels
-     * @return \Magento\Data\Form\Element\Fieldset mixed
+     * @return \Magento\Data\Form\Element\Fieldset
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {
-        $fieldset = $form->addFieldset('store_labels_fieldset', array(
-            'legend' => __('Store View Specific Labels'),
-            'class' => 'store-scope',
-        ));
+        $fieldset = $form->addFieldset(
+            'store_labels_fieldset',
+            array('legend' => __('Store View Specific Labels'), 'class' => 'store-scope')
+        );
         $renderer = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset');
         $fieldset->setRenderer($renderer);
 
         foreach ($this->_storeManager->getWebsites() as $website) {
-            $fieldset->addField("w_{$website->getId()}_label", 'note', array(
-                'label' => $website->getName(),
-                'fieldset_html_class' => 'website',
-            ));
+            $fieldset->addField(
+                "w_{$website->getId()}_label",
+                'note',
+                array('label' => $website->getName(), 'fieldset_html_class' => 'website')
+            );
             foreach ($website->getGroups() as $group) {
                 $stores = $group->getStores();
                 if (count($stores) == 0) {
                     continue;
                 }
-                $fieldset->addField("sg_{$group->getId()}_label", 'note', array(
-                    'label' => $group->getName(),
-                    'fieldset_html_class' => 'store-group',
-                ));
+                $fieldset->addField(
+                    "sg_{$group->getId()}_label",
+                    'note',
+                    array('label' => $group->getName(), 'fieldset_html_class' => 'store-group')
+                );
                 foreach ($stores as $store) {
-                    $fieldset->addField("s_{$store->getId()}", 'text', array(
-                        'name' => 'store_labels[' . $store->getId() . ']',
-                        'required' => false,
-                        'label' => $store->getName(),
-                        'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
-                        'fieldset_html_class' => 'store',
-                    ));
+                    $fieldset->addField(
+                        "s_{$store->getId()}",
+                        'text',
+                        array(
+                            'name' => 'store_labels[' . $store->getId() . ']',
+                            'required' => false,
+                            'label' => $store->getName(),
+                            'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
+                            'fieldset_html_class' => 'store'
+                        )
+                    );
                 }
             }
         }

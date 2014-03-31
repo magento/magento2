@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Page\System\Config\Robots;
 
 /**
  * "Reset to Defaults" button renderer
@@ -31,8 +32,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Page\System\Config\Robots;
-
 class Reset extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
@@ -61,8 +60,10 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
         parent::__construct($context, $data);
     }
 
-    /*
+    /**
      * Set template
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,12 +88,15 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
      */
     public function getButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'id'      => 'reset_to_default_button',
-                'label'   => __('Reset to Default'),
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
+                'id' => 'reset_to_default_button',
+                'label' => __('Reset to Default'),
                 'onclick' => 'javascript:resetRobotsToDefault(); return false;'
-            ));
+            )
+        );
 
         return $button->toHtml();
     }

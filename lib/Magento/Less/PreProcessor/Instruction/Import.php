@@ -21,10 +21,11 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\PreProcessor\Instruction;
 
 use Magento\Less\PreProcessorInterface;
+use Magento\Less\PreProcessor;
+use Magento\View;
 
 /**
  * Less @import instruction preprocessor
@@ -34,63 +35,68 @@ class Import implements PreProcessorInterface
     /**
      * Pattern of @import less instruction
      */
-    const REPLACE_PATTERN =
-        '#@import\s+(\((?P<type>\w+)\)\s+)?[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?(?P<media>.*?);#';
+    const REPLACE_PATTERN = '#@import\s+(\((?P<type>\w+)\)\s+)?[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?(?P<media>.*?);#';
 
     /**
-     * Import's path list where key is relative path and value is absolute path to the imported content
+     * @var PreProcessor\File\FileList
+     */
+    protected $fileList;
+
+    /**
+     * Pre-processor error handler
      *
-     * @var array
+     * @var PreProcessor\ErrorHandlerInterface
      */
-    protected $importPaths = [];
+    protected $errorHandler;
 
     /**
-     * @var \Magento\Less\PreProcessor
+     * Related file
+     *
+     * @var View\RelatedFile
      */
-    protected $preProcessor;
+    protected $relatedFile;
 
     /**
-     * @var \Magento\Logger
-     */
-    protected $logger;
-
-    /**
-     * @var array
-     */
-    protected $viewParams;
-
-    /**
-     * @param \Magento\Less\PreProcessor $preProcessor
-     * @param \Magento\Logger $logger
-     * @param array $viewParams
+     * @param View\RelatedFile $relatedFile
+     * @param PreProcessor\ErrorHandlerInterface $errorHandler
+     * @param PreProcessor\File\FileList $fileList
      */
     public function __construct(
-        \Magento\Less\PreProcessor $preProcessor,
-        \Magento\Logger $logger,
-        array $viewParams = array()
+        View\RelatedFile $relatedFile,
+        PreProcessor\ErrorHandlerInterface $errorHandler,
+        PreProcessor\File\FileList $fileList
     ) {
-        $this->preProcessor = $preProcessor;
-        $this->logger = $logger;
-        $this->viewParams = $viewParams;
+        $this->relatedFile = $relatedFile;
+        $this->errorHandler = $errorHandler;
+        $this->fileList = $fileList;
     }
 
     /**
      * Explode import paths
      *
-     * @param array $importPaths
-     * @return $this
+     * @param \Magento\Less\PreProcessor\File\Less $lessFile
+     * @param array $matchedPaths
+     * @return array
      */
-    protected function generatePaths($importPaths)
+    protected function generatePaths(PreProcessor\File\Less $lessFile, $matchedPaths)
     {
-        foreach ($importPaths as $path) {
-            $path = $this->preparePath($path);
+        $importPaths = array();
+        foreach ($matchedPaths as $path) {
             try {
-                $this->importPaths[$path] = $this->preProcessor->processLessInstructions($path, $this->viewParams);
+                $viewParams = $lessFile->getViewParams();
+                $resolvedPath = $this->relatedFile->buildPath(
+                    $this->preparePath($path),
+                    $lessFile->getFilePath(),
+                    $viewParams
+                );
+                $importedLessFile = $this->fileList->createFile($resolvedPath, $viewParams);
+                $this->fileList->addFile($importedLessFile);
+                $importPaths[$path] = $importedLessFile->getPublicationPath();
             } catch (\Magento\Filesystem\FilesystemException $e) {
-                $this->logger->logException($e);
+                $this->errorHandler->processException($e);
             }
         }
-        return $this;
+        return $importPaths;
     }
 
     /**
@@ -107,27 +113,32 @@ class Import implements PreProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process($lessContent)
+    public function process(PreProcessor\File\Less $lessFile, $lessContent)
     {
-        $matches = [];
+        $matches = array();
         preg_match_all(self::REPLACE_PATTERN, $lessContent, $matches);
-        $this->generatePaths($matches['path']);
-        return preg_replace_callback(self::REPLACE_PATTERN, array($this, 'replace'), $lessContent);
+        $importPaths = $this->generatePaths($lessFile, $matches['path']);
+        $replaceCallback = function ($matchContent) use ($importPaths) {
+            return $this->replace($matchContent, $importPaths);
+        };
+        return preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $lessContent);
     }
 
     /**
      * Replace import path to file
      *
      * @param array $matchContent
+     * @param array $importPaths
      * @return string
      */
-    protected function replace($matchContent)
+    protected function replace($matchContent, $importPaths)
     {
-        $path = $this->preparePath($matchContent['path']);
-        if (empty($this->importPaths[$path])) {
+        if (empty($importPaths[$matchContent['path']])) {
             return '';
         }
-        $typeString  = empty($matchContent['type']) ? '' : '(' . $matchContent['type'] . ') ';
-        return "@import {$typeString}'{$this->importPaths[$path]}';";
+        $filePath = $importPaths[$matchContent['path']];
+        $typeString = empty($matchContent['type']) ? '' : '(' . $matchContent['type'] . ') ';
+        $mediaString = empty($matchContent['media']) ? '' : ' ' . $matchContent['media'];
+        return "@import {$typeString}'{$filePath}'{$mediaString};";
     }
 }

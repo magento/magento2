@@ -160,7 +160,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
         $this->_model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals('AliasTarget', $this->_model->getAlias('AliasName') );
+        $this->assertEquals('AliasTarget', $this->_model->getAlias('AliasName'));
     }
 
     public function testGetAliasWhenAliasesIsNull()
@@ -202,8 +202,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $expected = 'TestValue';
         $this->_model->setPathInfo($expected);
         $this->_model->rewritePathInfo($expected . '/other');
-        $this->_routerListMock->expects($this->once())->method('getRouteByFrontName')->with($expected)
-            ->will($this->returnValue($expected));
+        $this->_routerListMock->expects(
+            $this->once()
+        )->method(
+            'getRouteByFrontName'
+        )->with(
+            $expected
+        )->will(
+            $this->returnValue($expected)
+        );
         $this->assertEquals($expected, $this->_model->getRequestedRouteName());
     }
 
@@ -229,7 +236,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
         $path = 'one/two/';
         $this->_model->setPathInfo($path);
-        $this->_model->rewritePathInfo($path. '/last');
+        $this->_model->rewritePathInfo($path . '/last');
         $this->assertEquals('two', $this->_model->getRequestedControllerName());
     }
 
@@ -245,7 +252,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
         $path = 'one/two/three';
         $this->_model->setPathInfo($path);
-        $this->_model->rewritePathInfo($path. '/last');
+        $this->_model->rewritePathInfo($path . '/last');
         $this->assertEquals('three', $this->_model->getRequestedActionName());
     }
 
@@ -266,9 +273,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
         /* empty request */
         $this->assertEquals('__', $this->_model->getFullActionName());
-        $this->_model->setRouteName('test')
-            ->setControllerName('controller')
-            ->setActionName('action');
+        $this->_model->setRouteName('test')->setControllerName('controller')->setActionName('action');
         $this->assertEquals('test/controller/action', $this->_model->getFullActionName('/'));
     }
 }

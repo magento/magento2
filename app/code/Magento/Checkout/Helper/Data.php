@@ -23,19 +23,25 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Helper;
+
+use Magento\Core\Model\Store;
+use Magento\Sales\Model\Quote\Item\AbstractItem;
 
 /**
  * Checkout default helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_GUEST_CHECKOUT = 'checkout/options/guest_checkout';
+
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
+    /**
+     * @var array|null
+     */
     protected $_agreements = null;
 
     /**
@@ -56,9 +62,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
@@ -66,34 +72,42 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_agreementCollectionFactory;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_emailTemplFactory;
+    protected $_transportBuilder;
+
+    /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
 
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
-     * @param \Magento\Email\Model\TemplateFactory $emailTemplFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
-        \Magento\Email\Model\TemplateFactory $emailTemplFactory
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_agreementCollectionFactory = $agreementCollectionFactory;
-        $this->_emailTemplFactory = $emailTemplFactory;
+        $this->_transportBuilder = $transportBuilder;
+        $this->inlineTranslation = $inlineTranslation;
         parent::__construct($context);
     }
 
@@ -117,26 +131,40 @@ class Data extends \Magento\App\Helper\AbstractHelper
         return $this->getCheckout()->getQuote();
     }
 
+    /**
+     * @param float $price
+     * @return string
+     */
     public function formatPrice($price)
     {
         return $this->getQuote()->getStore()->formatPrice($price);
     }
 
-    public function convertPrice($price, $format=true)
+    /**
+     * @param float $price
+     * @param bool $format
+     * @return float
+     */
+    public function convertPrice($price, $format = true)
     {
         return $this->getQuote()->getStore()->convertPrice($price, $format);
     }
 
+    /**
+     * @return array
+     */
     public function getRequiredAgreementIds()
     {
         if (is_null($this->_agreements)) {
             if (!$this->_coreStoreConfig->getConfigFlag('checkout/options/enable_agreements')) {
                 $this->_agreements = array();
             } else {
-                $this->_agreements = $this->_agreementCollectionFactory->create()
-                    ->addStoreFilter($this->_storeManager->getStore()->getId())
-                    ->addFieldToFilter('is_active', 1)
-                    ->getAllIds();
+                $this->_agreements = $this->_agreementCollectionFactory->create()->addStoreFilter(
+                    $this->_storeManager->getStore()->getId()
+                )->addFieldToFilter(
+                    'is_active',
+                    1
+                )->getAllIds();
             }
         }
         return $this->_agreements;
@@ -163,9 +191,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if ($item->getPriceInclTax()) {
             return $item->getPriceInclTax();
         }
-        $qty = ($item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1));
+        $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-        $price = (floatval($qty)) ? ($item->getRowTotal() + $taxAmount)/$qty : 0;
+        $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
         return $this->_storeManager->getStore()->roundPrice($price);
     }
 
@@ -184,18 +212,26 @@ class Data extends \Magento\App\Helper\AbstractHelper
         return $item->getRowTotal() + $tax;
     }
 
+    /**
+     * @param AbstractItem $item
+     * @return float
+     */
     public function getBasePriceInclTax($item)
     {
-        $qty = ($item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1));
+        $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-        $price = (floatval($qty)) ? ($item->getBaseRowTotal() + $taxAmount)/$qty : 0;
+        $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
         return $this->_storeManager->getStore()->roundPrice($price);
     }
 
+    /**
+     * @param AbstractItem $item
+     * @return float
+     */
     public function getBaseSubtotalInclTax($item)
     {
         $tax = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-        return $item->getBaseRowTotal()+$tax;
+        return $item->getBaseRowTotal() + $tax;
     }
 
     /**
@@ -204,43 +240,41 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Sales\Model\Quote $checkout
      * @param string $message
      * @param string $checkoutType
-     * @return \Magento\Checkout\Helper\Data
+     * @return $this
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {
-        $this->_translator->setTranslateInline(false);
-
-        /** @var \Magento\Email\Model\Template $mailTemplate */
-        $mailTemplate = $this->_emailTemplFactory->create();
+        $this->inlineTranslation->suspend();
 
         $template = $this->_coreStoreConfig->getConfig('checkout/payment_failed/template', $checkout->getStoreId());
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
         $copyMethod = $this->_coreStoreConfig->getConfig(
-            'checkout/payment_failed/copy_method', $checkout->getStoreId()
+            'checkout/payment_failed/copy_method',
+            $checkout->getStoreId()
         );
+        $bcc = array();
         if ($copyTo && $copyMethod == 'bcc') {
-            $mailTemplate->addBcc($copyTo);
+            $bcc = $copyTo;
         }
 
         $_receiver = $this->_coreStoreConfig->getConfig('checkout/payment_failed/receiver', $checkout->getStoreId());
         $sendTo = array(
             array(
                 'email' => $this->_coreStoreConfig->getConfig(
-                        'trans_email/ident_' . $_receiver . '/email', $checkout->getStoreId()
-                    ),
-                'name'  => $this->_coreStoreConfig->getConfig(
-                        'trans_email/ident_' . $_receiver . '/name', $checkout->getStoreId()
-                    )
+                    'trans_email/ident_' . $_receiver . '/email',
+                    $checkout->getStoreId()
+                ),
+                'name' => $this->_coreStoreConfig->getConfig(
+                    'trans_email/ident_' . $_receiver . '/name',
+                    $checkout->getStoreId()
+                )
             )
         );
 
         if ($copyTo && $copyMethod == 'copy') {
             foreach ($copyTo as $email) {
-                $sendTo[] = array(
-                    'email' => $email,
-                    'name'  => null
-                );
+                $sendTo[] = array('email' => $email, 'name' => null);
             }
         }
         $shippingMethod = '';
@@ -257,43 +291,57 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $items = '';
         foreach ($checkout->getAllVisibleItems() as $_item) {
             /* @var $_item \Magento\Sales\Model\Quote\Item */
-            $items .= $_item->getProduct()->getName() . '  x '. $_item->getQty() . '  '
-                    . $checkout->getStoreCurrencyCode() . ' '
-                    . $_item->getProduct()->getFinalPrice($_item->getQty()) . "\n";
+            $items .= $_item->getProduct()->getName() .
+                '  x ' .
+                $_item->getQty() .
+                '  ' .
+                $checkout->getStoreCurrencyCode() .
+                ' ' .
+                $_item->getProduct()->getFinalPrice($_item->getQty()) . "\n";
         }
         $total = $checkout->getStoreCurrencyCode() . ' ' . $checkout->getGrandTotal();
 
         foreach ($sendTo as $recipient) {
-            $mailTemplate->setDesignConfig(array(
-                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => $checkout->getStoreId()
-            ))
-                ->sendTransactional(
-                    $template,
-                    $this->_coreStoreConfig->getConfig('checkout/payment_failed/identity', $checkout->getStoreId()),
-                    $recipient['email'],
-                    $recipient['name'],
-                    array(
-                        'reason' => $message,
-                        'checkoutType' => $checkoutType,
-                        'dateAndTime' => $this->_locale->date(),
-                        'customer' => $checkout->getCustomerFirstname() . ' ' . $checkout->getCustomerLastname(),
-                        'customerEmail' => $checkout->getCustomerEmail(),
-                        'billingAddress' => $checkout->getBillingAddress(),
-                        'shippingAddress' => $checkout->getShippingAddress(),
-                        'shippingMethod' => $this->_coreStoreConfig->getConfig('carriers/'.$shippingMethod.'/title'),
-                        'paymentMethod' => $this->_coreStoreConfig->getConfig('payment/'.$paymentMethod.'/title'),
-                        'items' => nl2br($items),
-                        'total' => $total
-                    )
-                );
+            $transport = $this->_transportBuilder->setTemplateIdentifier(
+                $template
+            )->setTemplateOptions(
+                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $checkout->getStoreId())
+            )->setTemplateVars(
+                array(
+                    'reason' => $message,
+                    'checkoutType' => $checkoutType,
+                    'dateAndTime' => $this->_localeDate->date(),
+                    'customer' => $checkout->getCustomerFirstname() . ' ' . $checkout->getCustomerLastname(),
+                    'customerEmail' => $checkout->getCustomerEmail(),
+                    'billingAddress' => $checkout->getBillingAddress(),
+                    'shippingAddress' => $checkout->getShippingAddress(),
+                    'shippingMethod' => $this->_coreStoreConfig->getConfig('carriers/' . $shippingMethod . '/title'),
+                    'paymentMethod' => $this->_coreStoreConfig->getConfig('payment/' . $paymentMethod . '/title'),
+                    'items' => nl2br($items),
+                    'total' => $total
+                )
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig('checkout/payment_failed/identity', $checkout->getStoreId())
+            )->addTo(
+                $recipient['email'],
+                $recipient['name']
+            )->addBcc(
+                $bcc
+            )->getTransport();
+
+            $transport->sendMessage();
         }
 
-        $this->_translator->setTranslateInline(true);
+        $this->inlineTranslation->resume();
 
         return $this;
     }
 
+    /**
+     * @param string $configPath
+     * @param null|string|bool|int|Store $storeId
+     * @return array|false
+     */
     protected function _getEmails($configPath, $storeId)
     {
         $data = $this->_coreStoreConfig->getConfig($configPath, $storeId);
@@ -304,34 +352,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Check if multishipping checkout is available.
-     * There should be a valid quote in checkout session. If not, only the config value will be returned.
-     *
-     * @return bool
-     */
-    public function isMultishippingCheckoutAvailable()
-    {
-        $quote = $this->getQuote();
-        $isMultiShipping = (bool)(int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple');
-        if ((!$quote) || !$quote->hasItems()) {
-            return $isMultiShipping;
-        }
-        $maximunQty = (int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple_maximum_qty');
-        return $isMultiShipping
-            && !$quote->hasItemsWithDecimalQty()
-            && $quote->validateMinimumAmount(true)
-            && (($quote->getItemsSummaryQty() - $quote->getItemVirtualQty()) > 0)
-            && ($quote->getItemsSummaryQty() <= $maximunQty)
-            && !$quote->hasNominalItems()
-        ;
-    }
-
-    /**
      * Check is allowed Guest Checkout
      * Use config settings and observer
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @param int|\Magento\Core\Model\Store $store
+     * @param int|Store $store
      * @return bool
      */
     public function isAllowedGuestCheckout(\Magento\Sales\Model\Quote $quote, $store = null)
@@ -344,11 +369,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if ($guestCheckout == true) {
             $result = new \Magento\Object();
             $result->setIsAllowed($guestCheckout);
-            $this->_eventManager->dispatch('checkout_allow_guest', array(
-                'quote'  => $quote,
-                'store'  => $store,
-                'result' => $result
-            ));
+            $this->_eventManager->dispatch(
+                'checkout_allow_guest',
+                array('quote' => $quote, 'store' => $store, 'result' => $result)
+            );
 
             $guestCheckout = $result->getIsAllowed();
         }
@@ -363,7 +387,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isContextCheckout()
     {
-        return ($this->_request->getParam('context') == 'checkout');
+        return $this->_request->getParam('context') == 'checkout';
     }
 
     /**

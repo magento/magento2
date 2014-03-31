@@ -23,27 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-abstract class AbstractComposite
-    extends \Magento\Backend\Model\Config\Structure\AbstractElement
+abstract class AbstractComposite extends \Magento\Backend\Model\Config\Structure\AbstractElement
 {
     /**
      * Child elements iterator
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Iterator
+     * @var Iterator
      */
     protected $_childrenIterator;
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+     * @param Iterator $childrenIterator
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager, Iterator $childrenIterator)
+    {
         parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
     }
@@ -53,13 +49,17 @@ abstract class AbstractComposite
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
         parent::setData($data, $scope);
-        $children = array_key_exists('children', $this->_data) && is_array($this->_data['children']) ?
-            $this->_data['children'] :
-            array();
+        $children = array_key_exists(
+            'children',
+            $this->_data
+        ) && is_array(
+            $this->_data['children']
+        ) ? $this->_data['children'] : array();
         $this->_childrenIterator->setElements($children, $scope);
     }
 
@@ -72,7 +72,7 @@ abstract class AbstractComposite
     {
         foreach ($this->getChildren() as $child) {
             return (bool)$child;
-        };
+        }
         return false;
     }
 
@@ -99,4 +99,3 @@ abstract class AbstractComposite
         return false;
     }
 }
-

@@ -21,19 +21,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml\Order;
 
 /**
  * Shipment tracking control form
  *
  */
-namespace Magento\Shipping\Block\Adminhtml\Order;
-
 class Tracking extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -45,13 +44,13 @@ class Tracking extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_shippingConfig = $shippingConfig;
@@ -62,15 +61,15 @@ class Tracking extends \Magento\Backend\Block\Template
     /**
      * Prepares layout of block
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage
+     * @return void
      */
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'   => __('Add Tracking Number'),
-            'class'   => '',
-            'onclick' => 'trackingControl.add()'
-        ));
+        $this->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('label' => __('Add Tracking Number'), 'class' => '', 'onclick' => 'trackingControl.add()')
+        );
     }
 
     /**
@@ -101,10 +100,11 @@ class Tracking extends \Magento\Backend\Block\Template
         return $carriers;
     }
 
+    /**
+     * @return array
+     */
     protected function _getCarriersInstances()
     {
-        return $this->_shippingConfig->getAllCarriers(
-            $this->getShipment()->getStoreId()
-        );
+        return $this->_shippingConfig->getAllCarriers($this->getShipment()->getStoreId());
     }
 }

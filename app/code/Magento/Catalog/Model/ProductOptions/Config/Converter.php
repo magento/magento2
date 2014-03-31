@@ -36,7 +36,7 @@ class Converter implements \Magento\Config\ConverterInterface
     {
         $output = array();
 
-        /** @var $optionNode DOMNode */
+        /** @var $optionNode \DOMNode */
         foreach ($source->getElementsByTagName('option') as $optionNode) {
             $optionName = $this->_getAttributeValue($optionNode, 'name');
             $data = array();
@@ -44,7 +44,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $data['label'] = $this->_getAttributeValue($optionNode, 'label');
             $data['renderer'] = $this->_getAttributeValue($optionNode, 'renderer');
 
-            /** @var $childNode DOMNode */
+            /** @var $childNode \DOMNode */
             foreach ($optionNode->childNodes as $childNode) {
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
@@ -53,7 +53,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 $data['types'][$inputTypeName] = array(
                     'name' => $inputTypeName,
                     'label' => $this->_getAttributeValue($childNode, 'label'),
-                    'disabled' => 'true' == $this->_getAttributeValue($childNode, 'disabled', 'false') ? true : false,
+                    'disabled' => 'true' == $this->_getAttributeValue($childNode, 'disabled', 'false') ? true : false
                 );
             }
             $output[$optionName] = $data;
@@ -64,9 +64,9 @@ class Converter implements \Magento\Config\ConverterInterface
     /**
      * Get attribute value
      *
-     * @param DOMNode $node
+     * @param \DOMNode $node
      * @param string $attributeName
-     * @param mixed $defaultValue
+     * @param string|null $defaultValue
      * @return null|string
      */
     protected function _getAttributeValue(\DOMNode $node, $attributeName, $defaultValue = null)

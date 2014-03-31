@@ -74,7 +74,7 @@ class Factory
         'submit',
         'text',
         'textarea',
-        'time',
+        'time'
     );
 
     /**
@@ -102,9 +102,10 @@ class Factory
         }
 
         $element = $this->_objectManager->create($className, $config);
-        if (!($element instanceof AbstractElement)) {
-            throw new \InvalidArgumentException($className
-            . ' doesn\'n extend \Magento\Data\Form\Element\AbstractElement');
+        if (!$element instanceof AbstractElement) {
+            throw new \InvalidArgumentException(
+                $className . ' doesn\'n extend \Magento\Data\Form\Element\AbstractElement'
+            );
         }
         return $element;
     }

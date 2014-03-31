@@ -23,24 +23,25 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Wysiwyg;
 
 /**
  * Wysiwyg Config for Editor HTML Element
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Wysiwyg;
-
 class Config extends \Magento\Object
 {
     /**
      * Wysiwyg behaviour
      */
     const WYSIWYG_ENABLED = 'enabled';
+
     const WYSIWYG_HIDDEN = 'hidden';
+
     const WYSIWYG_DISABLED = 'disabled';
+
+    /**
+     * Wysiwyg image directory
+     */
     const IMAGE_DIRECTORY = 'wysiwyg';
 
     /**
@@ -68,14 +69,14 @@ class Config extends \Magento\Object
      *
      * @var \Magento\Cms\Helper\Data
      */
-    protected $_cmsData = null;
+    protected $_cmsData;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * Core store config
@@ -149,35 +150,40 @@ class Config extends \Magento\Object
     public function getConfig($data = array())
     {
         $config = new \Magento\Object();
-        $viewUrl = $this->_viewUrl;
 
-        $config->setData(array(
-            'enabled'                       => $this->isEnabled(),
-            'hidden'                        => $this->isHidden(),
-            'use_container'                 => false,
-            'add_variables'                 => true,
-            'add_widgets'                   => true,
-            'no_display'                    => false,
-            'translator'                    => $this->_cmsData,
-            'encode_directives'             => true,
-            'directives_url'                => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
-            'popup_css'                     =>
-                $viewUrl->getViewFileUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'),
-            'content_css'                   =>
-                $viewUrl->getViewFileUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'),
-            'width'                         => '100%',
-            'plugins'                       => array()
-        ));
+        $config->setData(
+            array(
+                'enabled' => $this->isEnabled(),
+                'hidden' => $this->isHidden(),
+                'use_container' => false,
+                'add_variables' => true,
+                'add_widgets' => true,
+                'no_display' => false,
+                'translator' => $this->_cmsData,
+                'encode_directives' => true,
+                'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
+                'popup_css' => $this->_viewUrl->getViewFileUrl(
+                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
+                ),
+                'content_css' => $this->_viewUrl->getViewFileUrl(
+                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
+                ),
+                'width' => '100%',
+                'plugins' => array()
+            )
+        );
 
         $config->setData('directives_url_quoted', preg_quote($config->getData('directives_url')));
 
         if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
-            $config->addData(array(
-                'add_images' => true,
-                'files_browser_window_url' => $this->_backendUrl->getUrl('cms/wysiwyg_images/index'),
-                'files_browser_window_width' => $this->_windowSize['width'],
-                'files_browser_window_height'=> $this->_windowSize['height'],
-            ));
+            $config->addData(
+                array(
+                    'add_images' => true,
+                    'files_browser_window_url' => $this->_backendUrl->getUrl('cms/wysiwyg_images/index'),
+                    'files_browser_window_width' => $this->_windowSize['width'],
+                    'files_browser_window_height' => $this->_windowSize['height']
+                )
+            );
         }
 
         if (is_array($data)) {

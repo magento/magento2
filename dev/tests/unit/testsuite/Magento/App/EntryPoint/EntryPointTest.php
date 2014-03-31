@@ -23,7 +23,7 @@
  */
 namespace Magento\App\EntryPoint;
 
-class EntryPointTest extends  \PHPUnit_Framework_TestCase
+class EntryPointTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\App\EntryPoint\EntryPoint
@@ -52,9 +52,7 @@ class EntryPointTest extends  \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_parameters = array(
-            'MAGE_MODE' => 'developer',
-        );
+        $this->_parameters = array('MAGE_MODE' => 'developer');
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
         $this->_responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
         $this->_rootDir = realpath(__DIR__ . '/../../../../../../../');
@@ -68,24 +66,42 @@ class EntryPointTest extends  \PHPUnit_Framework_TestCase
     public function testRunExecutesApplication()
     {
         $applicationName = '\Magento\App\TestApplication';
-        $applicationMock = $this->getMock('\Magento\LauncherInterface');
+        $applicationMock = $this->getMock('\Magento\AppInterface');
         $applicationMock->expects($this->once())->method('launch')->will($this->returnValue($this->_responseMock));
-        $this->_objectManagerMock->expects($this->once())->method('create')->with($applicationName, array())
-            ->will($this->returnValue($applicationMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $applicationName,
+            array()
+        )->will(
+            $this->returnValue($applicationMock)
+        );
         $this->assertNull($this->_model->run($applicationName));
     }
 
     public function testRunCatchesExceptionThrownByApplication()
     {
         $applicationName = '\Magento\App\TestApplication';
-        $applicationMock = $this->getMock('\Magento\LauncherInterface');
-        $applicationMock->expects($this->once())
-            ->method('launch')
-            ->will($this->throwException(new \Exception('Something went wrong.')));
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($applicationName, array())
-            ->will($this->returnValue($applicationMock));
+        $applicationMock = $this->getMock('\Magento\AppInterface');
+        $applicationMock->expects(
+            $this->once()
+        )->method(
+            'launch'
+        )->will(
+            $this->throwException(new \Exception('Something went wrong.'))
+        );
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $applicationName,
+            array()
+        )->will(
+            $this->returnValue($applicationMock)
+        );
         // clean output
         ob_start();
         $this->assertNull($this->_model->run($applicationName));

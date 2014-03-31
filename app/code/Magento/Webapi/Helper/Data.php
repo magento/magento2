@@ -21,30 +21,33 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Helper;
 
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Core\Model\Registry */
+    /** @var \Magento\Registry */
     protected $_registry;
 
-    public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Registry $registry
-    ) {
+    /**
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Registry $registry
+     */
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\Registry $registry)
+    {
         $this->_registry = $registry;
         parent::__construct($context);
     }
 
+    /**
+     * @return array
+     */
     public function getSelectedResources()
     {
         $selectedResourceIds = array();
         $currentIntegration = $this->_registry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
-        if ($currentIntegration
-            && isset($currentIntegration['resource']) && is_array($currentIntegration['resource'])
+        if ($currentIntegration && isset($currentIntegration['resource']) && is_array($currentIntegration['resource'])
         ) {
             $selectedResourceIds = $currentIntegration['resource'];
         }
@@ -81,7 +84,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $className
      * @param bool $preserveVersion Should version be preserved during class name conversion into service name
-     * @return array
+     * @return string[]
      * @throws \InvalidArgumentException When class is not valid API service.
      */
     public function getServiceNameParts($className, $preserveVersion = false)
@@ -89,7 +92,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if (preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $className, $matches)) {
             $moduleNamespace = $matches[1];
             $moduleName = $matches[2];
-            $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
+            $moduleNamespace = $moduleNamespace == 'Magento' ? '' : $moduleNamespace;
             $serviceNameParts = explode('\\', trim($matches[4], '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
@@ -107,14 +110,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Convert DTO getter name into field name.
+     * Convert Data Object getter name into field name.
      *
      * @param string $getterName
      * @return string
      */
-    public function dtoGetterNameToFieldName($getterName)
+    public function dataObjectGetterNameToFieldName($getterName)
     {
-        if ((strpos($getterName, 'get') === 0)) {
+        if (strpos($getterName, 'get') === 0) {
             /** Remove 'get' prefix and make the first letter lower case */
             $fieldName = substr($getterName, strlen('get'));
         } else {
@@ -125,12 +128,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Convert DTO field name into setter name.
+     * Convert Data Object field name into setter name.
      *
      * @param string $fieldName
      * @return string
      */
-    public function dtoFieldNameToSetterName($fieldName)
+    public function dataObjectFieldNameToSetterName($fieldName)
     {
         return 'set' . ucfirst($fieldName);
     }

@@ -29,7 +29,7 @@ interface BackupInterface
      * Set backup time
      *
      * @param int $time
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setTime($time);
 
@@ -37,7 +37,7 @@ interface BackupInterface
      * Set backup type
      *
      * @param string $type
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setType($type);
 
@@ -45,7 +45,7 @@ interface BackupInterface
      * Set backup path
      *
      * @param string $path
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setPath($path);
 
@@ -53,7 +53,7 @@ interface BackupInterface
      * Set backup name
      *
      * @param string $name
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setName($name);
 
@@ -61,7 +61,7 @@ interface BackupInterface
      * Open backup file (write or read mode)
      *
      * @param bool $write
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function open($write = false);
 
@@ -69,14 +69,14 @@ interface BackupInterface
      * Write to backup file
      *
      * @param string $data
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function write($data);
 
     /**
      * Close open backup file
      *
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function close();
 }

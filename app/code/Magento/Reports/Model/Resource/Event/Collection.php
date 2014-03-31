@@ -34,7 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource\Event;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Store Ids
@@ -46,6 +46,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource initializations
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -56,7 +57,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add store ids filter
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Event\Collection
+     * @return $this
      */
     public function addStoreFilter(array $storeIds)
     {
@@ -70,18 +71,27 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param int $typeId
      * @param int $subjectId
      * @param int $subtype
-     * @param int|array $ignore
+     * @param null|int|array $ignore
      * @param int $limit
-     * @return \Magento\Reports\Model\Resource\Event\Collection
+     * @return $this
      */
     public function addRecentlyFiler($typeId, $subjectId, $subtype = 0, $ignore = null, $limit = 15)
     {
         $stores = $this->getResource()->getCurrentStoreIds($this->_storeIds);
         $select = $this->getSelect();
-        $select->where('event_type_id = ?', $typeId)
-            ->where('subject_id = ?', $subjectId)
-            ->where('subtype = ?', $subtype)
-            ->where('store_id IN(?)', $stores);
+        $select->where(
+            'event_type_id = ?',
+            $typeId
+        )->where(
+            'subject_id = ?',
+            $subjectId
+        )->where(
+            'subtype = ?',
+            $subtype
+        )->where(
+            'store_id IN(?)',
+            $stores
+        );
         if ($ignore) {
             if (is_array($ignore)) {
                 $select->where('object_id NOT IN(?)', $ignore);
@@ -89,8 +99,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 $select->where('object_id <> ?', $ignore);
             }
         }
-        $select->group('object_id')
-            ->limit($limit);
+        $select->group('object_id')->limit($limit);
         return $this;
     }
 }

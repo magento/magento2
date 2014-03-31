@@ -37,6 +37,13 @@ lib/Magento/Data/Collection.php
 lib/Magento/Data/Form.php
 lib/Magento/Data/Form/FormKey.php
 
+lib/Magento/Exception/AuthenticationException.php
+lib/Magento/Exception/AuthorizationException.php
+lib/Magento/Exception/Exception.php
+lib/Magento/Exception/InputException.php
+lib/Magento/Exception/NoSuchEntityException.php
+lib/Magento/Exception/StateException.php
+
 lib/Magento/Filter/Object/Grid.php
 lib/Magento/Filter/Object.php
 
@@ -55,7 +62,6 @@ lib/Magento/App/Module/ResourceResolver.php
 lib/Magento/Event/Invoker/InvokerDefault.php
 lib/Magento/Phrase/Renderer/Translate.php
 lib/Magento/Backup/Snapshot.php
-lib/Magento/Outbound/Authentication/Hmac.php
 lib/Magento/Oauth/Exception.php
 
 lib/Magento/App/Helper/AbstractHelper.php

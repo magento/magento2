@@ -31,41 +31,60 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
+use Magento\Data\Tree\Node;
+
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
+    /**
+     * @var int[]
+     */
     protected $_selectedIds = array();
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->setTemplate('catalog/category/checkboxes/tree.phtml');
     }
 
+    /**
+     * @return int[]
+     */
     public function getCategoryIds()
     {
         return $this->_selectedIds;
     }
 
+    /**
+     * @param mixed $ids
+     * @return $this
+     */
     public function setCategoryIds($ids)
     {
         if (empty($ids)) {
             $ids = array();
-        }
-        elseif (!is_array($ids)) {
+        } elseif (!is_array($ids)) {
             $ids = array((int)$ids);
         }
         $this->_selectedIds = $ids;
         return $this;
     }
 
+    /**
+     * @param array|Node $node
+     * @param int $level
+     * @return array
+     */
     protected function _getNodeJson($node, $level = 1)
     {
         $item = array();
-        $item['text']= $this->escapeHtml($node->getName());
+        $item['text'] = $this->escapeHtml($node->getName());
 
         if ($this->_withProductCount) {
-             $item['text'].= ' ('.$node->getProductCount().')';
+            $item['text'] .= ' (' . $node->getProductCount() . ')';
         }
-        $item['id']  = $node->getId();
+        $item['id'] = $node->getId();
         $item['path'] = $node->getData('path');
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');
         $item['allowDrop'] = false;
@@ -93,7 +112,12 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         return $item;
     }
 
-    public function getRoot($parentNodeCategory=null, $recursionLevel=3)
+    /**
+     * @param mixed|null $parentNodeCategory
+     * @param int $recursionLevel
+     * @return Node|array|null
+     */
+    public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {
         return $this->getRootByIds($this->getCategoryIds());
     }

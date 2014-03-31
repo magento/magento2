@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Media;
 
 /**
  * Catalog product media config
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Media;
-
 class Config implements ConfigInterface
 {
     /**
@@ -46,7 +44,8 @@ class Config implements ConfigInterface
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    {
         $this->storeManager = $storeManager;
     }
 
@@ -85,8 +84,7 @@ class Config implements ConfigInterface
      */
     public function getBaseMediaUrl()
     {
-        return $this->storeManager->getStore()
-            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
+        return $this->storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
     }
 
     /**
@@ -105,8 +103,9 @@ class Config implements ConfigInterface
      */
     public function getBaseTmpMediaUrl()
     {
-        return $this->storeManager->getStore()
-            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'tmp/' . $this->getBaseMediaUrlAddition();
+        return $this->storeManager->getStore()->getBaseUrl(
+            \Magento\UrlInterface::URL_TYPE_MEDIA
+        ) . 'tmp/' . $this->getBaseMediaUrlAddition();
     }
 
     /**
@@ -128,7 +127,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     public function getTmpMediaUrl($file)
@@ -160,7 +159,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     public function getTmpMediaPath($file)
@@ -169,7 +168,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     protected function _prepareFile($file)

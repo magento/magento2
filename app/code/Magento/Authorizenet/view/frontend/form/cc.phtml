@@ -51,8 +51,8 @@
                 });
             })(jQuery);
         </script>
-        <span id="cancel-please-wait" class="please-wait" style="display:none">
-            <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="" class="v-middle" /> <?php echo __('Processing...') ?>
+        <span id="cancel-please-wait" class="please-wait load indicator" style="display: none" data-text="<?php echo __('Processing...') ?>">
+            <span><?php echo __('Processing...') ?></span>
         </span>
     <?php endif;?>
 </div>

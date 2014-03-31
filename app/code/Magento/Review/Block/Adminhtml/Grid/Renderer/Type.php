@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
 
 /**
@@ -36,20 +35,19 @@ namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
+     * Render review type
+     *
+     * @param \Magento\Object $row
      * @return string
      */
     public function render(\Magento\Object $row)
     {
-
-        if (is_null($row->getCustomerId())) {
-            if ($row->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
-                return __('Administrator');
-            } else {
-                return __('Guest');
-            }
-        } elseif ($row->getCustomerId() > 0) {
+        if ($row->getCustomerId()) {
             return __('Customer');
         }
-//		return ($row->getCustomerId() ? __('Customer') : __('Guest'));
+        if ($row->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
+            return __('Administrator');
+        }
+        return __('Guest');
     }
 }// Class \Magento\Review\Block\Adminhtml\Grid\Renderer\Type END

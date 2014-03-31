@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Custom variable resource model
@@ -32,13 +32,12 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
-class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Variable extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,7 +49,7 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\Variable $object
      * @param string $code
-     * @return \Magento\Core\Model\Resource\Variable
+     * @return $this
      */
     public function loadByCode(\Magento\Core\Model\Variable $object, $code)
     {
@@ -64,15 +63,18 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve variable data by code
      *
      * @param string $code
-     * @param boolean $withValue
+     * @param bool $withValue
      * @param integer $storeId
      * @return array
      */
     public function getVariableByCode($code, $withValue = false, $storeId = 0)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable())
-            ->where($this->getMainTable() . '.code = ?', $code);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            $this->getMainTable() . '.code = ?',
+            $code
+        );
         if ($withValue) {
             $this->_addValueToSelect($select, $storeId);
         }
@@ -82,10 +84,10 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Variable
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
         if ($object->getUseDefaultValue()) {
@@ -93,16 +95,15 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
              * remove store value
              */
             $this->_getWriteAdapter()->delete(
-                $this->getTable('core_variable_value'), array(
-                    'variable_id = ?' => $object->getId(),
-                    'store_id = ?' => $object->getStoreId()
-            ));
+                $this->getTable('core_variable_value'),
+                array('variable_id = ?' => $object->getId(), 'store_id = ?' => $object->getStoreId())
+            );
         } else {
-            $data =  array(
+            $data = array(
                 'variable_id' => $object->getId(),
-                'store_id'    => $object->getStoreId(),
+                'store_id' => $object->getStoreId(),
                 'plain_value' => $object->getPlainValue(),
-                'html_value'  => $object->getHtmlValue()
+                'html_value' => $object->getHtmlValue()
             );
             $data = $this->_prepareDataForTable(new \Magento\Object($data), $this->getTable('core_variable_value'));
             $this->_getWriteAdapter()->insertOnDuplicate(
@@ -119,8 +120,8 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Zend_Db_Select
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -142,22 +143,24 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
     ) {
         $adapter = $this->_getReadAdapter();
         $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
-        $ifNullHtmlValue  = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
+        $ifNullHtmlValue = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(
-                array('def' => $this->getTable('core_variable_value')),
-                'def.variable_id = '.$this->getMainTable().'.variable_id AND def.store_id = 0',
-                array())
-            ->joinLeft(
-                array('store' => $this->getTable('core_variable_value')),
-                'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
-                array())
-            ->columns(array(
-                'plain_value'       => $ifNullPlainValue,
-                'html_value'        => $ifNullHtmlValue,
+            array('def' => $this->getTable('core_variable_value')),
+            'def.variable_id = ' . $this->getMainTable() . '.variable_id AND def.store_id = 0',
+            array()
+        )->joinLeft(
+            array('store' => $this->getTable('core_variable_value')),
+            'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
+            array()
+        )->columns(
+            array(
+                'plain_value' => $ifNullPlainValue,
+                'html_value' => $ifNullHtmlValue,
                 'store_plain_value' => 'store.plain_value',
-                'store_html_value'  => 'store.html_value'
-            ));
+                'store_html_value' => 'store.html_value'
+            )
+        );
 
         return $this;
     }

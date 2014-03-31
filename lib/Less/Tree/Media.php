@@ -1,9 +1,18 @@
 <?php
 
+/**
+ * Media
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Media extends Less_Tree{
 
 	public $features;
-	public $ruleset;
+	public $rules;
+	public $index;
+	public $currentFileInfo;
+	public $isReferenced;
 	public $type = 'Media';
 
 	public function __construct($value = array(), $features = array(), $index = null, $currentFileInfo = null ){
@@ -24,11 +33,14 @@ class Less_Tree_Media extends Less_Tree{
 		$this->rules = $visitor->visitArray($this->rules);
 	}
 
-	function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
 
-		self::OutputAdd( $strs, '@media ', $this->currentFileInfo, $this->index );
-		$this->features->genCSS( $env, $strs );
-		Less_Tree::outputRuleset( $env, $strs, $this->rules);
+		$output->add( '@media ', $this->currentFileInfo, $this->index );
+		$this->features->genCSS( $output );
+		Less_Tree::outputRuleset( $output, $this->rules);
 
 	}
 
@@ -37,16 +49,15 @@ class Less_Tree_Media extends Less_Tree{
 		$media = new Less_Tree_Media(array(), array(), $this->index, $this->currentFileInfo );
 
 		$strictMathBypass = false;
-		if( $env->strictMath === false) {
+		if( Less_Parser::$options['strictMath'] === false) {
 			$strictMathBypass = true;
-			$env->strictMath = true;
+			Less_Parser::$options['strictMath'] = true;
 		}
-		try {
-			$media->features = $this->features->compile($env);
-		}catch(Exception $e){}
+
+		$media->features = $this->features->compile($env);
 
 		if( $strictMathBypass ){
-			$env->strictMath = false;
+			Less_Parser::$options['strictMath'] = false;
 		}
 
 		$env->mediaPath[] = $media;
@@ -71,16 +82,15 @@ class Less_Tree_Media extends Less_Tree{
 
 	public function emptySelectors(){
 		$el = new Less_Tree_Element('','&', $this->index, $this->currentFileInfo );
-		return array( new Less_Tree_Selector(array($el), array(), null, $this->index, $this->currentFileInfo) );
+		$sels = array( new Less_Tree_Selector(array($el), array(), null, $this->index, $this->currentFileInfo) );
+		$sels[0]->mediaEmpty = true;
+        return $sels;
 	}
 
 	public function markReferenced(){
+		$this->rules[0]->markReferenced();
 		$this->isReferenced = true;
-		foreach($this->rules[0]->rules as $rule){
-			if( Less_Parser::is_method($rule,'markReferenced') ){
-				$rule->markReferenced();
-			}
-		}
+		Less_Tree::ReferencedArray($this->rules[0]->rules);
 	}
 
 	// evaltop
@@ -160,6 +170,9 @@ class Less_Tree_Media extends Less_Tree{
 	}
 
 	function bubbleSelectors($selectors) {
+
+		if( !$selectors) return;
+
 		$this->rules = array(new Less_Tree_Ruleset( $selectors, array($this->rules[0])));
 	}
 

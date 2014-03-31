@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
@@ -41,19 +40,21 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Cache');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Resource\Cache'
+        );
     }
-
 
     public function testGetTable()
     {
         $this->_resourceMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Resource', array('tablePrefix' => 'prefix_')
+            'Magento\App\Resource',
+            array('tablePrefix' => 'prefix_')
         );
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Cache', array('resource' => $this->_resourceMock)
+            'Magento\Core\Model\Resource\Cache',
+            array('resource' => $this->_resourceMock)
         );
         $this->assertEquals('prefix_core_cache_option', $this->_model->getTable('core_cache_option'));
         $this->assertEquals('prefix_core_cache_option', $this->_model->getTable(array('core_cache', 'option')));
@@ -70,12 +71,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function testHasDataChanged()
     {
-        $object = new \Magento\Object(
-            array(
-                'code'  => 'value1',
-                'value' => 'value2'
-            )
-        );
+        $object = new \Magento\Object(array('code' => 'value1', 'value' => 'value2'));
         $this->assertTrue($this->_model->hasDataChanged($object));
 
         $object->setOrigData();

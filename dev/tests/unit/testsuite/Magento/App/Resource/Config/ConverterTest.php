@@ -50,7 +50,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $this->_source->loadXML(file_get_contents($this->_filePath . 'resources.xml'));
-        $convertedFile = include ($this->_filePath . 'resources.php');
+        $convertedFile = include $this->_filePath . 'resources.php';
         $this->assertEquals($convertedFile, $this->_model->convert($this->_source));
     }
 }

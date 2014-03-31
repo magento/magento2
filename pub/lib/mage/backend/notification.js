@@ -27,7 +27,7 @@
     $.widget("mage.notification", {
         options: {
             templates: {
-                global: '<ul class="messages"><li class="{{if error}}error-msg{{/if}}"><ul><li>${message}</li></ul></li></ul>'
+                global: '<div class="messages"><div class="message {{if error}}error{{/if}}"><div>${message}</div></div></div>'
             }
         },
 

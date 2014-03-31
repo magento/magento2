@@ -23,12 +23,16 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\App\Cache">
-        <param name="storeManager"><instance type="customStoreManagerProxy" /></param>
+        <arguments>
+            <argument name="storeManager" xsi:type="object">customStoreManagerProxy</argument>
+        </arguments>
     </type>
     <type name="Magento\App\Action\Context">
-        <param name="layoutFactory"><instance type="customLayoutFactory" /></param>
+        <arguments>
+            <argument name="layoutFactory" xsi:type="object">customLayoutFactory</argument>
+        </arguments>
         <plugin name="first" type="Magento\Core\Model\Action\Plugin" />
     </type>
     <virtualType name="customStoreManagerProxy" type="Magento\Core\Model\StoreManager\Proxy" />

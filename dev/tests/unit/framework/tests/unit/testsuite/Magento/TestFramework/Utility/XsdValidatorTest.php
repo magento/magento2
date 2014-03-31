@@ -39,12 +39,12 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_validator = new \Magento\TestFramework\Utility\XsdValidator();
-        $this->_xsdSchema = realpath( __DIR__ . '/_files/valid.xsd');
+        $this->_xsdSchema = realpath(__DIR__ . '/_files/valid.xsd');
     }
 
     public function testValidXml()
     {
-        $xmlFile = realpath( __DIR__ . '/_files/valid.xml');;
+        $xmlFile = realpath(__DIR__ . '/_files/valid.xml');
         $xmlString = file_get_contents($xmlFile);
 
         $this->assertEquals(array(), $this->_validator->validate($this->_xsdSchema, $xmlString));
@@ -52,10 +52,10 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidXml()
     {
-        $xmlFile = realpath( __DIR__ . '/_files/invalid.xml');
+        $xmlFile = realpath(__DIR__ . '/_files/invalid.xml');
         $expected = array(
             "Element 'block', attribute 'type': The attribute 'type' is not allowed.",
-            "Element 'actions': This element is not expected. Expected is ( property ).",
+            "Element 'actions': This element is not expected. Expected is ( property )."
         );
         $xmlString = file_get_contents($xmlFile);
 

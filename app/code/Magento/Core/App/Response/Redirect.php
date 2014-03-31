@@ -134,9 +134,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     {
         $refererUrl = $this->_getUrl();
         if (empty($refererUrl)) {
-            $refererUrl = empty($defaultUrl)
-                ? $this->_storeManager->getStore()->getBaseUrl()
-                : $defaultUrl;
+            $refererUrl = empty($defaultUrl) ? $this->_storeManager->getStore()->getBaseUrl() : $defaultUrl;
         }
         return $refererUrl;
     }
@@ -183,16 +181,19 @@ class Redirect implements \Magento\App\Response\RedirectInterface
      * @param \Magento\App\ResponseInterface $response
      * @param string $path
      * @param array $arguments
+     * @return void
      */
     public function redirect(\Magento\App\ResponseInterface $response, $path, $arguments = array())
     {
-        if ($this->_session->getCookieShouldBeReceived()
-            && $this->_urlBuilder->getUseSession()
-            && $this->_canUseSessionIdInParam
+        if ($this->_session->getCookieShouldBeReceived() &&
+            $this->_urlBuilder->getUseSession() &&
+            $this->_canUseSessionIdInParam
         ) {
-            $arguments += array('_query' => array(
-                $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
-            ));
+            $arguments += array(
+                '_query' => array(
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
+                )
+            );
         }
         $response->setRedirect($this->_urlBuilder->getUrl($path, $arguments));
     }
@@ -206,11 +207,11 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     protected function _isUrlInternal($url)
     {
         if (strpos($url, 'http') !== false) {
-            $unsecure = (strpos($url, $this->_storeManager->getStore()->getBaseUrl()) === 0);
+            $unsecure = strpos($url, $this->_storeManager->getStore()->getBaseUrl()) === 0;
             $secure = strpos(
-                    $url,
-                    $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
-                ) === 0;
+                $url,
+                $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
+            ) === 0;
             return $unsecure || $secure;
         }
         return false;

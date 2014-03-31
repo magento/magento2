@@ -21,30 +21,49 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 class Customer extends \Magento\View\Element\Template
 {
+    /** @var CustomerAccountServiceInterface */
+    protected $_customerAccountService;
+
+    /** @var \Magento\Customer\Helper\View */
+    protected $_viewHelper;
+
     /**
-     * Customer session
-     *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     */
+    protected $currentCustomer;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $session
+     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Helper\View $viewHelper
+     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $session,
+        CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Helper\View $viewHelper,
+        \Magento\App\Http\Context $httpContext,
+        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array()
     ) {
         parent::__construct($context, $data);
-        $this->_customerSession = $session;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_viewHelper = $viewHelper;
+        $this->httpContext = $httpContext;
+        $this->currentCustomer = $currentCustomer;
         $this->_isScopePrivate = true;
     }
 
@@ -53,17 +72,23 @@ class Customer extends \Magento\View\Element\Template
      *
      * @return bool
      */
-
     public function customerLoggedIn()
     {
-        return (bool)$this->_customerSession->isLoggedIn();
+        return (bool)$this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
     }
 
     /**
-     * @return string
+     * Return the full name of the customer currently logged in
+     *
+     * @return string|null
      */
     public function getCustomerName()
     {
-        return $this->escapeHtml($this->_customerSession->getCustomer()->getName());
+        try {
+            $customer = $this->_customerAccountService->getCustomer($this->currentCustomer->getCustomerId());
+            return $this->escapeHtml($this->_viewHelper->getCustomerName($customer));
+        } catch (\Magento\Exception\NoSuchEntityException $e) {
+            return null;
+        }
     }
 }

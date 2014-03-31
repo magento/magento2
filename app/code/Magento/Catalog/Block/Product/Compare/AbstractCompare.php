@@ -36,7 +36,6 @@ namespace Magento\Catalog\Block\Product\Compare;
 
 abstract class AbstractCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
-
     /**
      * Retrieve Product Compare Helper
      *

@@ -1,40 +1,41 @@
-"%1 - Discounts and Coupons","%1 - 折扣与代金券"
-"%1 - Special Products","%1 - 特价产品"
-"%1 RSS Feed","%1 RSS源"
-"%1 has reached a quantity of %2.",%1已经达到%2的数量。
-"%1's Wishlist","%1 的收藏清单"
-Catalog,产品目录
-"Category Feeds",分类源
-"Click <a href=""%1"">here</a> to view the review.","点击<a href=""%1"">这里</a>查看评论。"
-"Click for price",单击获取价格
-"Comment: %1<br/>","评论：%1 <br/>"
-Coupons/Discounts,代金券/折扣
-"Current Status: %1<br/>","当前状态：%1 <br/>"
-"Customer Name: %1","顾客名： %1"
-"Customer Order Status Notification",顾客订单状态通知
-"Details for %1 #%2","%1 #%2的详情"
-Discount,折扣
-"Discount (%1)",折扣（%1）
-"Enable RSS",启用RSS
-"Error in processing xml. %1",处理xml时出错。%1
-From:,来自：
-"Get Feed",获取源
-"Gift Message",礼品消息
-"Grand Total",总计
-"Low Stock Products",产品库存低
-Message:,信息：
-"Miscellaneous Feeds",杂项源订阅
-"New Orders",新订单
-"New Products",新产品
-"New Products from %1","新产品来自 %1"
-"Notified Date: %1<br/>",通知日期：%1<br/>
-"Order # %1 Notification(s)","订单# %1 通知（s）"
-"Order #%1 created at %2",订单#%1创建于%2
-"Pending product review(s)",未决的产品评论
-"Price: %1","价格： %1"
-"Product: ""%1"" review By: %2","产品：“%1” 由 %2 评论"
-"Product: <a href=""%1"">%2</a> <br/>","产品：<a href=""%1"">%2</a> <br/>"
-"Purchased From: %1",购买自：%1
+"%s - Discounts and Coupons","%s - 折扣与代金券"
+"%s - Special Products","%s - 特价产品"
+"%s RSS Feed","%s RSS源"
+"%s has reached a quantity of %s.","%s 已经达到了一些 %s"
+"%s's Wishlist","%s 的愿望清单"
+"Cannot retrieve the wishlist","无法获取愿望清单"
+"Catalog","分类"
+"Category Feeds","分类源"
+"Click for price","单击获取价格"
+"Comment: %s<br/>","评论：%s <br/>"
+"Coupons/Discounts","代金券/折扣"
+"Current Status: %s<br/>","当前状态：%s <br/>"
+"Customer: %s","客户姓名：%s"
+"Customer Order Status Notification","客户订单状态通知"
+"Details for %s #%s","%s #%s的详情"
+"Discount","折扣"
+"Discount (%s)","折扣（%s）"
+"Enable RSS","启用RSS"
+"Error in processing xml. %s","处理xml时出错。%s"
+"From:","来自："
+"Get Feed","获取源"
+"Gift Message","礼品消息"
+"Grand Total","总计"
+"Low Stock Products","产品库存低"
+"Message:","信息："
+"Miscellaneous Feeds","杂项源订阅"
+"New Orders","新订单"
+"New Products","新产品"
+"New Products from %s","新产品来自 %s"
+"Notified Date: %s<br/>","通知日期：%s<br/>"
+"Order %s Notification(s)","订单 # %s 通知"
+"Order %s created at %s","订单 # %s 已于 %s 创建"
+"Pending product review(s)","未决的产品评论"
+"Product: ""%s"" review By: %s","产品：“%s” 由 %s 评论"
+"Product: <a href=""%s"">%s</a> <br/>","产品：<a href=""%s"">%s</a> <br/>"
+"Products tagged with %s","已标记 %s 的产品"
+"Purchased From: %s","购买自：%s"
+"RSS","RSS"
 "RSS Feeds","RSS 订阅源"
 "RSS Feeds Section","RSS 源选区"
 "Review: %1 <br/>","评论：%1 <br/>"

@@ -27,7 +27,8 @@
 <?php echo $this->getChildHtml('items_before'); ?>
 <div id="checkout-review-table-wrapper" class="review table wrapper">
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
-    <table class="order review items data" id="checkout-review-table">
+    <table class="data table order review items" id="checkout-review-table">
+        <caption>Order Review</caption>
         <thead>
             <tr>
                 <th rowspan="<?php echo $rowspan ?>" class="col item"><?php echo __('Product Name') ?></th>
@@ -55,12 +56,12 @@
     </table>
 </div>
 <?php echo $this->getChildHtml('items_after'); ?>
-<div id="checkout-review-submit" data-mage-init="{paymentAuthentication:{}}" class="checkout submit order">
+<div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout submit order">
     <?php echo $this->getChildHtml('agreements') ?>
     <div class="actions" id="review-buttons-container">
         <div class="primary"><?php echo $this->getChildHtml('button') ?></div>
         <div class="secondary"><?php echo __('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>" class="action edit"><span><?php echo __('Edit Your Cart') ?></span></a></div>
-        <span class="please-wait load indicator" id="review-please-wait" style="display:none;">
+        <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
             <span><?php echo __('Submitting order information...') ?></span>
         </span>
     </div>

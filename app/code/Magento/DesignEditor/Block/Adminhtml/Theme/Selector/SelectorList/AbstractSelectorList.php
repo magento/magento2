@@ -23,25 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
 
- // @codingStandardsIgnoreStart
- /**
-  * Abstract theme list
-  *
-  * @method \Magento\Core\Model\Resource\Theme\Collection getCollection()
-  * @method bool|null getIsFirstEntrance()
-  * @method bool|null getHasThemeAssigned()
-  * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList setHasThemeAssigned(bool $flag)
-  * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList|\Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available setCollection(\Magento\Core\Model\Resource\Theme\Collection $collection)
-  * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList setIsFirstEntrance(bool $flag)
-  *
-  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-  */
+// @codingStandardsIgnoreStart
+/**
+ * Abstract theme list
+ *
+ * @method \Magento\Core\Model\Resource\Theme\Collection getCollection()
+ * @method bool|null getIsFirstEntrance()
+ * @method bool|null getHasThemeAssigned()
+ * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList setHasThemeAssigned(bool $flag)
+ * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList|\Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available setCollection(\Magento\Core\Model\Resource\Theme\Collection $collection)
+ * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList setIsFirstEntrance(bool $flag)
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 // @codingStandardsIgnoreEnd
-abstract class AbstractSelectorList
-    extends \Magento\Backend\Block\Template
+abstract class AbstractSelectorList extends \Magento\Backend\Block\Template
 {
     /**
      * Get tab title
@@ -54,7 +52,7 @@ abstract class AbstractSelectorList
      * Add theme buttons
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+     * @return $this
      */
     protected function _addThemeButtons($themeBlock)
     {
@@ -65,7 +63,7 @@ abstract class AbstractSelectorList
     /**
      * Get list items of themes
      *
-     * @return array
+     * @return string[]
      */
     public function getListItems()
     {
@@ -97,12 +95,14 @@ abstract class AbstractSelectorList
 
         /** @var $assignButton \Magento\Backend\Block\Widget\Button */
         $assignButton = $this->getLayout()->createBlock('Magento\DesignEditor\Block\Adminhtml\Theme\Button');
-        $assignButton->setData(array(
-            'title' => __('Duplicate'),
-            'label' => __('Duplicate'),
-            'class'   => 'action-duplicate',
-            'href'   => $this->getUrl('adminhtml/*/duplicate', array('theme_id' => $themeId))
-        ));
+        $assignButton->setData(
+            array(
+                'title' => __('Duplicate'),
+                'label' => __('Duplicate'),
+                'class' => 'action-duplicate',
+                'href' => $this->getUrl('adminhtml/*/duplicate', array('theme_id' => $themeId))
+            )
+        );
 
         $themeBlock->addButton($assignButton);
         return $this;
@@ -124,32 +124,33 @@ abstract class AbstractSelectorList
             // @codingStandardsIgnoreEnd
         } else {
             // @codingStandardsIgnoreStart
-            $message = __('You chose a theme for your new store. Click "OK" to go live. You can always modify or switch themes in "My Customizations" and "Available Themes."');
+            $message = __(
+                'You chose a theme for your new store. Click "OK" to go live. You can always modify or switch themes in "My Customizations" and "Available Themes."'
+            );
             // @codingStandardsIgnoreEnd
         }
         $themeId = $themeBlock->getTheme()->getId();
 
         /** @var $assignButton \Magento\Backend\Block\Widget\Button */
         $assignButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $assignButton->setData(array(
-            'label'   => __('Assign to a Store View'),
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event'     => 'assign',
-                        'target'    => 'body',
-                        'eventData' => array(
-                            'theme_id' => $themeId,
-                            'confirm'  => array(
-                                'message' =>  $message,
-                                'title'   =>  __('Assign New Theme')
+        $assignButton->setData(
+            array(
+                'label' => __('Assign to a Store View'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'assign',
+                            'target' => 'body',
+                            'eventData' => array(
+                                'theme_id' => $themeId,
+                                'confirm' => array('message' => $message, 'title' => __('Assign New Theme'))
                             )
                         )
-                    ),
+                    )
                 ),
-            ),
-            'class'   => 'save action-theme-assign primary',
-        ));
+                'class' => 'save action-theme-assign primary'
+            )
+        );
 
         $themeBlock->addButton($assignButton);
         return $this;
@@ -165,13 +166,15 @@ abstract class AbstractSelectorList
     {
         /** @var $editButton \Magento\Backend\Block\Widget\Button */
         $editButton = $this->getLayout()->createBlock('Magento\DesignEditor\Block\Adminhtml\Theme\Button');
-        $editButton->setData(array(
-            'title'  => __('Edit'),
-            'label'  => __('Edit'),
-            'class'  => 'action-edit primary',
-            'href'   => $this->_getEditUrl($themeBlock->getTheme()->getId()),
-            'target' => 'edittheme',
-        ));
+        $editButton->setData(
+            array(
+                'title' => __('Edit'),
+                'label' => __('Edit'),
+                'class' => 'action-edit primary',
+                'href' => $this->_getEditUrl($themeBlock->getTheme()->getId()),
+                'target' => 'edittheme'
+            )
+        );
 
         $themeBlock->addButton($editButton);
         return $this;
@@ -185,10 +188,10 @@ abstract class AbstractSelectorList
      */
     protected function _getPreviewUrl($themeId)
     {
-        return $this->getUrl('adminhtml/*/launch', array(
-            'theme_id' => $themeId,
-            'mode'     => \Magento\DesignEditor\Model\State::MODE_NAVIGATION
-        ));
+        return $this->getUrl(
+            'adminhtml/*/launch',
+            array('theme_id' => $themeId, 'mode' => \Magento\DesignEditor\Model\State::MODE_NAVIGATION)
+        );
     }
 
     /**
@@ -199,9 +202,9 @@ abstract class AbstractSelectorList
      */
     protected function _getEditUrl($themeId)
     {
-        return $this->getUrl('adminhtml/*/launch', array(
-            'theme_id' => $themeId,
-            'mode'     => \Magento\DesignEditor\Model\State::MODE_NAVIGATION
-        ));
+        return $this->getUrl(
+            'adminhtml/*/launch',
+            array('theme_id' => $themeId, 'mode' => \Magento\DesignEditor\Model\State::MODE_NAVIGATION)
+        );
     }
 }

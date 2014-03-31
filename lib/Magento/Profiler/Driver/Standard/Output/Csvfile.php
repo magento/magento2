@@ -90,7 +90,7 @@ class Csvfile extends AbstractOutput
             throw new \RuntimeException(sprintf('Can not open a file "%s".', $this->_filePath));
         }
 
-        $lockRequired = (strpos($this->_filePath, 'php://') !== 0);
+        $lockRequired = strpos($this->_filePath, 'php://') !== 0;
         $isLocked = false;
         while ($lockRequired && !$isLocked) {
             $isLocked = flock($fileHandle, LOCK_EX);

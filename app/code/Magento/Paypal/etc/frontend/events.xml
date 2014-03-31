@@ -23,11 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Event/etc/events.xsd">
     <event name="checkout_submit_all_after">
         <observer name="hss_save_order_after_submit" instance="Magento\Paypal\Model\Observer" method="saveOrderAfterSubmit" />
     </event>
     <event name="controller_action_postdispatch_checkout_onepage_saveOrder">
         <observer name="hss_save_order_onepage" instance="Magento\Paypal\Model\Observer" method="setResponseAfterSaveOrder" />
+    </event>
+    <event name="shortcut_buttons_container">
+        <observer name="paypal_shortcuts" instance="Magento\Paypal\Model\Observer" method="addPaypalShortcuts" />
     </event>
 </config>

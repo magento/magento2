@@ -50,10 +50,7 @@ class Validator extends \Magento\Validator\AbstractValidator
         if (!$validator->hasTranslator()) {
             $validator->setTranslator($this->getTranslator());
         }
-        $this->_validators[] = array(
-            'instance' => $validator,
-            'breakChainOnFailure' => (boolean)$breakChainOnFailure
-        );
+        $this->_validators[] = array('instance' => $validator, 'breakChainOnFailure' => (bool)$breakChainOnFailure);
         return $this;
     }
 

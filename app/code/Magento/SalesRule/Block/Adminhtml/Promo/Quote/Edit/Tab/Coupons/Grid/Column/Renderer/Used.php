@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer;
 
 /**
  * Coupon codes grid "Used" column renderer
@@ -31,11 +32,12 @@
  * @package     Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer;
-
-class Used
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Used extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
+    /**
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         $value = (int)$row->getData($this->getColumn()->getIndex());

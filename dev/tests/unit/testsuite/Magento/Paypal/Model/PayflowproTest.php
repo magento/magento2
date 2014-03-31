@@ -68,7 +68,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             array(0, 'Magento\Sales\Model\Order\Creditmemo', false),
             array(12.1, 'Magento\Sales\Model\Order\Payment', false),
             array(0, 'Magento\Sales\Model\Order\Payment', true),
-            array(null, 'Magento\Sales\Model\Order\Payment', true),
+            array(null, 'Magento\Sales\Model\Order\Payment', true)
         );
     }
 

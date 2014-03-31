@@ -45,12 +45,18 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         /** @var $validatorMock \Magento\View\Design\Theme\Validator */
         $validatorMock = $this->getMock(
-            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array(), '', false
+            'Magento\View\Design\Theme\Validator',
+            array('_setThemeValidators'),
+            array(),
+            '',
+            false
         );
 
         $versionValidators = array(
             array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
+                'name' => 'available',
+                'class' => 'Zend_Validate_Regex',
+                'break' => true,
                 'options' => array('pattern' => '/([a-z0-9\_]+)/'),
                 'message' => 'Theme code has not compatible format'
             )
@@ -76,27 +82,40 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         /** @var $validatorMock \Magento\View\Design\Theme\Validator */
         $validatorMock = $this->getMock(
-            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array($helper), '', true
+            'Magento\View\Design\Theme\Validator',
+            array('_setThemeValidators'),
+            array($helper),
+            '',
+            true
         );
 
         $codeValidators = array(
             array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
+                'name' => 'available',
+                'class' => 'Zend_Validate_Regex',
+                'break' => true,
                 'options' => array('pattern' => '/^[a-z]+$/'),
                 'message' => 'Theme code has not compatible format'
-            ),
+            )
         );
 
         $versionValidators = array(
             array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
+                'name' => 'available',
+                'class' => 'Zend_Validate_Regex',
+                'break' => true,
                 'options' => array('pattern' => '/(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)|\*/'),
                 'message' => 'Theme version has not compatible format.'
             )
         );
 
-        $validatorMock->addDataValidators('theme_code', $codeValidators)
-            ->addDataValidators('theme_version', $versionValidators);
+        $validatorMock->addDataValidators(
+            'theme_code',
+            $codeValidators
+        )->addDataValidators(
+            'theme_version',
+            $versionValidators
+        );
         $this->assertEquals(false, $validatorMock->validate($themeMock));
         $this->assertEquals($this->_getErrorMessages(), $validatorMock->getErrorMessages());
     }
@@ -109,12 +128,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeValidData()
     {
         return array(
-            'theme_code'           => 'iphone',
-            'theme_title'          => 'Iphone',
-            'theme_version'        => '2.0.0.0',
-            'parent_theme'         => array('default', 'default'),
-            'theme_path'           => 'magento_iphone',
-            'preview_image'        => 'images/preview.png',
+            'theme_code' => 'iphone',
+            'theme_title' => 'Iphone',
+            'theme_version' => '2.0.0.0',
+            'parent_theme' => array('default', 'default'),
+            'theme_path' => 'magento_iphone',
+            'preview_image' => 'images/preview.png'
         );
     }
 
@@ -126,12 +145,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeInvalidData()
     {
         return array(
-            'theme_code'           => 'iphone#theme!!!!',
-            'theme_title'          => 'Iphone',
-            'theme_version'        => 'last theme version',
-            'parent_theme'         => array('default', 'default'),
-            'theme_path'           => 'magento_iphone',
-            'preview_image'        => 'images/preview.png',
+            'theme_code' => 'iphone#theme!!!!',
+            'theme_title' => 'Iphone',
+            'theme_version' => 'last theme version',
+            'parent_theme' => array('default', 'default'),
+            'theme_path' => 'magento_iphone',
+            'preview_image' => 'images/preview.png'
         );
     }
 
@@ -143,8 +162,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     protected function _getErrorMessages()
     {
         return array(
-            'theme_code'           => array('Theme code has not compatible format'),
-            'theme_version'        => array('Theme version has not compatible format.')
+            'theme_code' => array('Theme code has not compatible format'),
+            'theme_version' => array('Theme version has not compatible format.')
         );
     }
 }

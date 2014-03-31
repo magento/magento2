@@ -34,10 +34,7 @@ class Converter implements \Magento\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = array(
-            'entities' => array(),
-            'productTypes' => array(),
-        );
+        $output = array('entities' => array(), 'productTypes' => array());
         /** @var \DOMNodeList $events */
         $entities = $source->getElementsByTagName('entity');
         /** @var DOMNode $entityConfig */
@@ -52,7 +49,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 'name' => $name,
                 'label' => $label,
                 'behaviorModel' => $behaviorModel,
-                'model' => $model,
+                'model' => $model
             );
         }
 
@@ -64,10 +61,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $name = $attributes->getNamedItem('name')->nodeValue;
             $model = $attributes->getNamedItem('model')->nodeValue;
 
-            $output['productTypes'][$name] = array(
-                'name' => $name,
-                'model' => $model,
-            );
+            $output['productTypes'][$name] = array('name' => $name, 'model' => $model);
         }
         return $output;
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Adapter;
 
 /**
@@ -35,7 +34,8 @@ class Oyejorge implements \Magento\Css\PreProcessor\AdapterInterface
      */
     public function process($sourceFilePath)
     {
-        $parser = new \Less_Parser();
+        $options = array('relativeUrls' => false);
+        $parser = new \Less_Parser($options);
         $parser->parseFile($sourceFilePath, '');
         return $parser->getCss();
     }

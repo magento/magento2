@@ -23,11 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Helper;
 
 /**
- * Authorizenet Backend Data Helper
+ * Authorize.net Backend Data Helper
  */
 class Backend extends Data
 {
@@ -46,7 +45,6 @@ class Backend extends Data
         parent::__construct($context, $storeManager, $orderFactory);
         $this->_urlBuilder = $backendUrl;
     }
-
 
     /**
      * Return URL for admin area
@@ -73,7 +71,7 @@ class Backend extends Data
     /**
      * Retrieve place order url
      *
-     * @param array params
+     * @param array $params
      * @return  string
      */
     public function getSuccessOrderUrl($params)
@@ -86,9 +84,9 @@ class Backend extends Data
     }
 
     /**
-     * Retrieve redirect ifrmae url
+     * Retrieve redirect iframe url
      *
-     * @param array params
+     * @param array $params
      * @return string
      */
     public function getRedirectIframeUrl($params)
@@ -104,7 +102,8 @@ class Backend extends Data
      */
     public function getRelyUrl($storeId = null)
     {
-        return $this->_storeManager->getDefaultStoreView()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK)
-            . 'authorizenet/directpost_payment/backendResponse';
+        return $this->_storeManager->getDefaultStoreView()->getBaseUrl(
+            \Magento\UrlInterface::URL_TYPE_LINK
+        ) . 'authorizenet/directpost_payment/backendResponse';
     }
 }

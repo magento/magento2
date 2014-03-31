@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class ActionFlagTest extends \PHPUnit_Framework_TestCase
@@ -70,20 +69,41 @@ class ActionFlagTest extends \PHPUnit_Framework_TestCase
     public function testGetIfFlagExist()
     {
         $this->_requestMock->expects($this->never())->method('getActionName');
-        $this->_requestMock->expects($this->exactly(3))
-            ->method('getRequestedRouteName')->will($this->returnValue('route'));
-        $this->_requestMock->expects($this->exactly(3))
-            ->method('getRequestedControllerName')->will($this->returnValue('controller'));
+        $this->_requestMock->expects(
+            $this->exactly(3)
+        )->method(
+            'getRequestedRouteName'
+        )->will(
+            $this->returnValue('route')
+        );
+        $this->_requestMock->expects(
+            $this->exactly(3)
+        )->method(
+            'getRequestedControllerName'
+        )->will(
+            $this->returnValue('controller')
+        );
         $this->_actionFlag->set('action', 'flag', 'value');
         $this->assertEquals('value', $this->_actionFlag->get('action', 'flag'));
     }
+
     public function testGetIfFlagWithControllerKryNotExist()
     {
         $this->_requestMock->expects($this->never())->method('getActionName');
-        $this->_requestMock->expects($this->once())
-            ->method('getRequestedRouteName')->will($this->returnValue('route'));
-        $this->_requestMock->expects($this->once())
-            ->method('getRequestedControllerName')->will($this->returnValue('controller'));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getRequestedRouteName'
+        )->will(
+            $this->returnValue('route')
+        );
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getRequestedControllerName'
+        )->will(
+            $this->returnValue('controller')
+        );
         $this->assertEquals(false, $this->_actionFlag->get('action', 'flag'));
     }
 }

@@ -31,11 +31,15 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class System extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+
+class System extends Generic
 {
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('entity_attribute');
@@ -45,41 +49,39 @@ class System extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('System Properties')));
 
         if ($model->getAttributeId()) {
-            $fieldset->addField('attribute_id', 'hidden', array(
-                'name' => 'attribute_id',
-            ));
+            $fieldset->addField('attribute_id', 'hidden', array('name' => 'attribute_id'));
         }
 
-        $yesno = array(
-            array(
-                'value' => 0,
-                'label' => __('No')
-            ),
-            array(
-                'value' => 1,
-                'label' => __('Yes')
-            ));
+        $yesno = array(array('value' => 0, 'label' => __('No')), array('value' => 1, 'label' => __('Yes')));
 
-        $fieldset->addField('backend_type', 'select', array(
-            'name' => 'backend_type',
-            'label' => __('Data Type for Saving in Database'),
-            'title' => __('Data Type for Saving in Database'),
-            'options' => array(
-                'text'      => __('Text'),
-                'varchar'   => __('Varchar'),
-                'static'    => __('Static'),
-                'datetime'  => __('Datetime'),
-                'decimal'   => __('Decimal'),
-                'int'       => __('Integer'),
-            ),
-        ));
+        $fieldset->addField(
+            'backend_type',
+            'select',
+            array(
+                'name' => 'backend_type',
+                'label' => __('Data Type for Saving in Database'),
+                'title' => __('Data Type for Saving in Database'),
+                'options' => array(
+                    'text' => __('Text'),
+                    'varchar' => __('Varchar'),
+                    'static' => __('Static'),
+                    'datetime' => __('Datetime'),
+                    'decimal' => __('Decimal'),
+                    'int' => __('Integer')
+                )
+            )
+        );
 
-        $fieldset->addField('is_global', 'select', array(
-            'name'  => 'is_global',
-            'label' => __('Globally Editable'),
-            'title' => __('Globally Editable'),
-            'values'=> $yesno,
-        ));
+        $fieldset->addField(
+            'is_global',
+            'select',
+            array(
+                'name' => 'is_global',
+                'label' => __('Globally Editable'),
+                'title' => __('Globally Editable'),
+                'values' => $yesno
+            )
+        );
 
         $form->setValues($model->getData());
 

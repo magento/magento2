@@ -30,7 +30,7 @@ class Collection extends \Magento\Tax\Model\Resource\Calculation\Rule\Collection
     /**
      * Process loaded collection data
      *
-     * @return \Magento\Tax\Model\Resource\Rule\Grid\Collection
+     * @return $this
      */
     protected function _afterLoadData()
     {
@@ -43,9 +43,9 @@ class Collection extends \Magento\Tax\Model\Resource\Calculation\Rule\Collection
     }
 
     /**
-     * @param array|string $field
-     * @param null $condition
-     * @return \Magento\Tax\Model\Resource\Rule\Grid\Collection
+     * @param string|array $field
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {

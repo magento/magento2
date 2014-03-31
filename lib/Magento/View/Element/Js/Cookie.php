@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element\Js;
 
 use Magento\Session\Config\ConfigInterface;
@@ -31,20 +30,21 @@ use Magento\View\Element\Template\Context;
 class Cookie extends Template
 {
     /**
+     * Session config
+     *
      * @var ConfigInterface
      */
     protected $sessionConfig;
 
     /**
+     * Constructor
+     *
      * @param Context $context
      * @param ConfigInterface $cookieConfig
      * @param array $data
      */
-    public function __construct(
-        Context $context,
-        ConfigInterface $cookieConfig,
-        array $data = array()
-    ) {
+    public function __construct(Context $context, ConfigInterface $cookieConfig, array $data = array())
+    {
         $this->sessionConfig = $cookieConfig;
         parent::__construct($context, $data);
     }
@@ -57,8 +57,8 @@ class Cookie extends Template
     public function getDomain()
     {
         $domain = $this->sessionConfig->getCookieDomain();
-        if (!empty($domain[0]) && ($domain[0] !== '.')) {
-            $domain = '.'.$domain;
+        if (!empty($domain[0]) && $domain[0] !== '.') {
+            $domain = '.' . $domain;
         }
         return $domain;
     }

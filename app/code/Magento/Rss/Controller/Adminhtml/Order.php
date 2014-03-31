@@ -23,16 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Controller\Adminhtml;
 
 /**
  * RSS Controller for Orders feed in Admin
  */
-namespace Magento\Rss\Controller\Adminhtml;
-
 class Order extends \Magento\Rss\Controller\Adminhtml\Authenticate
 {
     /**
      * New orders action
+     *
+     * @return void
      */
     public function newAction()
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Product\CopyConstructor;
 
 class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
@@ -50,28 +49,38 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory();
 
-        $this->_productMock   = $this->getMock(
+        $this->_productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('__wakeup', 'getStockItem'), array(), '', false
+            array('__wakeup', 'getStockItem'),
+            array(),
+            '',
+            false
         );
 
         $this->_duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('setStockData', 'unsStockItem', '__wakeup'), array(), '', false
+            array('setStockData', 'unsStockItem', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
         $this->_stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item', array(), array(), '', false
+            'Magento\CatalogInventory\Model\Stock\Item',
+            array(),
+            array(),
+            '',
+            false
         );
     }
 
     public function testBuildWithoutCurrentProductStockItem()
     {
         $expectedData = array(
-            'use_config_min_qty'          => 1,
-            'use_config_min_sale_qty'     => 1,
-            'use_config_max_sale_qty'     => 1,
-            'use_config_backorders'       => 1,
+            'use_config_min_qty' => 1,
+            'use_config_min_sale_qty' => 1,
+            'use_config_max_sale_qty' => 1,
+            'use_config_backorders' => 1,
             'use_config_notify_stock_qty' => 1
         );
         $this->_duplicateMock->expects($this->once())->method('unsStockItem');
@@ -85,19 +94,24 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithCurrentProductStockItem()
     {
         $expectedData = array(
-            'use_config_min_qty'          => 1,
-            'use_config_min_sale_qty'     => 1,
-            'use_config_max_sale_qty'     => 1,
-            'use_config_backorders'       => 1,
+            'use_config_min_qty' => 1,
+            'use_config_min_sale_qty' => 1,
+            'use_config_max_sale_qty' => 1,
+            'use_config_backorders' => 1,
             'use_config_notify_stock_qty' => 1,
-            'use_config_enable_qty_inc'   => 'use_config_enable_qty_inc',
-            'enable_qty_increments'       => 'enable_qty_increments',
-            'use_config_qty_increments'   => 'use_config_qty_increments',
-            'qty_increments'              => 'qty_increments',
+            'use_config_enable_qty_inc' => 'use_config_enable_qty_inc',
+            'enable_qty_increments' => 'enable_qty_increments',
+            'use_config_qty_increments' => 'use_config_qty_increments',
+            'qty_increments' => 'qty_increments'
         );
         $this->_duplicateMock->expects($this->once())->method('unsStockItem');
-        $this->_productMock->expects($this->once())
-            ->method('getStockItem')->will($this->returnValue($this->_stockItemMock));
+        $this->_productMock->expects(
+            $this->once()
+        )->method(
+            'getStockItem'
+        )->will(
+            $this->returnValue($this->_stockItemMock)
+        );
 
         $this->_stockItemMock->expects($this->any())->method('getData')->will($this->returnArgument(0));
 

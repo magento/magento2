@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Report\Invoiced\Collection;
 
 /**
  * Sales report invoiced collection
@@ -32,10 +32,7 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Report\Invoiced\Collection;
-
-class Order
-    extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
      * Period format
@@ -49,7 +46,7 @@ class Order
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
@@ -57,7 +54,7 @@ class Order
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
@@ -82,18 +79,21 @@ class Order
         if ('month' == $this->_period) {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateExtractSql('period', \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR);
+            $this->_periodFormat = $adapter->getDateExtractSql(
+                'period',
+                \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+            );
         } else {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals()) {
             $this->_selectedColumns = array(
-                'period'                => $this->_periodFormat,
-                'orders_count'          => 'SUM(orders_count)',
-                'orders_invoiced'       => 'SUM(orders_invoiced)',
-                'invoiced'              => 'SUM(invoiced)',
-                'invoiced_captured'     => 'SUM(invoiced_captured)',
+                'period' => $this->_periodFormat,
+                'orders_count' => 'SUM(orders_count)',
+                'orders_invoiced' => 'SUM(orders_invoiced)',
+                'invoiced' => 'SUM(invoiced)',
+                'invoiced_captured' => 'SUM(invoiced_captured)',
                 'invoiced_not_captured' => 'SUM(invoiced_not_captured)'
             );
         }
@@ -108,7 +108,7 @@ class Order
     /**
      * Add selected data
      *
-     * @return \Magento\Sales\Model\Resource\Report\Invoiced\Collection\Order
+     * @return $this
      */
     protected function _initSelect()
     {

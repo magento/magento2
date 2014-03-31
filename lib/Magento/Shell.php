@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
  */
-namespace Magento;
-
 class Shell
 {
     /**
@@ -39,13 +38,20 @@ class Shell
     protected $_logger;
 
     /**
-     * Constructor
+     * Operation system info
      *
+     * @var OSInfo
+     */
+    protected $_osInfo;
+
+    /**
+     * @param OSInfo $osInfo
      * @param \Zend_Log $logger Logger instance to be used to log commands and their output
      */
-    public function __construct(\Zend_Log $logger = null)
+    public function __construct(OSInfo $osInfo, \Zend_Log $logger = null)
     {
         $this->_logger = $logger;
+        $this->_osInfo = $osInfo;
     }
 
     /**
@@ -59,7 +65,8 @@ class Shell
     public function execute($command, array $arguments = array())
     {
         $arguments = array_map('escapeshellarg', $arguments);
-        $command = preg_replace('/\s?\||$/', ' 2>&1$0', $command); // Output errors to STDOUT instead of STDERR
+        $command = preg_replace('/\s?\||$/', ' 2>&1$0', $command);
+        // Output errors to STDOUT instead of STDERR
         $command = vsprintf($command, $arguments);
         $this->_log($command);
         exec($command, $output, $exitCode);
@@ -67,15 +74,33 @@ class Shell
         $this->_log($output);
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
-            throw new \Magento\Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
+            throw new \Magento\Exception("Command `{$command}` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
+    }
+
+    /**
+     * Run external command in background
+     *
+     * @param string $command
+     * @return void
+     * @throws \Magento\Exception
+     */
+    public function executeInBackground($command)
+    {
+        if ($this->_osInfo->isWindows()) {
+            $command = 'start /B "magento background task" ' . $command;
+        } else {
+            $command .= ' > /dev/null 2>1 &';
+        }
+        pclose(popen($command, 'r'));
     }
 
     /**
      * Log a message, if a logger is specified
      *
      * @param string $message
+     * @return void
      */
     protected function _log($message)
     {

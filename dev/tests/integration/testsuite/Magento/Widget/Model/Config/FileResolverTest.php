@@ -43,63 +43,67 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\App\Filesystem $filesystem */
         $filesystem = $objectManager->create(
             'Magento\App\Filesystem',
-            array('directoryList' => $objectManager->create(
+            array(
+                'directoryList' => $objectManager->create(
                     'Magento\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
                         'directories' => array(
                             \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files/code'),
                             \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design'),
-                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files/'),
+                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files/')
                         )
                     )
                 )
             )
         );
 
-        $moduleListMock = $this->getMockBuilder('Magento\Module\ModuleListInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $moduleListMock->expects($this->any())
-            ->method('getModules')
-            ->will($this->returnValue(array('Magento_Test' => array(
-                'name' => 'Magento_Test',
-                'version' => '1.11.1',
-                'active' => 'true'
-            ))));
+        $moduleListMock = $this->getMockBuilder(
+            'Magento\Module\ModuleListInterface'
+        )->disableOriginalConstructor()->getMock();
+        $moduleListMock->expects(
+            $this->any()
+        )->method(
+            'getModules'
+        )->will(
+            $this->returnValue(
+                array('Magento_Test' => array('name' => 'Magento_Test', 'version' => '1.11.1', 'active' => 'true'))
+            )
+        );
 
 
-        $moduleReader = $objectManager->create('Magento\Module\Dir\Reader', array(
-            'moduleList' => $moduleListMock,
-            'filesystem' => $filesystem
-        ));
+        $moduleReader = $objectManager->create(
+            'Magento\Module\Dir\Reader',
+            array('moduleList' => $moduleListMock, 'filesystem' => $filesystem)
+        );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');
-        $this->_object = $objectManager->create('Magento\Widget\Model\Config\FileResolver', array(
-            'moduleReader' => $moduleReader,
-            'filesystem' => $filesystem
-        ));
+        $this->_object = $objectManager->create(
+            'Magento\Widget\Model\Config\FileResolver',
+            array('moduleReader' => $moduleReader, 'filesystem' => $filesystem)
+        );
 
         $this->directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
-            . '/_files', '/');
+        $dirPath = ltrim(
+            str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files',
+            '/'
+        );
         $this->directoryList->addDirectory(\Magento\App\Filesystem::MODULES_DIR, array('path' => $dirPath));
-
     }
 
     public function testGetDesign()
     {
-        $widgetConfigs  = $this->_object->get('widget.xml', 'design');
-        $expected       = realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml');
-        $actual         = $widgetConfigs->key();
+        $widgetConfigs = $this->_object->get('widget.xml', 'design');
+        $expected = realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml');
+        $actual = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
         $this->assertStringEndsWith($actual, $expected);
     }
 
     public function testGetGlobal()
     {
-        $widgetConfigs  = $this->_object->get('widget.xml', 'global');
-        $expected       = realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml');
-        $actual         = $widgetConfigs->key();
+        $widgetConfigs = $this->_object->get('widget.xml', 'global');
+        $expected = realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml');
+        $actual = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
         $this->assertStringEndsWith($actual, $expected);
     }

@@ -21,19 +21,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
 
 /**
  * Logger model
  */
-namespace Magento;
-
 class Logger
 {
     /**#@+
      * Keys that stand for particular log streams
      */
-    const LOGGER_SYSTEM    = 'system';
+    const LOGGER_SYSTEM = 'system';
+
     const LOGGER_EXCEPTION = 'exception';
+
     /**#@-*/
 
     /**
@@ -53,8 +54,7 @@ class Logger
     public function __construct(\Magento\App\Filesystem $filesystem, $defaultFile = '')
     {
         $this->_filesystem = $filesystem;
-        $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)
-            ->addStreamLog(self::LOGGER_EXCEPTION, $defaultFile);
+        $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)->addStreamLog(self::LOGGER_EXCEPTION, $defaultFile);
     }
 
     /**
@@ -116,6 +116,7 @@ class Logger
      * @param string $message
      * @param int $level
      * @param string $loggerKey
+     * @return void
      */
     public function log($message, $level = \Zend_Log::DEBUG, $loggerKey = self::LOGGER_SYSTEM)
     {
@@ -136,6 +137,7 @@ class Logger
      * @param string $message
      * @param int $level
      * @param string $file
+     * @return void
      */
     public function logFile($message, $level = \Zend_Log::DEBUG, $file = '')
     {
@@ -158,6 +160,7 @@ class Logger
      *
      * @param string $message
      * @param string $loggerKey
+     * @return void
      */
     public function logDebug($message, $loggerKey = self::LOGGER_SYSTEM)
     {
@@ -168,6 +171,7 @@ class Logger
      * Log an exception
      *
      * @param \Exception $e
+     * @return void
      */
     public function logException(\Exception $e)
     {

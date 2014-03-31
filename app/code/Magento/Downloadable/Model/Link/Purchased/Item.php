@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Model\Link\Purchased;
 
 use Magento\Downloadable\Model\Resource\Link\Purchased\Item as Resource;
@@ -66,19 +65,24 @@ use Magento\Downloadable\Model\Resource\Link\Purchased\Item as Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Model\AbstractModel
 {
     const XML_PATH_ORDER_ITEM_STATUS = 'catalog/downloadable/order_item_status';
 
-    const LINK_STATUS_PENDING   = 'pending';
+    const LINK_STATUS_PENDING = 'pending';
+
     const LINK_STATUS_AVAILABLE = 'available';
-    const LINK_STATUS_EXPIRED   = 'expired';
+
+    const LINK_STATUS_EXPIRED = 'expired';
+
     const LINK_STATUS_PENDING_PAYMENT = 'pending_payment';
+
     const LINK_STATUS_PAYMENT_REVIEW = 'payment_review';
 
     /**
      * Enter description here...
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -89,16 +93,14 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Check order item id
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return $this
      * @throws \Exception
      */
     public function _beforeSave()
     {
         if (null == $this->getOrderItemId()) {
-            throw new \Exception(
-                __('Order item id cannot be null'));
+            throw new \Exception(__('Order item id cannot be null'));
         }
         return parent::_beforeSave();
     }
-
 }

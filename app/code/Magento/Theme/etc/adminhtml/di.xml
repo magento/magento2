@@ -23,20 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content">
-        <param name="storageHelper">
-            <instance type="Magento\Theme\Helper\Storage\Proxy" />
-        </param>
+        <arguments>
+            <argument name="storageHelper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree">
-        <param name="storageHelper">
-            <instance type="Magento\Theme\Helper\Storage\Proxy" />
-        </param>
+        <arguments>
+            <argument name="storageHelper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader">
-        <param name="storageHelper">
-            <instance type="Magento\Theme\Helper\Storage\Proxy" />
-        </param>
+        <arguments>
+            <argument name="storageHelper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
+        </arguments>
     </type>
 </config>

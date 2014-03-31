@@ -137,4 +137,17 @@ class Filesystem extends \Magento\Filesystem
      * System base temporary folder
      */
     const SYS_TMP_DIR = 'sys_tmp';
+
+    /**
+     * Retrieve absolute path for for given code
+     *
+     * @param string $code
+     * @return string
+     */
+    public function getPath($code = self::ROOT_DIR)
+    {
+        $config = $this->directoryList->getConfig($code);
+        $path = isset($config['path']) ? $config['path'] : '';
+        return str_replace('\\', '/', $path);
+    }
 }

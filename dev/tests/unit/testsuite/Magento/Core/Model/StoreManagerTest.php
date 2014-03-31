@@ -26,7 +26,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class StoreManagerTest extends \PHPUnit_Framework_TestCase
@@ -84,9 +83,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
         $map = array_values($arguments);
         $map[] = $expectedResult;
-        $this->_storage->expects($this->once())
-            ->method($method)
-            ->will($this->returnValueMap(array($map)));
+        $this->_storage->expects($this->once())->method($method)->will($this->returnValueMap(array($map)));
 
         $actualResult = call_user_func_array(array($this->_model, $method), $arguments);
         $this->assertEquals($expectedResult, $actualResult);
@@ -107,7 +104,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getStores' => array('getStores', array('withDefault' => true, 'codeKey' => true), 'storesArray'),
             'getStore' => array('getStore', array('id' => 104), 'storeObject'),
             'hasSingleStore' => array('hasSingleStore', array(), 'singleStoreResult'),
-            'throwStoreException' => array('throwStoreException', array(), null),
+            'throwStoreException' => array('throwStoreException', array(), null)
         );
     }
 
@@ -117,13 +114,18 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'isSingleStoreAllowed' => true,
             'currentStore' => 'current_store_code',
             'scopeCode' => 'scope_code',
-            'scopeType' => 'scope_type',
+            'scopeType' => 'scope_type'
         );
 
-        $this->_factoryMock->expects($this->any())
-            ->method('get')
-            ->with($arguments)
-            ->will($this->returnValue($this->_storage));
+        $this->_factoryMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            $arguments
+        )->will(
+            $this->returnValue($this->_storage)
+        );
 
         $this->_storage->expects($this->once())->method('setCurrentStore')->with('current_store_code');
 
@@ -136,13 +138,18 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'isSingleStoreAllowed' => false,
             'currentStore' => null,
             'scopeCode' => 'scope_code',
-            'scopeType' => 'scope_type',
+            'scopeType' => 'scope_type'
         );
 
-        $this->_factoryMock->expects($this->any())
-            ->method('get')
-            ->with($arguments)
-            ->will($this->returnValue($this->_storage));
+        $this->_factoryMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            $arguments
+        )->will(
+            $this->returnValue($this->_storage)
+        );
 
         $this->_storage->expects($this->once())->method('setIsSingleStoreModeAllowed')->with(false);
 
@@ -162,7 +169,13 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSingleStoreModeWhenSingleStoreModeDisabledAndHasSingleStore()
     {
-        $this->_helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(false));
+        $this->_helperMock->expects(
+            $this->once()
+        )->method(
+            'isSingleStoreModeEnabled'
+        )->will(
+            $this->returnValue(false)
+        );
 
         $this->_storage->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
 
@@ -182,10 +195,15 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetSafeStoreWithExceptionWithCurrentStore()
     {
         $this->_factoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_storage));
-        $this->_storage->expects($this->once())
-            ->method('getStore')
-            ->with(10)
-            ->will($this->throwException(new \Exception('test')));
+        $this->_storage->expects(
+            $this->once()
+        )->method(
+            'getStore'
+        )->with(
+            10
+        )->will(
+            $this->throwException(new \Exception('test'))
+        );
 
         $this->_storage->expects($this->once())->method('getCurrentStore')->will($this->returnValue('current'));
         $this->_requestMock->expects($this->once())->method('setActionName')->with('noroute');
@@ -194,15 +212,20 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testGetSafeStoreWithExceptionAndWithoutCurrentStore()
     {
         $this->_factoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_storage));
-        $this->_storage->expects($this->once())
-            ->method('getStore')
-            ->with(10)
-            ->will($this->throwException(new \Exception('test')));
+        $this->_storage->expects(
+            $this->once()
+        )->method(
+            'getStore'
+        )->with(
+            10
+        )->will(
+            $this->throwException(new \Exception('test'))
+        );
 
         $this->_storage->expects($this->once())->method('getCurrentStore')->will($this->returnValue(false));
         $this->_requestMock->expects($this->never())->method('setActionName');

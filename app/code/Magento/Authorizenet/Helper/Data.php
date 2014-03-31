@@ -23,11 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Helper;
 
 /**
- * Authorizenet Data Helper
+ * Authorize.net Data Helper
  */
 class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
 {
@@ -105,9 +104,9 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
     }
 
     /**
-     * Retrieve redirect ifrmae url
+     * Retrieve redirect iframe url
      *
-     * @param array params
+     * @param array $params
      * @return string
      */
     public function getRedirectIframeUrl($params)
@@ -138,7 +137,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
     /**
      * Retrieve place order url
      *
-     * @param array params
+     * @param array $params
      * @return  string
      */
     public function getSuccessOrderUrl($params)
@@ -149,7 +148,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
                 $route = 'checkout/onepage/success';
                 break;
 
-            default :
+            default:
                 $route = 'checkout/onepage/success';
                 break;
         }
@@ -162,6 +161,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      * Needed for Admin area.
      *
      * @param \Magento\Sales\Model\Order $order
+     * @return void
      */
     public function updateOrderEditIncrements(\Magento\Sales\Model\Order $order)
     {
@@ -210,7 +210,12 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
         $exception = false
     ) {
         return $this->getExtendedTransactionMessage(
-            $payment, $requestType, $lastTransactionId, $card, $amount, $exception
+            $payment,
+            $requestType,
+            $lastTransactionId,
+            $card,
+            $amount,
+            $exception
         );
     }
 
@@ -331,7 +336,10 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      */
     public function getRelyUrl($storeId = null)
     {
-        return $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK)
-            . 'authorizenet/directpost_payment/response';
+        return $this->_storeManager->getStore(
+            $storeId
+        )->getBaseUrl(
+            \Magento\UrlInterface::URL_TYPE_LINK
+        ) . 'authorizenet/directpost_payment/response';
     }
 }

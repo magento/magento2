@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Helper\Product;
 
 /**
  * Catalog Product Custom Options helper
@@ -32,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper\Product;
-
 class Options extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -67,13 +65,27 @@ class Options extends \Magento\App\Helper\AbstractHelper
     public function downloadFileOption($response, $filePath, $info)
     {
         try {
-            $response->setHttpResponseCode(200)
-                ->setHeader('Pragma', 'public', true)
-                ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
-                ->setHeader('Content-type', $info['type'], true)
-                ->setHeader('Content-Length', $info['size'])
-                ->setHeader('Content-Disposition', 'inline' . '; filename='.$info['title'])
-                ->clearBody();
+            $response->setHttpResponseCode(
+                200
+            )->setHeader(
+                'Pragma',
+                'public',
+                true
+            )->setHeader(
+                'Cache-Control',
+                'must-revalidate, post-check=0, pre-check=0',
+                true
+            )->setHeader(
+                'Content-type',
+                $info['type'],
+                true
+            )->setHeader(
+                'Content-Length',
+                $info['size']
+            )->setHeader(
+                'Content-Disposition',
+                'inline' . '; filename=' . $info['title']
+            )->clearBody();
             $response->sendHeaders();
 
             echo $this->directory->readFile($this->directory->getRelativePath($filePath));

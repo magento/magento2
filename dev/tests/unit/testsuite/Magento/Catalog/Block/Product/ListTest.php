@@ -24,21 +24,30 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 class ListTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMode()
     {
-        $childBlock = new \Magento\Object;
+        $childBlock = new \Magento\Object();
 
-        $block = $this->getMock('Magento\Catalog\Block\Product\ListProduct', array('getChildBlock'),
-            array(), '', false);
-        $block->expects($this->atLeastOnce())
-            ->method('getChildBlock')
-            ->with('toolbar')
-            ->will($this->returnValue($childBlock));
+        $block = $this->getMock(
+            'Magento\Catalog\Block\Product\ListProduct',
+            array('getChildBlock'),
+            array(),
+            '',
+            false
+        );
+        $block->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getChildBlock'
+        )->with(
+            'toolbar'
+        )->will(
+            $this->returnValue($childBlock)
+        );
 
         $expectedMode = 'a mode';
         $this->assertNotEquals($expectedMode, $block->getMode());

@@ -34,8 +34,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
-class Tierprice
-    extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice
+class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice
 {
     /**
      * Catalog product attribute backend tierprice

@@ -31,7 +31,6 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
@@ -44,7 +43,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      */
     public function render(\Magento\Object $row)
     {
-        if($row->isValidForSend()) {
+        if ($row->isValidForSend()) {
             $actions[] = array(
                 'url' => $this->getUrl('*/queue/edit', array('template_id' => $row->getId())),
                 'caption' => __('Queue Newsletter...')
@@ -52,8 +51,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
         }
 
         $actions[] = array(
-            'url'     => $this->getUrl('*/*/preview', array('id'=>$row->getId())),
-            'popup'   => true,
+            'url' => $this->getUrl('*/*/preview', array('id' => $row->getId())),
+            'popup' => true,
             'caption' => __('Preview')
         );
 

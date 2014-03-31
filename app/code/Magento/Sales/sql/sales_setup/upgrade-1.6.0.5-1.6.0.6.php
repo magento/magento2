@@ -27,10 +27,7 @@
 /* @var $installer \Magento\Sales\Model\Resource\Setup */
 $installer = $this;
 
-$entitiesToAlter = array(
-    'quote_address',
-    'order_address'
-);
+$entitiesToAlter = array('quote_address', 'order_address');
 
 $attributes = array(
     'vat_id' => array('type' => \Magento\DB\Ddl\Table::TYPE_TEXT),

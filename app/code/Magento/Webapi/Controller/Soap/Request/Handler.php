@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
@@ -118,7 +117,8 @@ class Handler
                 array(),
                 'authorization',
                 "Consumer ID = {$this->_request->getConsumerId()}",
-                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', '));
+                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', ')
+            );
         }
         $service = $this->_objectManager->get($serviceClass);
         $inputData = $this->_prepareRequestData($serviceClass, $serviceMethod, $arguments);
@@ -145,19 +145,19 @@ class Handler
     /**
      * Convert service response into format acceptable by SoapServer.
      *
-     * @param object|array|string|int|double|null $data
+     * @param object|array|string|int|float|null $data
      * @return array
      * @throws \InvalidArgumentException
      */
     protected function _prepareResponseData($data)
     {
-        if ($this->_isDto($data)) {
-            $result = $this->_unpackDto($data);
+        if ($this->_isDataObject($data)) {
+            $result = $this->_unpackDataObject($data);
         } elseif (is_array($data)) {
             foreach ($data as $key => $value) {
-                $result[$key] = $this->_isDto($value) ? $this->_unpackDto($value) : $value;
+                $result[$key] = $this->_isDataObject($value) ? $this->_unpackDataObject($value) : $value;
             }
-        } elseif (is_string($data) || is_numeric($data) || is_null($data)) {
+        } elseif (is_scalar($data) || is_null($data)) {
             $result = $data;
         } else {
             throw new \InvalidArgumentException("Service returned result in invalid format.");
@@ -166,38 +166,51 @@ class Handler
     }
 
     /**
-     * Create new object and initialize its public fields with data retrieved from DTO.
+     * Create new object and initialize its public fields with data retrieved from Data Object.
      *
-     * This method processes all nested DTOs recursively.
+     * This method processes all nested Data Objects recursively.
      *
-     * @param object $dto
+     * @param object $dataObject
      * @return \stdClass
      * @throws \InvalidArgumentException
      */
-    protected function _unpackDto($dto)
+    protected function _unpackDataObject($dataObject)
     {
-        if (!$this->_isDto($dto)) {
+        if (!$this->_isDataObject($dataObject)) {
             throw new \InvalidArgumentException("Object is expected to implement __toArray() method.");
         }
+        return $this->_unpackArray($dataObject->__toArray());
+    }
+
+    /**
+     * @param array $dataArray
+     * @return \stdClass
+     */
+    protected function _unpackArray($dataArray)
+    {
         $response = new \stdClass();
-        foreach ($dto->__toArray() as $fieldName => $fieldValue) {
-            if ($this->_isDto($fieldValue)) {
-                $fieldValue = $this->_unpackDto($fieldValue);
+        foreach ($dataArray as $fieldName => $fieldValue) {
+            if ($this->_isDataObject($fieldValue)) {
+                $fieldValue = $this->_unpackDataObject($fieldValue);
             }
-            $response->$fieldName = $fieldValue;
+            if (is_array($fieldValue)) {
+                $fieldValue = $this->_unpackArray($fieldValue);
+            }
+            $fieldName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName))));
+            $response->{$fieldName} = $fieldValue;
         }
         return $response;
     }
 
     /**
-     * Check if provided variable is service DTO.
+     * Check if provided variable is service Data Object.
      *
      * @param mixed $var
      * @return bool
      */
-    protected function _isDto($var)
+    protected function _isDataObject($var)
     {
-        return (is_object($var) && method_exists($var, '__toArray'));
+        return is_object($var) && method_exists($var, '__toArray');
     }
 
     /**

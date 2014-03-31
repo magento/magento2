@@ -23,8 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
-class Baseurl
-    implements \Magento\AdminNotification\Model\System\MessageInterface
+class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
      * @var \Magento\UrlInterface
@@ -72,18 +71,12 @@ class Baseurl
     protected function _getConfigUrl()
     {
         $output = '';
-        $defaultUnsecure = $this->_config->getValue(
-            \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL,
-            'default'
-        );
+        $defaultUnsecure = $this->_config->getValue(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        $defaultSecure = $this->_config->getValue(
-            \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL,
-            'default'
-        );
+        $defaultSecure = $this->_config->getValue(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, 'default');
 
-        if ($defaultSecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER
-            || $defaultUnsecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER
+        if ($defaultSecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER ||
+            $defaultUnsecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', array('section' => 'web'));
         } else {
@@ -96,13 +89,15 @@ class Baseurl
                 if ($data->getScope() == 'stores') {
                     $code = $this->_storeManager->getStore($data->getScopeId())->getCode();
                     $output = $this->_urlBuilder->getUrl(
-                        'adminhtml/system_config/edit', array('section' => 'web', 'store' => $code)
+                        'adminhtml/system_config/edit',
+                        array('section' => 'web', 'store' => $code)
                     );
                     break;
                 } elseif ($data->getScope() == 'websites') {
                     $code = $this->_storeManager->getWebsite($data->getScopeId())->getCode();
                     $output = $this->_urlBuilder->getUrl(
-                        'adminhtml/system_config/edit', array('section' => 'web', 'website' => $code)
+                        'adminhtml/system_config/edit',
+                        array('section' => 'web', 'website' => $code)
                     );
                     break;
                 }
@@ -110,7 +105,6 @@ class Baseurl
         }
         return $output;
     }
-
 
     /**
      * Retrieve unique message identity
@@ -129,7 +123,7 @@ class Baseurl
      */
     public function isDisplayed()
     {
-        return (bool) $this->_getConfigUrl();
+        return (bool)$this->_getConfigUrl();
     }
 
     /**
@@ -139,7 +133,10 @@ class Baseurl
      */
     public function getText()
     {
-        return __('{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href="%1">configuration</a>.', $this->_getConfigUrl());
+        return __(
+            '{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href="%1">configuration</a>.',
+            $this->_getConfigUrl()
+        );
     }
 
     /**

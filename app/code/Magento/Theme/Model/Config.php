@@ -32,7 +32,7 @@ namespace Magento\Theme\Model;
 class Config
 {
     /**
-     * @var \Magento\Core\Model\Config\Storage\WriterInterface
+     * @var \Magento\App\Config\Storage\WriterInterface
      */
     protected $_configWriter;
 
@@ -65,7 +65,7 @@ class Config
 
     /**
      * @param \Magento\App\Config\ValueInterface $configData
-     * @param \Magento\Core\Model\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Cache\FrontendInterface $configCache
@@ -73,18 +73,18 @@ class Config
      */
     public function __construct(
         \Magento\App\Config\ValueInterface $configData,
-        \Magento\Core\Model\Config\Storage\WriterInterface $configWriter,
+        \Magento\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Cache\FrontendInterface $configCache,
         \Magento\Cache\FrontendInterface $layoutCache
     ) {
-        $this->_configData   = $configData;
+        $this->_configData = $configData;
         $this->_configWriter = $configWriter;
         $this->_storeManager = $storeManager;
         $this->_eventManager = $eventManager;
-        $this->_configCache  = $configCache;
-        $this->_layoutCache  = $layoutCache;
+        $this->_configCache = $configCache;
+        $this->_layoutCache = $layoutCache;
     }
 
     /**
@@ -102,9 +102,7 @@ class Config
     ) {
         $isReassigned = false;
 
-        $this->_unassignThemeFromStores(
-            $theme->getId(), $stores, $scope, $isReassigned
-        );
+        $this->_unassignThemeFromStores($theme->getId(), $stores, $scope, $isReassigned);
 
         if ($this->_storeManager->isSingleStoreMode()) {
             $this->_assignThemeToDefaultScope($theme->getId(), $isReassigned);
@@ -117,12 +115,9 @@ class Config
             $this->_layoutCache->clean();
         }
 
-        $this->_eventManager->dispatch('assign_theme_to_stores_after',
-            array(
-                'stores' => $stores,
-                'scope'  => $scope,
-                'theme'  => $theme,
-            )
+        $this->_eventManager->dispatch(
+            'assign_theme_to_stores_after',
+            array('stores' => $stores, 'scope' => $scope, 'theme' => $theme)
         );
 
         return $this;
@@ -137,9 +132,13 @@ class Config
      */
     protected function _getAssignedScopesCollection($scope, $configPath)
     {
-        return $this->_configData->getCollection()
-            ->addFieldToFilter('scope', $scope)
-            ->addFieldToFilter('path', $configPath);
+        return $this->_configData->getCollection()->addFieldToFilter(
+            'scope',
+            $scope
+        )->addFieldToFilter(
+            'path',
+            $configPath
+        );
     }
 
     /**
@@ -148,8 +147,8 @@ class Config
      * @param string $themeId
      * @param array $stores
      * @param string $scope
-     * @param bool $isReassigned
-     * @return Config
+     * @param bool &$isReassigned
+     * @return $this
      */
     protected function _unassignThemeFromStores($themeId, $stores, $scope, &$isReassigned)
     {
@@ -169,8 +168,8 @@ class Config
      * @param string $themeId
      * @param array $stores
      * @param string $scope
-     * @param bool $isReassigned
-     * @return Config
+     * @param bool &$isReassigned
+     * @return $this
      */
     protected function _assignThemeToStores($themeId, $stores, $scope, &$isReassigned)
     {
@@ -188,13 +187,13 @@ class Config
      * Assign theme to default scope
      *
      * @param string $themeId
-     * @param bool $isReassigned
-     * @return Config
+     * @param bool &$isReassigned
+     * @return $this
      */
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {
         $configPath = \Magento\View\DesignInterface::XML_PATH_THEME_ID;
-        $this->_configWriter->save($configPath, $themeId, \Magento\Core\Model\ScopeInterface::SCOPE_DEFAULT);
+        $this->_configWriter->save($configPath, $themeId, \Magento\BaseScopeInterface::SCOPE_DEFAULT);
         $isReassigned = true;
         return $this;
     }

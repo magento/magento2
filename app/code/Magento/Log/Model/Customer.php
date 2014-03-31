@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model;
 
 /**
  * Customer log model
@@ -44,9 +45,7 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
-class Customer extends \Magento\Core\Model\AbstractModel
+class Customer extends \Magento\Model\AbstractModel
 {
     /**
      * @var \Magento\Stdlib\DateTime
@@ -54,18 +53,18 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -75,6 +74,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Define resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -85,16 +86,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Load last log by customer id
      *
-     * @param \Magento\Customer\Model\Customer|int $customer
+     * @param int $customerId
      * @return \Magento\Log\Model\Customer
      */
-    public function loadByCustomer($customer)
+    public function loadByCustomer($customerId)
     {
-        if ($customer instanceof \Magento\Customer\Model\Customer) {
-            $customer = $customer->getId();
-        }
-
-        return $this->load($customer, 'customer_id');
+        return $this->load($customerId, 'customer_id');
     }
 
     /**

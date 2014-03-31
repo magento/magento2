@@ -24,12 +24,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Attribute;
 
 class Group extends \Magento\Eav\Model\Entity\Attribute\Group
 {
-
     /**
      * Attribute collection factory
      *
@@ -38,18 +36,18 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
     protected $_attributeCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -70,26 +68,6 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
         $attributesCollection->setAttributeGroupFilter($this->getId());
         foreach ($attributesCollection as $attribute) {
             if (!$attribute->getIsUserDefined()) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Check if contains attributes used in the configurable products
-     *
-     * @return bool
-     */
-    public function hasConfigurableAttributes()
-    {
-        $result = false;
-        /** @var $attributesCollection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $attributesCollection = $this->_attributeCollectionFactory->create();
-        $attributesCollection->setAttributeGroupFilter($this->getId());
-        foreach ($attributesCollection as $attribute) {
-            if ($attribute->getIsConfigurable()) {
                 $result = true;
                 break;
             }

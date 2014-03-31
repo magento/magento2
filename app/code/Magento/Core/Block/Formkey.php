@@ -48,7 +48,6 @@ class Formkey extends \Magento\View\Element\Template
     ) {
         $this->formKey = $formKey;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

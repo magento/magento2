@@ -25,11 +25,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Variable');
-$variable->setCode('variable_code')
-    ->setName('Variable Name')
-    ->setPlainValue('Plain Value')
-    ->setHtmlValue('HTML Value')
-    ->save()
-;
+$variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Variable');
+$variable->setCode(
+    'variable_code'
+)->setName(
+    'Variable Name'
+)->setPlainValue(
+    'Plain Value'
+)->setHtmlValue(
+    'HTML Value'
+)->save();

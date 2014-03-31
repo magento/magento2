@@ -23,15 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
 
 /**
  * Cms page edit form main tab
  */
-namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
-
-class Content
-    extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Content extends \Magento\Backend\Block\Widget\Form\Generic implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
@@ -40,14 +38,14 @@ class Content
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = array()
@@ -58,6 +56,8 @@ class Content
 
     /**
      * Load Wysiwyg on demand and Prepare layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -67,6 +67,11 @@ class Content
         }
     }
 
+    /**
+     * Prepare form
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         /** @var $model \Magento\Cms\Model\Page */
@@ -83,34 +88,46 @@ class Content
 
 
         /** @var \Magento\Data\Form $form */
-        $form   = $this->_formFactory->create();
+        $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('page_');
 
-        $fieldset = $form->addFieldset('content_fieldset', array('legend'=>__('Content'),'class'=>'fieldset-wide'));
-
-        $wysiwygConfig = $this->_wysiwygConfig->getConfig(
-            array('tab_id' => $this->getTabId())
+        $fieldset = $form->addFieldset(
+            'content_fieldset',
+            array('legend' => __('Content'), 'class' => 'fieldset-wide')
         );
 
-        $fieldset->addField('content_heading', 'text', array(
-            'name'      => 'content_heading',
-            'label'     => __('Content Heading'),
-            'title'     => __('Content Heading'),
-            'disabled'  => $isElementDisabled
-        ));
+        $wysiwygConfig = $this->_wysiwygConfig->getConfig(array('tab_id' => $this->getTabId()));
 
-        $contentField = $fieldset->addField('content', 'editor', array(
-            'name'      => 'content',
-            'style'     => 'height:36em;',
-            'required'  => true,
-            'disabled'  => $isElementDisabled,
-            'config'    => $wysiwygConfig
-        ));
+        $fieldset->addField(
+            'content_heading',
+            'text',
+            array(
+                'name' => 'content_heading',
+                'label' => __('Content Heading'),
+                'title' => __('Content Heading'),
+                'disabled' => $isElementDisabled
+            )
+        );
+
+        $contentField = $fieldset->addField(
+            'content',
+            'editor',
+            array(
+                'name' => 'content',
+                'style' => 'height:36em;',
+                'required' => true,
+                'disabled' => $isElementDisabled,
+                'config' => $wysiwygConfig
+            )
+        );
 
         // Setting custom renderer for content field to remove label column
-        $renderer = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element')
-                    ->setTemplate('Magento_Cms::page/edit/form/renderer/content.phtml');
+        $renderer = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element'
+        )->setTemplate(
+            'Magento_Cms::page/edit/form/renderer/content.phtml'
+        );
         $contentField->setRenderer($renderer);
 
         $this->_eventManager->dispatch('adminhtml_cms_page_edit_tab_content_prepare_form', array('form' => $form));

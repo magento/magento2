@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Zend\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
@@ -148,11 +147,12 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param array $parameterData
      * @param string $parameterType
      * @param array $callInfo
+     * @return void
      */
     protected function _processParameter(\DOMElement $element, $isRequired, $parameterData, $parameterType, $callInfo)
     {
         $element->setAttribute('minOccurs', $isRequired ? 1 : 0);
-        $maxOccurs = (isset($parameterData['isArray']) && $parameterData['isArray']) ? 'unbounded' : 1;
+        $maxOccurs = isset($parameterData['isArray']) && $parameterData['isArray'] ? 'unbounded' : 1;
         $element->setAttribute('maxOccurs', $maxOccurs);
         if ($this->_typeProcessor->isTypeSimple($parameterType)) {
             $typeNs = Wsdl::XSD_NS;
@@ -168,6 +168,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      *
      * @param string $type
      * @param array $callInfo
+     * @return void
      */
     protected function _processArrayParameter($type, $callInfo = array())
     {
@@ -186,7 +187,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         );
         $arrayTypeData = array(
             'documentation' => sprintf('An array of %s items.', $arrayItemType),
-            'parameters' => $arrayTypeParameters,
+            'parameters' => $arrayTypeParameters
         );
         $this->_typeProcessor->setTypeData($arrayTypeName, $arrayTypeData);
         $this->addComplexType($arrayTypeName, $callInfo);
@@ -195,8 +196,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Revert required call info data if needed.
      *
-     * @param boolean $isRequired
-     * @param array $callInfo
+     * @param bool $isRequired
+     * @param array &$callInfo
+     * @return void
      */
     protected function _revertRequiredCallInfo($isRequired, &$callInfo)
     {
@@ -222,6 +224,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $documentation parameter documentation string
      * @param string|null $default
      * @param array $callInfo
+     * @return void
      */
     public function addAnnotation(\DOMElement $element, $documentation, $default = null, $callInfo = array())
     {
@@ -253,7 +256,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                                 $callInfo[$direction][$condition] = array(
                                     'allCallsExcept' => $calls[1],
                                 );
-                            } else if (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
+                            } elseif (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
                                 $this->_overrideCallInfoName($callInfo, $callName);
                                 $callInfo[$direction][$condition]['calls'][] = $callName;
                             }
@@ -290,6 +293,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $elementType
      * @param string $documentation
      * @param \DOMElement $appInfoNode
+     * @return void
      */
     protected function _processElementType($elementType, $documentation, \DOMElement $appInfoNode)
     {
@@ -314,6 +318,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * @param string $elementType
      * @param string $default
      * @param \DOMElement $appInfoNode
+     * @return void
      */
     protected function _processDefaultValueAnnotation($elementType, $default, \DOMElement $appInfoNode)
     {
@@ -346,9 +351,10 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Check if there is given annotation in documentation, and if not - create an empty one.
      *
-     * @param $annotation
-     * @param $documentation
+     * @param string $annotation
+     * @param string $documentation
      * @param \DOMElement $appInfoNode
+     * @return void
      */
     protected function _processRequiredAnnotation($annotation, $documentation, \DOMElement $appInfoNode)
     {
@@ -362,7 +368,8 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Process 'callInfo' appinfo tag.
      *
      * @param \DOMElement $appInfoNode
-     * @param $callInfo
+     * @param array $callInfo
+     * @return void
      */
     protected function _processCallInfo(\DOMElement $appInfoNode, $callInfo)
     {
@@ -394,7 +401,8 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Process 'docInstructions' appinfo tag.
      *
      * @param \DOMElement $appInfoNode
-     * @param $tagValue
+     * @param string $tagValue
+     * @return void
      */
     protected function _processDocInstructions(\DOMElement $appInfoNode, $tagValue)
     {
@@ -412,16 +420,13 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Process 'seeLink' appinfo tag.
      *
      * @param \DOMElement $appInfoNode
-     * @param $tagValue
+     * @param string $tagValue
+     * @return void
      */
     protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
     {
         if (preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
-            $seeLink = array(
-                'url' => $matches[1],
-                'title' => $matches[2],
-                'for' => $matches[3],
-            );
+            $seeLink = array('url' => $matches[1], 'title' => $matches[2], 'for' => $matches[3]);
             $seeLinkNode = $this->_getDom()->createElement(self::APP_INF_NS . ':seeLink');
             foreach (array('url', 'title', 'for') as $subNodeName) {
                 if (isset($seeLink[$subNodeName])) {
@@ -437,8 +442,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Delete callName if it's already defined in some direction group.
      *
-     * @param $callInfo
-     * @param $callName
+     * @param array &$callInfo
+     * @param string $callName
+     * @return void
      */
     protected function _overrideCallInfoName(&$callInfo, $callName)
     {

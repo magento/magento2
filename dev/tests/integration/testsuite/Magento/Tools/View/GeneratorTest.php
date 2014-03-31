@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\View;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +45,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->tmpDir = BP . '/var/static';
-        $this->shell = new \Magento\Shell();
+        $this->shell = new \Magento\Shell(new \Magento\OSInfo());
         $this->filesystem = new \Magento\Filesystem\Driver\File();
         if (!$this->filesystem->isExists($this->tmpDir)) {
             $this->filesystem->createDirectory($this->tmpDir, 0777);

@@ -32,11 +32,10 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
     <div class="block wishlist">
         <div class="title">
-            <strong><?php echo $this->getTitle(); ?>
+            <strong><?php echo $this->getTitle(); ?></strong>
             <?php if($count > 0): ?>
-                <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
+            <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
             <?php endif; ?>
-            </strong>
         </div>
         <div class="content">
             <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>

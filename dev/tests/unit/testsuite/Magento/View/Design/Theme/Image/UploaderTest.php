@@ -64,9 +64,13 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         $this->_fileUploader = $this->getMock('Magento\File\Uploader', array(), array(), '', false);
 
         $adapterFactory = $this->getMock('Magento\HTTP\Adapter\FileTransferFactory');
-        $adapterFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->_transferAdapterMock));
+        $adapterFactory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_transferAdapterMock)
+        );
 
         $uploaderFactory = $this->getMock('Magento\File\UploaderFactory', array('create'), array(), '', false);
         $uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_fileUploader));
@@ -92,45 +96,45 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'isUploaded'            => true,
-                'isValid'               => true,
+                'isUploaded' => true,
+                'isValid' => true,
                 'checkAllowedExtension' => true,
-                'save'                  => true,
-                'result'                => '/tmp/test_filename',
-                'exception'             => null
+                'save' => true,
+                'result' => '/tmp/test_filename',
+                'exception' => null
             ),
             array(
-                'isUploaded'            => false,
-                'isValid'               => true,
+                'isUploaded' => false,
+                'isValid' => true,
                 'checkAllowedExtension' => true,
-                'save'                  => true,
-                'result'                => false,
-                'exception'             => null
+                'save' => true,
+                'result' => false,
+                'exception' => null
             ),
             array(
-                'isUploaded'            => true,
-                'isValid'               => false,
+                'isUploaded' => true,
+                'isValid' => false,
                 'checkAllowedExtension' => true,
-                'save'                  => true,
-                'result'                => false,
-                'exception'             => 'Magento\Exception'
+                'save' => true,
+                'result' => false,
+                'exception' => 'Magento\Exception'
             ),
             array(
-                'isUploaded'            => true,
-                'isValid'               => true,
+                'isUploaded' => true,
+                'isValid' => true,
                 'checkAllowedExtension' => false,
-                'save'                  => true,
-                'result'                => false,
-                'exception'             => 'Magento\Exception'
+                'save' => true,
+                'result' => false,
+                'exception' => 'Magento\Exception'
             ),
             array(
-                'isUploaded'            => true,
-                'isValid'               => true,
+                'isUploaded' => true,
+                'isValid' => true,
                 'checkAllowedExtension' => true,
-                'save'                  => false,
-                'result'                => false,
-                'exception'             => 'Magento\Exception'
-            ),
+                'save' => false,
+                'result' => false,
+                'exception' => 'Magento\Exception'
+            )
         );
     }
 
@@ -144,20 +148,40 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException($exception);
         }
         $testScope = 'scope';
-        $this->_transferAdapterMock->expects($this->any())->method('isUploaded')->with($testScope)
-            ->will($this->returnValue($isUploaded));
-        $this->_transferAdapterMock->expects($this->any())->method('isValid')->with($testScope)
-            ->will($this->returnValue($isValid));
-        $this->_fileUploader->expects($this->any())->method('checkAllowedExtension')
-            ->will($this->returnValue($checkExtension));
-        $this->_fileUploader->expects($this->any())->method('save')
-            ->will($this->returnValue($save));
-        $this->_fileUploader->expects($this->any())->method('getUploadedFileName')
-            ->will($this->returnValue('test_filename'));
-
-        $this->assertEquals(
-            $result,
-            $this->_model->uploadPreviewImage($testScope, '/tmp')
+        $this->_transferAdapterMock->expects(
+            $this->any()
+        )->method(
+            'isUploaded'
+        )->with(
+            $testScope
+        )->will(
+            $this->returnValue($isUploaded)
         );
+        $this->_transferAdapterMock->expects(
+            $this->any()
+        )->method(
+            'isValid'
+        )->with(
+            $testScope
+        )->will(
+            $this->returnValue($isValid)
+        );
+        $this->_fileUploader->expects(
+            $this->any()
+        )->method(
+            'checkAllowedExtension'
+        )->will(
+            $this->returnValue($checkExtension)
+        );
+        $this->_fileUploader->expects($this->any())->method('save')->will($this->returnValue($save));
+        $this->_fileUploader->expects(
+            $this->any()
+        )->method(
+            'getUploadedFileName'
+        )->will(
+            $this->returnValue('test_filename')
+        );
+
+        $this->assertEquals($result, $this->_model->uploadPreviewImage($testScope, '/tmp'));
     }
 }

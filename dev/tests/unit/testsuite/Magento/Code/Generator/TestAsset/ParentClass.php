@@ -24,9 +24,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Generator\TestAsset;
-use \Zend\Code\Generator\DocBlockGenerator;
+
+use Zend\Code\Generator\DocBlockGenerator;
 
 class ParentClass
 {
@@ -41,8 +41,12 @@ class ParentClass
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function publicParentMethod(DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\',
-        $param3 = '\'', array $array = array()
+    public function publicParentMethod(
+        DocBlockGenerator $docBlockGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
+        array $array = array()
     ) {
     }
 
@@ -57,8 +61,12 @@ class ParentClass
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _protectedParentMethod(DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\',
-        $param3 = '\'', array $array = array()
+    protected function _protectedParentMethod(
+        DocBlockGenerator $docBlockGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
+        array $array = array()
     ) {
     }
 
@@ -74,8 +82,12 @@ class ParentClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function _privateParentMethod(DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\',
-        $param3 = '\'', array $array = array()
+    private function _privateParentMethod(
+        DocBlockGenerator $docBlockGenerator,
+        $param1 = '',
+        $param2 = '\\',
+        $param3 = '\'',
+        array $array = array()
     ) {
     }
 

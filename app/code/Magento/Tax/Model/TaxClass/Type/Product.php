@@ -29,9 +29,7 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
-class Product
-    extends \Magento\Tax\Model\TaxClass\AbstractType
-    implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
+class Product extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
      * @var \Magento\Catalog\Model\Product
@@ -62,13 +60,11 @@ class Product
     /**
      * Get Products with this tax class
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToObjects()
     {
-        return $this->_modelProduct
-            ->getCollection()
-            ->addAttributeToFilter('tax_class_id', $this->getId());
+        return $this->_modelProduct->getCollection()->addAttributeToFilter('tax_class_id', $this->getId());
     }
 
     /**

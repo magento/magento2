@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\PreProcessor;
 
 /**
@@ -34,7 +33,7 @@ class InstructionFactory
      *
      * @var \Magento\ObjectManager
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     /**
      * Factory constructor
@@ -43,23 +42,23 @@ class InstructionFactory
      */
     public function __construct(\Magento\ObjectManager $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
      * Create class instance with specified parameters
      *
      * @param string $className
-     * @param array $viewParams
+     * @param array $data
      * @return \Magento\Less\PreProcessorInterface
      * @throws \InvalidArgumentException
      */
-    public function create($className, array $viewParams = array())
+    public function create($className, array $data = array())
     {
-        $preProcessor = $this->_objectManager->create($className, array('viewParams' => $viewParams));
+        $preProcessor = $this->objectManager->create($className, $data);
         if (!$preProcessor instanceof \Magento\Less\PreProcessorInterface) {
             throw new \InvalidArgumentException(
-                "{$className} aren't instance of \\Magento\\Less\\PreProcessorInterface"
+                "{$className} doesn't implement \\Magento\\Less\\PreProcessorInterface"
             );
         }
         return $preProcessor;

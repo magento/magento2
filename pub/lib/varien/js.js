@@ -465,7 +465,7 @@ Varien.DateElement.prototype = {
 
             if (day<1 || day>countDaysInMonth) {
                 errorType = 'day';
-                error = 'Please enter a valid day (1-%d).';
+                error = 'Please enter a valid day (1-%1).';
             } else if (month<1 || month>12) {
                 errorType = 'month';
                 error = 'Please enter a valid month (1-12).';
@@ -494,7 +494,7 @@ Varien.DateElement.prototype = {
                 error = jQuery.mage.__(error);
             }
             if (!valueError) {
-                this.advice.innerHTML = error.replace('%d', countDaysInMonth);
+                this.advice.innerHTML = error.replace('%1', countDaysInMonth);
             } else {
                 this.advice.innerHTML = this.errorTextModifier(error);
             }
@@ -517,9 +517,9 @@ Varien.DateElement.prototype = {
         return (year>=1900 && year<=this.curyear);
     },
     validateDataErrorType: 'year',
-    validateDataErrorText: 'Please enter a valid year (1900-%d).',
+    validateDataErrorText: 'Please enter a valid year (1900-%1).',
     errorTextModifier: function(text) {
-        return text.replace('%d', this.curyear);
+        return text.replace('%1', this.curyear);
     },
     setDateRange: function(minDate, maxDate) {
         this.minDate = minDate;

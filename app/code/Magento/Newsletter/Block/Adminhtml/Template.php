@@ -31,7 +31,6 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Newsletter\Block\Adminhtml;
 
 class Template extends \Magento\Backend\Block\Template
@@ -48,7 +47,10 @@ class Template extends \Magento\Backend\Block\Template
     {
         $this->setChild(
             'grid',
-            $this->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Template\Grid', 'newsletter.template.grid')
+            $this->getLayout()->createBlock(
+                'Magento\Newsletter\Block\Adminhtml\Template\Grid',
+                'newsletter.template.grid'
+            )
         );
         return parent::_prepareLayout();
     }

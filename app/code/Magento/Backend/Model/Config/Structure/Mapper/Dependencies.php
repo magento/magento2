@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
-class Dependencies
-    extends \Magento\Backend\Model\Config\Structure\AbstractMapper
+class Dependencies extends \Magento\Backend\Model\Config\Structure\AbstractMapper
 {
     /**
      * Class that can convert relative paths from "depends" node to absolute
@@ -105,7 +104,7 @@ class Dependencies
      *
      * @param array $field
      * @param array $config
-     * @return array
+     * @return string[]
      * @throws \InvalidArgumentException
      */
     protected function _getDependPath($field, $config)

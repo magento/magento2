@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\File\Storage;
 
 /**
@@ -45,10 +44,8 @@ class File
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Logger $log
      */
-    public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        \Magento\Logger $log
-    ) {
+    public function __construct(\Magento\App\Filesystem $filesystem, \Magento\Logger $log)
+    {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;
     }
@@ -61,8 +58,8 @@ class File
      */
     public function getStorageData($dir = '/')
     {
-        $files          = array();
-        $directories    = array();
+        $files = array();
+        $directories = array();
         $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
         if ($directoryInstance->isDirectory($dir)) {
             foreach ($directoryInstance->readRecursively($dir) as $path) {
@@ -73,7 +70,7 @@ class File
                 if ($directoryInstance->isDirectory($path)) {
                     $directories[] = array(
                         'name' => $itemName,
-                        'path' => (dirname($path) == '.') ? '/' : dirname($path)
+                        'path' => dirname($path) == '.' ? '/' : dirname($path)
                     );
                 } else {
                     $files[] = $path;
@@ -88,7 +85,7 @@ class File
      * Clear files and directories in storage
      *
      * @param string $dir
-     * @return \Magento\Core\Model\Resource\File\Storage\File
+     * @return $this
      */
     public function clear($dir = '')
     {
@@ -106,7 +103,7 @@ class File
      * Save directory to storage
      *
      * @param array $dir
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     public function saveDir($dir)
@@ -115,15 +112,13 @@ class File
             return false;
         }
 
-        $path = (strlen($dir['path']))
-            ? $dir['path'] . '/' . $dir['name']
-            : $dir['name'];
+        $path = strlen($dir['path']) ? $dir['path'] . '/' . $dir['name'] : $dir['name'];
 
         try {
             $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR)->create($path);
         } catch (\Exception $e) {
             $this->_logger->log($e->getMessage());
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Unable to create directory: %1', \Magento\App\Filesystem::MEDIA_DIR . '/' . $path)
             );
         }
@@ -137,20 +132,20 @@ class File
      * @param string $filePath
      * @param string $content
      * @param bool $overwrite
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     public function saveFile($filePath, $content, $overwrite = false)
     {
         try {
             $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
-            if (!$directoryInstance->isFile($filePath) || ($overwrite && $directoryInstance->delete($filePath))) {
+            if (!$directoryInstance->isFile($filePath) || $overwrite && $directoryInstance->delete($filePath)) {
                 $directoryInstance->writeFile($filePath, $content);
                 return true;
             }
         } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->_logger->log($e->getMessage());
-            throw new \Magento\Core\Exception(__('Unable to save file: %1', $filePath));
+            throw new \Magento\Model\Exception(__('Unable to save file: %1', $filePath));
         }
 
         return false;

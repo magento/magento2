@@ -26,7 +26,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  -->
-<controls>
+<controls xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/DesignEditor/etc/quick_styles.xsd">
     <control name="store-name" title="Store Name" tab="header" column="left">
         <type>logo</type>
         <components>
@@ -728,26 +728,26 @@
 
     <control name="error-icon" title="Error Icon" tab="tips" column="left">
         <type>color-picker</type>
-        <selector><![CDATA[.error-msg > *:first-child:before]]></selector>
+        <selector><![CDATA[.message.error > *:first-child:before]]></selector>
         <attribute>color</attribute>
         <var>Magento_DesignEditor::error-icon</var>
     </control>
     <control name="error-box" title="Error Box" tab="tips" column="left">
         <type>color-picker</type>
-        <selector><![CDATA[.error-msg]]></selector>
+        <selector><![CDATA[.message.error]]></selector>
         <attribute>background-color</attribute>
         <var>Magento_DesignEditor::error-box</var>
     </control>
 
     <control name="success-icon" title="Success Icon" tab="tips" column="middle">
         <type>color-picker</type>
-        <selector><![CDATA[.success-msg > *:first-child:before]]></selector>
+        <selector><![CDATA[.message.success > *:first-child:before]]></selector>
         <attribute>color</attribute>
         <var>Magento_DesignEditor::success-icon</var>
     </control>
     <control name="success-box" title="Success Box" tab="tips" column="middle">
         <type>color-picker</type>
-        <selector><![CDATA[.success-msg]]></selector>
+        <selector><![CDATA[.message.success]]></selector>
         <attribute>background-color</attribute>
         <var>Magento_DesignEditor::success-box</var>
     </control>
@@ -755,8 +755,7 @@
     <control name="notice-icon" title="Notice Icon" tab="tips" column="right">
         <type>color-picker</type>
         <selector><![CDATA[
-            .notice-msg > *:first-child:before,
-            .note-msg > *:first-child:before
+            .message.notice > *:first-child:before
         ]]></selector>
         <attribute>color</attribute>
         <var>Magento_DesignEditor::notice-icon</var>
@@ -764,8 +763,7 @@
     <control name="notice-box" title="Notice Box" tab="tips" column="right">
         <type>color-picker</type>
         <selector><![CDATA[
-            .notice-msg,
-            .note-msg
+            .message.notice
         ]]></selector>
         <attribute>background-color</attribute>
         <var>Magento_DesignEditor::notice-box</var>

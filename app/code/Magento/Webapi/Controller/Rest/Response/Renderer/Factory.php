@@ -67,7 +67,8 @@ class Factory
         $renderer = $this->_objectManager->get($this->_getRendererClass());
         if (!$renderer instanceof \Magento\Webapi\Controller\Rest\Response\RendererInterface) {
             throw new \LogicException(
-                'The renderer must implement "Magento\Webapi\Controller\Rest\Response\RendererInterface".');
+                'The renderer must implement "Magento\Webapi\Controller\Rest\Response\RendererInterface".'
+            );
         }
         return $renderer;
     }
@@ -87,9 +88,9 @@ class Factory
         foreach ($acceptTypes as $acceptType) {
             foreach ($this->_renders as $rendererConfig) {
                 $rendererType = $rendererConfig['type'];
-                if ($acceptType == $rendererType
-                    || ($acceptType == current(explode('/', $rendererType)) . '/*')
-                    || $acceptType == '*/*'
+                if ($acceptType == $rendererType || $acceptType == current(
+                    explode('/', $rendererType)
+                ) . '/*' || $acceptType == '*/*'
                 ) {
                     return $rendererConfig['model'];
                 }

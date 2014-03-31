@@ -40,8 +40,15 @@ class ProxyTestingTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider invokeWithExpectationsDataProvider
      */
-    public function testInvokeWithExpectations($method, $params, $proxiedResult, $proxiedMethod, $proxiedParams,
-        $callProxiedMethod, $passProxiedParams, $expectedResult
+    public function testInvokeWithExpectations(
+        $method,
+        $params,
+        $proxiedResult,
+        $proxiedMethod,
+        $proxiedParams,
+        $callProxiedMethod,
+        $passProxiedParams,
+        $expectedResult
     ) {
         // Create proxied object with $callProxiedMethod
         $proxiedObject = $this->getMock('stdClass', array($callProxiedMethod));
@@ -52,15 +59,21 @@ class ProxyTestingTest extends \PHPUnit_Framework_TestCase
         };
 
         $object = $this->getMock('stdClass', array($method));
-        $builder = $object->expects($this->once())
-            ->method($method);
+        $builder = $object->expects($this->once())->method($method);
         call_user_func_array(array($builder, 'with'), $params);
         $builder->will($this->returnCallback($callProxy));
 
         // Test it
         $helper = new \Magento\TestFramework\Helper\ProxyTesting();
-        $result = $helper->invokeWithExpectations($object, $proxiedObject, $method, $params, $proxiedResult,
-            $proxiedMethod, $proxiedParams);
+        $result = $helper->invokeWithExpectations(
+            $object,
+            $proxiedObject,
+            $method,
+            $params,
+            $proxiedResult,
+            $proxiedMethod,
+            $proxiedParams
+        );
         $this->assertSame($expectedResult, $result);
     }
 
@@ -99,7 +112,7 @@ class ProxyTestingTest extends \PHPUnit_Framework_TestCase
                 'callProxiedMethod' => 'returnAminusB',
                 'passProxiedParams' => array(10, 3),
                 'expectedResult' => 7
-            ),
+            )
         );
     }
 }

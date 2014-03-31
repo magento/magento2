@@ -23,13 +23,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Helper;
+
+use Magento\App\Helper\AbstractHelper;
+use Magento\App\Helper\Context;
+use Magento\CatalogSearch\Model\Fulltext;
+use Magento\CatalogSearch\Model\Query;
+use Magento\CatalogSearch\Model\QueryFactory;
+use Magento\CatalogSearch\Model\Resource\Fulltext\Engine;
+use Magento\CatalogSearch\Model\Resource\Query\Collection;
+use Magento\Core\Model\Store\ConfigInterface;
+use Magento\Escaper;
+use Magento\Filter\FilterManager;
+use Magento\Stdlib\String;
 
 /**
  * Catalog search helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
      * Query variable
@@ -39,12 +50,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Max query length
      */
-    const MAX_QUERY_LEN  = 200;
+    const MAX_QUERY_LEN = 200;
 
     /**
      * Query object
      *
-     * @var \Magento\CatalogSearch\Model\Query
+     * @var Query
      */
     protected $_query;
 
@@ -72,58 +83,58 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Search engine model
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @var Engine
      */
     protected $_engine;
 
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var String
      */
     protected $string;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var ConfigInterface
      */
     protected $_coreStoreConfig;
 
     /**
      * Query factory
      *
-     * @var \Magento\CatalogSearch\Model\QueryFactory
+     * @var QueryFactory
      */
     protected $_queryFactory;
 
     /**
-     * @var \Magento\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filter;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\CatalogSearch\Model\QueryFactory $queryFactory
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Filter\FilterManager $filter
+     * @param Context $context
+     * @param String $string
+     * @param ConfigInterface $coreStoreConfig
+     * @param QueryFactory $queryFactory
+     * @param Escaper $escaper
+     * @param FilterManager $filter
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\CatalogSearch\Model\QueryFactory $queryFactory,
-        \Magento\Escaper $escaper,
-        \Magento\Filter\FilterManager $filter
+        Context $context,
+        String $string,
+        ConfigInterface $coreStoreConfig,
+        QueryFactory $queryFactory,
+        Escaper $escaper,
+        FilterManager $filter
     ) {
         $this->string = $string;
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -146,7 +157,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve query model object
      *
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return Query
      */
     public function getQuery()
     {
@@ -183,9 +194,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
             if ($this->_queryText === null) {
                 $this->_queryText = '';
             } else {
-                $this->_queryText = is_array($this->_queryText)
-                    ? ''
-                    : $this->string->cleanString(trim($this->_queryText));
+                $this->_queryText = is_array(
+                    $this->_queryText
+                ) ? '' : $this->string->cleanString(
+                    trim($this->_queryText)
+                );
 
                 $maxQueryLength = $this->getMaxQueryLength();
                 if ($maxQueryLength !== '' && $this->string->strlen($this->_queryText) > $maxQueryLength) {
@@ -210,7 +223,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve suggest collection for query
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Query\Collection
+     * @return Collection
      */
     public function getSuggestCollection()
     {
@@ -226,10 +239,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getResultUrl($query = null)
     {
-        return $this->_getUrl('catalogsearch/result', array(
-            '_query' => array(self::QUERY_VAR_NAME => $query),
-            '_secure' => $this->_request->isSecure()
-        ));
+        return $this->_getUrl(
+            'catalogsearch/result',
+            array('_query' => array(self::QUERY_VAR_NAME => $query), '_secure' => $this->_request->isSecure())
+        );
     }
 
     /**
@@ -239,9 +252,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getSuggestUrl()
     {
-        return $this->_getUrl('catalogsearch/ajax/suggest', array(
-            '_secure' => $this->_request->isSecure()
-        ));
+        return $this->_getUrl('catalogsearch/ajax/suggest', array('_secure' => $this->_request->isSecure()));
     }
 
     /**
@@ -272,10 +283,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMinQueryLength($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(
-            \Magento\CatalogSearch\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
-            $store
-        );
+        return $this->_coreStoreConfig->getConfig(Query::XML_PATH_MIN_QUERY_LENGTH, $store);
     }
 
     /**
@@ -286,10 +294,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMaxQueryLength($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(
-            \Magento\CatalogSearch\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
-            $store
-        );
+        return $this->_coreStoreConfig->getConfig(Query::XML_PATH_MAX_QUERY_LENGTH, $store);
     }
 
     /**
@@ -300,17 +305,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMaxQueryWords($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(
-            \Magento\CatalogSearch\Model\Query::XML_PATH_MAX_QUERY_WORDS,
-            $store
-        );
+        return $this->_coreStoreConfig->getConfig(Query::XML_PATH_MAX_QUERY_WORDS, $store);
     }
 
     /**
      * Add Note message
      *
      * @param string $message
-     * @return \Magento\CatalogSearch\Helper\Data
+     * @return $this
      */
     public function addNoteMessage($message)
     {
@@ -322,7 +324,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Set Note messages
      *
      * @param array $messages
-     * @return \Magento\CatalogSearch\Helper\Data
+     * @return $this
      */
     public function setNoteMessages(array $messages)
     {
@@ -344,22 +346,21 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Check query of a warnings
      *
      * @param mixed $store
-     * @return \Magento\CatalogSearch\Helper\Data
+     * @return $this
      */
     public function checkNotes($store = null)
     {
         if ($this->_isMaxLength) {
             $this->addNoteMessage(
-                __('Your search query can\'t be longer than %1, so we had to shorten your query.',
-                $this->getMaxQueryLength())
+                __(
+                    'Your search query can\'t be longer than %1, so we had to shorten your query.',
+                    $this->getMaxQueryLength()
+                )
             );
         }
 
-        $searchType = $this->_coreStoreConfig
-            ->getConfig(\Magento\CatalogSearch\Model\Fulltext::XML_PATH_CATALOG_SEARCH_TYPE);
-        if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
-            || $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE
-        ) {
+        $searchType = $this->_coreStoreConfig->getConfig(Fulltext::XML_PATH_CATALOG_SEARCH_TYPE);
+        if ($searchType == Fulltext::SEARCH_TYPE_COMBINE || $searchType == Fulltext::SEARCH_TYPE_LIKE) {
             $wordsFull = $this->filter->splitWords($this->getQueryText(), array('uniqueOnly' => true));
             $wordsLike = $this->filter->splitWords(
                 $this->getQueryText(),
@@ -368,7 +369,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
             if (count($wordsFull) > count($wordsLike)) {
                 $wordsCut = array_map(array($this->_escaper, 'escapeHtml'), array_diff($wordsFull, $wordsLike));
                 $this->addNoteMessage(
-                    __('Sorry, but the maximum word count is %1. We left out this part of your search: %2.', $this->getMaxQueryWords(), join(' ', $wordsCut))
+                    __(
+                        'Sorry, but the maximum word count is %1. We left out this part of your search: %2.',
+                        $this->getMaxQueryWords(),
+                        join(' ', $wordsCut)
+                    )
                 );
             }
         }

@@ -24,28 +24,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testAfterLoad()
     {
-        $categoryIds = array(1,2,3,4,5);
+        $categoryIds = array(1, 2, 3, 4, 5);
 
         $product = $this->getMock('Magento\Object', array('getCategoryIds', 'setData'));
-        $product->expects($this->once())
-            ->method('getCategoryIds')
-            ->will($this->returnValue($categoryIds));
+        $product->expects($this->once())->method('getCategoryIds')->will($this->returnValue($categoryIds));
 
-        $product->expects($this->once())
-            ->method('setData')
-            ->with('category_ids', $categoryIds);
+        $product->expects($this->once())->method('setData')->with('category_ids', $categoryIds);
 
         $categoryAttribute = $this->getMock('Magento\Object', array('getAttributeCode'));
-        $categoryAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('category_ids'));
+        $categoryAttribute->expects(
+            $this->once()
+        )->method(
+            'getAttributeCode'
+        )->will(
+            $this->returnValue('category_ids')
+        );
 
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $model = new \Magento\Catalog\Model\Product\Attribute\Backend\Category($logger);

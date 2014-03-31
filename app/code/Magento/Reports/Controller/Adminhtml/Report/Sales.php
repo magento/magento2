@@ -33,12 +33,15 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+use Magento\App\ResponseInterface;
+use Magento\Reports\Model\Flag;
+
+class Sales extends AbstractReport
 {
     /**
      * Add report/sales breadcrumbs
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return $this
      */
     public function _initAction()
     {
@@ -47,66 +50,80 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this;
     }
 
+    /**
+     * Sales report action
+     *
+     * @return void
+     */
     public function salesAction()
     {
         $this->_title->add(__('Sales Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_ORDER_FLAG_CODE, 'sales');
+        $this->_showLastExecutionTime(Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_sales')
-            ->_addBreadcrumb(__('Sales Report'), __('Sales Report'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_sales'
+        )->_addBreadcrumb(
+            __('Sales Report'),
+            __('Sales Report')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_sales.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
+    /**
+     * Best sellers report action
+     *
+     * @return void
+     */
     public function bestsellersAction()
     {
         $this->_title->add(__('Best Sellers Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
+        $this->_showLastExecutionTime(Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_products_bestsellers')
-            ->_addBreadcrumb(__('Products Bestsellers Report'), __('Products Bestsellers Report'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_products_bestsellers'
+        )->_addBreadcrumb(
+            __('Products Bestsellers Report'),
+            __('Products Bestsellers Report')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_bestsellers.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export bestsellers report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportBestsellersCsvAction()
     {
-        $fileName   = 'bestsellers.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid');
+        $fileName = 'bestsellers.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export bestsellers report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportBestsellersExcelAction()
     {
-        $fileName   = 'bestsellers.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid');
+        $fileName = 'bestsellers.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
@@ -114,7 +131,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
     /**
      * Refresh statistics for last 25 hours
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return void
      */
     public function refreshRecentAction()
     {
@@ -124,7 +141,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
     /**
      * Refresh statistics for all period
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return void
      */
     public function refreshLifetimeAction()
     {
@@ -133,246 +150,305 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export sales report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportSalesCsvAction()
     {
-        $fileName   = 'sales.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');
+        $fileName = 'sales.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export sales report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportSalesExcelAction()
     {
-        $fileName   = 'sales.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');
+        $fileName = 'sales.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Tax report action
+     *
+     * @return void
+     */
     public function taxAction()
     {
         $this->_title->add(__('Tax Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_TAX_FLAG_CODE, 'tax');
+        $this->_showLastExecutionTime(Flag::REPORT_TAX_FLAG_CODE, 'tax');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_tax')
-            ->_addBreadcrumb(__('Tax'), __('Tax'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_tax'
+        )->_addBreadcrumb(
+            __('Tax'),
+            __('Tax')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_tax.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export tax report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportTaxCsvAction()
     {
-        $fileName   = 'tax.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');
+        $fileName = 'tax.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export tax report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportTaxExcelAction()
     {
-        $fileName   = 'tax.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');
+        $fileName = 'tax.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Shipping report action
+     *
+     * @return void
+     */
     public function shippingAction()
     {
         $this->_title->add(__('Shipping Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
+        $this->_showLastExecutionTime(Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_shipping')
-            ->_addBreadcrumb(__('Shipping'), __('Shipping'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_shipping'
+        )->_addBreadcrumb(
+            __('Shipping'),
+            __('Shipping')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_shipping.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export shipping report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportShippingCsvAction()
     {
-        $fileName   = 'shipping.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');
+        $fileName = 'shipping.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export shipping report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportShippingExcelAction()
     {
-        $fileName   = 'shipping.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');
+        $fileName = 'shipping.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Invoice report action
+     *
+     * @return void
+     */
     public function invoicedAction()
     {
         $this->_title->add(__('Invoice Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
+        $this->_showLastExecutionTime(Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_invoiced')
-            ->_addBreadcrumb(__('Total Invoiced'), __('Total Invoiced'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_invoiced'
+        )->_addBreadcrumb(
+            __('Total Invoiced'),
+            __('Total Invoiced')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_invoiced.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export invoiced report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportInvoicedCsvAction()
     {
-        $fileName   = 'invoiced.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid');
+        $fileName = 'invoiced.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export invoiced report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportInvoicedExcelAction()
     {
-        $fileName   = 'invoiced.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid');
+        $fileName = 'invoiced.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Refunds report action
+     *
+     * @return void
+     */
     public function refundedAction()
     {
         $this->_title->add(__('Refunds Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_REFUNDED_FLAG_CODE, 'refunded');
+        $this->_showLastExecutionTime(Flag::REPORT_REFUNDED_FLAG_CODE, 'refunded');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_refunded')
-            ->_addBreadcrumb(__('Total Refunded'), __('Total Refunded'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_refunded'
+        )->_addBreadcrumb(
+            __('Total Refunded'),
+            __('Total Refunded')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_refunded.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export refunded report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportRefundedCsvAction()
     {
-        $fileName   = 'refunded.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');
+        $fileName = 'refunded.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export refunded report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportRefundedExcelAction()
     {
-        $fileName   = 'refunded.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');
+        $fileName = 'refunded.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Coupons report action
+     *
+     * @return void
+     */
     public function couponsAction()
     {
         $this->_title->add(__('Coupons Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
+        $this->_showLastExecutionTime(Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_salesroot_coupons')
-            ->_addBreadcrumb(__('Coupons'), __('Coupons'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_salesroot_coupons'
+        )->_addBreadcrumb(
+            __('Coupons'),
+            __('Coupons')
+        );
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_coupons.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array(
-            $gridBlock,
-            $filterFormBlock
-        ));
+        $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
         $this->_view->renderLayout();
     }
 
     /**
      * Export coupons report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportCouponsCsvAction()
     {
-        $fileName   = 'coupons.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');
+        $fileName = 'coupons.csv';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile());
     }
 
     /**
      * Export coupons report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportCouponsExcelAction()
     {
-        $fileName   = 'coupons.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');
+        $fileName = 'coupons.xml';
+        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Refresh report statistics action
+     *
+     * @return void
+     */
     public function refreshStatisticsAction()
     {
         $this->_forward('index', 'report_statistics');
     }
 
+    /**
+     * Determine if action is allowed for reports module
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

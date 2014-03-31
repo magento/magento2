@@ -23,8 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
-class CacheOutdated
-    implements \Magento\AdminNotification\Model\System\MessageInterface
+class CacheOutdated implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
      * @var \Magento\UrlInterface
@@ -87,8 +86,11 @@ class CacheOutdated
      */
     public function isDisplayed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::cache')
-            && count($this->_getCacheTypesForRefresh()) > 0;
+        return $this->_authorization->isAllowed(
+            'Magento_Adminhtml::cache'
+        ) && count(
+            $this->_getCacheTypesForRefresh()
+        ) > 0;
     }
 
     /**

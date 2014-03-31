@@ -23,8 +23,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkboxes;
 
-class Extended
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
+class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
     /**
      * Prepare data for renderer

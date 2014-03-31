@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 
 /**
  * Directory contents block for Wysiwyg Images
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
-
 class Files extends \Magento\Backend\Block\Template
 {
     /**
@@ -76,10 +75,11 @@ class Files extends \Magento\Backend\Block\Template
      */
     public function getFiles()
     {
-        if (! $this->_filesCollection) {
+        if (!$this->_filesCollection) {
             $this->_filesCollection = $this->_imageStorage->getFilesCollection(
-                    $this->_imageHelper->getCurrentPath(), $this->_getMediaType()
-                );
+                $this->_imageHelper->getCurrentPath(),
+                $this->_getMediaType()
+            );
         }
 
         return $this->_filesCollection;

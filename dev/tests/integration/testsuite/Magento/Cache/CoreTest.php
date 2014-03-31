@@ -36,9 +36,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             'backend_decorators' => array(
                 'test_decorator' => array(
                     'class' => 'Magento\Cache\Backend\Decorator\Compression',
-                    'options' => array(
-                        'compression_threshold' => '100',
-                    )
+                    'options' => array('compression_threshold' => '100')
                 )
             )
         );
@@ -55,13 +53,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     public function testSetBackendException()
     {
         $mockBackend = $this->getMock('Zend_Cache_Backend_File');
-        $config = array(
-            'backend_decorators' => array(
-                'test_decorator' => array(
-                    'class' => 'Zend_Cache_Backend',
-                )
-            )
-        );
+        $config = array('backend_decorators' => array('test_decorator' => array('class' => 'Zend_Cache_Backend')));
 
         $core = new \Magento\Cache\Core($config);
         $core->setBackend($mockBackend);

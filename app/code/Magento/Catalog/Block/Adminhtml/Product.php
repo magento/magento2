@@ -35,6 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml;
 
 class Product extends \Magento\Backend\Block\Widget\Container
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product.phtml';
 
     /**
@@ -78,7 +81,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
             'class' => 'btn-add',
             'button_class' => 'btn-round',
             'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
-            'options' => $this->_getAddProductButtonOptions(),
+            'options' => $this->_getAddProductButtonOptions()
         );
         $this->_addButton('add_new', $addButtonProps);
 
@@ -100,9 +103,9 @@ class Product extends \Magento\Backend\Block\Widget\Container
 
         foreach ($this->_typeFactory->create()->getOptionArray() as $key => $label) {
             $splitButtonOptions[$key] = array(
-                'label'     => $label,
-                'onclick'   => "setLocation('" . $this->_getProductCreateUrl($key) . "')",
-                'default'   => \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE == $key
+                'label' => $label,
+                'onclick' => "setLocation('" . $this->_getProductCreateUrl($key) . "')",
+                'default' => \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE == $key
             );
         }
 
@@ -117,10 +120,10 @@ class Product extends \Magento\Backend\Block\Widget\Container
      */
     protected function _getProductCreateUrl($type)
     {
-        return $this->getUrl('catalog/*/new', array(
-            'set'   => $this->_productFactory->create()->getDefaultAttributeSetId(),
-            'type'  => $type
-        ));
+        return $this->getUrl(
+            'catalog/*/new',
+            array('set' => $this->_productFactory->create()->getDefaultAttributeSetId(), 'type' => $type)
+        );
     }
 
     /**

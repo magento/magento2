@@ -23,8 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento;
 
 class Exception extends \Exception
@@ -32,6 +30,7 @@ class Exception extends \Exception
     /**
      * Check PCRE PREG error and throw exception
      *
+     * @return void
      * @throws \Magento\Exception
      */
     public static function processPcreError()

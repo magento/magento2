@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to work with remote REST interface
@@ -31,18 +32,21 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect;
-
 class Rest
 {
     /**
      * Paths for xml config files
      */
     const CHANNELS_XML = "channels.xml";
+
     const CHANNEL_XML = "channel.xml";
+
     const PACKAGES_XML = "packages.xml";
+
     const RELEASES_XML = "releases.xml";
+
     const PACKAGE_XML = "package.xml";
+
     const EXT = "tgz";
 
     /**
@@ -77,14 +81,14 @@ class Rest
      *
      * @var array
      */
-    protected $states = array('b'=>'beta', 'd'=>'dev', 's'=>'stable', 'a'=>'alpha');
+    protected $states = array('b' => 'beta', 'd' => 'dev', 's' => 'stable', 'a' => 'alpha');
 
     /**
      * Constructor sets default protocol
      *
      * @param string $protocol
      */
-    public function __construct($protocol="http")
+    public function __construct($protocol = "http")
     {
         switch ($protocol) {
             case 'ftp':
@@ -230,7 +234,7 @@ class Rest
         $c = count($return);
         if ($c) {
             $output = array();
-            for ($i=0; $i<$c; $i++) {
+            for ($i = 0; $i < $c; $i++) {
                 $element = $return[$i];
                 $output[$element['n']] = $element['r'];
             }
@@ -238,7 +242,7 @@ class Rest
         }
 
         $out = array();
-        foreach ($return as $name=>$package) {
+        foreach ($return as $name => $package) {
             $stabilities = array_map(array($this, 'shortStateToLong'), array_keys($package));
             $versions = array_map('trim', array_values($package));
             $package = array_combine($versions, $stabilities);
@@ -250,9 +254,8 @@ class Rest
 
     /**
      * Stub
-     *
-     * @param $n
-     * @return unknown_type
+     * @param string $n
+     * @return string
      */
     public function escapePackageName($n)
     {
@@ -288,7 +291,7 @@ class Rest
     /**
      * Sort releases
      *
-     * @param array $releases
+     * @param array &$releases
      * @return void
      */
     public function sortReleases(array &$releases)
@@ -306,14 +309,14 @@ class Rest
      */
     protected function sortReleasesCallback($a, $b)
     {
-        return version_compare($a['v'],$b['v']);
+        return version_compare($a['v'], $b['v']);
     }
 
     /**
      * Get package info (package.xml)
      *
-     * @param $package
-     * @return unknown_type
+     * @param string $package
+     * @return \Magento\Connect\Package
      */
     public function getPackageInfo($package)
     {
@@ -327,8 +330,8 @@ class Rest
     /**
      * Retrieve information on Package Release from the Channel Server
      *
-     * @param $package
-     * @param $version
+     * @param string $package
+     * @param string $version
      * @return \Magento\Connect\Package|bool
      */
     public function getPackageReleaseInfo($package, $version)
@@ -343,11 +346,11 @@ class Rest
     /**
      * Get package archive file of release
      *
-     * @throws \Exception
      * @param string $package package name
-     * @param string $version package version
+     * @param string $version version
      * @param string $targetFile
-     * @return bool
+     * @return true|void
+     * @throws \Exception
      */
     public function downloadPackageFileOfRelease($package, $version, $targetFile)
     {

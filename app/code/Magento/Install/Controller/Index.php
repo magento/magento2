@@ -36,15 +36,15 @@ class Index extends \Magento\Install\Controller\Action
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Config\Scope $configScope
      */
-    public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Config\Scope $configScope
-    ) {
+    public function __construct(\Magento\App\Action\Context $context, \Magento\Config\Scope $configScope)
+    {
         parent::__construct($context, $configScope);
     }
 
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {

@@ -84,6 +84,5 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             );
         }
         $this->assertEquals($expectedHtml, $actualHtml);
-
     }
 }

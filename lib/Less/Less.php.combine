@@ -5,8 +5,13 @@
 ./Functions.php
 ./Mime.php
 ./Tree.php
+./Output.php
 ./Visitor.php
 ./VisitorReplacing.php
+./Configurable.php
 ./Tree
 ./Visitor
-./Exception
+./Exception/Parser.php
+./Exception/
+./Output
+./SourceMap

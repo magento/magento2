@@ -23,14 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rule\Model\Action;
 
+use Magento\Data\Form;
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Quote rule action abstract
  */
-namespace Magento\Rule\Model\Action;
-
-abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\Model\Action\ActionInterface
+abstract class AbstractAction extends \Magento\Object implements ActionInterface
 {
     /**
      * @var \Magento\View\Url
@@ -69,6 +70,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         }
     }
 
+    /**
+     * @return Form
+     */
     public function getForm()
     {
         return $this->getRule()->getForm();
@@ -85,28 +89,45 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
             'type' => $this->getType(),
             'attribute' => $this->getAttribute(),
             'operator' => $this->getOperator(),
-            'value' => $this->getValue(),
+            'value' => $this->getValue()
         );
         return $out;
     }
 
+    /**
+     * @return string
+     */
     public function asXml()
     {
-        $xml = "<type>" . $this->getType() . "</type>"
-            . "<attribute>" . $this->getAttribute() . "</attribute>"
-            . "<operator>" . $this->getOperator() . "</operator>"
-            . "<value>" . $this->getValue() . "</value>";
+        $xml = "<type>" .
+            $this->getType() .
+            "</type>" .
+            "<attribute>" .
+            $this->getAttribute() .
+            "</attribute>" .
+            "<operator>" .
+            $this->getOperator() .
+            "</operator>" .
+            "<value>" .
+            $this->getValue() .
+            "</value>";
         return $xml;
     }
 
+    /**
+     * @param array $arr
+     * @return $this
+     */
     public function loadArray(array $arr)
     {
-        $this->addData(array(
-            'type' => $arr['type'],
-            'attribute' => $arr['attribute'],
-            'operator' => $arr['operator'],
-            'value' => $arr['value'],
-        ));
+        $this->addData(
+            array(
+                'type' => $arr['type'],
+                'attribute' => $arr['attribute'],
+                'operator' => $arr['operator'],
+                'value' => $arr['value']
+            )
+        );
         $this->loadAttributeOptions();
         $this->loadOperatorOptions();
         $this->loadValueOptions();
@@ -147,18 +168,18 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
      */
     public function loadOperatorOptions()
     {
-        $this->setOperatorOption(array(
-            '=' => __('to'),
-            '+=' => __('by'),
-        ));
+        $this->setOperatorOption(array('=' => __('to'), '+=' => __('by')));
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getOperatorSelectOptions()
     {
         $opt = array();
-        foreach ($this->getOperatorOption() as $k=>$v) {
-            $opt[] = array('value'=>$k, 'label'=>$v);
+        foreach ($this->getOperatorOption() as $k => $v) {
+            $opt[] = array('value' => $k, 'label' => $v);
         }
         return $opt;
     }
@@ -206,12 +227,7 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
      */
     public function getNewChildSelectOptions()
     {
-        return array(
-            array(
-                'value' => '',
-                'label' => __('Please choose an action to add.')
-            ),
-        );
+        return array(array('value' => '', 'label' => __('Please choose an action to add.')));
     }
 
     /**
@@ -239,42 +255,76 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         return $str;
     }
 
+    /**
+     * @return AbstractElement
+     */
     public function getTypeElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':type', 'hidden', array(
-            'name' => 'rule[actions][' . $this->getId() . '][type]',
-            'value' => $this->getType(),
-            'no_span' => true,
-        ));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':type',
+            'hidden',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][type]',
+                'value' => $this->getType(),
+                'no_span' => true
+            )
+        );
     }
 
+    /**
+     * @return $this
+     */
     public function getAttributeElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':attribute', 'select', array(
-            'name' => 'rule[actions][' . $this->getId() . '][attribute]',
-            'values' => $this->getAttributeSelectOptions(),
-            'value' => $this->getAttribute(),
-            'value_name' => $this->getAttributeName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':attribute',
+            'select',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][attribute]',
+                'values' => $this->getAttributeSelectOptions(),
+                'value' => $this->getAttribute(),
+                'value_name' => $this->getAttributeName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
+    /**
+     * @return $this
+     */
     public function getOperatorElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':operator', 'select', array(
-            'name' => 'rule[actions][' . $this->getId() . '][operator]',
-            'values' => $this->getOperatorSelectOptions(),
-            'value' => $this->getOperator(),
-            'value_name' => $this->getOperatorName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':operator',
+            'select',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][operator]',
+                'values' => $this->getOperatorSelectOptions(),
+                'value' => $this->getOperator(),
+                'value_name' => $this->getOperatorName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
+    /**
+     * @return $this
+     */
     public function getValueElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':value', 'text', array(
-            'name' => 'rule[actions][' . $this->getId() . '][value]',
-            'value' => $this->getValue(),
-            'value_name' => $this->getValueName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':value',
+            'text',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][value]',
+                'value' => $this->getValue(),
+                'value_name' => $this->getValueName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
     /**
@@ -293,8 +343,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
     public function getRemoveLinkHtml()
     {
         $src = $this->_viewUrl->getViewFileUrl('images/rule_component_remove.gif');
-        $html = '<span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove"><img src="'
-            . $src . '" alt="" class="v-middle" /></a></span>';
+        $html = '<span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove"><img src="' .
+            $src .
+            '" alt="" class="v-middle" /></a></span>';
         return $html;
     }
 

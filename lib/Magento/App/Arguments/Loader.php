@@ -57,10 +57,10 @@ class Loader
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/resource'       => 'name',
-        '/config/connection'     => 'name',
+        '/config/resource' => 'name',
+        '/config/connection' => 'name',
         '/config/cache/frontend' => 'name',
-        '/config/cache/type'     => 'name',
+        '/config/cache/type' => 'name'
     );
 
     /**
@@ -94,7 +94,11 @@ class Loader
             }
         }
 
-        $converter = new \Magento\Config\Converter\Dom\Flat($this->_idAttributes);
+        $arrayNodeConfig = new \Magento\Config\Dom\ArrayNodeConfig(
+            new \Magento\Config\Dom\NodePathMatcher(),
+            $this->_idAttributes
+        );
+        $converter = new \Magento\Config\Converter\Dom\Flat($arrayNodeConfig);
 
         $result = $converter->convert($localConfig->getDom());
         return !empty($result['config']) ? $result['config'] : array();

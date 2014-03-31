@@ -33,18 +33,19 @@
  */
 namespace Magento\Backend\Model\Config\Source\Reports;
 
-class Scope implements \Magento\Core\Model\Option\ArrayInterface
+class Scope implements \Magento\Option\ArrayInterface
 {
     /**
      * Scope filter
+     *
+     * @return array
      */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'website', 'label'=>__('Website')),
-            array('value'=>'group', 'label'=>__('Store')),
-            array('value'=>'store', 'label'=>__('Store View')),
+            array('value' => 'website', 'label' => __('Website')),
+            array('value' => 'group', 'label' => __('Store')),
+            array('value' => 'store', 'label' => __('Store View'))
         );
     }
-
 }

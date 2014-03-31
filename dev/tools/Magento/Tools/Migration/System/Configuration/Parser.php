@@ -75,9 +75,9 @@ class Parser
                 $siblingKey = $this->_getSiblingKey($childNode);
 
                 if ($siblingKey !== 0) {
-                    $nodeValue = isset($nodeValue[$childNode->nodeName]) ?
-                        $nodeValue[$childNode->nodeName] :
-                        $nodeValue;
+                    $nodeValue = isset(
+                        $nodeValue[$childNode->nodeName]
+                    ) ? $nodeValue[$childNode->nodeName] : $nodeValue;
                 } elseif (empty($nodeValue)) {
                     continue;
                 }
@@ -110,9 +110,8 @@ class Parser
      */
     protected function _getSiblingKey($childNode)
     {
-        return ($childNode->nodeName{0} == '#') ? 0 : $childNode->nodeName;
+        return $childNode->nodeName[0] == '#' ? 0 : $childNode->nodeName;
     }
-
 
     /**
      * Get count of the same nodes
@@ -140,7 +139,7 @@ class Parser
      */
     protected function _getSimpleNodeValue(\DOMNode $node)
     {
-        return (trim($node->nodeValue) !== '') ? array($node->nodeName => $node->nodeValue) : array();
+        return trim($node->nodeValue) !== '' ? array($node->nodeName => $node->nodeValue) : array();
     }
 
     /**

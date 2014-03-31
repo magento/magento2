@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <design>
             <pagination>
@@ -40,13 +40,6 @@
             <debug>
                 <profiler>0</profiler>
             </debug>
-            <translate_inline>
-                <active>0</active>
-                <active_admin>0</active_admin>
-                <invalid_caches>
-                    <block_html />
-                </invalid_caches>
-            </translate_inline>
             <log>
                 <active>0</active>
                 <file>system.log</file>
@@ -204,6 +197,7 @@
             <browser_capabilities>
                 <cookies>1</cookies>
                 <javascript>1</javascript>
+                <local_storage>0</local_storage>
             </browser_capabilities>
         </web>
         <admin>

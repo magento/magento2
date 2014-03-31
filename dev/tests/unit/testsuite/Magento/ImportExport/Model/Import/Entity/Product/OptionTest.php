@@ -47,9 +47,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_testStores = array(
-        'admin' => 0,
-    );
+    protected $_testStores = array('admin' => 0);
 
     /**
      * Tables array to inject into model
@@ -57,13 +55,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_tables = array(
-        'catalog_product_entity'            => 'catalog_product_entity',
-        'catalog_product_option'            => 'catalog_product_option',
-        'catalog_product_option_title'      => 'catalog_product_option_title',
+        'catalog_product_entity' => 'catalog_product_entity',
+        'catalog_product_option' => 'catalog_product_option',
+        'catalog_product_option_title' => 'catalog_product_option_title',
         'catalog_product_option_type_title' => 'catalog_product_option_type_title',
         'catalog_product_option_type_value' => 'catalog_product_option_type_value',
         'catalog_product_option_type_price' => 'catalog_product_option_type_price',
-        'catalog_product_option_price'      => 'catalog_product_option_price',
+        'catalog_product_option_price' => 'catalog_product_option_price'
     );
 
     /**
@@ -86,26 +84,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedTitles = array(
-        array(
-            'option_id' => 3,
-            'store_id'  => 0,
-            'title'     => 'Test Date and Time Title',
-        ),
-        array(
-            'option_id' => 4,
-            'store_id'  => 0,
-            'title'     => 'Test Select',
-        ),
-        array(
-            'option_id' => 5,
-            'store_id'  => 0,
-            'title'     => 'Test Radio',
-        ),
-        array(
-            'option_id' => 1,
-            'store_id'  => 0,
-            'title'     => 'Test Field Title',
-        )
+        array('option_id' => 3, 'store_id' => 0, 'title' => 'Test Date and Time Title'),
+        array('option_id' => 4, 'store_id' => 0, 'title' => 'Test Select'),
+        array('option_id' => 5, 'store_id' => 0, 'title' => 'Test Radio'),
+        array('option_id' => 1, 'store_id' => 0, 'title' => 'Test Field Title')
     );
 
     /**
@@ -114,12 +96,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedPrices = array(
-        3 => array(
-            'option_id'  => 3,
-            'store_id'   => 0,
-            'price_type' => 'fixed',
-            'price'      => 2
-        )
+        3 => array('option_id' => 3, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 2)
     );
 
     /**
@@ -128,30 +105,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedTypePrices = array(
-        array(
-            'price'          => 3,
-            'price_type'     => 'fixed',
-            'option_type_id' => 2,
-            'store_id'       => 0,
-        ),
-        array(
-            'price'          => 3,
-            'price_type'     => 'fixed',
-            'option_type_id' => 3,
-            'store_id'       => 0,
-        ),
-        array(
-            'price'          => 3,
-            'price_type'     => 'fixed',
-            'option_type_id' => 4,
-            'store_id'       => 0,
-        ),
-        array(
-            'price'          => 3,
-            'price_type'     => 'fixed',
-            'option_type_id' => 5,
-            'store_id'       => 0,
-        ),
+        array('price' => 3, 'price_type' => 'fixed', 'option_type_id' => 2, 'store_id' => 0),
+        array('price' => 3, 'price_type' => 'fixed', 'option_type_id' => 3, 'store_id' => 0),
+        array('price' => 3, 'price_type' => 'fixed', 'option_type_id' => 4, 'store_id' => 0),
+        array('price' => 3, 'price_type' => 'fixed', 'option_type_id' => 5, 'store_id' => 0)
     );
 
     /**
@@ -160,26 +117,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedTypeTitles = array(
-        array(
-            'option_type_id' => 2,
-            'store_id'       => 0,
-            'title'          => 'Option 1',
-        ),
-        array(
-            'option_type_id' => 3,
-            'store_id'       => 0,
-            'title'          => 'Option 2',
-        ),
-        array(
-            'option_type_id' => 4,
-            'store_id'       => 0,
-            'title'          => 'Option 1',
-        ),
-        array(
-            'option_type_id' => 5,
-            'store_id'       => 0,
-            'title'          => 'Option 2',
-        ),
+        array('option_type_id' => 2, 'store_id' => 0, 'title' => 'Option 1'),
+        array('option_type_id' => 3, 'store_id' => 0, 'title' => 'Option 2'),
+        array('option_type_id' => 4, 'store_id' => 0, 'title' => 'Option 1'),
+        array('option_type_id' => 5, 'store_id' => 0, 'title' => 'Option 2')
     );
 
     /**
@@ -187,13 +128,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_expectedUpdate = array(
-        1 => array(
-            'entity_id'        => 1,
-            'has_options'      => 1,
-            'required_options' => 1,
-        ),
-    );
+    protected $_expectedUpdate = array(1 => array('entity_id' => 1, 'has_options' => 1, 'required_options' => 1));
 
     /**
      * Array of expected (after import) options
@@ -202,53 +137,53 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_expectedOptions = array(
         array(
-            'option_id'      => 1,
-            'sku'            => '1-text',
+            'option_id' => 1,
+            'sku' => '1-text',
             'max_characters' => '100',
-            'file_extension' => NULL,
-            'image_size_x'   => 0,
-            'image_size_y'   => 0,
-            'product_id'     => 1,
-            'type'           => 'field',
-            'is_require'     => 1,
-            'sort_order'     => 0,
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
+            'type' => 'field',
+            'is_require' => 1,
+            'sort_order' => 0
         ),
         array(
-            'option_id'      => 2,
-            'sku'            => '2-date',
+            'option_id' => 2,
+            'sku' => '2-date',
             'max_characters' => 0,
-            'file_extension' => NULL,
-            'image_size_x'   => 0,
-            'image_size_y'   => 0,
-            'product_id'     => 1,
-            'type'           => 'date_time',
-            'is_require'     => 1,
-            'sort_order'     => 0,
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
+            'type' => 'date_time',
+            'is_require' => 1,
+            'sort_order' => 0
         ),
         array(
-            'option_id'      => 3,
-            'sku'            => '',
+            'option_id' => 3,
+            'sku' => '',
             'max_characters' => 0,
-            'file_extension' => NULL,
-            'image_size_x'   => 0,
-            'image_size_y'   => 0,
-            'product_id'     => 1,
-            'type'           => 'drop_down',
-            'is_require'     => 1,
-            'sort_order'     => 0,
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
+            'type' => 'drop_down',
+            'is_require' => 1,
+            'sort_order' => 0
         ),
         array(
-            'option_id'      => 4,
-            'sku'            => '',
+            'option_id' => 4,
+            'sku' => '',
             'max_characters' => 0,
-            'file_extension' => NULL,
-            'image_size_x'   => 0,
-            'image_size_y'   => 0,
-            'product_id'     => 1,
-            'type'           => 'radio',
-            'is_require'     => 1,
-            'sort_order'     => 0,
-        ),
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
+            'type' => 'radio',
+            'is_require' => 1,
+            'sort_order' => 0
+        )
     );
 
     /**
@@ -257,30 +192,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedTypeValues = array(
-        array(
-            'option_type_id' => 2,
-            'sort_order'     => 0,
-            'sku'            => '3-1-select',
-            'option_id'      => 4,
-        ),
-        array(
-            'option_type_id' => 3,
-            'sort_order'     => 0,
-            'sku'            => '3-2-select',
-            'option_id'      => 4,
-        ),
-        array(
-            'option_type_id' => 4,
-            'sort_order'     => 0,
-            'sku'            => '4-1-radio',
-            'option_id'      => 5,
-        ),
-        array(
-            'option_type_id' => 5,
-            'sort_order'     => 0,
-            'sku'            => '4-2-radio',
-            'option_id'      => 5,
-        ),
+        array('option_type_id' => 2, 'sort_order' => 0, 'sku' => '3-1-select', 'option_id' => 4),
+        array('option_type_id' => 3, 'sort_order' => 0, 'sku' => '3-2-select', 'option_id' => 4),
+        array('option_type_id' => 4, 'sort_order' => 0, 'sku' => '4-1-radio', 'option_id' => 5),
+        array('option_type_id' => 5, 'sort_order' => 0, 'sku' => '4-2-radio', 'option_id' => 5)
     );
 
     /**
@@ -311,7 +226,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $addExpectations = false;
-        $deleteBehavior  = false;
+        $deleteBehavior = false;
         $testName = $this->getName(true);
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
@@ -323,9 +238,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $doubleOptions = true;
         }
 
-        $catalogDataMock = $this->getMock(
-            'Magento\Catalog\Helper\Data', array('__construct'), array(), '', false
-        );
+        $catalogDataMock = $this->getMock('Magento\Catalog\Helper\Data', array('__construct'), array(), '', false);
 
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
 
@@ -335,13 +248,23 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
-            $this->getMock('Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
-                array(), array(), '', false),
-            $this->getMock('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
-                array(), array(), '', false),
+            $this->getMock(
+                'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
+                array(),
+                array(),
+                '',
+                false
+            ),
+            $this->getMock(
+                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                array(),
+                array(),
+                '',
+                false
+            ),
             $catalogDataMock,
             $coreStoreConfig,
-            new \Magento\Stdlib\DateTime,
+            new \Magento\Stdlib\DateTime(),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         );
     }
@@ -368,35 +291,49 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $connection = $this->getMock('stdClass', array('delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate'));
         if ($addExpectations) {
             if ($deleteBehavior) {
-                $connection->expects($this->exactly(2))
-                    ->method('quoteInto')
-                    ->will($this->returnCallback(array($this, 'stubQuoteInto')));
-                $connection->expects($this->exactly(2))
-                    ->method('delete')
-                    ->will($this->returnCallback(array($this, 'verifyDelete')));
+                $connection->expects(
+                    $this->exactly(2)
+                )->method(
+                    'quoteInto'
+                )->will(
+                    $this->returnCallback(array($this, 'stubQuoteInto'))
+                );
+                $connection->expects(
+                    $this->exactly(2)
+                )->method(
+                    'delete'
+                )->will(
+                    $this->returnCallback(array($this, 'verifyDelete'))
+                );
             } else {
-                $connection->expects($this->once())
-                    ->method('insertMultiple')
-                    ->will($this->returnCallback(array($this, 'verifyInsertMultiple')));
-                $connection->expects($this->exactly(6))
-                    ->method('insertOnDuplicate')
-                    ->will($this->returnCallback(array($this, 'verifyInsertOnDuplicate')));
+                $connection->expects(
+                    $this->once()
+                )->method(
+                    'insertMultiple'
+                )->will(
+                    $this->returnCallback(array($this, 'verifyInsertMultiple'))
+                );
+                $connection->expects(
+                    $this->exactly(6)
+                )->method(
+                    'insertOnDuplicate'
+                )->will(
+                    $this->returnCallback(array($this, 'verifyInsertOnDuplicate'))
+                );
             }
         }
 
         $resourceHelper = $this->getMock('stdClass', array('getNextAutoincrement'));
         if ($addExpectations) {
-            $resourceHelper->expects($this->any())
-                ->method('getNextAutoincrement')
-                ->will($this->returnValue(2));
+            $resourceHelper->expects($this->any())->method('getNextAutoincrement')->will($this->returnValue(2));
         }
 
         $data = array(
-            'connection'        => $connection,
-            'tables'            => $this->_tables,
-            'resource_helper'   => $resourceHelper,
-            'is_price_global'   => true,
-            'stores'            => $this->_testStores,
+            'connection' => $connection,
+            'tables' => $this->_tables,
+            'resource_helper' => $resourceHelper,
+            'is_price_global' => true,
+            'stores' => $this->_testStores
         );
         $sourceData = $this->_getSourceDataMocks($addExpectations, $doubleOptions);
 
@@ -409,6 +346,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @param bool $addExpectations
      * @param bool $doubleOptions
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getSourceDataMocks($addExpectations, $doubleOptions)
     {
@@ -416,12 +354,14 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $dataSourceModel = $this->getMock('stdClass', array('getNextBunch'));
         if ($addExpectations) {
-            $dataSourceModel->expects($this->at(0))
-                ->method('getNextBunch')
-                ->will($this->returnValue($csvData['data']));
-            $dataSourceModel->expects($this->at(1))
-                ->method('getNextBunch')
-                ->will($this->returnValue(null));
+            $dataSourceModel->expects(
+                $this->at(0)
+            )->method(
+                'getNextBunch'
+            )->will(
+                $this->returnValue($csvData['data'])
+            );
+            $dataSourceModel->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
         }
 
         $products = array();
@@ -430,27 +370,36 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             if (!empty($csvDataRow['sku']) && !array_key_exists($csvDataRow['sku'], $products)) {
                 $elementIndex = $rowIndex + 1;
                 $products[$csvDataRow['sku']] = array(
-                    'sku'        => $csvDataRow['sku'],
-                    'id'         => $elementIndex,
-                    'entity_id'  => $elementIndex,
+                    'sku' => $csvDataRow['sku'],
+                    'id' => $elementIndex,
+                    'entity_id' => $elementIndex,
                     'product_id' => $elementIndex,
-                    'type'       => $csvDataRow[\Magento\ImportExport\Model\Import\Entity\Product\Option::COLUMN_TYPE],
-                    'title'      => $csvDataRow[\Magento\ImportExport\Model\Import\Entity\Product\Option::COLUMN_TITLE],
+                    'type' => $csvDataRow[\Magento\ImportExport\Model\Import\Entity\Product\Option::COLUMN_TYPE],
+                    'title' => $csvDataRow[\Magento\ImportExport\Model\Import\Entity\Product\Option::COLUMN_TITLE]
                 );
             }
         }
 
         $this->_productEntity = $this->getMock(
-            'Magento\ImportExport\Model\Import\Entity\Product', null, array(), '', false
+            'Magento\ImportExport\Model\Import\Entity\Product',
+            null,
+            array(),
+            '',
+            false
         );
 
         $productModelMock = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(), '', false);
-        $productModelMock->expects($this->any())
-            ->method('getProductEntitiesInfo')
-            ->will($this->returnValue($products));
+        $productModelMock->expects(
+            $this->any()
+        )->method(
+            'getProductEntitiesInfo'
+        )->will(
+            $this->returnValue($products)
+        );
 
         $fetchStrategy = $this->getMockForAbstractClass(
-            'Magento\Data\Collection\Db\FetchStrategyInterface', array('fetchAll')
+            'Magento\Data\Collection\Db\FetchStrategyInterface',
+            array('fetchAll')
         );
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
@@ -465,18 +414,16 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('join')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
 
-        $optionCollection->expects($this->any())
-            ->method('getNewEmptyItem')
-            ->will($this->returnCallback(array($this, 'getNewOptionMock')));
-        $optionCollection->expects($this->any())
-            ->method('reset')
-            ->will($this->returnSelf());
-        $optionCollection->expects($this->any())
-            ->method('addProductToFilter')
-            ->will($this->returnSelf());
-        $optionCollection->expects($this->any())
-            ->method('getSelect')
-            ->will($this->returnValue($select));
+        $optionCollection->expects(
+            $this->any()
+        )->method(
+            'getNewEmptyItem'
+        )->will(
+            $this->returnCallback(array($this, 'getNewOptionMock'))
+        );
+        $optionCollection->expects($this->any())->method('reset')->will($this->returnSelf());
+        $optionCollection->expects($this->any())->method('addProductToFilter')->will($this->returnSelf());
+        $optionCollection->expects($this->any())->method('getSelect')->will($this->returnValue($select));
 
         $optionsData = array_values($products);
         if ($doubleOptions) {
@@ -487,22 +434,24 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $fetchStrategy->expects($this->any())
-            ->method('fetchAll')
-            ->will($this->returnValue($optionsData));
+        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue($optionsData));
 
         $collectionIterator = $this->getMock('stdClass', array('iterate'));
-        $collectionIterator->expects($this->any())
-            ->method('iterate')
-            ->will($this->returnCallback(array($this, 'iterate')));
+        $collectionIterator->expects(
+            $this->any()
+        )->method(
+            'iterate'
+        )->will(
+            $this->returnCallback(array($this, 'iterate'))
+        );
 
         $data = array(
-            'data_source_model'            => $dataSourceModel,
-            'product_model'                => $productModelMock,
-            'product_entity'               => $this->_productEntity,
-            'option_collection'            => $optionCollection,
+            'data_source_model' => $dataSourceModel,
+            'product_model' => $productModelMock,
+            'product_entity' => $this->_productEntity,
+            'option_collection' => $optionCollection,
             'collection_by_pages_iterator' => $collectionIterator,
-            'page_size'                    => $this->_iteratorPageSize,
+            'page_size' => $this->_iteratorPageSize
         );
         return $data;
     }
@@ -681,10 +630,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function _csvToArray($content, $entityId = null)
     {
-        $data = array(
-            'header' => array(),
-            'data'   => array()
-        );
+        $data = array('header' => array(), 'data' => array());
 
         $lines = str_getcsv($content, "\n");
         foreach ($lines as $index => $line) {
@@ -755,8 +701,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\ImportExport\Model\Import\Entity\Product\Option::_saveNewOptionData
      * @dataProvider validateAmbiguousDataDataProvider
      */
-    public function testValidateAmbiguousData(array $rowData, array $errors, $behavior = null, $numberOfValidations = 1)
-    {
+    public function testValidateAmbiguousData(
+        array $rowData,
+        array $errors,
+        $behavior = null,
+        $numberOfValidations = 1
+    ) {
         if ($behavior) {
             $this->_model->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND));
         }
@@ -788,62 +738,73 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'main_invalid_store' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_STORE
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_STORE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_incorrect_type' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_TYPE
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_TYPE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_no_title' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_EMPTY_TITLE => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_EMPTY_TITLE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_empty_title' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_EMPTY_TITLE => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_EMPTY_TITLE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_invalid_price' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_PRICE
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_PRICE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_invalid_max_characters' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_MAX_CHARACTERS
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_MAX_CHARACTERS => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_max_characters_less_zero' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_MAX_CHARACTERS
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_MAX_CHARACTERS => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_invalid_sort_order' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_SORT_ORDER
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_SORT_ORDER => array(
+                        array(1, null)
+                    )
                 )
             ),
             'main_sort_order_less_zero' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_SORT_ORDER
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_SORT_ORDER => array(
+                        array(1, null)
+                    )
                 )
             ),
             'secondary_valid' => array(
@@ -853,31 +814,35 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'secondary_invalid_store' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_STORE
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_STORE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'secondary_incorrect_price' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_PRICE
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_PRICE => array(
+                        array(1, null)
+                    )
                 )
             ),
             'secondary_incorrect_row_sort' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_SORT
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_SORT => array(
+                        array(1, null)
+                    )
                 )
             ),
             'secondary_row_sort_less_zero' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_SORT
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_INVALID_ROW_SORT => array(
+                        array(1, null)
+                    )
                 )
-            ),
+            )
         );
     }
 
@@ -894,65 +859,72 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                 '$errors' => array(
                     \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_AMBIGUOUS_NEW_NAMES => array(
                         array(1, null),
-                        array(2, null),
+                        array(2, null)
                     )
                 ),
                 '$behavior' => null,
-                '$numberOfValidations' => 2,
+                '$numberOfValidations' => 2
             ),
             'ambiguity_different_type' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_AMBIGUOUS_TYPES
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_AMBIGUOUS_TYPES => array(
+                        array(1, null)
+                    )
                 ),
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
             ),
             'ambiguity_several_db_rows' => array(
                 '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
                 '$errors' => array(
-                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_AMBIGUOUS_OLD_NAMES
-                    => array(array(1, null))
+                    \Magento\ImportExport\Model\Import\Entity\Product\Option::ERROR_AMBIGUOUS_OLD_NAMES => array(
+                        array(1, null)
+                    )
                 ),
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-            ),
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
+            )
         );
     }
 
     public function testParseRequiredData()
     {
         $modelData = $this->getMock('stdClass', array('getNextBunch'), array(), '', false);
-        $modelData->expects($this->at(0))
-            ->method('getNextBunch')
-            ->will($this->returnValue(array(array(
-                'sku' => 'simple3',
-                '_custom_option_type' => 'field',
-                '_custom_option_title' => 'Title',
-            ))));
-        $modelData->expects($this->at(1))
-            ->method('getNextBunch')
-            ->will($this->returnValue(null));
-
-        $productModel = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(),
-            '', false);
-        $productModel->expects($this->any())
-            ->method('getProductEntitiesInfo')
-            ->will($this->returnValue(array()));
-
-        $productEntity = $this->getMock('\Magento\ImportExport\Model\Import\Entity\Product', array(), array(),
-            '', false);
-
-        $model = $this->_helper->getObject('Magento\ImportExport\Model\Import\Entity\Product\Option', array(
-            'data' => array(
-                'data_source_model' => $modelData,
-                'product_model' => $productModel,
-                'option_collection' => $this->_helper->getObject('stdClass'),
-                'product_entity' => $productEntity,
-                'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
-                'page_size' => 5000,
-                'stores' => array(),
+        $modelData->expects(
+            $this->at(0)
+        )->method(
+            'getNextBunch'
+        )->will(
+            $this->returnValue(
+                array(array('sku' => 'simple3', '_custom_option_type' => 'field', '_custom_option_title' => 'Title'))
             )
-        ));
+        );
+        $modelData->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+
+        $productModel = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(), '', false);
+        $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue(array()));
+
+        $productEntity = $this->getMock(
+            '\Magento\ImportExport\Model\Import\Entity\Product',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $model = $this->_helper->getObject(
+            'Magento\ImportExport\Model\Import\Entity\Product\Option',
+            array(
+                'data' => array(
+                    'data_source_model' => $modelData,
+                    'product_model' => $productModel,
+                    'option_collection' => $this->_helper->getObject('stdClass'),
+                    'product_entity' => $productEntity,
+                    'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
+                    'page_size' => 5000,
+                    'stores' => array()
+                )
+            )
+        );
         $this->assertTrue($model->importData());
     }
 }

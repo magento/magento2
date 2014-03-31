@@ -25,19 +25,34 @@
  */
 namespace Magento\Customer\Service\V1;
 
+use Magento\Exception\NoSuchEntityException;
+
 class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
-    private $_customerService;
+    /** @var CustomerAccountServiceInterface */
+    private $_customerAccountService;
 
-    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface */
+    /** @var CustomerMetadataServiceInterface */
     private $_service;
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerService = $objectManager->create('Magento\Customer\Service\V1\CustomerServiceInterface');
+        $this->_customerAccountService = $objectManager->create(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        );
         $this->_service = $objectManager->create('Magento\Customer\Service\V1\CustomerMetadataServiceInterface');
+    }
+
+    public function testGetAttributeMetadataNoSuchEntity()
+    {
+        try {
+            $this->_service->getAttributeMetadata('customer_address', '1');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(array('entityType' => 'customer_address', 'attributeCode' => '1'), $e->getParams());
+        }
     }
 
     /**
@@ -46,28 +61,26 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerAttributeMetadata()
     {
         // Expect these attributes to exist but do not check the value
-        $expectAttrsWOutVals = array('updated_at', 'created_at', 'password_hash');
+        $expectAttrsWOutVals = array('created_at');
 
         // Expect these attributes to exist and check the value - values come from _files/customer.php
         $expectAttrsWithVals = array(
-            'entity_id'                 => '1',
-            'entity_type_id'            => '1',
-            'attribute_set_id'          => '1',
-            'website_id'                => '1',
-            'store_id'                  => '1',
-            'group_id'                  => '1',
-            'disable_auto_group_change' => '0',
-            'firstname'                 => 'Firstname',
-            'lastname'                  => 'Lastname',
-            'email'                     => 'customer@example.com',
-            'default_billing'           => '1',
-            'default_shipping'          => '1',
+            'id' => '1',
+            'website_id' => '1',
+            'store_id' => '1',
+            'group_id' => '1',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'email' => 'customer@example.com',
+            'default_billing' => '1',
+            'default_shipping' => '1',
+            'disable_auto_group_change' => '0'
         );
 
-        $customer = $this->_customerService->getCustomer(1);
+        $customer = $this->_customerAccountService->getCustomer(1);
         $this->assertNotNull($customer);
 
-        $attributes = $customer->getAttributes();
+        $attributes = \Magento\Service\DataObjectConverter::toFlatArray($customer);
         $this->assertNotEmpty($attributes);
 
         foreach ($attributes as $attributeCode => $attributeValue) {
@@ -83,7 +96,7 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
                 $this->assertSame(
                     $expectAttrsWithVals[$attrMetadataCode],
                     $attributeValue,
-                    "Failed for $attrMetadataCode"
+                    "Failed for {$attrMetadataCode}"
                 );
                 unset($expectAttrsWithVals[$attrMetadataCode]);
             }
@@ -92,13 +105,15 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($expectAttrsWithVals);
     }
 
-    public function testAttributeMetadataCached()
+    public function testGetCustomerAttributeMetadataNoSuchEntity()
     {
-        $firstCallMetadata = $this->_service->getAddressAttributeMetadata('firstname');
-        $secondCallMetadata = $this->_service->getAddressAttributeMetadata('firstname');
-
-        $this->assertSame($firstCallMetadata, $secondCallMetadata);
-
+        try {
+            $this->_service->getCustomerAttributeMetadata('20');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(array('entityType' => 'customer', 'attributeCode' => '20'), $e->getParams());
+        }
     }
 
     public function testGetAddressAttributeMetadata()
@@ -109,5 +124,16 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('vat_is_valid', $vatValidMetadata->getAttributeCode());
         $this->assertEquals('text', $vatValidMetadata->getFrontendInput());
         $this->assertEquals('VAT number validity', $vatValidMetadata->getStoreLabel());
+    }
+
+    public function testGetAddressAttributeMetadataNoSuchEntity()
+    {
+        try {
+            $this->_service->getAddressAttributeMetadata('1');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(array('entityType' => 'customer_address', 'attributeCode' => '1'), $e->getParams());
+        }
     }
 }

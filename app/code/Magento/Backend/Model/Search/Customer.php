@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Search;
 
 /**
  * Search Customer Model
@@ -31,8 +32,6 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Search;
-
 class Customer extends \Magento\Object
 {
     /**
@@ -62,7 +61,7 @@ class Customer extends \Magento\Object
     /**
      * Load search results
      *
-     * @return \Magento\Backend\Model\Search\Customer
+     * @return $this
      */
     public function load()
     {
@@ -72,24 +71,30 @@ class Customer extends \Magento\Object
             return $this;
         }
 
-        $collection = $this->_collectionFactory->create()
-            ->addNameToSelect()
-            ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left')
-            ->addAttributeToFilter(array(
-                array('attribute'=>'firstname', 'like' => $this->getQuery().'%'),
-                array('attribute'=>'lastname', 'like'  => $this->getQuery().'%'),
-                array('attribute'=>'company', 'like'   => $this->getQuery().'%'),
-            ))
-            ->setPage(1, 10)
-            ->load();
+        $collection = $this->_collectionFactory->create()->addNameToSelect()->joinAttribute(
+            'company',
+            'customer_address/company',
+            'default_billing',
+            null,
+            'left'
+        )->addAttributeToFilter(
+            array(
+                array('attribute' => 'firstname', 'like' => $this->getQuery() . '%'),
+                array('attribute' => 'lastname', 'like' => $this->getQuery() . '%'),
+                array('attribute' => 'company', 'like' => $this->getQuery() . '%')
+            )
+        )->setPage(
+            1,
+            10
+        )->load();
 
         foreach ($collection->getItems() as $customer) {
             $result[] = array(
-                'id'            => 'customer/1/'.$customer->getId(),
-                'type'          => __('Customer'),
-                'name'          => $customer->getName(),
-                'description'   => $customer->getCompany(),
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customer->getId())),
+                'id' => 'customer/1/' . $customer->getId(),
+                'type' => __('Customer'),
+                'name' => $customer->getName(),
+                'description' => $customer->getCompany(),
+                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customer->getId()))
             );
         }
 

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 class TruncateTest extends \PHPUnit_Framework_TestCase
@@ -49,15 +48,10 @@ class TruncateTest extends \PHPUnit_Framework_TestCase
     {
         $remainder = '';
         return array(
-            '1' => array(
-                '1234567890',
-                array(new \Magento\Stdlib\String, 5, '...', '', true),
-                '12...',
-                '34567890'
-            ),
+            '1' => array('1234567890', array(new \Magento\Stdlib\String(), 5, '...', '', true), '12...', '34567890'),
             '2' => array(
                 '123 456 789',
-                array(new \Magento\Stdlib\String, 8, '..', $remainder, false),
+                array(new \Magento\Stdlib\String(), 8, '..', $remainder, false),
                 '123..',
                 ' 456 789'
             )

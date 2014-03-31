@@ -43,7 +43,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->readerMock = $this->getMock(
-            'Magento\Catalog\Model\ProductTypes\Config\Reader', array(), array(), '', false);
+            'Magento\Catalog\Model\ProductTypes\Config\Reader',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->cacheMock = $this->getMock('Magento\Config\CacheInterface');
     }
 
@@ -56,8 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetType($value, $expected)
     {
         $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($value)));
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock,
-            $this->cacheMock, 'cache_id');
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->model->getType('global'));
     }
 
@@ -72,28 +76,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAll()
     {
         $expected = array('Expected Data');
-        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(
-            serialize(array('types' => $expected)))
+        $this->cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->will(
+            $this->returnValue(serialize(array('types' => $expected)))
         );
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config(
-            $this->readerMock,
-            $this->cacheMock,
-            'cache_id'
-        );
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->model->getAll());
     }
 
     public function testIsProductSet()
     {
         $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize(array())));
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config(
-            $this->readerMock,
-            $this->cacheMock,
-            'cache_id'
-        );
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
 
         $this->assertEquals(false, $this->model->isProductSet('typeId'));
-
     }
-
 }

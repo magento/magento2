@@ -38,15 +38,37 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-class Rule extends \Magento\Core\Model\AbstractModel
+class Rule extends \Magento\Model\AbstractModel
 {
-    protected $_ctcs                = null;
-    protected $_ptcs                = null;
-    protected $_rates               = null;
+    /**
+     * @var mixed
+     */
+    protected $_ctcs = null;
 
-    protected $_ctcModel            = null;
-    protected $_ptcModel            = null;
-    protected $_rateModel           = null;
+    /**
+     * @var mixed
+     */
+    protected $_ptcs = null;
+
+    /**
+     * @var mixed
+     */
+    protected $_rates = null;
+
+    /**
+     * @var mixed
+     */
+    protected $_ctcModel = null;
+
+    /**
+     * @var mixed
+     */
+    protected $_ptcModel = null;
+
+    /**
+     * @var mixed
+     */
+    protected $_rateModel = null;
 
     /**
      * Prefix of model events names
@@ -75,22 +97,22 @@ class Rule extends \Magento\Core\Model\AbstractModel
     protected $_calculation;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -107,7 +129,7 @@ class Rule extends \Magento\Core\Model\AbstractModel
      * After save rule
      * Redeclared for populate rate calculations
      *
-     * @return \Magento\Tax\Model\Calculation\Rule
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -119,9 +141,9 @@ class Rule extends \Magento\Core\Model\AbstractModel
 
     /**
      * After rule delete
-     * redeclared for dispatch tax_settings_change_after event
+     * re-declared for dispatch tax_settings_change_after event
      *
-     * @return \Magento\Tax\Model\Calculation\Rule
+     * @return $this
      */
     protected function _afterDelete()
     {
@@ -129,6 +151,9 @@ class Rule extends \Magento\Core\Model\AbstractModel
         return parent::_afterDelete();
     }
 
+    /**
+     * @return void
+     */
     public function saveCalculationData()
     {
         $ctc = $this->getData('tax_customer_class');
@@ -140,10 +165,10 @@ class Rule extends \Magento\Core\Model\AbstractModel
             foreach ($ptc as $p) {
                 foreach ($rates as $r) {
                     $dataArray = array(
-                        'tax_calculation_rule_id'   =>$this->getId(),
-                        'tax_calculation_rate_id'   =>$r,
-                        'customer_tax_class_id'     =>$c,
-                        'product_tax_class_id'      =>$p,
+                        'tax_calculation_rule_id' => $this->getId(),
+                        'tax_calculation_rate_id' => $r,
+                        'customer_tax_class_id' => $c,
+                        'product_tax_class_id' => $p
                     );
                     $this->_calculation->setData($dataArray)->save();
                 }
@@ -159,16 +184,25 @@ class Rule extends \Magento\Core\Model\AbstractModel
         return $this->_calculation;
     }
 
+    /**
+     * @return array
+     */
     public function getRates()
     {
         return $this->getCalculationModel()->getRates($this->getId());
     }
 
+    /**
+     * @return array
+     */
     public function getCustomerTaxClasses()
     {
         return $this->getCalculationModel()->getCustomerTaxClasses($this->getId());
     }
 
+    /**
+     * @return array
+     */
     public function getProductTaxClasses()
     {
         return $this->getCalculationModel()->getProductTaxClasses($this->getId());
@@ -224,12 +258,8 @@ class Rule extends \Magento\Core\Model\AbstractModel
      */
     public function getAllOptionsForClass($classFilter)
     {
-        $classes = $this->_taxClass
-            ->getCollection()
-            ->setClassTypeFilter($classFilter)
-            ->toOptionArray();
+        $classes = $this->_taxClass->getCollection()->setClassTypeFilter($classFilter)->toOptionArray();
 
         return $classes;
     }
 }
-

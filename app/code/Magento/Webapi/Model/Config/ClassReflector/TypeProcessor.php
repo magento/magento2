@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Config\ClassReflector;
 
 use Zend\Code\Reflection\ClassReflection;
@@ -36,8 +35,7 @@ class TypeProcessor
 
     /**
      * Array of types data.
-     *
-     * @var array <pre>array(
+     * <pre>array(
      *     $complexTypeName => array(
      *         'documentation' => $typeDocumentation
      *         'parameters' => array(
@@ -52,16 +50,19 @@ class TypeProcessor
      *     ),
      *     ...
      * )</pre>
+     *
+     * @var array
      */
     protected $_types = array();
 
     /**
      * Types class map.
-     *
-     * @var array <pre>array(
+     * <pre>array(
      *     $complexTypeName => $interfaceName,
      *     ...
      * )</pre>
+     *
+     * @var array
      */
     protected $_typeToClassMap = array();
 
@@ -105,6 +106,7 @@ class TypeProcessor
      *
      * @param string $typeName
      * @param array $data
+     * @return void
      */
     public function setTypeData($typeName, $data)
     {
@@ -126,9 +128,8 @@ class TypeProcessor
     {
         $typeName = $this->normalizeType($type);
         if (!$this->isTypeSimple($typeName)) {
-            if ((!$this->isArrayType($type) && !class_exists($type))
-                || !class_exists(str_replace('[]', '', $type))
-            ) {
+            $typeSimple = $this->getArrayItemType($type);
+            if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
                 throw new \LogicException(
                     sprintf('Class "%s" does not exist. Please note that namespace must be specified.', $type)
                 );
@@ -160,7 +161,7 @@ class TypeProcessor
         if ($this->isArrayType($class)) {
             $this->process($this->getArrayItemType($class));
         } else {
-            if (!class_exists($class)) {
+            if (!(class_exists($class) || interface_exists($class))) {
                 throw new \InvalidArgumentException(
                     sprintf('Could not load the "%s" class as parameter type.', $class)
                 );
@@ -182,15 +183,23 @@ class TypeProcessor
      *
      * @param \Zend\Code\Reflection\MethodReflection $methodReflection
      * @param string $typeName
+     * @return void
      */
     protected function _processMethod(\Zend\Code\Reflection\MethodReflection $methodReflection, $typeName)
     {
-        $isGetter = (strpos($methodReflection->getName(), 'get') === 0)
-            || (strpos($methodReflection->getName(), 'is') === 0)
-            || (strpos($methodReflection->getName(), 'has') === 0);
+        $isGetter = strpos(
+            $methodReflection->getName(),
+            'get'
+        ) === 0 || strpos(
+            $methodReflection->getName(),
+            'is'
+        ) === 0 || strpos(
+            $methodReflection->getName(),
+            'has'
+        ) === 0;
         if ($isGetter) {
             $returnMetadata = $this->getGetterReturnType($methodReflection);
-            $fieldName = $this->_helper->dtoGetterNameToFieldName($methodReflection->getName());
+            $fieldName = $this->_helper->dataObjectGetterNameToFieldName($methodReflection->getName());
             $this->_types[$typeName]['parameters'][$fieldName] = array(
                 'type' => $this->process($returnMetadata['type']),
                 'required' => $returnMetadata['isRequired'],
@@ -247,21 +256,23 @@ class TypeProcessor
         /*
          * Adding this code as a workaround since \Zend\Code\Reflection\DocBlock\Tag\ReturnTag::initialize does not
          * detect and return correct type for array of objects in annotation.
-         * eg @return \Magento\Webapi\Service\Entity\SimpleDto[] is returned with type
-         * \Magento\Webapi\Service\Entity\SimpleDto instead of \Magento\Webapi\Service\Entity\SimpleDto[]
+         * eg @return \Magento\Webapi\Service\Entity\SimpleData[] is returned with type
+         * \Magento\Webapi\Service\Entity\SimpleData instead of \Magento\Webapi\Service\Entity\SimpleData[]
          */
         $escapedReturnType = str_replace('\\', '\\\\', $returnType);
-        if (preg_match("/.*\@return\s+({$escapedReturnType}\[\]).*/i", $methodDocBlock->getContents(), $matches)) {
+        if (preg_match("/.*\\@return\\s+({$escapedReturnType}\\[\\]).*/i", $methodDocBlock->getContents(), $matches)) {
             $returnType = $matches[1];
         }
-        $isRequired = preg_match("/.*\@return\s+\S+\|null.*/i", $methodDocBlock->getContents(), $matches)
-            ? false
-            : true;
-        return [
+        $isRequired = preg_match(
+            "/.*\@return\s+\S+\|null.*/i",
+            $methodDocBlock->getContents(),
+            $matches
+        ) ? false : true;
+        return array(
             'type' => $returnType,
             'isRequired' => $isRequired,
             'description' => $returnAnnotation->getDescription()
-        ];
+        );
     }
 
     /**
@@ -272,11 +283,7 @@ class TypeProcessor
      */
     public function normalizeType($type)
     {
-        $normalizationMap = array(
-            'str' => 'string',
-            'integer' => 'int',
-            'bool' => 'boolean',
-        );
+        $normalizationMap = array('str' => 'string', 'integer' => 'int', 'bool' => 'boolean');
 
         return is_string($type) && isset($normalizationMap[$type]) ? $normalizationMap[$type] : $type;
     }
@@ -370,5 +377,33 @@ class TypeProcessor
     public function translateArrayTypeName($type)
     {
         return 'ArrayOf' . ucfirst($this->getArrayItemType($type));
+    }
+
+    /**
+     * Convert the value to the requested simple type
+     *
+     * @param int|string|float|int[]|string[]|float[] $value
+     * @param string $type Convert given value to the this simple type
+     * @return int|string|float|int[]|string[]|float[] Return the value which is converted to type
+     * @throws \Magento\Webapi\Exception
+     */
+    public function processSimpleType($value, $type)
+    {
+        $invalidTypeMsg = 'Invalid type for value :"%s". Expected Type: "%s".';
+        if ($this->isArrayType($type) && is_array($value)) {
+            $arrayItemType = $this->getArrayItemType($type);
+            foreach (array_keys($value) as $key) {
+                if (!settype($value[$key], $arrayItemType)) {
+                    throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+                }
+            }
+        } elseif (!$this->isArrayType($type) && !is_array($value)) {
+            if (!settype($value, $type)) {
+                throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+            }
+        } else {
+            throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+        }
+        return $value;
     }
 }

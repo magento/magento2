@@ -33,8 +33,47 @@
  */
 namespace Magento\Downloadable\Block\Checkout;
 
+use Magento\View\Element\Template;
+
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     */
+    protected $currentCustomer;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Sales\Model\Order\Config $orderConfig,
+        \Magento\App\Http\Context $httpContext,
+        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $context,
+            $checkoutSession,
+            $customerSession,
+            $orderFactory,
+            $orderConfig,
+            $httpContext,
+            $data
+        );
+        $this->currentCustomer = $currentCustomer;
+    }
+
     /**
      * Return true if order(s) has one or more downloadable products
      *
@@ -49,7 +88,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         /**
          * if use guest checkout
          */
-        if (!$this->_customerSession->getCustomerId()) {
+        if (!$this->currentCustomer->getCustomerId()) {
             return false;
         }
         return $hasDownloadableFlag;

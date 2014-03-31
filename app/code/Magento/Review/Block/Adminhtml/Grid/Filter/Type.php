@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Adminhtml\Grid\Filter;
 
 /**
@@ -36,19 +35,23 @@ namespace Magento\Review\Block\Adminhtml\Grid\Filter;
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
+     * Get grid options
+     *
      * @return array
      */
     protected function _getOptions()
     {
         return array(
-              array('label'=>'', 'value'=>''),
-              array('label'=>__('Administrator'), 'value'=>1),
-              array('label'=>__('Customer'), 'value'=>2),
-              array('label'=>__('Guest'), 'value'=>3)
+            array('label' => '', 'value' => ''),
+            array('label' => __('Administrator'), 'value' => 1),
+            array('label' => __('Customer'), 'value' => 2),
+            array('label' => __('Guest'), 'value' => 3)
         );
     }
 
     /**
+     * Get condition
+     *
      * @return int
      */
     public function getCondition()

@@ -42,10 +42,34 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_dirReadFactoryMock = $this->getMock('Magento\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $this->_directoryListMock = $this->getMock('Magento\App\Filesystem\DirectoryList', [], [], '', false);
-        $this->_dirWriteFactoryMock = $this->getMock('Magento\Filesystem\Directory\WriteFactory', [], [], '', false);
-        $this->_fileReadFactoryMock = $this->getMock('Magento\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->_dirReadFactoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\ReadFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_directoryListMock = $this->getMock(
+            'Magento\App\Filesystem\DirectoryList',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_dirWriteFactoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\WriteFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_fileReadFactoryMock = $this->getMock(
+            'Magento\Filesystem\File\ReadFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $this->_filesystem = new Filesystem(
             $this->_directoryListMock,
@@ -57,15 +81,12 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPath()
     {
-        $this->_setupDirectoryListMock(['path' => '\\some\\path']);
+        $this->_setupDirectoryListMock(array('path' => '\\some\\path'));
         $this->assertEquals('/some/path', $this->_filesystem->getPath(Filesystem::ROOT_DIR));
     }
 
     protected function _setupDirectoryListMock(array $config)
     {
-        $this->_directoryListMock
-            ->expects($this->any())
-            ->method('getConfig')
-            ->will($this->returnValue($config));
+        $this->_directoryListMock->expects($this->any())->method('getConfig')->will($this->returnValue($config));
     }
 }

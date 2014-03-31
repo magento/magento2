@@ -18,40 +18,56 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Group;
+
+use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Customer group edit block
  */
-namespace Magento\Customer\Block\Adminhtml\Group;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * Customer Group Service
+     *
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     */
+    protected $_groupService = null;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
+        $this->_groupService = $groupService;
         parent::__construct($context, $data);
     }
 
+    /**
+     * Update Save and Delete buttons. Remove Delete button if group can't be deleted.
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -63,22 +79,33 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('save', 'label', __('Save Customer Group'));
         $this->_updateButton('delete', 'label', __('Delete Customer Group'));
 
-        $group = $this->_coreRegistry->registry('current_group');
-        if (!$group || !$group->getId() || $group->usesAsDefault()) {
+        $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        if (!$groupId || !$this->_groupService->canDelete($groupId)) {
             $this->_removeButton('delete');
         }
     }
 
+    /**
+     * Retrieve the header text, either editing an existing group or creating a new one.
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
-        $currentGroup = $this->_coreRegistry->registry('current_group');
-        if (!is_null($currentGroup->getId())) {
-            return __('Edit Customer Group "%1"', $this->escapeHtml($currentGroup->getCustomerGroupCode()));
-        } else {
+        $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        if (is_null($groupId)) {
             return __('New Customer Group');
+        } else {
+            $group = $this->_groupService->getGroup($groupId);
+            return __('Edit Customer Group "%1"', $this->escapeHtml($group->getCode()));
         }
     }
 
+    /**
+     * Retrieve CSS classes added to the header.
+     *
+     * @return string
+     */
     public function getHeaderCssClass()
     {
         return 'icon-head head-customer-groups';

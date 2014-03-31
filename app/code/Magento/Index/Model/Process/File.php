@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Model\Process;
 
 use Magento\Filesystem\FilesystemException;
@@ -70,7 +69,7 @@ class File
      * Lock process file
      *
      * @param bool $nonBlocking
-     * @return bool
+     * @return void
      */
     public function processLock($nonBlocking = true)
     {
@@ -80,7 +79,7 @@ class File
         }
         try {
             $this->_streamHandler->lock($lockMode);
-            $this->_streamLocked  = true;
+            $this->_streamLocked = true;
         } catch (FilesystemException $e) {
             $this->_streamLocked = false;
         }

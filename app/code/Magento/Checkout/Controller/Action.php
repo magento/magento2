@@ -18,18 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Controller;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
+use Magento\Exception\NoSuchEntityException;
 
 /**
  * Controller for onepage checkouts
  */
-namespace Magento\Checkout\Controller;
-
 abstract class Action extends \Magento\App\Action\Action
 {
     /**
@@ -38,19 +38,36 @@ abstract class Action extends \Magento\App\Action\Action
     protected $_customerSession;
 
     /**
+     * @var CustomerAccountService
+     */
+    protected $_customerAccountService;
+
+    /**
+     * @var CustomerMetadataService
+     */
+    protected $_customerMetadataService;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        CustomerAccountService $customerAccountService,
+        CustomerMetadataService $customerMetadataService
     ) {
         $this->_customerSession = $customerSession;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_customerMetadataService = $customerMetadataService;
         parent::__construct($context);
     }
 
     /**
      * Make sure customer is valid, if logged in
+     *
      * By default will add error messages and redirect to customer edit form
      *
      * @param bool $redirect - stop dispatch and redirect?
@@ -59,10 +76,19 @@ abstract class Action extends \Magento\App\Action\Action
      */
     protected function _preDispatchValidateCustomer($redirect = true, $addErrors = true)
     {
-        $customer = $this->_customerSession->getCustomer();
-        if ($customer && $customer->getId()) {
-            $validationResult = $customer->validate();
-            if ((true !== $validationResult) && is_array($validationResult)) {
+        try {
+            $customerId = $this->_customerSession->getCustomerId();
+            $customer = $this->_customerAccountService->getCustomer($customerId);
+        } catch (NoSuchEntityException $e) {
+            return true;
+        }
+
+        if (isset($customer)) {
+            $validationResult = $this->_customerAccountService->validateCustomerData(
+                $customer,
+                $this->_customerMetadataService->getAllCustomerAttributeMetadata()
+            );
+            if (true !== $validationResult && is_array($validationResult)) {
                 if ($addErrors) {
                     foreach ($validationResult as $error) {
                         $this->messageManager->addError($error);

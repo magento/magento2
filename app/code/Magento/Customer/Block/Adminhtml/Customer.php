@@ -31,12 +31,15 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Customer\Block\Adminhtml;
 
 class Customer extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_controller = 'adminhtml';
@@ -45,5 +48,4 @@ class Customer extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Add New Customer');
         parent::_construct();
     }
-
 }

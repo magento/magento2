@@ -46,7 +46,7 @@ class Quantity extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $quantity = $product->getStockItem()->getQty();
         if ($quantity) {
-            $value = $quantity ? max(1, (int) $quantity) : 1;
+            $value = $quantity ? max(1, (int)$quantity) : 1;
             $this->_setAttribute($entry, 'quantity', self::ATTRIBUTE_TYPE_INT, $value);
         }
 

@@ -25,14 +25,16 @@
  */
 namespace Magento\Tax\Model\Config\Source\Apply;
 
-class On implements \Magento\Core\Model\Option\ArrayInterface
+class On implements \Magento\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value'=>0, 'label'=>__('Custom price if available')),
-            array('value'=>1, 'label'=>__('Original price only')),
+            array('value' => 0, 'label' => __('Custom price if available')),
+            array('value' => 1, 'label' => __('Original price only'))
         );
     }
-
 }

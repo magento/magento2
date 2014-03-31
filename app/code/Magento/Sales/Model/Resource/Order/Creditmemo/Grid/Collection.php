@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
 
 /**
  * Flat sales order creditmemo grid collection
@@ -32,28 +32,26 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
-
-class Collection
-    extends \Magento\Sales\Model\Resource\Order\Creditmemo\Collection
+class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Collection
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_creditmemo_grid_collection';
+    protected $_eventPrefix = 'sales_order_creditmemo_grid_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_creditmemo_grid_collection';
+    protected $_eventObject = 'order_creditmemo_grid_collection';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {

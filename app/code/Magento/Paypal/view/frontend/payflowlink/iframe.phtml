@@ -24,8 +24,8 @@
  */
 /** @var $this \Magento\Paypal\Block\Payflow\Link\Form */
 ?>
-<div id="iframe-warning" class="notice-msg">
-    <span><?php echo __('Please do not refresh the page until you complete payment.') ?></span>
+<div id="iframe-warning" class="message notice">
+    <div><?php echo __('Please do not refresh the page until you complete payment.') ?></div>
 </div>
 <iframe id="payflow-link-iframe" data-container="paypal-iframe" class="paypal iframe" scrolling="no" frameborder="0"
         border="0" src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>

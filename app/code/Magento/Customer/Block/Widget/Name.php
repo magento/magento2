@@ -23,35 +23,49 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
-class Name extends \Magento\Customer\Block\Widget\AbstractWidget
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Customer\Service\V1\Data\Customer;
+use Magento\View\Element\Template\Context;
+use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\Helper\Data as CustomerHelper;
+
+/**
+ * Widget for showing customer name.
+ *
+ * @method \Magento\Customer\Service\V1\Data\Customer getObject()
+ * @method Name setObject(\Magento\Customer\Service\V1\Data\Customer $customer)
+ */
+class Name extends AbstractWidget
 {
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var CustomerHelper
      */
     protected $_customerHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param Context $context
+     * @param AddressHelper $addressHelper
+     * @param CustomerMetadataServiceInterface $attributeMetadata
+     * @param CustomerHelper $customerHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Customer\Helper\Data $customerHelper,
+        Context $context,
+        AddressHelper $addressHelper,
+        CustomerMetadataServiceInterface $attributeMetadata,
+        CustomerHelper $customerHelper,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
-        parent::__construct($context, $eavConfig, $addressHelper, $data);
+        parent::__construct($context, $addressHelper, $attributeMetadata, $data);
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     public function _construct()
     {
         parent::_construct();
@@ -78,7 +92,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function showPrefix()
     {
-        return (bool)$this->_getAttribute('prefix')->getIsVisible();
+        return $this->_isAttributeVisible('prefix');
     }
 
     /**
@@ -88,7 +102,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function isPrefixRequired()
     {
-        return (bool)$this->_getAttribute('prefix')->getIsRequired();
+        return $this->_isAttributeRequired('prefix');
     }
 
     /**
@@ -114,7 +128,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function showMiddlename()
     {
-        return (bool)$this->_getAttribute('middlename')->getIsVisible();
+        return $this->_isAttributeVisible('middlename');
     }
 
     /**
@@ -124,7 +138,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function isMiddlenameRequired()
     {
-        return (bool)$this->_getAttribute('middlename')->getIsRequired();
+        return $this->_isAttributeRequired('middlename');
     }
 
     /**
@@ -134,7 +148,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function showSuffix()
     {
-        return (bool)$this->_getAttribute('suffix')->getIsVisible();
+        return $this->_isAttributeVisible('suffix');
     }
 
     /**
@@ -144,7 +158,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function isSuffixRequired()
     {
-        return (bool)$this->_getAttribute('suffix')->getIsRequired();
+        return $this->_isAttributeRequired('suffix');
     }
 
     /**
@@ -193,19 +207,28 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      * Retrieve customer or customer address attribute instance
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Model\Attribute|false
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|null
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getAttribute($attributeCode)
     {
-        if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof \Magento\Customer\Model\Customer) {
+        if ($this->getForceUseCustomerAttributes() ||
+            $this->getObject() instanceof \Magento\Customer\Model\Customer ||
+            $this->getObject() instanceof Customer
+        ) {
             return parent::_getAttribute($attributeCode);
         }
 
-        $attribute = $this->_eavConfig->getAttribute('customer_address', $attributeCode);
+        try {
+            $attribute = $this->_attributeMetadata->getAddressAttributeMetadata($attributeCode);
+        } catch (\Magento\Exception\NoSuchEntityException $e) {
+            return null;
+        }
 
-        if ($this->getForceUseCustomerRequiredAttributes() && $attribute && !$attribute->getIsRequired()) {
+        if ($this->getForceUseCustomerRequiredAttributes() && $attribute && !$attribute->isRequired()) {
             $customerAttribute = parent::_getAttribute($attributeCode);
-            if ($customerAttribute && $customerAttribute->getIsRequired()) {
+            if ($customerAttribute && $customerAttribute->isRequired()) {
                 $attribute = $customerAttribute;
             }
         }
@@ -223,5 +246,36 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
     {
         $attribute = $this->_getAttribute($attributeCode);
         return $attribute ? __($attribute->getStoreLabel()) : '';
+    }
+
+    /**
+     * Get string with frontend validation classes for attribute
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    public function getAttributeValidationClass($attributeCode)
+    {
+        return $this->_addressHelper->getAttributeValidationClass($attributeCode);
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function _isAttributeRequired($attributeCode)
+    {
+        $attributeMetadata = $this->_getAttribute($attributeCode);
+        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function _isAttributeVisible($attributeCode)
+    {
+        $attributeMetadata = $this->_getAttribute($attributeCode);
+        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
     }
 }

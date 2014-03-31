@@ -23,130 +23,147 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Structures;
+
+use Magento\Connect\Structures\Graph;
 
 class Node
 {
-    
-    protected $_data = null;    
-    protected $_metadata = array();    
-    protected $_arcs = array();    
+    /**
+     * @var mixed
+     */
+    protected $_data = null;
+
+    /**
+     * @var array
+     */
+    protected $_metadata = array();
+
+    /**
+     * @var array
+     */
+    protected $_arcs = array();
+
+    /**
+     * @var Graph
+     */
     protected $_graph = null;
-    
+
     /**
      * Node graph getter
      *
-     * @return \Magento\Connect\Structures\Graph
+     * @return Graph
      */
-    public function &getGraph() 
+    public function &getGraph()
     {
         return $this->_graph;
     }
 
     /**
-     *
-     * Node graph setter. 
-     * This method should not be called directly. 
+     * Node graph setter.
+     * This method should not be called directly.
      * Use Graph::addNode instead.
      *
-     * @param $graph
+     * @param Graph &$graph
+     * @return void
      */
-    public function setGraph(&$graph) 
+    public function setGraph(&$graph)
     {
         $this->_graph =& $graph;
     }
 
     /**
-     *
      * Node data getter.
      *
      * Each graph node can contain a reference to one variable. This is the getter for that reference.
      *
-     * @return   mixed   Data stored in node
-     * @access   public
+     * @return mixed Data stored in node
+     * @access public
      */
-    public function &getData() 
+    public function &getData()
     {
         return $this->_data;
     }
 
     /**
      * Node data setter
-     * 
+     *
      * Each graph node can contain a reference to one variable. This is the setter for that reference.
-     *   
-     * @return   mixed   Data to store in node
+     *
+     * @param mixed $data Data to store in node
+     * @return void
      */
-    public function setData($data) 
+    public function setData($data)
     {
         $this->_data =& $data;
     }
 
     /**
-     *
      * Test for existence of metadata under a given key.
      *
-     * @param    string    Key to test
-     * @return   boolean
-     * @access   public
+     * @param string  $key Key to test
+     * @return bool
+     * @access public
      */
-    public function metadataKeyExists($key) 
+    public function metadataKeyExists($key)
     {
         return array_key_exists($key, $this->_metadata);
     }
 
     /**
-     *
      * Get node metadata
      *
-     * @param    string  $key 
-     * @param    boolean $nullIfNonexistent (defaults to false).
-     * @return   mixed   
+     * @param string  $key
+     * @param bool $nullIfNonexistent (defaults to false).
+     * @return mixed
+     * @throws \Exception
      */
-    public function & getMetadata($key, $nullIfNonexistent = false) 
+    public function &getMetadata($key, $nullIfNonexistent = false)
     {
         if (array_key_exists($key, $this->_metadata)) {
             return $this->_metadata[$key];
         } elseif ($nullIfNonexistent) {
-                $a = null;
-                return $a;
+            $a = null;
+            return $a;
         } else {
-            throw new \Exception(__METHOD__." : requested key doesn't exist: {$key}");            
+            throw new \Exception(__METHOD__ . " : requested key doesn't exist: {$key}");
         }
     }
 
     /**
-     *
      * Delete metadata by key
      *
-     * @param    string  Key
+     * @param string $key Key
+     * @return void
      */
-    public function unsetMetadata($key) 
+    public function unsetMetadata($key)
     {
         if (array_key_exists($key, $this->_metadata)) {
             unset($this->_metadata[$key]);
-        }    
-        
+        }
     }
-        
+
     /**
-     *
      * Node metadata setter
      *
      * Each graph node can contain multiple 'metadata' entries, each stored under a different key, as in an
      * associative array or in a dictionary. This method stores data under the given key. If the key already exists,
      * previously stored data is discarded.
      *
-     * @param    string  $key
-     * @param    mixed   $data
+     * @param string  $key
+     * @param mixed   $data
+     * @return void
      */
-    public function setMetadata($key, $data) 
+    public function setMetadata($key, $data)
     {
         $this->_metadata[$key] =& $data;
     }
 
-    protected function _connectTo(&$destinationNode) 
+    /**
+     * @param mixed &$destinationNode
+     * @return void
+     */
+    protected function _connectTo(&$destinationNode)
     {
         $this->_arcs[] =& $destinationNode;
     }
@@ -154,22 +171,25 @@ class Node
     /**
      * Connect this node to another one.
      * If the graph is not directed, the reverse arc, connecting $destinationNode to $this is also created.
-     * @param    Structures_Graph Node to connect to
+     *
+     * @param \Magento\Object &$destinationNode  Structures_Graph Node to connect to
+     * @return void
+     * @throws \Exception
      */
     public function connectTo(&$destinationNode)
     {
         $class = get_class($this);
-        if(!$destinationNode instanceof $class) {
-            throw new \Exception(__METHOD__." : argument should be instance of {$class}");
+        if (!$destinationNode instanceof $class) {
+            throw new \Exception(__METHOD__ . " : argument should be instance of {$class}");
         }
-         
+
         // Nodes must already be in graphs to be connected
         if ($this->_graph == null) {
-            throw new \Exception(__METHOD__." : tried to connect to null graph");
+            throw new \Exception(__METHOD__ . " : tried to connect to null graph");
         }
 
         if ($destinationNode->getGraph() == null) {
-            throw new \Exception(__METHOD__." : tried to connect to node that is not connected to any graph");
+            throw new \Exception(__METHOD__ . " : tried to connect to node that is not connected to any graph");
         }
 
         // Connect here
@@ -180,10 +200,9 @@ class Node
         }
     }
 
-
     /**
      * Return nodes connected to this one.
-     * @return array 
+     * @return array
      */
     public function getNeighbours()
     {
@@ -193,14 +212,16 @@ class Node
     /**
      * Test whether this node has an arc to the target node
      * Returns true if the two nodes are connected
-     * @return boolean   
+     *
+     * @param Node &$target
+     * @return bool
      */
     public function connectsTo(&$target)
     {
         $arcKeys = array_keys($this->_arcs);
-        foreach($arcKeys as $key) {
+        foreach ($arcKeys as $key) {
             $arc =& $this->_arcs[$key];
-            if ($target === $arc) { 
+            if ($target === $arc) {
                 return true;
             }
         }
@@ -218,7 +239,7 @@ class Node
      *  
      * @return int
      */
-    public function inDegree() 
+    public function inDegree()
     {
         $result = 0;
 
@@ -236,7 +257,6 @@ class Node
             }
         }
         return $result;
-
     }
 
     /**
@@ -255,5 +275,4 @@ class Node
         }
         return count($this->_arcs);
     }
-
 }

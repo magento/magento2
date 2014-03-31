@@ -18,24 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Adminhtml customer view wishlist block
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Directory\Model\Currency;
+use Magento\Sales\Model\Order;
+
+/**
+ * Adminhtml customer view sales block
+ */
 class Sales extends \Magento\Backend\Block\Template
 {
-
     /**
      * Sales entity collection
      *
@@ -43,20 +39,27 @@ class Sales extends \Magento\Backend\Block\Template
      */
     protected $_collection;
 
+    /**
+     * @var array
+     */
     protected $_groupedCollection;
+
+    /**
+     * @var int[]
+     */
     protected $_websiteCounts;
 
     /**
      * Currency model
      *
-     * @var \Magento\Directory\Model\Currency
+     * @var Currency
      */
     protected $_currency;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -71,17 +74,19 @@ class Sales extends \Magento\Backend\Block\Template
     protected $_collectionFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -90,62 +95,87 @@ class Sales extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Initialize the sales grid.
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('customer_view_sales_grid');
     }
 
+    /**
+     * Execute before toHtml() code.
+     *
+     * @return $this
+     */
     public function _beforeToHtml()
     {
-        $this->_currency = $this->_currencyFactory->create()
-            ->load($this->_storeConfig->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE));
+        $this->_currency = $this->_currencyFactory->create()->load(
+            $this->_storeConfig->getConfig(Currency::XML_PATH_CURRENCY_BASE)
+        );
 
-        $this->_collection = $this->_collectionFactory->create()
-            ->setCustomerFilter($this->_coreRegistry->registry('current_customer'))
-            ->setOrderStateFilter(\Magento\Sales\Model\Order::STATE_CANCELED, true)
-            ->load();
+        $this->_collection = $this->_collectionFactory->create()->setCustomerIdFilter(
+            (int)$this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+        )->setOrderStateFilter(
+            Order::STATE_CANCELED,
+            true
+        )->load();
 
         $this->_groupedCollection = array();
 
         foreach ($this->_collection as $sale) {
             if (!is_null($sale->getStoreId())) {
-                $store      = $this->_storeManager->getStore($sale->getStoreId());
-                $websiteId  = $store->getWebsiteId();
-                $groupId    = $store->getGroupId();
-                $storeId    = $store->getId();
+                $store = $this->_storeManager->getStore($sale->getStoreId());
+                $websiteId = $store->getWebsiteId();
+                $groupId = $store->getGroupId();
+                $storeId = $store->getId();
 
                 $sale->setWebsiteId($store->getWebsiteId());
                 $sale->setWebsiteName($store->getWebsite()->getName());
                 $sale->setGroupId($store->getGroupId());
                 $sale->setGroupName($store->getGroup()->getName());
             } else {
-                $websiteId  = 0;
-                $groupId    = 0;
-                $storeId    = 0;
+                $websiteId = 0;
+                $groupId = 0;
+                $storeId = 0;
 
                 $sale->setStoreName(__('Deleted Stores'));
             }
 
             $this->_groupedCollection[$websiteId][$groupId][$storeId] = $sale;
-            $this->_websiteCounts[$websiteId] = isset($this->_websiteCounts[$websiteId])
-                ? $this->_websiteCounts[$websiteId] + 1
-                : 1;
+            $this->_websiteCounts[$websiteId] = isset(
+                $this->_websiteCounts[$websiteId]
+            ) ? $this->_websiteCounts[$websiteId] + 1 : 1;
         }
 
         return parent::_beforeToHtml();
     }
 
+    /**
+     * Retrieve the website count for the specified website Id
+     *
+     * @param int $websiteId
+     * @return int
+     */
     public function getWebsiteCount($websiteId)
     {
         return isset($this->_websiteCounts[$websiteId]) ? $this->_websiteCounts[$websiteId] : 0;
     }
 
+    /**
+     * @return array
+     */
     public function getRows()
     {
         return $this->_groupedCollection;
     }
 
+    /**
+     * @return \Magento\Object
+     */
     public function getTotals()
     {
         return $this->_collection->getTotals();

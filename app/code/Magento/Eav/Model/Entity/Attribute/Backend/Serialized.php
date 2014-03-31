@@ -23,19 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * "Serialized" attribute backend
  */
-namespace Magento\Eav\Model\Entity\Attribute\Backend;
-
 class Serialized extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Serialize before saving
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -52,7 +51,7 @@ class Serialized extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBac
      * Unserialize after saving
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
+     * @return $this
      */
     public function afterSave($object)
     {
@@ -65,7 +64,7 @@ class Serialized extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBac
      * Unserialize after loading
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
+     * @return $this
      */
     public function afterLoad($object)
     {
@@ -78,7 +77,7 @@ class Serialized extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBac
      * Try to unserialize the attribute value
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
+     * @return $this
      */
     protected function _unserialize(\Magento\Object $object)
     {

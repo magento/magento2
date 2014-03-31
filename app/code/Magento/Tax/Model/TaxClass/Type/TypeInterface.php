@@ -34,14 +34,14 @@ interface TypeInterface
     /**
      * Get Collection of Objects that are assigned to this tax class
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToObjects();
 
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToRules();
 

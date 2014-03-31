@@ -26,6 +26,11 @@
 
 require_once 'processor.php';
 
-$processor = new Error_Processor(new \Magento\App\Response\Http());
+$processor = new Error_Processor(
+    new \Magento\App\Response\Http(
+        new \Magento\Stdlib\Cookie(),
+        new \Magento\App\Http\Context()
+    )
+);
 $response = $processor->processNoCache();
 $response->sendResponse();

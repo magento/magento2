@@ -23,6 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
+
+use Magento\Escaper;
 
 /**
  * Form checkbox element
@@ -31,10 +34,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Escaper;
-
 class Checkbox extends AbstractElement
 {
     /**
@@ -69,8 +68,7 @@ class Checkbox extends AbstractElement
     {
         if ($checked = $this->getChecked()) {
             $this->setData('checked', true);
-        }
-        else {
+        } else {
             $this->unsetData('checked');
         }
         return parent::getElementHtml();
@@ -79,10 +77,10 @@ class Checkbox extends AbstractElement
     /**
      * Set check status of checkbox
      *
-     * @param boolean $value
+     * @param bool $value
      * @return Checkbox
      */
-    public function setIsChecked($value=false)
+    public function setIsChecked($value = false)
     {
         $this->setData('checked', $value);
         return $this;
@@ -91,9 +89,10 @@ class Checkbox extends AbstractElement
     /**
      * Return check status of checkbox
      *
-     * @return boolean
+     * @return bool
      */
-    public function getIsChecked() {
+    public function getIsChecked()
+    {
         return $this->getData('checked');
     }
 }

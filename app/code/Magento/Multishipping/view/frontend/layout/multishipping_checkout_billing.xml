@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="multishipping_checkout"/>
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
@@ -32,10 +32,6 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="checkout/billing.phtml" cacheable="false">
-            <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">purchaseorder</argument>
-                <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
-            </action>
             <container name="payment_methods_before" label="Payment Methods Before"/>
             <container name="payment_methods_after" label="Payment Methods After"/>
         </block>

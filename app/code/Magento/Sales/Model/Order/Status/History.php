@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Status;
 
 /**
  * Order status history comments
@@ -41,8 +42,6 @@
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
  */
-namespace Magento\Sales\Model\Order\Status;
-
 class History extends \Magento\Sales\Model\AbstractModel
 {
     const CUSTOMER_NOTIFICATION_NOT_APPLICABLE = 2;
@@ -54,7 +53,14 @@ class History extends \Magento\Sales\Model\AbstractModel
      */
     protected $_order;
 
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_status_history';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'status_history';
 
     /**
@@ -63,39 +69,33 @@ class History extends \Magento\Sales\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $coreLocale,
-            $dateTime,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -105,8 +105,8 @@ class History extends \Magento\Sales\Model\AbstractModel
     /**
      * Set order object and grab some metadata from it
      *
-     * @param   \Magento\Sales\Model\Order $order
-     * @return  \Magento\Sales\Model\Order\Status\History
+     * @param \Magento\Sales\Model\Order $order
+     * @return $this
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
@@ -119,7 +119,7 @@ class History extends \Magento\Sales\Model\AbstractModel
      * Notification flag
      *
      * @param  mixed $flag OPTIONAL (notification is not applicable by default)
-     * @return \Magento\Sales\Model\Order\Status\History
+     * @return $this
      */
     public function setIsCustomerNotified($flag = null)
     {
@@ -178,7 +178,7 @@ class History extends \Magento\Sales\Model\AbstractModel
     /**
      * Set order again if required
      *
-     * @return \Magento\Sales\Model\Order\Status\History
+     * @return $this
      */
     protected function _beforeSave()
     {

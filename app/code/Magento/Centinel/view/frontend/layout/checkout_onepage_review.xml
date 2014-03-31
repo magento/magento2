@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceContainer name="checkout.onepage.review.info.items.before">
-        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml" cacheable="false">
+        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml">
             <action method="setAuthenticationStartMode">
                 <argument name="mode" xsi:type="string">instant</argument>
             </action>

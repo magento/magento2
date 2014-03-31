@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
 class DependenciesTest extends \PHPUnit_Framework_TestCase
@@ -43,8 +42,8 @@ class DependenciesTest extends \PHPUnit_Framework_TestCase
 
     public function testMap()
     {
-        $data = require_once (realpath(__DIR__ . '/../../../') . '/_files/dependencies_data.php');
-        $expected = require_once (realpath(__DIR__ . '/../../../') . '/_files/dependencies_mapped.php');
+        $data = require_once realpath(__DIR__ . '/../../../') . '/_files/dependencies_data.php';
+        $expected = require_once realpath(__DIR__ . '/../../../') . '/_files/dependencies_mapped.php';
 
         $actual = $this->_model->map($data);
         $this->assertEquals($expected, $actual);

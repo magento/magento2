@@ -75,13 +75,18 @@ class RequestPreprocessor
      * Auto-redirect to base url (without SID) if the requested url doesn't match it.
      * By default this feature is enabled in configuration.
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\App\FrontController $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     *
+     * @return \Magento\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $request = $arguments[0];
+    public function aroundDispatch(
+        \Magento\App\FrontController $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         if ($this->_appState->isInstalled() && !$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\UrlInterface::URL_TYPE_WEB,
@@ -93,9 +98,9 @@ class RequestPreprocessor
                     $redirectUrl = $this->_url->getRedirectUrl(
                         $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), array('_nosid' => true))
                     );
-                    $redirectCode = (int)$this->_storeConfig->getConfig('web/url/redirect_to_base') !== 301
-                        ? 302
-                        : 301;
+                    $redirectCode = (int)$this->_storeConfig->getConfig(
+                        'web/url/redirect_to_base'
+                    ) !== 301 ? 302 : 301;
 
                     $response = $this->_responseFactory->create();
                     $response->setRedirect($redirectUrl, $redirectCode);
@@ -105,7 +110,7 @@ class RequestPreprocessor
         }
         $request->setDispatched(false);
 
-        return $invocationChain->proceed($arguments);
+        return $proceed($request);
     }
 
     /**
@@ -115,7 +120,7 @@ class RequestPreprocessor
      */
     protected function _isBaseUrlCheckEnabled()
     {
-        return (bool) $this->_storeConfig->getConfig('web/url/redirect_to_base');
+        return (bool)$this->_storeConfig->getConfig('web/url/redirect_to_base');
     }
 
     /**
@@ -128,8 +133,15 @@ class RequestPreprocessor
     protected function _isBaseUrlCorrect($uri, $request)
     {
         $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
-        return (!isset($uri['scheme']) || $uri['scheme'] === $request->getScheme())
-            && (!isset($uri['host']) || $uri['host'] === $request->getHttpHost())
-            && (!isset($uri['path']) || strpos($requestUri, $uri['path']) !== false);
+        return (!isset(
+            $uri['scheme']
+        ) || $uri['scheme'] === $request->getScheme()) && (!isset(
+            $uri['host']
+        ) || $uri['host'] === $request->getHttpHost()) && (!isset(
+            $uri['path']
+        ) || strpos(
+            $requestUri,
+            $uri['path']
+        ) !== false);
     }
 }

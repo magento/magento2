@@ -31,5 +31,4 @@ namespace Magento\GiftMessage\Helper;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-
 }

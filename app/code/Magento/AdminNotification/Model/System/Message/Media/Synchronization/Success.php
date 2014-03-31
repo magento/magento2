@@ -23,8 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
-class Success
-    extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
+class Success extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
     /**
      * Message identity

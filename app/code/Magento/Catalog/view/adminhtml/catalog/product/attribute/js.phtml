@@ -65,7 +65,6 @@ function bindAttributeInputType()
 {
     checkOptionsPanelVisibility();
     switchDefaultValueField();
-    checkIsConfigurableVisibility();
     if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect' || $('frontend_input').value=='price')){
         if($('is_filterable') && !$('is_filterable').getAttribute('readonly')){
             $('is_filterable').disabled = false;
@@ -227,10 +226,7 @@ function switchDefaultValueField()
         default:
             getFrontTab().show();
 
-            setRowVisibility('is_required', true);
-            setRowVisibility('is_unique', true);
-            setRowVisibility('frontend_class', true);
-            setRowVisibility('is_configurable', true);
+            showDefaultRows();
         break;
     }
 
@@ -244,6 +240,13 @@ function switchDefaultValueField()
     for (var i = 0; i < elems.length; i++) {
         elems[i].type = optionDefaultInputType;
     }
+}
+
+function showDefaultRows()
+{
+    setRowVisibility('is_required', true);
+    setRowVisibility('is_unique', true);
+    setRowVisibility('frontend_class', true);
 }
 
 function setRowVisibility(id, isVisible)
@@ -261,15 +264,6 @@ function setRowVisibility(id, isVisible)
     }
 }
 
-function checkIsConfigurableVisibility()
-{
-    if (!$('is_configurable') || !$('is_global') || !$('frontend_input')) return;
-    if ($F('is_global')==1 && $F('frontend_input')=='select') {
-        setRowVisibility('is_configurable', true);
-    } else {
-        setRowVisibility('is_configurable', false);
-    }
-}
 
 function updateRequriedOptions()
 {
@@ -317,7 +311,6 @@ function saveAttributeInNewSet(promptMessage)
 if($('frontend_input')){
     Event.observe($('frontend_input'), 'change', updateRequriedOptions);
     Event.observe($('frontend_input'), 'change', bindAttributeInputType);
-    Event.observe($('is_global'), 'change', checkIsConfigurableVisibility);
 }
 
 if ($('is_filterable')) {
@@ -327,9 +320,9 @@ if ($('is_filterable')) {
 if ($('is_required')) {
     Event.observe($('is_required'), 'change', updateRequriedOptions);
 }
-bindAttributeInputType();
 
 jQuery(function($) {
+    bindAttributeInputType();
     // @todo: refactor collapsable component
     $('.attribute-popup .collapse, [data-role="advanced_fieldset-content"]')
         .collapsable()

@@ -1,80 +1,99 @@
 <?php
 
+/**
+ * Directive
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Directive extends Less_Tree{
 
 	public $name;
 	public $value;
 	public $rules;
 	public $index;
+	public $isReferenced;
+	public $currentFileInfo;
+	public $debugInfo;
 	public $type = 'Directive';
 
-	public function __construct($name, $value = null, $index = null, $currentFileInfo = null ){
+	public function __construct($name, $value = null, $rules, $index = null, $currentFileInfo = null, $debugInfo = null ){
 		$this->name = $name;
-		if (is_array($value)) {
-			$rule = new Less_Tree_Ruleset(array(), $value);
-			$rule->allowImports = true;
-			$this->rules = array($rule);
-		} else {
-			$this->value = $value;
+		$this->value = $value;
+		if( $rules ){
+			$this->rules = $rules;
+			$this->rules->allowImports = true;
 		}
+
+		$this->index = $index;
 		$this->currentFileInfo = $currentFileInfo;
+		$this->debugInfo = $debugInfo;
 	}
 
 
 	function accept( $visitor ){
 		if( $this->rules ){
-			$this->rules = $visitor->visitArray( $this->rules );
+			$this->rules = $visitor->visitObj( $this->rules );
 		}
 		if( $this->value ){
 			$this->value = $visitor->visitObj( $this->value );
 		}
 	}
 
-	function genCSS( $env, &$strs ){
 
-		self::OutputAdd( $strs, $this->name, $this->currentFileInfo, $this->index );
-
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
+		$value = $this->value;
+		$rules = $this->rules;
+		$output->add( $this->name, $this->currentFileInfo, $this->index );
+		if( $this->value ){
+			$output->add(' ');
+			$this->value->genCSS($output);
+		}
 		if( $this->rules ){
-			Less_Tree::outputRuleset( $env, $strs, $this->rules);
-		}else{
-			self::OutputAdd( $strs, ' ' );
-			$this->value->genCSS( $env, $strs );
-			self::OutputAdd( $strs, ';' );
+			Less_Tree::outputRuleset( $output, array($this->rules));
+		} else {
+			$output->add(';');
 		}
 	}
 
 	public function compile($env){
-		$evaldDirective = $this;
-		if( $this->rules ){
-			$env->unshiftFrame($this);
-			$evaldDirective = new Less_Tree_Directive( $this->name, null, $this->index, $this->currentFileInfo );
-			$evaldDirective->rules = array( $this->rules[0]->compile($env) );
-			$evaldDirective->rules[0]->root = true;
-			$env->shiftFrame();
+
+		$value = $this->value;
+		$rules = $this->rules;
+		if( $value ){
+			$value = $value->compile($env);
 		}
-		return $evaldDirective;
+
+		if( $rules ){
+			$rules = $rules->compile($env);
+			$rules->root = true;
+		}
+
+		return new Less_Tree_Directive( $this->name, $value, $rules, $this->index, $this->currentFileInfo, $this->debugInfo );
 	}
 
-	// TODO: Not sure if this is right...
+
 	public function variable($name){
-		return $this->rules[0]->variable($name);
+		if( $this->rules ){
+			return $this->rules->variable($name);
+		}
 	}
 
 	public function find($selector){
-		return $this->rules[0]->find($selector, $this);
+		if( $this->rules ){
+			return $this->rules->find($selector, $this);
+		}
 	}
 
-	//rulesets: function () { return tree.Ruleset.prototype.rulesets.apply(this.rules[0]); },
+	//rulesets: function () { if (this.rules) return tree.Ruleset.prototype.rulesets.apply(this.rules); },
 
 	public function markReferenced(){
 		$this->isReferenced = true;
 		if( $this->rules ){
-			$rules = $this->rules[0]->rules;
-			for( $i = 0; $i < count($rules); $i++ ){
-				if( Less_Parser::is_method( $rules[$i], 'markReferenced') ){
-					$rules[$i]->markReferenced();
-				}
-			}
+			Less_Tree::ReferencedArray($this->rules->rules);
 		}
 	}
 

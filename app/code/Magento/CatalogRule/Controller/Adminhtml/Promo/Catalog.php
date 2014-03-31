@@ -33,7 +33,16 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
-class Catalog extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\CatalogRule\Model\Rule\Job;
+use Magento\Model\Exception;
+use Magento\Stdlib\DateTime\Filter\Date;
+use Magento\Registry;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Rule\Model\Action\AbstractAction;
+
+class Catalog extends Action
 {
     /**
      * Dirty rules notice message
@@ -46,41 +55,45 @@ class Catalog extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
-    /*
-     * @var \Magento\Core\Filter\Date
+    /**
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param Date $dateFilter
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Filter\Date $dateFilter
-    ) {
+    public function __construct(Context $context, Registry $coreRegistry, Date $dateFilter)
+    {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
         $this->_dateFilter = $dateFilter;
     }
 
+    /**
+     * @return $this
+     */
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_CatalogRule::promo_catalog')
-            ->_addBreadcrumb(
-                __('Promotions'),
-                __('Promotions')
-            );
+        $this->_setActiveMenu(
+            'Magento_CatalogRule::promo_catalog'
+        )->_addBreadcrumb(
+            __('Promotions'),
+            __('Promotions')
+        );
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Catalog Price Rules'));
@@ -90,19 +103,21 @@ class Catalog extends \Magento\Backend\App\Action
             $this->messageManager->addNotice($this->getDirtyRulesNoticeMessage());
         }
 
-        $this->_initAction()
-            ->_addBreadcrumb(
-                __('Catalog'),
-                __('Catalog')
-            );
+        $this->_initAction()->_addBreadcrumb(__('Catalog'), __('Catalog'));
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Catalog Price Rules'));
@@ -112,7 +127,7 @@ class Catalog extends \Magento\Backend\App\Action
 
         if ($id) {
             $model->load($id);
-            if (! $model->getRuleId()) {
+            if (!$model->getRuleId()) {
                 $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('catalog_rule/*');
                 return;
@@ -131,14 +146,21 @@ class Catalog extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('current_promo_catalog_rule', $model);
 
         $this->_initAction();
-        $this->_view->getLayout()->getBlock('promo_catalog_edit')
-            ->setData('action', $this->getUrl('catalog_rule/promo_catalog/save'));
+        $this->_view->getLayout()->getBlock(
+            'promo_catalog_edit'
+        )->setData(
+            'action',
+            $this->getUrl('catalog_rule/promo_catalog/save')
+        );
 
         $breadcrumb = $id ? __('Edit Rule') : __('New Rule');
         $this->_addBreadcrumb($breadcrumb, $breadcrumb);
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         if ($this->getRequest()->getPost()) {
@@ -150,13 +172,16 @@ class Catalog extends \Magento\Backend\App\Action
                 );
                 $data = $this->getRequest()->getPost();
                 $inputFilter = new \Zend_Filter_Input(
-                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter), array(), $data);
+                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter),
+                    array(),
+                    $data
+                );
                 $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {
-                        throw new \Magento\Core\Exception(__('Wrong rule specified.'));
+                        throw new Exception(__('Wrong rule specified.'));
                     }
                 }
 
@@ -166,7 +191,7 @@ class Catalog extends \Magento\Backend\App\Action
                         $this->messageManager->addError($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
-                    $this->_redirect('catalog_rule/*/edit', array('id'=>$model->getId()));
+                    $this->_redirect('catalog_rule/*/edit', array('id' => $model->getId()));
                     return;
                 }
 
@@ -185,9 +210,7 @@ class Catalog extends \Magento\Backend\App\Action
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
                 } else {
-                    $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()
-                        ->setState(1)
-                        ->save();
+                    $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
                     if ($this->getRequest()->getParam('back')) {
                         $this->_redirect('catalog_rule/*/edit', array('id' => $model->getId()));
                         return;
@@ -195,7 +218,7 @@ class Catalog extends \Magento\Backend\App\Action
                     $this->_redirect('catalog_rule/*/');
                 }
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
@@ -210,6 +233,9 @@ class Catalog extends \Magento\Backend\App\Action
         $this->_redirect('catalog_rule/*/');
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -218,13 +244,11 @@ class Catalog extends \Magento\Backend\App\Action
                 $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
                 $model->load($id);
                 $model->delete();
-                $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()
-                    ->setState(1)
-                    ->save();
+                $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
                 $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('catalog_rule/*/');
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
@@ -239,22 +263,31 @@ class Catalog extends \Magento\Backend\App\Action
         $this->_redirect('catalog_rule/*/');
     }
 
+    /**
+     * @return void
+     */
     public function newConditionHtmlAction()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create($type)
-            ->setId($id)
-            ->setType($type)
-            ->setRule($this->_objectManager->create('Magento\CatalogRule\Model\Rule'))
-            ->setPrefix('conditions');
+        $model = $this->_objectManager->create(
+            $type
+        )->setId(
+            $id
+        )->setType(
+            $type
+        )->setRule(
+            $this->_objectManager->create('Magento\CatalogRule\Model\Rule')
+        )->setPrefix(
+            'conditions'
+        );
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }
 
-        if ($model instanceof \Magento\Rule\Model\Condition\AbstractCondition) {
+        if ($model instanceof AbstractCondition) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));
             $html = $model->asHtmlRecursive();
         } else {
@@ -263,6 +296,9 @@ class Catalog extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($html);
     }
 
+    /**
+     * @return void
+     */
     public function chooserAction()
     {
         if ($this->getRequest()->getParam('attribute') == 'sku') {
@@ -276,22 +312,31 @@ class Catalog extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function newActionHtmlAction()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create($type)
-            ->setId($id)
-            ->setType($type)
-            ->setRule($this->_objectManager->create('Magento\CatalogRule\Model\Rule'))
-            ->setPrefix('actions');
+        $model = $this->_objectManager->create(
+            $type
+        )->setId(
+            $id
+        )->setType(
+            $type
+        )->setRule(
+            $this->_objectManager->create('Magento\CatalogRule\Model\Rule')
+        )->setPrefix(
+            'actions'
+        );
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }
 
-        if ($model instanceof \Magento\Rule\Model\Action\AbstractAction) {
+        if ($model instanceof AbstractAction) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));
             $html = $model->asHtmlRecursive();
         } else {
@@ -302,20 +347,20 @@ class Catalog extends \Magento\Backend\App\Action
 
     /**
      * Apply all active catalog price rules
+     *
+     * @return void
      */
     public function applyRulesAction()
     {
         $errorMessage = __('Unable to apply rules.');
         try {
-            /** @var $ruleJob \Magento\CatalogRule\Model\Rule\Job */
+            /** @var Job $ruleJob */
             $ruleJob = $this->_objectManager->get('Magento\CatalogRule\Model\Rule\Job');
             $ruleJob->applyAll();
 
             if ($ruleJob->hasSuccess()) {
                 $this->messageManager->addSuccess($ruleJob->getSuccess());
-                $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()
-                    ->setState(0)
-                    ->save();
+                $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(0)->save();
             } elseif ($ruleJob->hasError()) {
                 $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
             }
@@ -325,6 +370,9 @@ class Catalog extends \Magento\Backend\App\Action
         $this->_redirect('catalog_rule/*');
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_CatalogRule::promo_catalog');
@@ -334,6 +382,7 @@ class Catalog extends \Magento\Backend\App\Action
      * Set dirty rules notice message
      *
      * @param string $dirtyRulesNoticeMessage
+     * @return void
      */
     public function setDirtyRulesNoticeMessage($dirtyRulesNoticeMessage)
     {
@@ -347,7 +396,9 @@ class Catalog extends \Magento\Backend\App\Action
      */
     public function getDirtyRulesNoticeMessage()
     {
-        $defaultMessage = __('There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.');
+        $defaultMessage = __(
+            'There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.'
+        );
         return $this->_dirtyRulesNoticeMessage ? $this->_dirtyRulesNoticeMessage : $defaultMessage;
     }
 }

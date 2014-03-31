@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Generator\CodeGenerator;
 
-use \Zend\Code\Generator\MethodGenerator;
-use \Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\PropertyGenerator;
 
-class Zend extends \Zend\Code\Generator\ClassGenerator
-    implements \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface
+class Zend extends \Zend\Code\Generator\ClassGenerator implements
+    \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface
 {
     /**
      * Possible doc block options
@@ -39,8 +38,8 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      */
     protected $_docBlockOptions = array(
         'shortDescription' => 'setShortDescription',
-        'longDescription'  => 'setLongDescription',
-        'tags'             => 'setTags'
+        'longDescription' => 'setLongDescription',
+        'tags' => 'setTags'
     );
 
     /**
@@ -49,11 +48,11 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * @var array
      */
     protected $_propertyOptions = array(
-        'name'         => 'setName',
-        'const'        => 'setConst',
-        'static'       => 'setStatic',
-        'visibility'   => 'setVisibility',
-        'defaultValue' => 'setDefaultValue',
+        'name' => 'setName',
+        'const' => 'setConst',
+        'static' => 'setStatic',
+        'visibility' => 'setVisibility',
+        'defaultValue' => 'setDefaultValue'
     );
 
     /**
@@ -62,12 +61,12 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * @var array
      */
     protected $_methodOptions = array(
-        'name'       => 'setName',
-        'final'      => 'setFinal',
-        'static'     => 'setStatic',
-        'abstract'   => 'setAbstract',
+        'name' => 'setName',
+        'final' => 'setFinal',
+        'static' => 'setStatic',
+        'abstract' => 'setAbstract',
         'visibility' => 'setVisibility',
-        'body'       => 'setBody',
+        'body' => 'setBody'
     );
 
     /**
@@ -76,9 +75,9 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * @var array
      */
     protected $_parameterOptions = array(
-        'name'              => 'setName',
-        'type'              => 'setType',
-        'defaultValue'      => 'setDefaultValue',
+        'name' => 'setName',
+        'type' => 'setType',
+        'defaultValue' => 'setDefaultValue',
         'passedByReference' => 'setPassedByReference'
     );
 
@@ -123,8 +122,13 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
             $methodObject = new MethodGenerator();
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
-            if (isset($methodOptions['parameters']) && is_array($methodOptions['parameters'])
-                && count($methodOptions['parameters']) > 0
+            if (isset(
+                $methodOptions['parameters']
+            ) && is_array(
+                $methodOptions['parameters']
+            ) && count(
+                $methodOptions['parameters']
+            ) > 0
             ) {
                 $parametersArray = array();
                 foreach ($methodOptions['parameters'] as $parameterOptions) {
@@ -158,9 +162,7 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
     public function addMethodFromGenerator(MethodGenerator $method)
     {
         if (!is_string($method->getName())) {
-            throw new \InvalidArgumentException(
-                'addMethodFromGenerator() expects string for name'
-            );
+            throw new \InvalidArgumentException('addMethodFromGenerator() expects string for name');
         }
 
         return parent::addMethodFromGenerator($method);
@@ -204,9 +206,7 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
     public function addPropertyFromGenerator(PropertyGenerator $property)
     {
         if (!is_string($property->getName())) {
-            throw new \InvalidArgumentException(
-                'addPropertyFromGenerator() expects string for name'
-            );
+            throw new \InvalidArgumentException('addPropertyFromGenerator() expects string for name');
         }
 
         return parent::addPropertyFromGenerator($property);

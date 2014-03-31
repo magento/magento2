@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Product\View;
 
 /**
@@ -32,18 +31,18 @@ namespace Magento\Review\Block\Product\View;
 class Other extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_registry = $registry;
@@ -51,6 +50,8 @@ class Other extends \Magento\View\Element\Template
     }
 
     /**
+     * Get product object
+     *
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()

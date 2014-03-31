@@ -37,14 +37,17 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleReader = $this->getMock(
-            'Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false
+        $this->_moduleReader = $this->getMock('Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false);
+        $this->_moduleReader->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Catalog'
+        )->will(
+            $this->returnValue('fixture_dir')
         );
-        $this->_moduleReader
-            ->expects($this->once())
-            ->method('getModuleDir')->with('etc', 'Magento_Catalog')
-            ->will($this->returnValue('fixture_dir'))
-        ;
         $this->_model = new \Magento\Catalog\Model\Attribute\Config\SchemaLocator($this->_moduleReader);
     }
 

@@ -23,12 +23,11 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tools\Migration\System\Configuration;
 
 /**
  * System configuration migration reader
  */
-namespace Magento\Tools\Migration\System\Configuration;
-
 class Reader
 {
     /**
@@ -54,12 +53,12 @@ class Reader
     /**
      * pattern to find all system.xml files
      */
-    CONST SYSTEM_CONFIG_PATH_PATTERN = 'app/code/*/*/*/etc/system.xml';
+    const SYSTEM_CONFIG_PATH_PATTERN = 'app/code/*/*/*/etc/system.xml';
 
     /**
      * @param \Magento\Tools\Migration\System\FileManager $fileManager
      * @param \Magento\Tools\Migration\System\Configuration\Parser $parser
-     * @param Tools_Migration_System_Configuration_Mapper $mapper
+     * @param \Magento\Tools\Migration\System\Configuration\Mapper $mapper Tools_Migration_System_Configuration_Mapper
      */
     public function __construct(
         \Magento\Tools\Migration\System\FileManager $fileManager,
@@ -81,17 +80,12 @@ class Reader
     public function getConfiguration()
     {
         $files = $this->_fileManager->getFileList(
-            $this->_basePath . '/'
-            . \Magento\Tools\Migration\System\Configuration\Reader::SYSTEM_CONFIG_PATH_PATTERN
+            $this->_basePath . '/' . \Magento\Tools\Migration\System\Configuration\Reader::SYSTEM_CONFIG_PATH_PATTERN
         );
         $result = array();
         foreach ($files as $fileName) {
             $result[$fileName] = $this->_mapper->transform(
-                $this->_parser->parse(
-                    $this->_getDOMDocument(
-                        $this->_fileManager->getContents($fileName)
-                    )
-                )
+                $this->_parser->parse($this->_getDOMDocument($this->_fileManager->getContents($fileName)))
             );
         }
 
@@ -101,7 +95,7 @@ class Reader
     /**
      * Create Dom document from xml string
      *
-     * @param $xml
+     * @param string $xml
      * @return \DOMDocument
      */
     protected function _getDOMDocument($xml)

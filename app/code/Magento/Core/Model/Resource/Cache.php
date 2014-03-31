@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Core Cache resource model
@@ -32,13 +32,12 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
-class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magento\App\Cache\State\OptionsInterface
+class Cache extends \Magento\Model\Resource\Db\AbstractDb implements \Magento\App\Cache\State\OptionsInterface
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +47,7 @@ class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magen
     /**
      * Get all cache options
      *
-     * @return array | false
+     * @return array|false
      */
     public function getAllOptions()
     {
@@ -58,8 +57,7 @@ class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magen
              * Check if table exist (it protect upgrades. cache settings checked before upgrades)
              */
             if ($adapter->isTableExists($this->getMainTable())) {
-                $select = $adapter->select()
-                    ->from($this->getMainTable(), array('code', 'value'));
+                $select = $adapter->select()->from($this->getMainTable(), array('code', 'value'));
                 return $adapter->fetchPairs($select);
             }
         }
@@ -70,7 +68,7 @@ class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magen
      * Save all options to option table
      *
      * @param array $options
-     * @return \Magento\Core\Model\Resource\Cache
+     * @return $this
      * @throws \Exception
      */
     public function saveAllOptions($options)

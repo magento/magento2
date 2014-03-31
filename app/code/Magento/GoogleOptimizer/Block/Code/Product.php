@@ -25,10 +25,20 @@
  */
 namespace Magento\GoogleOptimizer\Block\Code;
 
-class Product extends \Magento\GoogleOptimizer\Block\AbstractCode
+class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\View\Block\IdentityInterface
 {
     /**
-     * @var Entity name in registry
+     * @var Product name in registry
      */
     protected $_registryName = 'current_product';
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->_getEntity()->getIdentities();
+    }
 }

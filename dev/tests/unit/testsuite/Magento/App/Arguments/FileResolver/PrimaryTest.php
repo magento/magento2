@@ -35,22 +35,21 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
     {
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array('search'), array(), '', false);
         $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
-        $iteratorFactory = $this->getMock(
-            'Magento\Config\FileIteratorFactory', array('create'), array(), '', false
+        $iteratorFactory = $this->getMock('Magento\Config\FileIteratorFactory', array('create'), array(), '', false);
+
+        $filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::CONFIG_DIR
+        )->will(
+            $this->returnValue($directory)
         );
 
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::CONFIG_DIR)
-            ->will($this->returnValue($directory));
+        $directory->expects($this->once())->method('search')->will($this->returnValue($fileList));
 
-        $directory->expects($this->once())
-            ->method('search')
-            ->will($this->returnValue($fileList));
-
-        $iteratorFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(true));
+        $iteratorFactory->expects($this->once())->method('create')->will($this->returnValue(true));
 
         $model = new \Magento\App\Arguments\FileResolver\Primary($filesystem, $iteratorFactory);
 
@@ -62,15 +61,6 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
      */
     public function getMethodDataProvider()
     {
-        return array(
-            array(
-                array(
-                    'config/di.xml',
-                    'config/some_config/di.xml',
-                ),
-                'primary',
-                'di.xml',
-            )
-        );
+        return array(array(array('config/di.xml', 'config/some_config/di.xml'), 'primary', 'di.xml'));
     }
 }

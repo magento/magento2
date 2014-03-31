@@ -23,15 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
     <referenceBlock name="header.links">
-        <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-" cacheable="false"/>
-        <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login" cacheable="false"/>
-        <block class="Magento\Customer\Block\Account\RegisterLink" after="authorization-link-login" name="register-link" cacheable="false">
-            <arguments>
-                <argument name="label" xsi:type="string">Register</argument>
-            </arguments>
-        </block>
+        <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-"/>
+        <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login"/>
     </referenceBlock>
     <move element="register-link" destination="header.links"/>
     <move element="top.links" destination="customer"/>

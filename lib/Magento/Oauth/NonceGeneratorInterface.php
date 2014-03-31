@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Oauth;
 
 /**
@@ -58,6 +57,7 @@ interface NonceGeneratorInterface
      * @param ConsumerInterface $consumer
      * @param string $nonce - The nonce value.
      * @param int $timestamp - The 'oauth_timestamp' value.
+     * @return void
      * @throws \Magento\Oauth\Exception - Exceptions are thrown for validation errors.
      */
     public function validateNonce(ConsumerInterface $consumer, $nonce, $timestamp);

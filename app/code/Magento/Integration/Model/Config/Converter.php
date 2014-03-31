@@ -32,8 +32,11 @@ class Converter implements \Magento\Config\ConverterInterface
      * Array keys for config internal representation.
      */
     const KEY_EMAIL = 'email';
+
     const KEY_AUTHENTICATION_ENDPOINT_URL = 'endpoint_url';
+
     const KEY_IDENTITY_LINKING_URL = 'identity_link_url';
+
     /**#@-*/
 
     /**

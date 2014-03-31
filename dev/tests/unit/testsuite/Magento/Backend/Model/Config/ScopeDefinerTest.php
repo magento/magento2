@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config;
 
 class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
@@ -52,19 +51,25 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopeReturnsStoreScopeIfStoreIsSpecified()
     {
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap(array(
-            array('website', null, 'someWebsite'),
-            array('store', null, 'someStore')
-        )));
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->will(
+            $this->returnValueMap(array(array('website', null, 'someWebsite'), array('store', null, 'someStore')))
+        );
         $this->assertEquals(\Magento\Backend\Model\Config\ScopeDefiner::SCOPE_STORE, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsWebsiteScopeIfWebsiteIsSpecified()
     {
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap(array(
-            array('website', null, 'someWebsite'),
-            array('store', null, null)
-        )));
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->will(
+            $this->returnValueMap(array(array('website', null, 'someWebsite'), array('store', null, null)))
+        );
         $this->assertEquals(\Magento\Backend\Model\Config\ScopeDefiner::SCOPE_WEBSITE, $this->_model->getScope());
     }
 }

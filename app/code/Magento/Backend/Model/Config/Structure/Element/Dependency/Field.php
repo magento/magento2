@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Dependency;
 
 class Field
@@ -31,7 +30,7 @@ class Field
     /**
      * Values for dependence
      *
-     * @var array
+     * @var string[]
      */
     protected $_values;
 
@@ -60,8 +59,13 @@ class Field
         } else {
             $this->_values = array($fieldData['value']);
         }
-        $fieldId = $fieldPrefix . (isset($fieldData['dependPath']) && is_array($fieldData['dependPath'])
-            ? array_pop($fieldData['dependPath']) : '');
+        $fieldId = $fieldPrefix . (isset(
+            $fieldData['dependPath']
+        ) && is_array(
+            $fieldData['dependPath']
+        ) ? array_pop(
+            $fieldData['dependPath']
+        ) : '');
         $fieldData['dependPath'][] = $fieldId;
         $this->_id = implode('_', $fieldData['dependPath']);
         $this->_isNegative = isset($fieldData['negative']) && $fieldData['negative'];
@@ -91,7 +95,7 @@ class Field
     /**
      * Get values for dependence
      *
-     * @return array
+     * @return string[]
      */
     public function getValues()
     {

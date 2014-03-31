@@ -44,28 +44,40 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_importConfig = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Config', array(), array(), '', false
+            'Magento\Directory\Model\Currency\Import\Config',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_model = new \Magento\Directory\Model\Currency\Import\Factory(
-            $this->_objectManager, $this->_importConfig
+            $this->_objectManager,
+            $this->_importConfig
         );
     }
 
     public function testCreate()
     {
         $expectedResult = $this->getMock('Magento\Directory\Model\Currency\Import\ImportInterface');
-        $this->_importConfig
-            ->expects($this->once())
-            ->method('getServiceClass')
-            ->with('test')
-            ->will($this->returnValue('Test_Class'))
-        ;
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with('Test_Class', array('argument' => 'value'))
-            ->will($this->returnValue($expectedResult))
-        ;
+        $this->_importConfig->expects(
+            $this->once()
+        )->method(
+            'getServiceClass'
+        )->with(
+            'test'
+        )->will(
+            $this->returnValue('Test_Class')
+        );
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Test_Class',
+            array('argument' => 'value')
+        )->will(
+            $this->returnValue($expectedResult)
+        );
         $actualResult = $this->_model->create('test', array('argument' => 'value'));
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -76,12 +88,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateUndefinedServiceClass()
     {
-        $this->_importConfig
-            ->expects($this->once())
-            ->method('getServiceClass')
-            ->with('test')
-            ->will($this->returnValue(null))
-        ;
+        $this->_importConfig->expects(
+            $this->once()
+        )->method(
+            'getServiceClass'
+        )->with(
+            'test'
+        )->will(
+            $this->returnValue(null)
+        );
         $this->_objectManager->expects($this->never())->method('create');
         $this->_model->create('test');
     }
@@ -93,18 +108,24 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateIrrelevantServiceClass()
     {
-        $this->_importConfig
-            ->expects($this->once())
-            ->method('getServiceClass')
-            ->with('test')
-            ->will($this->returnValue('stdClass'))
-        ;
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with('stdClass')
-            ->will($this->returnValue(new \stdClass()))
-        ;
+        $this->_importConfig->expects(
+            $this->once()
+        )->method(
+            'getServiceClass'
+        )->with(
+            'test'
+        )->will(
+            $this->returnValue('stdClass')
+        );
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'stdClass'
+        )->will(
+            $this->returnValue(new \stdClass())
+        );
         $this->_model->create('test');
     }
 }

@@ -23,8 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Option;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
 
 /**
  * Catalog product option select type model
@@ -40,12 +42,21 @@ namespace Magento\Catalog\Model\Product\Option;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Value extends \Magento\Core\Model\AbstractModel
+class Value extends \Magento\Model\AbstractModel
 {
+    /**
+     * @var array
+     */
     protected $_values = array();
 
+    /**
+     * @var Product
+     */
     protected $_product;
 
+    /**
+     * @var Option
+     */
     protected $_option;
 
     /**
@@ -56,18 +67,18 @@ class Value extends \Magento\Core\Model\AbstractModel
     protected $_valueCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -75,40 +86,64 @@ class Value extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Product\Option\Value');
     }
 
+    /**
+     * @param mixed $value
+     * @return $this
+     */
     public function addValue($value)
     {
         $this->_values[] = $value;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getValues()
     {
         return $this->_values;
     }
 
+    /**
+     * @param array $values
+     * @return $this
+     */
     public function setValues($values)
     {
         $this->_values = $values;
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function unsetValues()
     {
         $this->_values = array();
         return $this;
     }
 
-    public function setOption(\Magento\Catalog\Model\Product\Option $option)
+    /**
+     * @param Option $option
+     * @return $this
+     */
+    public function setOption(Option $option)
     {
         $this->_option = $option;
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function unsetOption()
     {
         $this->_option = null;
@@ -118,19 +153,26 @@ class Value extends \Magento\Core\Model\AbstractModel
     /**
      * Enter description here...
      *
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return Option
      */
     public function getOption()
     {
         return $this->_option;
     }
 
+    /**
+     * @param Product $product
+     * @return $this
+     */
     public function setProduct($product)
     {
         $this->_product = $product;
         return $this;
     }
 
+    /**
+     * @return Product
+     */
     public function getProduct()
     {
         if (is_null($this->_product)) {
@@ -139,14 +181,24 @@ class Value extends \Magento\Core\Model\AbstractModel
         return $this->_product;
     }
 
+    /**
+     * @return $this
+     */
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
-            $this->setData($value)
-                ->setData('option_id', $this->getOption()->getId())
-                ->setData('store_id', $this->getOption()->getStoreId());
+            $this->setData(
+                $value
+            )->setData(
+                'option_id',
+                $this->getOption()->getId()
+            )->setData(
+                'store_id',
+                $this->getOption()->getStoreId()
+            );
 
-            if ($this->getData('option_type_id') == '-1') {//change to 0
+            if ($this->getData('option_type_id') == '-1') {
+                //change to 0
                 $this->unsetData('option_type_id');
             } else {
                 $this->setId($this->getData('option_type_id'));
@@ -160,7 +212,8 @@ class Value extends \Magento\Core\Model\AbstractModel
             } else {
                 $this->save();
             }
-        }//eof foreach()
+        }
+        //eof foreach()
         return $this;
     }
 
@@ -171,11 +224,11 @@ class Value extends \Magento\Core\Model\AbstractModel
      * @param bool $flag
      * @return float|int
      */
-    public function getPrice($flag=false)
+    public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
             $basePrice = $this->getOption()->getProduct()->getFinalPrice();
-            $price = $basePrice*($this->_getData('price')/100);
+            $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }
         return $this->_getData('price');
@@ -184,33 +237,54 @@ class Value extends \Magento\Core\Model\AbstractModel
     /**
      * Enter description here...
      *
-     * @param \Magento\Catalog\Model\Product\Option $option
+     * @param Option $option
      * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
      */
-    public function getValuesCollection(\Magento\Catalog\Model\Product\Option $option)
+    public function getValuesCollection(Option $option)
     {
-        $collection = $this->_valueCollectionFactory->create()
-            ->addFieldToFilter('option_id', $option->getId())
-            ->getValues($option->getStoreId());
+        $collection = $this->_valueCollectionFactory->create()->addFieldToFilter(
+            'option_id',
+            $option->getId()
+        )->getValues(
+            $option->getStoreId()
+        );
 
         return $collection;
     }
 
+    /**
+     * @param array $optionIds
+     * @param int $option_id
+     * @param int $store_id
+     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     */
     public function getValuesByOption($optionIds, $option_id, $store_id)
     {
-        $collection = $this->_valueCollectionFactory->create()
-            ->addFieldToFilter('option_id', $option_id)
-            ->getValuesByOption($optionIds, $store_id);
+        $collection = $this->_valueCollectionFactory->create()->addFieldToFilter(
+            'option_id',
+            $option_id
+        )->getValuesByOption(
+            $optionIds,
+            $store_id
+        );
 
         return $collection;
     }
 
+    /**
+     * @param int $option_id
+     * @return $this
+     */
     public function deleteValue($option_id)
     {
         $this->getResource()->deleteValue($option_id);
         return $this;
     }
 
+    /**
+     * @param int $option_type_id
+     * @return $this
+     */
     public function deleteValues($option_type_id)
     {
         $this->getResource()->deleteValues($option_type_id);
@@ -235,7 +309,7 @@ class Value extends \Magento\Core\Model\AbstractModel
      *
      * @param int $oldOptionId
      * @param int $newOptionId
-     * @return \Magento\Catalog\Model\Product\Option\Value
+     * @return $this
      */
     public function duplicate($oldOptionId, $newOptionId)
     {

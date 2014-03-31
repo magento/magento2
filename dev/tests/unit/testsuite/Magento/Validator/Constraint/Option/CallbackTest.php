@@ -63,13 +63,17 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
             return 'Value from closure';
         };
 
-        $mock = $this->getMockBuilder('Foo')
-            ->setMethods(array('getValue'))
-            ->getMock();
-        $mock->expects($this->once())
-            ->method('getValue')
-            ->with('arg1', 'arg2')
-            ->will($this->returnValue('Value from mock'));
+        $mock = $this->getMockBuilder('Foo')->setMethods(array('getValue'))->getMock();
+        $mock->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            'arg1',
+            'arg2'
+        )->will(
+            $this->returnValue('Value from mock')
+        );
 
         return array(
             array($functionName, 'Value from function'),
@@ -84,7 +88,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
     /**
      * Get TEST_VALUE from static scope
      */
-    static public function getTestValueStatically()
+    public static function getTestValueStatically()
     {
         return self::TEST_VALUE;
     }
@@ -120,10 +124,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function setArgumentsDataProvider()
     {
-        return array(
-            array('baz', array('baz')),
-            array(array('foo', 'bar'), array('foo', 'bar'))
-        );
+        return array(array('baz', array('baz')), array(array('foo', 'bar'), array('foo', 'bar')));
     }
 
     /**
@@ -154,26 +155,14 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
                 array('Not_Existing_Callback_Class', 'someMethod'),
                 'Class "Not_Existing_Callback_Class" was not found'
             ),
-            array(
-                array($this, 'notExistingMethod'),
-                'Callback does not callable'
-            ),
-            array(
-                array('object' => $this, 'method' => 'getTestValue'),
-                'Callback does not callable'
-            ),
-            array(
-                'unknown_function',
-                'Callback does not callable'
-            ),
-            array(
-                new \stdClass(),
-                'Callback does not callable'
-            ),
+            array(array($this, 'notExistingMethod'), 'Callback does not callable'),
+            array(array('object' => $this, 'method' => 'getTestValue'), 'Callback does not callable'),
+            array('unknown_function', 'Callback does not callable'),
+            array(new \stdClass(), 'Callback does not callable'),
             array(
                 array($this, 'getTestValue'),
                 'Callable expected to be an array with class name as first element',
-                true,
+                true
             )
         );
     }

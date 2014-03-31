@@ -23,18 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Layout;
+
+use Magento\Simplexml\Element;
 
 class Translator
 {
     /**
      * Translate layout node
      *
-     * @param \Magento\Simplexml\Element $node
+     * @param Element $node
      * @param array $args
+     * @return void
      **/
-    public function translateActionParameters(\Magento\Simplexml\Element $node, &$args)
+    public function translateActionParameters(Element $node, &$args)
     {
         if (false === $this->_isNodeTranslatable($node)) {
             return;
@@ -48,7 +50,7 @@ class Translator
              */
             // @var $argumentHierarchy array - path to translatable item in $args array
             $argumentHierarchy = explode('.', $translatableArg);
-            $argumentStack = &$args;
+            $argumentStack =& $args;
             $canTranslate = true;
             while (is_array($argumentStack) && count($argumentStack) > 0) {
                 $argumentName = array_shift($argumentHierarchy);
@@ -57,7 +59,7 @@ class Translator
                      * Move to the next element in arguments hierarchy
                      * in order to find target translatable argument
                      */
-                    $argumentStack = &$argumentStack[$argumentName];
+                    $argumentStack =& $argumentStack[$argumentName];
                 } else {
                     // Target argument cannot be found
                     $canTranslate = false;
@@ -74,10 +76,10 @@ class Translator
     /**
      * Translate argument value
      *
-     * @param \Magento\Simplexml\Element $node
+     * @param Element $node
      * @return string
      */
-    public function translateArgument(\Magento\Simplexml\Element $node)
+    public function translateArgument(Element $node)
     {
         $value = $this->_getNodeValue($node);
 
@@ -95,10 +97,10 @@ class Translator
     /**
      * Get node names that have to be translated
      *
-     * @param $node
+     * @param Element $node
      * @return array
      */
-    protected function _getNodeNamesToTranslate(\Magento\Simplexml\Element $node)
+    protected function _getNodeNamesToTranslate(Element $node)
     {
         return explode(' ', (string)$node['translate']);
     }
@@ -106,10 +108,10 @@ class Translator
     /**
      * Check if node has to be translated
      *
-     * @param \Magento\Simplexml\Element $node
+     * @param Element $node
      * @return bool
      */
-    protected function _isNodeTranslatable(\Magento\Simplexml\Element $node)
+    protected function _isNodeTranslatable(Element $node)
     {
         return isset($node['translate']);
     }
@@ -117,10 +119,10 @@ class Translator
     /**
      * Check if node has to translate own value
      *
-     * @param \Magento\Simplexml\Element $node
+     * @param Element $node
      * @return bool
      */
-    protected function _isSelfTranslatable(\Magento\Simplexml\Element $node)
+    protected function _isSelfTranslatable(Element $node)
     {
         return $this->_isNodeTranslatable($node) && 'true' == (string)$node['translate'];
     }
@@ -128,10 +130,10 @@ class Translator
     /**
      * Get node value
      *
-     * @param \Magento\Simplexml\Element $node
+     * @param Element $node
      * @return string
      */
-    protected function _getNodeValue(\Magento\Simplexml\Element $node)
+    protected function _getNodeValue(Element $node)
     {
         return trim((string)$node);
     }

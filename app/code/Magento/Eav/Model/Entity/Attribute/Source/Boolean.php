@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
@@ -33,8 +31,8 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Option values
      */
     const VALUE_YES = 1;
-    const VALUE_NO = 0;
 
+    const VALUE_NO = 0;
 
     /**
      * Core data
@@ -69,14 +67,8 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         if (is_null($this->_options)) {
             $this->_options = array(
-                array(
-                    'label' => __('Yes'),
-                    'value' => self::VALUE_YES
-                ),
-                array(
-                    'label' => __('No'),
-                    'value' => self::VALUE_NO
-                ),
+                array('label' => __('Yes'), 'value' => self::VALUE_YES),
+                array('label' => __('No'), 'value' => self::VALUE_NO)
             );
         }
         return $this->_options;
@@ -99,8 +91,8 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Get a text for option value
      *
-     * @param string|integer $value
-     * @return string
+     * @param string|int $value
+     * @return string|false
      */
     public function getOptionText($value)
     {
@@ -121,21 +113,11 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatColums()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array(
-            'unsigned'  => false,
-            'default'   => null,
-            'extra'     => null
-        );
-
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'tinyint(1)';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
-            $column['length']   = 1;
-            $column['nullable'] = true;
-            $column['comment']  = $attributeCode . ' column';
-        }
+        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
+        $column['type'] = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+        $column['length'] = 1;
+        $column['nullable'] = true;
+        $column['comment'] = $attributeCode . ' column';
 
         return array($attributeCode => $column);
     }
@@ -150,10 +132,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $indexes = array();
 
         $index = 'IDX_' . strtoupper($this->getAttribute()->getAttributeCode());
-        $indexes[$index] = array(
-            'type'      => 'index',
-            'fields'    => array($this->getAttribute()->getAttributeCode())
-        );
+        $indexes[$index] = array('type' => 'index', 'fields' => array($this->getAttribute()->getAttributeCode()));
 
         return $indexes;
     }

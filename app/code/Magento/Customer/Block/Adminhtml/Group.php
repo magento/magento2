@@ -35,10 +35,10 @@ namespace Magento\Customer\Block\Adminhtml;
 
 class Group extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
     /**
      * Modify header & button labels
      *
+     * @return void
      */
     protected function _construct()
     {

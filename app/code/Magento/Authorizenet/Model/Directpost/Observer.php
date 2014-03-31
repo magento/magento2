@@ -23,25 +23,22 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Authorizenet directpayment observer
- *
- * @category    Magento
- * @package     Magento_Authorizenet
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Authorizenet\Model\Directpost;
 
+/**
+ * Authorize.net directpayment observer
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class Observer
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
-    
+
     /**
      * Core helper
      *
@@ -74,7 +71,7 @@ class Observer
     /**
      * @param \Magento\Authorizenet\Helper\Data $authorizenetData
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Authorizenet\Model\Directpost $payment
      * @param \Magento\Authorizenet\Model\Directpost\Session $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -82,7 +79,7 @@ class Observer
     public function __construct(
         \Magento\Authorizenet\Helper\Data $authorizenetData,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Authorizenet\Model\Directpost $payment,
         \Magento\Authorizenet\Model\Directpost\Session $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -99,7 +96,7 @@ class Observer
      * Save order into registry to use it in the overloaded controller.
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function saveOrderAfterSubmit(\Magento\Event\Observer $observer)
     {
@@ -114,7 +111,7 @@ class Observer
      * Set data for response of frontend saveOrder action
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function addAdditionalFieldsToResponseFrontend(\Magento\Event\Observer $observer)
     {
@@ -155,11 +152,11 @@ class Observer
      * Needed for correct work of edit orders in Admin area.
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function updateAllEditIncrements(\Magento\Event\Observer $observer)
     {
-         /* @var $order \Magento\Sales\Model\Order */
+        /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
         $this->_authorizenetData->updateOrderEditIncrements($order);
 

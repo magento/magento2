@@ -47,6 +47,8 @@ class Scope implements \Magento\Config\ScopeInterface, \Magento\Config\ScopeList
     protected $_areaList;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\AreaList $areaList
      * @param string $defaultScope
      */
@@ -70,6 +72,7 @@ class Scope implements \Magento\Config\ScopeInterface, \Magento\Config\ScopeList
      * Set current configuration scope
      *
      * @param string $scope
+     * @return void
      */
     public function setCurrentScope($scope)
     {
@@ -79,7 +82,7 @@ class Scope implements \Magento\Config\ScopeInterface, \Magento\Config\ScopeList
     /**
      * Retrieve list of available config scopes
      *
-     * @return array
+     * @return string[]
      */
     public function getAllScopes()
     {

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Entity;
 
 /**
  * Entity type model
@@ -58,9 +58,7 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
-class Type extends \Magento\Core\Model\AbstractModel
+class Type extends \Magento\Model\AbstractModel
 {
     /**
      * Collection of attributes
@@ -74,7 +72,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      *
      * @var array
      */
-    protected $_attributesBySet             = array();
+    protected $_attributesBySet = array();
 
     /**
      * Collection of sets
@@ -93,7 +91,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      */
     protected $_attSetFactory;
 
-    /***
+    /**
      * @var \Magento\Eav\Model\Entity\StoreFactory
      */
     protected $_storeFactory;
@@ -104,24 +102,24 @@ class Type extends \Magento\Core\Model\AbstractModel
     protected $_universalFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory
      * @param \Magento\Eav\Model\Entity\StoreFactory $storeFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory,
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -134,6 +132,8 @@ class Type extends \Magento\Core\Model\AbstractModel
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -144,7 +144,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * Load type by code
      *
      * @param string $code
-     * @return \Magento\Eav\Model\Entity\Type
+     * @return $this
      */
     public function loadByCode($code)
     {
@@ -163,15 +163,16 @@ class Type extends \Magento\Core\Model\AbstractModel
     {
         if ($setId === null) {
             if ($this->_attributes === null) {
-                $this->_attributes = $this->_getAttributeCollection()
-                    ->setEntityTypeFilter($this);
+                $this->_attributes = $this->_getAttributeCollection()->setEntityTypeFilter($this);
             }
             $collection = $this->_attributes;
         } else {
             if (!isset($this->_attributesBySet[$setId])) {
-                $this->_attributesBySet[$setId] = $this->_getAttributeCollection()
-                    ->setEntityTypeFilter($this)
-                    ->setAttributeSetFilter($setId);
+                $this->_attributesBySet[$setId] = $this->_getAttributeCollection()->setEntityTypeFilter(
+                    $this
+                )->setAttributeSetFilter(
+                    $setId
+                );
             }
             $collection = $this->_attributesBySet[$setId];
         }
@@ -203,8 +204,9 @@ class Type extends \Magento\Core\Model\AbstractModel
     public function getAttributeSetCollection()
     {
         if (empty($this->_sets)) {
-            $this->_sets = $this->_attSetFactory->create()->getResourceCollection()
-                ->setEntityTypeFilter($this->getId());
+            $this->_sets = $this->_attSetFactory->create()->getResourceCollection()->setEntityTypeFilter(
+                $this->getId()
+            );
         }
         return $this->_sets;
     }
@@ -221,7 +223,7 @@ class Type extends \Magento\Core\Model\AbstractModel
             return false;
         }
 
-        if (!$this->getIncrementPerStore() || ($storeId === null)) {
+        if (!$this->getIncrementPerStore() || $storeId === null) {
             /**
              * store_id null we can have for entity from removed store
              */
@@ -231,35 +233,49 @@ class Type extends \Magento\Core\Model\AbstractModel
         // Start transaction to run SELECT ... FOR UPDATE
         $this->_getResource()->beginTransaction();
 
-        $entityStoreConfig = $this->_storeFactory->create()
-            ->loadByEntityStore($this->getId(), $storeId);
+        try {
+            $entityStoreConfig = $this->_storeFactory->create()->loadByEntityStore($this->getId(), $storeId);
 
-        if (!$entityStoreConfig->getId()) {
-            $entityStoreConfig
-                ->setEntityTypeId($this->getId())
-                ->setStoreId($storeId)
-                ->setIncrementPrefix($storeId)
-                ->save();
+            if (!$entityStoreConfig->getId()) {
+                $entityStoreConfig->setEntityTypeId(
+                    $this->getId()
+                )->setStoreId(
+                    $storeId
+                )->setIncrementPrefix(
+                    $storeId
+                )->save();
+            }
+
+            $incrementInstance = $this->_universalFactory->create(
+                $this->getIncrementModel()
+            )->setPrefix(
+                $entityStoreConfig->getIncrementPrefix()
+            )->setPadLength(
+                $this->getIncrementPadLength()
+            )->setPadChar(
+                $this->getIncrementPadChar()
+            )->setLastId(
+                $entityStoreConfig->getIncrementLastId()
+            )->setEntityTypeId(
+                $entityStoreConfig->getEntityTypeId()
+            )->setStoreId(
+                $entityStoreConfig->getStoreId()
+            );
+
+            /**
+             * do read lock on eav/entity_store to solve potential timing issues
+             * (most probably already done by beginTransaction of entity save)
+             */
+            $incrementId = $incrementInstance->getNextId();
+            $entityStoreConfig->setIncrementLastId($incrementId);
+            $entityStoreConfig->save();
+
+            // Commit increment_last_id changes
+            $this->_getResource()->commit();
+        } catch (\Exception $exception) {
+            $this->_getResource()->rollBack();
+            throw $exception;
         }
-
-        $incrementInstance = $this->_universalFactory->create($this->getIncrementModel())
-            ->setPrefix($entityStoreConfig->getIncrementPrefix())
-            ->setPadLength($this->getIncrementPadLength())
-            ->setPadChar($this->getIncrementPadChar())
-            ->setLastId($entityStoreConfig->getIncrementLastId())
-            ->setEntityTypeId($entityStoreConfig->getEntityTypeId())
-            ->setStoreId($entityStoreConfig->getStoreId());
-
-        /**
-         * do read lock on eav/entity_store to solve potential timing issues
-         * (most probably already done by beginTransaction of entity save)
-         */
-        $incrementId = $incrementInstance->getNextId();
-        $entityStoreConfig->setIncrementLastId($incrementId);
-        $entityStoreConfig->save();
-
-        // Commit increment_last_id changes
-        $this->_getResource()->commit();
 
         return $incrementId;
     }
@@ -287,7 +303,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve entity table prefix name
      *
-     * @return string
+     * @return null|string
      */
     public function getValueTablePrefix()
     {
@@ -372,7 +388,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve resource entity object
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return \Magento\Model\Resource\AbstractResource
      */
     public function getEntity()
     {

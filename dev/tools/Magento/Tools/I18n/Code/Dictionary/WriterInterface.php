@@ -21,10 +21,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary;
-
-use \Magento\Tools\I18n\Code\Dictionary\Phrase;
 
 /**
  * Writer interface
@@ -34,7 +31,8 @@ interface WriterInterface
     /**
      * Write data to dictionary
      *
-     * @param \Magento\Tools\I18n\Code\Dictionary\Phrase $phrase
+     * @param Phrase $phrase
+     * @return void
      */
     public function write(Phrase $phrase);
 }

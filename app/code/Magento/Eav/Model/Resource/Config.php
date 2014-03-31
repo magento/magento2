@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource;
 
 /**
  * Eav Resource Config model
@@ -32,26 +32,26 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource;
-
-class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Config extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Array of entity types
      *
      * @var array
      */
-    protected static $_entityTypes   = array();
+    protected static $_entityTypes = array();
 
     /**
      * Array of attributes
      *
      * @var array
      */
-    protected static $_attributes    = array();
+    protected static $_attributes = array();
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,7 +61,7 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load all entity types
      *
-     * @return \Magento\Eav\Model\Resource\Config
+     * @return $this
      */
     protected function _loadTypes()
     {
@@ -71,7 +71,7 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
         if (empty(self::$_entityTypes)) {
             $select = $adapter->select()->from($this->getMainTable());
-            $data   = $adapter->fetchAll($select);
+            $data = $adapter->fetchAll($select);
             foreach ($data as $row) {
                 self::$_entityTypes['by_id'][$row['entity_type_id']] = $row;
                 self::$_entityTypes['by_code'][$row['entity_type_code']] = $row;
@@ -91,10 +91,12 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         if (!isset(self::$_attributes[$typeId])) {
             $adapter = $this->_getReadAdapter();
-            $bind    = array('entity_type_id' => $typeId);
-            $select  = $adapter->select()
-                ->from($this->getTable('eav_attribute'))
-                ->where('entity_type_id = :entity_type_id');
+            $bind = array('entity_type_id' => $typeId);
+            $select = $adapter->select()->from(
+                $this->getTable('eav_attribute')
+            )->where(
+                'entity_type_id = :entity_type_id'
+            );
 
             self::$_attributes[$typeId] = $adapter->fetchAll($select, $bind);
         }
@@ -113,17 +115,19 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
         $this->_loadTypes();
 
         if (is_numeric($entityType)) {
-            $info = isset(self::$_entityTypes['by_id'][$entityType])
-                ? self::$_entityTypes['by_id'][$entityType] : null;
+            $info = isset(
+                self::$_entityTypes['by_id'][$entityType]
+            ) ? self::$_entityTypes['by_id'][$entityType] : null;
         } else {
-            $info = isset(self::$_entityTypes['by_code'][$entityType])
-                ? self::$_entityTypes['by_code'][$entityType] : null;
+            $info = isset(
+                self::$_entityTypes['by_code'][$entityType]
+            ) ? self::$_entityTypes['by_code'][$entityType] : null;
         }
 
         $data = array();
         if ($info) {
-            $data['entity']     = $info;
-            $attributes         = $this->_loadTypeAttributes($info['entity_type_id']);
+            $data['entity'] = $info;
+            $attributes = $this->_loadTypeAttributes($info['entity_type_id']);
             $data['attributes'] = array();
             foreach ($attributes as $attribute) {
                 $data['attributes'][$attribute['attribute_id']] = $attribute;

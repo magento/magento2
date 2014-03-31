@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
@@ -39,7 +38,10 @@ class Delete extends Button
      */
     protected function _getOnclickAttribute(Object $row)
     {
-        return sprintf("this.setAttribute('data-url', '%s')", $this->getUrl('*/*/delete', ['id' => $row->getId()]));
+        return sprintf(
+            "this.setAttribute('data-url', '%s')",
+            $this->getUrl('*/*/delete', array('id' => $row->getId()))
+        );
     }
 
     /**

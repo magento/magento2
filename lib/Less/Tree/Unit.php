@@ -1,10 +1,16 @@
 <?php
 
-
+/**
+ * Unit
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Unit extends Less_Tree{
 
 	var $numerator = array();
 	var $denominator = array();
+	public $backupUnit;
 	public $type = 'Unit';
 
 	function __construct($numerator = array(), $denominator = array(), $backupUnit = null ){
@@ -16,14 +22,17 @@ class Less_Tree_Unit extends Less_Tree{
 	function __clone(){
 	}
 
-	function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
 
 		if( $this->numerator ){
-			self::OutputAdd( $strs, $this->numerator[0] );
+			$output->add( $this->numerator[0] );
 		}elseif( $this->denominator ){
-			self::OutputAdd( $strs, $this->denominator[0] );
-		}elseif( (!$env || !$env->strictUnits) && $this->backupUnit ){
-			self::OutputAdd( $strs, $this->backupUnit );
+			$output->add( $this->denominator[0] );
+		}elseif( !Less_Parser::$options['strictUnits'] && $this->backupUnit ){
+			$output->add( $this->backupUnit );
 			return ;
 		}
 	}
@@ -36,6 +45,14 @@ class Less_Tree_Unit extends Less_Tree{
 		return $returnStr;
 	}
 
+	function __toString(){
+		return $this->toString();
+	}
+
+
+	/**
+	 * @param Less_Tree_Unit $other
+	 */
 	function compare($other) {
 		return $this->is( $other->toString() ) ? 0 : -1;
 	}

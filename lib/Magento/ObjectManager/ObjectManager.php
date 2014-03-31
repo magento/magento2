@@ -54,24 +54,12 @@ class ObjectManager implements \Magento\ObjectManager
      * @param Config $config
      * @param array $sharedInstances
      */
-    public function __construct(Factory $factory = null, Config $config = null, array $sharedInstances = array())
+    public function __construct(Factory $factory, Config $config, array $sharedInstances = array())
     {
-        $this->_config = $config ?: new Config\Config();
-        $this->_factory = $factory ?: new Factory\Factory($this->_config, $this);
-        $this->_factory->setObjectManager($this);
+        $this->_config = $config;
+        $this->_factory = $factory;
         $this->_sharedInstances = $sharedInstances;
         $this->_sharedInstances['Magento\ObjectManager'] = $this;
-    }
-
-    /**
-     * Set creation factory
-     *
-     * @param Factory $factory
-     * @return void
-     */
-    public function setFactory(Factory $factory)
-    {
-        $this->_factory = $factory;
     }
 
     /**
@@ -105,6 +93,7 @@ class ObjectManager implements \Magento\ObjectManager
      * Configure di instance
      *
      * @param array $configuration
+     * @return void
      */
     public function configure(array $configuration)
     {

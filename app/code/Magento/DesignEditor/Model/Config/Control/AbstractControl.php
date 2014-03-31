@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Config\Control;
 
 /**
  * Controls configuration
  */
-namespace Magento\DesignEditor\Model\Config\Control;
-
 abstract class AbstractControl extends \Magento\Config\AbstractXml
 {
     /**
      * Keys of layout params attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_controlAttributes = array();
 
@@ -70,7 +69,7 @@ abstract class AbstractControl extends \Magento\Config\AbstractXml
             if ($components && $components->childNodes->length) {
                 $result[$controlName]['components'] = $this->_extractControls($components->childNodes);
             } else {
-                $result[$controlName] =  $this->_extractParams($control);
+                $result[$controlName] = $this->_extractParams($control);
             }
             $controlLayoutParams = $this->_extractLayoutParams($control);
             if (!empty($controlLayoutParams)) {
@@ -113,8 +112,12 @@ abstract class AbstractControl extends \Magento\Config\AbstractXml
             if (!$paramNode instanceof \DOMElement) {
                 continue;
             }
-            $param = $paramNode->childNodes->length > 1 ? $this->_extractParams($paramNode, false)
-                : trim($paramNode->nodeValue);
+            $param = $paramNode->childNodes->length > 1 ? $this->_extractParams(
+                $paramNode,
+                false
+            ) : trim(
+                $paramNode->nodeValue
+            );
             if ($useKeyIdentifier) {
                 $result[$paramNode->nodeName] = $param;
             } else {

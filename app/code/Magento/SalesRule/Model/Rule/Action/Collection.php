@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Action;
 
 class Collection extends \Magento\Rule\Model\Action\Collection
@@ -51,10 +49,10 @@ class Collection extends \Magento\Rule\Model\Action\Collection
     public function getNewChildSelectOptions()
     {
         $actions = parent::getNewChildSelectOptions();
-        $actions = array_merge_recursive($actions, array(array(
-            'value' => 'Magento\SalesRule\Model\Rule\Action\Product',
-            'label' => __('Update the Product'))
-        ));
+        $actions = array_merge_recursive(
+            $actions,
+            array(array('value' => 'Magento\SalesRule\Model\Rule\Action\Product', 'label' => __('Update the Product')))
+        );
         return $actions;
     }
 }

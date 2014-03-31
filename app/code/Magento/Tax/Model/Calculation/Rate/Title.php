@@ -43,13 +43,20 @@
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
-class Title extends \Magento\Core\Model\AbstractModel
+class Title extends \Magento\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Tax\Model\Resource\Calculation\Rate\Title');
     }
 
+    /**
+     * @param int $rateId
+     * @return $this
+     */
     public function deleteByRateId($rateId)
     {
         $this->getResource()->deleteByRateId($rateId);

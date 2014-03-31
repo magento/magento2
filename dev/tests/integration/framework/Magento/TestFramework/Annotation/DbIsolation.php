@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Annotation;
 
 /**
@@ -44,14 +43,15 @@ class DbIsolation
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function startTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test, \Magento\TestFramework\Event\Param\Transaction $param
+        \PHPUnit_Framework_TestCase $test,
+        \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         $methodIsolation = $this->_getIsolation('method', $test);
         if ($this->_isIsolationActive) {
             if ($methodIsolation === false) {
                 $param->requestTransactionRollback();
             }
-        } else if ($methodIsolation || ($methodIsolation === null && $this->_getIsolation('class', $test))) {
+        } elseif ($methodIsolation || ($methodIsolation === null && $this->_getIsolation('class', $test))) {
             $param->requestTransactionStart();
         }
     }
@@ -63,7 +63,8 @@ class DbIsolation
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function endTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test, \Magento\TestFramework\Event\Param\Transaction $param
+        \PHPUnit_Framework_TestCase $test,
+        \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         if ($this->_isIsolationActive && $this->_getIsolation('method', $test)) {
             $param->requestTransactionRollback();
@@ -112,7 +113,7 @@ class DbIsolation
                     'Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.'
                 );
             }
-            return ($isolation === array('enabled'));
+            return $isolation === array('enabled');
         }
         return null;
     }

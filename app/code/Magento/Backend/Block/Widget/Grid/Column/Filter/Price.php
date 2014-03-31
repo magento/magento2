@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Range grid column filter
@@ -31,10 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  *
- */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-/**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
@@ -56,14 +53,14 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Directory\Model\Currency $currencyModel
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Directory\Model\Currency $currencyModel,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         array $data = array()
@@ -80,18 +77,37 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getHtml()
     {
-        $html  = '<div class="range">';
-        $html .= '<div class="range-line">'
-            . '<input type="text" name="'
-            . $this->_getHtmlName()
-            . '[from]" id="' . $this->_getHtmlId() . '_from" placeholder="' . __('From') . '" value="'
-            . $this->getEscapedValue('from') . '" class="input-text no-changes"  '
-            . $this->getUiId('filter', $this->_getHtmlName(), 'from') . '/></div>';
-        $html .= '<div class="range-line">'
-            . '<input type="text" name="'
-            . $this->_getHtmlName() . '[to]" id="' . $this->_getHtmlId() . '_to" placeholder="' . __('To')
-            . '" value="'.$this->getEscapedValue('to')
-            . '" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'to') . '/></div>';
+        $html = '<div class="range">';
+        $html .= '<div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[from]" id="' .
+            $this->_getHtmlId() .
+            '_from" placeholder="' .
+            __(
+                'From'
+            ) . '" value="' . $this->getEscapedValue(
+                'from'
+            ) . '" class="input-text no-changes"  ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'from'
+            ) . '/></div>';
+        $html .= '<div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[to]" id="' .
+            $this->_getHtmlId() .
+            '_to" placeholder="' .
+            __(
+                'To'
+            ) . '" value="' . $this->getEscapedValue(
+                'to'
+            ) . '" class="input-text no-changes" ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'to'
+            ) . '/></div>';
 
         if ($this->getDisplayCurrencySelect()) {
             $html .= '<div class="range-line">' . $this->_getCurrencySelectHtml() . '</div>';
@@ -105,7 +121,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve display currency select
      *
-     * @return bool|mixed
+     * @return true|mixed
      */
     public function getDisplayCurrencySelect()
     {
@@ -119,7 +135,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve currency affect
      *
-     * @return bool|mixed
+     * @return true|mixed
      */
     public function getCurrencyAffect()
     {
@@ -142,11 +158,11 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
             $value = $this->_getColumnCurrencyCode();
         }
 
-        $html  = '';
-        $html .= '<select name="'.$this->_getHtmlName().'[currency]" id="'.$this->_getHtmlId().'_currency">';
+        $html = '';
+        $html .= '<select name="' . $this->_getHtmlName() . '[currency]" id="' . $this->_getHtmlId() . '_currency">';
         foreach ($this->_getCurrencyList() as $currency) {
-            $html .= '<option value="' . $currency . '" '
-                . ($currency == $value ? 'selected="selected"' : '').'>' . $currency . '</option>';
+            $html .= '<option value="' . $currency . '" ' . ($currency ==
+                $value ? 'selected="selected"' : '') . '>' . $currency . '</option>';
         }
         $html .= '</select>';
         return $html;
@@ -169,17 +185,15 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve filter value
      *
      * @param null $index
-     * @return mixed|null
+     * @return array|null
      */
-    public function getValue($index=null)
+    public function getValue($index = null)
     {
         if ($index) {
             return $this->getData('value', $index);
         }
         $value = $this->getData('value');
-        if ((isset($value['from']) && strlen($value['from']) > 0)
-            || (isset($value['to']) && strlen($value['to']) > 0)
-        ) {
+        if (isset($value['from']) && strlen($value['from']) > 0 || isset($value['to']) && strlen($value['to']) > 0) {
             return $value;
         }
         return null;
@@ -188,7 +202,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve filter condition
      *
-     * @return array|mixed|null
+     * @return array
      */
     public function getCondition()
     {
@@ -220,15 +234,21 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     protected function _getColumnCurrencyCode()
     {
-        return $this->getColumn()->getCurrencyCode()?
-            $this->getColumn()->getCurrencyCode() : $this->_currencyLocator->getDefaultCurrency($this->_request);
+        return $this->getColumn()
+            ->getCurrencyCode() ? $this
+            ->getColumn()
+            ->getCurrencyCode() : $this
+            ->_currencyLocator
+            ->getDefaultCurrency(
+                $this->_request
+            );
     }
 
     /**
      * Get currency rate
      *
-     * @param $fromRate
-     * @param $toRate
+     * @param string $fromRate
+     * @param string $toRate
      * @return float
      */
     protected function _getRate($fromRate, $toRate)
@@ -239,7 +259,8 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Prepare currency rates
      *
-     * @param $displayCurrency
+     * @param string $displayCurrency
+     * @return void
      */
     public function prepareRates($displayCurrency)
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element\Html;
 
 /**
@@ -30,6 +29,8 @@ namespace Magento\View\Element\Html;
 class Select extends \Magento\View\Element\AbstractBlock
 {
     /**
+     * Options
+     *
      * @var array
      */
     protected $_options = array();
@@ -48,7 +49,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set options for the HTML select
      *
      * @param array $options
-     * @return Select
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -62,7 +63,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * @param string $value  HTML value
      * @param string $label  HTML label
      * @param array  $params HTML attributes
-     * @return Select
+     * @return $this
      */
     public function addOption($value, $label, $params = array())
     {
@@ -74,7 +75,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's HTML ID
      *
      * @param string $elementId ID
-     * @return Select
+     * @return $this
      */
     public function setId($elementId)
     {
@@ -86,7 +87,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's CSS class
      *
      * @param string $class Class
-     * @return Select
+     * @return $this
      */
     public function setClass($class)
     {
@@ -98,7 +99,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's HTML title
      *
      * @param string $title Title
-     * @return Select
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -149,8 +150,17 @@ class Select extends \Magento\View\Element\AbstractBlock
             return '';
         }
 
-        $html = '<select name="' . $this->getName() . '" id="' . $this->getId() . '" class="'
-            . $this->getClass() . '" title="' . $this->getTitle() . '" ' . $this->getExtraParams() . '>';
+        $html = '<select name="' .
+            $this->getName() .
+            '" id="' .
+            $this->getId() .
+            '" class="' .
+            $this->getClass() .
+            '" title="' .
+            $this->getTitle() .
+            '" ' .
+            $this->getExtraParams() .
+            '>';
 
         $values = $this->getValue();
         if (!is_array($values)) {
@@ -160,9 +170,9 @@ class Select extends \Magento\View\Element\AbstractBlock
         $isArrayOption = true;
         foreach ($this->getOptions() as $key => $option) {
             if ($isArrayOption && is_array($option)) {
-                $value  = $option['value'];
-                $label  = (string)$option['label'];
-                $params = (!empty($option['params'])) ? $option['params'] : array();
+                $value = $option['value'];
+                $label = (string)$option['label'];
+                $params = !empty($option['params']) ? $option['params'] : array();
             } else {
                 $value = (string)$key;
                 $label = (string)$option;
@@ -174,24 +184,14 @@ class Select extends \Magento\View\Element\AbstractBlock
                 $html .= '<optgroup label="' . $label . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
-                        $optionGroup = array(
-                            'value' => $keyGroup,
-                            'label' => $optionGroup
-                        );
+                        $optionGroup = array('value' => $keyGroup, 'label' => $optionGroup);
                     }
-                    $html .= $this->_optionToHtml(
-                        $optionGroup,
-                        in_array($optionGroup['value'], $values)
-                    );
+                    $html .= $this->_optionToHtml($optionGroup, in_array($optionGroup['value'], $values));
                 }
                 $html .= '</optgroup>';
             } else {
                 $html .= $this->_optionToHtml(
-                    array(
-                        'value' => $value,
-                        'label' => $label,
-                        'params' => $params
-                    ),
+                    array('value' => $value, 'label' => $label, 'params' => $params),
                     in_array($value, $values)
                 );
             }

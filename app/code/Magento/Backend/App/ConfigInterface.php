@@ -43,11 +43,14 @@ interface ConfigInterface
      *
      * @param string $path
      * @param mixed $value
+     * @return void
      */
     public function setValue($path, $value);
 
     /**
      * Reinitialize config object
+     *
+     * @return void
      */
     public function reinit();
 

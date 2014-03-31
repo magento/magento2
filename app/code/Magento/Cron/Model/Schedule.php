@@ -50,32 +50,38 @@
  */
 namespace Magento\Cron\Model;
 
-class Schedule extends \Magento\Core\Model\AbstractModel
+use Magento\Cron\Exception;
+
+class Schedule extends \Magento\Model\AbstractModel
 {
     const STATUS_PENDING = 'pending';
+
     const STATUS_RUNNING = 'running';
+
     const STATUS_SUCCESS = 'success';
+
     const STATUS_MISSED = 'missed';
+
     const STATUS_ERROR = 'error';
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Date $date
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Date $date,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        \Magento\Stdlib\DateTime\DateTime $date,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -83,16 +89,24 @@ class Schedule extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     public function _construct()
     {
         $this->_init('Magento\Cron\Model\Resource\Schedule');
     }
 
+    /**
+     * @param string $expr
+     * @return $this
+     * @throws Exception
+     */
     public function setCronExpr($expr)
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
         if (sizeof($e) < 5 || sizeof($e) > 6) {
-            throw new \Magento\Cron\Exception('Invalid cron expression: ' . $expr);
+            throw new Exception('Invalid cron expression: ' . $expr);
         }
 
         $this->setCronExprArr($e);
@@ -104,8 +118,8 @@ class Schedule extends \Magento\Core\Model\AbstractModel
      *
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
-     * @param \Magento\Event $event
-     * @return boolean
+     * @param int|string $time
+     * @return bool
      */
     public function trySchedule($time)
     {
@@ -119,11 +133,22 @@ class Schedule extends \Magento\Core\Model\AbstractModel
 
         $d = getdate($this->_date->timestamp($time));
 
-        $match = $this->matchCronExpression($e[0], $d['minutes'])
-            && $this->matchCronExpression($e[1], $d['hours'])
-            && $this->matchCronExpression($e[2], $d['mday'])
-            && $this->matchCronExpression($e[3], $d['mon'])
-            && $this->matchCronExpression($e[4], $d['wday']);
+        $match = $this->matchCronExpression(
+            $e[0],
+            $d['minutes']
+        ) && $this->matchCronExpression(
+            $e[1],
+            $d['hours']
+        ) && $this->matchCronExpression(
+            $e[2],
+            $d['mday']
+        ) && $this->matchCronExpression(
+            $e[3],
+            $d['mon']
+        ) && $this->matchCronExpression(
+            $e[4],
+            $d['wday']
+        );
 
         if ($match) {
             $this->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
@@ -132,6 +157,12 @@ class Schedule extends \Magento\Core\Model\AbstractModel
         return $match;
     }
 
+    /**
+     * @param string $expr
+     * @param int $num
+     * @return bool
+     * @throws Exception
+     */
     public function matchCronExpression($expr, $num)
     {
         // handle ALL match
@@ -153,14 +184,10 @@ class Schedule extends \Magento\Core\Model\AbstractModel
         if (strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
             if (sizeof($e) !== 2) {
-                throw new \Magento\Cron\Exception(
-                    "Invalid cron expression, expecting 'match/modulus': " . $expr
-                );
+                throw new Exception("Invalid cron expression, expecting 'match/modulus': " . $expr);
             }
             if (!is_numeric($e[1])) {
-                throw new \Magento\Cron\Exception(
-                    "Invalid cron expression, expecting numeric modulus: " . $expr
-                );
+                throw new Exception("Invalid cron expression, expecting numeric modulus: " . $expr);
             }
             $expr = $e[0];
             $mod = $e[1];
@@ -172,30 +199,32 @@ class Schedule extends \Magento\Core\Model\AbstractModel
         if ($expr === '*') {
             $from = 0;
             $to = 60;
-            // handle range
         } elseif (strpos($expr, '-') !== false) {
+            // handle range
             $e = explode('-', $expr);
             if (sizeof($e) !== 2) {
-                throw new \Magento\Cron\Exception(
-                    "Invalid cron expression, expecting 'from-to' structure: " . $expr
-                );
+                throw new Exception("Invalid cron expression, expecting 'from-to' structure: " . $expr);
             }
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
-            // handle regular token
         } else {
+            // handle regular token
             $from = $this->getNumeric($expr);
             $to = $from;
         }
 
         if ($from === false || $to === false) {
-            throw new \Magento\Cron\Exception("Invalid cron expression: " . $expr);
+            throw new Exception("Invalid cron expression: " . $expr);
         }
 
-        return ($num >= $from) && ($num <= $to) && ($num % $mod === 0);
+        return $num >= $from && $num <= $to && $num % $mod === 0;
     }
 
+    /**
+     * @param int|string $value
+     * @return bool|int|string
+     */
     public function getNumeric($value)
     {
         static $data = array(
@@ -211,14 +240,13 @@ class Schedule extends \Magento\Core\Model\AbstractModel
             'oct' => 10,
             'nov' => 11,
             'dec' => 12,
-
             'sun' => 0,
             'mon' => 1,
             'tue' => 2,
             'wed' => 3,
             'thu' => 4,
             'fri' => 5,
-            'sat' => 6,
+            'sat' => 6
         );
 
         if (is_numeric($value)) {
@@ -245,6 +273,10 @@ class Schedule extends \Magento\Core\Model\AbstractModel
      */
     public function tryLockJob()
     {
-        return $this->_getResource()->trySetJobStatusAtomic($this->getId(), self::STATUS_RUNNING,self::STATUS_PENDING);
+        return $this->_getResource()->trySetJobStatusAtomic(
+            $this->getId(),
+            self::STATUS_RUNNING,
+            self::STATUS_PENDING
+        );
     }
 }

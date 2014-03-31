@@ -34,28 +34,29 @@ Enabled,已启用
 "Font Family of the Ogone Template","Ogone 模板的字体库"
 "For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","对于产品，将 ""test"" 替换为 ""prod""。例如：https：//secure.ogone.com/ncol/prod/orderstandard。asp"
 "Gateway URL","网关 URL"
-"Hash All Parameters",哈希所有参数
-"Hashing Algorithm",哈希算法
-"Horizontally grouped logo with group name on left",左侧带组名称的水平分组标志
-"Horizontally grouped logo with no group name",不带组名称的水平分组标志
-"If you choose ""No Operation"", Ogone will use the default payment procedure in your Ogone setup.","如果选择""不操作""， Ogone将在你的Ogone设置中使用默认支付过程。"
-"If you choose ""Ogone Template"", you will need to fill in all the following fields.",如果选择“Ogone模板”，则需要填写下列全部字段。
-"Layout of Payment Methods",支付方法布局
-"Logo of the Ogone Template",Ogone模板的徽标
-Magento,Magento
-Ogone,Ogone
-"Ogone Default Operation",Ogone默认操作
-"Order can't save",订单无法保存
-"PSPID is a case sensitive field.",PSPID是一个大小写敏感的字段。
-"Payment Action",支付操作
-"Payment ID: %1","支付ID： %1"
-"Payment Template",支付模板
-"Pending Ogone",挂起的Ogone
-"Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","请稍等， 此刻页面将要传输数据到Ogone支付网关。"
-"Processed Ogone Payment",已处理的Ogone支付
-"Processed by Ogone",由Ogone处理
-"Processing Ogone Payment",正在处理Ogone支付
-"SHA-IN Pass Phrase",SHA-IN通路
+"Hash All Parameters","哈希所有参数"
+"Hashing Algorithm","哈希算法"
+"Horizontally grouped logo with group name on left","左侧带组名称的水平分组标志"
+"Horizontally grouped logo with no group name","不带组名称的水平分组标志"
+"If you choose ""No Operation"", Ogone will use default payment procedure setup in Ogone configuration.","如果您选择“无操作”，Ogone将使用Ogone配置中的默认支付流程。"
+"If you choose ""Ogone Template"", you will need to fill in all the following fields.","如果选择“Ogone模板”，则需要填写下列全部字段。"
+"Layout of Payment Methods","支付方法布局"
+"Logo of the Ogone Template","Ogone模板的徽标"
+"Magento","Magento"
+"Ogone","Ogone"
+"Ogone Default Operation","Ogone默认操作"
+"Order can't save","订单无法保存"
+"PSPID","PSPID"
+"Payment Action","支付操作"
+"Payment Template","支付模板"
+"Payment transaction has been declined.","支付交易被拒绝。"
+"Payment uncertain: A technical problem arose during payment process, giving unpredictable result","支付不确定：支付过程中遇到了技术问题，因此获得了非预期结果"
+"Pending Ogone","挂起的Ogone"
+"Please, wait a moment. This page will transfer your data to Ogone payment gateway in a few seconds.","请稍等。该页面会在几秒后将您的数据传输到Ogone支付网站。"
+"Processed Ogone Payment","已处理的Ogone支付"
+"Processed by Ogone","由Ogone处理"
+"Processing Ogone Payment","正在处理Ogone支付"
+"SHA-IN Pass Phrase","SHA-IN通路"
 "SHA-OUT Pass Phrase","SHA-OUT 通路"
 "Something went wrong during the authorization process, and so the result is unpredictable.",授权过程中发生错误，所以结果是不可预期的。
 "Something went wrong during the payment process, and so the result is unpredictable.",支付过程中发生错误，所以结果是不可预期的。

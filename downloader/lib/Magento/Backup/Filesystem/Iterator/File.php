@@ -55,6 +55,8 @@ class File extends \SplFileObject
 
     /**
      * Iterate to next sql statement in file
+     *
+     * @return void
      */
     public function next()
     {
@@ -72,6 +74,8 @@ class File extends \SplFileObject
 
     /**
      * Return to first statement
+     *
+     * @return void
      */
     public function rewind()
     {

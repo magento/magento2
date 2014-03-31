@@ -26,7 +26,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Dependency;
 
 class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
@@ -60,9 +59,9 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      * @var array
      */
     protected $_defaultModules = array(
-        'default'   => 'Magento\Install',
-        'frontend'  => 'Magento\Theme',
-        'adminhtml' => 'Magento\Adminhtml',
+        'default' => 'Magento\Install',
+        'frontend' => 'Magento\Theme',
+        'adminhtml' => 'Magento\Adminhtml'
     );
 
     /**
@@ -89,13 +88,14 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
-        if (!in_array($fileType, ['php', 'template'])) {
+        if (!in_array($fileType, array('php', 'template'))) {
             return array();
         }
 
-        $pattern = '~\b(?<class>(?<module>(' . implode('_|',
-                \Magento\TestFramework\Utility\Files::init()->getNamespaces()) .
-                '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+        $pattern = '~\b(?<class>(?<module>(' . implode(
+            '_|',
+            \Magento\TestFramework\Utility\Files::init()->getNamespaces()
+        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = array();
         if (preg_match_all($pattern, $contents, $matches)) {
@@ -107,8 +107,8 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                 }
                 $dependenciesInfo[] = array(
                     'module' => $referenceModule,
-                    'type'   => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                    'source' => trim($matches['class'][$i]),
+                    'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                    'source' => trim($matches['class'][$i])
                 );
             }
         }
@@ -151,7 +151,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                         $dependencies[] = array(
                             'module' => $module,
                             'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                            'source' => $item['source'],
+                            'source' => $item['source']
                         );
                     }
                 }
@@ -181,7 +181,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
         }
 
         foreach ($matches as $match) {
-            if (in_array($match['block'], ['root', 'content'])) {
+            if (in_array($match['block'], array('root', 'content'))) {
                 continue;
             }
             $check = $this->_checkDependencyLayoutBlock($currentModule, $area, $match['block']);
@@ -189,7 +189,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
             if ($module) {
                 $result[$module] = array(
                     'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                    'source' => $match['source'],
+                    'source' => $match['source']
                 );
             }
         }
@@ -232,7 +232,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         if (isset($this->_mapLayoutBlocks[$area][$block]) || is_null($area)) {
             // CASE 1: No dependencies
-            $modules = [];
+            $modules = array();
             if (is_null($area)) {
                 foreach ($this->_mapLayoutBlocks as $blocks) {
                     if (array_key_exists($block, $blocks)) {
@@ -283,11 +283,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         $result = array();
         foreach ($dependencies as $module => $value) {
-            $result[] = array(
-                'module' => $module,
-                'type'   => $value['type'],
-                'source' => $value['source'],
-            );
+            $result[] = array('module' => $module, 'type' => $value['type'], 'source' => $value['source']);
         }
         return $result;
     }

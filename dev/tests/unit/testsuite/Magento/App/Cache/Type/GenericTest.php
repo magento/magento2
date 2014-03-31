@@ -38,10 +38,15 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
 
         $poolMock = $this->getMock('Magento\App\Cache\Type\FrontendPool', array(), array(), '', false);
-        $poolMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->with($className::TYPE_IDENTIFIER)
-            ->will($this->returnValue($frontendMock));
+        $poolMock->expects(
+            $this->atLeastOnce()
+        )->method(
+            'get'
+        )->with(
+            $className::TYPE_IDENTIFIER
+        )->will(
+            $this->returnValue($frontendMock)
+        );
 
         $model = new $className($poolMock);
 
@@ -49,9 +54,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($className::CACHE_TAG, $model->getTag(), 'The tag is wrong');
 
         // Test that frontend is now engaged in operations
-        $frontendMock->expects($this->once())
-            ->method('load')
-            ->with(26);
+        $frontendMock->expects($this->once())->method('load')->with(26);
         $model->load(26);
     }
 
@@ -66,7 +69,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             array('Magento\App\Cache\Type\Config'),
             array('Magento\App\Cache\Type\Layout'),
             array('Magento\App\Cache\Type\Translate'),
-            array('Magento\App\Cache\Type\Block'),
+            array('Magento\App\Cache\Type\Block')
         );
     }
 }

@@ -50,7 +50,7 @@ class EventRepository
      */
     public function hasUnprocessed($process)
     {
-        return (bool) $this->getUnprocessed($process)->getSize();
+        return (bool)$this->getUnprocessed($process)->getSize();
     }
 
     /**

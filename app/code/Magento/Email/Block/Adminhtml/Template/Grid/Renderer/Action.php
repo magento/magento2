@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * Email templates grid block action item renderer
@@ -31,19 +32,22 @@
  * @package    Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         $actions = array();
 
         $actions[] = array(
-            'url'		=>  $this->getUrl('adminhtml/*/preview', array('id'=>$row->getId())),
-            'popup'     =>  true,
-            'caption'	=>	__('Preview')
+            'url' => $this->getUrl('adminhtml/*/preview', array('id' => $row->getId())),
+            'popup' => true,
+            'caption' => __('Preview')
         );
 
         $this->getColumn()->setActions($actions);
@@ -51,11 +55,23 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
         return parent::render($row);
     }
 
+    /**
+     * Get escaped value
+     *
+     * @param string $value
+     * @return string
+     */
     protected function _getEscapedValue($value)
     {
         return addcslashes(htmlspecialchars($value), '\\\'');
     }
 
+    /**
+     * Convert actions to html
+     *
+     * @param array $actions
+     * @return string
+     */
     protected function _actionsToHtml(array $actions)
     {
         $html = array();

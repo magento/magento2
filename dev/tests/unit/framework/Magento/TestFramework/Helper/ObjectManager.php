@@ -37,8 +37,8 @@ class ObjectManager
      * @var array
      */
     protected $_specialCases = array(
-        'Magento\Core\Model\Resource\AbstractResource' => '_getResourceModelMock',
-        'Magento\Core\Model\Translate' => '_getTranslatorMock',
+        'Magento\Model\Resource\AbstractResource' => '_getResourceModelMock',
+        'Magento\TranslateInterface' => '_getTranslatorMock',
     );
 
     /**
@@ -92,7 +92,7 @@ class ObjectManager
             $object = $this->getObject($className, $arguments);
         } elseif (isset($this->_specialCases[$className])) {
             $method = $this->_specialCases[$className];
-            $object = $this->$method($className);
+            $object = $this->{$method}($className);
         }
 
         return $object;
@@ -105,13 +105,20 @@ class ObjectManager
      */
     protected function _getResourceModelMock()
     {
-        $resourceMock = $this->_testObject->getMock('Magento\Core\Model\Resource\Resource',
+        $resourceMock = $this->_testObject->getMock(
+            'Magento\Core\Model\Resource\Resource',
             array('getIdFieldName', '__sleep', '__wakeup'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
-        $resourceMock->expects($this->_testObject->any())
-            ->method('getIdFieldName')
-            ->will($this->_testObject->returnValue('id'));
+        $resourceMock->expects(
+            $this->_testObject->any()
+        )->method(
+            'getIdFieldName'
+        )->will(
+            $this->_testObject->returnValue('id')
+        );
 
         return $resourceMock;
     }
@@ -120,20 +127,21 @@ class ObjectManager
      * Retrieve mock of core translator model
      *
      * @param string $className
-     * @return \Magento\Core\Model\Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getTranslatorMock($className)
     {
-        $translator = $this->_testObject->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->setMethods(array('translate'))
-            ->getMock();
+        $translator = $this->_testObject->getMockBuilder($className)->disableOriginalConstructor()->getMock();
         $translateCallback = function ($arguments) {
             return is_array($arguments) ? vsprintf(array_shift($arguments), $arguments) : '';
         };
-        $translator->expects($this->_testObject->any())
-            ->method('translate')
-            ->will($this->_testObject->returnCallback($translateCallback));
+        $translator->expects(
+            $this->_testObject->any()
+        )->method(
+            'translate'
+        )->will(
+            $this->_testObject->returnCallback($translateCallback)
+        );
         return $translator;
     }
 
@@ -195,12 +203,12 @@ class ObjectManager
             }
 
             if ($parameter->isDefaultValueAvailable()) {
-                $defaultValue =  $parameter->getDefaultValue();
+                $defaultValue = $parameter->getDefaultValue();
             }
 
             try {
                 if ($parameter->getClass()) {
-                    $argClassName =  $parameter->getClass()->getName();
+                    $argClassName = $parameter->getClass()->getName();
                 }
                 $object = $this->_createArgumentMock($argClassName, $arguments);
             } catch (\ReflectionException $e) {
@@ -209,9 +217,7 @@ class ObjectManager
                 if ($firstPosition !== false) {
                     $parameterString = substr($parameterString, $firstPosition + 11);
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
-                    $object = $this->_testObject->getMock(
-                        $parameterString, array(), array(), '', false
-                    );
+                    $object = $this->_testObject->getMock($parameterString, array(), array(), '', false);
                 }
             }
 
@@ -235,9 +241,13 @@ class ObjectManager
         }
         $mock = $this->_testObject->getMock($className, array(), array(), '', false, false);
         $iterator = new \ArrayIterator($data);
-        $mock->expects($this->_testObject->any())
-            ->method('getIterator')
-            ->will($this->_testObject->returnValue($iterator));
+        $mock->expects(
+            $this->_testObject->any()
+        )->method(
+            'getIterator'
+        )->will(
+            $this->_testObject->returnValue($iterator)
+        );
         return $mock;
     }
 }

@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Config\Form\Field;
 
 /**
  * Backend system config array field renderer
  */
-namespace Magento\Backend\Block\System\Config\Form\Field;
-
-class Regexceptions
-    extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+class Regexceptions extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
      * @var \Magento\Data\Form\Element\Factory
@@ -61,15 +59,13 @@ class Regexceptions
 
     /**
      * Initialise form fields
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->addColumn('search', array(
-            'label' => __('Search String'),
-        ));
-        $this->addColumn('value', array(
-            'label' => __('Design Theme'),
-        ));
+        $this->addColumn('search', array('label' => __('Search String')));
+        $this->addColumn('value', array('label' => __('Design Theme')));
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add \Exception');
         parent::_construct();
@@ -88,15 +84,18 @@ class Regexceptions
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection(__('-- No Theme --'));
             $element = $this->_elementFactory->create('select');
-            $element
-                ->setForm($this->getForm())
-                ->setName($this->_getCellInputElementName($columnName))
-                ->setHtmlId($this->_getCellInputElementId('#{_id}', $columnName))
-                ->setValues($options);
+            $element->setForm(
+                $this->getForm()
+            )->setName(
+                $this->_getCellInputElementName($columnName)
+            )->setHtmlId(
+                $this->_getCellInputElementId('#{_id}', $columnName)
+            )->setValues(
+                $options
+            );
             return str_replace("\n", '', $element->getElementHtml());
         }
 
         return parent::renderCellTemplate($columnName);
     }
-
 }

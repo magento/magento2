@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\FileResolution;
 
 use Magento\Exception;
@@ -42,16 +41,22 @@ class StrategyPool
     const FALLBACK_MAP_DIR = 'maps/fallback';
 
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Application state
+     *
      * @var string
      */
     protected $appState;
 
     /**
+     * File system
+     *
      * @var Filesystem
      */
     protected $filesystem;
@@ -72,30 +77,29 @@ class StrategyPool
         'production_mode' => array(
             'file' => 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy',
             'locale' => 'Magento\View\Design\FileResolution\Strategy\Fallback',
-            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback',
+            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback'
         ),
         'caching_map' => array(
             'file' => 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy',
             'locale' => 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy',
-            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy',
+            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy'
         ),
         'full_check' => array(
             'file' => 'Magento\View\Design\FileResolution\Strategy\Fallback',
             'locale' => 'Magento\View\Design\FileResolution\Strategy\Fallback',
-            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback',
-        ),
+            'view' => 'Magento\View\Design\FileResolution\Strategy\Fallback'
+        )
     );
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param State $appState
      * @param Filesystem $filesystem
      */
-    public function __construct(
-        ObjectManager $objectManager,
-        State $appState,
-        Filesystem $filesystem
-    ) {
+    public function __construct(ObjectManager $objectManager, State $appState, Filesystem $filesystem)
+    {
         $this->objectManager = $objectManager;
         $this->appState = $appState;
         $this->filesystem = $filesystem;
@@ -113,7 +117,7 @@ class StrategyPool
     }
 
     /**
-     * * Get strategy to resolve locale files (e.g. locale settings)
+     * Get strategy to resolve locale files (e.g. locale settings)
      *
      * @param bool $skipProxy
      * @return \Magento\View\Design\FileResolution\Strategy\LocaleInterface
@@ -163,7 +167,7 @@ class StrategyPool
         $mode = $this->appState->getMode();
         if ($mode == State::MODE_PRODUCTION) {
             $strategyClasses = $this->strategies['production_mode'];
-        } elseif (($mode == State::MODE_DEVELOPER) || $skipProxy) {
+        } elseif ($mode == State::MODE_DEVELOPER || $skipProxy) {
             $strategyClasses = $this->strategies['full_check'];
         } elseif ($mode == State::MODE_DEFAULT) {
             $strategyClasses = $this->strategies['caching_map'];
@@ -184,10 +188,7 @@ class StrategyPool
         switch ($className) {
             case 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy':
                 $mapDir = $this->filesystem->getPath(Filesystem::VAR_DIR) . '/' . self::FALLBACK_MAP_DIR;
-                $arguments = array(
-                    'mapDir' => $mapDir,
-                    'baseDir' => $this->filesystem->getPath(Filesystem::ROOT_DIR),
-                );
+                $arguments = array('mapDir' => $mapDir, 'baseDir' => $this->filesystem->getPath(Filesystem::ROOT_DIR));
                 break;
             default:
                 $arguments = array();

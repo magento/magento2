@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="catalog_product_rss_feed_renderer_list" />
     <block class="Magento\Rss\Block\Catalog\Category" output="1" name="rss.catalog.category" cacheable="false">
         <block class="Magento\View\Element\RendererList" name="catalog.product.rss.feed.renderer.list" as="renderer.list" />

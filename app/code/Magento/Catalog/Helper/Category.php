@@ -23,19 +23,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper;
+
+use Magento\App\Helper\AbstractHelper;
+use Magento\Catalog\Model\Category as ModelCategory;
+use Magento\Core\Model\Store;
 
 /**
  * Catalog category helper
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Category extends \Magento\App\Helper\AbstractHelper
+class Category extends AbstractHelper
 {
-    const XML_PATH_CATEGORY_URL_SUFFIX          = 'catalog/seo/category_url_suffix';
-    const XML_PATH_USE_CATEGORY_CANONICAL_TAG   = 'catalog/seo/category_canonical_tag';
-    const XML_PATH_CATEGORY_ROOT_ID             = 'catalog/category/root_id';
+    const XML_PATH_CATEGORY_URL_SUFFIX = 'catalog/seo/category_url_suffix';
+
+    const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
+
+    const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
 
     /**
      * Store categories cache
@@ -103,14 +108,15 @@ class Category extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve current store categories
      *
-     * @param   boolean|string $sorted
-     * @param   boolean $asCollection
-     * @return  \Magento\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
+     * @param bool|string $sorted
+     * @param bool $asCollection
+     * @param bool $toLoad
+     * @return \Magento\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
      */
-    public function getStoreCategories($sorted=false, $asCollection=false, $toLoad=true)
+    public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {
-        $parent     = $this->_storeManager->getStore()->getRootCategoryId();
-        $cacheKey   = sprintf('%d-%d-%d-%d', $parent, $sorted, $asCollection, $toLoad);
+        $parent = $this->_storeManager->getStore()->getRootCategoryId();
+        $cacheKey = sprintf('%d-%d-%d-%d', $parent, $sorted, $asCollection, $toLoad);
         if (isset($this->_storeCategories[$cacheKey])) {
             return $this->_storeCategories[$cacheKey];
         }
@@ -119,7 +125,7 @@ class Category extends \Magento\App\Helper\AbstractHelper
          * Check if parent node of the store still exists
          */
         $category = $this->_categoryFactory->create();
-        /* @var $category \Magento\Catalog\Model\Category */
+        /* @var $category ModelCategory */
         if (!$category->checkId($parent)) {
             if ($asCollection) {
                 return $this->_dataCollectionFactory->create();
@@ -127,7 +133,7 @@ class Category extends \Magento\App\Helper\AbstractHelper
             return array();
         }
 
-        $recursionLevel  = max(0, (int) $this->_storeManager->getStore()->getConfig('catalog/navigation/max_depth'));
+        $recursionLevel = max(0, (int)$this->_storeManager->getStore()->getConfig('catalog/navigation/max_depth'));
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
 
         $this->_storeCategories[$cacheKey] = $storeCategories;
@@ -137,24 +143,22 @@ class Category extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve category url
      *
-     * @param   \Magento\Catalog\Model\Category $category
-     * @return  string
+     * @param ModelCategory $category
+     * @return string
      */
     public function getCategoryUrl($category)
     {
-        if ($category instanceof \Magento\Catalog\Model\Category) {
+        if ($category instanceof ModelCategory) {
             return $category->getUrl();
         }
-        return $this->_categoryFactory->create()
-            ->setData($category->getData())
-            ->getUrl();
+        return $this->_categoryFactory->create()->setData($category->getData())->getUrl();
     }
 
     /**
      * Check if a category can be shown
      *
-     * @param  \Magento\Catalog\Model\Category|int $category
-     * @return boolean
+     * @param ModelCategory|int $category
+     * @return bool
      */
     public function canShow($category)
     {
@@ -176,8 +180,8 @@ class Category extends \Magento\App\Helper\AbstractHelper
         return true;
     }
 
-/**
-     * Retrieve category rewrite sufix for store
+    /**
+     * Retrieve category rewrite suffix for store
      *
      * @param int $storeId
      * @return string
@@ -190,19 +194,19 @@ class Category extends \Magento\App\Helper\AbstractHelper
 
         if (!isset($this->_categoryUrlSuffix[$storeId])) {
             $this->_categoryUrlSuffix[$storeId] = $this->_coreStoreConfig->getConfig(
-                self::XML_PATH_CATEGORY_URL_SUFFIX, $storeId
+                self::XML_PATH_CATEGORY_URL_SUFFIX,
+                $storeId
             );
         }
         return $this->_categoryUrlSuffix[$storeId];
     }
 
     /**
-     * Retrieve clear url for category as parrent
+     * Retrieve clear url for category as parent
      *
-     * @param string $url
+     * @param string $urlPath
      * @param bool $slash
      * @param int $storeId
-     *
      * @return string
      */
     public function getCategoryUrlPath($urlPath, $slash = false, $storeId = null)
@@ -212,12 +216,11 @@ class Category extends \Magento\App\Helper\AbstractHelper
         }
 
         if ($slash) {
-            $regexp     = '#('.preg_quote($this->getCategoryUrlSuffix($storeId), '#').')/$#i';
-            $replace    = '/';
-        }
-        else {
-            $regexp     = '#('.preg_quote($this->getCategoryUrlSuffix($storeId), '#').')$#i';
-            $replace    = '';
+            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')/$#i';
+            $replace = '/';
+        } else {
+            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')$#i';
+            $replace = '';
         }
 
         return preg_replace($regexp, $replace, $urlPath);
@@ -226,7 +229,7 @@ class Category extends \Magento\App\Helper\AbstractHelper
     /**
      * Check if <link rel="canonical"> can be used for category
      *
-     * @param $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canUseCanonicalTag($store = null)

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design;
 
 /**
@@ -47,12 +46,12 @@ interface ThemeInterface
     /**
      * Virtual theme type
      */
-    const TYPE_VIRTUAL  = 1;
+    const TYPE_VIRTUAL = 1;
 
     /**
      * Staging theme type
      */
-    const TYPE_STAGING  = 2;
+    const TYPE_STAGING = 2;
 
     /**
      * Retrieve code of an area a theme belongs to
@@ -98,8 +97,16 @@ interface ThemeInterface
 
     /**
      * Return the full theme inheritance sequence, from the root theme till a specified one
+     * Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
      *
-     * @return ThemeInterface[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
+     * @return ThemeInterface[]
      */
     public function getInheritedThemes();
+
+    /**
+     * Get theme id
+     *
+     * @return int
+     */
+    public function getId();
 }

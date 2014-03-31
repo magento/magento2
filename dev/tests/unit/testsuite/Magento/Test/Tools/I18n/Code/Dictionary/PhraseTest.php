@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code\Dictionary;
 
 use Magento\Tools\I18n\Code\Dictionary\Phrase;
@@ -39,7 +38,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $reflectionClass = new \ReflectionClass('Magento\Tools\I18n\Code\Dictionary\Phrase');
         $phrase = $reflectionClass->newInstanceArgs($constructArguments);
 
-        $this->assertEquals($result, $phrase->$getter());
+        $this->assertEquals($result, $phrase->{$getter}());
     }
 
     /**
@@ -61,10 +60,11 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
                 'getContextValue',
                 array('context_value1', 'context_value2')
             ),
-            array(array('phrase', 'translation', 'context_type', 'context_value1,context_value2'),
+            array(
+                array('phrase', 'translation', 'context_type', 'context_value1,context_value2'),
                 'getContextValue',
                 array('context_value1', 'context_value2')
-            ),
+            )
         );
     }
 
@@ -89,7 +89,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         return array(
             array(array(null, 'translation'), 'Missed phrase.'),
             array(array('phrase', null), 'Missed translation.'),
-            array(array('phrase', 'translation', null, new \stdClass()), 'Wrong context type.'),
+            array(array('phrase', 'translation', null, new \stdClass()), 'Wrong context type.')
         );
     }
 
@@ -102,9 +102,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     public function testAccessorMethods($value, $setter, $getter)
     {
         $phrase = new Phrase('phrase', 'translation');
-        $phrase->$setter($value);
+        $phrase->{$setter}($value);
 
-        $this->assertEquals($value, $phrase->$getter());
+        $this->assertEquals($value, $phrase->{$getter}());
     }
 
     /**
@@ -116,7 +116,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
             array('value1', 'setPhrase', 'getPhrase'),
             array('value1', 'setTranslation', 'getTranslation'),
             array('value1', 'setContextType', 'getContextType'),
-            array(array('value1'), 'setContextValue', 'getContextValue'),
+            array(array('value1'), 'setContextValue', 'getContextValue')
         );
     }
 

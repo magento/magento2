@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 /**
@@ -37,10 +36,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
-        $block = $layout->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content',
-            'block'
-        );
+        $block = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content', 'block');
 
         $this->assertInstanceOf('Magento\Backend\Block\Media\Uploader', $block->getUploader());
     }

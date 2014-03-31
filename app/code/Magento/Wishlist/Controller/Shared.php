@@ -34,24 +34,24 @@
  */
 namespace Magento\Wishlist\Controller;
 
-class Shared extends \Magento\Wishlist\Controller\AbstractController
+class Shared extends AbstractController
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context, $formKeyValidator);
@@ -64,7 +64,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
      */
     protected function _getWishlist()
     {
-        $code     = (string)$this->getRequest()->getParam('code');
+        $code = (string)$this->getRequest()->getParam('code');
         if (empty($code)) {
             return false;
         }
@@ -82,10 +82,11 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
     /**
      * Shared wishlist view page
      *
+     * @return void
      */
     public function indexAction()
     {
-        $wishlist   = $this->_getWishlist();
+        $wishlist = $this->_getWishlist();
         $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
 
         if ($wishlist && $wishlist->getCustomerId() && $wishlist->getCustomerId() == $customerId) {
@@ -108,24 +109,28 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
+     * @return \Zend_Controller_Response_Abstract
      */
     public function cartAction()
     {
-        $itemId = (int) $this->getRequest()->getParam('item');
+        $itemId = (int)$this->getRequest()->getParam('item');
 
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
 
 
         /* @var $session \Magento\Session\Generic */
-        $session    = $this->_objectManager->get('Magento\Wishlist\Model\Session');
-        $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        $session = $this->_objectManager->get('Magento\Wishlist\Model\Session');
+        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
 
         $redirectUrl = $this->_redirect->getRefererUrl();
 
         try {
-            $options = $this->_objectManager->create('Magento\Wishlist\Model\Item\Option')->getCollection()
-                    ->addItemFilter(array($itemId));
+            $options = $this->_objectManager->create(
+                'Magento\Wishlist\Model\Item\Option'
+            )->getCollection()->addItemFilter(
+                array($itemId)
+            );
             $item->setOptions($options->getOptionsByItem($itemId));
 
             $item->addToCart($cart);
@@ -134,7 +139,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
             if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
                 $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
                 $this->messageManager->addError(__('This product(s) is out of stock.'));
             } else {

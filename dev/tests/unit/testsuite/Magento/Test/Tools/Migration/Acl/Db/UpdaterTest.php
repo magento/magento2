@@ -25,9 +25,8 @@
  */
 namespace Magento\Test\Tools\Migration\Acl\Db;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Updater.php';
 
+require_once realpath(__DIR__ . '/../../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Db/Updater.php';
 class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,31 +52,43 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_readerMock = $this->getMock('Magento\Tools\Migration\Acl\Db\Reader', array(), array(), '', false);
-        $this->_readerMock->expects($this->once())->method('fetchAll')->will($this->returnValue(array(
-            'oldResource1' => 1,
-            'oldResource2' => 2,
-            'Test::newResource3'  => 3,
-            'additionalResource'  => 4,
-        )));
+        $this->_readerMock->expects(
+            $this->once()
+        )->method(
+            'fetchAll'
+        )->will(
+            $this->returnValue(
+                array('oldResource1' => 1, 'oldResource2' => 2, 'Test::newResource3' => 3, 'additionalResource' => 4)
+            )
+        );
 
         $this->_map = array(
-            "oldResource1"  => "Test::newResource1",
-            "oldResource2"  => "Test::newResource2",
-            "oldResource3"  => "Test::newResource3",
-            "oldResource4"  => "Test::newResource4",
-            "oldResource5"  => "Test::newResource5"
+            "oldResource1" => "Test::newResource1",
+            "oldResource2" => "Test::newResource2",
+            "oldResource3" => "Test::newResource3",
+            "oldResource4" => "Test::newResource4",
+            "oldResource5" => "Test::newResource5"
         );
 
         $this->_writerMock = $this->getMock('Magento\Tools\Migration\Acl\Db\Writer', array(), array(), '', false);
         $this->_loggerMock = $this->getMockForAbstractClass(
-            'Magento\Tools\Migration\Acl\Db\AbstractLogger', array(), '', false, false, false, array('add')
+            'Magento\Tools\Migration\Acl\Db\AbstractLogger',
+            array(),
+            '',
+            false,
+            false,
+            false,
+            array('add')
         );
     }
 
     public function testMigrateInPreviewModeDoesntWriteToDb()
     {
         $model = new \Magento\Tools\Migration\Acl\Db\Updater(
-            $this->_readerMock, $this->_writerMock, $this->_loggerMock, null
+            $this->_readerMock,
+            $this->_writerMock,
+            $this->_loggerMock,
+            null
         );
 
         $this->_writerMock->expects($this->never())->method('update');
@@ -93,8 +104,10 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     public function testMigrateInRealModeWritesToDb()
     {
         $model = new \Magento\Tools\Migration\Acl\Db\Updater(
-            $this->
-                _readerMock, $this->_writerMock, $this->_loggerMock, \Magento\Tools\Migration\Acl\Db\Updater::WRITE_MODE
+            $this->_readerMock,
+            $this->_writerMock,
+            $this->_loggerMock,
+            \Magento\Tools\Migration\Acl\Db\Updater::WRITE_MODE
         );
 
         $this->_writerMock->expects($this->at(0))->method('update')->with('oldResource1', 'Test::newResource1');
@@ -108,4 +121,3 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $model->migrate($this->_map);
     }
 }
-

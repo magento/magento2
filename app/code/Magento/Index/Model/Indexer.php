@@ -23,16 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Indexer strategy
- */
 namespace Magento\Index\Model;
 
 use Magento\Event\ManagerInterface;
 use Magento\Index\Model\Resource\Process as ResourceProcess;
 use Magento\Index\Model\Resource\Process\Collection;
 
+/**
+ * Indexer strategy
+ */
 class Indexer
 {
     /**
@@ -101,7 +100,6 @@ class Indexer
         return $this->_processesCollection;
     }
 
-
     /**
      * Get index process by specific id
      *
@@ -143,7 +141,7 @@ class Indexer
      * @return  $this
      * @throws \Exception
      */
-    public function indexEvents($entity=null, $type=null)
+    public function indexEvents($entity = null, $type = null)
     {
         $this->_eventManager->dispatch('start_index_events' . $this->_getEventTypeName($entity, $type));
         $this->_resourceProcess->beginTransaction();
@@ -191,13 +189,17 @@ class Indexer
      * @param   bool $doSave
      * @return  Event
      */
-    public function logEvent(\Magento\Object $entity, $entityType, $eventType, $doSave=true)
+    public function logEvent(\Magento\Object $entity, $entityType, $eventType, $doSave = true)
     {
-        $event = $this->_indexEventFactory->create()
-            ->setEntity($entityType)
-            ->setType($eventType)
-            ->setDataObject($entity)
-            ->setEntityPk($entity->getId());
+        $event = $this->_indexEventFactory->create()->setEntity(
+            $entityType
+        )->setType(
+            $eventType
+        )->setDataObject(
+            $entity
+        )->setEntityPk(
+            $entity->getId()
+        );
 
         $this->registerEvent($event);
         if ($doSave) {
@@ -266,7 +268,7 @@ class Indexer
      * @param Collection $collection
      * @return void
      */
-    private function _reindexCollection(\Magento\Index\Model\Resource\Process\Collection $collection)
+    private function _reindexCollection(Collection $collection)
     {
         /** @var $process \Magento\Index\Model\Process */
         foreach ($collection as $process) {
@@ -302,7 +304,8 @@ class Indexer
                             $hasLocks = true;
                         } else {
                             call_user_func_array(array($dependProcess, $method), $args);
-                            if ($checkLocks && $dependProcess->getMode() == \Magento\Index\Model\Process::MODE_MANUAL) {
+                            if ($checkLocks && $dependProcess->getMode() == \Magento\Index\Model\Process::MODE_MANUAL
+                            ) {
                                 $hasLocks = true;
                             } else {
                                 $processed[] = $processCode;

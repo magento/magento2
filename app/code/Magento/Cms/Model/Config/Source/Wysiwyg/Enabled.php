@@ -23,33 +23,22 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Config\Source\Wysiwyg;
 
 /**
  * Configuration source model for Wysiwyg toggling
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Config\Source\Wysiwyg;
-
-class Enabled implements \Magento\Core\Model\Option\ArrayInterface
+class Enabled implements \Magento\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_ENABLED,
-                'label' => __('Enabled by Default')
-            ),
-            array(
-                'value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_HIDDEN,
-                'label' => __('Disabled by Default')
-            ),
-            array(
-                'value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_DISABLED,
-                'label' => __('Disabled Completely')
-            )
+            array('value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_ENABLED, 'label' => __('Enabled by Default')),
+            array('value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_HIDDEN, 'label' => __('Disabled by Default')),
+            array('value' => \Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_DISABLED, 'label' => __('Disabled Completely'))
         );
     }
 }

@@ -164,7 +164,7 @@ AdminBackup.prototype = {
     },
 
     getErrorMessageHtml: function(message) {
-        return '<li class="error-msg"><ul><li><span>' + message + '</span></li></ul></li>';
+        return '<div class="message error"><div>' + message + '</div></div>';
     },
 
     getPostData: function() {

@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Controller;
 
 use Magento\Integration\Service\OauthV1Interface as IntegrationOauthService;
@@ -68,6 +67,8 @@ class Token extends \Magento\App\Action\Action
 
     /**
      *  Initiate RequestToken request operation
+     *
+     * @return void
      */
     public function requestAction()
     {
@@ -76,19 +77,17 @@ class Token extends \Magento\App\Action\Action
             $request = $this->_helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request request token
-            $response = $this->_oauthService->getRequestToken(
-                $request, $requestUrl, $this->getRequest()->getMethod());
+            $response = $this->_oauthService->getRequestToken($request, $requestUrl, $this->getRequest()->getMethod());
         } catch (\Exception $exception) {
-            $response = $this->_helper->prepareErrorResponse(
-                $exception,
-                $this->getResponse()
-            );
+            $response = $this->_helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));
     }
 
     /**
      * Initiate AccessToken request operation
+     *
+     * @return void
      */
     public function accessAction()
     {
@@ -97,21 +96,16 @@ class Token extends \Magento\App\Action\Action
             $request = $this->_helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request access token in exchange of a pre-authorized token
-            $response = $this->_oauthService->getAccessToken(
-                $request,
-                $requestUrl,
-                $this->getRequest()->getMethod()
-            );
+            $response = $this->_oauthService->getAccessToken($request, $requestUrl, $this->getRequest()->getMethod());
             //After sending the access token, update the integration status to active;
             $consumer = $this->_intOauthService->loadConsumerByKey($request['oauth_consumer_key']);
-            $this->_integrationService->findByConsumerId($consumer->getId())
-                ->setStatus(IntegrationModel::STATUS_ACTIVE)
-                ->save();
+            $this->_integrationService->findByConsumerId(
+                $consumer->getId()
+            )->setStatus(
+                IntegrationModel::STATUS_ACTIVE
+            )->save();
         } catch (\Exception $exception) {
-            $response = $this->_helper->prepareErrorResponse(
-                $exception,
-                $this->getResponse()
-            );
+            $response = $this->_helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));
     }

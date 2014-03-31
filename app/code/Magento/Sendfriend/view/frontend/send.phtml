@@ -28,25 +28,30 @@
  */
 ?>
 <script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
-    <a href="delete_email" id="btn-remove${_index_}" class="action delete"
-       title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></a>
-
-    <div class="field name required">
-        <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name:')?></span></label>
-        <div class="control">
-            <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name:') ?>" class="input-text"
-                   id="recipients-name${_index_}" data-validate="{required:true}"/>
+    <div class="actions toolbar">
+        <div class="secondary">
+            <a href="delete_email" id="btn-remove${_index_}" class="action delete"
+               title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></a>
         </div>
     </div>
-
-    <div class="field email required">
-        <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address:') ?></span></label>
-        <div class="control">
-            <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address:') ?>"
-                   id="recipients-email${_index_}" type="email" class="input-text"
-                   data-validate="{required:true, 'validate-email':true}"/>
+    <fieldset class="fieldset">
+        <div class="field name required">
+            <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name:')?></span></label>
+            <div class="control">
+                <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name:') ?>" class="input-text"
+                       id="recipients-name${_index_}" data-validate="{required:true}"/>
+            </div>
         </div>
-    </div>
+
+        <div class="field email required">
+            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address:') ?></span></label>
+            <div class="control">
+                <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address:') ?>"
+                       id="recipients-email${_index_}" type="email" class="input-text"
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+    </fieldset>
 </script>
 
 <form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form" class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
@@ -81,12 +86,12 @@
         </div>
     </fieldset>
 
-    <fieldset class="fieldset recipients">
+    <div class="recipients">
         <?php echo $this->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo __('Recipient:') ?></span></legend><br />
+        <strong class="title"><span><?php echo __('Recipient:') ?></span></strong>
         <div id="recipients-options"></div>
-        <div class="actions">
-            <div class="primary">
+        <div class="actions toolbar">
+            <div class="secondary">
             <?php if (1 < $this->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
                     <span><?php echo __('Add Recipient') ?></span></button>
@@ -98,8 +103,8 @@
             <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
             <?php endif; ?>
         </div>
-    </fieldset>
-    <div class="actions">
+    </div>
+    <div class="actions toolbar">
         <div class="primary">
             <button type="submit"
                     class="action submit"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>

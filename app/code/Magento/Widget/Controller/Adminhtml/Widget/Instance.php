@@ -34,7 +34,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -54,27 +54,27 @@ class Instance extends \Magento\Backend\App\Action
     protected $mathRandom;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $_translateInline;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\Translate\InlineInterface $translateInline
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
         \Magento\Logger $logger,
         \Magento\Math\Random $mathRandom,
-        \Magento\Core\Model\Translate $translator
+        \Magento\Translate\InlineInterface $translateInline
     ) {
-        $this->_translator = $translator;
+        $this->_translateInline = $translateInline;
         $this->_coreRegistry = $coreRegistry;
         $this->_widgetFactory = $widgetFactory;
         $this->_logger = $logger;
@@ -85,16 +85,20 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Load layout, set active menu and breadcrumbs
      *
-     * @return \Magento\Widget\Controller\Adminhtml\Widget\Instance
+     * @return $this
      */
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Widget::cms_widget_instance')
-            ->_addBreadcrumb(__('CMS'),
-                __('CMS'))
-            ->_addBreadcrumb(__('Manage Widget Instances'),
-                __('Manage Widget Instances'));
+        $this->_setActiveMenu(
+            'Magento_Widget::cms_widget_instance'
+        )->_addBreadcrumb(
+            __('CMS'),
+            __('CMS')
+        )->_addBreadcrumb(
+            __('Manage Widget Instances'),
+            __('Manage Widget Instances')
+        );
         return $this;
     }
 
@@ -113,13 +117,9 @@ class Instance extends \Magento\Backend\App\Action
         $code = $this->getRequest()->getParam('code', null);
         $instanceId = $this->getRequest()->getParam('instance_id', null);
         if ($instanceId) {
-            $widgetInstance
-                ->load($instanceId)
-                ->setCode($code);
+            $widgetInstance->load($instanceId)->setCode($code);
             if (!$widgetInstance->getId()) {
-                $this->messageManager->addError(
-                    __('Please specify a correct widget.')
-                );
+                $this->messageManager->addError(__('Please specify a correct widget.'));
                 return false;
             }
         } else {
@@ -127,10 +127,7 @@ class Instance extends \Magento\Backend\App\Action
             // type (namespace\classname) based upon the widget code (aka, widget id).
             $themeId = $this->getRequest()->getParam('theme_id', null);
             $type = $code != null ? $widgetInstance->getWidgetReference('code', $code, 'type') : null;
-            $widgetInstance
-                ->setType($type)
-                ->setCode($code)
-                ->setThemeId($themeId);
+            $widgetInstance->setType($type)->setCode($code)->setThemeId($themeId);
         }
         $this->_coreRegistry->register('current_widget_instance', $widgetInstance);
         return $widgetInstance;
@@ -139,6 +136,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Widget Instances Grid
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -151,6 +149,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * New widget instance action (forward to edit action)
      *
+     * @return void
      */
     public function newAction()
     {
@@ -160,6 +159,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Edit widget instance action
      *
+     * @return void
      */
     public function editAction()
     {
@@ -179,11 +179,11 @@ class Instance extends \Magento\Backend\App\Action
      * Set body to response
      *
      * @param string $body
-     * @return null
+     * @return void
      */
     protected function setBody($body)
     {
-        $this->_translator->processResponseBody($body);
+        $this->_translateInline->processResponseBody($body);
 
         $this->getResponse()->setBody($body);
     }
@@ -191,6 +191,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Validate action
      *
+     * @return void
      */
     public function validateAction()
     {
@@ -209,6 +210,8 @@ class Instance extends \Magento\Backend\App\Action
 
     /**
      * Save action
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -217,21 +220,25 @@ class Instance extends \Magento\Backend\App\Action
             $this->_redirect('adminhtml/*/');
             return;
         }
-        $widgetInstance->setTitle($this->getRequest()->getPost('title'))
-            ->setStoreIds($this->getRequest()->getPost('store_ids', array(0)))
-            ->setSortOrder($this->getRequest()->getPost('sort_order', 0))
-            ->setPageGroups($this->getRequest()->getPost('widget_instance'))
-            ->setWidgetParameters($this->getRequest()->getPost('parameters'));
+        $widgetInstance->setTitle(
+            $this->getRequest()->getPost('title')
+        )->setStoreIds(
+            $this->getRequest()->getPost('store_ids', array(0))
+        )->setSortOrder(
+            $this->getRequest()->getPost('sort_order', 0)
+        )->setPageGroups(
+            $this->getRequest()->getPost('widget_instance')
+        )->setWidgetParameters(
+            $this->getRequest()->getPost('parameters')
+        );
         try {
             $widgetInstance->save();
-            $this->messageManager->addSuccess(
-                __('The widget instance has been saved.')
-            );
+            $this->messageManager->addSuccess(__('The widget instance has been saved.'));
             if ($this->getRequest()->getParam('back', false)) {
-                    $this->_redirect('adminhtml/*/edit', array(
-                        'instance_id' => $widgetInstance->getId(),
-                        '_current' => true
-                    ));
+                $this->_redirect(
+                    'adminhtml/*/edit',
+                    array('instance_id' => $widgetInstance->getId(), '_current' => true)
+                );
             } else {
                 $this->_redirect('adminhtml/*/');
             }
@@ -249,6 +256,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Delete Action
      *
+     * @return void
      */
     public function deleteAction()
     {
@@ -256,9 +264,7 @@ class Instance extends \Magento\Backend\App\Action
         if ($widgetInstance) {
             try {
                 $widgetInstance->delete();
-                $this->messageManager->addSuccess(
-                    __('The widget instance has been deleted.')
-                );
+                $this->messageManager->addSuccess(__('The widget instance has been deleted.'));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }
@@ -270,34 +276,46 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Categories chooser Action (Ajax request)
      *
+     * @return void
      */
     public function categoriesAction()
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $isAnchorOnly = $this->getRequest()->getParam('is_anchor_only', 0);
-        $chooser = $this->_view->getLayout()
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser')
-            ->setUseMassaction(true)
-            ->setId($this->mathRandom->getUniqueHash('categories'))
-            ->setIsAnchorOnly($isAnchorOnly)
-            ->setSelectedCategories(explode(',', $selected));
+        $chooser = $this->_view->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser'
+        )->setUseMassaction(
+            true
+        )->setId(
+            $this->mathRandom->getUniqueHash('categories')
+        )->setIsAnchorOnly(
+            $isAnchorOnly
+        )->setSelectedCategories(
+            explode(',', $selected)
+        );
         $this->setBody($chooser->toHtml());
     }
 
     /**
      * Products chooser Action (Ajax request)
      *
+     * @return void
      */
     public function productsAction()
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $productTypeId = $this->getRequest()->getParam('product_type_id', '');
-        $chooser = $this->_view->getLayout()
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser')
-            ->setName($this->mathRandom->getUniqueHash('products_grid_'))
-            ->setUseMassaction(true)
-            ->setProductTypeId($productTypeId)
-            ->setSelectedProducts(explode(',', $selected));
+        $chooser = $this->_view->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser'
+        )->setName(
+            $this->mathRandom->getUniqueHash('products_grid_')
+        )->setUseMassaction(
+            true
+        )->setProductTypeId(
+            $productTypeId
+        )->setSelectedProducts(
+            explode(',', $selected)
+        );
         /* @var $serializer \Magento\Backend\Block\Widget\Grid\Serializer */
         $serializer = $this->_view->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Grid\Serializer',
@@ -317,15 +335,22 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Blocks Action (Ajax request)
      *
+     * @return void
      */
     public function blocksAction()
     {
-        $this->_objectManager->get('Magento\App\State')
-            ->emulateAreaCode('frontend', array($this, 'renderPageContainers'));
+        $this->_objectManager->get(
+            'Magento\App\State'
+        )->emulateAreaCode(
+            'frontend',
+            array($this, 'renderPageContainers')
+        );
     }
 
     /**
      * Render page containers
+     *
+     * @return void
      */
     public function renderPageContainers()
     {
@@ -333,19 +358,26 @@ class Instance extends \Magento\Backend\App\Action
         $widgetInstance = $this->_initWidgetInstance();
         $layout = $this->getRequest()->getParam('layout');
         $selected = $this->getRequest()->getParam('selected', null);
-        $blocksChooser = $this->_view->getLayout()
-            ->createBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container')
-            ->setValue($selected)
-            ->setArea($widgetInstance->getArea())
-            ->setTheme($widgetInstance->getThemeId())
-            ->setLayoutHandle($layout)
-            ->setAllowedContainers($widgetInstance->getWidgetSupportedContainers());
+        $blocksChooser = $this->_view->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container'
+        )->setValue(
+            $selected
+        )->setArea(
+            $widgetInstance->getArea()
+        )->setTheme(
+            $widgetInstance->getThemeId()
+        )->setLayoutHandle(
+            $layout
+        )->setAllowedContainers(
+            $widgetInstance->getWidgetSupportedContainers()
+        );
         $this->setBody($blocksChooser->toHtml());
     }
 
     /**
      * Templates Chooser Action (Ajax request)
      *
+     * @return void
      */
     public function templateAction()
     {
@@ -353,10 +385,13 @@ class Instance extends \Magento\Backend\App\Action
         $widgetInstance = $this->_initWidgetInstance();
         $block = $this->getRequest()->getParam('block');
         $selected = $this->getRequest()->getParam('selected', null);
-        $templateChooser = $this->_view->getLayout()
-            ->createBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template')
-            ->setSelected($selected)
-            ->setWidgetTemplates($widgetInstance->getWidgetSupportedTemplatesByContainer($block));
+        $templateChooser = $this->_view->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template'
+        )->setSelected(
+            $selected
+        )->setWidgetTemplates(
+            $widgetInstance->getWidgetSupportedTemplatesByContainer($block)
+        );
         $this->setBody($templateChooser->toHtml());
     }
 

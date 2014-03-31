@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml\System;
 
 /**
@@ -55,7 +54,7 @@ class StoreTest extends \Magento\Backend\Utility\Controller
                 'code' => 'base',
                 'sort_order' => '',
                 'is_default' => '',
-                'website_id' => '',
+                'website_id' => ''
             ),
             'store_type' => 'website',
             'store_action' => 'add'

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Searches;
 
 /**
  * Adminhtml dashboard last search keywords block
@@ -31,11 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Searches;
-
 class Last extends \Magento\Backend\Block\Dashboard\Grid
 {
+    /**
+     * @var \Magento\CatalogSearch\Model\Resource\Query\Collection
+     */
     protected $_collection;
 
     /**
@@ -67,12 +68,18 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('lastSearchGrid');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         if (!$this->_moduleManager->isEnabled('Magento_CatalogSearch')) {
@@ -96,28 +103,30 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('search_query', array(
-            'header'    => __('Search Term'),
-            'sortable'  => false,
-            'index'     => 'query_text',
-            'renderer'  => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery',
-        ));
+        $this->addColumn(
+            'search_query',
+            array(
+                'header' => __('Search Term'),
+                'sortable' => false,
+                'index' => 'query_text',
+                'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
+            )
+        );
 
-        $this->addColumn('num_results', array(
-            'header'    => __('Results'),
-            'sortable'  => false,
-            'index'     => 'num_results',
-            'type'      => 'number'
-        ));
+        $this->addColumn(
+            'num_results',
+            array('header' => __('Results'), 'sortable' => false, 'index' => 'num_results', 'type' => 'number')
+        );
 
-        $this->addColumn('popularity', array(
-            'header'    => __('Uses'),
-            'sortable'  => false,
-            'index'     => 'popularity',
-            'type'      => 'number'
-        ));
+        $this->addColumn(
+            'popularity',
+            array('header' => __('Uses'), 'sortable' => false, 'index' => 'popularity', 'type' => 'number')
+        );
 
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
@@ -125,8 +134,11 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/search/edit', array('id'=>$row->getId()));
+        return $this->getUrl('catalog/search/edit', array('id' => $row->getId()));
     }
 }

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
 
 /**
  * Attributes Model
@@ -31,14 +32,12 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
-class Attribute extends \Magento\Core\Model\AbstractModel
+class Attribute extends \Magento\Model\AbstractModel
 {
     /**
      * Default ignored attribute codes
      *
-     * @var array
+     * @var string[]
      */
     protected $_ignoredAttributeCodes = array(
         'custom_design',
@@ -58,14 +57,14 @@ class Attribute extends \Magento\Core\Model\AbstractModel
         'use_config_email_template',
         'tier_price',
         'minimal_price',
-        'recurring_profile',
+        'recurring_payment',
         'shipment_type'
     );
 
     /**
      * Default ignored attribute types
      *
-     * @var array
+     * @var string[]
      */
     protected $_ignoredAttributeTypes = array('hidden', 'media_image', 'image', 'gallery');
 
@@ -92,8 +91,8 @@ class Attribute extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
@@ -103,8 +102,8 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
@@ -118,9 +117,11 @@ class Attribute extends \Magento\Core\Model\AbstractModel
         $this->_gsProduct = $gsProduct;
         $this->catalogPrice = $catalogPrice;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GoogleShopping\Model\Resource\Attribute');
@@ -134,9 +135,9 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      */
     public function getAllowedAttributes($setId)
     {
-        $attributes = $this->_productFactory->create()->getResource()
-                ->loadAllAttributes()
-                ->getSortedAttributes($setId);
+        $attributes = $this->_productFactory->create()->getResource()->loadAllAttributes()->getSortedAttributes(
+            $setId
+        );
 
         $titles = array();
         foreach ($attributes as $attribute) {
@@ -158,13 +159,16 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      * Check if attribute allowed
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param array $attributes
-     * @return boolean
+     * @return bool
      */
     protected function _isAllowedAttribute($attribute)
     {
-        return !in_array($attribute->getFrontendInput(), $this->_ignoredAttributeTypes)
-               && !in_array($attribute->getAttributeCode(), $this->_ignoredAttributeCodes)
-               && $attribute->getFrontendLabel() != "";
+        return !in_array(
+            $attribute->getFrontendInput(),
+            $this->_ignoredAttributeTypes
+        ) && !in_array(
+            $attribute->getAttributeCode(),
+            $this->_ignoredAttributeCodes
+        ) && $attribute->getFrontendLabel() != "";
     }
 }

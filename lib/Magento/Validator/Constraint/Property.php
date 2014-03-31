@@ -71,6 +71,7 @@ class Property extends \Magento\Validator\Constraint
      * Add messages with code of property name
      *
      * @param array $messages
+     * @return void
      */
     protected function _addMessages(array $messages)
     {

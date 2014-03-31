@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleAdwords\Model\Config\Source;
 
-class ValueType implements \Magento\Core\Model\Option\ArrayInterface
+class ValueType implements \Magento\Option\ArrayInterface
 {
     /**
      * Get conversation value type option
@@ -37,12 +37,12 @@ class ValueType implements \Magento\Core\Model\Option\ArrayInterface
         return array(
             array(
                 'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC,
-                'label' => __('Dynamic'),
+                'label' => __('Dynamic')
             ),
             array(
                 'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT,
-                'label' => __('Constant'),
-            ),
+                'label' => __('Constant')
+            )
         );
     }
 }

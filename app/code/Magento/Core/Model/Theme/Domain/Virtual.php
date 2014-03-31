@@ -135,15 +135,17 @@ class Virtual implements \Magento\View\Design\Theme\Domain\VirtualInterface
     protected function _createStagingTheme()
     {
         $stagingTheme = $this->_themeFactory->create();
-        $stagingTheme->setData(array(
-            'parent_id'            => $this->_theme->getId(),
-            'theme_path'           => null,
-            'theme_version'        => $this->_theme->getThemeVersion(),
-            'theme_title'          => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
-            'preview_image'        => $this->_theme->getPreviewImage(),
-            'is_featured'          => $this->_theme->getIsFeatured(),
-            'type'                 => \Magento\View\Design\ThemeInterface::TYPE_STAGING
-        ));
+        $stagingTheme->setData(
+            array(
+                'parent_id' => $this->_theme->getId(),
+                'theme_path' => null,
+                'theme_version' => $this->_theme->getThemeVersion(),
+                'theme_title' => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
+                'preview_image' => $this->_theme->getPreviewImage(),
+                'is_featured' => $this->_theme->getIsFeatured(),
+                'type' => \Magento\View\Design\ThemeInterface::TYPE_STAGING
+            )
+        );
         $stagingTheme->save();
         return $stagingTheme;
     }

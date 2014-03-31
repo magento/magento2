@@ -33,18 +33,25 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-class Price extends \Magento\View\Element\Template
+class Price extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
+    /**
+     * @var null
+     */
     protected $_priceDisplayType = null;
+
+    /**
+     * @var string
+     */
     protected $_idSuffix = '';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Tax data
      *
@@ -84,7 +91,7 @@ class Price extends \Magento\View\Element\Template
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
@@ -95,7 +102,7 @@ class Price extends \Magento\View\Element\Template
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
@@ -125,17 +132,27 @@ class Price extends \Magento\View\Element\Template
         return $product;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDisplayMinimalPrice()
     {
         return $this->_getData('display_minimal_price');
     }
 
+    /**
+     * @param string $idSuffix
+     * @return $this
+     */
     public function setIdSuffix($idSuffix)
     {
         $this->_idSuffix = $idSuffix;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getIdSuffix()
     {
         return $this->_idSuffix;
@@ -171,7 +188,7 @@ class Price extends \Magento\View\Element\Template
                 }
 
                 if ($price['price'] < $productPrice) {
-                    $price['savePercent'] = ceil(100 - ((100 / $productPrice) * $price['price']));
+                    $price['savePercent'] = ceil(100 - 100 / $productPrice * $price['price']);
 
                     $tierPrice = $this->_storeManager->getStore()->convertPrice(
                         $this->_taxData->getPrice($product, $price['website_price'])
@@ -262,5 +279,15 @@ class Price extends \Magento\View\Element\Template
     public function getRandomString($length, $chars = null)
     {
         return $this->mathRandom->getRandomString($length, $chars);
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getProduct()->getIdentities();
     }
 }

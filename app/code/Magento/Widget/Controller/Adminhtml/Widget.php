@@ -40,7 +40,7 @@ class Widget extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -58,13 +58,13 @@ class Widget extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Widget\Model\Widget $widget,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_widgetConfig = $widgetConfig;
         $this->_widget = $widget;
@@ -74,6 +74,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Wisywyg widget plugin main page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -88,6 +90,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Ajax responder for loading plugin options form
+     *
+     * @return void
      */
     public function loadOptionsAction()
     {
@@ -106,7 +110,7 @@ class Widget extends \Magento\Backend\App\Action
                 }
                 $this->_view->renderLayout();
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
         }
@@ -114,6 +118,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Format widget pseudo-code for inserting into wysiwyg editor
+     *
+     * @return void
      */
     public function buildWidgetAction()
     {

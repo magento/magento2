@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Object;
 
 class CopyTest extends \PHPUnit_Framework_TestCase
@@ -43,14 +42,12 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     {
         $fieldset = 'sales_copy_order';
         $aspect = 'to_edit';
-        $data = array(
-            'customer_email' => 'admin@example.com',
-            'customer_group_id' => '1',
-        );
+        $data = array('customer_email' => 'admin@example.com', 'customer_group_id' => '1');
         $source = new \Magento\Object($data);
         $target = new \Magento\Object();
         $expectedTarget = new \Magento\Object($data);
-        $expectedTarget->setDataChanges(true); // hack for assertion
+        $expectedTarget->setDataChanges(true);
+        // hack for assertion
 
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, 'invalid_source', array()));
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, array(), 'invalid_target'));
@@ -66,10 +63,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     {
         $fieldset = 'sales_copy_order';
         $aspect = 'to_edit';
-        $data = array(
-            'customer_email' => 'admin@example.com',
-            'customer_group_id' => '1',
-        );
+        $data = array('customer_email' => 'admin@example.com', 'customer_group_id' => '1');
         $source = new \Magento\Object($data);
         $target = array();
         $expectedTarget = $data;
@@ -80,6 +74,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $expectedTarget,
-            $this->_service->copyFieldsetToTarget($fieldset, $aspect, $source, $target));
+            $this->_service->copyFieldsetToTarget($fieldset, $aspect, $source, $target)
+        );
     }
 }

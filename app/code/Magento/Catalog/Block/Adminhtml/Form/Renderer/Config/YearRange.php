@@ -33,13 +33,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
-class YearRange extends \Magento\Backend\Block\System\Config\Form\Field
-{
+use Magento\Backend\Block\System\Config\Form\Field;
+use Magento\Data\Form\Element\AbstractElement;
 
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+class YearRange extends Field
+{
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
-        $element->setStyle('width:70px;')
-            ->setName($element->getName() . '[]');
+        $element->setStyle('width:70px;')->setName($element->getName() . '[]');
 
         if ($element->getValue()) {
             $values = explode(',', $element->getValue());
@@ -49,7 +54,10 @@ class YearRange extends \Magento\Backend\Block\System\Config\Form\Field
 
         $from = $element->setValue(isset($values[0]) ? $values[0] : null)->getElementHtml();
         $to = $element->setValue(isset($values[1]) ? $values[1] : null)->getElementHtml();
-        return __('<label class="label"><span>from</span></label>') . $from
-            . __('<label class="label"><span>to</span></label>') . $to;
+        return __(
+            '<label class="label"><span>from</span></label>'
+        ) . $from . __(
+            '<label class="label"><span>to</span></label>'
+        ) . $to;
     }
 }

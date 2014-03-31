@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\App;
 
-class Indexer implements \Magento\LauncherInterface
+class Indexer implements \Magento\AppInterface
 {
     /**
      * Report directory
@@ -39,32 +38,29 @@ class Indexer implements \Magento\LauncherInterface
     protected $filesystem;
 
     /**
-     * @var \Magento\App\Console\Response
+     * @var \Magento\Index\Model\IndexerFactory
      */
-    protected $response;
+    protected $_indexerFactory;
 
     /**
-     * @param $reportDir
+     * @param string $reportDir
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Indexer\Model\Processor $processor
-     * @param \Magento\App\Console\Response $response
      */
     public function __construct(
         $reportDir,
         \Magento\Filesystem $filesystem,
-        \Magento\Indexer\Model\Processor $processor,
-        \Magento\App\Console\Response $response
+        \Magento\Indexer\Model\Processor $processor
     ) {
         $this->reportDir = $reportDir;
         $this->filesystem = $filesystem;
         $this->processor = $processor;
-        $this->response = $response;
     }
 
     /**
      * Run application
      *
-     * @return \Magento\App\ResponseInterface
+     * @return int
      */
     public function launch()
     {
@@ -77,8 +73,7 @@ class Indexer implements \Magento\LauncherInterface
 
         /* Regenerate all indexers */
         $this->processor->reindexAll();
-        $this->response->setCode(0);
 
-        return $this->response;
+        return 0;
     }
 }

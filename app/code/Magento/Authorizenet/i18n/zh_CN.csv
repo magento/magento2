@@ -47,7 +47,7 @@
 "Payment canceling error.","取消支付过程出错。"
 "Payment capturing error.","支付捕获出错。"
 "Payment error. Order was not found.","支付出错，订单未找到。"
-"Payment error. Paid amount doesn\'t match the order amount.","支付错误。付款金额与订单金额不匹配。"
+"Payment error. Paid amount doesn't match the order amount.","支付错误。付款金额与订单金额不匹配。"
 "Payment from Applicable Countries","从可接受的国家支付"
 "Payment from Specific Countries","从指定的国家支付"
 "Payment partial authorization error.","支付的部分身份验证出错。"

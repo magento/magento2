@@ -25,8 +25,8 @@
  */
 namespace Magento\App\Action;
 
-use \Magento\App\RequestInterface;
-use \Magento\App\ResponseInterface;
+use Magento\App\RequestInterface;
+use Magento\App\ResponseInterface;
 
 class Redirect extends AbstractAction
 {

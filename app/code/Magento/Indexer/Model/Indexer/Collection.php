@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model\Indexer;
 
 class Collection extends \Magento\Data\Collection
@@ -31,7 +30,7 @@ class Collection extends \Magento\Data\Collection
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Indexer\Model\Indexer';
+    protected $_itemObjectClass = 'Magento\Indexer\Model\IndexerInterface';
 
     /**
      * @var \Magento\Indexer\Model\ConfigInterface
@@ -71,8 +70,8 @@ class Collection extends \Magento\Data\Collection
     {
         if (!$this->isLoaded()) {
             $states = $this->statesFactory->create();
-            foreach ($this->config->getIndexerIds() as $indexerId) {
-                /** @var \Magento\Indexer\Model\Indexer $indexer */
+            foreach (array_keys($this->config->getIndexers()) as $indexerId) {
+                /** @var \Magento\Indexer\Model\IndexerInterface $indexer */
                 $indexer = $this->getNewEmptyItem();
                 $indexer->load($indexerId);
                 foreach ($states->getItems() as $state) {
@@ -87,25 +86,5 @@ class Collection extends \Magento\Data\Collection
             $this->_setIsLoaded(true);
         }
         return $this;
-    }
-
-    /**
-     * Return indexers by given state status
-     *
-     * @param string $status
-     * @return \Magento\Indexer\Model\Indexer[]
-     */
-    public function getIndexersByStateStatus($status)
-    {
-        $this->load();
-
-        $result = array();
-        foreach ($this as $indexer) {
-            /** @var \Magento\Indexer\Model\Indexer $indexer */
-            if ($indexer->getState()->getStatus() == $status) {
-                $result[] = $indexer;
-            }
-        }
-        return $result;
     }
 }

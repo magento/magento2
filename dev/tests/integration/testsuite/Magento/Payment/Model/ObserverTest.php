@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Model;
 
 /**
@@ -63,21 +62,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'section' => 'payment',
             'website' => 1,
             'store' => 1,
-            'groups' => array(
-                'checkmo' => array(
-                    'fields' => array(
-                        'order_status' => array(
-                            'value' => $statusCode
-                        )
-                    )
-                )
-            )
+            'groups' => array('checkmo' => array('fields' => array('order_status' => array('value' => $statusCode))))
         );
-        $this->_objectManager->create('Magento\Backend\Model\Config')
-            ->setSection('payment')
-            ->setWebsite('base')
-            ->setGroups(array('groups' => $data['groups']))
-            ->save();
+        $this->_objectManager->create(
+            'Magento\Backend\Model\Config'
+        )->setSection(
+            'payment'
+        )->setWebsite(
+            'base'
+        )->setGroups(
+            array('groups' => $data['groups'])
+        )->save();
 
         /** @var \Magento\Sales\Model\Order\Status $status */
         $status = $this->_objectManager->get('Magento\Sales\Model\Order\Status')->load($statusCode);

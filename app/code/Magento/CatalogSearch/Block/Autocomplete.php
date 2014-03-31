@@ -29,29 +29,36 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class Autocomplete extends \Magento\View\Element\AbstractBlock
+use Magento\CatalogSearch\Helper\Data;
+use Magento\View\Element\AbstractBlock;
+use Magento\View\Element\Context;
+
+class Autocomplete extends AbstractBlock
 {
+    /**
+     * @var array
+     */
     protected $_suggestData = null;
 
     /**
-     * @var \Magento\CatalogSearch\Helper\Data
+     * @var Data
      */
     protected $_catalogsearchHelper;
 
     /**
-     * @param \Magento\View\Element\Context $context
-     * @param \Magento\CatalogSearch\Helper\Data $catalogsearchHelper
+     * @param Context $context
+     * @param Data $catalogsearchHelper
      * @param array $data
      */
-    public function __construct(
-        \Magento\View\Element\Context $context,
-        \Magento\CatalogSearch\Helper\Data $catalogsearchHelper,
-        array $data = array()
-    ) {
+    public function __construct(Context $context, Data $catalogsearchHelper, array $data = array())
+    {
         $this->_catalogsearchHelper = $catalogsearchHelper;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $html = '';
@@ -78,15 +85,26 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
             }
 
             $escapedTitle = $this->escapeHtml($item['title']);
-            $html .=  '<li title="'.$escapedTitle.'" class="'.$item['row_class'].'">'
-                . '<span class="amount">'.$item['num_of_results'].'</span>'.$escapedTitle.'</li>';
+            $html .= '<li title="' .
+                $escapedTitle .
+                '" class="' .
+                $item['row_class'] .
+                '">' .
+                '<span class="amount">' .
+                $item['num_of_results'] .
+                '</span>' .
+                $escapedTitle .
+                '</li>';
         }
 
-        $html.= '</ul>';
+        $html .= '</ul>';
 
         return $html;
     }
 
+    /**
+     * @return array
+     */
     public function getSuggestData()
     {
         if (!$this->_suggestData) {
@@ -97,14 +115,13 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
             foreach ($collection as $item) {
                 $_data = array(
                     'title' => $item->getQueryText(),
-                    'row_class' => (++$counter)%2?'odd':'even',
+                    'row_class' => ++$counter % 2 ? 'odd' : 'even',
                     'num_of_results' => $item->getNumResults()
                 );
 
                 if ($item->getQueryText() == $query) {
                     array_unshift($data, $_data);
-                }
-                else {
+                } else {
                     $data[] = $_data;
                 }
             }
@@ -112,7 +129,4 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
         }
         return $this->_suggestData;
     }
-/*
- *
-*/
 }

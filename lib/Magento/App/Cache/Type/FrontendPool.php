@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Cache\Type;
 
 /**
@@ -83,12 +82,10 @@ class FrontendPool
         if (!isset($this->_instances[$cacheType])) {
             $frontendId = $this->_getCacheFrontendId($cacheType);
             $frontendInstance = $this->_frontendPool->get($frontendId);
-            /** @var $frontendInstance \Magento\App\Cache\Type\AccessProxy */
+            /** @var $frontendInstance AccessProxy */
             $frontendInstance = $this->_objectManager->create(
-                'Magento\App\Cache\Type\AccessProxy', array(
-                    'frontend' => $frontendInstance,
-                    'identifier' => $cacheType,
-                )
+                'Magento\App\Cache\Type\AccessProxy',
+                array('frontend' => $frontendInstance, 'identifier' => $cacheType)
             );
             $this->_instances[$cacheType] = $frontendInstance;
         }

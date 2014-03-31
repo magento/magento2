@@ -122,7 +122,9 @@
     <div class="actions" id="shipping-buttons-container">
         <div class="primary"><button type="button" class="button action continue"><span><?php echo __('Continue') ?></span></button></div>
         <div class="secondary"><a href="#" class="action back"><span><?php echo __('Back') ?></span></a></div>
-        <span id="shipping-please-wait" class="please-wait load indicator" style="display:none;"><span><?php echo __('Loading next step...') ?></span></span>
+        <span id="shipping-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?php echo __('Loading next step...') ?>">
+            <span><?php echo __('Loading next step...') ?></span>
+        </span>
     </div>
 </form>
 <script type="text/javascript">

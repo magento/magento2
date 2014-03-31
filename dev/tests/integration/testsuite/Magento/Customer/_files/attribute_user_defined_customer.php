@@ -22,18 +22,28 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME', 'user_attribute');
-define('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL', 'frontend_label');
+if (!defined('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME')) {
+    define('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME', 'user_attribute');
+    define('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL', 'frontend_label');
+}
 
 /** @var Magento\Customer\Model\Attribute $model */
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 
-$model->setName(FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME)
-    ->setEntityTypeId(1)
-    ->setIsUserDefined(1)
-    ->setAttributeSetId(1)
-    ->setAttributeGroupId(1)
-    ->setFrontendInput('text')
-    ->setFrontendLabel(FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL);
+$model->setName(
+    FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME
+)->setEntityTypeId(
+    1
+)->setIsUserDefined(
+    1
+)->setAttributeSetId(
+    1
+)->setAttributeGroupId(
+    1
+)->setFrontendInput(
+    'text'
+)->setFrontendLabel(
+    FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL
+);
 
 $model->save();

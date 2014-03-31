@@ -24,7 +24,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('USAGE', <<<USAGE
+define(
+    'USAGE',
+<<<USAGE
 $>./FactoryTableNames.php -- [-dseh]
     additional parameters:
     -d          replacement in dry-run mode
@@ -38,7 +40,7 @@ $shortOpts = 'ehds';
 $options = getopt($shortOpts);
 
 if (isset($options['h'])) {
-    print USAGE;
+    echo USAGE;
     exit(0);
 }
 
@@ -67,15 +69,15 @@ exit(0);
 /**
  * Get combined array from similar files by pattern
  *
- * @param $dirPath
- * @param $filePattern
+ * @param string $dirPath
+ * @param string $filePattern
  * @return array
  */
 function getFilesCombinedArray($dirPath, $filePattern)
 {
     $result = array();
     foreach (glob($dirPath . '/' . $filePattern, GLOB_NOSORT | GLOB_BRACE) as $filePath) {
-        $arrayFromFile = include_once($filePath);
+        $arrayFromFile = include_once $filePath;
         $result = array_merge($result, $arrayFromFile);
     }
     return $result;
@@ -85,9 +87,9 @@ function getFilesCombinedArray($dirPath, $filePattern)
  * Replace table names in all files
  *
  * @param array $files
- * @param array $tablesAssociation
- * @param $outputWithErrors
- * @param $isDryRunMode
+ * @param array &$tablesAssociation
+ * @param bool $outputWithErrors
+ * @param bool $isDryRunMode
  * @return bool
  */
 function replaceTableNames(array $files, array &$tablesAssociation, $outputWithErrors, $isDryRunMode)
@@ -135,10 +137,11 @@ function replaceTableNames(array $files, array &$tablesAssociation, $outputWithE
 /**
  * Replace table names in an file
  *
- * @param $filePath
- * @param $search
- * @param $replace
- * @param $isDryRunMode
+ * @param string $filePath
+ * @param string $search
+ * @param string $replace
+ * @param bool $isDryRunMode
+ * @return void
  */
 function replaceTableNamesInFile($filePath, $search, $replace, $isDryRunMode)
 {
@@ -146,7 +149,8 @@ function replaceTableNamesInFile($filePath, $search, $replace, $isDryRunMode)
     $newContent = str_replace($search, $replace, $content);
     if ($newContent != $content) {
         echo "{$filePath}\n";
-        echo 'Replaced tables: '; print_r($search);
+        echo 'Replaced tables: ';
+        print_r($search);
         if (!$isDryRunMode) {
             file_put_contents($filePath, $newContent);
         }
@@ -157,8 +161,8 @@ function replaceTableNamesInFile($filePath, $search, $replace, $isDryRunMode)
  * Looking for table names which not defined in current config
  *
  * @param array $files
- * @param array $tablesAssociation
- * @param array $blackList
+ * @param array &$tablesAssociation
+ * @param array &$blackList
  * @return bool
  */
 function searchTableNamesNotInReplacedList(array $files, array &$tablesAssociation, array &$blackList)

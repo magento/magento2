@@ -27,5 +27,4 @@ namespace Magento\Validator;
 
 class Alnum extends \Zend_Validate_Alnum implements \Magento\Validator\ValidatorInterface
 {
-
 }

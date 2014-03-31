@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Backend;
 
 class CatalogPriceRuleTest extends \PHPUnit_Framework_TestCase
@@ -39,9 +38,7 @@ class CatalogPriceRuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_quoteMock = $this->getMock('Magento\Sales\Model\Resource\Quote', array(), array(), '', false);
-        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogPriceRule(
-            $this->_quoteMock
-        );
+        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogPriceRule($this->_quoteMock);
     }
 
     public function testDispatch()

@@ -25,63 +25,44 @@
  */
 namespace Magento\Phrase\Renderer;
 
-class Composite implements \Magento\Phrase\RendererInterface
+use Magento\Phrase\RendererInterface;
+
+class Composite implements RendererInterface
 {
     /**
-     * Renderer factory
-     *
-     * @var Factory
+     * @var RendererInterface[]
      */
-    protected $_rendererFactory;
+    protected $_renderers;
 
     /**
-     * List of \Magento\Phrase\RendererInterface
-     *
-     * @var array
+     * @param RendererInterface[] $renderers
+     * @throws \InvalidArgumentException
      */
-    protected $_renderers = array();
-
-    /**
-     * Renderer construct
-     *
-     * @param Factory $rendererFactory
-     * @param array $renderers
-     */
-    public function __construct(
-        Factory $rendererFactory,
-        array $renderers = array()
-    ) {
-        $this->_rendererFactory = $rendererFactory;
-
-        foreach ($renderers as $render) {
-            $this->_append($render);
-        }
-    }
-
-    /**
-     * Add renderer to the end of the chain
-     *
-     * @param string $render
-     * @return void
-     */
-    protected function _append($render)
+    public function __construct(array $renderers)
     {
-        $this->_renderers[] = $this->_rendererFactory->create($render);
+        foreach ($renderers as $renderer) {
+            if (!$renderer instanceof RendererInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Instance of the phrase renderer is expected, got %s instead.', get_class($renderer))
+                );
+            }
+        }
+        $this->_renderers = $renderers;
     }
 
     /**
-     * Render result text
+     * Render source text
      *
-     * @param string $text
-     * @param array $arguments
+     * @param [] $source
+     * @param [] $arguments
      * @return string
      */
-    public function render($text, array $arguments = array())
+    public function render(array $source, array $arguments = array())
     {
-        /** @var \Magento\Phrase\Renderer\Composite $render */
+        $result = $source;
         foreach ($this->_renderers as $render) {
-            $text = $render->render($text, $arguments);
+            $result[] = $render->render($result, $arguments);
         }
-        return $text;
+        return end($result);
     }
 }

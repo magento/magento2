@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource;
 
 /**
  * Bundle Option Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource;
-
-class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,10 +47,10 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * After save process
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Bundle\Model\Resource\Option
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
 
@@ -64,9 +63,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         $write->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
         $data = new \Magento\Object();
-        $data->setOptionId($object->getId())
-            ->setStoreId($object->getStoreId())
-            ->setTitle($object->getTitle());
+        $data->setOptionId($object->getId())->setStoreId($object->getStoreId())->setTitle($object->getTitle());
 
         $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
@@ -86,10 +83,10 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * After delete process
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Bundle\Model\Resource\Option
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterDelete(\Magento\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
 
@@ -112,28 +109,27 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
 
-        $title = $adapter->getCheckSql('option_title_store.title IS NOT NULL',
+        $title = $adapter->getCheckSql(
+            'option_title_store.title IS NOT NULL',
             'option_title_store.title',
             'option_title_default.title'
         );
-        $bind = array(
-            'store_id'   => $storeId,
-            'product_id' => $productId
+        $bind = array('store_id' => $storeId, 'product_id' => $productId);
+        $select = $adapter->select()->from(
+            array('opt' => $this->getMainTable()),
+            array()
+        )->join(
+            array('option_title_default' => $this->getTable('catalog_product_bundle_option_value')),
+            'option_title_default.option_id = opt.option_id AND option_title_default.store_id = 0',
+            array()
+        )->joinLeft(
+            array('option_title_store' => $this->getTable('catalog_product_bundle_option_value')),
+            'option_title_store.option_id = opt.option_id AND option_title_store.store_id = :store_id',
+            array('title' => $title)
+        )->where(
+            'opt.parent_id=:product_id'
         );
-        $select = $adapter->select()
-            ->from(array('opt' => $this->getMainTable()), array())
-            ->join(
-                array('option_title_default' => $this->getTable('catalog_product_bundle_option_value')),
-                'option_title_default.option_id = opt.option_id AND option_title_default.store_id = 0',
-                array()
-            )
-            ->joinLeft(
-                array('option_title_store' => $this->getTable('catalog_product_bundle_option_value')),
-                'option_title_store.option_id = opt.option_id AND option_title_store.store_id = :store_id',
-                array('title' => $title)
-            )
-            ->where('opt.parent_id=:product_id');
-        if (!$searchData = $adapter->fetchCol($select, $bind)) {
+        if (!($searchData = $adapter->fetchCol($select, $bind))) {
             $searchData = array();
         }
         return $searchData;

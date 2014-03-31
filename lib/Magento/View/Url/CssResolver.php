@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Url;
 
 /**
@@ -32,27 +31,31 @@ class CssResolver
     /**
      * PCRE that matches non-absolute URLs in CSS content
      */
-    const REGEX_CSS_RELATIVE_URLS
-        = '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
+    const REGEX_CSS_RELATIVE_URLS =
+        '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $viewFileSystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      */
-    public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        \Magento\View\FileSystem $viewFileSystem
-    ) {
+    public function __construct(\Magento\App\Filesystem $filesystem, \Magento\View\FileSystem $viewFileSystem)
+    {
         $this->filesystem = $filesystem;
         $this->viewFileSystem = $viewFileSystem;
     }
@@ -66,23 +69,19 @@ class CssResolver
      * @param string $originalPath
      * @param string $newPath
      * @param callable|null $cbRelUrlToPublicPath Optional custom callback to resolve relative urls to file paths
-     * @return mixed
+     * @return string
      */
     public function replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $cbRelUrlToPublicPath = null)
     {
-        $originalPath = $this->viewFileSystem->normalizePath($originalPath);
-        $newPath = $this->viewFileSystem->normalizePath($newPath);
         $relativeUrls = $this->_extractCssRelativeUrls($cssContent);
         foreach ($relativeUrls as $urlNotation => $originalRelativeUrl) {
             if ($cbRelUrlToPublicPath) {
-                $filePath = call_user_func($cbRelUrlToPublicPath, $originalRelativeUrl, $originalPath);
+                $filePath = call_user_func($cbRelUrlToPublicPath, $originalRelativeUrl);
             } else {
                 $filePath = dirname($originalPath) . '/' . $originalRelativeUrl;
             }
             $filePath = $this->viewFileSystem->normalizePath(str_replace('\\', '/', $filePath));
-            $relativePath = $this->_getFileRelativePath(
-                str_replace('\\', '/', $newPath), $filePath
-            );
+            $relativePath = $this->_getFileRelativePath(str_replace('\\', '/', $newPath), $filePath);
             $urlNotationNew = str_replace($originalRelativeUrl, $relativePath, $urlNotation);
             $cssContent = str_replace($urlNotation, $urlNotationNew, $cssContent);
         }

@@ -33,7 +33,6 @@
  */
 namespace Magento\Cron;
 
-class Exception extends \Magento\Core\Exception
+class Exception extends \Magento\Model\Exception
 {
-
 }

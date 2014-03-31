@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary;
 
 /**
@@ -29,6 +28,20 @@ namespace Magento\Tools\I18n\Code\Dictionary;
  */
 class Phrase
 {
+    /**
+     * Single quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_SINGLE = "'";
+
+    /**
+     * Double quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_DOUBLE = '"';
+
     /**
      * Phrase
      *
@@ -58,25 +71,35 @@ class Phrase
     private $_contextValue = array();
 
     /**
+     * Quote type that enclose the phrase, single or double
+     *
+     * @var string
+     */
+    private $_quote;
+
+    /**
      * Phrase construct
      *
      * @param string $phrase
      * @param string $translation
      * @param string|null $contextType
      * @param string|array|null $contextValue
+     * @param string|null $quote
      */
-    public function __construct($phrase, $translation, $contextType = null, $contextValue = null)
+    public function __construct($phrase, $translation, $contextType = null, $contextValue = null, $quote = null)
     {
         $this->setPhrase($phrase);
         $this->setTranslation($translation);
         $this->setContextType($contextType);
         $this->setContextValue($contextValue);
+        $this->setQuote($quote);
     }
 
     /**
      * Set phrase
      *
      * @param string $phrase
+     * @return void
      * @throws \DomainException
      */
     public function setPhrase($phrase)
@@ -88,7 +111,7 @@ class Phrase
     }
 
     /**
-     * Get phrase
+     * Get quote type
      *
      * @return string
      */
@@ -98,9 +121,33 @@ class Phrase
     }
 
     /**
+     * Set quote type
+     *
+     * @param string $quote
+     * @return void
+     */
+    public function setQuote($quote)
+    {
+        if (in_array($quote, array(self::QUOTE_SINGLE, self::QUOTE_DOUBLE))) {
+            $this->_quote = $quote;
+        }
+    }
+
+    /**
+     * Get phrase
+     *
+     * @return string
+     */
+    public function getQuote()
+    {
+        return $this->_quote;
+    }
+
+    /**
      * Set translation
      *
      * @param string $translation
+     * @return void
      * @throws \DomainException
      */
     public function setTranslation($translation)
@@ -125,6 +172,7 @@ class Phrase
      * Set context type
      *
      * @param string $contextType
+     * @return void
      */
     public function setContextType($contextType)
     {
@@ -145,6 +193,7 @@ class Phrase
      * Add context value
      *
      * @param string $contextValue
+     * @return void
      * @throws \DomainException
      */
     public function addContextValue($contextValue)
@@ -161,6 +210,7 @@ class Phrase
      * Set context type
      *
      * @param string $contextValue
+     * @return void
      * @throws \DomainException
      */
     public function setContextValue($contextValue)

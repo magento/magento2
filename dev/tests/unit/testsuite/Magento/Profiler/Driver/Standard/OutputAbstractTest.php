@@ -68,16 +68,12 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $configuration = array(
-            'filterPattern' => '/filter pattern/',
-            'thresholds' => array(
-                'fetchKey' => 100
-            )
-        );
+        $configuration = array('filterPattern' => '/filter pattern/', 'thresholds' => array('fetchKey' => 100));
         /** @var \Magento\Profiler\Driver\Standard\AbstractOutput|PHPUnit_Framework_MockObject_MockObject $output  */
-        $output = $this->getMockForAbstractClass('Magento\Profiler\Driver\Standard\AbstractOutput', array(
-            $configuration
-        ));
+        $output = $this->getMockForAbstractClass(
+            'Magento\Profiler\Driver\Standard\AbstractOutput',
+            array($configuration)
+        );
         $this->assertEquals('/filter pattern/', $output->getFilterPattern());
         $thresholds = $output->getThresholds();
         $this->assertArrayHasKey('fetchKey', $thresholds);
@@ -105,31 +101,11 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
     public function renderColumnValueDataProvider()
     {
         return array(
-            array(
-                'someTimerId',
-                \Magento\Profiler\Driver\Standard\Stat::ID,
-                'someTimerId'
-            ),
-            array(
-                10000.123,
-                \Magento\Profiler\Driver\Standard\Stat::TIME,
-                '10,000.123000'
-            ),
-            array(
-                200000.123456789,
-                \Magento\Profiler\Driver\Standard\Stat::AVG,
-                '200,000.123457'
-            ),
-            array(
-                1000000000.12345678,
-                \Magento\Profiler\Driver\Standard\Stat::EMALLOC,
-                '1,000,000,000'
-            ),
-            array(
-                2000000000.12345678,
-                \Magento\Profiler\Driver\Standard\Stat::REALMEM,
-                '2,000,000,000'
-            ),
+            array('someTimerId', \Magento\Profiler\Driver\Standard\Stat::ID, 'someTimerId'),
+            array(10000.123, \Magento\Profiler\Driver\Standard\Stat::TIME, '10,000.123000'),
+            array(200000.123456789, \Magento\Profiler\Driver\Standard\Stat::AVG, '200,000.123457'),
+            array(1000000000.12345678, \Magento\Profiler\Driver\Standard\Stat::EMALLOC, '1,000,000,000'),
+            array(2000000000.12345678, \Magento\Profiler\Driver\Standard\Stat::REALMEM, '2,000,000,000')
         );
     }
 
@@ -155,10 +131,16 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
 
         $mockStat = $this->getMock('Magento\Profiler\Driver\Standard\Stat');
         $expectedTimerIds = array('test');
-        $mockStat->expects($this->once())
-            ->method('getFilteredTimerIds')
-            ->with($this->_output->getThresholds(), $this->_output->getFilterPattern())
-            ->will($this->returnValue($expectedTimerIds));
+        $mockStat->expects(
+            $this->once()
+        )->method(
+            'getFilteredTimerIds'
+        )->with(
+            $this->_output->getThresholds(),
+            $this->_output->getFilterPattern()
+        )->will(
+            $this->returnValue($expectedTimerIds)
+        );
 
         $method = new \ReflectionMethod($this->_output, '_getTimerIds');
         $method->setAccessible(true);

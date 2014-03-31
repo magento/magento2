@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Source\PaymentActions;
 
 /**
  * Source model for available paypal express payment actions
  */
-namespace Magento\Paypal\Model\System\Config\Source\PaymentActions;
-
-class Express
-    implements \Magento\Core\Model\Option\ArrayInterface
+class Express implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -46,9 +44,7 @@ class Express
     }
 
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

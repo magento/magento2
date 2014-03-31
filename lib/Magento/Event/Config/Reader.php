@@ -32,10 +32,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/event' => 'name',
-        '/config/event/observer' => 'name',
-    );
+    protected $_idAttributes = array('/config/event' => 'name', '/config/event/observer' => 'name');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
@@ -68,5 +65,4 @@ class Reader extends \Magento\Config\Reader\Filesystem
             $defaultScope
         );
     }
-
 }

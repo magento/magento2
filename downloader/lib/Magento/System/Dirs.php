@@ -27,10 +27,13 @@ namespace Magento\System;
 
 class Dirs
 {
-
+    /**
+     * @param string[]|string $dirname
+     * @return bool
+     */
     public static function rm($dirname)
     {
-        if(is_array($dirname)) {
+        if (is_array($dirname)) {
             $dirname = $dirname[1];
         }
         // Sanity check
@@ -60,7 +63,7 @@ class Dirs
             // Otherwise add it to the stack
             $stack[] = $entry;
             $dh = opendir($entry);
-            while (false !== $child = readdir($dh)) {
+            while (false !== ($child = readdir($dh))) {
                 // Ignore pointers
                 if ($child === '.' || $child === '..') {
                     continue;
@@ -78,29 +81,42 @@ class Dirs
         return true;
     }
 
-
+    /**
+     * Attempts to create the directory
+     *
+     * @param string $path
+     * @param bool $recursive
+     * @param int $mode
+     * @return true
+     * @throws \Exception
+     */
     public static function mkdirStrict($path, $recursive = true, $mode = 0777)
     {
         $exists = file_exists($path);
-        if($exists && is_dir($path)) {
+        if ($exists && is_dir($path)) {
             return true;
         }
-        if($exists && !is_dir($path)) {
+        if ($exists && !is_dir($path)) {
             throw new \Exception("'{$path}' already exists, should be a dir, not a file!");
         }
         $out = @mkdir($path, $mode, $recursive);
-        if(false === $out) {
+        if (false === $out) {
             throw new \Exception("Can't create dir: '{$path}'");
         }
         return true;
     }
 
+    /**
+     * @param string $source
+     * @param string $dest
+     * @return void
+     * @throws \Exception
+     */
     public static function copyFileStrict($source, $dest)
     {
         $exists = file_exists($source);
-        if(!$exists) {
-            throw new \Exception('No file exists: '.$exists);
+        if (!$exists) {
+            throw new \Exception('No file exists: ' . $exists);
         }
-
     }
 }

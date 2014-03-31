@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource\Form;
 
 /**
  * Eav Form Element Resource Model
@@ -32,20 +32,19 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Form;
-
-class Element extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Element extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('eav_form_element', 'element_id');
-        $this->addUniqueField(array(
-            'field' => array('type_id', 'attribute_id'),
-            'title' => __('Form Element with the same attribute')
-        ));
+        $this->addUniqueField(
+            array('field' => array('type_id', 'attribute_id'), 'title' => __('Form Element with the same attribute'))
+        );
     }
 
     /**

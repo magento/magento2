@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Module/etc/module.xsd">
     <module name="Magento_GroupedProduct" version="0.0.1" active="true">
         <sequence>
             <module name="Magento_Catalog" />
@@ -37,7 +37,6 @@
             <module name="Magento_Core" />
             <module name="Magento_Tax" />
             <module name="Magento_Checkout" />
-            <module name="Magento_Wishlist" />
             <module name="Magento_Backend" />
             <module name="Magento_Eav" />
             <module name="Magento_Customer" />

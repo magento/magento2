@@ -81,7 +81,7 @@ class Request extends \Magento\Webapi\Controller\Request
     /**
      * Retrieve accept types understandable by requester in a form of array sorted by quality in descending order.
      *
-     * @return array
+     * @return string[]
      */
     public function getAcceptTypes()
     {
@@ -96,7 +96,8 @@ class Request extends \Magento\Webapi\Controller\Request
             if (!preg_match('~^([0-9a-z*+\-]+)(?:/([0-9a-z*+\-\.]+))?$~i', $mimeType)) {
                 continue;
             }
-            $quality = '1.0'; // default value for quality
+            $quality = '1.0';
+            // default value for quality
 
             if ($typeWithQ) {
                 $qAndValue = explode('=', $typeWithQ[0]);
@@ -176,8 +177,8 @@ class Request extends \Magento\Webapi\Controller\Request
         $requestBody = array();
 
         $httpMethod = $this->getHttpMethod();
-        if ($httpMethod == \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST
-            || $httpMethod == \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT
+        if ($httpMethod == \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST ||
+            $httpMethod == \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT
         ) {
             $requestBody = $this->getBodyParams();
         }

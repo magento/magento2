@@ -37,16 +37,16 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
     <?php echo $this->getChildHtml('head') ?>
 </head>
-<body class="col2-left-layout<?php echo $bodyCss ?>"
+<body class="layout-2-left<?php echo $bodyCss ?>"
       data-container="body"
       <?php echo $this->getAddAttribute(); ?>
-      data-mage-init="{loaderAjax: {}, loader: {}}">
+      data-mage-init='{"loaderAjax": {}, "loader": {}}'>
     <?php echo $this->getChildHtml('after_body_start') ?>
     <div class="page wrapper">
         <?php echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header-container') ?>
         <?php echo $this->getChildHtml('page_top') ?>
-        <section class="page main">
+        <section id="maincontent" class="page main">
             <?php echo $this->getChildHtml('columns_top') ?>
             <div class="columns">
                 <?php

@@ -27,7 +27,6 @@
 /**
  * Catalog rule edit form block
  */
-
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -35,18 +34,18 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -58,6 +57,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Add standard buttons
      * Add "Save and Apply" button
      * Add "Save and Continue" button
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -67,33 +68,34 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_addButton('save_apply', array(
-            'class'   => 'save',
-            'label'   => __('Save and Apply'),
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'save',
-                        'target' => '#edit_form',
-                        'eventData' => array(
-                            'action' => array(
-                                'args' => array('auto_apply' => 1),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ));
+        $this->_addButton(
+            'save_apply',
+            array(
+                'class' => 'save',
+                'label' => __('Save and Apply'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => array('action' => array('args' => array('auto_apply' => 1)))
+                        )
+                    )
+                )
+            )
+        );
 
-        $this->_addButton('save_and_continue_edit', array(
-            'class'   => 'save',
-            'label'   => __('Save and Continue Edit'),
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
-                ),
+        $this->_addButton(
+            'save_and_continue_edit',
+            array(
+                'class' => 'save',
+                'label' => __('Save and Continue Edit'),
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'))
+                )
             ),
-        ), 10);
+            10
+        );
     }
 
     /**
@@ -110,5 +112,4 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             return __('New Rule');
         }
     }
-
 }

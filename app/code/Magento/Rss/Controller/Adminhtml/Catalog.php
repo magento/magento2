@@ -23,16 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Controller\Adminhtml;
 
 /**
  * RSS Controller for Catalog feeds in Admin
  */
-namespace Magento\Rss\Controller\Adminhtml;
-
 class Catalog extends \Magento\Rss\Controller\Adminhtml\Authenticate
 {
     /**
      * Notify stock action
+     *
+     * @return void
      */
     public function notifystockAction()
     {
@@ -43,6 +44,8 @@ class Catalog extends \Magento\Rss\Controller\Adminhtml\Authenticate
 
     /**
      * Review action
+     *
+     * @return void
      */
     public function reviewAction()
     {

@@ -21,20 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Url;
 
-interface ScopeResolverInterface
+interface ScopeResolverInterface extends \Magento\BaseScopeResolverInterface
 {
-
-    /**
-     * Retrieve application scope object
-     *
-     * @param null|int $scopeId
-     * @return \Magento\Url\ScopeInterface
-     */
-    public function getScope($scopeId = null);
-
     /**
      * Retrieve scopes array
      *

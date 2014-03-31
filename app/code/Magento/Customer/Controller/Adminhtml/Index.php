@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer admin controller
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,7 +24,25 @@
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\App\Action\NotFoundException;
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Service\V1\Data\AddressBuilder;
+use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Message\Error;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadata;
+use Magento\Customer\Service\V1\Data\AddressConverter;
 
+/**
+ * Class Index
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -37,7 +53,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -51,10 +67,22 @@ class Index extends \Magento\Backend\App\Action
      */
     protected $_customerFactory = null;
 
+    /** @var  CustomerBuilder */
+    protected $_customerBuilder;
+
+    /** @var  CustomerDetailsBuilder */
+    protected $_customerDetailsBuilder;
+
+    /** @var  AddressBuilder */
+    protected $_addressBuilder;
+
     /**
      * @var \Magento\Customer\Model\AddressFactory
      */
     protected $_addressFactory = null;
+
+    /** @var \Magento\Newsletter\Model\SubscriberFactory */
+    protected $_subscriberFactory;
 
     /**
      * @var \Magento\Customer\Helper\Data
@@ -62,37 +90,72 @@ class Index extends \Magento\Backend\App\Action
     protected $_dataHelper = null;
 
     /**
-     * Registry key where current customer DTO stored
-     * @todo switch to use ID instead and remove after refactoring of all occurrences
+     * @var \Magento\Customer\Model\Metadata\FormFactory
      */
-    const REGISTRY_CURRENT_CUSTOMER = 'current_customer';
+    protected $_formFactory;
 
-    /**
-     * Registry key where current customer ID is stored
-     */
-    const REGISTRY_CURRENT_CUSTOMER_ID = 'current_customer_id';
+    /** @var CustomerAddressServiceInterface */
+    protected $_addressService;
+
+    /** @var CustomerAccountServiceInterface */
+    protected $_customerAccountService;
+
+    /** @var  \Magento\Customer\Helper\View */
+    protected $_viewHelper;
+
+    /** @var \Magento\Math\Random */
+    protected $_random;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param CustomerBuilder $customerBuilder
+     * @param CustomerDetailsBuilder $customerDetailsBuilder
+     * @param AddressBuilder $addressBuilder
+     * @param CustomerAddressServiceInterface $addressService
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
+     * @param \Magento\Customer\Helper\View $viewHelper
      * @param \Magento\Customer\Helper\Data $helper
+     * @param \Magento\Math\Random $random
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\App\Response\Http\FileFactory $fileFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Helper\Data $helper
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        CustomerBuilder $customerBuilder,
+        CustomerDetailsBuilder $customerDetailsBuilder,
+        AddressBuilder $addressBuilder,
+        CustomerAddressServiceInterface $addressService,
+        CustomerAccountServiceInterface $accountService,
+        \Magento\Customer\Helper\View $viewHelper,
+        \Magento\Customer\Helper\Data $helper,
+        \Magento\Math\Random $random
     ) {
         $this->_fileFactory = $fileFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->_customerFactory = $customerFactory;
+        $this->_customerBuilder = $customerBuilder;
+        $this->_customerDetailsBuilder = $customerDetailsBuilder;
+        $this->_addressBuilder = $addressBuilder;
         $this->_addressFactory = $addressFactory;
+        $this->_subscriberFactory = $subscriberFactory;
         $this->_dataHelper = $helper;
+        $this->_formFactory = $formFactory;
+        $this->_addressService = $addressService;
+        $this->_customerAccountService = $accountService;
+        $this->_viewHelper = $viewHelper;
+        $this->_random = $random;
         parent::__construct($context);
     }
 
@@ -100,7 +163,7 @@ class Index extends \Magento\Backend\App\Action
      * Customer initialization
      *
      * @param string $idFieldName
-     * @return \Magento\Customer\Controller\Adminhtml\Index
+     * @return string customer id
      */
     protected function _initCustomer($idFieldName = 'id')
     {
@@ -113,12 +176,16 @@ class Index extends \Magento\Backend\App\Action
             $customer->load($customerId);
         }
 
-        $this->_coreRegistry->register(self::REGISTRY_CURRENT_CUSTOMER, $customer);
-        return $this;
+        // TODO: Investigate if any piece of code still relies on this; remove if not.
+        $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customer);
+        $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
+        return $customerId;
     }
 
     /**
      * Customers list action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -136,13 +203,6 @@ class Index extends \Magento\Backend\App\Action
         $this->_setActiveMenu('Magento_Customer::customer_manage');
 
         /**
-         * Append customers block to content
-         */
-        $this->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Customer', 'customer')
-        );
-
-        /**
          * Add breadcrumb item
          */
         $this->_addBreadcrumb(__('Customers'), __('Customers'));
@@ -153,78 +213,127 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Customer grid action
+     *
+     * @return void
      */
     public function gridAction()
     {
-        $this->_view->loadLayout();
+        $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }
 
     /**
      * Customer edit action
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function editAction()
     {
-        $this->_initCustomer();
+        $customerId = $this->_initCustomer();
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Customer::customer_manage');
 
-        /* @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
+        $customerData = array();
+        $customerData['account'] = array();
+        $customerData['address'] = array();
+        $customer = null;
+        $isExistingCustomer = (bool)$customerId;
+        if ($isExistingCustomer) {
+            try {
+                $customer = $this->_customerAccountService->getCustomer($customerId);
+                $customerData['account'] = \Magento\Service\DataObjectConverter::toFlatArray($customer);
+                $customerData['account']['id'] = $customerId;
+                try {
+                    $addresses = $this->_addressService->getAddresses($customerId);
+                    foreach ($addresses as $address) {
+                        $customerData['address'][$address->getId()] = AddressConverter::toFlatArray($address);
+                        $customerData['address'][$address->getId()]['id'] = $address->getId();
+                    }
+                } catch (NoSuchEntityException $e) {
+                    //do nothing
+                }
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addException($e, __('An error occurred while editing the customer.'));
+                $this->_redirect('customer/*/index');
+                return;
+            }
+        }
+        $customerData['customer_id'] = $customerId;
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getCustomerData(true);
+        $data = $this->_getSession()->getCustomerData(true);
 
         // restore data from SESSION
-        if ($data) {
+        if ($data && (!isset(
+            $data['customer_id']
+        ) || isset(
+            $data['customer_id']
+        ) && $data['customer_id'] == $customerId)
+        ) {
             $request = clone $this->getRequest();
             $request->setParams($data);
 
-            if (isset($data['account'])) {
-                /* @var $customerForm \Magento\Customer\Model\Form */
-                $customerForm = $this->_objectManager->create('Magento\Customer\Model\Form');
-                $customerForm->setEntity($customer)
-                    ->setFormCode('adminhtml_customer')
-                    ->setIsAjaxRequest(true);
+            if (isset($data['account']) && is_array($data['account'])) {
+                $customerForm = $this->_formFactory->create(
+                    'customer',
+                    'adminhtml_customer',
+                    $customerData['account'],
+                    true
+                );
                 $formData = $customerForm->extractData($request, 'account');
-                $customerForm->restoreData($formData);
+                $customerData['account'] = $customerForm->restoreData($formData);
+                $customer = $this->_customerBuilder->populateWithArray($customerData['account'])->create();
             }
 
             if (isset($data['address']) && is_array($data['address'])) {
-                /* @var $addressForm \Magento\Customer\Model\Form */
-                $addressForm = $this->_objectManager->create('Magento\Customer\Model\Form');
-                $addressForm->setFormCode('adminhtml_customer_address');
-
                 foreach (array_keys($data['address']) as $addressId) {
                     if ($addressId == '_template_') {
                         continue;
                     }
 
-                    $address = $customer->getAddressItemById($addressId);
-                    if (!$address) {
-                        $address = $this->_objectManager->create('Magento\Customer\Model\Address');
-                        $address->setId($addressId);
-                        $customer->addAddress($address);
+                    try {
+                        $address = $this->_addressService->getAddress($addressId);
+                        if (!empty($customerId) && $address->getCustomerId() == $customerId) {
+                            $this->_addressBuilder->populate($address);
+                        }
+                    } catch (NoSuchEntityException $e) {
+                        $this->_addressBuilder->setId($addressId);
                     }
-
+                    if (!empty($customerId)) {
+                        $this->_addressBuilder->setCustomerId($customerId);
+                    }
+                    $this->_addressBuilder->setDefaultBilling(
+                        !empty($data['account'][Customer::DEFAULT_BILLING]) &&
+                        $data['account'][Customer::DEFAULT_BILLING] == $addressId
+                    );
+                    $this->_addressBuilder->setDefaultShipping(
+                        !empty($data['account'][Customer::DEFAULT_SHIPPING]) &&
+                        $data['account'][Customer::DEFAULT_SHIPPING] == $addressId
+                    );
+                    $address = $this->_addressBuilder->create();
                     $requestScope = sprintf('address/%s', $addressId);
-                    $formData = $addressForm->setEntity($address)
-                        ->extractData($request, $requestScope);
-                    $customer->setDefaultBilling(
-                        !empty($data['account']['default_billing'])
-                        && $data['account']['default_billing'] == $addressId
+                    $addressForm = $this->_formFactory->create(
+                        'customer_address',
+                        'adminhtml_customer_address',
+                        AddressConverter::toFlatArray($address)
                     );
-                    $customer->setDefaultShipping(
-                        !empty($data['account']['default_shipping'])
-                        && $data['account']['default_shipping'] == $addressId
-                    );
-                    $addressForm->restoreData($formData);
+                    $formData = $addressForm->extractData($request, $requestScope);
+                    $customerData['address'][$addressId] = $addressForm->restoreData($formData);
+                    $customerData['address'][$addressId]['id'] = $addressId;
                 }
             }
         }
 
-        $this->_title->add($customer->getId() ? $customer->getName() : __('New Customer'));
+        $this->_getSession()->setCustomerData($customerData);
 
+        if ($isExistingCustomer) {
+            $this->_title->add($this->_viewHelper->getCustomerName($customer));
+        } else {
+            $this->_title->add(__('New Customer'));
+        }
         /**
          * Set active menu item
          */
@@ -235,6 +344,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Create new customer action
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -243,17 +354,18 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Delete customer action
+     *
+     * @return void
      */
     public function deleteAction()
     {
         $this->_initCustomer();
-        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
-        if ($customer->getId()) {
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        if (!empty($customerId)) {
             try {
-                $customer->delete();
-                $this->messageManager->addSuccess(
-                    __('You deleted the customer.'));
-            } catch (\Exception $exception){
+                $this->_customerAccountService->deleteCustomer($customerId);
+                $this->messageManager->addSuccess(__('You deleted the customer.'));
+            } catch (\Exception $exception) {
                 $this->messageManager->addError($exception->getMessage());
             }
         }
@@ -262,6 +374,9 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Save customer action
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveAction()
     {
@@ -276,52 +391,63 @@ class Index extends \Magento\Backend\App\Action
                 $request = $this->getRequest();
                 $isExistingCustomer = (bool)$customerId;
 
-                /** @var \Magento\Customer\Model\Customer $customer */
-                $customer = null;
+                $customerBuilder = $this->_customerBuilder;
                 if ($isExistingCustomer) {
-                    // load the customer from the db
-                    $customer = $this->_loadCustomerById($customerId);
-                } else {
-                    // create a new customer
-                    $customer = $this->_customerFactory->create();
-                    $this->_preparePasswordForSave($customer, $customerData);
+                    $savedCustomerData = $this->_customerAccountService->getCustomer($customerId);
+                    $customerData = array_merge(
+                        \Magento\Service\DataObjectConverter::toFlatArray($savedCustomerData),
+                        $customerData
+                    );
+                }
+                unset($customerData[Customer::DEFAULT_BILLING]);
+                unset($customerData[Customer::DEFAULT_SHIPPING]);
+                $customerBuilder->populateWithArray($customerData);
+
+                $addresses = array();
+                foreach ($addressesData as $addressData) {
+                    $addresses[] = $this->_addressBuilder->populateWithArray($addressData)->create();
                 }
 
-                // Before save
-                foreach ($customerData as $property => $value) {
-                        $customer->setDataUsingMethod($property, $value);
-                }
-                $this->_prepareCustomerAddressesForSave($customer, $addressesData);
-                $this->_eventManager->dispatch('adminhtml_customer_prepare_save', array(
-                    'customer'  => $customer,
-                    'request'   => $request
-                ));
+                $this->_eventManager->dispatch(
+                    'adminhtml_customer_prepare_save',
+                    array('customer' => $customerBuilder, 'request' => $request)
+                );
+                $customer = $customerBuilder->create();
 
                 // Save customer
-                $customer->save();
-
-                // After save
-                $this->_eventManager->dispatch('adminhtml_customer_save_after', array(
-                    'customer' => $customer,
-                    'request'  => $request
-                ));
-                $this->_sendWelcomeEmail($customer, $customerData);
+                $customerDetails = $this->_customerDetailsBuilder->setCustomer(
+                    $customer
+                )->setAddresses(
+                    $addresses
+                )->create();
                 if ($isExistingCustomer) {
-                    $this->_changePassword($customer, $customerData);
+                    $this->_customerAccountService->updateCustomer($customerDetails);
+                } else {
+                    $customer = $this->_customerAccountService->createAccount($customerDetails);
                 }
 
+                if ($customerData['is_subscribed']) {
+                    $this->_subscriberFactory->create()->updateSubscription($customerId, true);
+                }
+
+                // After save
+                $this->_eventManager->dispatch(
+                    'adminhtml_customer_save_after',
+                    array('customer' => $customer, 'request' => $request)
+                );
+
                 // Done Saving customer, finish save action
-                $this->_objectManager->get('Magento\Core\Model\Registry')
-                    ->register(self::REGISTRY_CURRENT_CUSTOMER, $customer);
+                $customerId = $customer->getId();
+                $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
+
                 $this->messageManager->addSuccess(__('You saved the customer.'));
 
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
-                $customerId = $customer->getId();
             } catch (\Magento\Validator\ValidatorException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessages());
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
-            } catch (\Magento\Core\Exception $exception) {
+            } catch (\Magento\Model\Exception $exception) {
                 $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
                 if (!count($messages)) {
                     $messages = $exception->getMessage();
@@ -329,9 +455,12 @@ class Index extends \Magento\Backend\App\Action
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
+            } catch (\Magento\Exception\Exception $exception) {
+                $this->_addSessionErrorMessages($exception->getMessage());
+                $this->_getSession()->setCustomerData($originalRequestData);
+                $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception,
-                    __('An error occurred while saving the customer.'));
+                $this->messageManager->addException($exception, __('An error occurred while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             }
@@ -349,164 +478,9 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Load customer by its ID
-     *
-     * @param int|string $customerId
-     * @return \Magento\Customer\Model\Customer
-     * @throws \Magento\Core\Exception
-     */
-    private function _loadCustomerById($customerId)
-    {
-        $customer = $this->_customerFactory->create();
-        $customer->load($customerId);
-        if (!$customer->getId()) {
-            throw new \Magento\Core\Exception(__("The customer with the specified ID not found."));
-        }
-
-        return $customer;
-    }
-
-    /**
-     * Save customer addresses.
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param array $addressesData
-     * @throws \Magento\Core\Exception
-     */
-    private function _prepareCustomerAddressesForSave($customer, array $addressesData)
-    {
-        $hasChanges = $customer->hasDataChanges();
-        $actualAddressesIds = array();
-        foreach ($addressesData as $addressData) {
-            $addressId = null;
-            if (array_key_exists('entity_id', $addressData)) {
-                $addressId = $addressData['entity_id'];
-                unset($addressData['entity_id']);
-            }
-
-            if (null !== $addressId) {
-                $address = $customer->getAddressItemById($addressId);
-                if (!$address || !$address->getId()) {
-                    throw new \Magento\Core\Exception(
-                        __('The address with the specified ID not found.')
-                    );
-                }
-            } else {
-                $address = $this->_addressFactory->create();
-                $address->setCustomerId($customer->getId());
-                // Add customer address into addresses collection
-                $customer->addAddress($address);
-            }
-            $address->addData($addressData);
-            $hasChanges = $hasChanges || $address->hasDataChanges();
-
-            // Set post_index for detect default billing and shipping addresses
-            $address->setPostIndex($addressId);
-
-            $actualAddressesIds[] = $address->getId();
-        }
-
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($customer->getAddressesCollection() as $address) {
-            if (!in_array($address->getId(), $actualAddressesIds)) {
-                $address->setData('_deleted', true);
-                $hasChanges = true;
-            }
-        }
-        $customer->setDataChanges($hasChanges);
-    }
-
-    /**
-     * Send welcome email to customer
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param array $customerData
-     */
-    private function _sendWelcomeEmail($customer, array $customerData)
-    {
-        $isSendEmail = !empty($customerData['sendemail']);
-
-        if ($customer->getWebsiteId()
-            && ($isSendEmail || $this->_isAutogeneratePassword($customerData))
-        ) {
-            $isNewCustomer = !(bool)$customer->getOrigData($customer->getIdFieldName());
-            $storeId = $customer->getSendemailStoreId();
-
-            if ($isNewCustomer) {
-                $newLinkToken = $this->_dataHelper->generateResetPasswordLinkToken();
-                $customer->changeResetPasswordLinkToken($newLinkToken);
-                $customer->sendNewAccountEmail('registered', '', $storeId);
-            } elseif (!$customer->getConfirmation()) {
-                // Confirm not confirmed customer
-                $customer->sendNewAccountEmail('confirmed', '', $storeId);
-            }
-        }
-    }
-
-    /**
-     * Check if password should be generated automatically
-     *
-     * @param array $customerData
-     * @return bool
-     */
-    private function _isAutogeneratePassword(array $customerData)
-    {
-        return !empty($customerData['autogenerate_password']);
-    }
-
-    /**
-     * Change customer password
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param array $customerData
-     */
-    private function _changePassword($customer, array $customerData)
-    {
-        if (!empty($customerData['password']) || $this->_isAutogeneratePassword($customerData)) {
-                $newPassword = $this->_getCustomerPassword($customer, $customerData);
-                $customer->changePassword($newPassword);
-                $customer->sendPasswordReminderEmail();
-        }
-    }
-
-    /**
-     * Get customer password
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param array $customerData
-     * @return string|null
-     */
-    private function _getCustomerPassword($customer, array $customerData)
-    {
-        $password = null;
-
-        if ($this->_isAutogeneratePassword($customerData)) {
-            $password = $customer->generatePassword();
-        } elseif (isset($customerData['password'])) {
-            $password = $customerData['password'];
-        }
-
-        return $password;
-    }
-
-    /**
-     * Set customer password
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param array $customerData
-     */
-    private function _preparePasswordForSave($customer, array $customerData)
-    {
-        $password = $this->_getCustomerPassword($customer, $customerData);
-        if (!is_null($password)) {
-            // 'force_confirmed' should be set in admin area only
-            $customer->setForceConfirmed(true);
-            $customer->setPassword($password);
-        }
-    }
-
-    /**
      * Reset password handler
+     *
+     * @return \Magento\App\ResponseInterface
      */
     public function resetPasswordAction()
     {
@@ -515,35 +489,27 @@ class Index extends \Magento\Backend\App\Action
             return $this->_redirect('customer/index');
         }
 
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
-        $customer->load($customerId);
-        if (!$customer->getId()) {
-            return $this->_redirect('customer/index');
-        }
-
         try {
-            $newPasswordToken = $this->_objectManager->get('Magento\Customer\Helper\Data')
-                ->generateResetPasswordLinkToken();
-            $customer->changeResetPasswordLinkToken($newPasswordToken);
-            $resetUrl = $this->_objectManager->create('Magento\UrlInterface')
-                ->getUrl('customer/account/createPassword', array(
-                        '_query' => array('id' => $customer->getId(), 'token' => $newPasswordToken),
-                        '_store' => $customer->getStoreId()
-                    )
-                );
-            $customer->setResetPasswordUrl($resetUrl);
-            $customer->sendPasswordReminderEmail();
+            $customer = $this->_customerAccountService->getCustomer($customerId);
+            $this->_customerAccountService->initiatePasswordReset(
+                $customer->getEmail(),
+                $customer->getWebsiteId(),
+                CustomerAccountServiceInterface::EMAIL_REMINDER
+            );
             $this->messageManager->addSuccess(__('Customer will receive an email with a link to reset password.'));
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (NoSuchEntityException $exception) {
+            return $this->_redirect('customer/index');
+        } catch (\Magento\Model\Exception $exception) {
             $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
             if (!count($messages)) {
                 $messages = $exception->getMessage();
             }
             $this->_addSessionErrorMessages($messages);
         } catch (\Exception $exception) {
-            $this->messageManager->addException($exception,
-                __('An error occurred while resetting customer password.'));
+            $this->messageManager->addException(
+                $exception,
+                __('An error occurred while resetting customer password.')
+            );
         }
 
         $this->_redirect('customer/*/edit', array('id' => $customerId, '_current' => true));
@@ -553,6 +519,9 @@ class Index extends \Magento\Backend\App\Action
      * Add errors messages to session.
      *
      * @param array|string $messages
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _addSessionErrorMessages($messages)
     {
@@ -560,8 +529,8 @@ class Index extends \Magento\Backend\App\Action
         $session = $this->_getSession();
 
         $callback = function ($error) use ($session) {
-            if (!($error instanceof \Magento\Message\Error)) {
-                $error = new \Magento\Message\Error($error);
+            if (!$error instanceof Error) {
+                $error = new Error($error);
             }
             $this->messageManager->addMessage($error);
         };
@@ -578,21 +547,22 @@ class Index extends \Magento\Backend\App\Action
         $customerData = array();
         if ($this->getRequest()->getPost('account')) {
             $serviceAttributes = array(
-                'new_password', 'default_billing', 'default_shipping', 'confirmation', 'sendemail');
-
-            /** @var \Magento\Customer\Model\Customer $customerEntity */
-            $customerEntity = $this->_objectManager->get('Magento\Customer\Model\CustomerFactory')->create();
+                Customer::DEFAULT_BILLING,
+                Customer::DEFAULT_SHIPPING,
+                'confirmation',
+                'sendemail'
+            );
             /** @var \Magento\Customer\Helper\Data $customerHelper */
             $customerHelper = $this->_objectManager->get('Magento\Customer\Helper\Data');
             $customerData = $customerHelper->extractCustomerData(
-                $this->getRequest(), 'adminhtml_customer', $customerEntity, $serviceAttributes, 'account'
+                $this->getRequest(),
+                'adminhtml_customer',
+                CustomerMetadata::ENTITY_TYPE_CUSTOMER,
+                $serviceAttributes,
+                'account'
             );
         }
 
-        if (!$this->getRequest()->getPost('customer_id')) {
-            $customerData['new_password'] = 'auto';
-        }
-        $this->_processCustomerPassword($customerData);
         if ($this->_authorization->isAllowed(null)) {
             $customerData['is_subscribed'] = $this->getRequest()->getPost('subscription') !== null;
         }
@@ -619,28 +589,32 @@ class Index extends \Magento\Backend\App\Action
                 unset($addresses['_template_']);
             }
 
-            /** @var \Magento\Customer\Model\Address\Form $eavForm */
-            $eavForm = $this->_objectManager->create('Magento\Customer\Model\Address\Form');
-            /** @var \Magento\Customer\Model\Address $addressEntity */
-            $addressEntity = $this->_objectManager->get('Magento\Customer\Model\AddressFactory')->create();
-
             $addressIdList = array_keys($addresses);
             /** @var \Magento\Customer\Helper\Data $customerHelper */
             $customerHelper = $this->_objectManager->get('Magento\Customer\Helper\Data');
             foreach ($addressIdList as $addressId) {
                 $scope = sprintf('address/%s', $addressId);
                 $addressData = $customerHelper->extractCustomerData(
-                    $this->getRequest(), 'adminhtml_customer_address', $addressEntity, array(), $scope, $eavForm);
+                    $this->getRequest(),
+                    'adminhtml_customer_address',
+                    CustomerMetadata::ENTITY_TYPE_ADDRESS,
+                    array(),
+                    $scope
+                );
                 if (is_numeric($addressId)) {
-                    $addressData['entity_id'] = $addressId;
+                    $addressData['id'] = $addressId;
                 }
                 // Set default billing and shipping flags to address
-                $addressData['is_default_billing'] = isset($customerData['default_billing'])
-                    && $customerData['default_billing']
-                    && $customerData['default_billing'] == $addressId;
-                $addressData['is_default_shipping'] = isset($customerData['default_shipping'])
-                    && $customerData['default_shipping']
-                    && $customerData['default_shipping'] == $addressId;
+                $addressData[Customer::DEFAULT_BILLING] = isset(
+                    $customerData[Customer::DEFAULT_BILLING]
+                ) &&
+                    $customerData[Customer::DEFAULT_BILLING] &&
+                    $customerData[Customer::DEFAULT_BILLING] == $addressId;
+                $addressData[Customer::DEFAULT_SHIPPING] = isset(
+                    $customerData[Customer::DEFAULT_SHIPPING]
+                ) &&
+                    $customerData[Customer::DEFAULT_SHIPPING] &&
+                    $customerData[Customer::DEFAULT_SHIPPING] == $addressId;
 
                 $result[] = $addressData;
             }
@@ -650,46 +624,38 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Generate password if auto generated password was requested
-     *
-     * @param array $customerData
-     * @throws \Magento\Core\Exception
-     */
-    protected function _processCustomerPassword(&$customerData)
-    {
-        if (!empty($customerData['new_password'])) {
-            if ($customerData['new_password'] == 'auto') {
-                $customerData['autogenerate_password'] = true;
-            } else {
-                $customerData['password'] = $customerData['new_password'];
-            }
-        }
-        unset($customerData['new_password']);
-    }
-
-    /**
      * Export customer grid to CSV format
+     *
+     * @return \Magento\App\ResponseInterface
      */
     public function exportCsvAction()
     {
+        $this->_view->loadLayout();
         $fileName = 'customers.csv';
-        $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getCsvFile();
-
-        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Export customer grid to XML format
+     *
+     * @return \Magento\App\ResponseInterface
      */
     public function exportXmlAction()
     {
+        $this->_view->loadLayout();
         $fileName = 'customers.xml';
-        $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getExcelFile();
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
+        $content = $exportBlock->getExcelFile($fileName);
         return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Customer orders grid
+     *
+     * @return void
      */
     public function ordersAction()
     {
@@ -700,6 +666,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Customer last orders grid for ajax
+     *
+     * @return void
      */
     public function lastOrdersAction()
     {
@@ -710,26 +678,36 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Customer newsletter grid
+     *
+     * @return void
      */
     public function newsletterAction()
     {
         $this->_initCustomer();
-        $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')
-            ->loadByCustomer($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER));
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $subscriber = $this->_objectManager->create(
+            'Magento\Newsletter\Model\Subscriber'
+        )->loadByCustomer(
+            $customerId
+        );
 
         $this->_coreRegistry->register('subscriber', $subscriber);
         $this->_view->loadLayout()->renderLayout();
     }
 
+    /**
+     * Wishlist Action
+     *
+     * @return void
+     */
     public function wishlistAction()
     {
         $this->_initCustomer();
-        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $itemId = (int)$this->getRequest()->getParam('delete');
-        if ($customer->getId() && $itemId) {
+        if ($customerId && $itemId) {
             try {
-                $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId)
-                    ->delete();
+                $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId)->delete();
             } catch (\Exception $exception) {
                 $this->_objectManager->get('Magento\Logger')->logException($exception);
             }
@@ -744,6 +722,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Customer last view wishlist for ajax
+     *
+     * @return void
      */
     public function viewWishlistAction()
     {
@@ -753,9 +733,9 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * [Handle and then] get a cart grid contents
+     * Handle and then get cart grid contents
      *
-     * @return string
+     * @return void
      */
     public function cartAction()
     {
@@ -765,11 +745,13 @@ class Index extends \Magento\Backend\App\Action
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
         if ($deleteItemId) {
-            $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')
-                ->setWebsite(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId)
-                )
-                ->loadByCustomer($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER));
+            $quote = $this->_objectManager->create(
+                'Magento\Sales\Model\Quote'
+            )->setWebsite(
+                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId)
+            )->loadByCustomer(
+                $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+            );
             $item = $quote->getItemById($deleteItemId);
             if ($item && $item->getId()) {
                 $quote->removeItem($deleteItemId);
@@ -785,19 +767,24 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Get shopping cart to view only
      *
+     * @return void
      */
     public function viewCartAction()
     {
         $this->_initCustomer();
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('admin.customer.view.cart')
-            ->setWebsiteId((int)$this->getRequest()->getParam('website_id'));
+        $this->_view->getLayout()->getBlock(
+            'admin.customer.view.cart'
+        )->setWebsiteId(
+            (int)$this->getRequest()->getParam('website_id')
+        );
         $this->_view->renderLayout();
     }
 
     /**
      * Get shopping carts from all websites for specified client
      *
+     * @return void
      */
     public function cartsAction()
     {
@@ -809,19 +796,26 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Get customer's product reviews list
      *
+     * @return void
      */
     public function productReviewsAction()
     {
         $this->_initCustomer();
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('admin.customer.reviews')
-            ->setCustomerId($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER)->getId())
-            ->setUseAjax(true);
+        $this->_view->getLayout()->getBlock(
+            'admin.customer.reviews'
+        )->setCustomerId(
+            $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+        )->setUseAjax(
+            true
+        );
         $this->_view->renderLayout();
     }
 
     /**
      * AJAX customer validation action
+     *
+     * @return void
      */
     public function validateAction()
     {
@@ -830,7 +824,7 @@ class Index extends \Magento\Backend\App\Action
 
         $customer = $this->_validateCustomer($response);
         if ($customer) {
-            $this->_validateCustomerAddress($response, $customer);
+            $this->_validateCustomerAddress($response);
         }
 
         if ($response->getError()) {
@@ -845,7 +839,7 @@ class Index extends \Magento\Backend\App\Action
      * Customer validation
      *
      * @param \Magento\Object $response
-     * @return \Magento\Customer\Model\Customer|null
+     * @return Customer|null
      */
     protected function _validateCustomer($response)
     {
@@ -853,35 +847,27 @@ class Index extends \Magento\Backend\App\Action
         $errors = null;
 
         try {
-            /** @var \Magento\Customer\Model\Customer $customer */
-            $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
-            $customerId = $this->getRequest()->getParam('id');
-            if ($customerId) {
-                $customer->load($customerId);
-            }
+            /** @var Customer $customer */
+            $customer = $this->_customerBuilder->create();
 
-            /* @var $customerForm \Magento\Customer\Model\Form */
-            $customerForm = $this->_objectManager->get('Magento\Customer\Model\Form');
-            $customerForm->setEntity($customer)
-                ->setFormCode('adminhtml_customer')
-                ->setIsAjaxRequest(true)
-                ->ignoreInvisible(false);
+            $customerForm = $this->_formFactory->create(
+                'customer',
+                'adminhtml_customer',
+                \Magento\Service\DataObjectConverter::toFlatArray($customer),
+                true
+            );
+            $customerForm->setInvisibleIgnored(true);
+
             $data = $customerForm->extractData($this->getRequest(), 'account');
-            $accountData = $this->getRequest()->getPost('account');
-            $data['password'] = isset($accountData['password']) ? $accountData['password'] : '';
-            if (!$customer->getId()) {
-                $data['password'] = $customer->generatePassword();
-            }
-            $data['confirmation'] = $data['password'];
 
             if ($customer->getWebsiteId()) {
                 unset($data['website_id']);
             }
 
-            $customer->addData($data);
-            $errors = $customer->validate();
-        } catch (\Magento\Core\Exception $exception) {
-            /* @var $error \Magento\Message\Error */
+            $customer = $this->_customerBuilder->populateWithArray($data)->create();
+            $errors = $this->_customerAccountService->validateCustomerData($customer);
+        } catch (\Magento\Model\Exception $exception) {
+            /* @var $error Error */
             foreach ($exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }
@@ -901,27 +887,21 @@ class Index extends \Magento\Backend\App\Action
      * Customer address validation.
      *
      * @param \Magento\Object $response
-     * @param \Magento\Customer\Model\Customer $customer
+     * @return void
      */
-    protected function _validateCustomerAddress($response, $customer)
+    protected function _validateCustomerAddress($response)
     {
         $addressesData = $this->getRequest()->getParam('address');
         if (is_array($addressesData)) {
-            /* @var $addressForm \Magento\Customer\Model\Form */
-            $addressForm = $this->_objectManager->create('Magento\Customer\Model\Form');
-            $addressForm->setFormCode('adminhtml_customer_address')->ignoreInvisible(false);
             foreach (array_keys($addressesData) as $index) {
                 if ($index == '_template_') {
                     continue;
                 }
-                $address = $customer->getAddressItemById($index);
-                if (!$address) {
-                    $address   = $this->_objectManager->create('Magento\Customer\Model\Address');
-                }
+
+                $addressForm = $this->_formFactory->create('customer_address', 'adminhtml_customer_address');
 
                 $requestScope = sprintf('address/%s', $index);
-                $formData = $addressForm->setEntity($address)
-                    ->extractData($this->getRequest(), $requestScope);
+                $formData = $addressForm->extractData($this->getRequest(), $requestScope);
 
                 $errors = $addressForm->validateData($formData);
                 if ($errors !== true) {
@@ -936,118 +916,141 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Customer mass subscribe action
+     *
+     * @return void
      */
     public function massSubscribeAction()
     {
-        $customersIds = $this->getRequest()->getParam('customer');
-        if (!is_array($customersIds)) {
-            $this->messageManager->addError(__('Please select customer(s).'));
-        } else {
-            try {
-                foreach ($customersIds as $customerId) {
-                    $customer = $this->_objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
-                    $customer->setIsSubscribed(true);
-                    $customer->save();
-                }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
-            } catch (\Exception $exception) {
-                $this->messageManager->addError($exception->getMessage());
-            }
+        $customerIds = $this->getRequest()->getParam('customer');
+        $customersUpdated = $this->actUponMultipleCustomers(
+            function ($customerId) {
+                // Verify customer exists
+                $this->_customerAccountService->getCustomer($customerId);
+                $this->_subscriberFactory->create()->updateSubscription($customerId, true);
+            },
+            $customerIds
+        );
+        if ($customersUpdated) {
+            $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
         $this->_redirect('customer/*/index');
     }
 
     /**
      * Customer mass unsubscribe action
+     *
+     * @return void
      */
     public function massUnsubscribeAction()
     {
-        $customersIds = $this->getRequest()->getParam('customer');
-        if (!is_array($customersIds)) {
-            $this->messageManager->addError(__('Please select customer(s).'));
-        } else {
-            try {
-                foreach ($customersIds as $customerId) {
-                    $customer = $this->_objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
-                    $customer->setIsSubscribed(false);
-                    $customer->save();
-                }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
-            } catch (\Exception $exception) {
-                $this->messageManager->addError($exception->getMessage());
-            }
+        $customerIds = $this->getRequest()->getParam('customer');
+        $customersUpdated = $this->actUponMultipleCustomers(
+            function ($customerId) {
+                // Verify customer exists
+                $this->_customerAccountService->getCustomer($customerId);
+                $this->_subscriberFactory->create()->updateSubscription($customerId, false);
+            },
+            $customerIds
+        );
+        if ($customersUpdated) {
+            $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-
         $this->_redirect('customer/*/index');
     }
 
     /**
      * Customer mass delete action
+     *
+     * @return void
      */
     public function massDeleteAction()
     {
-        $customersIds = $this->getRequest()->getParam('customer');
-        if (!is_array($customersIds)) {
-            $this->messageManager->addError(__('Please select customer(s).'));
-        } else {
-            try {
-                $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
-                foreach ($customersIds as $customerId) {
-                    $customer->reset()
-                        ->load($customerId)
-                        ->delete();
-                }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', count($customersIds)));
-            } catch (\Exception $exception) {
-                $this->messageManager->addError($exception->getMessage());
-            }
+        $customerIds = $this->getRequest()->getParam('customer');
+        $customersDeleted = $this->actUponMultipleCustomers(
+            function ($customerId) {
+                $this->_customerAccountService->deleteCustomer($customerId);
+            },
+            $customerIds
+        );
+        if ($customersDeleted) {
+            $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', $customersDeleted));
         }
-
         $this->_redirect('customer/*/index');
     }
 
     /**
      * Customer mass assign group action
+     *
+     * @return void
      */
     public function massAssignGroupAction()
     {
-        $customersIds = $this->getRequest()->getParam('customer');
-        if (!is_array($customersIds)) {
+        $customerIds = $this->getRequest()->getParam('customer');
+        $customersUpdated = $this->actUponMultipleCustomers(
+            function ($customerId) {
+                // Verify customer exists
+                $customer = $this->_customerAccountService->getCustomer($customerId);
+                $this->_customerBuilder->populate($customer);
+                $customer = $this->_customerBuilder->setGroupId($this->getRequest()->getParam('group'))->create();
+                $this->_customerAccountService->saveCustomer($customer);
+            },
+            $customerIds
+        );
+        if ($customersUpdated) {
+            $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
+        }
+        $this->_redirect('customer/*/index');
+    }
+
+    /**
+     * Helper function that handles mass actions by taking in a callable for handling a single customer action.
+     *
+     * @param callable $singleAction A single action callable that takes a customer ID as input
+     * @param int[] $customerIds Array of customer Ids to perform the action upon
+     * @return int Number of customers successfully acted upon
+     */
+    protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
+    {
+        if (!is_array($customerIds)) {
             $this->messageManager->addError(__('Please select customer(s).'));
-        } else {
+            return 0;
+        }
+        $customersUpdated = 0;
+        foreach ($customerIds as $customerId) {
             try {
-                foreach ($customersIds as $customerId) {
-                    $customer = $this->_objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
-                    $customer->setGroupId($this->getRequest()->getParam('group'));
-                    $customer->save();
-                }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
+                $singleAction($customerId);
+                $customersUpdated++;
             } catch (\Exception $exception) {
                 $this->messageManager->addError($exception->getMessage());
             }
         }
-
-        $this->_redirect('customer/*/index');
+        return $customersUpdated;
     }
 
     /**
      * Customer view file action
      *
+     * @return void
      * @throws NotFoundException
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function viewfileAction()
     {
-        $file   = null;
-        $plain  = false;
+        $file = null;
+        $plain = false;
         if ($this->getRequest()->getParam('file')) {
             // download file
             $file   = $this->_objectManager->get('Magento\Core\Helper\Data')
                 ->urlDecode($this->getRequest()->getParam('file'));
-        } else if ($this->getRequest()->getParam('image')) {
+        } elseif ($this->getRequest()->getParam('image')) {
             // show plain image
-            $file   = $this->_objectManager->get('Magento\Core\Helper\Data')
-                ->urlDecode($this->getRequest()->getParam('image'));
-            $plain  = true;
+            $file = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->urlDecode(
+                $this->getRequest()->getParam('image')
+            );
+            $plain = true;
         } else {
             throw new NotFoundException();
         }
@@ -1057,9 +1060,13 @@ class Index extends \Magento\Backend\App\Action
         $directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
         $fileName = 'customer' . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
-        if (!$directory->isFile($fileName)
-            && !$this->_objectManager->get('Magento\Core\Helper\File\Storage')
-                ->processStorageFile($path)
+        if (!$directory->isFile(
+            $fileName
+        ) && !$this->_objectManager->get(
+            'Magento\Core\Helper\File\Storage'
+        )->processStorageFile(
+            $path
+        )
         ) {
             throw new NotFoundException();
         }
@@ -1084,13 +1091,23 @@ class Index extends \Magento\Backend\App\Action
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
-            $this->getResponse()
-                ->setHttpResponseCode(200)
-                ->setHeader('Pragma', 'public', true)
-                ->setHeader('Content-type', $contentType, true)
-                ->setHeader('Content-Length', $contentLength)
-                ->setHeader('Last-Modified', date('r', $contentModify))
-                ->clearBody();
+            $this->getResponse()->setHttpResponseCode(
+                200
+            )->setHeader(
+                'Pragma',
+                'public',
+                true
+            )->setHeader(
+                'Content-type',
+                $contentType,
+                true
+            )->setHeader(
+                'Content-Length',
+                $contentLength
+            )->setHeader(
+                'Last-Modified',
+                date('r', $contentModify)
+            )->clearBody();
             $this->getResponse()->sendHeaders();
 
             echo $directory->readFile($fileName);
@@ -1098,19 +1115,17 @@ class Index extends \Magento\Backend\App\Action
             $name = pathinfo($path, PATHINFO_BASENAME);
             $this->_fileFactory->create(
                 $name,
-                array(
-                    'type'  => 'filename',
-                    'value' => $fileName
-                ),
+                array('type' => 'filename', 'value' => $fileName),
                 \Magento\App\Filesystem::MEDIA_DIR
             )->sendResponse();
         }
 
-        exit();
+        exit;
     }
 
     /**
      * Customer access rights checking
+     *
      * @return bool
      */
     protected function _isAllowed()

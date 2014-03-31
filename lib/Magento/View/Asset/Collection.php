@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 /**
@@ -30,6 +29,8 @@ namespace Magento\View\Asset;
 class Collection
 {
     /**
+     * Assets
+     *
      * @var AssetInterface[]
      */
     protected $assets = array();
@@ -39,6 +40,7 @@ class Collection
      *
      * @param string $identifier
      * @param AssetInterface $asset
+     * @return void
      */
     public function add($identifier, AssetInterface $asset)
     {
@@ -60,6 +62,7 @@ class Collection
      * Remove an item from the list
      *
      * @param string $identifier
+     * @return void
      */
     public function remove($identifier)
     {

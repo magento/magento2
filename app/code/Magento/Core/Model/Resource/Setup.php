@@ -53,12 +53,14 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @var \Magento\DB\Adapter\Pdo\Mysql
      */
     protected $_connection = null;
+
     /**
      * Tables cache array
      *
      * @var array
      */
     protected $_tables = array();
+
     /**
      * Tables data cache array
      *
@@ -131,8 +133,8 @@ class Setup implements \Magento\Module\Updater\SetupInterface
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param $resourceName
-     * @param $moduleName
+     * @param string $resourceName
+     * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
@@ -174,7 +176,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $tableName
      * @param string $realTableName
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function setTable($tableName, $realTableName)
     {
@@ -207,7 +209,6 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     {
         if (is_array($tableName)) {
             return join('_', $tableName);
-
         }
         return $tableName;
     }
@@ -215,11 +216,11 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Apply data updates to the system after upgrading.
      *
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function applyDataUpdates()
     {
-        $dataVer= $this->_resourceResource->getDataVersion($this->_resourceName);
+        $dataVer = $this->_resourceResource->getDataVersion($this->_resourceName);
         $configVer = $this->_moduleConfig['version'];
         if ($dataVer !== false) {
             $status = version_compare($configVer, $dataVer);
@@ -235,7 +236,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Apply module resource install, upgrade and data scripts
      *
-     * @return \Magento\Core\Model\Resource\Setup|bool
+     * @return $this|true
      */
     public function applyUpdates()
     {
@@ -267,7 +268,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * Run data install scripts
      *
      * @param string $newVersion
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _installData($newVersion)
     {
@@ -283,7 +284,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $oldVersion
      * @param string $newVersion
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _upgradeData($oldVersion, $newVersion)
     {
@@ -297,7 +298,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * Run resource installation file
      *
      * @param string $newVersion
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _installResourceDb($newVersion)
     {
@@ -313,7 +314,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $oldVersion
      * @param string $newVersion
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _upgradeResourceDb($oldVersion, $newVersion)
     {
@@ -328,7 +329,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $newVersion
      * @param string $oldVersion
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _rollbackResourceDb($newVersion, $oldVersion)
     {
@@ -340,7 +341,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * Uninstall resource
      *
      * @param string $version existing resource version
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _uninstallResourceDb($version)
     {
@@ -358,17 +359,17 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      */
     protected function _getAvailableDbFiles($actionType, $fromVersion, $toVersion)
     {
-        $modName    = (string)$this->_moduleConfig['name'];
+        $modName = (string)$this->_moduleConfig['name'];
 
-        $filesDir   = $this->_modulesReader->getModuleDir('sql', $modName) . '/' . $this->_resourceName;
+        $filesDir = $this->_modulesReader->getModuleDir('sql', $modName) . '/' . $this->_resourceName;
         $modulesDirPath = $this->modulesDir->getRelativePath($filesDir);
         if (!$this->modulesDir->isDirectory($modulesDirPath) || !$this->modulesDir->isReadable($modulesDirPath)) {
             return array();
         }
 
-        $dbFiles    = array();
-        $typeFiles  = array();
-        $regExpDb   = sprintf('#%s-(.*)\.(php|sql)$#i', $actionType);
+        $dbFiles = array();
+        $typeFiles = array();
+        $regExpDb = sprintf('#%s-(.*)\.(php|sql)$#i', $actionType);
         $regExpType = sprintf('#%s-%s-(.*)\.(php|sql)$#i', 'mysql4', $actionType);
         foreach ($this->modulesDir->read($modulesDirPath) as $file) {
             $matches = array();
@@ -400,13 +401,13 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      */
     protected function _getAvailableDataFiles($actionType, $fromVersion, $toVersion)
     {
-        $modName    = (string)$this->_moduleConfig['name'];
-        $files      = array();
+        $modName = (string)$this->_moduleConfig['name'];
+        $files = array();
 
-        $filesDir   = $this->_modulesReader->getModuleDir('data', $modName) . '/' . $this->_resourceName;
+        $filesDir = $this->_modulesReader->getModuleDir('data', $modName) . '/' . $this->_resourceName;
         $modulesDirPath = $this->modulesDir->getRelativePath($filesDir);
         if ($this->modulesDir->isDirectory($modulesDirPath) && $this->modulesDir->isReadable($modulesDirPath)) {
-            $regExp     = sprintf('#%s-(.*)\.php$#i', $actionType);
+            $regExp = sprintf('#%s-(.*)\.php$#i', $actionType);
             foreach ($this->modulesDir->read($modulesDirPath) as $file) {
                 $matches = array();
                 if (preg_match($regExp, $file, $matches)) {
@@ -427,7 +428,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $actionType
      * @param string $version
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     protected function _setResourceVersion($actionType, $version)
     {
@@ -452,7 +453,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @param string $actionType
      * @param string $fromVersion
      * @param string $toVersion
-     * @return bool|string
+     * @return false|string
      * @throws \Magento\Exception
      */
     protected function _modifyResourceDb($actionType, $fromVersion, $toVersion)
@@ -539,17 +540,17 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      */
     protected function _getModifySqlFiles($actionType, $fromVersion, $toVersion, $arrFiles)
     {
-        $arrRes = array();
+        $arrRes = [];
         switch ($actionType) {
             case self::TYPE_DB_INSTALL:
             case self::TYPE_DATA_INSTALL:
                 uksort($arrFiles, 'version_compare');
                 foreach ($arrFiles as $version => $file) {
                     if (version_compare($version, $toVersion) !== self::VERSION_COMPARE_GREATER) {
-                        $arrRes[0] = array(
+                        $arrRes[0] = [
                             'toVersion' => $version,
                             'fileName'  => $file
-                        );
+                        ];
                     }
                 }
                 break;
@@ -566,12 +567,15 @@ class Setup implements \Magento\Module\Updater\SetupInterface
                     }
                     $infoFrom = $versionInfo[0];
                     $infoTo   = $versionInfo[1];
-                    if (version_compare($infoFrom, $fromVersion) !== self::VERSION_COMPARE_LOWER
-                        && version_compare($infoTo, $toVersion) !== self::VERSION_COMPARE_GREATER) {
-                        $arrRes[] = array(
+                    if (version_compare($infoFrom, $fromVersion, '>=')
+                        && version_compare($infoTo, $fromVersion, '>')
+                        && version_compare($infoTo, $toVersion, '<=')
+                        && version_compare($infoFrom, $toVersion, '<')
+                    ) {
+                        $arrRes[] = [
                             'toVersion' => $infoTo,
                             'fileName'  => $file
-                        );
+                        ];
                     }
                 }
                 break;
@@ -584,7 +588,6 @@ class Setup implements \Magento\Module\Updater\SetupInterface
         return $arrRes;
     }
 
-
     /******************* UTILITY METHODS *****************/
 
     /**
@@ -593,20 +596,18 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @param string $table
      * @param string $idField
      * @param string|integer $rowId
-     * @param string $field
-     * @param string $parentField
+     * @param string|null $field
+     * @param string|null $parentField
      * @param string|integer $parentId
-     * @return mixed|boolean
+     * @return mixed
      */
     public function getTableRow($table, $idField, $rowId, $field = null, $parentField = null, $parentId = 0)
     {
         $table = $this->getTable($table);
         if (empty($this->_setupCache[$table][$parentId][$rowId])) {
             $adapter = $this->getConnection();
-            $bind    = array('id_field' => $rowId);
-            $select  = $adapter->select()
-                ->from($table)
-                ->where($adapter->quoteIdentifier($idField) . '= :id_field');
+            $bind = array('id_field' => $rowId);
+            $select = $adapter->select()->from($table)->where($adapter->quoteIdentifier($idField) . '= :id_field');
             if (null !== $parentField) {
                 $select->where($adapter->quoteIdentifier($parentField) . '= :parent_id');
                 $bind['parent_id'] = $parentId;
@@ -617,11 +618,10 @@ class Setup implements \Magento\Module\Updater\SetupInterface
         if (null === $field) {
             return $this->_setupCache[$table][$parentId][$rowId];
         }
-        return isset($this->_setupCache[$table][$parentId][$rowId][$field])
-            ? $this->_setupCache[$table][$parentId][$rowId][$field]
-            : false;
+        return isset(
+            $this->_setupCache[$table][$parentId][$rowId][$field]
+        ) ? $this->_setupCache[$table][$parentId][$rowId][$field] : false;
     }
-
 
     /**
      * Delete table row
@@ -631,7 +631,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @param string|int $rowId
      * @param null|string $parentField
      * @param int|string $parentId
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function deleteTableRow($table, $idField, $rowId, $parentField = null, $parentId = 0)
     {
@@ -661,7 +661,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @param mixed|null $value
      * @param string $parentField
      * @param string|integer $parentId
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0)
     {
@@ -678,8 +678,10 @@ class Setup implements \Magento\Module\Updater\SetupInterface
 
         if (isset($this->_setupCache[$table][$parentId][$rowId])) {
             if (is_array($field)) {
-                $this->_setupCache[$table][$parentId][$rowId] =
-                    array_merge($this->_setupCache[$table][$parentId][$rowId], $field);
+                $this->_setupCache[$table][$parentId][$rowId] = array_merge(
+                    $this->_setupCache[$table][$parentId][$rowId],
+                    $field
+                );
             } else {
                 $this->_setupCache[$table][$parentId][$rowId][$field] = $value;
             }
@@ -709,7 +711,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * @param string $value
      * @param int|string $scope
      * @param int $scopeId
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function setConfigData($path, $value, $scope = \Magento\Core\Model\Store::DEFAULT_CODE, $scopeId = 0)
     {
@@ -717,12 +719,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
         // this is a fix for mysql 4.1
         $this->getConnection()->showTableStatus($table);
 
-        $data  = array(
-            'scope'     => $scope,
-            'scope_id'  => $scopeId,
-            'path'      => $path,
-            'value'     => $value
-        );
+        $data = array('scope' => $scope, 'scope_id' => $scopeId, 'path' => $path, 'value' => $value);
         $this->getConnection()->insertOnDuplicate($table, $data, array('value'));
         return $this;
     }
@@ -732,7 +729,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $path
      * @param string $scope (default|stores|websites|config)
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function deleteConfigData($path, $scope = null)
     {
@@ -748,7 +745,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * Run plain SQL query(ies)
      *
      * @param string $sql
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function run($sql)
     {
@@ -759,7 +756,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Prepare database before install/upgrade
      *
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function startSetup()
     {
@@ -770,7 +767,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Prepare database after install/upgrade
      *
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function endSetup()
     {
@@ -808,7 +805,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Check call afterApplyAllUpdates method for setup class
      *
-     * @return boolean
+     * @return bool
      */
     public function getCallAfterApplyAllUpdates()
     {
@@ -819,7 +816,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      * Run each time after applying of all updates,
      * if setup model setted $_callAfterApplyAllUpdates flag to true
      *
-     * @return \Magento\Core\Model\Resource\Setup
+     * @return $this
      */
     public function afterApplyAllUpdates()
     {

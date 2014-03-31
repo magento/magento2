@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration;
 
 class Formatter
@@ -31,6 +30,7 @@ class Formatter
     /**
      * @param string $string
      * @param string $parameters
+     * @return string
      */
     public function parseString($string, $parameters)
     {

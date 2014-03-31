@@ -23,6 +23,5 @@
  */
 
 /** @var $cache \Magento\App\Cache */
-$cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\App\Cache');
+$cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Cache');
 $cache->clean();

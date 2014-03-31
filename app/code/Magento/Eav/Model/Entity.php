@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model;
 
 /**
  * EAV entity model
@@ -31,24 +31,27 @@
  * @category   Magento
  * @package    Magento_Eav
  */
-namespace Magento\Eav\Model;
-
 class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
-    const DEFAULT_ENTITY_MODEL      = 'Magento\Eav\Model\Entity';
-    const DEFAULT_ATTRIBUTE_MODEL   = 'Magento\Eav\Model\Entity\Attribute';
-    const DEFAULT_BACKEND_MODEL     = 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend';
-    const DEFAULT_FRONTEND_MODEL    = 'Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend';
-    const DEFAULT_SOURCE_MODEL      = 'Magento\Eav\Model\Entity\Attribute\Source\Config';
+    const DEFAULT_ENTITY_MODEL = 'Magento\Eav\Model\Entity';
 
-    const DEFAULT_ENTITY_TABLE      = 'eav_entity';
-    const DEFAULT_ENTITY_ID_FIELD   = 'entity_id';
+    const DEFAULT_ATTRIBUTE_MODEL = 'Magento\Eav\Model\Entity\Attribute';
+
+    const DEFAULT_BACKEND_MODEL = 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend';
+
+    const DEFAULT_FRONTEND_MODEL = 'Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend';
+
+    const DEFAULT_SOURCE_MODEL = 'Magento\Eav\Model\Entity\Attribute\Source\Config';
+
+    const DEFAULT_ENTITY_TABLE = 'eav_entity';
+
+    const DEFAULT_ENTITY_ID_FIELD = 'entity_id';
 
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param array $data
@@ -57,7 +60,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
         $data = array()
@@ -66,7 +69,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
             $resource,
             $eavConfig,
             $attrSetEntity,
-            $locale,
+            $localeFormat,
             $resourceHelper,
             $universalFactory,
             $data

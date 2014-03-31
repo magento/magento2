@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Design\Backend;
 
 class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized
@@ -36,22 +35,22 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     protected $_design = null;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -62,12 +61,14 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     /**
      * Validate value
      *
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Model\Exception
      * if there is no field value, search value is empty or regular expression is not valid
      */
     protected function _beforeSave()
     {
-        $design = clone $this->_design; // For value validations
+        $design = clone $this->_design;
+        // For value validations
         $exceptions = $this->getValue();
         foreach ($exceptions as $rowKey => $row) {
             if ($rowKey === '__empty') {
@@ -77,7 +78,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
             // Validate that all values have come
             foreach (array('search', 'value') as $fieldName) {
                 if (!isset($row[$fieldName])) {
-                    throw new \Magento\Core\Exception(__("Exception does not contain field '{$fieldName}'"));
+                    throw new \Magento\Model\Exception(__("Exception does not contain field '{$fieldName}'"));
                 }
             }
 
@@ -103,7 +104,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      *
      * @param string $search
      * @return string
-     * @throws \Magento\Core\Exception on invalid regular expression
+     * @throws \Magento\Model\Exception on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
@@ -114,7 +115,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
-            throw new \Magento\Core\Exception(__('Invalid regular expression: "%1".', $search));
+            throw new \Magento\Model\Exception(__('Invalid regular expression: "%1".', $search));
         }
 
         return '/' . preg_quote($search, '/') . '/i';
@@ -132,7 +133,8 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
             return false;
         }
 
-        $possibleDelimiters = '/#~%'; // Limit delimiters to reduce possibility, that we miss string with regexp.
+        $possibleDelimiters = '/#~%';
+        // Limit delimiters to reduce possibility, that we miss string with regexp.
 
         // Starts with a delimiter
         if (strpos($possibleDelimiters, $search[0]) !== false) {

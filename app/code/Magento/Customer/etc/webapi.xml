@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" baseUrl="/V1/customerGroup">
+        <rest-route httpMethod="GET" method="getGroup" resources="Magento_Customer::group">/:groupId</rest-route>
+        <rest-route httpMethod="GET" method="getGroups" resources="Magento_Customer::group"></rest-route>
+        <rest-route httpMethod="GET" method="getDefaultGroup" resources="Magento_Customer::group">/default/:storeId</rest-route>
+        <rest-route httpMethod="GET" method="canDelete" resources="Magento_Customer::group">/canDelete/:groupId</rest-route>
+        <rest-route httpMethod="PUT" method="saveGroup" resources="Magento_Customer::group"></rest-route>
+        <rest-route httpMethod="DELETE" method="deleteGroup" resources="Magento_Customer::group">/:groupId</rest-route>
+    </service>
+    <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" baseUrl="/V1/customerMetadata">
+        <rest-route httpMethod="GET" method="getAttributeMetadata" resources="Magento_Customer::customer">/:entityType/entity/:attributeCode/attribute</rest-route>
+        <rest-route httpMethod="GET" method="getAllAttributeSetMetadata" resources="Magento_Customer::customer">/:entityType/entity/:attributeSetId/attributeSet/:storeId/store</rest-route>
+        <rest-route httpMethod="GET" method="getAttributes" resources="Magento_Customer::customer">/:entityType/entity/:formCode/form</rest-route>
+        <rest-route httpMethod="GET" method="getCustomerAttributeMetadata" resources="Magento_Customer::customer">/customer/:attributeCode/attribute</rest-route>
+        <rest-route httpMethod="GET" method="getAllCustomerAttributeMetadata" resources="Magento_Customer::customer">/customer</rest-route>
+        <rest-route httpMethod="GET" method="getAddressAttributeMetadata" resources="Magento_Customer::customer">/address/:attributeCode/attribute</rest-route>
+        <rest-route httpMethod="GET" method="getAllAddressAttributeMetadata" resources="Magento_Customer::customer">/address</rest-route>
+    </service>
+    <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" baseUrl="/V1/customerAccounts">
+        <!-- TODO: changePassword is a case of SELF. Need to revisit. For now manage is assigned -->
+        <!-- TODO: createAccount, authenticate, validateResetPasswordLinkToken, initiatePasswordReset, resetPassword, resendConfirmation apis
+                   can be accessed anonymously and need no resources to be assigned. Webapi framework doesn't support support that as yet.
+                   Adding Magento_Customer::customer temporarily until handling anonymous users is finalized -->
+        <rest-route httpMethod="POST" method="createAccount" resources="Magento_Customer::customer"></rest-route>
+        <rest-route httpMethod="PUT" method="updateCustomer" resources="Magento_Customer::manage"></rest-route>
+        <rest-route httpMethod="GET" method="getCustomerDetails" resources="Magento_Customer::customer">/:customerId</rest-route>
+        <rest-route httpMethod="GET" method="getCustomer" resources="Magento_Customer::customer">/:customerId/customer</rest-route>
+        <rest-route httpMethod="PUT" method="activateCustomer" resources="Magento_Customer::manage">/:customerId/activateCustomer</rest-route>
+        <rest-route httpMethod="PUT" method="searchCustomers" resources="Magento_Customer::customer">/search</rest-route>
+        <rest-route httpMethod="PUT" method="authenticate" resources="Magento_Customer::customer">/authenticate</rest-route>
+        <rest-route httpMethod="PUT" method="changePassword" resources="Magento_Customer::manage">/:customerId/changePassword</rest-route>
+        <rest-route httpMethod="GET" method="validateResetPasswordLinkToken" resources="Magento_Customer::customer">/:customerId/validateResetPasswordLinkToken/:resetPasswordLinkToken</rest-route>
+        <rest-route httpMethod="PUT" method="initiatePasswordReset" resources="Magento_Customer::customer">/initiatePasswordReset</rest-route>
+        <rest-route httpMethod="PUT" method="resetPassword" resources="Magento_Customer::customer">/:customerId/resetPassword</rest-route>
+        <rest-route httpMethod="GET" method="getConfirmationStatus" resources="Magento_Customer::customer">/:customerId/confirmationStatus</rest-route>
+        <rest-route httpMethod="PUT" method="resendConfirmation" resources="Magento_Customer::customer">/resendConfirmation</rest-route>
+        <rest-route httpMethod="PUT" method="validateCustomerData" resources="Magento_Customer::manage">/validateCustomerData</rest-route>
+        <rest-route httpMethod="GET" method="canModify" resources="Magento_Customer::customer">/:customerId/canModify</rest-route>
+        <rest-route httpMethod="GET" method="canDelete" resources="Magento_Customer::customer">/:customerId/canDelete</rest-route>
+        <rest-route httpMethod="DELETE" method="deleteCustomer" resources="Magento_Customer::manage">/:customerId</rest-route>
+        <rest-route httpMethod="PUT" method="isEmailAvailable" resources="Magento_Customer::manage">/isEmailAvailable</rest-route>
+    </service>
+    <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" baseUrl="/V1/customer">
+        <rest-route httpMethod="GET" method="getAddresses" resources="Magento_Customer::manage">/:customerId/address</rest-route>
+        <rest-route httpMethod="GET" method="getAddress" resources="Magento_Customer::manage">/address/:addressId</rest-route>
+        <rest-route httpMethod="GET" method="getDefaultBillingAddress" resources="Magento_Customer::manage">/:customerId/address/defaultBilling</rest-route>
+        <rest-route httpMethod="GET" method="getDefaultShippingAddress" resources="Magento_Customer::manage">/:customerId/address/defaultShipping</rest-route>
+        <rest-route httpMethod="DELETE" method="deleteAddress" resources="Magento_Customer::manage">/address/:addressId</rest-route>
+        <rest-route httpMethod="POST" method="saveAddresses" resources="Magento_Customer::manage">/:customerId/address</rest-route>
+    </service>
+</config>

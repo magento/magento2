@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Helper\Catalog\Product;
 
 /**
  * Helper for fetching properties by product configurational item
@@ -31,10 +32,8 @@
  * @package    Magento_Downloadable
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Helper\Catalog\Product;
-
-class Configuration extends \Magento\App\Helper\AbstractHelper
-    implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+class Configuration extends \Magento\App\Helper\AbstractHelper implements
+    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
      * Catalog product configuration
@@ -77,8 +76,7 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
         $itemLinks = array();
         $linkIds = $item->getOptionByCode('downloadable_link_ids');
         if ($linkIds) {
-            $productLinks = $product->getTypeInstance()
-                ->getLinks($product);
+            $productLinks = $product->getTypeInstance()->getLinks($product);
             foreach (explode(',', $linkIds->getValue()) as $linkId) {
                 if (isset($productLinks[$linkId])) {
                     $itemLinks[] = $productLinks[$linkId];
@@ -115,10 +113,7 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
 
         $links = $this->getLinks($item);
         if ($links) {
-            $linksOption = array(
-                'label' => $this->getLinksTitle($item->getProduct()),
-                'value' => array()
-            );
+            $linksOption = array('label' => $this->getLinksTitle($item->getProduct()), 'value' => array());
             foreach ($links as $link) {
                 $linksOption['value'][] = $link->getTitle();
             }

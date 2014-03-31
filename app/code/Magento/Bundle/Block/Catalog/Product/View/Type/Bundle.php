@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 /**
  * Catalog bundle product info block
@@ -32,11 +32,12 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Catalog\Product\View\Type;
-
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
-    protected $_options         = null;
+    /**
+     * @var mixed
+     */
+    protected $_options = null;
 
     /**
      * Default MAP renderer type
@@ -68,44 +69,29 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var \Magento\Locale\FormatInterface
+     */
+    protected $_localeFormat;
+
+    /**
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Bundle\Model\Product\PriceFactory $productPrice
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param array $data
      * @param array $priceBlockTypes
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Bundle\Model\Product\PriceFactory $productPrice,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Locale\FormatInterface $localeFormat,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
@@ -113,24 +99,18 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->_productPrice = $productPrice;
         $this->coreData = $coreData;
         $this->jsonEncoder = $jsonEncoder;
+        $this->_localeFormat = $localeFormat;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $arrayUtils,
             $data,
             $priceBlockTypes
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getOptions()
     {
         if (!$this->_options) {
@@ -145,7 +125,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $product
             );
 
-            $this->_options = $optionCollection->appendSelections($selectionCollection, false,
+            $this->_options = $optionCollection->appendSelections(
+                $selectionCollection,
+                false,
                 $this->_catalogProduct->getSkipSaleableCheck()
             );
         }
@@ -153,6 +135,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         return $this->_options;
     }
 
+    /**
+     * @return bool
+     */
     public function hasOptions()
     {
         $this->getOptions();
@@ -170,15 +155,15 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getJsonConfig()
     {
         $optionsArray = $this->getOptions();
-        $options      = array();
-        $selected     = array();
+        $options = array();
+        $selected = array();
         $currentProduct = $this->getProduct();
         /* @var $bundlePriceModel \Magento\Bundle\Model\Product\Price */
         $bundlePriceModel = $this->_productPrice->create();
 
         if ($preConfiguredFlag = $currentProduct->hasPreconfiguredValues()) {
             $preConfiguredValues = $currentProduct->getPreconfiguredValues();
-            $defaultValues       = array();
+            $defaultValues = array();
         }
 
         $position = 0;
@@ -189,11 +174,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             }
 
             $optionId = $_option->getId();
-            $option = array (
+            $option = array(
                 'selections' => array(),
-                'title'      => $_option->getTitle(),
-                'isMulti'    => in_array($_option->getType(), array('multi', 'checkbox')),
-                'position'   => $position++
+                'title' => $_option->getTitle(),
+                'isMulti' => in_array($_option->getType(), array('multi', 'checkbox')),
+                'position' => $position++
             );
 
             $selectionCount = count($_option->getSelections());
@@ -207,10 +192,16 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 foreach ($tierPrices as &$tierPriceInfo) {
                     $tierPriceInfo['price'] = $this->coreData->currency($tierPriceInfo['price'], false, false);
                 }
-                unset($tierPriceInfo); // break the reference with the last element
+                unset($tierPriceInfo);
+                // break the reference with the last element
 
-                $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice($currentProduct, $_selection,
-                    $currentProduct->getQty(), $_selection->getQty(), false, false
+                $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice(
+                    $currentProduct,
+                    $_selection,
+                    $currentProduct->getQty(),
+                    $_selection->getQty(),
+                    false,
+                    false
                 );
 
                 $canApplyMAP = false;
@@ -223,21 +214,19 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     $_priceExclTax = $this->_taxData->getPrice($currentProduct, $itemPrice);
                 }
 
-                $selection = array (
-                    'qty'              => $_qty,
-                    'customQty'        => $_selection->getSelectionCanChangeQty(),
-                    'price'            => $this->coreData->currency($_selection->getFinalPrice(), false, false),
-                    'priceInclTax'     => $this->coreData->currency($_priceInclTax, false, false),
-                    'priceExclTax'     => $this->coreData->currency($_priceExclTax, false, false),
-                    'priceValue'       => $this->coreData->currency(
-                            $_selection->getSelectionPriceValue(), false, false
-                        ),
-                    'priceType'        => $_selection->getSelectionPriceType(),
-                    'tierPrice'        => $tierPrices,
-                    'name'             => $_selection->getName(),
-                    'plusDisposition'  => 0,
+                $selection = array(
+                    'qty' => $_qty,
+                    'customQty' => $_selection->getSelectionCanChangeQty(),
+                    'price' => $this->coreData->currency($_selection->getFinalPrice(), false, false),
+                    'priceInclTax' => $this->coreData->currency($_priceInclTax, false, false),
+                    'priceExclTax' => $this->coreData->currency($_priceExclTax, false, false),
+                    'priceValue' => $this->coreData->currency($_selection->getSelectionPriceValue(), false, false),
+                    'priceType' => $_selection->getSelectionPriceType(),
+                    'tierPrice' => $tierPrices,
+                    'name' => $_selection->getName(),
+                    'plusDisposition' => 0,
                     'minusDisposition' => 0,
-                    'canApplyMAP'      => $canApplyMAP
+                    'canApplyMAP' => $canApplyMAP
                 );
 
                 $responseObject = new \Magento\Object();
@@ -250,8 +239,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
                 $option['selections'][$selectionId] = $selection;
 
-                if (($_selection->getIsDefault() || ($selectionCount == 1 && $_option->getRequired()))
-                    && $_selection->isSalable()
+                if (($_selection->getIsDefault() ||
+                    $selectionCount == 1 && $_option->getRequired()) && $_selection->isSalable()
                 ) {
                     $selected[$optionId][] = $selectionId;
                 }
@@ -269,15 +258,15 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $config = array(
-            'options'       => $options,
-            'selected'      => $selected,
-            'bundleId'      => $currentProduct->getId(),
-            'priceFormat'   => $this->_locale->getJsPriceFormat(),
-            'basePrice'     => $this->coreData->currency($currentProduct->getPrice(), false, false),
-            'priceType'     => $currentProduct->getPriceType(),
-            'specialPrice'  => $currentProduct->getSpecialPrice(),
-            'includeTax'    => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
-            'isFixedPrice'  => $isFixedPrice,
+            'options' => $options,
+            'selected' => $selected,
+            'bundleId' => $currentProduct->getId(),
+            'priceFormat' => $this->_localeFormat->getPriceFormat(),
+            'basePrice' => $this->coreData->currency($currentProduct->getPrice(), false, false),
+            'priceType' => $currentProduct->getPriceType(),
+            'specialPrice' => $currentProduct->getSpecialPrice(),
+            'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
+            'isFixedPrice' => $isFixedPrice,
             'isMAPAppliedDirectly' => $this->_catalogData->canApplyMsrp($this->getProduct(), null, false)
         );
 

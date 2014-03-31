@@ -44,12 +44,11 @@ class Data extends \Magento\Core\Helper\Data
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $readDirectory;
-    
+
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Convert\Xml $xmlConverter
@@ -59,7 +58,6 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         \Magento\App\Filesystem $filesystem,
         \Magento\Convert\Xml $xmlConverter,
@@ -68,14 +66,7 @@ class Data extends \Magento\Core\Helper\Data
         $this->filesystem = $filesystem;
         $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::VAR_DIR);
         $this->_xmlConverter = $xmlConverter;
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $locale,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**
@@ -98,9 +89,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getChannelMapToV1x()
     {
-        return array(
-            'community' => 'connect.magentocommerce.com/community'
-        );
+        return array('community' => 'connect.magentocommerce.com/community');
     }
 
     /**

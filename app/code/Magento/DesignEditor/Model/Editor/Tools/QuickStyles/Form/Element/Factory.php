@@ -23,9 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element;
+
+use Magento\ObjectManager;
 
 class Factory
 {
@@ -34,7 +34,10 @@ class Factory
      */
     protected $_objectManager;
 
-    public function __construct(\Magento\ObjectManager $objectManager)
+    /**
+     * @param ObjectManager $objectManager
+     */
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

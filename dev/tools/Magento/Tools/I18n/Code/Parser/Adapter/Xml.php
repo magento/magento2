@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser\Adapter;
 
 /**
@@ -48,7 +47,7 @@ class Xml extends AbstractAdapter
             } else {
                 $nodesDelimiter = strpos($attributes, ' ') === false ? ',' : ' ';
                 foreach (explode($nodesDelimiter, $attributes) as $value) {
-                    $phrase = (string)$element->$value;
+                    $phrase = (string)$element->{$value};
                     if ($phrase) {
                         $this->_addPhrase($phrase);
                     }

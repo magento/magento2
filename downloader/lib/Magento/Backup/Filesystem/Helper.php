@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Filesystem;
 
 /**
  * Filesystem helper
@@ -31,8 +32,6 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Filesystem;
-
 class Helper
 {
     /**
@@ -49,7 +48,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_READABLE  = 2;
+    const INFO_READABLE = 2;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -57,7 +56,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_SIZE      = 4;
+    const INFO_SIZE = 4;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -65,7 +64,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_ALL       = 7;
+    const INFO_ALL = 7;
 
     /**
      * Recursively delete $path
@@ -73,12 +72,14 @@ class Helper
      * @param string $path
      * @param array $skipPaths
      * @param bool $removeRoot
+     * @return void
      * @throws \Magento\Exception
      */
     public function rm($path, $skipPaths = array(), $removeRoot = false)
     {
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::CHILD_FIRST
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::CHILD_FIRST
         );
 
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $skipPaths);
@@ -98,6 +99,7 @@ class Helper
      * @param string $path
      * @param int $infoOptions
      * @param array $skipFiles
+     * @return array
      */
     public function getInfo($path, $infoOptions = self::INFO_ALL, $skipFiles = array())
     {
@@ -115,7 +117,8 @@ class Helper
         }
 
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::CHILD_FIRST
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::CHILD_FIRST
         );
 
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $skipFiles);
@@ -125,11 +128,11 @@ class Helper
                 continue;
             }
 
-            if (($infoOptions & self::INFO_WRITABLE) && !$item->isWritable()) {
+            if ($infoOptions & self::INFO_WRITABLE && !$item->isWritable()) {
                 $info['writable'] = false;
             }
 
-            if (($infoOptions & self::INFO_READABLE) && !$item->isReadable()) {
+            if ($infoOptions & self::INFO_READABLE && !$item->isReadable()) {
                 $info['readable'] = false;
             }
 

@@ -81,9 +81,9 @@ class Design implements \Magento\View\DesignInterface
     private $_storeConfig;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_app;
+    protected $_locale;
 
     /**
      * @var \Magento\App\State
@@ -96,7 +96,7 @@ class Design implements \Magento\View\DesignInterface
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\App\State $appState
      * @param array $themes
      */
@@ -106,7 +106,7 @@ class Design implements \Magento\View\DesignInterface
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Core\Model\App $app,
+        \Magento\Locale\ResolverInterface $locale,
         \Magento\App\State $appState,
         array $themes
     ) {
@@ -117,15 +117,15 @@ class Design implements \Magento\View\DesignInterface
         $this->_storeConfig = $storeConfig;
         $this->_appState = $appState;
         $this->_themes = $themes;
-        $this->_app = $app;
+        $this->_locale = $locale;
     }
 
     /**
      * Set package area
      *
-     * @deprecated
      * @param string $area
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
+     * @deprecated
      */
     public function setArea($area)
     {
@@ -149,7 +149,7 @@ class Design implements \Magento\View\DesignInterface
      *
      * @param \Magento\View\Design\ThemeInterface|string $theme
      * @param string $area
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
      */
     public function setDesignTheme($theme, $area = null)
     {
@@ -173,7 +173,7 @@ class Design implements \Magento\View\DesignInterface
      *
      * Write default theme to core_config_data
      *
-     * @param string $area
+     * @param string|null $area
      * @param array $params
      * @return string|int
      */
@@ -187,9 +187,13 @@ class Design implements \Magento\View\DesignInterface
         $store = isset($params['store']) ? $params['store'] : null;
 
         if ($this->_isThemePerStoveView($area)) {
-            $theme = $this->_storeManager->isSingleStoreMode()
-                ? $this->_config->getValue(self::XML_PATH_THEME_ID, 'default')
-                : (string)$this->_storeConfig->getConfig(self::XML_PATH_THEME_ID, $store);
+            $theme = $this->_storeManager->isSingleStoreMode() ? $this->_config->getValue(
+                self::XML_PATH_THEME_ID,
+                'default'
+            ) : (string)$this->_storeConfig->getConfig(
+                self::XML_PATH_THEME_ID,
+                $store
+            );
         }
 
         if (!$theme && isset($this->_themes[$area])) {
@@ -213,7 +217,7 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Set default design theme
      *
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
      */
     public function setDefaultDesignTheme()
     {
@@ -240,9 +244,9 @@ class Design implements \Magento\View\DesignInterface
     public function getDesignParams()
     {
         $params = array(
-            'area'       => $this->getArea(),
+            'area' => $this->getArea(),
             'themeModel' => $this->getDesignTheme(),
-            'locale'     => $this->_app->getLocale()->getLocaleCode()
+            'locale' => $this->_locale->getLocaleCode()
         );
 
         return $params;

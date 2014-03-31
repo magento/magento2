@@ -33,8 +33,14 @@
  */
 namespace Magento\Catalog\Block\Adminhtml;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\View\Element\AbstractBlock;
+
+class Form extends Generic
 {
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         \Magento\Data\Form::setElementRenderer(

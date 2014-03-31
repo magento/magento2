@@ -52,11 +52,13 @@
         </div>
         <?php echo $this->getChildHtml('form.additional.info'); ?>
     </fieldset>
-    <div class="actions">
-        <input type="hidden" name="hideit" id="hideit" value="" />
-        <button type="submit" title="<?php echo __('Submit') ?>" class="action submit">
-            <span><?php echo __('Submit') ?></span>
-        </button>
+    <div class="actions toolbar">
+        <div class="primary">
+            <input type="hidden" name="hideit" id="hideit" value="" />
+            <button type="submit" title="<?php echo __('Submit') ?>" class="action submit">
+                <span><?php echo __('Submit') ?></span>
+            </button>
+        </div>
     </div>
 </form>
 <script type="text/javascript">

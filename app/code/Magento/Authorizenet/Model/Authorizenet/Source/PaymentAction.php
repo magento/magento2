@@ -23,17 +23,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorizenet\Model\Authorizenet\Source;
 
 /**
  *
- * Authorizenet Payment Action Dropdown source
+ * Authorize.net Payment Action Dropdown source
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Authorizenet\Model\Authorizenet\Source;
-
-class PaymentAction implements \Magento\Core\Model\Option\ArrayInterface
+class PaymentAction implements \Magento\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
@@ -44,7 +46,7 @@ class PaymentAction implements \Magento\Core\Model\Option\ArrayInterface
             array(
                 'value' => \Magento\Authorizenet\Model\Authorizenet::ACTION_AUTHORIZE_CAPTURE,
                 'label' => __('Authorize and Capture')
-            ),
+            )
         );
     }
 }

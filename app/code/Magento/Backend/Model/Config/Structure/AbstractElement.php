@@ -23,11 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure;
 
-abstract class AbstractElement
-    implements \Magento\Backend\Model\Config\Structure\ElementInterface
+use Magento\Core\Model\StoreManagerInterface;
+
+abstract class AbstractElement implements ElementInterface
 {
     /**
      * Element data
@@ -46,14 +46,14 @@ abstract class AbstractElement
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -77,6 +77,7 @@ abstract class AbstractElement
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
@@ -155,12 +156,11 @@ abstract class AbstractElement
         $showInScope = array(
             \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
             \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
+            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault')
         );
 
         if ($this->_storeManager->isSingleStoreMode()) {
-            $result = !$this->_hasVisibilityValue('hide_in_single_store_mode')
-                && array_sum($showInScope);
+            $result = !$this->_hasVisibilityValue('hide_in_single_store_mode') && array_sum($showInScope);
             return $result;
         }
 

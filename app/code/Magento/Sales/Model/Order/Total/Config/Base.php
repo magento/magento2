@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Total\Config;
 
 /**
  * Configuration class for totals
  */
-namespace Magento\Sales\Model\Order\Total\Config;
-
 class Base extends \Magento\Sales\Model\Config\Ordered
 {
     /**
@@ -82,13 +81,13 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * @param string $totalCode
      * @param array $totalConfig
      * @return \Magento\Sales\Model\Order\Total\AbstractTotal
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
         $model = $this->_orderTotalFactory->create($class);
         if (!$model instanceof \Magento\Sales\Model\Order\Total\AbstractTotal) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.')
             );
         }

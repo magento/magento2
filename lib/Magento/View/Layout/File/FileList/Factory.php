@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\FileList;
 
 use Magento\ObjectManager;
@@ -37,11 +36,15 @@ class Factory
     const FILE_LIST_COLLATOR = 'Magento\View\Layout\File\FileList\Collator';
 
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      */
     public function __construct(ObjectManager $objectManager)
@@ -52,14 +55,16 @@ class Factory
     /**
      * Return newly created instance of a layout file list
      *
-     * @param string $collator
+     * @param string $instanceName
      * @return \Magento\View\Layout\File\FileList
+     * @throws \UnexpectedValueException
      */
-    public function create($collator = self::FILE_LIST_COLLATOR)
+    public function create($instanceName = self::FILE_LIST_COLLATOR)
     {
-        return $this->objectManager->create(
-            'Magento\View\Layout\File\FileList',
-            array('collator' => $this->objectManager->get($collator))
-        );
+        $collator = $this->objectManager->get($instanceName);
+        if (!$collator instanceof CollateInterface) {
+            throw new \UnexpectedValueException("{$instanceName} has to implement the collate interface.");
+        }
+        return $this->objectManager->create('Magento\View\Layout\File\FileList', array('collator' => $collator));
     }
 }

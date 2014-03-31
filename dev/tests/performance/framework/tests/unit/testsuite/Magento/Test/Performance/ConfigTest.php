@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Performance;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +48,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_fixtureDir = __DIR__ . '/_files';
         $this->_fixtureConfigData = require $this->_fixtureDir . '/config_data.php';
         $this->_object = new \Magento\TestFramework\Performance\Config(
-            $this->_fixtureConfigData, $this->_fixtureDir, $this->_getFixtureAppBaseDir()
+            $this->_fixtureConfigData,
+            $this->_fixtureDir,
+            $this->_getFixtureAppBaseDir()
         );
     }
 
@@ -91,56 +92,56 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 require __DIR__ . '/_files/config_data.php',
                 'non_existing_dir',
                 'Magento\Exception',
-                "Base directory 'non_existing_dir' does not exist",
+                "Base directory 'non_existing_dir' does not exist"
             ),
             'invalid scenarios format' => array(
                 require __DIR__ . '/_files/config_data_invalid_scenarios_format.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "'scenario' => 'scenarios' option must be an array",
+                "'scenario' => 'scenarios' option must be an array"
             ),
             'no scenario title' => array(
                 require __DIR__ . '/_files/config_no_title.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                'Scenario must have a title',
+                'Scenario must have a title'
             ),
             'bad users scenario argument' => array(
                 require __DIR__ . '/_files/config_bad_users.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Scenario 'Scenario' must have a positive integer argument 'users'.",
+                "Scenario 'Scenario' must have a positive integer argument 'users'."
             ),
             'bad loops scenario argument' => array(
                 require __DIR__ . '/_files/config_bad_loops.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Scenario 'Scenario' must have a positive integer argument 'loops'.",
+                "Scenario 'Scenario' must have a positive integer argument 'loops'."
             ),
             'invalid scenario fixtures format' => array(
                 require __DIR__ . '/_files/config_invalid_fixtures_format.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "'fixtures' for scenario 'Scenario' must be represented by an array",
+                "'fixtures' for scenario 'Scenario' must be represented by an array"
             ),
             'no scenario file defined' => array(
                 require __DIR__ . '/_files/config_no_file_defined.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "File is not defined for scenario 'Scenario'",
+                "File is not defined for scenario 'Scenario'"
             ),
             'non-existing scenario file' => array(
                 require __DIR__ . '/_files/config_non_existing_file.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "File non_existing_file.jmx doesn't exist for scenario 'Scenario'",
+                "File non_existing_file.jmx doesn't exist for scenario 'Scenario'"
             ),
             'non-existing scenario fixture' => array(
                 require __DIR__ . '/_files/config_non_existing_fixture.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Fixture 'non_existing_fixture.php' doesn't exist",
-            ),
+                "Fixture 'non_existing_fixture.php' doesn't exist"
+            )
         );
     }
 
@@ -161,11 +162,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAdminOptions()
     {
-        $expectedOptions = array(
-            'frontname' => 'backend',
-            'username' => 'admin',
-            'password' => 'password1',
-        );
+        $expectedOptions = array('frontname' => 'backend', 'username' => 'admin', 'password' => 'password1');
         $this->assertEquals($expectedOptions, $this->_object->getAdminOptions());
     }
 
@@ -193,17 +190,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         // Assert that default config is applied
         $expectedArguments = array(
-            \Magento\TestFramework\Performance\Scenario::ARG_USERS             => 1,
-            \Magento\TestFramework\Performance\Scenario::ARG_LOOPS             => 1,
-            \Magento\TestFramework\Performance\Scenario::ARG_HOST              => '127.0.0.1',
-            \Magento\TestFramework\Performance\Scenario::ARG_PATH              => '/',
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_FRONTNAME   => 'backend',
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME    => 'admin',
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD    => 'password1',
-            \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR           => $this->_getFixtureAppBaseDir(),
-            'arg1'                                              => 'value 1',
-            'arg2'                                              => 'overridden value 2',
-            'arg3'                                              => 'custom value 3'
+            \Magento\TestFramework\Performance\Scenario::ARG_USERS => 1,
+            \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 1,
+            \Magento\TestFramework\Performance\Scenario::ARG_HOST => '127.0.0.1',
+            \Magento\TestFramework\Performance\Scenario::ARG_PATH => '/',
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_FRONTNAME => 'backend',
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => 'admin',
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => 'password1',
+            \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->_getFixtureAppBaseDir(),
+            'arg1' => 'value 1',
+            'arg2' => 'overridden value 2',
+            'arg3' => 'custom value 3'
         );
         $this->assertEquals($expectedArguments, $scenario->getArguments());
 
@@ -223,7 +220,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expectedFixtures = array(
             realpath(__DIR__ . '/_files/fixture.php'),
-            realpath(__DIR__ . '/_files/fixture2.php'),
+            realpath(__DIR__ . '/_files/fixture2.php')
         );
         $this->assertEquals($expectedFixtures, $scenario->getFixtures());
     }

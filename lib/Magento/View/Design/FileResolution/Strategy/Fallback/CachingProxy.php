@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
 use Magento\App\Filesystem;
@@ -70,6 +69,8 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected $canSaveMap;
 
     /**
+     * Var directory
+     *
      * @var Write
      */
     protected $varDirectory;
@@ -82,6 +83,8 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected $sections = array();
 
     /**
+     * Constructor
+     *
      * @param Fallback $fallback
      * @param Filesystem $filesystem
      * @param string $mapDir
@@ -93,7 +96,8 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         Fallback $fallback,
         Filesystem $filesystem,
         $mapDir,
-        $baseDir, // magento root
+        // magento root
+        $baseDir,
         $canSaveMap = true
     ) {
         $this->fallback = $fallback;
@@ -199,7 +203,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected function getFromMap($fileType, $area, ThemeInterface $theme, $locale, $module, $file)
     {
         $sectionKey = $this->loadSection($area, $theme, $locale);
-        $fileKey = "$fileType|$file|$module";
+        $fileKey = "{$fileType}|{$file}|{$module}";
         if (isset($this->sections[$sectionKey]['data'][$fileKey])) {
             $value = $this->sections[$sectionKey]['data'][$fileKey];
             if ('' !== (string)$value) {
@@ -220,6 +224,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      * @param string|null $module
      * @param string $file
      * @param string $filePath
+     * @return void
      * @throws \Magento\Exception
      */
     protected function setToMap($fileType, $area, ThemeInterface $theme, $locale, $module, $file, $filePath)
@@ -232,7 +237,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         $value = ltrim(substr($filePath, strlen($this->baseDir)), '/\\');
 
         $sectionKey = $this->loadSection($area, $theme, $locale);
-        $fileKey = "$fileType|$file|$module";
+        $fileKey = "{$fileType}|{$file}|{$module}";
         $this->sections[$sectionKey]['data'][$fileKey] = $value;
         $this->sections[$sectionKey]['is_changed'] = true;
     }
@@ -264,10 +269,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         $sectionFile = $this->getSectionFile($area, $themeModel, $locale);
         if (!isset($this->sections[$sectionFile])) {
             $filePath = $this->mapDir . '/' . $sectionFile;
-            $this->sections[$sectionFile] = array(
-                'data' => array(),
-                'is_changed' => false,
-            );
+            $this->sections[$sectionFile] = array('data' => array(), 'is_changed' => false);
             if ($this->varDirectory->isFile($filePath)) {
                 $this->sections[$sectionFile]['data'] = unserialize($this->varDirectory->readFile($filePath));
             }
@@ -284,7 +286,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      * @param string|null $module
      * @param string $file
      * @param string $newFilePath
-     * @return \Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy
+     * @return $this
      */
     public function setViewFilePathToMap($area, ThemeInterface $themeModel, $locale, $module, $file, $newFilePath)
     {

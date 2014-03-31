@@ -30,14 +30,14 @@ return array(
                     'title' => 'Resource One Title',
                     'sortOrder' => 10,
                     'disabled' => true,
-                    'children' => array(),
+                    'children' => array()
                 ),
                 array(
                     'id' => 'Custom_Module::resource_two',
                     'title' => 'Resource Two Title',
                     'sortOrder' => 20,
                     'disabled' => false,
-                    'children' => array(),
+                    'children' => array()
                 ),
                 array(
                     'id' => 'Custom_Module::parent_resource',
@@ -56,14 +56,13 @@ return array(
                                     'title' => 'Resource Child Level 2 Title',
                                     'sortOrder' => 10,
                                     'disabled' => false,
-                                    'children' => array(),
-                                ),
-                            ),
-
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                                    'children' => array()
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
 );

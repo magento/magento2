@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GiftMessage\Block\Message;
 
+use Magento\GiftMessage\Model\Message;
 
 /**
  * Gift message inline edit form
@@ -32,20 +34,32 @@
  * @package    Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Block\Message;
-
 class Inline extends \Magento\View\Element\Template
 {
+    /**
+     * @var mixed
+     */
     protected $_entity = null;
-    protected $_type   = null;
+
+    /**
+     * @var string|null
+     */
+    protected $_type = null;
+
+    /**
+     * @var Message|null
+     */
     protected $_giftMessage = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'inline.phtml';
 
     /**
      * Gift message message
      *
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
 
@@ -60,10 +74,16 @@ class Inline extends \Magento\View\Element\Template
     protected $_imageHelper;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -71,6 +91,7 @@ class Inline extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
         \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_imageHelper = $imageHelper;
@@ -78,13 +99,14 @@ class Inline extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
     }
 
     /**
      * Set entity
      *
-     * @param $entity
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @param mixed $entity
+     * @return $this
      */
     public function setEntity($entity)
     {
@@ -95,7 +117,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Get entity
      *
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return mixed
      */
     public function getEntity()
     {
@@ -106,7 +128,7 @@ class Inline extends \Magento\View\Element\Template
      * Set type
      *
      * @param string $type
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return $this
      */
     public function setType($type)
     {
@@ -137,13 +159,11 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Init message
      *
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return $this
      */
     protected function _initMessage()
     {
-        $this->_giftMessage = $this->_giftMessageMessage->getGiftMessage(
-            $this->getEntity()->getGiftMessageId()
-        );
+        $this->_giftMessage = $this->_giftMessageMessage->getGiftMessage($this->getEntity()->getGiftMessageId());
         return $this;
     }
 
@@ -154,7 +174,7 @@ class Inline extends \Magento\View\Element\Template
      */
     public function getDefaultFrom()
     {
-        if ($this->_customerSession->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             return $this->_customerSession->getCustomer()->getName();
         } else {
             return $this->getEntity()->getBillingAddress()->getName();
@@ -181,7 +201,7 @@ class Inline extends \Magento\View\Element\Template
      * @param mixed $entity
      * @return string
      */
-    public function getMessage($entity=null)
+    public function getMessage($entity = null)
     {
         if (is_null($this->_giftMessage)) {
             $this->_initMessage();
@@ -189,9 +209,7 @@ class Inline extends \Magento\View\Element\Template
 
         if ($entity) {
             if (!$entity->getGiftMessage()) {
-                $entity->setGiftMessage(
-                    $this->_giftMessageMessage->getGiftMessage($entity->getGiftMessageId())
-                );
+                $entity->setGiftMessage($this->_giftMessageMessage->getGiftMessage($entity->getGiftMessageId()));
             }
             return $entity->getGiftMessage();
         }
@@ -228,7 +246,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Retrieve additional url
      *
-     * @return bool
+     * @return string
      */
     public function getAdditionalUrl()
     {
@@ -287,9 +305,9 @@ class Inline extends \Magento\View\Element\Template
      * @param string $defaultValue
      * @return string
      */
-    public function getEscaped($value, $defaultValue='')
+    public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value)!='' ? $value : $defaultValue);
+        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
     }
 
     /**
@@ -305,7 +323,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Check availability of giftmessages for specified entity item
      *
-     * @param $item
+     * @param \Magento\Object $item
      * @return bool
      */
     public function isItemMessagesAvailable($item)
@@ -322,8 +340,7 @@ class Inline extends \Magento\View\Element\Template
      */
     public function getThumbnailUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')
-            ->resize($this->getThumbnailSize());
+        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
     }
 
     /**

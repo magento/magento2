@@ -42,41 +42,33 @@ class Adapter extends \Magento\Core\Model\Config\Value
     protected $_imageFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Image\AdapterFactory $imageFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Image\AdapterFactory $imageFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
         $this->_imageFactory = $imageFactory;
     }
 
     /**
      * Checks if chosen image adapter available
      *
-     * @throws \Magento\Core\Exception if some of adapter dipendencies was not loaded
+     * @throws \Magento\Model\Exception If some of adapter dependencies was not loaded
      * @return \Magento\Backend\Model\Config\Backend\File
      */
     protected function _beforeSave()
@@ -85,7 +77,7 @@ class Adapter extends \Magento\Core\Model\Config\Value
             $this->_imageFactory->create($this->getValue());
         } catch (\Exception $e) {
             $message = __('The specified image adapter cannot be used because of: ' . $e->getMessage());
-            throw new \Magento\Core\Exception($message);
+            throw new \Magento\Model\Exception($message);
         }
 
         return $this;

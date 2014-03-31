@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Error;
 
 /**
@@ -35,21 +34,21 @@ class Handler implements HandlerInterface
      * @var array
      */
     protected $errorPhrases = array(
-        E_ERROR             => 'Error',
-        E_WARNING           => 'Warning',
-        E_PARSE             => 'Parse Error',
-        E_NOTICE            => 'Notice',
-        E_CORE_ERROR        => 'Core Error',
-        E_CORE_WARNING      => 'Core Warning',
-        E_COMPILE_ERROR     => 'Compile Error',
-        E_COMPILE_WARNING   => 'Compile Warning',
-        E_USER_ERROR        => 'User Error',
-        E_USER_WARNING      => 'User Warning',
-        E_USER_NOTICE       => 'User Notice',
-        E_STRICT            => 'Strict Notice',
+        E_ERROR => 'Error',
+        E_WARNING => 'Warning',
+        E_PARSE => 'Parse Error',
+        E_NOTICE => 'Notice',
+        E_CORE_ERROR => 'Core Error',
+        E_CORE_WARNING => 'Core Warning',
+        E_COMPILE_ERROR => 'Compile Error',
+        E_COMPILE_WARNING => 'Compile Warning',
+        E_USER_ERROR => 'User Error',
+        E_USER_WARNING => 'User Warning',
+        E_USER_NOTICE => 'User Notice',
+        E_STRICT => 'Strict Notice',
         E_RECOVERABLE_ERROR => 'Recoverable Error',
-        E_DEPRECATED        => 'Deprecated Functionality',
-        E_USER_DEPRECATED   => 'User Deprecated Functionality'
+        E_DEPRECATED => 'Deprecated Functionality',
+        E_USER_DEPRECATED => 'User Deprecated Functionality'
     );
 
     /**
@@ -61,10 +60,10 @@ class Handler implements HandlerInterface
      */
     public function processException(\Exception $exception, array $params = array())
     {
-        print '<pre>';
-        print $exception->getMessage() . "\n\n";
-        print $exception->getTraceAsString();
-        print '</pre>';
+        echo '<pre>';
+        echo $exception->getMessage() . "\n\n";
+        echo $exception->getTraceAsString();
+        echo '</pre>';
     }
 
     /**
@@ -102,7 +101,7 @@ class Handler implements HandlerInterface
         // PEAR specific message handling
         if (stripos($errorFile . $errorStr, 'pear') !== false) {
             // ignore strict and deprecated notices
-            if (($errorNo == E_STRICT) || ($errorNo == E_DEPRECATED)) {
+            if ($errorNo == E_STRICT || $errorNo == E_DEPRECATED) {
                 return true;
             }
             // ignore attempts to read system files when open_basedir is set
@@ -110,9 +109,9 @@ class Handler implements HandlerInterface
                 return true;
             }
         }
-        $errorMessage = isset($this->errorPhrases[$errorNo])
-            ? $this->errorPhrases[$errorNo]
-            : "Unknown error ($errorNo)";
+        $errorMessage = isset(
+            $this->errorPhrases[$errorNo]
+        ) ? $this->errorPhrases[$errorNo] : "Unknown error ({$errorNo})";
         $errorMessage .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
         $this->_processError($errorMessage);
         return true;

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloader\Model;
 
 /**
  * Class session
@@ -31,8 +32,6 @@
  * @package    Magento_Connect
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloader\Model;
-
 class Session extends \Magento\Downloader\Model
 {
     /**
@@ -73,6 +72,7 @@ class Session extends \Magento\Downloader\Model
      *
      * @param string $key
      * @param mixed $value
+     * @return $this
      */
     public function set($key, $value)
     {
@@ -82,6 +82,8 @@ class Session extends \Magento\Downloader\Model
 
     /**
      * Authentication to downloader
+     *
+     * @return $this
      */
     public function authenticate()
     {
@@ -102,8 +104,12 @@ class Session extends \Magento\Downloader\Model
         }
 
         try {
-            if ( (isset($_POST['username']) && empty($_POST['username']))
-                || (isset($_POST['password']) && empty($_POST['password']))) {
+            if (isset(
+                $_POST['username']
+            ) && empty($_POST['username']) || isset(
+                $_POST['password']
+            ) && empty($_POST['password'])
+            ) {
                 $this->addMessage('error', 'Invalid user name or password');
             }
             if (empty($_POST['username']) || empty($_POST['password'])) {
@@ -119,11 +125,7 @@ class Session extends \Magento\Downloader\Model
             $this->addMessage('error', $e->getMessage());
         }
 
-        $this->controller()
-            ->redirect(
-                $this->controller()->url('loggedin'),
-                true
-        );
+        $this->controller()->redirect($this->controller()->url('loggedin'), true);
     }
 
     /**
@@ -137,7 +139,7 @@ class Session extends \Magento\Downloader\Model
         if ($user && !$user->getId()) {
             $this->addMessage('error', 'Invalid user name or password');
             $this->controller()->setAction('login');
-        } elseif ($this->getUserId() || ($user && $user->getId())) {
+        } elseif ($this->getUserId() || $user && $user->getId()) {
             if (\Mage::getSingleton('Magento\AuthorizationInterface')->isAllowed('Magento_Adminhtml::all')) {
                 return true;
             } else {
@@ -181,7 +183,7 @@ class Session extends \Magento\Downloader\Model
      *
      * @param string $type
      * @param string $msg
-     * @param string $clear
+     * @param string|bool $clear
      * @return \Magento\Downloader\Model\Session
      */
     public function addMessage($type, $msg, $clear = false)
@@ -195,7 +197,7 @@ class Session extends \Magento\Downloader\Model
     /**
      * Retrieve messages from cache
      *
-     * @param boolean $clear
+     * @param bool $clear
      * @return mixed
      */
     public function getMessages($clear = true)

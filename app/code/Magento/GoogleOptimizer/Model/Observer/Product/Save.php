@@ -25,6 +25,8 @@
  */
 namespace Magento\GoogleOptimizer\Model\Observer\Product;
 
+use Magento\Event\Observer;
+
 class Save extends \Magento\GoogleOptimizer\Model\Observer\AbstractSave
 {
     /**
@@ -35,7 +37,8 @@ class Save extends \Magento\GoogleOptimizer\Model\Observer\AbstractSave
     /**
      * Init entity
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
     protected function _initEntity($observer)
     {
@@ -44,6 +47,8 @@ class Save extends \Magento\GoogleOptimizer\Model\Observer\AbstractSave
 
     /**
      * Check is Google Experiment enabled
+     *
+     * @return bool
      */
     protected function _isGoogleExperimentActive()
     {
@@ -61,7 +66,7 @@ class Save extends \Magento\GoogleOptimizer\Model\Observer\AbstractSave
             'entity_type' => \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT,
             'entity_id' => $this->_product->getId(),
             'store_id' => $this->_product->getStoreId(),
-            'experiment_script' => $this->_params['experiment_script'],
+            'experiment_script' => $this->_params['experiment_script']
         );
     }
 }

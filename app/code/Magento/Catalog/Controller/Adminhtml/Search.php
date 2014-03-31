@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -33,45 +32,52 @@ class Search extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
+    /**
+     * @return $this
+     */
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_CatalogSearch::catalog_search')
-            ->_addBreadcrumb(__('Search'), __('Search'))
-        ;
+        $this->_setActiveMenu('Magento_CatalogSearch::catalog_search')->_addBreadcrumb(__('Search'), __('Search'));
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Search Terms'));
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Catalog'), __('Catalog'));
-            $this->_view->renderLayout();
+        $this->_initAction()->_addBreadcrumb(__('Catalog'), __('Catalog'));
+        $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Search Terms'));
@@ -81,7 +87,7 @@ class Search extends \Magento\Backend\App\Action
 
         if ($id) {
             $model->load($id);
-            if (! $model->getId()) {
+            if (!$model->getId()) {
                 $this->messageManager->addError(__('This search no longer exists.'));
                 $this->_redirect('catalog/*');
                 return;
@@ -102,8 +108,12 @@ class Search extends \Magento\Backend\App\Action
 
         $this->_view->getLayout()->getBlock('head')->setCanLoadRulesJs(true);
 
-        $this->_view->getLayout()->getBlock('adminhtml.catalog.search.edit')
-            ->setData('action', $this->getUrl('catalog/search/save'));
+        $this->_view->getLayout()->getBlock(
+            'adminhtml.catalog.search.edit'
+        )->setData(
+            'action',
+            $this->getUrl('catalog/search/save')
+        );
 
         $this->_addBreadcrumb($id ? __('Edit Search') : __('New Search'), $id ? __('Edit Search') : __('New Search'));
 
@@ -113,29 +123,30 @@ class Search extends \Magento\Backend\App\Action
     /**
      * Save search query
      *
+     * @return void
      */
     public function saveAction()
     {
-        $hasError   = false;
-        $data       = $this->getRequest()->getPost();
-        $queryId    = $this->getRequest()->getPost('query_id', null);
+        $hasError = false;
+        $data = $this->getRequest()->getPost();
+        $queryId = $this->getRequest()->getPost('query_id', null);
         if ($this->getRequest()->isPost() && $data) {
             /* @var $model \Magento\CatalogSearch\Model\Query */
             $model = $this->_objectManager->create('Magento\CatalogSearch\Model\Query');
 
             // validate query
-            $queryText  = $this->getRequest()->getPost('query_text', false);
-            $storeId    = $this->getRequest()->getPost('store_id', false);
+            $queryText = $this->getRequest()->getPost('query_text', false);
+            $storeId = $this->getRequest()->getPost('store_id', false);
 
             try {
                 if ($queryText) {
                     $model->setStoreId($storeId);
                     $model->loadByQueryText($queryText);
                     if ($model->getId() && $model->getId() != $queryId) {
-                        throw new \Magento\Core\Exception(
+                        throw new \Magento\Model\Exception(
                             __('You already have an identical search term query.')
                         );
-                    } else if (!$model->getId() && $queryId) {
+                    } elseif (!$model->getId() && $queryId) {
                         $model->load($queryId);
                     }
                 } else if ($queryId) {
@@ -145,15 +156,11 @@ class Search extends \Magento\Backend\App\Action
                 $model->addData($data);
                 $model->setIsProcessed(0);
                 $model->save();
-
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $hasError = true;
             } catch (\Exception $e) {
-                $this->messageManager->addException(
-                    $e,
-                    __('Something went wrong while saving the search query.')
-                );
+                $this->messageManager->addException($e, __('Something went wrong while saving the search query.'));
                 $hasError = true;
             }
         }
@@ -166,6 +173,9 @@ class Search extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -187,6 +197,9 @@ class Search extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/');
     }
 
+    /**
+     * @return void
+     */
     public function massDeleteAction()
     {
         $searchIds = $this->getRequest()->getParam('search');
@@ -206,6 +219,9 @@ class Search extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/index');
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_CatalogSearch::search');

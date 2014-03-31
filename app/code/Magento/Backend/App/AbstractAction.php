@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\App;
 
 /**
@@ -83,9 +82,9 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @var bool
@@ -114,11 +113,14 @@ abstract class AbstractAction extends \Magento\App\Action\Action
         $this->_backendUrl = $context->getBackendUrl();
         $this->_formKeyValidator = $context->getFormKeyValidator();
         $this->_title = $context->getTitle();
-        $this->_locale = $context->getLocale();
+        $this->_localeResolver = $context->getLocaleResolver();
         $this->_canUseBaseUrl = $context->getCanUseBaseUrl();
         $this->_session = $context->getSession();
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return true;
@@ -144,8 +146,9 @@ abstract class AbstractAction extends \Magento\App\Action\Action
 
     /**
      * Define active menu item in menu block
+     *
      * @param string $itemId current active menu item
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     protected function _setActiveMenu($itemId)
     {
@@ -162,12 +165,12 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     }
 
     /**
-     * @param $label
-     * @param $title
-     * @param null $link
-     * @return \Magento\Backend\App\AbstractAction
+     * @param string $label
+     * @param string $title
+     * @param string|null $link
+     * @return $this
      */
-    protected function _addBreadcrumb($label, $title, $link=null)
+    protected function _addBreadcrumb($label, $title, $link = null)
     {
         $this->_view->getLayout()->getBlock('breadcrumbs')->addLink($label, $title, $link);
         return $this;
@@ -175,7 +178,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\View\Element\AbstractBlock $block
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     protected function _addContent(\Magento\View\Element\AbstractBlock $block)
     {
@@ -184,7 +187,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\View\Element\AbstractBlock $block
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     protected function _addLeft(\Magento\View\Element\AbstractBlock $block)
     {
@@ -193,7 +196,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\View\Element\AbstractBlock $block
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     protected function _addJs(\Magento\View\Element\AbstractBlock $block)
     {
@@ -207,7 +210,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      *
      * @param \Magento\View\Element\AbstractBlock $block
      * @param string $containerName
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     private function _moveBlockToContainer(\Magento\View\Element\AbstractBlock $block, $containerName)
     {
@@ -246,10 +249,14 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      */
     protected function _isUrlChecked()
     {
-        return !$this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED)
-            && !$this->getRequest()->getParam('forwarded')
-            && !$this->_getSession()->getIsUrlNotice(true)
-            && !$this->_canUseBaseUrl;
+        return !$this->_actionFlag->get(
+            '',
+            self::FLAG_IS_URLS_CHECKED
+        ) && !$this->getRequest()->getParam(
+            'forwarded'
+        ) && !$this->_getSession()->getIsUrlNotice(
+            true
+        ) && !$this->_canUseBaseUrl;
     }
 
     /**
@@ -275,10 +282,13 @@ abstract class AbstractAction extends \Magento\App\Action\Action
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
-                $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                    'error' => true,
-                    'message' => $_keyErrorMsg
-                )));
+                $this->getResponse()->setBody(
+                    $this->_objectManager->get(
+                        'Magento\Core\Helper\Data'
+                    )->jsonEncode(
+                        array('error' => true, 'message' => $_keyErrorMsg)
+                    )
+                );
             } else {
                 $this->_redirect($this->_backendUrl->getStartupPageUrl());
             }
@@ -291,22 +301,25 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      * Set session locale,
      * process force locale set through url params
      *
-     * @return \Magento\Backend\App\AbstractAction
+     * @return $this
      */
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Core\Model\Locale\Validator')->isValid($forceLocale)) {
+        if ($this->_objectManager->get('Magento\Locale\Validator')->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 
         if (is_null($this->_getSession()->getLocale())) {
-            $this->_getSession()->setLocale($this->_locale->getLocaleCode());
+            $this->_getSession()->setLocale($this->_localeResolver->getLocaleCode());
         }
 
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function deniedAction()
     {
         $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
@@ -322,6 +335,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      * No route action
      *
      * @param null $coreRoute
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function norouteAction($coreRoute = null)
@@ -337,15 +351,22 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      *
      * @param   string $path
      * @param   array $arguments
-     * @return \Magento\Backend\App\AbstractAction
+     * @return \Magento\App\ResponseInterface
      */
-    protected function _redirect($path, $arguments=array())
+    protected function _redirect($path, $arguments = array())
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
         $this->getResponse()->setRedirect($this->getUrl($path, $arguments));
         return $this->getResponse();
     }
 
+    /**
+     * @param string $action
+     * @param string|null $controller
+     * @param string|null $module
+     * @param array|null $params
+     * @return void
+     */
     protected function _forward($action, $controller = null, $module = null, array $params = null)
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
@@ -359,7 +380,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      * @param   array $params
      * @return  string
      */
-    public function getUrl($route = '', $params=array())
+    public function getUrl($route = '', $params = array())
     {
         return $this->_helper->getUrl($route, $params);
     }

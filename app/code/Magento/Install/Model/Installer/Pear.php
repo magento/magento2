@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model\Installer;
 
 /**
@@ -48,9 +47,8 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->messageManager = $messageManager;
     }
 
-
     /**
-     * @return array
+     * @return string[]
      */
     public function getPackages()
     {
@@ -62,7 +60,7 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
             'connect.magentocommerce.com/core/Magento_All',
             'connect.magentocommerce.com/core/Interface_Frontend_Default',
             'connect.magentocommerce.com/core/Interface_Adminhtml_Default',
-            'connect.magentocommerce.com/core/Interface_Install_Default',
+            'connect.magentocommerce.com/core/Interface_Install_Default'
         );
         return $packages;
     }
@@ -72,7 +70,7 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function checkDownloads()
     {
-        $pear = new \Magento\Pear;
+        $pear = new \Magento\Pear();
         $pkg = new PEAR_PackageFile($pear->getConfig(), false);
         $result = true;
         foreach ($this->getPackages() as $package) {

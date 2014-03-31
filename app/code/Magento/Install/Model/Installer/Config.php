@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model\Installer;
 
 /**
@@ -31,7 +30,8 @@ namespace Magento\Install\Model\Installer;
  */
 class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 {
-    const TMP_INSTALL_DATE_VALUE= 'd-d-d-d-d';
+    const TMP_INSTALL_DATE_VALUE = 'd-d-d-d-d';
+
     const TMP_ENCRYPT_KEY_VALUE = 'k-k-k-k-k';
 
     /**
@@ -46,6 +46,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     protected $_request;
 
+    /**
+     * @var array
+     */
     protected $_configData = array();
 
     /**
@@ -98,6 +101,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->messageManager = $messageManager;
     }
 
+    /**
+     * @param array $data
+     * @return $this
+     */
     public function setConfigData($data)
     {
         if (is_array($data)) {
@@ -106,6 +113,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getConfigData()
     {
         return $this->_configData;
@@ -113,6 +123,8 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * Generate installation data and record them into local.xml using local.xml.template
+     *
+     * @return void
      */
     public function install()
     {
@@ -120,9 +132,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
         $defaults = array(
             'root_dir' => $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR),
-            'app_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::APP_DIR),
-            'var_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR),
-            'base_url' => $this->_request->getDistroBaseUrl(),
+            'app_dir' => $this->_filesystem->getPath(\Magento\App\Filesystem::APP_DIR),
+            'var_dir' => $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR),
+            'base_url' => $this->_request->getDistroBaseUrl()
         );
         foreach ($defaults as $index => $value) {
             if (!isset($data[$index])) {
@@ -145,14 +157,13 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
                 $data['secure_base_url'] = 'https://' . $data['secure_base_url'];
             }
 
-            if (!empty($data['use_secure'])
-                && !$this->_getInstaller()->getDataModel()->getSkipUrlValidation()) {
+            if (!empty($data['use_secure']) && !$this->_getInstaller()->getDataModel()->getSkipUrlValidation()) {
                 $this->_checkUrl($data['secure_base_url']);
             }
         }
 
-        $data['date']   = self::TMP_INSTALL_DATE_VALUE;
-        $data['key']    = self::TMP_ENCRYPT_KEY_VALUE;
+        $data['date'] = self::TMP_INSTALL_DATE_VALUE;
+        $data['key'] = self::TMP_ENCRYPT_KEY_VALUE;
         $data['var_dir'] = $data['root_dir'] . '/var';
 
         $data['use_script_name'] = isset($data['use_script_name']) ? 'true' : 'false';
@@ -168,6 +179,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_configDirectory->changePermissions($this->_localConfigFile, 0777);
     }
 
+    /**
+     * @return \Magento\Object
+     */
     public function getFormData()
     {
         $uri = \Zend_Uri::factory($this->_storeManager->getStore()->getBaseUrl('web'));
@@ -181,16 +195,25 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         }
 
         $data = new \Magento\Object();
-        $data->setDbHost('localhost')
-            ->setDbName('magento')
-            ->setDbUser('')
-            ->setDbModel('mysql4')
-            ->setDbPass('')
-            ->setSecureBaseUrl($baseSecureUrl)
-            ->setUnsecureBaseUrl($baseUrl)
-            ->setBackendFrontname('backend')
-            ->setEnableCharts('1')
-        ;
+        $data->setDbHost(
+            'localhost'
+        )->setDbName(
+            'magento'
+        )->setDbUser(
+            ''
+        )->setDbModel(
+            'mysql4'
+        )->setDbPass(
+            ''
+        )->setSecureBaseUrl(
+            $baseSecureUrl
+        )->setUnsecureBaseUrl(
+            $baseUrl
+        )->setBackendFrontname(
+            'backend'
+        )->setEnableCharts(
+            '1'
+        );
         return $data;
     }
 
@@ -198,27 +221,26 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      * Check validity of a base URL
      *
      * @param string $baseUrl
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      * @throws \Exception
      */
     protected function _checkUrl($baseUrl)
     {
         try {
             $staticFile = $this->_findFirstFileRelativePath('', '/.+\.(html?|js|css|gif|jpe?g|png)$/');
-            $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\App\Filesystem::PUB_LIB_DIR) . '/' . $staticFile;
+            $staticUrl = $baseUrl . $this->_filesystem->getUri(
+                \Magento\App\Filesystem::PUB_LIB_DIR
+            ) . '/' . $staticFile;
             $client = new \Magento\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
-        } catch (\Exception $e){
-            $this->messageManager->addError(
-                __('The URL "%1" is not accessible.', $baseUrl)
-            );
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('The URL "%1" is not accessible.', $baseUrl));
             throw $e;
         }
         if ($response->getStatus() != 200) {
-            $this->messageManager->addError(
-                __('The URL "%1" is invalid.', $baseUrl)
-            );
-            throw new \Magento\Core\Exception(__('Response from the server is invalid.'));
+            $this->messageManager->addError(__('The URL "%1" is invalid.', $baseUrl));
+            throw new \Magento\Model\Exception(__('Response from the server is invalid.'));
         }
     }
 
@@ -251,9 +273,13 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return null;
     }
 
+    /**
+     * @param string $date
+     * @return $this
+     */
     public function replaceTmpInstallDate($date = 'now')
     {
-        $stamp    = strtotime((string) $date);
+        $stamp = strtotime((string)$date);
         $localXml = $this->_configDirectory->readFile($this->_localConfigFile);
         $localXml = str_replace(self::TMP_INSTALL_DATE_VALUE, date('r', $stamp), $localXml);
         $this->_configDirectory->writeFile($this->_localConfigFile, $localXml);
@@ -261,6 +287,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return $this
+     */
     public function replaceTmpEncryptKey($key)
     {
         $localXml = $this->_configDirectory->readFile($this->_localConfigFile);

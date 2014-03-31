@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <block class="Magento\Rss\Block\Wishlist" name="rss.wishlist" output="1" cacheable="false">
         <action method="addPriceBlockType">
             <argument name="type" xsi:type="string">msrp_rss</argument>

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/Magento/App/etc/resources.xsd">
     <resource name="test_name" extends="test_extends" connection="test_connection" />
     <resource name="test_name_two" />
 </config>

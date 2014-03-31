@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Info;
 
 /**
  * Block for Bank Transfer payment generic info
  */
-namespace Magento\Payment\Block\Info;
-
 class Instructions extends \Magento\Payment\Block\Info
 {
     /**
@@ -38,6 +37,9 @@ class Instructions extends \Magento\Payment\Block\Info
      */
     protected $_instructions;
 
+    /**
+     * @var string
+     */
     protected $_template = 'info/instructions.phtml';
 
     /**
@@ -49,8 +51,9 @@ class Instructions extends \Magento\Payment\Block\Info
     public function getInstructions()
     {
         if (is_null($this->_instructions)) {
-            $this->_instructions = $this->getInfo()->getAdditionalInformation('instructions')
-                ?: $this->getMethod()->getInstructions();
+            $this->_instructions = $this->getInfo()->getAdditionalInformation(
+                'instructions'
+            ) ?: $this->getMethod()->getInstructions();
         }
         return $this->_instructions;
     }

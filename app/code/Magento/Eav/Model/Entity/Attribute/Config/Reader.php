@@ -33,9 +33,9 @@ class Reader extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        'config/entity' => 'type',
-        'config/entity/attribute' => 'code',
-        'config/entity/attribute/field' => 'code'
+        '/config/entity' => 'type',
+        '/config/entity/attribute' => 'code',
+        '/config/entity/attribute/field' => 'code'
     );
 
     /**
@@ -50,6 +50,13 @@ class Reader extends \Magento\Config\Reader\Filesystem
         \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState
     ) {
-        parent::__construct($fileResolver, $converter, $schemaLocator, $validationState, 'eav_attributes.xml', array());
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            'eav_attributes.xml',
+            array()
+        );
     }
 }

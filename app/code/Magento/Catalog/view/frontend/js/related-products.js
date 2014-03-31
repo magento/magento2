@@ -31,7 +31,9 @@
             relatedProductsCheckFlag: false, // Related products checkboxes are initially unchecked.
             relatedProductsField: '#related-products-field', // Hidden input field that stores related products.
             selectAllMessage: $.mage.__('select all'),
-            unselectAllMessage: $.mage.__('unselect all')
+            unselectAllMessage: $.mage.__('unselect all'),
+            selectAllLink: "[role='select-all']",
+            elementsSelector: ".item.product"
         },
 
         /**
@@ -39,8 +41,13 @@
          * @private
          */
         _create: function() {
-            this.element.on('click', $.proxy(this._selectAllRelated, this));
+            $(this.options.selectAllLink).on('click', $.proxy(this._selectAllRelated, this));
             $(this.options.relatedCheckbox).on('click', $.proxy(this._addRelatedToProduct, this));
+            this._showRelatedProducts(
+                this.element.find(this.options.elementsSelector),
+                this.element.data('limit'),
+                this.element.data('shuffle')
+            );
         },
 
         /**
@@ -71,6 +78,32 @@
                     return this.value;
                 }).get().join(',')
             );
+        },
+
+        /**
+         * Show related products according to limit. Shuffle if needed.
+         * @param elements
+         * @param limit
+         * @param shuffle
+         * @private
+         */
+        _showRelatedProducts: function(elements, limit, shuffle) {
+            if (shuffle) {
+                this._shuffle(elements);
+            }
+            for (var index = 0; index < limit; index++) {
+                $(elements[index]).show();
+            }
+        },
+
+        /**
+         * Shuffle an array
+         * @param o
+         * @returns {*}
+         */
+        _shuffle: function shuffle(o){ //v1.0
+            for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
         }
     });
 })(jQuery);

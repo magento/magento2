@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 use Magento\Filesystem\Directory\ReadInterface;
@@ -46,11 +45,15 @@ class Config implements \Magento\View\ConfigInterface
     protected $moduleReader;
 
     /**
+     * Root directory
+     *
      * @var ReadInterface
      */
     protected $rootDirectory;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $viewService;
@@ -63,22 +66,28 @@ class Config implements \Magento\View\ConfigInterface
     protected $viewFileSystem;
 
     /**
+     * File name
+     *
      * @var string
      */
     protected $filename;
 
     /**
+     * File iterator factory
+     *
      * @var \Magento\Config\FileIteratorFactory
      */
     protected $fileIteratorFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\App\Filesystem $filesystem
-     * @param Service $viewService
-     * @param FileSystem $viewFileSystem
+     * @param \Magento\View\Service  $viewService
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
-     * @param $filename
+     * @param string $filename
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
@@ -115,18 +124,19 @@ class Config implements \Magento\View\ConfigInterface
         $configFiles = $this->moduleReader->getConfigurationFiles($this->filename)->toArray();
 
         $themeConfigFile = $currentTheme->getCustomization()->getCustomViewConfigPath();
-        if (empty($themeConfigFile) ||
-            !$this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
+        if (empty($themeConfigFile) || !$this->rootDirectory->isExist(
+            $this->rootDirectory->getRelativePath($themeConfigFile)
+        )
         ) {
-            $themeConfigFile = $this->viewFileSystem->getFilename(
-                $this->filename, $params
-            );
+            $themeConfigFile = $this->viewFileSystem->getFilename($this->filename, $params);
         }
-        if ($themeConfigFile &&
-            $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
+        if ($themeConfigFile && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
         ) {
-            $configFiles[$this->rootDirectory->getRelativePath($themeConfigFile)] =
-                $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($themeConfigFile));
+            $configFiles[$this->rootDirectory->getRelativePath(
+                $themeConfigFile
+            )] = $this->rootDirectory->readFile(
+                $this->rootDirectory->getRelativePath($themeConfigFile)
+            );
         }
         $config = new \Magento\Config\View($configFiles);
 

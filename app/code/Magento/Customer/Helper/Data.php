@@ -23,14 +23,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Helper;
 
 /**
  * Customer Data Helper
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
+    /**
+     * Customer group cache context
+     */
+    const CONTEXT_GROUP = 'customer_group';
+
+    /**
+     * Customer authorization cache context
+     */
+    const CONTEXT_AUTH = 'customer_logged_in';
+
     /**
      * Query param name for last url visited
      */
@@ -50,8 +62,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Config paths to VAT related customer groups
      */
     const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
+
     const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
+
     const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
+
     const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
 
     /**
@@ -93,17 +108,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * VAT class constants
      */
-    const VAT_CLASS_DOMESTIC    = 'domestic';
-    const VAT_CLASS_INTRA_UNION = 'intra_union';
-    const VAT_CLASS_INVALID     = 'invalid';
-    const VAT_CLASS_ERROR       = 'error';
+    const VAT_CLASS_DOMESTIC = 'domestic';
 
-    /**
-     * Customer groups collection
-     *
-     * @var \Magento\Customer\Model\Resource\Group\Collection
-     */
-    protected $_groups;
+    const VAT_CLASS_INTRA_UNION = 'intra_union';
+
+    const VAT_CLASS_INVALID = 'invalid';
+
+    const VAT_CLASS_ERROR = 'error';
 
     /**
      * Core data
@@ -115,13 +126,21 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Customer address
      *
-     * @var \Magento\Customer\Helper\Address
+     * @var Address
      */
     protected $_customerAddress = null;
 
     /**
-     * Core store config
-     *
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    protected $_configShare;
+
+    /**
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_coreStoreConfig;
@@ -137,12 +156,27 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_customerSession;
 
     /**
-     * @var \Magento\Customer\Model\GroupFactory
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
      */
-    protected $_groupFactory;
+    protected $_accountService;
 
     /**
-     * @var \Magento\Customer\Model\FormFactory
+     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     */
+    protected $_addressService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
+     */
+    protected $_metadataService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     */
+    protected $_groupService;
+
+    /**
+     * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_formFactory;
 
@@ -156,36 +190,56 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected $mathRandom;
 
+    /** @var \Magento\Customer\Service\V1\Data\Customer */
+    protected $customerData;
+
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Customer\Helper\Address $customerAddress
+     * @param Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Config\Share $configShare
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Model\GroupFactory $groupFactory
-     * @param \Magento\Customer\Model\FormFactory $formFactory
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService
+     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Escaper $escaper
      * @param \Magento\Math\Random $mathRandom
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Customer\Helper\Address $customerAddress,
+        Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\ConfigInterface $coreConfig,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Model\GroupFactory $groupFactory,
-        \Magento\Customer\Model\FormFactory $formFactory,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService,
+        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Escaper $escaper,
         \Magento\Math\Random $mathRandom
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_coreData = $coreData;
+        $this->_storeManager = $storeManager;
+        $this->_configShare = $configShare;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_coreConfig = $coreConfig;
         $this->_customerSession = $customerSession;
-        $this->_groupFactory = $groupFactory;
+        $this->_accountService = $accountService;
+        $this->_metadataService = $metadataService;
+        $this->_addressService = $addressService;
+        $this->_groupService = $groupService;
         $this->_formFactory = $formFactory;
         $this->_escaper = $escaper;
         $this->mathRandom = $mathRandom;
@@ -200,7 +254,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMerchantCountryCode($store = null)
     {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
+        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
     }
 
     /**
@@ -211,7 +265,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMerchantVatNumber($store = null)
     {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
+        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
     }
 
     /**
@@ -241,6 +295,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Retrieve logged in customer
      *
      * @return \Magento\Customer\Model\Customer
+     * @deprecated use getCustomerData() instead
      */
     public function getCustomer()
     {
@@ -251,48 +306,29 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve customer groups collection
-     *
-     * @return \Magento\Customer\Model\Resource\Group\Collection
+     * @return \Magento\Customer\Service\V1\Data\Customer|null
+     * @throws  \Magento\Exception\NoSuchEntityException
      */
-    public function getGroups()
+    public function getCustomerData()
     {
-        if (empty($this->_groups)) {
-            $this->_groups = $this->_createGroup()->getResourceCollection()
-                ->setRealGroupsFilter()
-                ->load();
+        if (empty($this->customerData)) {
+            $customerId = $this->_customerSession->getCustomerId();
+            $this->customerData = $this->_accountService->getCustomer($customerId);
         }
-        return $this->_groups;
-    }
-
-    /**
-     * Retrieve current (logged in) customer object
-     *
-     * @return \Magento\Customer\Model\Customer
-     */
-    public function getCurrentCustomer()
-    {
-        return $this->getCustomer();
-    }
-
-    /**
-     * Retrieve current customer name
-     *
-     * @return string
-     */
-    public function getCustomerName()
-    {
-        return $this->getCustomer()->getName();
+        return $this->customerData;
     }
 
     /**
      * Check customer has address
      *
      * @return bool
+     *
+     * @throws \Magento\Exception\NoSuchEntityException If the customer Id is invalid
      */
     public function customerHasAddresses()
     {
-        return count($this->getCustomer()->getAddresses()) > 0;
+        $customerId = $this->_customerSession->getCustomerId();
+        return count($this->_addressService->getAddresses($customerId)) > 0;
     }
 
     /**************************************************************************
@@ -320,8 +356,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         $referer = $this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME);
 
-        if (!$referer && !$this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD)
-            && !$this->_customerSession->getNoReferer()
+        if (!$referer && !$this->_coreStoreConfig->getConfigFlag(
+            self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
+        ) && !$this->_customerSession->getNoReferer()
         ) {
             $referer = $this->_getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
             $referer = $this->_coreData->urlEncode($referer);
@@ -437,7 +474,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isConfirmationRequired()
     {
-        return $this->getCustomer()->isConfirmationRequired();
+        $customerId = $this->_customerSession->getCustomerId();
+        return \Magento\Customer\Service\V1\CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED ==
+            $this->_accountService->getConfirmationStatus(
+                $customerId
+            );
     }
 
     /**
@@ -469,9 +510,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getNamePrefixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions(
-            $this->_customerAddress->getConfig('prefix_options', $store)
-        );
+        return $this->_prepareNamePrefixSuffixOptions($this->_customerAddress->getConfig('prefix_options', $store));
     }
 
     /**
@@ -482,9 +521,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getNameSuffixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions(
-            $this->_customerAddress->getConfig('suffix_options', $store)
-        );
+        return $this->_prepareNamePrefixSuffixOptions($this->_customerAddress->getConfig('suffix_options', $store));
     }
 
     /**
@@ -525,7 +562,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getResetPasswordLinkExpirationPeriod()
     {
-        return (int) $this->_coreConfig->getValue(
+        return (int)$this->_coreConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
             'default'
         );
@@ -539,7 +576,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getDefaultCustomerGroupId($store = null)
     {
-        return (int)$this->_coreStoreConfig->getConfig(\Magento\Customer\Model\Group::XML_PATH_DEFAULT_ID, $store);
+        return $this->_groupService->getDefaultGroup($store)->getId();
     }
 
     /**
@@ -583,15 +620,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Object(array(
-            'is_valid' => false,
-            'request_date' => '',
-            'request_identifier' => '',
-            'request_success' => false
-        ));
+        $gatewayResponse = new \Magento\Object(
+            array('is_valid' => false, 'request_date' => '', 'request_identifier' => '', 'request_success' => false)
+        );
 
         if (!extension_loaded('soap')) {
-            $this->_logger->logException(new \Magento\Core\Exception(__('PHP SOAP extension is required.')));
+            $this->_logger->logException(new \Magento\Model\Exception(__('PHP SOAP extension is required.')));
             return $gatewayResponse;
         }
 
@@ -611,9 +645,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
-            $gatewayResponse->setIsValid((boolean) $result->valid);
-            $gatewayResponse->setRequestDate((string) $result->requestDate);
-            $gatewayResponse->setRequestIdentifier((string) $result->requestIdentifier);
+            $gatewayResponse->setIsValid((bool)$result->valid);
+            $gatewayResponse->setRequestDate((string)$result->requestDate);
+            $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
             $gatewayResponse->setRequestSuccess(true);
         } catch (\Exception $exception) {
             $gatewayResponse->setIsValid(false);
@@ -633,20 +667,29 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param string $requesterVatNumber
      *
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canCheckVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber)
     {
         $result = true;
-        if (!is_string($countryCode)
-            || !is_string($vatNumber)
-            || !is_string($requesterCountryCode)
-            || !is_string($requesterVatNumber)
-            || empty($countryCode)
-            || !$this->isCountryInEU($countryCode)
-            || empty($vatNumber)
-            || (empty($requesterCountryCode) && !empty($requesterVatNumber))
-            || (!empty($requesterCountryCode) && empty($requesterVatNumber))
-            || (!empty($requesterCountryCode) && !$this->isCountryInEU($requesterCountryCode))
+        if (!is_string(
+            $countryCode
+        ) || !is_string(
+            $vatNumber
+        ) || !is_string(
+            $requesterCountryCode
+        ) || !is_string(
+            $requesterVatNumber
+        ) || empty($countryCode) || !$this->isCountryInEU(
+            $countryCode
+        ) ||
+            empty($vatNumber) ||
+            empty($requesterCountryCode) && !empty($requesterVatNumber) ||
+            !empty($requesterCountryCode) && empty($requesterVatNumber) ||
+            !empty($requesterCountryCode) && !$this->isCountryInEU(
+                $requesterCountryCode
+            )
         ) {
             $result = false;
         }
@@ -668,10 +711,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         $isVatNumberValid = $vatValidationResult->getIsValid();
 
-        if (is_string($customerCountryCode)
-            && !empty($customerCountryCode)
-            && $customerCountryCode === $this->getMerchantCountryCode($store)
-            && $isVatNumberValid
+        if (is_string(
+            $customerCountryCode
+        ) && !empty($customerCountryCode) && $customerCountryCode === $this->getMerchantCountryCode(
+            $store
+        ) && $isVatNumberValid
         ) {
             $vatClass = self::VAT_CLASS_DOMESTIC;
         } elseif ($isVatNumberValid) {
@@ -685,59 +729,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
         }
 
         return $vatClass;
-    }
-
-    /**
-     * Get validation message that will be displayed to user by VAT validation result object
-     *
-     * @param \Magento\Customer\Model\Address $customerAddress
-     * @param bool $customerGroupAutoAssignDisabled
-     * @param \Magento\Object $validationResult
-     * @return \Magento\Object
-     */
-    public function getVatValidationUserMessage($customerAddress, $customerGroupAutoAssignDisabled, $validationResult)
-    {
-        $message = '';
-        $isError = true;
-        $customerVatClass = $this->getCustomerVatClass($customerAddress->getCountryId(), $validationResult);
-        $groupAutoAssignDisabled = $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CUSTOMER_VIV_GROUP_AUTO_ASSIGN);
-
-        $willChargeTaxMessage    = __('You will be charged tax.');
-        $willNotChargeTaxMessage = __('You will not be charged tax.');
-
-        if ($validationResult->getIsValid()) {
-            $message = __('Your VAT ID was successfully validated.');
-            $isError = false;
-
-            if (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled) {
-                $message .= ' ' . ($customerVatClass == self::VAT_CLASS_DOMESTIC
-                    ? $willChargeTaxMessage
-                    : $willNotChargeTaxMessage);
-            }
-        } else if ($validationResult->getRequestSuccess()) {
-            $message = sprintf(
-                __('The VAT ID entered (%s) is not a valid VAT ID.') . ' ',
-                $this->_escaper->escapeHtml($customerAddress->getVatId())
-            );
-            if (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled) {
-                $message .= $willChargeTaxMessage;
-            }
-        }
-        else {
-            $contactUsMessage = sprintf(__('If you believe this is an error, please contact us at %s'),
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_SUPPORT_EMAIL));
-
-            $message = __('Your Tax ID cannot be validated.') . ' '
-                . (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled
-                    ? $willChargeTaxMessage . ' ' : '')
-                . $contactUsMessage;
-        }
-
-        $validationMessageEnvelope = new \Magento\Object();
-        $validationMessageEnvelope->setMessage($message);
-        $validationMessageEnvelope->setIsError($isError);
-
-        return $validationMessageEnvelope;
     }
 
     /**
@@ -756,31 +747,37 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\App\RequestInterface $request
      * @param string $formCode The code of EAV form to take the list of attributes from
-     * @param \Magento\Core\Model\AbstractModel $entity entity model for the form
-     * @param array $additionalAttributes The list of attribute codes to skip filtration for
+     * @param string $entityType entity type for the form
+     * @param string[] $additionalAttributes The list of attribute codes to skip filtration for
      * @param string $scope scope of the request
-     * @param \Magento\Eav\Model\Form|null $eavForm EAV form model to use for extraction
+     * @param \Magento\Customer\Model\Metadata\Form $metadataForm to use for extraction
      * @return array Filtered customer data
      */
-    public function extractCustomerData(\Magento\App\RequestInterface $request, $formCode, $entity,
-        $additionalAttributes = array(), $scope = null, $eavForm = null
+    public function extractCustomerData(
+        \Magento\App\RequestInterface $request,
+        $formCode,
+        $entityType,
+        $additionalAttributes = array(),
+        $scope = null,
+        \Magento\Customer\Model\Metadata\Form $metadataForm = null
     ) {
-        if (is_null($eavForm)) {
-            $eavForm = $this->_createForm();
+        if (is_null($metadataForm)) {
+            $metadataForm = $this->_formFactory->create(
+                $entityType,
+                $formCode,
+                array(),
+                false,
+                \Magento\Customer\Model\Metadata\Form::DONT_IGNORE_INVISIBLE
+            );
         }
-        /** @var \Magento\Eav\Model\Form $eavForm */
-        $eavForm->setEntity($entity)
-            ->setFormCode($formCode)
-            ->ignoreInvisible(false);
-        $filteredData = $eavForm->extractData($request, $scope);
+        $filteredData = $metadataForm->extractData($request, $scope);
         $requestData = $request->getPost($scope);
         foreach ($additionalAttributes as $attributeCode) {
-            $filteredData[$attributeCode] = isset($requestData[$attributeCode])
-                ? $requestData[$attributeCode] : false;
+            $filteredData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
 
-        $formAttributes = $eavForm->getAttributes();
-        /** @var \Magento\Customer\Model\Attribute $attribute */
+        $formAttributes = $metadataForm->getAttributes();
+        /** @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute */
         foreach ($formAttributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $frontendInput = $attribute->getFrontendInput();
@@ -793,18 +790,34 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * @return \Magento\Customer\Model\Group
+     * Check store availability for customer given the customerId
+     *
+     * @param int $customerWebsiteId
+     * @param int $storeId
+     * @return bool
      */
-    protected function _createGroup()
+    public function isCustomerInStore($customerWebsiteId, $storeId)
     {
-        return $this->_groupFactory->create();
+        $ids = $this->getSharedStoreIds($customerWebsiteId);
+        return in_array($storeId, $ids);
     }
 
     /**
-     * @return \Magento\Customer\Model\Form
+     * Retrieve shared store ids
+     *
+     * @param int $customerWebsiteId
+     * @return array
      */
-    protected function _createForm()
+    public function getSharedStoreIds($customerWebsiteId)
     {
-        return $this->_formFactory->create();
+        $ids = array();
+        if ((bool)$this->_configShare->isWebsiteScope()) {
+            $ids = $this->_storeManager->getWebsite($customerWebsiteId)->getStoreIds();
+        } else {
+            foreach ($this->_storeManager->getStores() as $store) {
+                $ids[] = $store->getId();
+            }
+        }
+        return $ids;
     }
 }

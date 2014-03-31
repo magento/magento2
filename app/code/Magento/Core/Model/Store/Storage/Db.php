@@ -25,15 +25,17 @@
  */
 namespace Magento\Core\Model\Store\Storage;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\App\State;
 use Magento\Core\Model\Store;
 use Magento\Core\Model\Store\StorageInterface;
 use Magento\Core\Model\Store\Group;
+use Magento\Core\Model\Store\Group\Factory;
 use Magento\Core\Model\Store\Exception as StoreException;
 use Magento\Core\Model\StoreFactory;
 use Magento\Core\Model\StoreManagerInterface;
 use Magento\Core\Model\Website;
+use Magento\Core\Model\Website\Factory as WebsiteFactory;
 use Magento\Profiler;
 
 class Db implements StorageInterface
@@ -125,14 +127,14 @@ class Db implements StorageInterface
     /**
      * Website factory
      *
-     * @var Website\Factory
+     * @var WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
      * Group factory
      *
-     * @var Group\Factory
+     * @var Factory
      */
     protected $_groupFactory;
 
@@ -156,26 +158,33 @@ class Db implements StorageInterface
     protected $_url;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $_httpContext;
+
+    /**
      * @param StoreFactory $storeFactory
-     * @param Website\Factory $websiteFactory
-     * @param Group\Factory $groupFactory
+     * @param WebsiteFactory $websiteFactory
+     * @param Factory $groupFactory
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Stdlib\Cookie $cookie
      * @param State $appState
      * @param \Magento\Backend\Model\UrlInterface $url
-     * @param $isSingleStoreAllowed
-     * @param $scopeCode
-     * @param $scopeType
+     * @param \Magento\App\Http\Context $httpContext
+     * @param bool $isSingleStoreAllowed
+     * @param string $scopeCode
+     * @param string $scopeType
      * @param null $currentStore
      */
     public function __construct(
-        \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\Core\Model\Website\Factory $websiteFactory,
-        \Magento\Core\Model\Store\Group\Factory $groupFactory,
+        StoreFactory $storeFactory,
+        WebsiteFactory $websiteFactory,
+        Factory $groupFactory,
         \Magento\App\ConfigInterface $config,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\State $appState,
+        State $appState,
         \Magento\Backend\Model\UrlInterface $url,
+        \Magento\App\Http\Context $httpContext,
         $isSingleStoreAllowed,
         $scopeCode,
         $scopeType,
@@ -191,6 +200,7 @@ class Db implements StorageInterface
         $this->_appState = $appState;
         $this->_cookie = $cookie;
         $this->_url = $url;
+        $this->_httpContext = $httpContext;
         if ($currentStore) {
             $this->_currentStore = $currentStore;
         }
@@ -204,9 +214,11 @@ class Db implements StorageInterface
     protected function _getDefaultStore()
     {
         if (empty($this->_store)) {
-            $this->_store = $this->_storeFactory->create()
-                ->setId(\Magento\Core\Model\Store::DISTRO_STORE_ID)
-                ->setCode(\Magento\Core\Model\Store::DEFAULT_CODE);
+            $this->_store = $this->_storeFactory->create()->setId(
+                \Magento\Core\Model\Store::DISTRO_STORE_ID
+            )->setCode(
+                \Magento\Core\Model\Store::DEFAULT_CODE
+            );
         }
         return $this->_store;
     }
@@ -214,6 +226,7 @@ class Db implements StorageInterface
     /**
      * Initialize currently ran store
      *
+     * @return void
      * @throws StoreException
      */
     public function initCurrentStore()
@@ -250,18 +263,15 @@ class Db implements StorageInterface
      * Check get store
      *
      * @param string $type
+     * @return void
      */
     protected function _checkGetStore($type)
     {
-        if (empty($_GET)) {
+        if (empty($_POST['___store']) && empty($_GET['___store'])) {
             return;
         }
+        $store = empty($_POST['___store']) ? $_GET['___store'] : $_POST['___store'];
 
-        if (!isset($_GET['___store'])) {
-            return;
-        }
-
-        $store = $_GET['___store'];
         if (!isset($this->_stores[$store])) {
             return;
         }
@@ -290,6 +300,11 @@ class Db implements StorageInterface
                 $this->_cookie->set(Store::COOKIE_NAME, null);
             } else {
                 $this->_cookie->set(Store::COOKIE_NAME, $this->_currentStore, true);
+                $this->_httpContext->setValue(
+                    \Magento\Core\Helper\Data::CONTEXT_STORE,
+                    $this->_currentStore,
+                    $this->_getDefaultStore()->getCode()
+                );
             }
         }
         return;
@@ -299,6 +314,7 @@ class Db implements StorageInterface
      * Check cookie store
      *
      * @param string $type
+     * @return void
      */
     protected function _checkCookieStore($type)
     {
@@ -307,17 +323,17 @@ class Db implements StorageInterface
         }
 
         $store = $this->_cookie->get(Store::COOKIE_NAME);
-        if ($store && isset($this->_stores[$store])
-            && $this->_stores[$store]->getId()
-            && $this->_stores[$store]->getIsActive()
+        if ($store && isset(
+            $this->_stores[$store]
+        ) && $this->_stores[$store]->getId() && $this->_stores[$store]->getIsActive()
         ) {
-            if ($type == 'website'
-                && $this->_stores[$store]->getWebsiteId() == $this->_stores[$this->_currentStore]->getWebsiteId()
+            if ($type == 'website' &&
+                $this->_stores[$store]->getWebsiteId() == $this->_stores[$this->_currentStore]->getWebsiteId()
             ) {
                 $this->_currentStore = $store;
             }
-            if ($type == 'group'
-                && $this->_stores[$store]->getGroupId() == $this->_stores[$this->_currentStore]->getGroupId()
+            if ($type == 'group' &&
+                $this->_stores[$store]->getGroupId() == $this->_stores[$this->_currentStore]->getGroupId()
             ) {
                 $this->_currentStore = $store;
             }
@@ -363,15 +379,17 @@ class Db implements StorageInterface
 
     /**
      * Init store, group and website collections
+     *
+     * @return void
      */
     protected function _initStores()
     {
-        $this->_store    = null;
-        $this->_stores   = array();
-        $this->_groups   = array();
+        $this->_store = null;
+        $this->_stores = array();
+        $this->_groups = array();
         $this->_websites = array();
 
-        $this->_website  = null;
+        $this->_website = null;
 
         /** @var $websiteCollection \Magento\Core\Model\Resource\Website\Collection */
         $websiteCollection = $this->_websiteFactory->create()->getCollection();
@@ -392,7 +410,7 @@ class Db implements StorageInterface
 
         $websiteStores = array();
         $websiteGroups = array();
-        $groupStores   = array();
+        $groupStores = array();
 
         foreach ($storeCollection as $store) {
             /** @var $store Store */
@@ -450,6 +468,7 @@ class Db implements StorageInterface
      * Allow or disallow single store mode
      *
      * @param bool $value
+     * @return void
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -646,6 +665,8 @@ class Db implements StorageInterface
 
     /**
      * Reinitialize store list
+     *
+     * @return void
      */
     public function reinitStores()
     {
@@ -655,7 +676,7 @@ class Db implements StorageInterface
     /**
      * Retrieve default store for default group and website
      *
-     * @return Store
+     * @return Store|null
      */
     public function getDefaultStoreView()
     {
@@ -675,6 +696,7 @@ class Db implements StorageInterface
      *  Unset website by id from app cache
      *
      * @param null|bool|int|string|Website $websiteId
+     * @return void
      */
     public function clearWebsiteCache($websiteId = null)
     {
@@ -716,6 +738,7 @@ class Db implements StorageInterface
      * Set current default store
      *
      * @param string $store
+     * @return void
      */
     public function setCurrentStore($store)
     {
@@ -723,6 +746,7 @@ class Db implements StorageInterface
     }
 
     /**
+     * @return void
      * @throws StoreException
      */
     public function throwStoreException()

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Gift Message resource setup
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,14 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Gift Message resource setup
  */
 namespace Magento\GiftMessage\Model\Resource;
 
@@ -37,7 +33,7 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     protected $_catalogSetupFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
@@ -47,7 +43,7 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
@@ -57,7 +53,15 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
         $connectionName = ''
     ) {
         $this->_catalogSetupFactory = $catalogSetupFactory;
-        parent::__construct($context, $resourceName, $cache, $attrGroupCollectionFactory, $config, $moduleName, $connectionName);
+        parent::__construct(
+            $context,
+            $resourceName,
+            $cache,
+            $attrGroupCollectionFactory,
+            $config,
+            $moduleName,
+            $connectionName
+        );
     }
 
     /**

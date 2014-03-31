@@ -32,8 +32,9 @@ class CriticalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\AdminNotification\Model\Resource\Inbox\Collection\Critical');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\AdminNotification\Model\Resource\Inbox\Collection\Critical'
+        );
     }
 
     /**

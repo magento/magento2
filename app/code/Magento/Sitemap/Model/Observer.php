@@ -23,20 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model;
 
 /**
  * Sitemap module observer
  *
- * @category   Magento
- * @package    Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model;
-
 class Observer
 {
-
     /**
      * Enable/disable configuration
      */
@@ -45,17 +40,17 @@ class Observer
     /**
      * Cronjob expression configuration
      */
-    const XML_PATH_CRON_EXPR = 'crontab/jobs/generate_sitemaps/schedule/cron_expr';
+    const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
 
     /**
      * Error email template configuration
      */
-    const XML_PATH_ERROR_TEMPLATE  = 'sitemap/generate/error_email_template';
+    const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
 
     /**
      * Error email identity configuration
      */
-    const XML_PATH_ERROR_IDENTITY  = 'sitemap/generate/error_email_identity';
+    const XML_PATH_ERROR_IDENTITY = 'sitemap/generate/error_email_identity';
 
     /**
      * 'Send error emails to' configuration
@@ -75,37 +70,46 @@ class Observer
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
-    protected $_translateModel;
+    protected $_storeManager;
+
+    /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Translate $translateModel
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Translate $translateModel,
-        \Magento\Email\Model\TemplateFactory $templateFactory
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_collectionFactory = $collectionFactory;
-        $this->_translateModel = $translateModel;
-        $this->_templateFactory = $templateFactory;
+        $this->_storeManager = $storeManager;
+        $this->_transportBuilder = $transportBuilder;
+        $this->inlineTranslation = $inlineTranslation;
     }
 
     /**
      * Generate sitemaps
      *
      * @param \Magento\Cron\Model\Schedule $schedule
+     * @return void
      */
     public function scheduledGenerateSitemaps($schedule)
     {
@@ -123,27 +127,32 @@ class Observer
 
             try {
                 $sitemap->generateXml();
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
 
         if ($errors && $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)) {
-            $this->_translateModel->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
-            $emailTemplate = $this->_templateFactory->create();
-            /* @var $emailTemplate \Magento\Email\Model\Template */
-            $emailTemplate->setDesignConfig(array('area' => 'backend'))
-                ->sendTransactional(
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT),
-                    null,
-                    array('warnings' => join("\n", $errors))
-                );
+            $this->_transportBuilder->setTemplateIdentifier(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+            )->setTemplateOptions(
+                array(
+                    'area' => \Magento\Core\Model\App\Area::AREA_ADMIN,
+                    'store' => $this->_storeManager->getStore()->getId()
+                )
+            )->setTemplateVars(
+                array('warnings' => join("\n", $errors))
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY)
+            )->addTo(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)
+            );
+            $transport = $this->_transportBuilder->getTransport();
+            $transport->sendMessage();
 
-            $this->_translateModel->setTranslateInline(true);
+            $this->inlineTranslation->resume();
         }
     }
 }

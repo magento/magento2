@@ -37,28 +37,28 @@ return array(
     '$tableData' => array(
         array('field' => '<p>{{widget type="productalert/product_view"}}</p>'),
         array('field' => '<p>{{widget type="catalogSearch/result"}}</p>'),
-        array('field' => '<p>Some HTML code</p>'),
+        array('field' => '<p>Some HTML code</p>')
     ),
     '$expected' => array(
         'updates' => array(
             array(
                 'table' => 'table',
                 'field' => 'field',
-                'to'    => '<p>{{widget type="Magento\ProductAlert\Block\Product\View"}}</p>',
-                'from'  => array('`field` = ?' => '<p>{{widget type="productalert/product_view"}}</p>')
+                'to' => '<p>{{widget type="Magento\ProductAlert\Block\Product\View"}}</p>',
+                'from' => array('`field` = ?' => '<p>{{widget type="productalert/product_view"}}</p>')
             ),
             array(
                 'table' => 'table',
                 'field' => 'field',
-                'to'    => '<p>{{widget type="Magento\CatalogSearch\Block\Result"}}</p>',
-                'from'  => array('`field` = ?' => '<p>{{widget type="catalogSearch/result"}}</p>')
-            ),
+                'to' => '<p>{{widget type="Magento\CatalogSearch\Block\Result"}}</p>',
+                'from' => array('`field` = ?' => '<p>{{widget type="catalogSearch/result"}}</p>')
+            )
         ),
         'aliases_map' => array(
             \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_BLOCK => array(
                 'productalert/product_view' => 'Magento\ProductAlert\Block\Product\View',
-                'catalogSearch/result'      => 'Magento\CatalogSearch\Block\Result',
+                'catalogSearch/result' => 'Magento\CatalogSearch\Block\Result'
             )
         )
-    ),
+    )
 );

@@ -43,12 +43,15 @@ class Dashboard extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Dashboard'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::dashboard');
+        $this->_setActiveMenu('Magento_Backend::dashboard');
         $this->_addBreadcrumb(__('Dashboard'), __('Dashboard'));
         $this->_view->renderLayout();
     }
@@ -56,6 +59,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets most viewed products list
      *
+     * @return void
      */
     public function productsViewedAction()
     {
@@ -66,6 +70,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets latest customers list
      *
+     * @return void
      */
     public function customersNewestAction()
     {
@@ -76,6 +81,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets the list of most active customers
      *
+     * @return void
      */
     public function customersMostAction()
     {
@@ -83,9 +89,12 @@ class Dashboard extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function ajaxBlockAction()
     {
-        $output   = '';
+        $output = '';
         $blockTab = $this->getRequest()->getParam('block');
         $blockClassSuffix = str_replace(
             ' ',
@@ -93,8 +102,9 @@ class Dashboard extends \Magento\Backend\App\Action
             ucwords(str_replace('_', ' ', $blockTab))
         );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
-            $output = $this->_view->getLayout()->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
-                ->toHtml();
+            $output = $this->_view->getLayout()->createBlock(
+                'Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix
+            )->toHtml();
         }
         $this->getResponse()->setBody($output);
         return;
@@ -104,6 +114,8 @@ class Dashboard extends \Magento\Backend\App\Action
      * Forward request for a graph image to the web-service
      *
      * This is done in order to include the image to a HTTPS-page regardless of web-service settings
+     *
+     * @return void
      */
     public function tunnelAction()
     {
@@ -121,15 +133,24 @@ class Dashboard extends \Magento\Backend\App\Action
                     try {
                         /** @var $httpClient \Magento\HTTP\ZendClient */
                         $httpClient = $this->_objectManager->create('Magento\HTTP\ZendClient');
-                        $response = $httpClient->setUri(\Magento\Backend\Block\Dashboard\Graph::API_URL)
-                            ->setParameterGet($params)
-                            ->setConfig(array('timeout' => 5))
-                            ->request('GET');
+                        $response = $httpClient->setUri(
+                            \Magento\Backend\Block\Dashboard\Graph::API_URL
+                        )->setParameterGet(
+                            $params
+                        )->setConfig(
+                            array('timeout' => 5)
+                        )->request(
+                            'GET'
+                        );
 
                         $headers = $response->getHeaders();
 
-                        $this->_response->setHeader('Content-type', $headers['Content-type'])
-                            ->setBody($response->getBody());
+                        $this->_response->setHeader(
+                            'Content-type',
+                            $headers['Content-type']
+                        )->setBody(
+                            $response->getBody()
+                        );
                         return;
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -139,11 +160,19 @@ class Dashboard extends \Magento\Backend\App\Action
                 }
             }
         }
-        $this->_response->setBody(__('Service unavailable: %1', $error))
-            ->setHeader('Content-Type', 'text/plain; charset=UTF-8')
-            ->setHttpResponseCode($httpCode);
+        $this->_response->setBody(
+            __('Service unavailable: %1', $error)
+        )->setHeader(
+            'Content-Type',
+            'text/plain; charset=UTF-8'
+        )->setHttpResponseCode(
+            $httpCode
+        );
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::dashboard');

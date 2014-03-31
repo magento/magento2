@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit;
 
 /**
  * Adminhtml product edit tabs
@@ -31,21 +32,28 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit;
-
 class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
 {
+    /**
+     * @var string
+     */
     protected $_attributeTabBlock = 'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes';
 
+    /**
+     * @return $this|void
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $this->addTab('bundle_items', array(
-            'label'     => __('Bundle Items'),
-            'url'   => $this->getUrl('adminhtml/*/bundles', array('_current' => true)),
-            'class' => 'ajax',
-        ));
+        $this->addTab(
+            'bundle_items',
+            array(
+                'label' => __('Bundle Items'),
+                'url' => $this->getUrl('adminhtml/*/bundles', array('_current' => true)),
+                'class' => 'ajax'
+            )
+        );
         $this->bindShadowTabs('bundle_items', 'customer_options');
     }
 }

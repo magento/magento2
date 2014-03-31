@@ -17,28 +17,26 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview;
 
 interface ConfigInterface
 {
     /**
-     * Get indexer's config
+     * Get views list
      *
-     * @return array
+     * @return array[]
      */
-    public function getAll();
+    public function getViews();
 
     /**
-     * Get config value by key
+     * Get view by ID
      *
-     * @param string $path
-     * @param mixed $default
-     * @return mixed
+     * @param string $viewId
+     * @return array
      */
-    public function get($path = null, $default = null);
+    public function getView($viewId);
 }

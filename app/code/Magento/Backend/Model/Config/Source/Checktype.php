@@ -34,7 +34,7 @@
  */
 namespace Magento\Backend\Model\Config\Source;
 
-class Checktype implements \Magento\Core\Model\Option\ArrayInterface
+class Checktype implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve Check Type Option array
@@ -44,14 +44,8 @@ class Checktype implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Sendfriend\Helper\Data::CHECK_IP,
-                'label' => __('IP Address')
-            ),
-            array(
-                'value' => \Magento\Sendfriend\Helper\Data::CHECK_COOKIE,
-                'label' => __('Cookie (unsafe)')
-            ),
+            array('value' => \Magento\Sendfriend\Helper\Data::CHECK_IP, 'label' => __('IP Address')),
+            array('value' => \Magento\Sendfriend\Helper\Data::CHECK_COOKIE, 'label' => __('Cookie (unsafe)'))
         );
     }
 }

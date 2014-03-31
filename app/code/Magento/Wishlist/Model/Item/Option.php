@@ -18,29 +18,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Wishlist\Model\Item;
 
 /**
  * Item option model
- *
- * @category    Magento
- * @package     Magento_Wishlist
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Model\Item;
+use Magento\Catalog\Model\Product;
+use Magento\Wishlist\Model\Item;
 
-class Option extends \Magento\Core\Model\AbstractModel
-    implements \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends \Magento\Model\AbstractModel implements
+    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
+    /**
+     * @var Item
+     */
     protected $_item;
+
+    /**
+     * @var Product
+     */
     protected $_product;
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,7 +55,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Checks that item option model has data changes
      *
-     * @return boolean
+     * @return bool
      */
     protected function _hasModelChanged()
     {
@@ -64,8 +69,8 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Set quote item
      *
-     * @param   \Magento\Wishlist\Model\Item $item
-     * @return  \Magento\Wishlist\Model\Item\Option
+     * @param   Item $item
+     * @return  $this
      */
     public function setItem($item)
     {
@@ -77,7 +82,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Get option item
      *
-     * @return \Magento\Wishlist\Model\Item
+     * @return Item
      */
     public function getItem()
     {
@@ -87,8 +92,8 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Set option product
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Wishlist\Model\Item\Option
+     * @param   Product $product
+     * @return  $this
      */
     public function setProduct($product)
     {
@@ -100,7 +105,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Get option product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
@@ -120,7 +125,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize item identifier before save data
      *
-     * @return \Magento\Wishlist\Model\Item\Option
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -133,12 +138,12 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Clone option object
      *
-     * @return \Magento\Wishlist\Model\Item\Option
+     * @return $this
      */
     public function __clone()
     {
         $this->setId(null);
-        $this->_item    = null;
+        $this->_item = null;
         return $this;
     }
 }

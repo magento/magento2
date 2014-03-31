@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Magento
  *
@@ -22,10 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Cache\Type;
+
 /**
  * Integration Config Model.
  *
@@ -56,10 +55,8 @@ class Config
      * @param Cache\Type $configCacheType
      * @param Config\Reader $configReader
      */
-    public function __construct(
-        Cache\Type $configCacheType,
-        Config\Reader $configReader
-    ) {
+    public function __construct(Cache\Type $configCacheType, Config\Reader $configReader)
+    {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
     }

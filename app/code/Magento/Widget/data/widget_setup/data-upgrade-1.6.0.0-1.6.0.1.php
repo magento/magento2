@@ -28,7 +28,9 @@
 $installer = $this->_migrationFactory->create(array('resourceName' => 'core_setup'));
 $installer->startSetup();
 
-$installer->appendClassAliasReplace('widget_instance', 'instance_type',
+$installer->appendClassAliasReplace(
+    'widget_instance',
+    'instance_type',
     \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_BLOCK,
     \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('instance_id')

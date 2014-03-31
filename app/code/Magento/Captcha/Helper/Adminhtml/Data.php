@@ -60,7 +60,6 @@ class Data extends \Magento\Captcha\Helper\Data
         parent::__construct($context, $storeManager, $config, $filesystem, $factory);
     }
 
-
     /**
      * Returns config value for admin captcha
      *

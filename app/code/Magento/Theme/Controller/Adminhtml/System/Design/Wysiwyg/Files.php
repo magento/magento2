@@ -29,6 +29,8 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
+use Magento\App\ResponseInterface;
+
 class Files extends \Magento\Backend\App\Action
 {
     /**
@@ -47,9 +49,11 @@ class Files extends \Magento\Backend\App\Action
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
-    
+
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -59,13 +63,18 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Tree json action
+     *
+     * @return void
      */
     public function treeJsonAction()
     {
         try {
             $this->getResponse()->setBody(
-                $this->_view->getLayout()->createBlock('Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree')
-                    ->getTreeJson($this->_getStorage()->getTreeArray())
+                $this->_view->getLayout()->createBlock(
+                    'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree'
+                )->getTreeJson(
+                    $this->_getStorage()->getTreeArray()
+                )
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -75,6 +84,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * New folder action
+     *
+     * @return void
      */
     public function newFolderAction()
     {
@@ -82,7 +93,7 @@ class Files extends \Magento\Backend\App\Action
         try {
             $path = $this->_getSession()->getStoragePath();
             $result = $this->_getStorage()->createFolder($name, $path);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => __('Sorry, there was an unknown error.'));
@@ -93,6 +104,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Delete folder action
+     *
+     * @return void
      */
     public function deleteFolderAction()
     {
@@ -107,6 +120,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Contents action
+     *
+     * @return void
      */
     public function contentsAction()
     {
@@ -126,6 +141,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Files upload action
+     *
+     * @return void
      */
     public function uploadAction()
     {
@@ -140,6 +157,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Preview image action
+     *
+     * @return ResponseInterface|void
      */
     public function previewImageAction()
     {
@@ -149,10 +168,7 @@ class Files extends \Magento\Backend\App\Action
         try {
             return $this->_fileFactory->create(
                 $file,
-                array(
-                    'type'  => 'filename',
-                    'value' => $helper->getThumbnailPath($file)
-                ),
+                array('type' => 'filename', 'value' => $helper->getThumbnailPath($file)),
                 \Magento\App\Filesystem::MEDIA_DIR
             );
         } catch (\Exception $e) {
@@ -163,6 +179,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Delete file from media storage
+     *
+     * @return void
      * @throws \Exception
      */
     public function deleteFilesAction()
@@ -171,7 +189,9 @@ class Files extends \Magento\Backend\App\Action
             if (!$this->getRequest()->isPost()) {
                 throw new \Exception('Wrong request');
             }
-            $files = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode(
+            $files = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonDecode(
                 $this->getRequest()->getParam('files')
             );
             foreach ($files as $file) {
@@ -185,6 +205,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Fire when select image
+     *
+     * @return void
      */
     public function onInsertAction()
     {

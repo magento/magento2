@@ -2,7 +2,7 @@
 "Allowed Currencies","Toegestane Munteenheden"
 "Base Currency","Basis Munteenheid"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","Basis munteenheid wordt gebruikt voor alle online betalingstransacties. Reikwijdte is gedefinieerd door de catalogus prijsreikwijdte (""Catalogus"" > ""Prijs"" > ""Catalogus prijsreikwijdte"")."
-"Can\'t convert rate from ""%s-%s"".","Kan tarief niet omzetten van ""%s-%s""."
+"Can't convert rate from ""%s-%s"".","Kan tarief niet omzetten van ""%s-%s""."
 "Cannot retrieve rate from %s.","Kan koers niet terughalen van %s."
 "Connection Timeout in Seconds","Connectie Timeout in Secondes"
 "Continue &raquo;","Ga verder &raquo;"

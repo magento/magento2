@@ -76,13 +76,13 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     protected function _applyConfig()
     {
-        if (empty($this->_config)) {
-            return $this;
-        }
-
         // apply additional options to cURL
         foreach ($this->_options as $option => $value) {
             curl_setopt($this->_getResource(), $option, $value);
+        }
+
+        if (empty($this->_config)) {
+            return $this;
         }
 
         $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : true;
@@ -139,11 +139,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Connect to the remote server
      *
-     * @deprecated since 1.4.0.0-rc1
      * @param string  $host
      * @param int     $port
      * @param boolean $secure
      * @return $this
+     *
+     * @deprecated since 1.4.0.0-rc1
      */
     public function connect($host, $port = 80, $secure = false)
     {
@@ -173,8 +174,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         if ($method == \Zend_Http_Client::POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
-        }
-        elseif ($method == \Zend_Http_Client::GET) {
+        } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
         }
 
@@ -278,14 +278,14 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     public function multiRequest($urls, $options = array())
     {
         $handles = array();
-        $result  = array();
+        $result = array();
 
         $multihandle = curl_multi_init();
 
         foreach ($urls as $key => $url) {
             $handles[$key] = curl_init();
-            curl_setopt($handles[$key], CURLOPT_URL,            $url);
-            curl_setopt($handles[$key], CURLOPT_HEADER,         0);
+            curl_setopt($handles[$key], CURLOPT_URL, $url);
+            curl_setopt($handles[$key], CURLOPT_HEADER, 0);
             curl_setopt($handles[$key], CURLOPT_RETURNTRANSFER, 1);
             if (!empty($options)) {
                 curl_setopt_array($handles[$key], $options);
@@ -296,7 +296,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         do {
             curl_multi_exec($multihandle, $process);
             usleep(100);
-        } while ($process>0);
+        } while ($process > 0);
 
         foreach ($handles as $key => $handle) {
             $result[$key] = curl_multi_getcontent($handle);

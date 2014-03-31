@@ -38,6 +38,8 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +51,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      *
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Tax\Model\Resource\Report\Tax\Createdat
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {
@@ -59,11 +61,11 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
     /**
      * Aggregate Tax data by orders
      *
-     * @throws \Exception
      * @param string $aggregationField
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Tax\Model\Resource\Report\Tax\Createdat
+     * @return $this
+     * @throws \Exception
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
@@ -79,7 +81,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             if ($from !== null || $to !== null) {
                 $subSelect = $this->_getTableDateRangeSelect(
                     $this->getTable('sales_flat_order'),
-                    'created_at', 'updated_at', $from, $to
+                    'created_at',
+                    'updated_at',
+                    $from,
+                    $to
                 );
             } else {
                 $subSelect = null;
@@ -91,29 +96,35 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $this->getStoreTZOffsetQuery(
                     array('e' => $this->getTable('sales_flat_order')),
                     'e.' . $aggregationField,
-                    $from, $to
+                    $from,
+                    $to
                 )
             );
 
             $columns = array(
-                'period'                => $periodExpr,
-                'store_id'              => 'e.store_id',
-                'code'                  => 'tax.code',
-                'order_status'          => 'e.status',
-                'percent'               => 'MAX(tax.' . $writeAdapter->quoteIdentifier('percent') .')',
-                'orders_count'          => 'COUNT(DISTINCT e.entity_id)',
-                'tax_base_amount_sum'   => 'SUM(tax.base_amount * e.base_to_global_rate)'
+                'period' => $periodExpr,
+                'store_id' => 'e.store_id',
+                'code' => 'tax.code',
+                'order_status' => 'e.status',
+                'percent' => 'MAX(tax.' . $writeAdapter->quoteIdentifier('percent') . ')',
+                'orders_count' => 'COUNT(DISTINCT e.entity_id)',
+                'tax_base_amount_sum' => 'SUM(tax.base_amount * e.base_to_global_rate)'
             );
 
             $select = $writeAdapter->select();
-            $select->from(array('tax' => $this->getTable('sales_order_tax')), $columns)
-                ->joinInner(array('e' => $this->getTable('sales_flat_order')), 'e.entity_id = tax.order_id', array())
-                ->useStraightJoin();
+            $select->from(
+                array('tax' => $this->getTable('sales_order_tax')),
+                $columns
+            )->joinInner(
+                array('e' => $this->getTable('sales_flat_order')),
+                'e.entity_id = tax.order_id',
+                array()
+            )->useStraightJoin();
 
-            $select->where('e.state NOT IN (?)', array(
-                \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
-                \Magento\Sales\Model\Order::STATE_NEW
-            ));
+            $select->where(
+                'e.state NOT IN (?)',
+                array(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW)
+            );
 
             if ($subSelect !== null) {
                 $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
@@ -127,18 +138,16 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $select->reset();
 
             $columns = array(
-                'period'                => 'period',
-                'store_id'              => new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID),
-                'code'                  => 'code',
-                'order_status'          => 'order_status',
-                'percent'               => 'MAX(' . $writeAdapter->quoteIdentifier('percent') . ')',
-                'orders_count'          => 'SUM(orders_count)',
-                'tax_base_amount_sum'   => 'SUM(tax_base_amount_sum)'
+                'period' => 'period',
+                'store_id' => new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID),
+                'code' => 'code',
+                'order_status' => 'order_status',
+                'percent' => 'MAX(' . $writeAdapter->quoteIdentifier('percent') . ')',
+                'orders_count' => 'SUM(orders_count)',
+                'tax_base_amount_sum' => 'SUM(tax_base_amount_sum)'
             );
 
-            $select
-                ->from($this->getMainTable(), $columns)
-                ->where('store_id <> ?', 0);
+            $select->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
 
             if ($subSelect !== null) {
                 $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));

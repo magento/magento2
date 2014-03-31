@@ -51,7 +51,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     /**
      * @param Node $container
      */
-    public function __construct($container) 
+    public function __construct($container)
     {
         $this->_nodes = array();
         $this->_container = $container;
@@ -66,7 +66,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         return $this->_nodes;
     }
-    
+
     /**
      * Implementation of \IteratorAggregate::getIterator()
      *
@@ -88,7 +88,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         $this->_nodes[$key] = $value;
     }
-    
+
     /**
      * Implementation of \ArrayAccess:offsetGet()
      * @param string $key
@@ -98,7 +98,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         return $this->_nodes[$key];
     }
-    
+
     /**
      * Implementation of \ArrayAccess:offsetUnset()
      * @param string $key
@@ -108,7 +108,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         unset($this->_nodes[$key]);
     }
-    
+
     /**
      * Implementation of \ArrayAccess:offsetExists()
      * @param string $key
@@ -118,7 +118,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
     {
         return isset($this->_nodes[$key]);
     }
-    
+
     /**
      * Adds a node to this node
      * @param Node $node

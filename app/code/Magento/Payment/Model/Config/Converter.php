@@ -32,9 +32,22 @@ class Converter implements \Magento\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $configs = array();
         $xpath = new \DOMXPath($source);
+        return array(
+            'credit_cards' => $this->convertCreditCards($xpath),
+            'groups' => $this->convertGroups($xpath),
+            'methods' => $this->convertMethods($xpath)
+        );
+    }
 
+    /**
+     * Convert credit cards xml tree to array
+     *
+     * @param \DOMXPath $xpath
+     * @return array
+     */
+    protected function convertCreditCards(\DOMXPath $xpath)
+    {
         $creditCards = array();
         /** @var \DOMNode $type */
         foreach ($xpath->query('/payment/credit_cards/type') as $type) {
@@ -57,28 +70,11 @@ class Converter implements \Magento\Config\ConverterInterface
             $creditCards[$ccId] = $typeArray;
         }
         uasort($creditCards, array($this, '_compareCcTypes'));
-        foreach ($creditCards as $code=>$data) {
-            $configs['credit_cards'][$code] = $data['name'];
+        $config = array();
+        foreach ($creditCards as $code => $data) {
+            $config[$code] = $data['name'];
         }
-
-        $configs['groups'] = array();
-        /** @var \DOMNode $group */
-        foreach ($xpath->query('/payment/groups/group') as $group) {
-            $groupAttributes = $group->attributes;
-            $id = $groupAttributes->getNamedItem('id')->nodeValue;
-
-            /** @var $groupSubNode \DOMNode */
-            foreach ($group->childNodes as $groupSubNode) {
-                switch ($groupSubNode->nodeName) {
-                    case 'label':
-                        $configs['groups'][$id] = $groupSubNode->nodeValue;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        return $configs;
+        return $config;
     }
 
     /**
@@ -93,5 +89,56 @@ class Converter implements \Magento\Config\ConverterInterface
     private function _compareCcTypes($left, $right)
     {
         return $left['order'] - $right['order'];
+    }
+
+    /**
+     * Convert groups xml tree to array
+     *
+     * @param \DOMXPath $xpath
+     * @return array
+     */
+    protected function convertGroups(\DOMXPath $xpath)
+    {
+        $config = array();
+        /** @var \DOMNode $group */
+        foreach ($xpath->query('/payment/groups/group') as $group) {
+            $groupAttributes = $group->attributes;
+            $id = $groupAttributes->getNamedItem('id')->nodeValue;
+
+            /** @var $groupSubNode \DOMNode */
+            foreach ($group->childNodes as $groupSubNode) {
+                switch ($groupSubNode->nodeName) {
+                    case 'label':
+                        $config[$id] = $groupSubNode->nodeValue;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return $config;
+    }
+
+    /**
+     * Convert methods xml tree to array
+     *
+     * @param \DOMXPath $xpath
+     * @return array
+     */
+    protected function convertMethods(\DOMXPath $xpath)
+    {
+        $config = array();
+        /** @var \DOMNode $method */
+        foreach ($xpath->query('/payment/methods/method') as $method) {
+            $name = $method->attributes->getNamedItem('name')->nodeValue;
+            /** @var $methodSubNode \DOMNode */
+            foreach ($method->childNodes as $methodSubNode) {
+                if ($methodSubNode->nodeType != XML_ELEMENT_NODE) {
+                    continue;
+                }
+                $config[$name][$methodSubNode->nodeName] = $methodSubNode->nodeValue;
+            }
+        }
+        return $config;
     }
 }

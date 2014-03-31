@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Online\Grid\Renderer;
 
 /**
  * Adminhtml customers online grid block item renderer by ip.
@@ -31,14 +32,14 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Online\Grid\Renderer;
-
 class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
-
+    /**
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         return long2ip($row->getData($this->getColumn()->getIndex()));
     }
-
 }

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Controller\Adminhtml;
 
 class Agreement extends \Magento\Backend\App\Action
@@ -31,44 +30,50 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Terms and Conditions'));
 
-        $this->_initAction()
-            ->_addContent(
-                $this->_view->getLayout()->createBlock('Magento\Checkout\Block\Adminhtml\Agreement')
-            );
+        $this->_initAction()->_addContent(
+            $this->_view->getLayout()->createBlock('Magento\Checkout\Block\Adminhtml\Agreement')
+        );
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Terms and Conditions'));
 
-        $id  = $this->getRequest()->getParam('id');
-        $agreementModel  = $this->_objectManager->create('Magento\Checkout\Model\Agreement');
+        $id = $this->getRequest()->getParam('id');
+        $agreementModel = $this->_objectManager->create('Magento\Checkout\Model\Agreement');
 
         if ($id) {
             $agreementModel->load($id);
@@ -88,19 +93,23 @@ class Agreement extends \Magento\Backend\App\Action
 
         $this->_coreRegistry->register('checkout_agreement', $agreementModel);
 
-        $this->_initAction()
-            ->_addBreadcrumb(
-                $id ? __('Edit Condition') :  __('New Condition'),
-                $id ?  __('Edit Condition') :  __('New Condition')
+        $this->_initAction()->_addBreadcrumb(
+            $id ? __('Edit Condition') : __('New Condition'),
+            $id ? __('Edit Condition') : __('New Condition')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Checkout\Block\Adminhtml\Agreement\Edit'
+            )->setData(
+                'action',
+                $this->getUrl('checkout/*/save')
             )
-            ->_addContent(
-                $this->_view->getLayout()
-                    ->createBlock('Magento\Checkout\Block\Adminhtml\Agreement\Edit')
-                    ->setData('action', $this->getUrl('checkout/*/save'))
-            );
+        );
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         $postData = $this->getRequest()->getPost();
@@ -115,7 +124,7 @@ class Agreement extends \Magento\Backend\App\Action
                 $this->_redirect('checkout/*/');
 
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));
@@ -126,11 +135,13 @@ class Agreement extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $id = (int)$this->getRequest()->getParam('id');
-        $model = $this->_objectManager->get('Magento\Checkout\Model\Agreement')
-            ->load($id);
+        $model = $this->_objectManager->get('Magento\Checkout\Model\Agreement')->load($id);
         if (!$model->getId()) {
             $this->messageManager->addError(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
@@ -142,7 +153,7 @@ class Agreement extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(__('The condition has been deleted.'));
             $this->_redirect('checkout/*/');
             return;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));
@@ -154,17 +165,26 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\App\Action
+     * @return $this
      */
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Checkout::sales_checkoutagreement')
-            ->_addBreadcrumb(__('Sales'), __('Sales'))
-            ->_addBreadcrumb(__('Checkout Conditions'), __('Checkout Terms and Conditions'));
+        $this->_setActiveMenu(
+            'Magento_Checkout::sales_checkoutagreement'
+        )->_addBreadcrumb(
+            __('Sales'),
+            __('Sales')
+        )->_addBreadcrumb(
+            __('Checkout Conditions'),
+            __('Checkout Terms and Conditions')
+        );
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Checkout::checkoutagreement');

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Page;
 
 /**
  * Adminhtml header block
@@ -31,10 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Page;
-
 class Header extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'page/header.phtml';
 
     /**
@@ -66,16 +68,25 @@ class Header extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getHomeLink()
     {
         return $this->_backendData->getHomePageUrl();
     }
 
+    /**
+     * @return \Magento\User\Model\User|null
+     */
     public function getUser()
     {
         return $this->_authSession->getUser();
     }
 
+    /**
+     * @return string
+     */
     public function getLogoutLink()
     {
         return $this->getUrl('adminhtml/auth/logout');

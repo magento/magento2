@@ -95,6 +95,9 @@ class Arguments
                     foreach ($value as $subKey => $node) {
                         $build[$key . $separator . $subKey] = $node;
                     }
+                    if (array_key_exists($key, $build)) {
+                        unset($build[$key]);
+                    }
                 } else {
                     $build[$key] = null;
                 }
@@ -114,9 +117,7 @@ class Arguments
      */
     public function getConnection($connectionName)
     {
-        return isset($this->_data['connection'][$connectionName])
-            ? $this->_data['connection'][$connectionName]
-            : null;
+        return isset($this->_data['connection'][$connectionName]) ? $this->_data['connection'][$connectionName] : null;
     }
 
     /**
@@ -157,9 +158,9 @@ class Arguments
      */
     public function getCacheTypeFrontendId($cacheType)
     {
-        return isset($this->_data['cache']['type'][$cacheType]['frontend'])
-            ? $this->_data['cache']['type'][$cacheType]['frontend']
-            : null;
+        return isset(
+            $this->_data['cache']['type'][$cacheType]['frontend']
+        ) ? $this->_data['cache']['type'][$cacheType]['frontend'] : null;
     }
 
     /**
@@ -179,6 +180,8 @@ class Arguments
 
     /**
      * Reload local.xml
+     *
+     * @return void
      */
     public function reload()
     {

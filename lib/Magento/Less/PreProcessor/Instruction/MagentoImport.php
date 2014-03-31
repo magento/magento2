@@ -21,10 +21,11 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\PreProcessor\Instruction;
 
+use Magento\Less\PreProcessor;
 use Magento\Less\PreProcessorInterface;
+use Magento\View;
 
 /**
  * Less @magento_import instruction preprocessor
@@ -37,65 +38,86 @@ class MagentoImport implements PreProcessorInterface
     const REPLACE_PATTERN = '#//@magento_import\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
+     * Layout file source
+     *
      * @var \Magento\View\Layout\File\SourceInterface
      */
     protected $fileSource;
 
     /**
-     * @var \Magento\Logger
+     * Pre-processor error handler
+     *
+     * @var PreProcessor\ErrorHandlerInterface
      */
-    protected $logger;
+    protected $errorHandler;
 
     /**
-     * @var array
+     * Related file
+     *
+     * @var \Magento\View\RelatedFile
      */
-    protected $viewParams;
+    protected $relatedFile;
 
     /**
-     * @param \Magento\View\Layout\File\SourceInterface $fileSource
-     * @param \Magento\View\Service $viewService
-     * @param \Magento\Less\PreProcessor $preProcessor
-     * @param \Magento\Logger $logger
-     * @param array $viewParams
+     * View service
+     *
+     * @var \Magento\View\Service
+     */
+    protected $viewService;
+
+    /**
+     * @param View\Layout\File\SourceInterface $fileSource
+     * @param View\Service $viewService
+     * @param View\RelatedFile $relatedFile
+     * @param PreProcessor\ErrorHandlerInterface $errorHandler
      */
     public function __construct(
-        \Magento\View\Layout\File\SourceInterface $fileSource,
-        \Magento\View\Service $viewService,
-        \Magento\Less\PreProcessor $preProcessor,
-        \Magento\Logger $logger,
-        array $viewParams = array()
+        View\Layout\File\SourceInterface $fileSource,
+        View\Service $viewService,
+        View\RelatedFile $relatedFile,
+        PreProcessor\ErrorHandlerInterface $errorHandler
     ) {
         $this->fileSource = $fileSource;
-        $viewService->updateDesignParams($viewParams);
-        $this->logger = $logger;
-        $this->viewParams = $viewParams;
+        $this->viewService = $viewService;
+        $this->relatedFile = $relatedFile;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process($lessContent)
+    public function process(PreProcessor\File\Less $lessFile, $lessContent)
     {
-        return preg_replace_callback(self::REPLACE_PATTERN, array($this, 'replace'), $lessContent);
+        $viewParams = $lessFile->getViewParams();
+        $parentPath = $lessFile->getFilePath();
+        $this->viewService->updateDesignParams($viewParams);
+        $replaceCallback = function ($matchContent) use ($viewParams, $parentPath) {
+            return $this->replace($matchContent, $viewParams, $parentPath);
+        };
+        return preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $lessContent);
     }
 
     /**
      * Replace @magento_import to @import less instructions
      *
      * @param array $matchContent
+     * @param array $viewParams
+     * @param string $parentPath
      * @return string
      */
-    protected function replace($matchContent)
+    protected function replace($matchContent, $viewParams, $parentPath)
     {
         $importsContent = '';
         try {
-            $importFiles = $this->fileSource->getFiles($this->viewParams['themeModel'], $matchContent['path']);
+            $resolvedPath = $this->relatedFile->buildPath($matchContent['path'], $parentPath, $viewParams);
+            $importFiles = $this->fileSource->getFiles($viewParams['themeModel'], $resolvedPath);
             /** @var $importFile \Magento\View\Layout\File */
             foreach ($importFiles as $importFile) {
-                $importsContent .= "@import '{$importFile->getFilename()}';\n";
+                $importsContent .= $importFile->getModule() ? "@import '{$importFile
+                    ->getModule()}::{$resolvedPath}';\n" : "@import '{$matchContent['path']}';\n";
             }
-        } catch(\LogicException $e) {
-            $this->logger->logException($e);
+        } catch (\LogicException $e) {
+            $this->errorHandler->processException($e);
         }
         return $importsContent;
     }

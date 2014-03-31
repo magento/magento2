@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Quote\Address\Total;
 
 class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
@@ -70,7 +69,7 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
     /**
      * @param \Magento\Sales\Model\Quote\Address $address
-     * @return $this|\Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
@@ -135,11 +134,11 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                     }
 
                     $this->_saveAppliedTaxes(
-                       $address,
-                       $taxCalculationModel->getAppliedRates($request),
-                       $child->getTaxAmount(),
-                       $child->getBaseTaxAmount(),
-                       $rate
+                        $address,
+                        $taxCalculationModel->getAppliedRates($request),
+                        $child->getTaxAmount(),
+                        $child->getBaseTaxAmount(),
+                        $rate
                     );
                 }
                 $itemTaxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
@@ -179,13 +178,7 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                 $address->setBaseTaxAmount($address->getBaseTaxAmount() + $itemBaseTaxAmount);
 
                 $applied = $taxCalculationModel->getAppliedRates($request);
-                $this->_saveAppliedTaxes(
-                   $address,
-                   $applied,
-                   $item->getTaxAmount(),
-                   $item->getBaseTaxAmount(),
-                   $rate
-                );
+                $this->_saveAppliedTaxes($address, $applied, $item->getTaxAmount(), $item->getBaseTaxAmount(), $rate);
             }
         }
 
@@ -194,22 +187,22 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
             $store
         );
 
-        $shippingTax      = 0;
-        $shippingBaseTax  = 0;
+        $shippingTax = 0;
+        $shippingBaseTax = 0;
 
         if ($shippingTaxClass) {
             $rate = $taxCalculationModel->getRate($request->setProductClassId($shippingTaxClass));
             if ($rate) {
                 if (!$this->_taxData->shippingPriceIncludesTax()) {
-                    $shippingTax    = $address->getShippingAmount() * $rate / 100;
-                    $shippingBaseTax= $address->getBaseShippingAmount() * $rate / 100;
+                    $shippingTax = $address->getShippingAmount() * $rate / 100;
+                    $shippingBaseTax = $address->getBaseShippingAmount() * $rate / 100;
                 } else {
-                    $shippingTax    = $address->getShippingTaxAmount();
-                    $shippingBaseTax= $address->getBaseShippingTaxAmount();
+                    $shippingTax = $address->getShippingTaxAmount();
+                    $shippingBaseTax = $address->getBaseShippingTaxAmount();
                 }
 
-                $shippingTax    = $store->roundPrice($shippingTax);
-                $shippingBaseTax= $store->roundPrice($shippingBaseTax);
+                $shippingTax = $store->roundPrice($shippingTax);
+                $shippingBaseTax = $store->roundPrice($shippingBaseTax);
 
                 $address->setTaxAmount($address->getTaxAmount() + $shippingTax);
                 $address->setBaseTaxAmount($address->getBaseTaxAmount() + $shippingBaseTax);
@@ -240,9 +233,15 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      * @param int $amount
      * @param int $baseAmount
      * @param int $rate
+     * @return void
      */
-    protected function _saveAppliedTaxes(\Magento\Sales\Model\Quote\Address $address, $applied, $amount, $baseAmount, $rate)
-    {
+    protected function _saveAppliedTaxes(
+        \Magento\Sales\Model\Quote\Address $address,
+        $applied,
+        $amount,
+        $baseAmount,
+        $rate
+    ) {
         $previouslyAppliedTaxes = $address->getAppliedTaxes();
         $process = count($previouslyAppliedTaxes);
 
@@ -290,13 +289,15 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         $store = $address->getQuote()->getStore();
         $amount = $address->getTaxAmount();
 
-        if (($amount != 0) || ($this->_taxData->displayZeroTax($store))) {
-            $address->addTotal(array(
-                'code' => $this->getCode(),
-                'title' => __('Tax'),
-                'full_info' => $applied ? $applied : array(),
-                'value' => $amount
-            ));
+        if ($amount != 0 || $this->_taxData->displayZeroTax($store)) {
+            $address->addTotal(
+                array(
+                    'code' => $this->getCode(),
+                    'title' => __('Tax'),
+                    'full_info' => $applied ? $applied : array(),
+                    'value' => $amount
+                )
+            );
         }
         return $this;
     }

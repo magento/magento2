@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Search;
 
 /**
@@ -70,7 +69,7 @@ class Catalog extends \Magento\Object
     /**
      * Load search results
      *
-     * @return \Magento\Backend\Model\Search\Catalog
+     * @return $this
      */
     public function load()
     {
@@ -80,22 +79,26 @@ class Catalog extends \Magento\Object
             return $this;
         }
 
-        $collection = $this->_catalogSearchData->getQuery()->getSearchCollection()
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('description')
-            ->addSearchFilter($this->getQuery())
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
-            ->load();
+        $collection = $this->_catalogSearchData->getQuery()->getSearchCollection()->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'description'
+        )->addSearchFilter(
+            $this->getQuery()
+        )->setCurPage(
+            $this->getStart()
+        )->setPageSize(
+            $this->getLimit()
+        )->load();
 
         foreach ($collection as $product) {
             $description = strip_tags($product->getDescription());
             $result[] = array(
-                'id'            => 'product/1/'.$product->getId(),
-                'type'          => __('Product'),
-                'name'          => $product->getName(),
-                'description'   => $this->string->substr($description, 0, 30),
-                'url' => $this->_adminhtmlData->getUrl('catalog/product/edit', array('id' => $product->getId())),
+                'id' => 'product/1/' . $product->getId(),
+                'type' => __('Product'),
+                'name' => $product->getName(),
+                'description' => $this->string->substr($description, 0, 30),
+                'url' => $this->_adminhtmlData->getUrl('catalog/product/edit', array('id' => $product->getId()))
             );
         }
 

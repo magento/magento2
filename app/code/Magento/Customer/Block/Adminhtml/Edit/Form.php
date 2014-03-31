@@ -18,38 +18,75 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit;
+
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Adminhtml customer edit form block
  */
-namespace Magento\Customer\Block\Adminhtml\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * Customer Service.
+     *
+     * @var CustomerAccountServiceInterface
+     */
+    protected $_customerAccountService;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
+     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
+        CustomerAccountServiceInterface $customerAccountService,
+        array $data = array()
+    ) {
+        $this->_customerAccountService = $customerAccountService;
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * Prepare the form.
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getUrl('customer/*/save'),
-                'method'    => 'post',
-                'enctype'   => 'multipart/form-data',
-            ))
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'edit_form',
+                    'action' => $this->getUrl('customer/*/save'),
+                    'method' => 'post',
+                    'enctype' => 'multipart/form-data'
+                )
+            )
         );
 
-        $customer = $this->_coreRegistry->registry('current_customer');
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
 
-        if ($customer->getId()) {
-            $form->addField('entity_id', 'hidden', array(
-                'name' => 'customer_id',
-            ));
-            $form->setValues($customer->getData());
+        if ($customerId) {
+            $form->addField('id', 'hidden', array('name' => 'customer_id'));
+            $customer = $this->_customerAccountService->getCustomer($customerId);
+            $form->setValues(
+                \Magento\Service\DataObjectConverter::toFlatArray($customer)
+            )->addValues(
+                array('customer_id' => $customerId)
+            );
         }
 
         $form->setUseContainer(true);

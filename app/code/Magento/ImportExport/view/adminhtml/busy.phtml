@@ -24,17 +24,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <h4><?php echo __('Status'); ?></h4>
-    </div>
-    <div class="fieldset ">
-        <ul class="messages">
-            <li class="success-msg">
-                <ul>
-                    <li><?php echo $this->getStatusMessage(); ?></li>
-                </ul>
-            </li>
-        </ul>
+<div class="fieldset">
+    <div class="legend">
+        <span><?php echo __('Status'); ?></span>
+    </div><br>
+    <div class="message success">
+        <div><?php echo $this->getStatusMessage(); ?>hh</div>
     </div>
 </div>

@@ -31,16 +31,19 @@
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
 class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
-    protected function _getValue (\Magento\Object $row)
+    /**
+     * @param \Magento\Object $row
+     * @return int|string
+     */
+    protected function _getValue(\Magento\Object $row)
     {
         $data = parent::_getValue($row);
         if (intval($data) == $data) {
-            return (string) number_format($data, 2);
+            return (string)number_format($data, 2);
         }
         if (!is_null($data)) {
             return $data * 1;

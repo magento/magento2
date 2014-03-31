@@ -61,8 +61,14 @@ class Response extends \Magento\Object
      */
     public function isValidHash($merchantMd5, $merchantApiLogin)
     {
-        return $this->generateHash($merchantMd5, $merchantApiLogin, $this->getXAmount(), $this->getXTransId())
-            == $this->getData('x_MD5_Hash');
+        return $this->generateHash(
+            $merchantMd5,
+            $merchantApiLogin,
+            $this->getXAmount(),
+            $this->getXTransId()
+        ) == $this->getData(
+            'x_MD5_Hash'
+        );
     }
 
     /**

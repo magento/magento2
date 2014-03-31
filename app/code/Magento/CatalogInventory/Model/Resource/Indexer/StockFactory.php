@@ -46,9 +46,8 @@ class StockFactory
     /**
      * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -66,9 +65,10 @@ class StockFactory
             $indexerClassName = $this->_defaultIndexer;
         }
         $indexer = $this->_objectManager->create($indexerClassName, $data);
-        if (false == ($indexer instanceof \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface)) {
-            throw new \InvalidArgumentException($indexerClassName
-                . ' doesn\'t implement \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface'
+        if (false == $indexer instanceof \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface) {
+            throw new \InvalidArgumentException(
+                $indexerClassName .
+                ' doesn\'t implement \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface'
             );
         }
         return $indexer;

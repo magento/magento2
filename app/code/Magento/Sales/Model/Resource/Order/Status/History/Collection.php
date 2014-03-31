@@ -23,7 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order\Status\History;
 
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\Order;
 
 /**
  * Flat sales order status history collection
@@ -32,28 +35,26 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Status\History;
-
-class Collection
-    extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_status_history_collection';
+    protected $_eventPrefix = 'sales_order_status_history_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_status_history_collection';
+    protected $_eventObject = 'order_status_history_collection';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,23 +66,33 @@ class Collection
      * Parameter instance may be one of the following types: \Magento\Sales\Model\Order,
      * \Magento\Sales\Model\Order\Creditmemo, \Magento\Sales\Model\Order\Invoice, \Magento\Sales\Model\Order\Shipment
      *
-     * @param mixed $instance
+     * @param AbstractModel $instance
      * @param string $historyEntityName
      *
      * @return \Magento\Sales\Model\Order\Status\History|null
      */
-    public function getUnnotifiedForInstance($instance, $historyEntityName=\Magento\Sales\Model\Order::HISTORY_ENTITY_NAME)
+    public function getUnnotifiedForInstance($instance, $historyEntityName = Order::HISTORY_ENTITY_NAME)
     {
-        if(!$instance instanceof \Magento\Sales\Model\Order) {
+        if (!$instance instanceof Order) {
             $instance = $instance->getOrder();
         }
-        $this->setOrderFilter($instance)->setOrder('created_at', 'desc')
-            ->addFieldToFilter('entity_name', $historyEntityName)
-            ->addFieldToFilter('is_customer_notified', 0)->setPageSize(1);
-        foreach($this as $historyItem) {
+        $this->setOrderFilter(
+            $instance
+        )->setOrder(
+            'created_at',
+            'desc'
+        )->addFieldToFilter(
+            'entity_name',
+            $historyEntityName
+        )->addFieldToFilter(
+            'is_customer_notified',
+            0
+        )->setPageSize(
+            1
+        );
+        foreach ($this as $historyItem) {
             return $historyItem;
         }
         return null;
     }
-
 }

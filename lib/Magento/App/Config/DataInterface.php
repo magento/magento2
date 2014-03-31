@@ -26,8 +26,8 @@ namespace Magento\App\Config;
 interface DataInterface
 {
     /**
-     * @param $path
-     * @return mixed
+     * @param string|null $path
+     * @return string|array
      */
     public function getValue($path);
 }

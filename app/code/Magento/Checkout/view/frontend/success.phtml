@@ -23,6 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this \Magento\Checkout\Block\Onepage\Success */ ?>
 <div class="checkout success">
     <h2 class="subtitle"><?php echo __('Thank you for your purchase!') ?></h2>
     <?php if ($this->getOrderId()):?>
@@ -40,19 +41,7 @@
         <?php endif;?>
     <?php endif;?>
 
-    <?php if ($this->getAgreementRefId()): ?>
-        <p><?php echo __('Your billing agreement # is: %1.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
-    <?php endif;?>
-
-    <?php if ($profiles = $this->getRecurringProfiles()):?>
-    <p><?php echo __('Your recurring payment profiles:'); ?></p>
-    <ul>
-    <?php foreach($profiles as $profile):?>
-    <?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
-        <li><?php echo __('Payment profile # %1: "%2".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
-    <?php endforeach;?>
-    </ul>
-    <?php endif;?>
+    <?php echo $this->getAdditionalInfoHtml() ?>
 
     <div class="actions">
         <a class="action continue" title="<?php echo __('Continue Shopping') ?>" href="<?php echo $this->getUrl() ?>"><span><?php echo __('Continue Shopping') ?></span></a>

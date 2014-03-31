@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
-class Ignore
-    implements \Magento\Backend\Model\Config\Structure\MapperInterface
+class Ignore implements \Magento\Backend\Model\Config\Structure\MapperInterface
 {
     /**
      * Apply map

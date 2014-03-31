@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
 class CookieTest extends \PHPUnit_Framework_TestCase
@@ -41,22 +40,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\TestFramework\Cookie(
-            new \Magento\TestFramework\Request(
-                $this->getMock('\Magento\App\Route\ConfigInterface'),
-                $this->getMock('Magento\App\Request\PathInfoProcessorInterface'),
-                'http://example.com'
-            ),
-            new \Magento\TestFramework\Response(
-                $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)
-            )
-        );
+        $this->_model = new \Magento\TestFramework\Cookie();
     }
 
     public function testSet()
     {
         $cookieValue = 'some_cookie_value';
-        $this->assertFalse($this->_model->get(self::SAMPLE_COOKIE_NAME));
+        $this->assertNull($this->_model->get(self::SAMPLE_COOKIE_NAME));
         $this->_model->set(self::SAMPLE_COOKIE_NAME, $cookieValue);
         $this->assertEquals($cookieValue, $this->_model->get(self::SAMPLE_COOKIE_NAME));
         $this->assertEquals($cookieValue, $_COOKIE[self::SAMPLE_COOKIE_NAME]);

@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Controller\Adminhtml;
 
 class Edit extends \Magento\Backend\App\AbstractAction
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $registry;
 
@@ -43,13 +42,13 @@ class Edit extends \Magento\Backend\App\AbstractAction
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $factory
      * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $factory,
         \Magento\Logger $logger
     ) {
@@ -71,10 +70,12 @@ class Edit extends \Magento\Backend\App\AbstractAction
 
     /**
      * Get associated grouped products grid popup
+     *
+     * @return void
      */
     public function popupAction()
     {
-        $productId  = (int)$this->getRequest()->getParam('id');
+        $productId = (int)$this->getRequest()->getParam('id');
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->factory->create();
@@ -104,4 +105,4 @@ class Edit extends \Magento\Backend\App\AbstractAction
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }
-} 
+}

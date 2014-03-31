@@ -21,11 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Authz\Model\UserIdentifier;
 use Magento\Integration\Model\Integration;
+use Magento\Webapi\Model\IntegrationConfig;
 
 /**
  * Plugin for Magento\Core\Model\Resource\Setup model to manage resource permissions of
@@ -36,7 +36,7 @@ class Setup
     /**
      * API Integration config
      *
-     * @var Config
+     * @var IntegrationConfig
      */
     protected $_integrationConfig;
 
@@ -61,17 +61,16 @@ class Setup
      */
     protected $_userIdentifierFactory;
 
-
     /**
      * Construct Setup plugin instance
      *
-     * @param \Magento\Webapi\Model\IntegrationConfig $integrationConfig
+     * @param IntegrationConfig $integrationConfig
      * @param \Magento\Authz\Service\AuthorizationV1 $authzService
      * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
      * @param \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\IntegrationConfig $integrationConfig,
+        IntegrationConfig $integrationConfig,
         \Magento\Authz\Service\AuthorizationV1 $authzService,
         \Magento\Integration\Service\IntegrationV1Interface $integrationService,
         \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
@@ -85,11 +84,16 @@ class Setup
     /**
      * Process integration resource permissions after the integration is created
      *
-     * @param array $integrationNames Name of integrations passed as array from the invocation chain
-     * @return array
+     * @param \Magento\Integration\Model\Resource\Setup $subject
+     * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
+     *
+     * @return string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitIntegrationProcessing($integrationNames)
-    {
+    public function afterInitIntegrationProcessing(
+        \Magento\Integration\Model\Resource\Setup $subject,
+        $integrationNames
+    ) {
         if (empty($integrationNames)) {
             return array();
         }
@@ -103,10 +107,7 @@ class Setup
                         UserIdentifier::USER_TYPE_INTEGRATION,
                         $integration->getId()
                     );
-                    $this->_authzService->grantPermissions(
-                        $userIdentifier,
-                        $integrations[$name]['resources']
-                    );
+                    $this->_authzService->grantPermissions($userIdentifier, $integrations[$name]['resources']);
                 }
             }
         }

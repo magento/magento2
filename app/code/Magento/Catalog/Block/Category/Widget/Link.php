@@ -31,11 +31,9 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Category\Widget;
 
-class Link
-    extends \Magento\Catalog\Block\Widget\Link
+class Link extends \Magento\Catalog\Block\Widget\Link
 {
     /**
      * @param \Magento\View\Element\Template\Context $context

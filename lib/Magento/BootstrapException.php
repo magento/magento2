@@ -32,5 +32,4 @@ namespace Magento;
 
 class BootstrapException extends \Magento\Exception
 {
-
 }

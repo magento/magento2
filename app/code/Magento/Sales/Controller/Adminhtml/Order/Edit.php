@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml\Order;
 
 /**
  * Adminhtml sales order edit controller
@@ -31,12 +32,12 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml\Order;
-
 class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Start edit order initialization
+     *
+     * @return void
      */
     public function startAction()
     {
@@ -52,7 +53,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
             } else {
                 $this->_redirect('sales/order/');
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('sales/order/view', array('order_id' => $orderId));
         } catch (\Exception $e) {
@@ -63,6 +64,8 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
     /**
      * Index page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -70,8 +73,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $this->_title->add(__('Edit Order'));
         $this->_view->loadLayout();
 
-        $this->_initSession()
-            ->_setActiveMenu('Magento_Sales::sales_order');
+        $this->_initSession()->_setActiveMenu('Magento_Sales::sales_order');
         $this->_view->renderLayout();
     }
 

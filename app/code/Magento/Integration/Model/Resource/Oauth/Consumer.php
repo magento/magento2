@@ -21,10 +21,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Resource\Oauth;
 
-class Consumer extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Consumer extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Stdlib\DateTime
@@ -54,10 +53,10 @@ class Consumer extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set updated_at automatically before saving
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Integration\Model\Resource\Oauth\Consumer
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         $object->setUpdatedAt($this->_dateTime->formatDate(time()));
         return parent::_beforeSave($object);
@@ -66,10 +65,10 @@ class Consumer extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Delete all Nonce entries associated with the consumer
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Integration\Model\Resource\Oauth\Consumer
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    public function _afterDelete(\Magento\Core\Model\AbstractModel $object)
+    public function _afterDelete(\Magento\Model\AbstractModel $object)
     {
         $adapter = $this->_getWriteAdapter();
         $adapter->delete($this->getTable('oauth_nonce'), array('consumer_id' => $object->getId()));

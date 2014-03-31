@@ -31,12 +31,19 @@ class Exception extends \RuntimeException
      * Error HTTP response codes.
      */
     const HTTP_BAD_REQUEST = 400;
+
     const HTTP_UNAUTHORIZED = 401;
+
     const HTTP_FORBIDDEN = 403;
+
     const HTTP_NOT_FOUND = 404;
+
     const HTTP_METHOD_NOT_ALLOWED = 405;
+
     const HTTP_NOT_ACCEPTABLE = 406;
+
     const HTTP_INTERNAL_ERROR = 500;
+
     /**#@-*/
 
     /**
@@ -64,8 +71,8 @@ class Exception extends \RuntimeException
      * Initialize exception with HTTP code.
      *
      * @param string $message
-     * @param int $httpCode
      * @param int $code Error code
+     * @param int $httpCode
      * @param array $details Additional exception details
      * @param string $name Exception name
      * @throws \InvalidArgumentException
@@ -104,9 +111,10 @@ class Exception extends \RuntimeException
      */
     public function getOriginator()
     {
-        return ($this->getHttpCode() < 500)
-            ? \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_SENDER
-            : \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_RECEIVER;
+        return $this->getHttpCode() <
+            500 ?
+            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_SENDER :
+            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_RECEIVER;
     }
 
     /**

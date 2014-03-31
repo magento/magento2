@@ -58,8 +58,13 @@ class Wsdl extends \Zend\Soap\Wsdl
     {
         $operation = parent::addPortOperation($portType, $name, $input, $output, false);
         if (is_array($fault)) {
-            $isMessageValid = isset($fault['message']) && is_string($fault['message'])
-                && strlen(trim($fault['message']));
+            $isMessageValid = isset(
+                $fault['message']
+            ) && is_string(
+                $fault['message']
+            ) && strlen(
+                trim($fault['message'])
+            );
             $isNameValid = isset($fault['name']) && is_string($fault['name']) && strlen(trim($fault['name']));
 
             if ($isNameValid && $isMessageValid) {

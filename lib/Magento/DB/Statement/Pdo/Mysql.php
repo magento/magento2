@@ -59,7 +59,8 @@ class Mysql extends \Zend_Db_Statement_Pdo
 
         /* @var $statement \PDOStatement */
         $statement = $this->_stmt;
-        $bindValues = array(); // Separate array with values, as they are bound by reference
+        $bindValues = array();
+        // Separate array with values, as they are bound by reference
         foreach ($params as $name => $param) {
             $dataType = \PDO::PARAM_STR;
             $length = null;
@@ -78,14 +79,14 @@ class Mysql extends \Zend_Db_Statement_Pdo
                 $bindValues[$name] = $param;
             }
 
-            $paramName = $isPositionalBind ? ($name + 1) : $name;
+            $paramName = $isPositionalBind ? $name + 1 : $name;
             $statement->bindParam($paramName, $bindValues[$name], $dataType, $length, $driverOptions);
         }
 
         try {
             return $statement->execute();
         } catch (\PDOException $e) {
-            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int) $e->getCode(), $e);
+            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 

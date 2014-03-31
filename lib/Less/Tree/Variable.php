@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Variable
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Variable extends Less_Tree{
 
 	public $name;
@@ -9,25 +14,29 @@ class Less_Tree_Variable extends Less_Tree{
 	public $evaluating = false;
 	public $type = 'Variable';
 
-    public function __construct($name, $index, $currentFileInfo = null) {
+    /**
+     * @param string $name
+     */
+    public function __construct($name, $index = null, $currentFileInfo = null) {
         $this->name = $name;
         $this->index = $index;
 		$this->currentFileInfo = $currentFileInfo;
     }
 
 	public function compile($env) {
-		$name = $this->name;
-		if (strpos($name, '@@') === 0) {
-			$v = new Less_Tree_Variable(substr($name, 1), $this->index + 1);
+
+		if( $this->name[1] === '@' ){
+			$v = new Less_Tree_Variable(substr($this->name, 1), $this->index + 1);
 			$name = '@' . $v->compile($env)->value;
+		}else{
+			$name = $this->name;
 		}
 
 		if ($this->evaluating) {
-			throw new Less_Exception_Compiler("Recursive variable definition for " . $name, $this->index, null, $this->currentFileInfo['filename']);
+			throw new Less_Exception_Compiler("Recursive variable definition for " . $name, null, $this->index, $this->currentFileInfo);
 		}
 
 		$this->evaluating = true;
-
 
 		foreach($env->frames as $frame){
 			if( $v = $frame->variable($name) ){
@@ -36,7 +45,7 @@ class Less_Tree_Variable extends Less_Tree{
 			}
 		}
 
-		throw new Less_Exception_Compiler("variable " . $name . " is undefined", $this->index, null);
+		throw new Less_Exception_Compiler("variable " . $name . " is undefined", null, $this->index );
 	}
 
 }

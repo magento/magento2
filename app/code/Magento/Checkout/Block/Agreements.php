@@ -56,9 +56,12 @@ class Agreements extends \Magento\View\Element\Template
                 $agreements = array();
             } else {
                 /** @var \Magento\Checkout\Model\Resource\Agreement\Collection $agreements */
-                $agreements = $this->_agreementCollectionFactory->create()
-                    ->addStoreFilter($this->_storeManager->getStore()->getId())
-                    ->addFieldToFilter('is_active', 1);
+                $agreements = $this->_agreementCollectionFactory->create()->addStoreFilter(
+                    $this->_storeManager->getStore()->getId()
+                )->addFieldToFilter(
+                    'is_active',
+                    1
+                );
             }
             $this->setAgreements($agreements);
         }

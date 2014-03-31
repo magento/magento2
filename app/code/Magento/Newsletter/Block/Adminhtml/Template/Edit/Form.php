@@ -43,14 +43,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = array()
@@ -72,74 +72,79 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Newsletter\Block\Adminhtml\Template\Edit\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
-        $model  = $this->getModel();
+        $model = $this->getModel();
         $identity = $this->_storeConfig->getConfig(
             \Magento\Newsletter\Model\Subscriber::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY
         );
-        $identityName = $this->_storeConfig->getConfig('trans_email/ident_'.$identity.'/name');
-        $identityEmail = $this->_storeConfig->getConfig('trans_email/ident_'.$identity.'/email');
+        $identityName = $this->_storeConfig->getConfig('trans_email/ident_' . $identity . '/name');
+        $identityEmail = $this->_storeConfig->getConfig('trans_email/ident_' . $identity . '/email');
 
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getData('action'),
-                'method'    => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
 
-        $fieldset   = $form->addFieldset('base_fieldset', array(
-            'legend'    => __('Template Information'),
-            'class'     => 'fieldset-wide'
-        ));
+        $fieldset = $form->addFieldset(
+            'base_fieldset',
+            array('legend' => __('Template Information'), 'class' => 'fieldset-wide')
+        );
 
         if ($model->getId()) {
-            $fieldset->addField('id', 'hidden', array(
-                'name'      => 'id',
-                'value'     => $model->getId(),
-            ));
+            $fieldset->addField('id', 'hidden', array('name' => 'id', 'value' => $model->getId()));
         }
 
-        $fieldset->addField('code', 'text', array(
-            'name'      => 'code',
-            'label'     => __('Template Name'),
-            'title'     => __('Template Name'),
-            'required'  => true,
-            'value'     => $model->getTemplateCode(),
-        ));
+        $fieldset->addField(
+            'code',
+            'text',
+            array(
+                'name' => 'code',
+                'label' => __('Template Name'),
+                'title' => __('Template Name'),
+                'required' => true,
+                'value' => $model->getTemplateCode()
+            )
+        );
 
-        $fieldset->addField('subject', 'text', array(
-            'name'      => 'subject',
-            'label'     => __('Template Subject'),
-            'title'     => __('Template Subject'),
-            'required'  => true,
-            'value'     => $model->getTemplateSubject(),
-        ));
+        $fieldset->addField(
+            'subject',
+            'text',
+            array(
+                'name' => 'subject',
+                'label' => __('Template Subject'),
+                'title' => __('Template Subject'),
+                'required' => true,
+                'value' => $model->getTemplateSubject()
+            )
+        );
 
-        $fieldset->addField('sender_name', 'text', array(
-            'name'      =>'sender_name',
-            'label'     => __('Sender Name'),
-            'title'     => __('Sender Name'),
-            'required'  => true,
-            'value'     => $model->getId() !== null
-                ? $model->getTemplateSenderName()
-                : $identityName,
-        ));
+        $fieldset->addField(
+            'sender_name',
+            'text',
+            array(
+                'name' => 'sender_name',
+                'label' => __('Sender Name'),
+                'title' => __('Sender Name'),
+                'required' => true,
+                'value' => $model->getId() !== null ? $model->getTemplateSenderName() : $identityName
+            )
+        );
 
-        $fieldset->addField('sender_email', 'text', array(
-            'name'      =>'sender_email',
-            'label'     => __('Sender Email'),
-            'title'     => __('Sender Email'),
-            'class'     => 'validate-email',
-            'required'  => true,
-            'value'     => $model->getId() !== null
-                ? $model->getTemplateSenderEmail()
-                : $identityEmail
-        ));
+        $fieldset->addField(
+            'sender_email',
+            'text',
+            array(
+                'name' => 'sender_email',
+                'label' => __('Sender Email'),
+                'title' => __('Sender Email'),
+                'class' => 'validate-email',
+                'required' => true,
+                'value' => $model->getId() !== null ? $model->getTemplateSenderEmail() : $identityEmail
+            )
+        );
 
 
         $widgetFilters = array('is_email_compatible' => 1);
@@ -147,24 +152,32 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($model->isPlain()) {
             $wysiwygConfig->setEnabled(false);
         }
-        $fieldset->addField('text', 'editor', array(
-            'name'      => 'text',
-            'label'     => __('Template Content'),
-            'title'     => __('Template Content'),
-            'required'  => true,
-            'state'     => 'html',
-            'style'     => 'height:36em;',
-            'value'     => $model->getTemplateText(),
-            'config'    => $wysiwygConfig
-        ));
+        $fieldset->addField(
+            'text',
+            'editor',
+            array(
+                'name' => 'text',
+                'label' => __('Template Content'),
+                'title' => __('Template Content'),
+                'required' => true,
+                'state' => 'html',
+                'style' => 'height:36em;',
+                'value' => $model->getTemplateText(),
+                'config' => $wysiwygConfig
+            )
+        );
 
         if (!$model->isPlain()) {
-            $fieldset->addField('template_styles', 'textarea', array(
-                'name'          =>'styles',
-                'label'         => __('Template Styles'),
-                'container_id'  => 'field_template_styles',
-                'value'         => $model->getTemplateStyles()
-            ));
+            $fieldset->addField(
+                'template_styles',
+                'textarea',
+                array(
+                    'name' => 'styles',
+                    'label' => __('Template Styles'),
+                    'container_id' => 'field_template_styles',
+                    'value' => $model->getTemplateStyles()
+                )
+            );
         }
 
         $form->setAction($this->getUrl('*/*/save'));

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\ImportExport\Fixture\Complex;
 
 /**
@@ -56,47 +55,32 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function patternDataPrivider()
     {
-        $result = array(
-            0 => array(
-                array(
-                    array(
-                        'id' => '%s',
-                        'name' => 'Static',
-                        // @codingStandardsIgnoreStart
-                        /**
-                         * PHP_CodeSniffer bug - http://pear.php.net/bugs/bug.php?id=19290 (fixed in 1.4.0)
-                         */
-                        'calculated' => function ($index) {
-                            return $index * 10;
-                        },
-                        // @codingStandardsIgnoreEnd
-                    ),
-                    array(
-                        'name' => 'xxx %s'
-                    ),
-                    array(
-                        'name' => 'yyy %s'
-                    ),
-                ),
-                'ecpectedCount'      => 3,
-                'expectedRowsResult' => array(
-                    array('id' => '1', 'name' => 'Static', 'calculated' => 10),
-                    array('id' => '',  'name' => 'xxx 1',  'calculated' => ''),
-                    array('id' => '',  'name' => 'yyy 1',  'calculated' => ''),
-                )
-            ),
+        $result = array(0 => array(array(array(
+            'id' => '%s',
+            'name' => 'Static',
+            // @codingStandardsIgnoreStart
+            /**
+             * PHP_CodeSniffer bug - http://pear.php.net/bugs/bug.php?id=19290 (fixed in 1.4.0)
+             */
+            'calculated' => function ($index) {
+                return $index * 10;
+            }
+            // @codingStandardsIgnoreEnd
+        ),
+            array('name' => 'xxx %s'),
+            array('name' => 'yyy %s')
+        ),
+            'ecpectedCount' => 3,
+            'expectedRowsResult' => array(
+                array('id' => '1', 'name' => 'Static', 'calculated' => 10),
+                array('id' => '', 'name' => 'xxx 1', 'calculated' => ''),
+                array('id' => '', 'name' => 'yyy 1', 'calculated' => '')
+            )
+        ),
             1 => array(
-                array(
-                    array(
-                        'id' => '%s',
-                        'name' => 'Dynamic %s',
-                        'calculated' => 'calc %s',
-                    )
-                ),
+                array(array('id' => '%s', 'name' => 'Dynamic %s', 'calculated' => 'calc %s')),
                 'ecpectedCount' => 1,
-                'expectedRowsResult' => array(
-                    array('id' => '1', 'name' => 'Dynamic 1', 'calculated' => 'calc 1'),
-                )
+                'expectedRowsResult' => array(array('id' => '1', 'name' => 'Dynamic 1', 'calculated' => 'calc 1'))
             )
         );
         return $result;

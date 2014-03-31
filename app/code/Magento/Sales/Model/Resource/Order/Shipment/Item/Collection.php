@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Shipment\Item;
 
 /**
  * Flat sales order shipment items collection
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Shipment\Item;
-
 class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
 {
     /**
@@ -41,18 +39,19 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_item_collection';
+    protected $_eventPrefix = 'sales_order_shipment_item_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_shipment_item_collection';
+    protected $_eventObject = 'order_shipment_item_collection';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -63,7 +62,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      * Set shipment filter
      *
      * @param int $shipmentId
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Item\Collection
+     * @return $this
      */
     public function setShipmentFilter($shipmentId)
     {

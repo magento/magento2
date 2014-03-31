@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Resource\Item;
 
 /**
  * Google Content items collection
@@ -31,9 +32,7 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Resource\Item;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Config
@@ -45,7 +44,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource helper
      *
-     * @var \Magento\Core\Model\Resource\Helper
+     * @var \Magento\DB\Helper
      */
     protected $_resourceHelper;
 
@@ -54,26 +53,29 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Eav\Model\Config $config
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Eav\Model\Config $config,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_resourceHelper = $resourceHelper;
         $this->_eavConfig = $config;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GoogleShopping\Model\Item', 'Magento\GoogleShopping\Model\Resource\Item');
@@ -82,7 +84,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Init collection select
      *
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -95,7 +97,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter collection by specified store ids
      *
      * @param array|int $storeIds
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {
@@ -107,7 +109,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter collection by specified product id
      *
      * @param int $productId
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addProductFilterId($productId)
     {
@@ -118,16 +120,17 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
      * @param string $field
      * @param null|string|array $condition
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return $this
+     * @see self::_getConditionSql for $condition
      */
-    public function addFieldToFilter($field, $condition=null)
+    public function addFieldToFilter($field, $condition = null)
     {
         if ($field == 'name') {
             $conditionSql = $this->_getConditionSql(
-                $this->getConnection()->getIfNullSql('p.value', 'p_d.value'), $condition
+                $this->getConnection()->getIfNullSql('p.value', 'p_d.value'),
+                $condition
             );
             $this->getSelect()->where($conditionSql, null, \Magento\DB\Select::TYPE_CONDITION);
             return $this;
@@ -139,40 +142,40 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Join product and type data
      *
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _joinTables()
     {
         $entityType = $this->_eavConfig->getEntityType('catalog_product');
-        $attribute = $this->_eavConfig->getAttribute($entityType->getEntityTypeId(),'name');
+        $attribute = $this->_eavConfig->getAttribute($entityType->getEntityTypeId(), 'name');
 
-        $joinConditionDefault =
-            sprintf("p_d.attribute_id=%d AND p_d.store_id='0' AND main_table.product_id=p_d.entity_id",
-                $attribute->getAttributeId()
-            );
-        $joinCondition =
-            sprintf("p.attribute_id=%d AND p.store_id=main_table.store_id AND main_table.product_id=p.entity_id",
-                $attribute->getAttributeId()
-            );
+        $joinConditionDefault = sprintf(
+            "p_d.attribute_id=%d AND p_d.store_id='0' AND main_table.product_id=p_d.entity_id",
+            $attribute->getAttributeId()
+        );
+        $joinCondition = sprintf(
+            "p.attribute_id=%d AND p.store_id=main_table.store_id AND main_table.product_id=p.entity_id",
+            $attribute->getAttributeId()
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('p_d' => $attribute->getBackend()->getTable()),
-                $joinConditionDefault,
-                array());
+        $this->getSelect()->joinLeft(
+            array('p_d' => $attribute->getBackend()->getTable()),
+            $joinConditionDefault,
+            array()
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('p' => $attribute->getBackend()->getTable()),
-                $joinCondition,
-                array('name' => $this->getConnection()->getIfNullSql('p.value', 'p_d.value')));
+        $this->getSelect()->joinLeft(
+            array('p' => $attribute->getBackend()->getTable()),
+            $joinCondition,
+            array('name' => $this->getConnection()->getIfNullSql('p.value', 'p_d.value'))
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('types' => $this->getTable('googleshopping_types')),
-                'main_table.type_id=types.type_id'
-            );
-        $this->_resourceHelper->prepareColumnsList($this->getSelect()); // avoid column name collision
+        $this->getSelect()->joinLeft(
+            array('types' => $this->getTable('googleshopping_types')),
+            'main_table.type_id=types.type_id'
+        );
+        $this->_resourceHelper->prepareColumnsList($this->getSelect());
+        // avoid column name collision
 
         return $this;
     }

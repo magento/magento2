@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloader\Model\Config;
 
 /**
  * Class config
@@ -31,13 +32,13 @@
  * @package    Magento_Connect
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloader\Model\Config;
-
-class Community extends \Magento\Downloader\Model\Config\AbstractConfig implements \Magento\Downloader\Model\Config\ConfigInterface
+class Community extends \Magento\Downloader\Model\Config\AbstractConfig implements
+    \Magento\Downloader\Model\Config\ConfigInterface
 {
-
     /**
      * Initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +50,7 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      *
      * @param \Magento\Connect\Config $config
      * @param \Magento\Downloader\View $view
-     * @return null
+     * @return void
      */
     public function setInstallView($config, $view)
     {
@@ -60,7 +61,7 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      * Set data for Settings View
      * @param \Magento\Connect\Config $config
      * @param \Magento\Downloader\View $view
-     * @return null
+     * @return void
      */
     public function setSettingsView($config, $view)
     {
@@ -70,7 +71,7 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      * Set session data for Settings
      * @param array $post post data
      * @param mixed $session Session object
-     * @return null
+     * @return void
      */
     public function setSettingsSession($post, $session)
     {
@@ -81,7 +82,8 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      *
      * @return string Root channel URI
      */
-    public function getRootChannelUri(){
+    public function getRootChannelUri()
+    {
         if (!$this->get('root_channel_uri')) {
             $this->set('root_channel_uri', 'connect20.magentocommerce.com/community');
         }
@@ -93,7 +95,7 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      *
      * @param \Magento\Connect\Config $config Config object
      * @param array $post post data
-     * @return null
+     * @return void
      */
     public function setPostData($config, &$post)
     {
@@ -104,10 +106,9 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      *
      * @param mixed $session Session object
      * @param array $options
-     * @return null
+     * @return void
      */
     public function setCommandOptions($session, &$options)
     {
     }
 }
-?>

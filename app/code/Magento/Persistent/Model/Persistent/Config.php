@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Persistent\Model\Persistent;
 
 /**
  * Persistent Config Model
  */
-namespace Magento\Persistent\Model\Persistent;
-
 class Config
 {
     /**
@@ -39,13 +37,19 @@ class Config
      */
     protected $_configFilePath;
 
-    /** @var \Magento\Config\DomFactory  */
+    /**
+     * @var \Magento\Config\DomFactory
+     */
     protected $_domFactory;
 
-    /** @var \Magento\Module\Dir\Reader  */
+    /**
+     * @var \Magento\Module\Dir\Reader
+     */
     protected $_moduleReader;
 
-    /** @var \DOMXPath  */
+    /**
+     * @var \DOMXPath
+     */
     protected $_configDomXPath = null;
 
     /**
@@ -104,7 +108,7 @@ class Config
      * Set path to config file that should be loaded
      *
      * @param string $path
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function setConfigFilePath($path)
     {
@@ -116,7 +120,7 @@ class Config
      * Get persistent XML config xpath
      *
      * @return \DOMXPath
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _getConfigDomXPath()
     {
@@ -125,7 +129,7 @@ class Config
             $isFile = $this->_modulesDirectory->isFile($filePath);
             $isReadable = $this->_modulesDirectory->isReadable($filePath);
             if (!$isFile || !$isReadable) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
@@ -134,24 +138,20 @@ class Config
             $configDom = $this->_domFactory->createDom(
                 array(
                     'xml' => $xml,
-                    'idAttributes' => array(
-                        'config/instances/blocks/reference' => 'id',
-                    ),
-                    'schemaFile' => $this->_moduleReader
-                        ->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd'
+                    'idAttributes' => array('config/instances/blocks/reference' => 'id'),
+                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd'
                 )
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
         }
         return $this->_configDomXPath;
-
     }
 
     /**
      * Get block's persistent config info.
      *
      * @param string $block
-     * @return $array
+     * @return array
      */
     public function getBlockConfigInfo($block)
     {
@@ -176,7 +176,7 @@ class Config
     /**
      * Convert Blocks
      *
-     * @param DomNodeList $blocks
+     * @param /DomNodeList $blocks
      * @return array
      */
     protected function _convertBlocksToArray($blocks)
@@ -186,7 +186,7 @@ class Config
             $referenceAttributes = $reference->attributes;
             $id = $referenceAttributes->getNamedItem('id')->nodeValue;
             $blocksArray[$id] = array();
-            /** @var $referenceSubNode DOMNode */
+            /** @var $referenceSubNode /DOMNode */
             foreach ($reference->childNodes as $referenceSubNode) {
                 switch ($referenceSubNode->nodeName) {
                     case 'name_in_layout':
@@ -205,7 +205,7 @@ class Config
     /**
      * Run all methods declared in persistent configuration
      *
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function fire()
     {
@@ -229,15 +229,18 @@ class Config
      *
      * @param array $info
      * @param bool $instance
-     * @return \Magento\Persistent\Model\Persistent\Config
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     public function fireOne($info, $instance = false)
     {
-        if (!$instance
-            || (isset($info['block_type']) && !($instance instanceof $info['block_type']))
-            || !isset($info['class'])
-            || !isset($info['method'])
+        if (!$instance || isset(
+            $info['block_type']
+        ) && !$instance instanceof $info['block_type'] || !isset(
+            $info['class']
+        ) || !isset(
+            $info['method']
+        )
         ) {
             return $this;
         }
@@ -245,9 +248,11 @@ class Config
         $method = $info['method'];
 
         if (method_exists($object, $method)) {
-            $object->$method($instance);
+            $object->{$method}($instance);
         } elseif ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Core\Exception('Method "' . $method.'" is not defined in "' . get_class($object) . '"');
+            throw new \Magento\Model\Exception(
+                'Method "' . $method . '" is not defined in "' . get_class($object) . '"'
+            );
         }
 
         return $this;

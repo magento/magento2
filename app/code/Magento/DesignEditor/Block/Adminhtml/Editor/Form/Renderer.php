@@ -29,8 +29,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form;
 
-class Renderer extends \Magento\Backend\Block\Template
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Renderer extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element to render

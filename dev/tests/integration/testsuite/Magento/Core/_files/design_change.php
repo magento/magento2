@@ -25,12 +25,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-    ->getAnyStoreView()->getId();
+$storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Core\Model\StoreManagerInterface'
+)->getAnyStoreView()->getId();
 /** @var $change \Magento\Core\Model\Design */
-$change = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Design');
+$change = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Design');
 $change->setStoreId($storeId)
-    ->setDesign('magento_blank')
+    ->setDesign('magento_plushe')
     ->setDateFrom('2001-01-01 01:01:01')
     ->save(); // creating with predefined ID doesn't work for some reason

@@ -57,7 +57,7 @@ class Generator extends \Magento\ImportExport\Model\Import\AbstractSource
     public function __construct(array $rowPattern, $limit)
     {
         foreach ($rowPattern as $key => $value) {
-            if (is_callable($value) || is_string($value) && (false !== strpos($value, '%s'))) {
+            if (is_callable($value) || is_string($value) && false !== strpos($value, '%s')) {
                 $this->_dynamicColumns[$key] = $value;
             }
         }

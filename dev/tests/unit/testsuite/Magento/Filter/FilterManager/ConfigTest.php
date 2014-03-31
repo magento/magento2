@@ -37,11 +37,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFactories()
     {
-        $expectedConfig = array(
-            'test' => 'test',
-            'Magento\Filter\Factory',
-            'Magento\Filter\ZendFactory',
-        );
+        $expectedConfig = array('test' => 'test', 'Magento\Filter\Factory', 'Magento\Filter\ZendFactory');
         $this->assertEquals($expectedConfig, $this->_config->getFactories());
     }
 }

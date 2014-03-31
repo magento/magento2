@@ -21,7 +21,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function ($) {
+jQuery(function ($) {
     $.template(
         'systemMessageDialog',
         '<li class="{{if severity == 1}}error{{else}}warning{{/if}}">{{html text}}</li>'
@@ -69,5 +69,5 @@
             $('#message-system-all').systemMessageDialog('open', 2);
         });
     });
-})(jQuery);
+});
 

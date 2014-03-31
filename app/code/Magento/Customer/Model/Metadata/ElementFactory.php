@@ -25,11 +25,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 class ElementFactory
 {
+    const OUTPUT_FORMAT_JSON = 'json';
+
+    const OUTPUT_FORMAT_TEXT = 'text';
+
+    const OUTPUT_FORMAT_HTML = 'html';
+
+    const OUTPUT_FORMAT_PDF = 'pdf';
+
+    const OUTPUT_FORMAT_ONELINE = 'oneline';
+
+    const OUTPUT_FORMAT_ARRAY = 'array';
+
+    // available only for multiply attributes
+
     /**
      * @var \Magento\ObjectManager
      */
@@ -53,25 +66,25 @@ class ElementFactory
     /**
      * Create Form Element
      *
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
-     * @param $value
-     * @param $entityTypeCode
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param string|int|bool $value
+     * @param string $entityTypeCode
      * @param bool $isAjax
      * @return \Magento\Customer\Model\Metadata\Form\AbstractData
      */
     public function create(
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
         $value,
         $entityTypeCode,
         $isAjax = false
     ) {
         $dataModelClass = $attribute->getDataModel();
-        $params = [
+        $params = array(
             'entityTypeCode' => $entityTypeCode,
             'value' => is_null($value) ? false : $value,
             'isAjax' => $isAjax,
             'attribute' => $attribute
-        ];
+        );
         /** TODO fix when Validation is implemented MAGETWO-17341 */
         if ($dataModelClass == 'Magento\Customer\Model\Attribute\Data\Postcode') {
             $dataModelClass = 'Magento\Customer\Model\Metadata\Form\Text';

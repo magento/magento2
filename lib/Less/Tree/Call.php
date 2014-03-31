@@ -1,10 +1,12 @@
 <?php
 
 
-//
-// A function call node.
-//
-
+/**
+ * Call
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Call extends Less_Tree{
     public $value;
 
@@ -37,61 +39,77 @@ class Less_Tree_Call extends Less_Tree{
     // we try to pass a variable to a function, like: `saturate(@color)`.
     // The function should receive the value, not the variable.
     //
-    public function compile($env){
+    public function compile($env=null){
 		$args = array();
 		foreach($this->args as $a){
 			$args[] = $a->compile($env);
 		}
 
-		$name = $this->name;
-		switch($name){
+		$nameLC = strtolower($this->name);
+		switch($nameLC){
 			case '%':
-			$name = '_percent';
+			$nameLC = '_percent';
+			break;
+
+			case 'get-unit':
+			$nameLC = 'getunit';
 			break;
 
 			case 'data-uri':
-			$name = 'datauri';
+			$nameLC = 'datauri';
 			break;
 
 			case 'svg-gradient':
-			$name = 'svggradient';
+			$nameLC = 'svggradient';
 			break;
 		}
 
+		$result = null;
+		if( $nameLC === 'default' ){
+			$result = Less_Tree_DefaultFunc::compile();
 
-		if( is_callable( array('Less_Functions',$name) ) ){ // 1.
-			try {
-				$func = new Less_Functions($env, $this->currentFileInfo);
-				$result = call_user_func_array( array($func,$name),$args);
-				if( $result != null ){
-					return $result;
+		}else{
+
+			if( method_exists('Less_Functions',$nameLC) ){ // 1.
+				try {
+
+					$func = new Less_Functions($env, $this->currentFileInfo);
+					$result = call_user_func_array( array($func,$nameLC),$args);
+
+				} catch (Exception $e) {
+					throw new Less_Exception_Compiler('error evaluating function `' . $this->name . '` '.$e->getMessage().' index: '. $this->index);
 				}
-
-			} catch (Exception $e) {
-				throw new Less_Exception_Compiler('error evaluating function `' . $this->name . '` '.$e->getMessage().' index: '. $this->index);
 			}
-
 		}
+
+		if( $result !== null ){
+			return $result;
+		}
+
 
 		return new Less_Tree_Call( $this->name, $args, $this->index, $this->currentFileInfo );
     }
 
-	public function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	public function genCSS( $output ){
 
-		self::OutputAdd( $strs, $this->name . '(', $this->currentFileInfo, $this->index );
+		$output->add( $this->name . '(', $this->currentFileInfo, $this->index );
 		$args_len = count($this->args);
 		for($i = 0; $i < $args_len; $i++ ){
-			$this->args[$i]->genCSS($env, $strs );
+			$this->args[$i]->genCSS( $output );
 			if( $i + 1 < $args_len ){
-				self::OutputAdd( $strs, ', ' );
+				$output->add( ', ' );
 			}
 		}
 
-		self::OutputAdd( $strs, ')' );
+		$output->add( ')' );
 	}
 
-    public function toCSS($env = null){
-        return $this->compile($env)->toCSS();
-    }
+
+    //public function toCSS(){
+    //    return $this->compile()->toCSS();
+    //}
 
 }

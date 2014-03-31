@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\FileList;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -29,30 +28,66 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\View\Layout\File\FileList\Factory
      */
-    private $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_objectManager;
+    protected $objectManager;
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager');
-        $this->_model = new \Magento\View\Layout\File\FileList\Factory($this->_objectManager);
+        $this->objectManager = $this->getMockForAbstractClass('Magento\ObjectManager');
+        $this->model = new \Magento\View\Layout\File\FileList\Factory($this->objectManager);
     }
 
     public function testCreate()
     {
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $collator = $helperObjectManager->getObject(\Magento\View\Layout\File\FileList\Factory::FILE_LIST_COLLATOR);
         $list = $helperObjectManager->getObject('Magento\View\Layout\File\FileList');
 
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\View\Layout\File\FileList')
-            ->will($this->returnValue($list))
-        ;
-        $this->assertSame($list, $this->_model->create());
+        $this->objectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $this->equalTo(\Magento\View\Layout\File\FileList\Factory::FILE_LIST_COLLATOR)
+        )->will(
+            $this->returnValue($collator)
+        );
+
+        $this->objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('Magento\View\Layout\File\FileList'),
+            $this->equalTo(array('collator' => $collator))
+        )->will(
+            $this->returnValue($list)
+        );
+        $this->assertSame($list, $this->model->create());
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     * @expectedExceptionMessage Magento\View\Layout\File\FileList\Collator has to implement the collate interface.
+     */
+    public function testCreateException()
+    {
+        $collator = new \stdClass();
+
+        $this->objectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $this->equalTo(\Magento\View\Layout\File\FileList\Factory::FILE_LIST_COLLATOR)
+        )->will(
+            $this->returnValue($collator)
+        );
+
+        $this->model->create();
     }
 }

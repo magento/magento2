@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Catalog;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Catalog;
-
 class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 {
     /**
-     * \Zend_Date object for date comparsions
+     * \Magento\Stdlib\DateTime\DateInterface object for date comparsions
      *
-     * @var \Zend_Date
+     * @var \Magento\Stdlib\DateTime\Date
      */
     protected static $_currentDate = null;
 
@@ -49,7 +48,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_rssFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Iterator
+     * @var \Magento\Model\Resource\Iterator
      */
     protected $_resourceIterator;
 
@@ -70,24 +69,24 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
-     * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
-        \Magento\Core\Model\Resource\Iterator $resourceIterator,
+        \Magento\Model\Resource\Iterator $resourceIterator,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Helper\Output $outputHelper,
         array $data = array()
@@ -98,21 +97,27 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $this->_productFactory = $productFactory;
         $this->_rssFactory = $rssFactory;
         $this->_resourceIterator = $resourceIterator;
-        parent::__construct($context, $customerSession, $catalogData, $data);
+        parent::__construct($context, $httpContext, $catalogData, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         /*
-        * setting cache to save the rss for 10 minutes
-        */
-        $this->setCacheKey('rss_catalog_special_'.$this->_getStoreId().'_'.$this->_getCustomerGroupId());
+         * setting cache to save the rss for 10 minutes
+         */
+        $this->setCacheKey('rss_catalog_special_' . $this->_getStoreId() . '_' . $this->_getCustomerGroupId());
         $this->setCacheLifetime(600);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
-         //store id is store view id
+        //store id is store view id
         $storeId = $this->_getStoreId();
         $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
 
@@ -122,29 +127,45 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->_productFactory->create();
         $product->setStoreId($storeId);
-        $specials = $product->getResourceCollection()
-            ->addPriceDataFieldFilter('%s < %s', array('final_price', 'price'))
-            ->addPriceData($customerGroupId, $websiteId)
-            ->addAttributeToSelect(array(
-                'name', 'short_description', 'description', 'price', 'thumbnail',
-                'special_price', 'special_to_date',
-                'msrp_enabled', 'msrp_display_actual_price_type', 'msrp'
-            ), 'left')
-            ->addAttributeToSort('name', 'asc')
-        ;
+        $specials = $product->getResourceCollection()->addPriceDataFieldFilter(
+            '%s < %s',
+            array('final_price', 'price')
+        )->addPriceData(
+            $customerGroupId,
+            $websiteId
+        )->addAttributeToSelect(
+            array(
+                'name',
+                'short_description',
+                'description',
+                'price',
+                'thumbnail',
+                'special_price',
+                'special_to_date',
+                'msrp_enabled',
+                'msrp_display_actual_price_type',
+                'msrp'
+            ),
+            'left'
+        )->addAttributeToSort(
+            'name',
+            'asc'
+        );
 
         $newUrl = $this->_urlBuilder->getUrl('rss/catalog/special/store_id/' . $storeId);
         $title = __('%1 - Special Products', $this->_storeManager->getStore()->getFrontendName());
         $lang = $this->_storeConfig->getConfig('general/locale/code');
         /** @var $rssObj \Magento\Rss\Model\Rss */
         $rssObj = $this->_rssFactory->create();
-        $rssObj->_addHeader(array(
-            'title'       => $title,
-            'description' => $title,
-            'link'        => $newUrl,
-            'charset'     => 'UTF-8',
-            'language'    => $lang
-        ));
+        $rssObj->_addHeader(
+            array(
+                'title' => $title,
+                'description' => $title,
+                'link' => $newUrl,
+                'charset' => 'UTF-8',
+                'language' => $lang
+            )
+        );
 
         $results = array();
         /*
@@ -161,31 +182,32 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
             foreach ($results as $result) {
                 // render a row for RSS feed
                 $product->setData($result);
-                $html = sprintf('<table><tr>
+                $html = sprintf(
+                    '<table><tr>
                     <td><a href="%s"><img src="%s" alt="" border="0" align="left" height="75" width="75" /></a></td>
                     <td style="text-decoration:none;">%s',
                     $product->getProductUrl(),
                     $this->_imageHelper->init($product, 'thumbnail')->resize(75, 75),
-                    $this->_outputHelper->productAttribute(
-                        $product,
-                        $product->getDescription(),
-                        'description'
-                    )
+                    $this->_outputHelper->productAttribute($product, $product->getDescription(), 'description')
                 );
 
                 // add price data if needed
                 if ($product->getAllowedPriceInRss()) {
                     if ($this->_catalogData->canApplyMsrp($product)) {
-                        $html .= '<br/><a href="' . $product->getProductUrl() . '">'
-                            . __('Click for price') . '</a>';
+                        $html .= '<br/><a href="' . $product->getProductUrl() . '">' . __('Click for price') . '</a>';
                     } else {
                         $special = '';
                         if ($result['use_special']) {
-                            $special = '<br />' . __('Special Expires On: %1',
-                                    $this->formatDate($result['special_to_date'],
-                                        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM));
+                            $special = '<br />' . __(
+                                'Special Expires On: %1',
+                                $this->formatDate(
+                                    $result['special_to_date'],
+                                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                                )
+                            );
                         }
-                        $html .= sprintf('<p>%s %s%s</p>',
+                        $html .= sprintf(
+                            '<p>%s %s%s</p>',
                             __('Price: %1', $this->_coreData->currency($result['price'])),
                             __('Special Price: %1', $this->_coreData->currency($result['final_price'])),
                             $special
@@ -195,11 +217,9 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 
                 $html .= '</td></tr></table>';
 
-                $rssObj->_addEntry(array(
-                    'title'       => $product->getName(),
-                    'link'        => $product->getProductUrl(),
-                    'description' => $html
-                ));
+                $rssObj->_addEntry(
+                    array('title' => $product->getName(), 'link' => $product->getProductUrl(), 'description' => $html)
+                );
             }
         }
         return $rssObj->createRssXml();
@@ -209,11 +229,12 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * Preparing data and adding to rss object
      *
      * @param array $args
+     * @return void
      */
     public function addSpecialXmlCallback($args)
     {
         if (!isset(self::$_currentDate)) {
-            self::$_currentDate = new \Zend_Date();
+            self::$_currentDate = new \Magento\Stdlib\DateTime\Date();
         }
 
         // dispatch event to determine whether the product will eventually get to the result
@@ -228,11 +249,14 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $row = $args['row'];
         $row['use_special'] = false;
         $row['allowed_price_in_rss'] = $product->getAllowedPriceInRss();
-        if (isset($row['special_to_date']) && $row['final_price'] <= $row['special_price']
-            && $row['allowed_price_in_rss']
+        if (isset(
+            $row['special_to_date']
+        ) && $row['final_price'] <= $row['special_price'] && $row['allowed_price_in_rss']
         ) {
-            $compareDate = self::$_currentDate->compareDate($row['special_to_date'],
-                \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $compareDate = self::$_currentDate->compareDate(
+                $row['special_to_date'],
+                \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT
+            );
             if (-1 === $compareDate || 0 === $compareDate) {
                 $row['use_special'] = true;
             }
@@ -241,16 +265,15 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $args['results'][] = $row;
     }
 
-
     /**
      * Function for comparing two items in collection
      *
-     * @param $a
-     * @param $b
-     * @return  boolean
+     * @param array $a
+     * @param array $b
+     * @return bool
      */
     public function sortByStartDate($a, $b)
     {
-        return $a['start_date']>$b['start_date'] ? -1 : ($a['start_date']<$b['start_date'] ? 1 : 0);
+        return $a['start_date'] > $b['start_date'] ? -1 : ($a['start_date'] < $b['start_date'] ? 1 : 0);
     }
 }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Newsletter\Block\Subscribe\Grid\Options;
 
-class StoreOptionHash implements \Magento\Core\Model\Option\ArrayInterface
+class StoreOptionHash implements \Magento\Option\ArrayInterface
 {
     /**
      * System Store Model
@@ -35,7 +35,7 @@ class StoreOptionHash implements \Magento\Core\Model\Option\ArrayInterface
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\System\Store
+     * @param \Magento\Core\Model\System\Store $systemStore
      */
     public function __construct(\Magento\Core\Model\System\Store $systemStore)
     {

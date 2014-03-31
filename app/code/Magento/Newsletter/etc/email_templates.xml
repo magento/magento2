@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
     <template id="newsletter_subscription_confirm_email_template" label="Subscription Confirmation" file="subscr_confirm.html" type="html" module="Magento_Newsletter"/>
     <template id="newsletter_subscription_success_email_template" label="Subscription Success" file="subscr_success.html" type="html" module="Magento_Newsletter"/>
     <template id="newsletter_subscription_un_email_template" label="Unsubscription Success" file="unsub_success.html" type="html" module="Magento_Newsletter"/>

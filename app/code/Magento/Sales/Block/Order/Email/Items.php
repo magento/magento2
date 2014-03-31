@@ -36,5 +36,4 @@ namespace Magento\Sales\Block\Order\Email;
 
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
-
 }

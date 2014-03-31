@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Entity;
+
+use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
  * Product attribute extension with event dispatching
@@ -53,8 +56,6 @@
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedInProductListing(int $value)
  * @method int getUsedForSortBy()
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedForSortBy(int $value)
- * @method int getIsConfigurable()
- * @method \Magento\Catalog\Model\Entity\Attribute setIsConfigurable(int $value)
  * @method string getApplyTo()
  * @method \Magento\Catalog\Model\Entity\Attribute setApplyTo(string $value)
  * @method int getIsVisibleInAdvancedSearch()
@@ -65,51 +66,65 @@
  * @method \Magento\Catalog\Model\Entity\Attribute setIsWysiwygEnabled(int $value)
  * @method int getIsUsedForPromoRules()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
- *
- * @category    Magento
- * @package     Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Entity;
-
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
+    /**
+     * Event Prefix
+     *
+     * @var string
+     */
     protected $_eventPrefix = 'catalog_entity_attribute';
+
+    /**
+     * Event Object
+     *
+     * @var string
+     */
     protected $_eventObject = 'attribute';
+
     const MODULE_NAME = 'Magento_Catalog';
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var LockValidatorInterface
+     */
+    protected $attrLockValidator;
+
+    /**
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param LockValidatorInterface $lockValidator
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        LockValidatorInterface $lockValidator,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->attrLockValidator = $lockValidator;
         parent::__construct(
             $context,
             $registry,
@@ -119,8 +134,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $storeManager,
             $resourceHelper,
             $universalFactory,
-            $locale,
+            $localeDate,
             $catalogProductFactory,
+            $localeResolver,
             $resource,
             $resourceCollection,
             $data
@@ -130,14 +146,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Processing object before save data
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      * @throws \Magento\Eav\Exception
      */
     protected function _beforeSave()
     {
-        if ($this->_getResource()->isUsedBySuperProducts($this)) {
-            throw new \Magento\Eav\Exception(__('This attribute is used in configurable products'));
+        try {
+            $this->attrLockValidator->validate($this);
+        } catch (\Magento\Model\Exception $exception) {
+            throw new \Magento\Eav\Exception($exception->getMessage());
         }
+
         $this->setData('modulePrefix', self::MODULE_NAME);
         return parent::_beforeSave();
     }
@@ -145,7 +164,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Processing object after save data
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _afterSave()
     {

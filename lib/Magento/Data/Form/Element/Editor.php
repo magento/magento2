@@ -23,6 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
+
+use Magento\Escaper;
 
 /**
  * Form editor element
@@ -31,10 +34,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Escaper;
-
 class Editor extends Textarea
 {
     /**
@@ -51,7 +50,7 @@ class Editor extends Textarea
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
-        if($this->isEnabled()) {
+        if ($this->isEnabled()) {
             $this->setType('wysiwyg');
             $this->setExtType('wysiwyg');
         } else {
@@ -89,20 +88,21 @@ class Editor extends Textarea
             //]]>
             </script>';
 
-        if($this->isEnabled())
-        {
+        if ($this->isEnabled()) {
             // add Firebug notice translations
             $warn = 'Firebug is known to make the WYSIWYG editor slow unless it is turned off or configured properly.';
-            $this->getConfig()->addData(array(
-                'firebug_warning_title'  => $this->translate('Warning'),
-                'firebug_warning_text'   => $this->translate($warn),
-                'firebug_warning_anchor' => $this->translate('Hide'),
-            ));
+            $this->getConfig()->addData(
+                array(
+                    'firebug_warning_title' => $this->translate('Warning'),
+                    'firebug_warning_text' => $this->translate($warn),
+                    'firebug_warning_anchor' => $this->translate('Hide')
+                )
+            );
 
             $translatedString = array(
                 'Insert Image...' => $this->translate('Insert Image...'),
                 'Insert Media...' => $this->translate('Insert Media...'),
-                'Insert File...'  => $this->translate('Insert File...')
+                'Insert File...' => $this->translate('Insert File...')
             );
 
             $jsSetupObject = 'wysiwyg' . $this->getHtmlId();
@@ -112,35 +112,83 @@ class Editor extends Textarea
                 if ($this->getForceLoad()) {
                     $forceLoad = $jsSetupObject . '.setup("exact");';
                 } else {
-                    $forceLoad = 'Event.observe(window, "load", '
-                                . $jsSetupObject . '.setup.bind(' . $jsSetupObject . ', "exact"));';
+                    $forceLoad = 'Event.observe(window, "load", ' .
+                        $jsSetupObject .
+                        '.setup.bind(' .
+                        $jsSetupObject .
+                        ', "exact"));';
                 }
             }
 
-            $html = $this->_getButtonsHtml()
-                . '<textarea name="' . $this->getName() . '" title="' . $this->getTitle() . '" '
-                . $this->_getUiId()
-                . ' id="' . $this->getHtmlId() . '"'
-                . ' class="textarea' . $this->getClass() . '" '
-                . $this->serialize($this->getHtmlAttributes()) . ' >' . $this->getEscapedValue() . '</textarea>'
-                . $js . '
+            $html = $this->_getButtonsHtml() .
+                '<textarea name="' .
+                $this->getName() .
+                '" title="' .
+                $this->getTitle() .
+                '" ' .
+                $this->_getUiId() .
+                ' id="' .
+                $this->getHtmlId() .
+                '"' .
+                ' class="textarea' .
+                $this->getClass() .
+                '" ' .
+                $this->serialize(
+                    $this->getHtmlAttributes()
+                ) .
+                ' >' .
+                $this->getEscapedValue() .
+                '</textarea>' .
+                $js .
+                '
                 <script type="text/javascript">
-                //<![CDATA[' . "\n"
-                    . '(function($) {$.mage.translate.add(' . \Zend_Json::encode($translatedString) . ')})(jQuery);' . "\n"
-                    . $jsSetupObject . ' = new tinyMceWysiwygSetup("' . $this->getHtmlId() . '", '
-                    . \Zend_Json::encode($this->getConfig()).');'
-                    . $forceLoad.'
-                    editorFormValidationHandler = ' . $jsSetupObject . '.onFormValidation.bind(' . $jsSetupObject . ');
-                    Event.observe("toggle' . $this->getHtmlId() . '", "click", '
-                        . $jsSetupObject . '.toggle.bind('.$jsSetupObject.'));
+                //<![CDATA[' .
+                "\n" .
+                '(function($) {$.mage.translate.add(' .
+                \Zend_Json::encode(
+                    $translatedString
+                ) .
+                ')})(jQuery);' .
+                "\n" .
+                $jsSetupObject .
+                ' = new tinyMceWysiwygSetup("' .
+                $this->getHtmlId() .
+                '", ' .
+                \Zend_Json::encode(
+                    $this->getConfig()
+                ) .
+                ');' .
+                $forceLoad .
+                '
+                    editorFormValidationHandler = ' .
+                $jsSetupObject .
+                '.onFormValidation.bind(' .
+                $jsSetupObject .
+                ');
+                    Event.observe("toggle' .
+                $this->getHtmlId() .
+                '", "click", ' .
+                $jsSetupObject .
+                '.toggle.bind(' .
+                $jsSetupObject .
+                '));
                     varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.attachEventHandler("tinymceBeforeSetContent", '
-                        . $jsSetupObject . '.beforeSetContent.bind(' . $jsSetupObject . '));
-                    varienGlobalEvents.attachEventHandler("tinymceSaveContent", '
-                        . $jsSetupObject . '.saveContent.bind(' . $jsSetupObject . '));
+                    varienGlobalEvents.attachEventHandler("tinymceBeforeSetContent", ' .
+                $jsSetupObject .
+                '.beforeSetContent.bind(' .
+                $jsSetupObject .
+                '));
+                    varienGlobalEvents.attachEventHandler("tinymceSaveContent", ' .
+                $jsSetupObject .
+                '.saveContent.bind(' .
+                $jsSetupObject .
+                '));
                     varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", '
-                        . $jsSetupObject . '.openFileBrowser.bind(' . $jsSetupObject . '));
+                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
+                $jsSetupObject .
+                '.openFileBrowser.bind(' .
+                $jsSetupObject .
+                '));
                 //]]>
                 </script>';
 
@@ -163,7 +211,7 @@ class Editor extends Textarea
      */
     public function getTheme()
     {
-        if(!$this->hasData('theme')) {
+        if (!$this->hasData('theme')) {
             return 'simple';
         }
 
@@ -177,7 +225,7 @@ class Editor extends Textarea
      */
     protected function _getButtonsHtml()
     {
-        $buttonsHtml = '<div id="buttons'.$this->getHtmlId().'" class="buttons-set">';
+        $buttonsHtml = '<div id="buttons' . $this->getHtmlId() . '" class="buttons-set">';
         if ($this->isEnabled()) {
             $buttonsHtml .= $this->_getToggleButtonHtml() . $this->_getPluginButtonsHtml($this->isHidden());
         } else {
@@ -196,12 +244,14 @@ class Editor extends Textarea
      */
     protected function _getToggleButtonHtml($visible = true)
     {
-        $html = $this->_getButtonHtml(array(
-            'title'     => $this->translate('Show / Hide Editor'),
-            'class'     => 'action-show-hide',
-            'style'     => $visible ? '' : 'display:none',
-            'id'        => 'toggle'.$this->getHtmlId(),
-        ));
+        $html = $this->_getButtonHtml(
+            array(
+                'title' => $this->translate('Show / Hide Editor'),
+                'class' => 'action-show-hide',
+                'style' => $visible ? '' : 'display:none',
+                'id' => 'toggle' . $this->getHtmlId()
+            )
+        );
         return $html;
     }
 
@@ -209,7 +259,7 @@ class Editor extends Textarea
      * Prepare Html buttons for additional WYSIWYG features
      *
      * @param bool $visible Display button or not
-     * @return void
+     * @return string
      */
     protected function _getPluginButtonsHtml($visible = true)
     {
@@ -217,29 +267,34 @@ class Editor extends Textarea
 
         // Button to widget insertion window
         if ($this->getConfig('add_widgets')) {
-            $buttonsHtml .= $this->_getButtonHtml(array(
-                'title'     => $this->translate('Insert Widget...'),
-                'onclick'   => "widgetTools.openDialog('" . $this->getConfig('widget_window_url') . "widget_target_id/"
-                               . $this->getHtmlId() . "')",
-                'class'     => 'action-add-widget plugin',
-                'style'     => $visible ? '' : 'display:none',
-            ));
+            $buttonsHtml .= $this->_getButtonHtml(
+                array(
+                    'title' => $this->translate('Insert Widget...'),
+                    'onclick' => "widgetTools.openDialog('" . $this->getConfig(
+                        'widget_window_url'
+                    ) . "widget_target_id/" . $this->getHtmlId() . "')",
+                    'class' => 'action-add-widget plugin',
+                    'style' => $visible ? '' : 'display:none'
+                )
+            );
         }
 
         // Button to media images insertion window
         if ($this->getConfig('add_images')) {
-            $buttonsHtml .= $this->_getButtonHtml(array(
-                'title'     => $this->translate('Insert Image...'),
-                'onclick'   => "MediabrowserUtility.openDialog('" .
-                               $this->getConfig('files_browser_window_url') .
-                               "target_element_id/" . $this->getHtmlId() . "/" .
-                                ((null !== $this->getConfig('store_id'))
-                                    ? ('store/' . $this->getConfig('store_id') . '/')
-                                    : '')
-                               . "')",
-            'class'     => 'action-add-image plugin',
-            'style'     => $visible ? '' : 'display:none',
-        ));
+            $buttonsHtml .= $this->_getButtonHtml(
+                array(
+                    'title' => $this->translate('Insert Image...'),
+                    'onclick' => "MediabrowserUtility.openDialog('" . $this->getConfig(
+                        'files_browser_window_url'
+                    ) . "target_element_id/" . $this->getHtmlId() . "/" . (null !== $this->getConfig(
+                        'store_id'
+                    ) ? 'store/' . $this->getConfig(
+                        'store_id'
+                    ) . '/' : '') . "')",
+                    'class' => 'action-add-image plugin',
+                    'style' => $visible ? '' : 'display:none'
+                )
+            );
         }
 
         foreach ($this->getConfig('plugins') as $plugin) {
@@ -304,7 +359,7 @@ class Editor extends Textarea
             if (is_array($value) && isset($value['search']) && isset($value['subject'])) {
                 $subject = $value['subject'];
                 foreach ($value['search'] as $part) {
-                    $subject = str_replace('{{'.$part.'}}', $this->getDataUsingMethod($part), $subject);
+                    $subject = str_replace('{{' . $part . '}}', $this->getDataUsingMethod($part), $subject);
                 }
                 $preparedOptions[$name] = $subject;
             } else {
@@ -323,13 +378,13 @@ class Editor extends Textarea
     protected function _getButtonHtml($data)
     {
         $html = '<button type="button"';
-        $html.= ' class="scalable '.(isset($data['class']) ? $data['class'] : '').'"';
-        $html.= isset($data['onclick']) ? ' onclick="'.$data['onclick'].'"' : '';
-        $html.= isset($data['style']) ? ' style="'.$data['style'].'"' : '';
-        $html.= isset($data['id']) ? ' id="'.$data['id'].'"' : '';
-        $html.= '>';
-        $html.= isset($data['title']) ? '<span><span><span>'.$data['title'].'</span></span></span>' : '';
-        $html.= '</button>';
+        $html .= ' class="scalable ' . (isset($data['class']) ? $data['class'] : '') . '"';
+        $html .= isset($data['onclick']) ? ' onclick="' . $data['onclick'] . '"' : '';
+        $html .= isset($data['style']) ? ' style="' . $data['style'] . '"' : '';
+        $html .= isset($data['id']) ? ' id="' . $data['id'] . '"' : '';
+        $html .= '>';
+        $html .= isset($data['title']) ? '<span><span><span>' . $data['title'] . '</span></span></span>' : '';
+        $html .= '</button>';
 
         return $html;
     }
@@ -347,12 +402,13 @@ class Editor extends Textarea
             return $html;
         }
 
-        $html = '<div id="editor'.$this->getHtmlId().'"'
-              . ($this->getConfig('no_display') ? ' style="display:none;"' : '')
-              . ($this->getConfig('container_class') ? ' class="' . $this->getConfig('container_class') . '"' : '')
-              . '>'
-              . $html
-              . '</div>';
+        $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(
+            'no_display'
+        ) ? ' style="display:none;"' : '') . ($this->getConfig(
+            'container_class'
+        ) ? ' class="' . $this->getConfig(
+            'container_class'
+        ) . '"' : '') . '>' . $html . '</div>';
 
         return $html;
     }
@@ -365,7 +421,7 @@ class Editor extends Textarea
      */
     public function getConfig($key = null)
     {
-        if ( !($this->_getData('config') instanceof \Magento\Object) ) {
+        if (!$this->_getData('config') instanceof \Magento\Object) {
             $config = new \Magento\Object();
             $this->setConfig($config);
         }

@@ -23,35 +23,25 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\CatalogInventory\Model\Observer">
-        <param name="indexerPrice">
-            <instance type="Magento\Catalog\Model\Resource\Product\Indexer\Price\Proxy" />
-        </param>
-        <param name="resourceIndexerStock">
-            <instance type="Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy" />
-        </param>
-        <param name="resourceStock">
-            <instance type="Magento\CatalogInventory\Model\Resource\Stock\Proxy" />
-        </param>
-        <param name="indexer">
-            <instance type="Magento\Index\Model\Indexer\Proxy" />
-        </param>
-        <param name="stock">
-            <instance type="Magento\CatalogInventory\Model\Stock\Proxy" />
-        </param>
-        <param name="stockStatus">
-            <instance type="Magento\CatalogInventory\Model\Stock\Status\Proxy" />
-        </param>
-        <param name="catalogInventoryData">
-            <instance type="Magento\CatalogInventory\Helper\Data\Proxy" />
-        </param>
+        <arguments>
+            <argument name="resourceIndexerStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy</argument>
+            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
+            <argument name="indexer" xsi:type="object">Magento\Index\Model\Indexer\Proxy</argument>
+            <argument name="stock" xsi:type="object">Magento\CatalogInventory\Model\Stock\Proxy</argument>
+            <argument name="stockStatus" xsi:type="object">Magento\CatalogInventory\Model\Stock\Status\Proxy</argument>
+            <argument name="catalogInventoryData" xsi:type="object">Magento\CatalogInventory\Helper\Data\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="cataloginventory_setup"><value>Magento\Eav\Model\Entity\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="cataloginventory_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer">
+        <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer"/>
     </type>
 </config>

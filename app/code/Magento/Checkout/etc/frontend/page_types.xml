@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="checkout_cart_configure" label="Configure Cart Item (Any)"/>
     <type id="checkout_cart_index" label="Shopping Cart"/>
     <type id="checkout_onepage_failure" label="One Page Checkout Failure"/>

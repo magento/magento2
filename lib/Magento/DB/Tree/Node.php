@@ -23,14 +23,12 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\DB\Tree;
 
 use Magento\DB\Tree\Node\NodeException;
 
-class Node {
-
+class Node
+{
     /**
      * @var int
      */
@@ -76,14 +74,13 @@ class Node {
      */
     public $numChild = 0;
 
-
     /**
      * @param array $nodeData
      * @param array $keys
-     * @return $this
      * @throws NodeException
      */
-    function __construct($nodeData, $keys) {
+    public function __construct($nodeData, $keys)
+    {
         if (empty($nodeData)) {
             throw new NodeException('Empty array of node information');
         }
@@ -91,13 +88,13 @@ class Node {
             throw new NodeException('Empty keys array');
         }
 
-        $this->id    = $nodeData[$keys['id']];
-        $this->pid   = $nodeData[$keys['pid']];
-        $this->left  = $nodeData[$keys['left']];
+        $this->id = $nodeData[$keys['id']];
+        $this->pid = $nodeData[$keys['pid']];
+        $this->left = $nodeData[$keys['left']];
         $this->right = $nodeData[$keys['right']];
         $this->level = $nodeData[$keys['level']];
 
-        $this->data  = $nodeData;
+        $this->data = $nodeData;
         $a = $this->right - $this->left;
         if ($a > 1) {
             $this->hasChild = true;
@@ -110,7 +107,8 @@ class Node {
      * @param string $name
      * @return null|array
      */
-    function getData($name) {
+    public function getData($name)
+    {
         if (isset($this->data[$name])) {
             return $this->data[$name];
         } else {
@@ -121,44 +119,50 @@ class Node {
     /**
      * @return int
      */
-    function getLevel() {
+    public function getLevel()
+    {
         return $this->level;
     }
 
     /**
      * @return int
      */
-    function getLeft() {
+    public function getLeft()
+    {
         return $this->left;
     }
 
     /**
      * @return int
      */
-    function getRight() {
+    public function getRight()
+    {
         return $this->right;
     }
 
     /**
      * @return string|int
      */
-    function getPid() {
+    public function getPid()
+    {
         return $this->pid;
     }
 
     /**
      * @return string|int
      */
-    function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-    
+
     /**
      * Return true if node has child
      *
      * @return bool
      */
-    function isParent() {
+    public function isParent()
+    {
         if ($this->right - $this->left > 1) {
             return true;
         } else {

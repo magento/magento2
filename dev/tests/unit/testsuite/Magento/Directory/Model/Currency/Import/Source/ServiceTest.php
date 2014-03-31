@@ -38,33 +38,45 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_importConfig = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Config', array(), array(), '', false
+            'Magento\Directory\Model\Currency\Import\Config',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);
     }
 
     public function testToOptionArray()
     {
-        $this->_importConfig
-            ->expects($this->once())
-            ->method('getAvailableServices')
-            ->will($this->returnValue(array('service_one', 'service_two')))
-        ;
-        $this->_importConfig
-            ->expects($this->at(1))
-            ->method('getServiceLabel')
-            ->with('service_one')
-            ->will($this->returnValue('Service One'))
-        ;
-        $this->_importConfig
-            ->expects($this->at(2))
-            ->method('getServiceLabel')
-            ->with('service_two')
-            ->will($this->returnValue('Service Two'))
-        ;
+        $this->_importConfig->expects(
+            $this->once()
+        )->method(
+            'getAvailableServices'
+        )->will(
+            $this->returnValue(array('service_one', 'service_two'))
+        );
+        $this->_importConfig->expects(
+            $this->at(1)
+        )->method(
+            'getServiceLabel'
+        )->with(
+            'service_one'
+        )->will(
+            $this->returnValue('Service One')
+        );
+        $this->_importConfig->expects(
+            $this->at(2)
+        )->method(
+            'getServiceLabel'
+        )->with(
+            'service_two'
+        )->will(
+            $this->returnValue('Service Two')
+        );
         $expectedResult = array(
             array('value' => 'service_one', 'label' => 'Service One'),
-            array('value' => 'service_two', 'label' => 'Service Two'),
+            array('value' => 'service_two', 'label' => 'Service Two')
         );
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());
         // Makes sure the value is calculated only once

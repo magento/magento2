@@ -37,6 +37,8 @@ class Instance extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Block constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

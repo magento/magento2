@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector;
 
 /**
@@ -120,19 +119,17 @@ class StoreView extends \Magento\Backend\Block\Template
     {
         /** @var $assignSaveButton \Magento\Backend\Block\Widget\Button */
         $assignSaveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $assignSaveButton->setData(array(
-            'label'     => __('Assign'),
-            'class'     => 'action-save primary',
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'assign-confirm',
-                        'target' => 'body',
-                        'eventData' => array()
-                    ),
-                ),
+        $assignSaveButton->setData(
+            array(
+                'label' => __('Assign'),
+                'class' => 'action-save primary',
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array('event' => 'assign-confirm', 'target' => 'body', 'eventData' => array())
+                    )
+                )
             )
-        ));
+        );
 
         return $assignSaveButton->toHtml();
     }
@@ -159,10 +156,10 @@ class StoreView extends \Magento\Backend\Block\Template
         $storesByThemes = array();
         foreach ($this->_customizationConfig->getStoresByThemes() as $themeId => $stores) {
             /* NOTE
-                We filter out themes not included to $assignedThemeIds array so we only get actually "assigned"
-                themes. So if theme is assigned to store or website and used by store-view only via config fall-back
-                mechanism it will not get to the resulting $storesByThemes array.
-            */
+               We filter out themes not included to $assignedThemeIds array so we only get actually "assigned"
+               themes. So if theme is assigned to store or website and used by store-view only via config fall-back
+               mechanism it will not get to the resulting $storesByThemes array.
+               */
             if (!in_array($themeId, $assignedThemeIds)) {
                 continue;
             }
@@ -193,7 +190,7 @@ class StoreView extends \Magento\Backend\Block\Template
                     $tmpStore = $store->getId();
                 } elseif ($tmpStore != $store->getId()) {
                     $isMultipleMode = true;
-                    break(2);
+                    break 2;
                 }
             }
         }
@@ -209,15 +206,16 @@ class StoreView extends \Magento\Backend\Block\Template
     public function getOptionsJson()
     {
         $options = array();
-        $options['storesByThemes']    = $this->_getStoresByThemes();
-        $options['assignUrl']         = $this->getUrl('adminhtml/*/assignThemeToStore', array(
-            'theme_id' => $this->getThemeId()
-        ));
-        $options['afterAssignUrl']    = $this->getUrl('adminhtml/*/index');
+        $options['storesByThemes'] = $this->_getStoresByThemes();
+        $options['assignUrl'] = $this->getUrl(
+            'adminhtml/*/assignThemeToStore',
+            array('theme_id' => $this->getThemeId())
+        );
+        $options['afterAssignUrl'] = $this->getUrl('adminhtml/*/index');
         $options['hasMultipleStores'] = $this->_hasMultipleStores();
 
-        $options['actionOnAssign']   = $this->getData('actionOnAssign');
-        $options['afterAssignOpen']  = false;
+        $options['actionOnAssign'] = $this->getData('actionOnAssign');
+        $options['afterAssignOpen'] = false;
 
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->_coreHelper;

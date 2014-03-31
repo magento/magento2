@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
 /**
  * Sales Order Creditmemo Pdf default items renderer
  */
-class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
+class Creditmemo extends AbstractItems
 {
     /**
      * Core string
@@ -39,24 +38,24 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
     protected $string;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\App\Filesystem $filesystem,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -75,23 +74,25 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
 
     /**
      * Draw item line
+     *
+     * @return void
      */
     public function draw()
     {
-        $order  = $this->getOrder();
-        $item   = $this->getItem();
-        $pdf    = $this->getPdf();
-        $page   = $this->getPage();
+        $order = $this->getOrder();
+        $item = $this->getItem();
+        $pdf = $this->getPdf();
+        $page = $this->getPage();
 
         $items = $this->getChilds($item);
         $prevOptionId = '';
-        $drawItems  = array();
-        $leftBound  = 35;
+        $drawItems = array();
+        $leftBound = 35;
         $rightBound = 565;
 
         foreach ($items as $childItem) {
-            $x      = $leftBound;
-            $line   = array();
+            $x = $leftBound;
+            $line = array();
 
             $attributes = $this->getSelectionAttributes($childItem);
             if (is_array($attributes)) {
@@ -101,25 +102,19 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = array(
-                    'lines'  => array(),
-                    'height' => 15
-                );
+                $drawItems[$optionId] = array('lines' => array(), 'height' => 15);
             }
 
             // draw selection attributes
             if ($childItem->getOrderItem()->getParentItem()) {
                 if ($prevOptionId != $attributes['option_id']) {
                     $line[0] = array(
-                        'font'  => 'italic',
-                        'text'  => $this->string->split($attributes['option_label'], 38, true, true),
-                        'feed'  => $x
+                        'font' => 'italic',
+                        'text' => $this->string->split($attributes['option_label'], 38, true, true),
+                        'feed' => $x
                     );
 
-                    $drawItems[$optionId] = array(
-                        'lines'  => array($line),
-                        'height' => 15
-                    );
+                    $drawItems[$optionId] = array('lines' => array($line), 'height' => 15);
 
                     $line = array();
                     $prevOptionId = $attributes['option_id'];
@@ -135,10 +130,7 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
                 $name = $childItem->getName();
             }
 
-            $line[] = array(
-                'text'  => $this->string->split($name, 35, true, true),
-                'feed'  => $feed
-            );
+            $line[] = array('text' => $this->string->split($name, 35, true, true), 'feed' => $feed);
 
             $x += 220;
 
@@ -148,10 +140,7 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
                 foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
-                $line[] = array(
-                    'text'  => $text,
-                    'feed'  => $x
-                );
+                $line[] = array('text' => $text, 'feed' => $x);
             }
 
             $x += 100;
@@ -160,32 +149,20 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
             if ($this->canShowPriceInfo($childItem)) {
                 // draw Total(ex)
                 $text = $order->formatPriceTxt($childItem->getRowTotal());
-                $line[] = array(
-                    'text'  => $text,
-                    'feed'  => $x,
-                    'font'  => 'bold',
-                    'align' => 'right',
-                    'width' => 50
-                );
+                $line[] = array('text' => $text, 'feed' => $x, 'font' => 'bold', 'align' => 'right', 'width' => 50);
                 $x += 50;
 
                 // draw Discount
                 $text = $order->formatPriceTxt(-$childItem->getDiscountAmount());
-                $line[] = array(
-                    'text'  => $text,
-                    'feed'  => $x,
-                    'font'  => 'bold',
-                    'align' => 'right',
-                    'width' => 50
-                );
+                $line[] = array('text' => $text, 'feed' => $x, 'font' => 'bold', 'align' => 'right', 'width' => 50);
                 $x += 50;
 
                 // draw QTY
                 $text = $childItem->getQty() * 1;
                 $line[] = array(
-                    'text'  => $childItem->getQty() * 1,
-                    'feed'  => $x,
-                    'font'  => 'bold',
+                    'text' => $childItem->getQty() * 1,
+                    'feed' => $x,
+                    'font' => 'bold',
                     'align' => 'center',
                     'width' => 30
                 );
@@ -193,29 +170,17 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
 
                 // draw Tax
                 $text = $order->formatPriceTxt($childItem->getTaxAmount());
-                $line[] = array(
-                    'text'  => $text,
-                    'feed'  => $x,
-                    'font'  => 'bold',
-                    'align' => 'right',
-                    'width' => 45
-                );
+                $line[] = array('text' => $text, 'feed' => $x, 'font' => 'bold', 'align' => 'right', 'width' => 45);
                 $x += 45;
 
                 // draw Total(inc)
                 $text = $order->formatPriceTxt(
                     $childItem->getRowTotal() + $childItem->getTaxAmount() - $childItem->getDiscountAmount()
                 );
-                $line[] = array(
-                    'text'  => $text,
-                    'feed'  => $rightBound,
-                    'font'  => 'bold',
-                    'align' => 'right',
-                );
+                $line[] = array('text' => $text, 'feed' => $rightBound, 'font' => 'bold', 'align' => 'right');
             }
 
             $drawItems[$optionId]['lines'][] = $line;
-
         }
 
         // custom options
@@ -225,21 +190,23 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
                 foreach ($options['options'] as $option) {
                     $lines = array();
                     $lines[][] = array(
-                        'text'  => $this->string->split(
+                        'text' => $this->string->split(
                             $this->filterManager->stripTags($option['label']),
                             40,
                             true,
                             true
                         ),
-                        'font'  => 'italic',
-                        'feed'  => $leftBound
+                        'font' => 'italic',
+                        'feed' => $leftBound
                     );
 
                     if ($option['value']) {
                         $text = array();
-                        $printValue = isset($option['print_value'])
-                            ? $option['print_value']
-                            : $this->filterManager->stripTags($option['value']);
+                        $printValue = isset(
+                            $option['print_value']
+                        ) ? $option['print_value'] : $this->filterManager->stripTags(
+                            $option['value']
+                        );
                         $values = explode(', ', $printValue);
                         foreach ($values as $value) {
                             foreach ($this->string->split($value, 30, true, true) as $subValue) {
@@ -247,16 +214,10 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
                             }
                         }
 
-                        $lines[][] = array(
-                            'text'  => $text,
-                            'feed'  => $leftBound + 5
-                        );
+                        $lines[][] = array('text' => $text, 'feed' => $leftBound + 5);
                     }
 
-                    $drawItems[] = array(
-                        'lines'  => $lines,
-                        'height' => 15
-                    );
+                    $drawItems[] = array('lines' => $lines, 'height' => 15);
                 }
             }
         }

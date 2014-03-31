@@ -37,6 +37,4 @@
     <label for="<?php echo $rememberMeId; ?>" class="label"><span><?php echo __('Remember Me') ?></span></label>
     <a class="link tip" href="#"><?php echo __('What\'s this?') ?></a>
 </div>
-<?php if ($this->helper('Magento\Checkout\Helper\Data')->isContextCheckout()): ?>
-    <input name="context" type="hidden" value="checkout" />
-<?php endif; ?>
+

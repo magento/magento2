@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Block;
 
 class BlockTest extends \PHPUnit_Framework_TestCase
@@ -37,12 +36,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Cms\Model\Block');
+        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Block');
         $cmsBlock->load('fixture_block', 'identifier');
         /** @var $block \Magento\Cms\Block\Block */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Cms\Block\Block');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Cms\Block\Block'
+        );
         $block->setBlockId($cmsBlock->getId());
         $result = $block->toHtml();
         $this->assertContains('<a href="http://example.com/', $result);

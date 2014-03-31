@@ -30,7 +30,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_oauthHelper = new \Magento\Oauth\Helper\Oauth(new \Magento\Math\Random);
+        $this->_oauthHelper = new \Magento\Oauth\Helper\Oauth(new \Magento\Math\Random());
     }
 
     protected function tearDown()

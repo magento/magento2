@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Block\Adminhtml;
+
+use Magento\Newsletter\Model\Resource\Problem\Collection;
 
 /**
  * Newsletter problem block template.
@@ -31,13 +34,8 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Block\Adminhtml;
-
-use Magento\Newsletter\Model\Resource\Problem\Collection;
-
 class Problem extends \Magento\Backend\Block\Template
 {
-
     /**
      * @var string
      */
@@ -62,12 +60,14 @@ class Problem extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
 
-        $collection = $this->_problemCollection->addSubscriberInfo()
-            ->addQueueInfo();
+        $collection = $this->_problemCollection->addSubscriberInfo()->addQueueInfo();
     }
 
     /**
@@ -77,24 +77,24 @@ class Problem extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->setChild('deleteButton',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'del.button')
-                ->setData(
-                    array(
-                        'label' => __('Delete Selected Problems'),
-                        'onclick' => 'problemController.deleteSelected();'
-                    )
-                )
+        $this->setChild(
+            'deleteButton',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button',
+                'del.button'
+            )->setData(
+                array('label' => __('Delete Selected Problems'), 'onclick' => 'problemController.deleteSelected();')
+            )
         );
 
-        $this->setChild('unsubscribeButton',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'unsubscribe.button')
-                ->setData(
-                    array(
-                        'label' => __('Unsubscribe Selected'),
-                        'onclick' => 'problemController.unsubscribe();'
-                    )
-                )
+        $this->setChild(
+            'unsubscribeButton',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button',
+                'unsubscribe.button'
+            )->setData(
+                array('label' => __('Unsubscribe Selected'), 'onclick' => 'problemController.unsubscribe();')
+            )
         );
         return parent::_prepareLayout();
     }

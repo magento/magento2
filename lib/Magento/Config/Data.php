@@ -41,7 +41,6 @@ class Data implements \Magento\Config\DataInterface
      */
     protected $_cache;
 
-
     /**
      * Cache tag
      *
@@ -57,9 +56,11 @@ class Data implements \Magento\Config\DataInterface
     protected $_data = array();
 
     /**
+     * Constructor
+     *
      * @param \Magento\Config\ReaderInterface $reader
      * @param \Magento\Config\CacheInterface $cache
-     * @param $cacheId
+     * @param string $cacheId
      */
     public function __construct(
         \Magento\Config\ReaderInterface $reader,
@@ -80,6 +81,7 @@ class Data implements \Magento\Config\DataInterface
      * Merge config data to the object
      *
      * @param array $config
+     * @return void
      */
     public function merge(array $config)
     {
@@ -91,7 +93,7 @@ class Data implements \Magento\Config\DataInterface
      *
      * @param string $path
      * @param mixed $default
-     * @return mixed
+     * @return array|mixed|null
      */
     public function get($path = null, $default = null)
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 /**
@@ -37,18 +36,20 @@ class FileSystem
     protected $_resolutionPool;
 
     /**
+     * View service
+     *
      * @var Service
      */
     protected $_viewService;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Design\FileResolution\StrategyPool $resolutionPool
      * @param Service $viewService
      */
-    public function __construct(
-        \Magento\View\Design\FileResolution\StrategyPool $resolutionPool,
-        Service $viewService
-    ) {
+    public function __construct(\Magento\View\Design\FileResolution\StrategyPool $resolutionPool, Service $viewService)
+    {
         $this->_resolutionPool = $resolutionPool;
         $this->_viewService = $viewService;
     }
@@ -64,8 +65,14 @@ class FileSystem
     {
         $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
         $this->_viewService->updateDesignParams($params);
-        return $this->_resolutionPool->getFileStrategy(!empty($params['skipProxy']))
-            ->getFile($params['area'], $params['themeModel'], $filePath, $params['module']);
+        return $this->_resolutionPool->getFileStrategy(
+            !empty($params['skipProxy'])
+        )->getFile(
+            $params['area'],
+            $params['themeModel'],
+            $filePath,
+            $params['module']
+        );
     }
 
     /**
@@ -79,8 +86,14 @@ class FileSystem
     {
         $this->_viewService->updateDesignParams($params);
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
-        return $this->_resolutionPool->getLocaleStrategy($skipProxy)->getLocaleFile($params['area'],
-            $params['themeModel'], $params['locale'], $file);
+        return $this->_resolutionPool->getLocaleStrategy(
+            $skipProxy
+        )->getLocaleFile(
+            $params['area'],
+            $params['themeModel'],
+            $params['locale'],
+            $file
+        );
     }
 
     /**
@@ -95,28 +108,37 @@ class FileSystem
         $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
         $this->_viewService->updateDesignParams($params);
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
-        return $this->_resolutionPool->getViewStrategy($skipProxy)->getViewFile($params['area'],
-            $params['themeModel'], $params['locale'], $filePath, $params['module']);
+        return $this->_resolutionPool->getViewStrategy(
+            $skipProxy
+        )->getViewFile(
+            $params['area'],
+            $params['themeModel'],
+            $params['locale'],
+            $filePath,
+            $params['module']
+        );
     }
 
     /**
      * Notify that view file resolved path was changed (i.e. it was published to a public directory)
      *
-     * @param string $targetPath
-     * @param string $fileId
-     * @param array $params
+     * @param Publisher\FileInterface $publisherFile
      * @return $this
      */
-    public function notifyViewFileLocationChanged($targetPath, $fileId, $params)
+    public function notifyViewFileLocationChanged(Publisher\FileInterface $publisherFile)
     {
+        $params = $publisherFile->getViewParams();
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
         $strategy = $this->_resolutionPool->getViewStrategy($skipProxy);
-        if ($strategy instanceof \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface) {
-            /** @var $strategy \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface  */
-            $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
-            $this->_viewService->updateDesignParams($params);
+        if ($strategy instanceof Design\FileResolution\Strategy\View\NotifiableInterface) {
+            /** @var $strategy Design\FileResolution\Strategy\View\NotifiableInterface  */
             $strategy->setViewFilePathToMap(
-                $params['area'], $params['themeModel'], $params['locale'], $params['module'], $filePath, $targetPath
+                $params['area'],
+                $params['themeModel'],
+                $params['locale'],
+                $params['module'],
+                $publisherFile->getFilePath(),
+                $publisherFile->buildPublicViewFilename()
             );
         }
 
@@ -136,7 +158,7 @@ class FileSystem
 
         foreach ($parts as $part) {
             if ('..' === $part) {
-                if (!count($result) || ($result[count($result) - 1] == '..')) {
+                if (!count($result) || $result[count($result) - 1] == '..') {
                     $result[] = $part;
                 } else {
                     array_pop($result);

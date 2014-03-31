@@ -33,43 +33,47 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
+use Magento\App\Action\Context;
+use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
+use Magento\Session\Generic;
+use Magento\UrlFactory;
+
 class Advanced extends \Magento\App\Action\Action
 {
-
     /**
      * Url factory
      *
-     * @var \Magento\UrlFactory
+     * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
      * Catalog search advanced
      *
-     * @var \Magento\CatalogSearch\Model\Advanced
+     * @var ModelAdvanced
      */
     protected $_catalogSearchAdvanced;
 
     /**
      * Catalog search session
      *
-     * @var \Magento\Session\Generic
+     * @var Generic
      */
     protected $_catalogSearchSession;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Session\Generic $catalogSearchSession
-     * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
-     * @param \Magento\UrlFactory $urlFactory
+     * @param Context $context
+     * @param Generic $catalogSearchSession
+     * @param ModelAdvanced $catalogSearchAdvanced
+     * @param UrlFactory $urlFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Session\Generic $catalogSearchSession,
-        \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
-        \Magento\UrlFactory $urlFactory
+        Context $context,
+        Generic $catalogSearchSession,
+        ModelAdvanced $catalogSearchAdvanced,
+        UrlFactory $urlFactory
     ) {
         $this->_catalogSearchSession = $catalogSearchSession;
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
@@ -77,6 +81,9 @@ class Advanced extends \Magento\App\Action\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -84,19 +91,23 @@ class Advanced extends \Magento\App\Action\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function resultAction()
     {
         $this->_view->loadLayout();
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-            $defaultUrl = $this->_urlFactory->create()
-                ->setQueryParams($this->getRequest()->getQuery())
-                ->getUrl('*/*/');
+            $defaultUrl = $this->_urlFactory->create()->addQueryParams(
+                $this->getRequest()->getQuery()
+            )->getUrl(
+                '*/*/'
+            );
             $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
         }
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

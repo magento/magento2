@@ -29,15 +29,19 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
+use Magento\Model\Exception;
+
 class Address extends \Magento\Core\Model\Config\Value
 {
+    /**
+     * @return $this
+     * @throws Exception
+     */
     protected function _beforeSave()
     {
         $value = $this->getValue();
         if (!\Zend_Validate::is($value, 'EmailAddress')) {
-            throw new \Magento\Core\Exception(
-                __('Please correct the email address: "%1".', $value)
-            );
+            throw new Exception(__('Please correct the email address: "%1".', $value));
         }
         return $this;
     }

@@ -36,7 +36,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      */
     protected $_url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
 
-     /**
+    /**
      * HTTP client
      *
      * @var \Magento\HTTP\ZendClient
@@ -69,27 +69,28 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * @param int $retry
      * @return float|null
      */
-    protected function _convert($currencyFrom, $currencyTo, $retry=0)
+    protected function _convert($currencyFrom, $currencyTo, $retry = 0)
     {
         $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, $this->_url);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
 
         try {
-            $response = $this->_httpClient
-                ->setUri($url)
-                ->setConfig(array('timeout' => $this->_coreStoreConfig->getConfig('currency/webservicex/timeout')))
-                ->request('GET')
-                ->getBody();
+            $response = $this->_httpClient->setUri(
+                $url
+            )->setConfig(
+                array('timeout' => $this->_coreStoreConfig->getConfig('currency/webservicex/timeout'))
+            )->request(
+                'GET'
+            )->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
-            if( !$xml ) {
+            if (!$xml) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
                 return null;
             }
-            return (float) $xml;
-        }
-        catch (\Exception $e) {
-            if( $retry == 0 ) {
+            return (double)$xml;
+        } catch (\Exception $e) {
+            if ($retry == 0) {
                 $this->_convert($currencyFrom, $currencyTo, 1);
             } else {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);

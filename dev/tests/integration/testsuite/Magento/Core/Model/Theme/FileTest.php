@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Theme;
 
 class FileTest extends \PHPUnit_Framework_TestCase
@@ -54,10 +53,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->_data = array(
             'file_path' => 'main.css',
             'file_type' => 'css',
-            'content'   => 'content files',
-            'order'     => 0,
-            'theme'     => $this->_theme,
-            'theme_id'  => $this->_theme->getId(),
+            'content' => 'content files',
+            'order' => 0,
+            'theme' => $this->_theme,
+            'theme_id' => $this->_theme->getId()
         );
     }
 

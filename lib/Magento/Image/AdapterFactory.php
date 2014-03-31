@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Image;
 
 class AdapterFactory
@@ -77,8 +74,8 @@ class AdapterFactory
         $imageAdapter = $this->objectManager->create($this->adapterMap[$adapterAlias]['class']);
         if (!$imageAdapter instanceof Adapter\AdapterInterface) {
             throw new \InvalidArgumentException(
-                $this->adapterMap[$adapterAlias]['class']
-                . ' is not instance of \Magento\Image\Adapter\AdapterInterface'
+                $this->adapterMap[$adapterAlias]['class'] .
+                ' is not instance of \Magento\Image\Adapter\AdapterInterface'
             );
         }
         $imageAdapter->checkDependencies();

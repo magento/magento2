@@ -40,15 +40,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $expectedMetadata = array('text_xml' => array('type' => 'text/xml', 'model' => 'Xml'));
-        $validInterpreterMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Request\Deserializer\Xml')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $validInterpreterMock = $this->getMockBuilder(
+            'Magento\Webapi\Controller\Rest\Request\Deserializer\Xml'
+        )->disableOriginalConstructor()->getMock();
 
         $objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $objectManagerMock
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($validInterpreterMock));
+        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($validInterpreterMock));
 
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(
             $objectManagerMock,
@@ -74,19 +71,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetLogicExceptionInvalidRequestDeserializer()
     {
         $expectedMetadata = array('text_xml' => array('type' => 'text/xml', 'model' => 'Xml'));
-        $invalidInterpreter = $this->getMockBuilder('Magento\Webapi\Controller\Response\Rest\Renderer\Json')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invalidInterpreter = $this->getMockBuilder(
+            'Magento\Webapi\Controller\Response\Rest\Renderer\Json'
+        )->disableOriginalConstructor()->getMock();
 
         $this->setExpectedException(
             'LogicException',
             'The deserializer must implement "Magento\Webapi\Controller\Rest\Request\DeserializerInterface".'
         );
         $objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $objectManagerMock
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($invalidInterpreter));
+        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($invalidInterpreter));
 
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(
             $objectManagerMock,

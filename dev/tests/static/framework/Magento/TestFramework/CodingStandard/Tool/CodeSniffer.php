@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,43 +27,44 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeSniffer
-    implements \Magento\TestFramework\CodingStandard\ToolInterface
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
+use Magento\TestFramework\CodingStandard\ToolInterface;
+
+class CodeSniffer implements ToolInterface
 {
     /**
      * Ruleset directory
      *
      * @var string
      */
-    protected $_rulesetDir;
+    protected $rulesetDir;
 
     /**
      * Report file
      *
      * @var string
      */
-    protected $_reportFile;
+    protected $reportFile;
 
     /**
      * PHPCS cli tool wrapper
      *
-     * @var \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper
+     * @var Wrapper
      */
-    protected $_wrapper;
+    protected $wrapper;
 
     /**
      * Constructor
      *
      * @param string $rulesetDir \Directory that locates the inspection rules
      * @param string $reportFile Destination file to write inspection report to
-     * @param \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper $wrapper
+     * @param Wrapper $wrapper
      */
-    public function __construct($rulesetDir, $reportFile,
-        \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper $wrapper
-    ) {
-        $this->_reportFile = $reportFile;
-        $this->_rulesetDir = $rulesetDir;
-        $this->_wrapper = $wrapper;
+    public function __construct($rulesetDir, $reportFile, Wrapper $wrapper)
+    {
+        $this->reportFile = $reportFile;
+        $this->rulesetDir = $rulesetDir;
+        $this->wrapper = $wrapper;
     }
 
     /**
@@ -86,11 +84,11 @@ class CodeSniffer
      */
     public function version()
     {
-        return $this->_wrapper->version();
+        return $this->wrapper->version();
     }
 
     /**
-     * Run tool for files cpecified
+     * Run tool for files specified
      *
      * @param array $whiteList Files/directories to be inspected
      * @param array $blackList Files/directories to be excluded from the inspection
@@ -99,29 +97,39 @@ class CodeSniffer
      *
      * @return int
      */
-    public function run(array $whiteList, array $blackList = array(), array $extensions = array(), $warningSeverity = 0)
-    {
-        $whiteList = array_map(function ($item) {
-            return $item;
-        }, $whiteList);
+    public function run(
+        array $whiteList,
+        array $blackList = array(),
+        array $extensions = array(),
+        $warningSeverity = 0
+    ) {
+        $whiteList = array_map(
+            function ($item) {
+                return $item;
+            },
+            $whiteList
+        );
 
-        $blackList = array_map(function ($item) {
-            return preg_quote($item);
-        }, $blackList);
+        $blackList = array_map(
+            function ($item) {
+                return preg_quote($item);
+            },
+            $blackList
+        );
 
-        $this->_wrapper->checkRequirements();
-        $settings = $this->_wrapper->getDefaults();
+        $this->wrapper->checkRequirements();
+        $settings = $this->wrapper->getDefaults();
         $settings['files'] = $whiteList;
-        $settings['standard'] = $this->_rulesetDir;
+        $settings['standard'] = $this->rulesetDir;
         $settings['ignored'] = $blackList;
         $settings['extensions'] = $extensions;
-        $settings['reportFile'] = $this->_reportFile;
+        $settings['reportFile'] = $this->reportFile;
         $settings['warningSeverity'] = $warningSeverity;
         $settings['reports']['checkstyle'] = null;
-        $this->_wrapper->setValues($settings);
+        $this->wrapper->setValues($settings);
 
         ob_start();
-        $result = $this->_wrapper->process();
+        $result = $this->wrapper->process();
         ob_end_clean();
         return $result;
     }
@@ -133,6 +141,6 @@ class CodeSniffer
      */
     public function getReportFile()
     {
-        return $this->_reportFile;
+        return $this->reportFile;
     }
 }

@@ -73,7 +73,7 @@ class SizeTest extends \PHPUnit_Framework_TestCase
             array('1K', 1024),
             array('1g', 1073741824),
             array('asdas', 0),
-            array('1M', 1048576),
+            array('1M', 1048576)
         );
     }
 }

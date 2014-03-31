@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Block\Role\Tab;
 
 /**
@@ -29,16 +28,17 @@ namespace Magento\User\Block\Role\Tab;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Edit extends \Magento\Backend\Block\Widget\Form
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'role/edit.phtml';
 
     /**
      * Root ACL Resource
      *
-     * @var \Magento\Core\Model\Acl\RootResource
+     * @var \Magento\Acl\RootResource
      */
     protected $_rootResource;
 
@@ -68,7 +68,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Acl\RootResource $rootResource
+     * @param \Magento\Acl\RootResource $rootResource
      * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Acl\Resource\ProviderInterface $aclResourceProvider
@@ -77,7 +77,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Acl\RootResource $rootResource,
+        \Magento\Acl\RootResource $rootResource,
         \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Acl\Resource\ProviderInterface $aclResourceProvider,
@@ -134,6 +134,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -159,7 +161,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form
     /**
      * Check if everything is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function isEverythingAllowed()
     {

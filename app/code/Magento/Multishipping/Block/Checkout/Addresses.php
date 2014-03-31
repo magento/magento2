@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Multishipping\Block\Checkout;
 
 /**
  * Multishipping checkout choose item addresses block
@@ -31,8 +32,6 @@
  * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
@@ -100,17 +99,23 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve HTML for addresses dropdown
      *
-     * @param $item
+     * @param mixed $item
      * @param int $index
      * @return string
      */
     public function getAddressesHtmlSelect($item, $index)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('ship['.$index.']['.$item->getQuoteItemId().'][address]')
-            ->setId('ship_'.$index.'_'.$item->getQuoteItemId().'_address')
-            ->setValue($item->getCustomerAddressId())
-            ->setOptions($this->getAddressOptions());
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setName(
+            'ship[' . $index . '][' . $item->getQuoteItemId() . '][address]'
+        )->setId(
+            'ship_' . $index . '_' . $item->getQuoteItemId() . '_address'
+        )->setValue(
+            $item->getCustomerAddressId()
+        )->setOptions(
+            $this->getAddressOptions()
+        );
 
         return $select->getHtml();
     }
@@ -126,10 +131,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
         if (is_null($options)) {
             $options = array();
             foreach ($this->getCustomer()->getAddresses() as $address) {
-                $options[] = array(
-                    'value' => $address->getId(),
-                    'label' => $address->format('oneline')
-                );
+                $options[] = array('value' => $address->getId(), 'label' => $address->format('oneline'));
             }
             $this->setData('address_options', $options);
         }
@@ -146,7 +148,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param $item
+     * @param mixed $item
      * @return string
      */
     public function getItemUrl($item)
@@ -155,7 +157,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param $item
+     * @param mixed $item
      * @return string
      */
     public function getItemDeleteUrl($item)
@@ -184,7 +186,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getBackUrl()
     {
-        return $this->getUrl('*/cart/');
+        return $this->getUrl('checkout/cart/');
     }
 
     /**

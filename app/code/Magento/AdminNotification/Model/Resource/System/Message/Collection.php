@@ -21,11 +21,9 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\AdminNotification\Model\Resource\System\Message;
 
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * System message list
@@ -48,7 +46,7 @@ class Collection
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\AdminNotification\Model\System\MessageList $messageList
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
@@ -57,7 +55,7 @@ class Collection
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\AdminNotification\Model\System\MessageList $messageList,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_messageList = $messageList;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -65,30 +63,32 @@ class Collection
 
     /**
      * Resource collection initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init(
-            'Magento\AdminNotification\Model\System\Message', 'Magento\AdminNotification\Model\Resource\System\Message'
+            'Magento\AdminNotification\Model\System\Message',
+            'Magento\AdminNotification\Model\Resource\System\Message'
         );
     }
 
     /**
      * Initialize db query
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection|void
+     * @return void
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addOrder('severity', self::SORT_ORDER_ASC)
-            ->addOrder('created_at');
+        $this->addOrder('severity', self::SORT_ORDER_ASC)->addOrder('created_at');
     }
 
     /**
      * Initialize system messages after load
      *
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return void
      */
     protected function _afterLoad()
     {
@@ -111,7 +111,7 @@ class Collection
      * Set message severity filter
      *
      * @param int $severity
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function setSeverity($severity)
     {

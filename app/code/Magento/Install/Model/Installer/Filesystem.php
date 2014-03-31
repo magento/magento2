@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model\Installer;
 
 /**
@@ -35,7 +34,9 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
      * @deprecated since 1.7.1.0
      */
     const MODE_WRITE = 'write';
-    const MODE_READ  = 'read';
+
+    const MODE_READ = 'read';
+
     /**#@- */
 
     /**
@@ -83,12 +84,14 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Check and prepare file system
      *
+     * @return $this
+     * @throws \Exception
      */
     public function install()
     {
         if (!$this->_checkFilesystem()) {
             throw new \Exception();
-        };
+        }
         return $this;
     }
 

@@ -46,9 +46,9 @@
 <div class="search">
     <form action="#" id="form-search">
         <label for="search-global">
-            <input type="text" id="search-global" name="query" data-mage-init="<?php
+            <input type="text" id="search-global" name="query" data-mage-init='<?php
             echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWidgetInitOptions()))
-            ?>">
+            ?>'>
         </label>
         <button type="submit" title="<?php echo __('Search') ?>"><?php echo __('Search') ?></button>
     </form>

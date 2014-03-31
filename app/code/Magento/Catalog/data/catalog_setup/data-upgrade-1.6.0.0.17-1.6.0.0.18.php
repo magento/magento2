@@ -35,14 +35,9 @@ if ($attribute) {
         'input' => 'categories',
         'group' => 'General Information',
         'backend_model' => 'Magento\Catalog\Model\Product\Attribute\Backend\Category',
-        'frontend_input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+        'frontend_input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category'
     );
     foreach ($properties as $key => $value) {
-        $this->updateAttribute(
-            $attribute['entity_type_id'],
-            $attribute['attribute_id'],
-            $key,
-            $value
-        );
+        $this->updateAttribute($attribute['entity_type_id'], $attribute['attribute_id'], $key, $value);
     }
 }

@@ -33,12 +33,14 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
+
+class Main extends AbstractMain
 {
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -48,11 +50,7 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
         $form = $this->getForm();
         /* @var $fieldset \Magento\Data\Form\Element\Fieldset */
         $fieldset = $form->getElement('base_fieldset');
-        $fiedsToRemove = array(
-            'attribute_code',
-            'is_unique',
-            'frontend_class',
-        );
+        $fiedsToRemove = array('attribute_code', 'is_unique', 'frontend_class');
 
         foreach ($fieldset->getElements() as $element) {
             /** @var \Magento\Data\Form\AbstractForm $element  */
@@ -65,16 +63,8 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
         }
 
         $frontendInputElm = $form->getElement('frontend_input');
-        $additionalTypes = array(
-            array(
-                'value' => 'price',
-                'label' => __('Price')
-            ),
-        );
-        $additionalReadOnlyTypes = array(
-            'media_image' => __('Media Image'),
-            'gallery'     => __('Gallery')
-        );
+        $additionalTypes = array(array('value' => 'price', 'label' => __('Price')));
+        $additionalReadOnlyTypes = array('media_image' => __('Media Image'), 'gallery' => __('Gallery'));
         if (isset($additionalReadOnlyTypes[$attributeObject->getFrontendInput()])) {
             $additionalTypes[] = array(
                 'value' => $attributeObject->getFrontendInput(),
@@ -84,7 +74,7 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
 
         $response = new \Magento\Object();
         $response->setTypes(array());
-        $this->_eventManager->dispatch('adminhtml_product_attribute_types', array('response'=>$response));
+        $this->_eventManager->dispatch('adminhtml_product_attribute_types', array('response' => $response));
         $_disabledTypes = array();
         $_hiddenFields = array();
         foreach ($response->getTypes() as $type) {

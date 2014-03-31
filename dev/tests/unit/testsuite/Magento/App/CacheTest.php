@@ -48,24 +48,34 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->_initCacheTypeMocks();
 
         $this->_cacheFrontendMock = $this->getMockForAbstractClass(
-            'Magento\Cache\FrontendInterface', array(), '', true, true, true, array('clean')
+            'Magento\Cache\FrontendInterface',
+            array(),
+            '',
+            true,
+            true,
+            true,
+            array('clean')
         );
 
         $frontendPoolMock = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
-        $frontendPoolMock
-            ->expects($this->any())
-            ->method('valid')
-            ->will($this->onConsecutiveCalls(true, false));
+        $frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
 
-        $frontendPoolMock
-            ->expects($this->any())
-            ->method('current')
-            ->will($this->returnValue($this->_cacheFrontendMock));
-        $frontendPoolMock
-            ->expects($this->any())
-            ->method('get')
-            ->with(\Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID)
-            ->will($this->returnValue($this->_cacheFrontendMock));
+        $frontendPoolMock->expects(
+            $this->any()
+        )->method(
+            'current'
+        )->will(
+            $this->returnValue($this->_cacheFrontendMock)
+        );
+        $frontendPoolMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            \Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
+        )->will(
+            $this->returnValue($this->_cacheFrontendMock)
+        );
 
         $this->_model = new \Magento\App\Cache($frontendPoolMock);
     }
@@ -77,9 +87,11 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $cacheTypes = array('Magento\Cache\Frontend\Decorator\TagScope', 'Magento\Cache\Frontend\Decorator\Bare');
         foreach ($cacheTypes as $type) {
-            $this->_cacheTypeMocks[$type] = $this->getMock($type, array('clean'), array(
-                $this->getMockForAbstractClass('Magento\Cache\FrontendInterface'), 'FIXTURE_TAG'
-            ));
+            $this->_cacheTypeMocks[$type] = $this->getMock(
+                $type,
+                array('clean'),
+                array($this->getMockForAbstractClass('Magento\Cache\FrontendInterface'), 'FIXTURE_TAG')
+            );
         }
     }
 
@@ -114,12 +126,15 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('load')
-            ->with('test_id')
-            ->will($this->returnValue('test_data'))
-        ;
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'test_id'
+        )->will(
+            $this->returnValue('test_data')
+        );
         $this->assertEquals('test_data', $this->_model->load('test_id'));
     }
 
@@ -134,30 +149,40 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave($inputData, $inputId, $inputTags, $expectedData, $expectedId, $expectedTags)
     {
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('save')
-            ->with($this->identicalTo($expectedData), $expectedId, $expectedTags)
-        ;
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'save'
+        )->with(
+            $this->identicalTo($expectedData),
+            $expectedId,
+            $expectedTags
+        );
         $this->_model->save($inputData, $inputId, $inputTags);
     }
 
     public function saveDataProvider()
     {
-        $configTag = \Magento\Core\Model\Config::CACHE_TAG;
+        $configTag = \Magento\App\Config::CACHE_TAG;
         return array(
-            'default tags' => array(
-                'test_data', 'test_id', array(), 'test_data', 'test_id', array()
-            ),
+            'default tags' => array('test_data', 'test_id', array(), 'test_data', 'test_id', array()),
             'config tags' => array(
-                'test_data', 'test_id', array($configTag), 'test_data', 'test_id', array($configTag)
+                'test_data',
+                'test_id',
+                array($configTag),
+                'test_data',
+                'test_id',
+                array($configTag)
             ),
             'lowercase tags' => array(
-                'test_data', 'test_id', array('test_tag'), 'test_data', 'test_id', array('test_tag')
+                'test_data',
+                'test_id',
+                array('test_tag'),
+                'test_data',
+                'test_id',
+                array('test_tag')
             ),
-            'non-string data' => array(
-                1234567890, 'test_id', array(), '1234567890', 'test_id', array()
-            ),
+            'non-string data' => array(1234567890, 'test_id', array(), '1234567890', 'test_id', array())
         );
     }
 
@@ -167,43 +192,50 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemove($result)
     {
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('remove')
-            ->with('test_id')
-            ->will($this->returnValue($result))
-        ;
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'remove'
+        )->with(
+            'test_id'
+        )->will(
+            $this->returnValue($result)
+        );
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
 
     public function successFailureDataProvider()
     {
-        return array(
-            'success' => array(true),
-            'failure' => array(false),
-        );
+        return array('success' => array(true), 'failure' => array(false));
     }
 
     public function testCleanByTags()
     {
         $expectedTags = array('test_tag');
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags)
-            ->will($this->returnValue(true))
-        ;
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'clean'
+        )->with(
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            $expectedTags
+        )->will(
+            $this->returnValue(true)
+        );
         $this->assertTrue($this->_model->clean($expectedTags));
     }
 
     public function testCleanByEmptyTags()
     {
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_ALL)
-            ->will($this->returnValue(true))
-        ;
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'clean'
+        )->with(
+            \Zend_Cache::CLEANING_MODE_ALL
+        )->will(
+            $this->returnValue(true)
+        );
         $this->assertTrue($this->_model->clean());
     }
 }

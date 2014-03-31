@@ -62,13 +62,13 @@
         <div class="field street required">
             <label for="street_1" class="label"><span><?php echo __('Street Address') ?></span></label>
             <div class="control">
-                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" title="<?php echo __('Street Address') ?>" id="street_1" class="input-text <?php echo $_streetValidationClass ?>"  />
+                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getStreetLine(1)) ?>" title="<?php echo __('Street Address') ?>" id="street_1" class="input-text <?php echo $_streetValidationClass ?>"  />
                 <div class="nested">
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-                    <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                    <?php for ($_i = 1, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <div class="control">
-                                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" title="<?php echo __('Street Address %1', $_i) ?>" id="street_<?php echo $_i ?>" class="input-text <?php echo $_streetValidationClass ?>">
+                                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getStreetLine($_i+1)) ?>" title="<?php echo __('Street Address %1', $_i+1) ?>" id="street_<?php echo $_i+1 ?>" class="input-text <?php echo $_streetValidationClass ?>">
                             </div>
                         </div>
                     <?php endfor; ?>
@@ -96,7 +96,7 @@
                 <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" class="validate-select" style="display:none;"<?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>>
                     <option value=""><?php echo __('Please select region, state or province') ?></option>
                 </select>
-                <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>/>
+                <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>/>
             </div>
         </div>
         <div class="field zip required">
@@ -134,9 +134,15 @@
             <input type="hidden" name="default_shipping" value="1">
         <?php endif; ?>
     </fieldset>
-    <div class="actions">
-        <div class="primary"><button type="submit" class="action submit" title="<?php echo __('Save Address') ?>"><span><?php echo __('Save Address') ?></span></button></div>
-        <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Go back') ?></span></a></div>
+    <div class="actions toolbar">
+        <div class="primary">
+            <button type="submit" class="action save" title="<?php echo __('Save Address') ?>">
+                <span><?php echo __('Save Address') ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Go back') ?></span></a>
+        </div>
     </div>
 </form>
 <script type="text/javascript">
@@ -155,7 +161,7 @@
                     postcodeId: '#zip',
                     form: $('#form-validate').validation(),
                     regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                    defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+                    defaultRegion: "<?php echo $this->getRegionId() ?>",
                     countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
                 });
             });

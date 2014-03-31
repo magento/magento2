@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Email\Model\Resource\Template;
 
 /**
  * Templates collection
@@ -32,9 +32,7 @@
  * @package     Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Email\Model\Resource\Template;
-
-class Collection extends  \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Template table name
@@ -46,6 +44,7 @@ class Collection extends  \Magento\Core\Model\Resource\Db\Collection\AbstractCol
     /**
      * Define resource table
      *
+     * @return void
      */
     public function _construct()
     {

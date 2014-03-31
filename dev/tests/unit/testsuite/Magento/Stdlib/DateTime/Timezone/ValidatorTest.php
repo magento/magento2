@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib\DateTime\Timezone;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
@@ -48,7 +47,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithTimestampOutOfSpecifiedRangeThrowsException()
     {
-        $this->_validator = new \Magento\Stdlib\DateTime\Timezone\Validator;
+        $this->_validator = new \Magento\Stdlib\DateTime\Timezone\Validator();
         $this->_validator->validate(mktime(1, 2, 3, 4, 5, 2007), mktime(1, 2, 3, 4, 5, 2006));
     }
 
@@ -58,26 +57,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function validateWithTimestampOutOfSystemRangeDataProvider()
     {
         return array(
-            array(
-                array(
-                    'min' => 2000,
-                    'max' => 2030
-                ),
-                array(
-                    'timestamp' => PHP_INT_MAX,
-                    'to_date' => PHP_INT_MAX
-                ),
-            ),
-            array(
-                array(
-                    'min' => 2000,
-                    'max' => 2030
-                ),
-                array(
-                    'timestamp' => 0,
-                    'to_date' => PHP_INT_MAX
-                ),
-            )
+            array(array('min' => 2000, 'max' => 2030), array('timestamp' => PHP_INT_MAX, 'to_date' => PHP_INT_MAX)),
+            array(array('min' => 2000, 'max' => 2030), array('timestamp' => 0, 'to_date' => PHP_INT_MAX))
         );
     }
 }

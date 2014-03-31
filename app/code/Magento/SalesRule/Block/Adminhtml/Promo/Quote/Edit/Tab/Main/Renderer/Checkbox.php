@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main\Renderer;
 
 /**
  * Renderer for specific checkbox that is used on Rule Information tab in Shopping cart price rules
@@ -31,11 +32,8 @@
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main\Renderer;
-
-class Checkbox
-    extends \Magento\Backend\Block\AbstractBlock
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Checkbox extends \Magento\Backend\Block\AbstractBlock implements
+    \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Data\Form\Element\Factory
@@ -69,17 +67,21 @@ class Checkbox
         $checkbox->setForm($element->getForm());
 
         $elementHtml = sprintf(
-            '<div class="field no-label field-%s with-note">'
-                    . '<div class="control">'
-                        . '<div class="nested">'
-                            . '<div class="field choice"> %s'
-                                .'<label class="label" for="%s">%s</label>'
-                                . '<p class="note">%s</p>'
-                            . '</div>'
-                        . '</div>'
-                    . '</div>'
-                . '</div>',
-            $element->getHtmlId(), $checkbox->getElementHtml(), $element->getHtmlId(), $element->getLabel(), $element->getNote()
+            '<div class="field no-label field-%s with-note">' .
+            '<div class="control">' .
+            '<div class="nested">' .
+            '<div class="field choice"> %s' .
+            '<label class="label" for="%s">%s</label>' .
+            '<p class="note">%s</p>' .
+            '</div>' .
+            '</div>' .
+            '</div>' .
+            '</div>',
+            $element->getHtmlId(),
+            $checkbox->getElementHtml(),
+            $element->getHtmlId(),
+            $element->getLabel(),
+            $element->getNote()
         );
         return $elementHtml;
     }

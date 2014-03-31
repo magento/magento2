@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
 /**
  * Shipment tracking control form
  *
  */
-namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
-
 class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
     /**
@@ -38,14 +37,14 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()
     ) {
@@ -56,16 +55,16 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * Prepares layout of block
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage
+     * @return void
      */
     protected function _prepareLayout()
     {
-        $onclick = "submitAndReloadArea($('shipment_tracking_info').parentNode, '".$this->getSubmitUrl()."')";
-        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'   => __('Add'),
-            'class'   => 'save',
-            'onclick' => $onclick
-        ));
+        $onclick = "submitAndReloadArea($('shipment_tracking_info').parentNode, '" . $this->getSubmitUrl() . "')";
+        $this->addChild(
+            'save_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('label' => __('Add'), 'class' => 'save', 'onclick' => $onclick)
+        );
     }
 
     /**
@@ -75,7 +74,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      */
     public function getSubmitUrl()
     {
-        return $this->getUrl('adminhtml/*/addTrack/', array('shipment_id'=>$this->getShipment()->getId()));
+        return $this->getUrl('adminhtml/*/addTrack/', array('shipment_id' => $this->getShipment()->getId()));
     }
 
     /**
@@ -91,17 +90,21 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * Retrieve remove url
      *
-     * @param $track
+     * @param \Magento\Sales\Model\Order\Shipment\Track $track
      * @return string
      */
     public function getRemoveUrl($track)
     {
-        return $this->getUrl('adminhtml/*/removeTrack/', array(
-            'shipment_id' => $this->getShipment()->getId(),
-            'track_id' => $track->getId()
-        ));
+        return $this->getUrl(
+            'adminhtml/*/removeTrack/',
+            array('shipment_id' => $this->getShipment()->getId(), 'track_id' => $track->getId())
+        );
     }
 
+    /**
+     * @param string $code
+     * @return false|string
+     */
     public function getCarrierTitle($code)
     {
         $carrier = $this->_carrierFactory->create($code);

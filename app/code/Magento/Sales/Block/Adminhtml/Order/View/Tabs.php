@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 /**
  * Order view tabs
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View;
-
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -42,14 +41,14 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -60,6 +59,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Retrieve available order
      *
      * @return \Magento\Sales\Model\Order
+     * @throws \Magento\Model\Exception
      */
     public function getOrder()
     {
@@ -72,9 +72,14 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         if ($this->_coreRegistry->registry('order')) {
             return $this->_coreRegistry->registry('order');
         }
-        throw new \Magento\Core\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Model\Exception(__('We cannot get the order instance.'));
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

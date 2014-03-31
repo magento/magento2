@@ -23,22 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Model\Resource\Block;
 
 /**
  * CMS block model
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Resource\Block;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,7 +56,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int|\Magento\Core\Model\Store $store
      * @param bool $withAdmin
-     * @return \Magento\Cms\Model\Resource\Block\Collection
+     * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
@@ -99,6 +94,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Join store relation table if there is store filter
+     *
+     * @return void
      */
     protected function _renderFiltersBefore()
     {
@@ -107,9 +104,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 array('store_table' => $this->getTable('cms_block_store')),
                 'main_table.block_id = store_table.block_id',
                 array()
-            )->group('main_table.block_id');
+            )->group(
+                'main_table.block_id'
+            );
         }
         return parent::_renderFiltersBefore();
     }
-
 }

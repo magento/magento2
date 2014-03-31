@@ -35,8 +35,19 @@ namespace Magento\Core\Block\Store;
 
 class Switcher extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_groups = array();
+
+    /**
+     * @var array
+     */
     protected $_stores = array();
+
+    /**
+     * @var bool
+     */
     protected $_loaded = false;
 
     /**
@@ -70,6 +81,9 @@ class Switcher extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_loadData();
@@ -78,6 +92,9 @@ class Switcher extends \Magento\View\Element\Template
         return parent::_construct();
     }
 
+    /**
+     * @return $this
+     */
     protected function _loadData()
     {
         if ($this->_loaded) {
@@ -85,12 +102,8 @@ class Switcher extends \Magento\View\Element\Template
         }
 
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        $storeCollection = $this->_storeFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($websiteId);
-        $groupCollection = $this->_storeGroupFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($websiteId);
+        $storeCollection = $this->_storeFactory->create()->getCollection()->addWebsiteFilter($websiteId);
+        $groupCollection = $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($websiteId);
         foreach ($groupCollection as $group) {
             $this->_groups[$group->getId()] = $group;
         }
@@ -107,6 +120,9 @@ class Switcher extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getStoreCount()
     {
         $stores = array();
@@ -131,6 +147,9 @@ class Switcher extends \Magento\View\Element\Template
         return count($this->getStores());
     }
 
+    /**
+     * @return int
+     */
     public function getLanguageCount()
     {
         $groupId = $this->_storeManager->getStore()->getGroupId();
@@ -142,11 +161,17 @@ class Switcher extends \Magento\View\Element\Template
         return count($this->getLanguages());
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentStoreId()
     {
         return $this->_storeManager->getStore()->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getCurrentStoreCode()
     {
         return $this->_storeManager->getStore()->getCode();

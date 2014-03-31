@@ -33,14 +33,17 @@
     $_product = $this->getProduct()
 ?>
 <?php if($_additional = $this->getAdditionalData()): ?>
-    <table class="data table additional attributes" id="product-attribute-specs-table">
-        <tbody>
-        <?php foreach ($_additional as $_data): ?>
-            <tr>
-                <th class="col label"><?php echo $this->escapeHtml(__($_data['label'])) ?></th>
-                <td class="col data"><?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="additional attributes table wrapper">
+        <table class="data table additional attributes" id="product-attribute-specs-table">
+            <caption class="table caption"><?php echo __('Additional Information') ?></caption>
+            <tbody>
+            <?php foreach ($_additional as $_data): ?>
+                <tr>
+                    <th class="col label" scope="row"><?php echo $this->escapeHtml(__($_data['label'])) ?></th>
+                    <td class="col data"><?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 <?php endif;?>

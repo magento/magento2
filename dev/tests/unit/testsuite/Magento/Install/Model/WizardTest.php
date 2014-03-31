@@ -72,10 +72,10 @@ class WizardTest extends \PHPUnit_Framework_TestCase
         $this->_configMock->expects($this->any())->method('getWizardSteps')->will($this->returnValue(array()));
         $this->_urlBuilderMock = $this->getMock('\Magento\UrlInterface', array(), array(), '', false);
         $this->_requestMock = $this->getMock('\Magento\App\RequestInterface', array(), array(), '', false);
-        $this->_model = $this->_objectManager->getObject('Magento\Install\Model\Wizard', array(
-            'urlBuilder' => $this->_urlBuilderMock,
-            'installConfig' => $this->_configMock
-        ));
+        $this->_model = $this->_objectManager->getObject(
+            'Magento\Install\Model\Wizard',
+            array('urlBuilder' => $this->_urlBuilderMock, 'installConfig' => $this->_configMock)
+        );
     }
 
     /**

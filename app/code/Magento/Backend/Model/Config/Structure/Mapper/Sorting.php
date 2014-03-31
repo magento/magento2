@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
-class Sorting
-    extends \Magento\Backend\Model\Config\Structure\AbstractMapper
+class Sorting extends \Magento\Backend\Model\Config\Structure\AbstractMapper
 {
     /**
      * Apply map
@@ -46,6 +45,10 @@ class Sorting
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function _processConfig($data)
     {
         foreach ($data as &$item) {
@@ -56,7 +59,6 @@ class Sorting
         uasort($data, array($this, '_cmp'));
         return $data;
     }
-
 
     /**
      * Compare elements
@@ -80,6 +82,6 @@ class Sorting
             return 0;
         }
 
-        return ($sortIndexA < $sortIndexB) ? -1 : 1;
+        return $sortIndexA < $sortIndexB ? -1 : 1;
     }
 }

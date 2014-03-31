@@ -27,9 +27,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Encrypted
-    extends \Magento\Core\Model\Config\Value
-    implements \Magento\Core\Model\Config\Data\BackendModelInterface
+class Encrypted extends \Magento\Core\Model\Config\Value implements \Magento\App\Config\Data\ProcessorInterface
 {
     /**
      * @var \Magento\Encryption\EncryptorInterface
@@ -37,22 +35,22 @@ class Encrypted
     protected $_encryptor;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -63,7 +61,7 @@ class Encrypted
     /**
      * Magic method called during class serialization
      *
-     * @return array
+     * @return string[]
      */
     public function __sleep()
     {
@@ -73,17 +71,19 @@ class Encrypted
 
     /**
      * Magic method called during class un-serialization
+     *
+     * @return void
      */
     public function __wakeup()
     {
         parent::__wakeup();
-        $this->_encryptor = \Magento\App\ObjectManager::getInstance()
-            ->get('Magento\Encryption\EncryptorInterface');
+        $this->_encryptor = \Magento\App\ObjectManager::getInstance()->get('Magento\Encryption\EncryptorInterface');
     }
 
     /**
      * Decrypt value after loading
      *
+     * @return void
      */
     protected function _afterLoad()
     {
@@ -96,6 +96,7 @@ class Encrypted
     /**
      * Encrypt value before saving
      *
+     * @return void
      */
     protected function _beforeSave()
     {

@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
+use Magento\Backend\App\Action;
 
 /**
  * Adminhtml catalog product action attribute update controller
@@ -32,24 +34,49 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
-
-use Magento\Backend\App\Action;
-
-class Attribute extends \Magento\Backend\App\Action
+class Attribute extends Action
 {
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
+     */
+    protected $_productFlatIndexerProcessor;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    protected $_productPriceIndexerProcessor;
+
+    /**
+     * Catalog product
+     *
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $_catalogProduct = null;
+
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
+     * @param \Magento\Catalog\Helper\Product $catalogProduct
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper,
+        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
+        \Magento\Catalog\Helper\Product $catalogProduct
     ) {
         parent::__construct($context);
         $this->_helper = $helper;
+        $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->_catalogProduct = $catalogProduct;
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         if (!$this->_validateProducts()) {
@@ -62,6 +89,8 @@ class Attribute extends \Magento\Backend\App\Action
 
     /**
      * Update product attributes
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -70,10 +99,10 @@ class Attribute extends \Magento\Backend\App\Action
         }
 
         /* Collect Data */
-        $inventoryData      = $this->getRequest()->getParam('inventory', array());
-        $attributesData     = $this->getRequest()->getParam('attributes', array());
-        $websiteRemoveData  = $this->getRequest()->getParam('remove_website_ids', array());
-        $websiteAddData     = $this->getRequest()->getParam('add_website_ids', array());
+        $inventoryData = $this->getRequest()->getParam('inventory', array());
+        $attributesData = $this->getRequest()->getParam('attributes', array());
+        $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', array());
+        $websiteAddData = $this->getRequest()->getParam('add_website_ids', array());
 
         /* Prepare inventory data item options (use config settings) */
         $options = $this->_objectManager->get('Magento\CatalogInventory\Helper\Data')->getConfigItemOptions();
@@ -85,25 +114,30 @@ class Attribute extends \Magento\Backend\App\Action
 
         try {
             if ($attributesData) {
-                $dateFormat = $this->_objectManager->get('Magento\Core\Model\LocaleInterface')
-                    ->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
-                $storeId    = $this->_helper->getSelectedStoreId();
+                $dateFormat = $this->_objectManager->get(
+                    'Magento\Stdlib\DateTime\TimezoneInterface'
+                )->getDateFormat(
+                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                );
+                $storeId = $this->_helper->getSelectedStoreId();
 
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
-                        ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                    $attribute = $this->_objectManager->get(
+                        'Magento\Eav\Model\Config'
+                    )->getAttribute(
+                        \Magento\Catalog\Model\Product::ENTITY,
+                        $attributeCode
+                    );
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;
                     }
                     if ($attribute->getBackendType() == 'datetime') {
                         if (!empty($value)) {
-                            $filterInput    = new \Zend_Filter_LocalizedToNormalized(array(
-                                'date_format' => $dateFormat
-                            ));
-                            $filterInternal = new \Zend_Filter_NormalizedToLocalized(array(
-                                'date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT
-                            ));
+                            $filterInput = new \Zend_Filter_LocalizedToNormalized(array('date_format' => $dateFormat));
+                            $filterInternal = new \Zend_Filter_NormalizedToLocalized(
+                                array('date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
+                            );
                             $value = $filterInternal->filter($filterInput->filter($value));
                         } else {
                             $value = null;
@@ -123,8 +157,13 @@ class Attribute extends \Magento\Backend\App\Action
                     }
                 }
 
-                $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-                    ->updateAttributes($this->_helper->getProductIds(), $attributesData, $storeId);
+                $this->_objectManager->get(
+                    'Magento\Catalog\Model\Product\Action'
+                )->updateAttributes(
+                    $this->_helper->getProductIds(),
+                    $attributesData,
+                    $storeId
+                );
             }
             if ($inventoryData) {
                 $stockItem = $this->_objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
@@ -133,8 +172,7 @@ class Attribute extends \Magento\Backend\App\Action
 
                 foreach ($this->_helper->getProductIds() as $productId) {
                     $stockItem->setData(array());
-                    $stockItem->loadByProduct($productId)
-                        ->setProductId($productId);
+                    $stockItem->loadByProduct($productId)->setProductId($productId);
 
                     $stockDataChanged = false;
                     foreach ($inventoryData as $k => $v) {
@@ -150,7 +188,9 @@ class Attribute extends \Magento\Backend\App\Action
                 }
 
                 if ($stockItemSaved) {
-                    $this->_objectManager->get('Magento\Index\Model\Indexer')->indexEvents(
+                    $this->_objectManager->get(
+                        'Magento\Index\Model\Indexer'
+                    )->indexEvents(
                         \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
                         \Magento\Index\Model\Event::TYPE_SAVE
                     );
@@ -160,7 +200,7 @@ class Attribute extends \Magento\Backend\App\Action
             if ($websiteAddData || $websiteRemoveData) {
                 /* @var $actionModel \Magento\Catalog\Model\Product\Action */
                 $actionModel = $this->_objectManager->get('Magento\Catalog\Model\Product\Action');
-                $productIds  = $this->_helper->getProductIds();
+                $productIds = $this->_helper->getProductIds();
 
                 if ($websiteRemoveData) {
                     $actionModel->updateWebsites($productIds, $websiteRemoveData, 'remove');
@@ -169,31 +209,39 @@ class Attribute extends \Magento\Backend\App\Action
                     $actionModel->updateWebsites($productIds, $websiteAddData, 'add');
                 }
 
-                $this->_eventManager->dispatch('catalog_product_to_website_change', array(
-                    'products' => $productIds
-                ));
+                $this->_eventManager->dispatch('catalog_product_to_website_change', array('products' => $productIds));
 
                 $this->messageManager->addNotice(
-                    __('Please refresh "Catalog URL Rewrites" and "Product Attributes" in System -> '
-                        . '<a href="%1">Index Management</a>.', $this->getUrl('adminhtml/process/list'))
+                    __(
+                        'Please refresh "Catalog URL Rewrites" and "Product Attributes" in System -> ' .
+                        '<a href="%1">Index Management</a>.',
+                        $this->getUrl('adminhtml/process/list')
+                    )
                 );
             }
 
             $this->messageManager->addSuccess(
                 __('A total of %1 record(s) were updated.', count($this->_helper->getProductIds()))
             );
-        }
-        catch (\Magento\Core\Exception $e) {
+
+            $this->_productFlatIndexerProcessor->reindexList($this->_helper->getProductIds());
+
+            if ($this->_catalogProduct->isDataForPriceIndexerWasChanged(
+                $attributesData
+            ) || !empty($websiteRemoveData) || !empty($websiteAddData)
+            ) {
+                $this->_productPriceIndexerProcessor->reindexList($this->_helper->getProductIds());
+            }
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );
         }
 
-        $this->_redirect('catalog/product/', array('store'=>$this->_helper->getSelectedStoreId()));
+        $this->_redirect('catalog/product/', array('store' => $this->_helper->getSelectedStoreId()));
     }
 
     /**
@@ -213,12 +261,15 @@ class Attribute extends \Magento\Backend\App\Action
 
         if ($error) {
             $this->messageManager->addError($error);
-            $this->_redirect('catalog/product/', array('_current'=>true));
+            $this->_redirect('catalog/product/', array('_current' => true));
         }
 
         return !$error;
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Catalog::update_attributes');
@@ -227,6 +278,7 @@ class Attribute extends \Magento\Backend\App\Action
     /**
      * Attributes validation action
      *
+     * @return void
      */
     public function validateAction()
     {
@@ -238,8 +290,12 @@ class Attribute extends \Magento\Backend\App\Action
         try {
             if ($attributesData) {
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
-                        ->getAttribute('catalog_product', $attributeCode);
+                    $attribute = $this->_objectManager->get(
+                        'Magento\Eav\Model\Config'
+                    )->getAttribute(
+                        'catalog_product',
+                        $attributeCode
+                    );
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;
@@ -252,12 +308,14 @@ class Attribute extends \Magento\Backend\App\Action
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager
-                ->addException($e, __('Something went wrong while updating the product(s) attributes.'));
+            $this->messageManager->addException(
+                $e,
+                __('Something went wrong while updating the product(s) attributes.')
+            );
             $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());

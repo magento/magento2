@@ -48,13 +48,13 @@ class CommentFactory
      * Create new config object
      *
      * @param string $type
-     * @return \Magento\Backend\Model\Config\CommentInterface
+     * @return CommentInterface
      * @throws \InvalidArgumentException
      */
     public function create($type)
     {
         $commentModel = $this->_objectManager->create($type);
-        if (!$commentModel instanceof \Magento\Backend\Model\Config\CommentInterface) {
+        if (!$commentModel instanceof CommentInterface) {
             throw new \InvalidArgumentException('Incorrect comment model provided');
         }
         return $commentModel;

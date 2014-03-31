@@ -38,15 +38,18 @@ class ValueTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $this->assertEquals(array(
+        $this->assertEquals(
             array(
-                'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC,
-                'label' => 'Dynamic',
+                array(
+                    'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC,
+                    'label' => 'Dynamic'
+                ),
+                array(
+                    'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT,
+                    'label' => 'Constant'
+                )
             ),
-            array(
-                'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT,
-                'label' => 'Constant',
-            ),
-        ), $this->_model->toOptionArray());
+            $this->_model->toOptionArray()
+        );
     }
 }

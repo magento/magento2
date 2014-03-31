@@ -49,25 +49,38 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\ConfigInterface');
         $this->_catalogConfig = $this->getMock('Magento\Catalog\Model\Config', array(), array(), '', false);
-        $this->_attributeConfig = $this->getMock('Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
+        $this->_attributeConfig = $this->getMock(
+            'Magento\Catalog\Model\Attribute\Config',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_model = new \Magento\Wishlist\Model\Config(
-            $this->_storeConfig, $this->_catalogConfig, $this->_attributeConfig
+            $this->_storeConfig,
+            $this->_catalogConfig,
+            $this->_attributeConfig
         );
     }
 
     public function testGetProductAttributes()
     {
-        $this->_catalogConfig
-            ->expects($this->once())
-            ->method('getProductAttributes')
-            ->will($this->returnValue(array('attribute_one', 'attribute_two')))
-        ;
-        $this->_attributeConfig
-            ->expects($this->once())
-            ->method('getAttributeNames')
-            ->with('wishlist_item')
-            ->will($this->returnValue(array('attribute_three')))
-        ;
+        $this->_catalogConfig->expects(
+            $this->once()
+        )->method(
+            'getProductAttributes'
+        )->will(
+            $this->returnValue(array('attribute_one', 'attribute_two'))
+        );
+        $this->_attributeConfig->expects(
+            $this->once()
+        )->method(
+            'getAttributeNames'
+        )->with(
+            'wishlist_item'
+        )->will(
+            $this->returnValue(array('attribute_three'))
+        );
         $expectedResult = array('attribute_one', 'attribute_two', 'attribute_three');
         $this->assertEquals($expectedResult, $this->_model->getProductAttributes());
     }

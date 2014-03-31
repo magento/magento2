@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Layout\Update;
 
 /**
  * Validator for custom layout update
@@ -34,17 +34,18 @@
  * @package    Magento_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Layout\Update;
-
 class Validator extends \Zend_Validate_Abstract
 {
     const XML_INVALID = 'invalidXml';
+
     const HELPER_ARGUMENT_TYPE = 'helperArgumentType';
+
     const UPDATER_MODEL = 'updaterModel';
 
     const XML_NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
 
     const LAYOUT_SCHEMA_SINGLE_HANDLE = 'layout_single';
+
     const LAYOUT_SCHEMA_MERGED = 'layout_merged';
 
     /**
@@ -61,7 +62,7 @@ class Validator extends \Zend_Validate_Abstract
      */
     protected $_protectedExpressions = array(
         self::HELPER_ARGUMENT_TYPE => '//*[@xsi:type="helper"]',
-        self::UPDATER_MODEL => '//updater',
+        self::UPDATER_MODEL => '//updater'
     );
 
     /**
@@ -93,27 +94,29 @@ class Validator extends \Zend_Validate_Abstract
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
         $this->_xsdSchemas = array(
-            self::LAYOUT_SCHEMA_SINGLE_HANDLE => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . '/layout_single.xsd',
-            self::LAYOUT_SCHEMA_MERGED => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . '/layout_merged.xsd',
+            self::LAYOUT_SCHEMA_SINGLE_HANDLE => $this->_modulesReader->getModuleDir(
+                'etc',
+                'Magento_Core'
+            ) . '/layout_single.xsd',
+            self::LAYOUT_SCHEMA_MERGED => $this->_modulesReader->getModuleDir(
+                'etc',
+                'Magento_Core'
+            ) . '/layout_merged.xsd'
         );
     }
 
     /**
      * Initialize messages templates with translating
      *
-     * @return \Magento\Core\Model\Layout\Update\Validator
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = array(
-                self::HELPER_ARGUMENT_TYPE =>
-                    __('Helper arguments should not be used in custom layout updates.'),
-                self::UPDATER_MODEL =>
-                    __('Updater model should not be used in custom layout updates.'),
-                self::XML_INVALID => __('Please correct the XML data and try again. %value%'),
+                self::HELPER_ARGUMENT_TYPE => __('Helper arguments should not be used in custom layout updates.'),
+                self::UPDATER_MODEL => __('Updater model should not be used in custom layout updates.'),
+                self::XML_INVALID => __('Please correct the XML data and try again. %value%')
             );
         }
         return $this;
@@ -128,7 +131,7 @@ class Validator extends \Zend_Validate_Abstract
      *
      * @param string $value
      * @param string $schema
-     * @param boolean $isSecurityCheck
+     * @param bool $isSecurityCheck
      * @return bool
      */
     public function isValid($value, $schema = self::LAYOUT_SCHEMA_SINGLE_HANDLE, $isSecurityCheck = true)
@@ -136,10 +139,7 @@ class Validator extends \Zend_Validate_Abstract
         try {
             //wrap XML value in the "layout" and "handle" tags to make it validatable
             $value = '<layout xmlns:xsi="' . self::XML_NAMESPACE_XSI . '">' . $value . '</layout>';
-            $this->_domConfigFactory->createDom(array(
-                'xml' => $value,
-                'schemaFile' => $this->_xsdSchemas[$schema]
-            ));
+            $this->_domConfigFactory->createDom(array('xml' => $value, 'schemaFile' => $this->_xsdSchemas[$schema]));
 
             if ($isSecurityCheck) {
                 $value = new \Magento\Simplexml\Element($value);

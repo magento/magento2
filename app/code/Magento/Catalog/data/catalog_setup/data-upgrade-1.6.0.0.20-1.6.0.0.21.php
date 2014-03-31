@@ -36,31 +36,27 @@ $tabNames = array(
         'attribute_group_name' => $newGeneralTabName,
         'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newGeneralTabName)),
         'tab_group_code' => 'basic',
-        'sort_order' => 10,
+        'sort_order' => 10
     ),
     'Images' => array(
         'attribute_group_name' => $newImagesTabName,
         'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newImagesTabName)),
         'tab_group_code' => 'basic',
-        'sort_order' => 20,
+        'sort_order' => 20
     ),
     'Meta Information' => array(
         'attribute_group_name' => $newMetaTabName,
         'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newMetaTabName)),
         'tab_group_code' => 'basic',
-        'sort_order' => 30,
+        'sort_order' => 30
     ),
     'Prices' => array(
         'attribute_group_name' => $newPriceTabName,
         'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newPriceTabName)),
         'tab_group_code' => 'advanced',
-        'sort_order' => 40,
+        'sort_order' => 40
     ),
-    'Design' => array(
-        'attribute_group_code' => 'design',
-        'tab_group_code' => 'advanced',
-        'sort_order' => 50,
-    )
+    'Design' => array('attribute_group_code' => 'design', 'tab_group_code' => 'advanced', 'sort_order' => 50)
 );
 
 $entityTypeId = $this->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
@@ -94,7 +90,9 @@ $attributesOrder = array(
     'category_ids' => array($newGeneralTabName => 80),
     'description' => array($newGeneralTabName => 90, 'is_required' => 0),
     'status' => array(
-        $newGeneralTabName => 100, 'is_required' => 0, 'default_value' => 1,
+        $newGeneralTabName => 100,
+        'is_required' => 0,
+        'default_value' => 1,
         'frontend_input_renderer' => 'Magento\Data\Form\Element\Hidden'
     ),
     //Autosettings tab
@@ -111,12 +109,7 @@ foreach ($attributesOrder as $key => $value) {
     if ($attribute) {
         foreach ($value as $propertyName => $propertyValue) {
             if (in_array($propertyName, $properties)) {
-                $this->updateAttribute(
-                    $entityTypeId,
-                    $attribute['attribute_id'],
-                    $propertyName,
-                    $propertyValue
-                );
+                $this->updateAttribute($entityTypeId, $attribute['attribute_id'], $propertyName, $propertyValue);
             } else {
                 $this->addAttributeToGroup(
                     $entityTypeId,

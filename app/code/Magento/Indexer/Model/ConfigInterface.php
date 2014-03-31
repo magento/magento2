@@ -21,31 +21,22 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model;
 
 interface ConfigInterface
 {
     /**
-     * Get indexer's config
+     * Get indexers list
      *
-     * @return array
+     * @return array[]
      */
-    public function getAll();
+    public function getIndexers();
 
     /**
-     * Get config value by key
+     * Get indexer by ID
      *
-     * @param string $path
-     * @param mixed $default
-     * @return mixed
-     */
-    public function get($path = null, $default = null);
-
-    /**
-     * Get list of indexer ids
-     *
+     * @param string $indexerId
      * @return array
      */
-    public function getIndexerIds();
+    public function getIndexer($indexerId);
 }

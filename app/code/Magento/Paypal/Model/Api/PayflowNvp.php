@@ -21,52 +21,72 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Api;
+
+use Magento\Payment\Model\Cart;
 
 /**
  * NVP API wrappers model
  */
-namespace Magento\Paypal\Model\Api;
-
 class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 {
     /**#@+
      * Transaction types declaration
      */
-    const TRXTYPE_AUTH_ONLY         = 'A';
-    const TRXTYPE_SALE              = 'S';
-    const TRXTYPE_CREDIT            = 'C';
-    const TRXTYPE_DELAYED_CAPTURE   = 'D';
-    const TRXTYPE_DELAYED_VOID      = 'V';
+    const TRXTYPE_AUTH_ONLY = 'A';
+
+    const TRXTYPE_SALE = 'S';
+
+    const TRXTYPE_CREDIT = 'C';
+
+    const TRXTYPE_DELAYED_CAPTURE = 'D';
+
+    const TRXTYPE_DELAYED_VOID = 'V';
+
     /**#@-*/
 
     /**#@+
      * Tender definition
      */
-    const TENDER_CC                 = 'C';
-    const TENDER_PAYPAL             = 'P';
+    const TENDER_CC = 'C';
+
+    const TENDER_PAYPAL = 'P';
+
     /**#@-*/
 
     /**#@+
      * Express Checkout Actions
      */
-    const EXPRESS_SET               = 'S';
-    const EXPRESS_GET               = 'G';
-    const EXPRESS_DO_PAYMENT        = 'D';
+    const EXPRESS_SET = 'S';
+
+    const EXPRESS_GET = 'G';
+
+    const EXPRESS_DO_PAYMENT = 'D';
+
     /**#@-*/
 
     /**#@+
      * Response codes definition
      */
     const RESPONSE_CODE_APPROVED = 0;
+
     const RESPONSE_CODE_FRAUD = 126;
+
     /**#@-*/
 
-    /**#@+
-     * Capture types (make authorization close or remain open)
+    /**
+     * Capture type (make authorization close or remain open)
+     *
+     * @var string
      */
     protected $_captureTypeComplete = 'Y';
+
+    /**
+     * Capture type (make authorization close or remain open)
+     *
+     * @var string
+     */
     protected $_captureTypeNotcomplete = 'N';
-    /**#@-*/
 
     /**
      * Global public interface map
@@ -109,7 +129,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'AMT' => 'amount',
         'AVSADDR' => 'address_verification',
         'AVSZIP' => 'postcode_verification',
-
         // payment/billing info
         'CURRENCY' => 'currency_code',
         'PAYMENTSTATUS' => 'payment_status',
@@ -124,7 +143,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'ACCT' => 'credit_card_number',
         'EXPDATE' => 'credit_card_expiration_date',
         'CVV2' => 'credit_card_cvv2',
-        'CARDSTART' => 'maestro_solo_issue_date', // MMYY, including leading zero
+        'CARDSTART' => 'maestro_solo_issue_date',
         'CARDISSUE' => 'maestro_solo_issue_number',
         'CVV2MATCH' => 'cvv2_check_result',
         // cardinal centinel
@@ -134,112 +153,189 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'ECI' => 'centinel_eci',
         'XID' => 'centinel_xid',
         'VPAS' => 'centinel_vpas_result',
-        'ECISUBMITTED3DS' => 'centinel_eci_result',
+        'ECISUBMITTED3DS' => 'centinel_eci_result'
     );
 
     /**
      * Fields that should be replaced in debug with '***'
      *
-     * @var array
+     * @var string[]
      */
-    protected $_debugReplacePrivateDataKeys = array(
-        'ACCT', 'EXPDATE', 'CVV2',
-        'PARTNER', 'USER', 'VENDOR', 'PWD',
-    );
+    protected $_debugReplacePrivateDataKeys = array('ACCT', 'EXPDATE', 'CVV2', 'PARTNER', 'USER', 'VENDOR', 'PWD');
 
-    /**#@+
-     * DoDirectPayment request/response map
+    /**
+     * DoDirectPayment request map
      *
-     * @var array
+     * @var string[]
      */
     protected $_doDirectPaymentRequest = array(
-        'ACCT', 'EXPDATE', 'CVV2', 'CURRENCY', 'EMAIL', 'TENDER', 'NOTIFYURL',
-        'AMT', 'CUSTIP', 'INVNUM',
-        'CARDISSUE', 'CARDSTART',
-        'AUTHSTATUS3DS', 'MPIVENDOR3DS', 'CAVV', 'ECI', 'XID',//cardinal centinel params
-        'TAXAMT', 'FREIGHTAMT'
+        'ACCT',
+        'EXPDATE',
+        'CVV2',
+        'CURRENCY',
+        'EMAIL',
+        'TENDER',
+        'NOTIFYURL',
+        'AMT',
+        'CUSTIP',
+        'INVNUM',
+        'CARDISSUE',
+        'CARDSTART',
+        'AUTHSTATUS3DS',
+        'MPIVENDOR3DS',
+        'CAVV',
+        'ECI',
+        'XID',
+        'TAXAMT',
+        'FREIGHTAMT'
     );
-    protected $_doDirectPaymentResponse = array(
-        'PNREF', 'PAYMENTINFO_0_TRANSACTIONID', 'CORRELATIONID', 'CVV2MATCH', 'AVSADDR', 'AVSZIP', 'PENDINGREASON'
-    );
-    /**#@-*/
 
-    /**#@+
-     * DoCapture request/response map
+    /**
+     * DoDirectPayment response map
      *
-     * @var array
+     * @var string[]
+     */
+    protected $_doDirectPaymentResponse = array(
+        'PNREF',
+        'PAYMENTINFO_0_TRANSACTIONID',
+        'CORRELATIONID',
+        'CVV2MATCH',
+        'AVSADDR',
+        'AVSZIP',
+        'PENDINGREASON'
+    );
+
+    /**
+     * DoCapture request map
+     *
+     * @var string[]
      */
     protected $_doCaptureRequest = array('ORIGID', 'CAPTURECOMPLETE', 'AMT', 'TENDER', 'NOTE', 'INVNUM');
+
+    /**
+     * DoCapture response map
+     *
+     * @var string[]
+     */
     protected $_doCaptureResponse = array('PNREF', 'TRANSACTIONID');
-    /**#@-*/
 
     /**
      * DoVoid request map
      *
-     * @var array
+     * @var string[]
      */
     protected $_doVoidRequest = array('ORIGID', 'NOTE', 'TENDER');
 
     /**
      * Request map for each API call
      *
-     * @var array
+     * @var string[]
      */
     protected $_eachCallRequest = array('PARTNER', 'USER', 'VENDOR', 'PWD', 'BUTTONSOURCE');
 
-    /**#@+
-     * RefundTransaction request/response map
+    /**
+     * RefundTransaction request map
      *
-     * @var array
+     * @var string[]
      */
     protected $_refundTransactionRequest = array('ORIGID', 'TENDER');
-    protected $_refundTransactionResponse = array('PNREF', 'REFUNDTRANSACTIONID');
-    /**#@-*/
 
-    /**#@+
-     * SetExpressCheckout request/response map
+    /**
+     * RefundTransaction response map
      *
-     * @var array
+     * @var string[]
+     */
+    protected $_refundTransactionResponse = array('PNREF', 'REFUNDTRANSACTIONID');
+
+    /**
+     * SetExpressCheckout request map
+     *
+     * @var string[]
      */
     protected $_setExpressCheckoutRequest = array(
-        'TENDER', 'AMT', 'CURRENCY', 'RETURNURL', 'CANCELURL', 'INVNUM',
-        'PAGESTYLE', 'HDRIMG', 'HDRBORDERCOLOR', 'HDRBACKCOLOR', 'PAYFLOWCOLOR', 'LOCALECODE',
+        'TENDER',
+        'AMT',
+        'CURRENCY',
+        'RETURNURL',
+        'CANCELURL',
+        'INVNUM',
+        'PAGESTYLE',
+        'HDRIMG',
+        'HDRBORDERCOLOR',
+        'HDRBACKCOLOR',
+        'PAYFLOWCOLOR',
+        'LOCALECODE'
     );
+
+    /**
+     * SetExpressCheckout response map
+     *
+     * @var string[]
+     */
     protected $_setExpressCheckoutResponse = array('REPMSG', 'TOKEN');
-    /**#@-*/
 
     /**
      * GetExpressCheckoutDetails request/response map
      *
-     * @var array
+     * @var string[]
      */
     protected $_getExpressCheckoutDetailsRequest = array('TENDER', 'TOKEN');
 
-    /**#@+
-     * DoExpressCheckoutPayment request/response map
+    /**
+     * DoExpressCheckoutPayment request map
      *
-     * @var array
+     * @var string[]
      */
     protected $_doExpressCheckoutPaymentRequest = array(
-        'TENDER', 'TOKEN', 'PAYERID', 'AMT', 'CURRENCY', 'CUSTIP', 'BUTTONSOURCE', 'NOTIFYURL',
+        'TENDER',
+        'TOKEN',
+        'PAYERID',
+        'AMT',
+        'CURRENCY',
+        'CUSTIP',
+        'BUTTONSOURCE',
+        'NOTIFYURL'
     );
-    protected $_doExpressCheckoutPaymentResponse = array(
-        'PNREF', 'PAYMENTINFO_0_TRANSACTIONID', 'REPMSG', 'AMT', 'PENDINGREASON',
-        'CVV2MATCH', 'AVSADDR', 'AVSZIP', 'CORRELATIONID'
-    );
-    /**#@-*/
 
-    /**#@+
+    /**
+     * DoExpressCheckoutPayment response map
+     *
+     * @var string[]
+     */
+    protected $_doExpressCheckoutPaymentResponse = array(
+        'PNREF',
+        'PAYMENTINFO_0_TRANSACTIONID',
+        'REPMSG',
+        'AMT',
+        'PENDINGREASON',
+        'CVV2MATCH',
+        'AVSADDR',
+        'AVSZIP',
+        'CORRELATIONID'
+    );
+
+    /**
      * GetTransactionDetailsRequest
      *
-     * @var array
+     * @var string[]
      */
     protected $_getTransactionDetailsRequest = array('ORIGID', 'TENDER');
+
+    /**
+     * GetTransactionDetailsResponse
+     *
+     * @var string[]
+     */
     protected $_getTransactionDetailsResponse = array(
-        'PAYERID', 'FIRSTNAME', 'LASTNAME', 'TRANSACTIONID',
-        'PARENTTRANSACTIONID', 'CURRENCYCODE', 'AMT', 'PAYMENTSTATUS'
+        'PAYERID',
+        'FIRSTNAME',
+        'LASTNAME',
+        'TRANSACTIONID',
+        'PARENTTRANSACTIONID',
+        'CURRENCYCODE',
+        'AMT',
+        'PAYMENTSTATUS'
     );
-    /**#@-*/
 
     /**
      * Map for shipping address import/export (extends billing address mapper)
@@ -249,11 +345,11 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     protected $_shippingAddressMap = array(
         'SHIPTOCOUNTRY' => 'country_id',
         'SHIPTOSTATE' => 'region',
-        'SHIPTOCITY'    => 'city',
-        'SHIPTOSTREET'  => 'street',
+        'SHIPTOCITY' => 'city',
+        'SHIPTOSTREET' => 'street',
         'SHIPTOSTREET2' => 'street2',
         'SHIPTOZIP' => 'postcode',
-        'SHIPTOPHONENUM' => 'telephone', // does not supported by Payflow
+        'SHIPTOPHONENUM' => 'telephone'
     );
 
     /**
@@ -270,14 +366,13 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'MIDDLENAME' => 'middlename',
         'SALUTATION' => 'prefix',
         'SUFFIX' => 'suffix',
-
-        'COUNTRYCODE' => 'country_id', // iso-3166 two-character code
-        'STATE'    => 'region',
-        'CITY'     => 'city',
-        'STREET'   => 'street',
-        'STREET2'  => 'street2',
-        'ZIP'      => 'postcode',
-        'PHONENUM' => 'telephone',
+        'COUNTRYCODE' => 'country_id',
+        'STATE' => 'region',
+        'CITY' => 'city',
+        'STREET' => 'street',
+        'STREET2' => 'street2',
+        'ZIP' => 'postcode',
+        'PHONENUM' => 'telephone'
     );
 
     /**
@@ -285,41 +380,51 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @var array
      */
-    protected $_billingAddressMapRequest = array(
-        'country_id' => 'COUNTRY',
-    );
+    protected $_billingAddressMapRequest = array('country_id' => 'COUNTRY');
 
-    /**#@+
+    /**
      * Line items export mapping settings
      *
      * @var array
      */
-    protected $_lineItemTotalExportMap = array(
-        \Magento\Paypal\Model\Cart::TOTAL_TAX       => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING  => 'FREIGHTAMT',
-    );
+    protected $_lineItemTotalExportMap = array(Cart::AMOUNT_TAX => 'TAXAMT', Cart::AMOUNT_SHIPPING => 'FREIGHTAMT');
 
+    /**
+     * Line items export request totals format
+     *
+     * @var array
+     */
     protected $_lineItemsExportRequestTotalsFormat = array(
         'amount' => 'PAYMENTREQUEST_%d_ITEMAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_TAX      => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING => 'FREIGHTAMT',
+        Cart::AMOUNT_TAX => 'TAXAMT',
+        Cart::AMOUNT_SHIPPING => 'FREIGHTAMT'
     );
 
+    /**
+     * Line items export items format
+     *
+     * @var array
+     */
     protected $_lineItemExportItemsFormat = array(
-        'name'   => 'L_PAYMENTREQUEST_%d_NAME%d',
-        'qty'    => 'L_PAYMENTREQUEST_%d_QTY%d',
-        'amount' => 'L_PAYMENTREQUEST_%d_AMT%d',
+        'name' => 'L_PAYMENTREQUEST_%d_NAME%d',
+        'qty' => 'L_PAYMENTREQUEST_%d_QTY%d',
+        'amount' => 'L_PAYMENTREQUEST_%d_AMT%d'
     );
-    /**#@-*/
 
     /**
      * Payment information response specifically to be collected after some requests
      *
-     * @var array
+     * @var string[]
      */
     protected $_paymentInformationResponse = array(
-        'PAYERID', 'CORRELATIONID', 'ADDRESSID', 'ADDRESSSTATUS',
-        'PAYMENTSTATUS', 'PENDINGREASON', 'PROTECTIONELIGIBILITY', 'EMAIL',
+        'PAYERID',
+        'CORRELATIONID',
+        'ADDRESSID',
+        'ADDRESSSTATUS',
+        'PAYMENTSTATUS',
+        'PENDINGREASON',
+        'PROTECTIONELIGIBILITY',
+        'EMAIL'
     );
 
     /**
@@ -339,9 +444,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Math\Random $mathRandom
      * @param array $data
@@ -349,9 +454,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Math\Random $mathRandom,
         array $data = array()
@@ -360,7 +465,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         parent::__construct(
             $customerAddress,
             $logger,
-            $locale,
+            $localeResolver,
             $regionFactory,
             $logAdapterFactory,
             $countryFactory,
@@ -463,12 +568,12 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * Return Payflow Edition
      *
-     * @param string
-     * @return string | null
+     * @param string $methodName
+     * @return string|null
      */
     protected function _getPayflowActionName($methodName)
     {
-        switch($methodName) {
+        switch ($methodName) {
             case \Magento\Paypal\Model\Api\Nvp::SET_EXPRESS_CHECKOUT:
                 return self::EXPRESS_SET;
             case \Magento\Paypal\Model\Api\Nvp::GET_EXPRESS_CHECKOUT_DETAILS:
@@ -487,14 +592,13 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      */
     protected function _mapPaypalMethodName($methodName)
     {
-        switch($methodName) {
+        switch ($methodName) {
             case \Magento\Paypal\Model\Api\Nvp::DO_EXPRESS_CHECKOUT_PAYMENT:
             case \Magento\Paypal\Model\Api\Nvp::GET_EXPRESS_CHECKOUT_DETAILS:
             case \Magento\Paypal\Model\Api\Nvp::SET_EXPRESS_CHECKOUT:
             case \Magento\Paypal\Model\Api\Nvp::DO_DIRECT_PAYMENT:
-                return ($this->_config->payment_action == \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH)
-                    ? self::TRXTYPE_AUTH_ONLY
-                    : self::TRXTYPE_SALE;
+                return $this->_config->payment_action ==
+                    \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH ? self::TRXTYPE_AUTH_ONLY : self::TRXTYPE_SALE;
             case \Magento\Paypal\Model\Api\Nvp::DO_CAPTURE:
                 return self::TRXTYPE_DELAYED_CAPTURE;
             case \Magento\Paypal\Model\Api\Nvp::DO_VOID:
@@ -507,7 +611,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * Catch success calls and collect warnings
      *
-     * @param array
+     * @param array $response
      * @return bool success flag
      */
     protected function _isCallSuccessful($response)
@@ -527,7 +631,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Handle logical errors
      *
      * @param array $response
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      */
     protected function _handleCallErrors($response)
     {
@@ -535,7 +640,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             $message = $response['RESPMSG'];
             $e = new \Exception(sprintf('PayPal gateway errors: %s.', $message));
             $this->_logger->logException($e);
-            throw new \Magento\Core\Exception(__('PayPal gateway rejected the request. %1', $message));
+            throw new \Magento\Model\Exception(__('PayPal gateway rejected the request. %1', $message));
         }
     }
 
@@ -565,7 +670,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * "GetTransactionDetails" method does not exists in Payflow
+     * GetTransactionDetails method does not exists in Payflow
+     *
+     * @return void
      */
     public function callGetTransactionDetails()
     {
@@ -576,6 +683,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array $from
      * @param array $collectedWarnings
+     * @return void
      */
     protected function _importFraudFiltersResult(array $from, array $collectedWarnings)
     {
@@ -590,7 +698,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * (PayFlow edition doesn't support Unilateral payments)
      *
      * @param string $methodName Current method name
-     * @return array
+     * @return string[]
      */
     protected function _prepareEachCallRequest($methodName)
     {
@@ -614,12 +722,13 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Puerto Rico should be as state of USA and not as a country
      *
      * @param array $request
+     * @return void
      */
     protected function _applyCountryWorkarounds(&$request)
     {
         if (isset($request['SHIPTOCOUNTRY']) && $request['SHIPTOCOUNTRY'] == 'PR') {
             $request['SHIPTOCOUNTRY'] = 'US';
-            $request['SHIPTOSTATE']   = 'PR';
+            $request['SHIPTOSTATE'] = 'PR';
         }
     }
 
@@ -627,7 +736,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Retrieve headers for request.
      * This is a hack to make Payflow work with negative values for items like discount has.
      *
-     * @return array
+     * @return string[]
      */
     protected function _getHeaderListForRequest()
     {
@@ -639,7 +748,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * Hack to cut off length from API type response params.
      *
      * @param  array $response
-     *
      * @return array
      */
     protected function _postProcessResponse($response)
@@ -668,7 +776,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array &$request
      * @param int $i
-     *
      * @return bool|null
      */
     protected function _exportLineItems(array &$request, $i = 0)
@@ -680,13 +787,11 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * NVP doesn't support passing discount total as a separate amount - add it as a line item.
      * This is a hack for proper line items display for order at PP EC side using Payflow through API.
      *
-     * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
-     *
      * @param array &$request
      * @param int $requestNum
      * @param int $itemNum
-     *
      * @return bool|null
+     * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
      */
     protected function _preparePaymentRequestLineItems(array &$request, $requestNum = 0, $itemNum = 0)
     {
@@ -694,12 +799,13 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             return;
         }
 
-        $this->_cart->isDiscountAsItem(true);
+        $this->_cart->setTransferDiscountAsItem();
 
         // always add cart totals, even if line items are not requested
         if ($this->_lineItemTotalExportMap) {
-            foreach ($this->_cart->getTotals() as $key => $total) {
-                if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
+            foreach ($this->_cart->getAmounts() as $key => $total) {
+                if (isset($this->_lineItemTotalExportMap[$key])) {
+                    // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
                     $request[$privateKey] = $this->_filterAmount($total);
                 } elseif (isset($this->_lineItemsExportRequestTotalsFormat[$key])) {
@@ -710,7 +816,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         }
 
         // add cart line items
-        $items = $this->_cart->getItems();
+        $items = $this->_cart->getAllItems();
         if (empty($items) || !$this->getIsLineItemsEnabled()) {
             return;
         }

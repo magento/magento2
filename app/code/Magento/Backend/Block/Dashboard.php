@@ -23,20 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 class Dashboard extends \Magento\Backend\Block\Template
 {
-    protected $_locale;
-
     /**
      * Location of the "Enable Chart" config param
      */
     const XML_PATH_ENABLE_CHARTS = 'admin/dashboard/enable_charts';
 
+    /**
+     * @var string
+     */
     protected $_template = 'dashboard/index.phtml';
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->addChild('lastOrders', 'Magento\Backend\Block\Dashboard\Orders\Grid');
@@ -52,9 +55,13 @@ class Dashboard extends \Magento\Backend\Block\Template
         if ($this->_storeConfig->getConfig(self::XML_PATH_ENABLE_CHARTS)) {
             $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
         } else {
-            $block = $this->getLayout()->createBlock('Magento\Backend\Block\Template')
-                ->setTemplate('dashboard/graph/disabled.phtml')
-                ->setConfigUrl($this->getUrl('adminhtml/system_config/edit', array('section'=>'admin')));
+            $block = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Template'
+            )->setTemplate(
+                'dashboard/graph/disabled.phtml'
+            )->setConfigUrl(
+                $this->getUrl('adminhtml/system_config/edit', array('section' => 'admin'))
+            );
         }
         $this->setChild('diagrams', $block);
 
@@ -63,11 +70,14 @@ class Dashboard extends \Magento\Backend\Block\Template
         parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getSwitchUrl()
     {
         if ($url = $this->getData('switch_url')) {
             return $url;
         }
-        return $this->getUrl('adminhtml/*/*', array('_current'=>true, 'period'=>null));
+        return $this->getUrl('adminhtml/*/*', array('_current' => true, 'period' => null));
     }
 }

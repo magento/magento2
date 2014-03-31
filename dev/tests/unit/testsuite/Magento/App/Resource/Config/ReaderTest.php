@@ -66,16 +66,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $this->_validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
-        $this->_schemaLocatorMock = $this->getMock('Magento\App\Resource\Config\SchemaLocator',
-            array(), array(), '', false);
-
-        $this->_converterMock = $this->getMock(
-            'Magento\App\Resource\Config\Converter', array(), array(), '', false
+        $this->_schemaLocatorMock = $this->getMock(
+            'Magento\App\Resource\Config\SchemaLocator',
+            array(),
+            array(),
+            '',
+            false
         );
 
-        $this->_configLocalMock = $this->getMock(
-            'Magento\App\Arguments', array(), array(), '', false
-        );
+        $this->_converterMock = $this->getMock('Magento\App\Resource\Config\Converter', array(), array(), '', false);
+
+        $this->_configLocalMock = $this->getMock('Magento\App\Arguments', array(), array(), '', false);
 
         $this->_model = new \Magento\App\Resource\Config\Reader(
             $this->_fileResolverMock,
@@ -88,30 +89,23 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $modulesConfig = include ($this->_filePath . 'resources.php');
+        $modulesConfig = include $this->_filePath . 'resources.php';
 
         $expectedResult = array(
-            'resourceName' => array(
-                'name' => 'resourceName',
-                'extends' => 'anotherResourceName',
-            ),
-            'otherResourceName' => array(
-                'name' => 'otherResourceName',
-                'connection' => 'connectionName',
-            ),
-            'defaultSetup' => array(
-                'name' => 'defaultSetup',
-                'connection' => 'customConnection'
-            ),
+            'resourceName' => array('name' => 'resourceName', 'extends' => 'anotherResourceName'),
+            'otherResourceName' => array('name' => 'otherResourceName', 'connection' => 'connectionName'),
+            'defaultSetup' => array('name' => 'defaultSetup', 'connection' => 'customConnection')
         );
 
-        $this->_fileResolverMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue(array(file_get_contents($this->_filePath .  'resources.xml'))));
+        $this->_fileResolverMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue(array(file_get_contents($this->_filePath . 'resources.xml')))
+        );
 
-        $this->_converterMock->expects($this->once())
-            ->method('convert')
-            ->will($this->returnValue($modulesConfig));
+        $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue($modulesConfig));
 
         $this->assertEquals($expectedResult, $this->_model->read());
     }

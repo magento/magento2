@@ -23,28 +23,28 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Authorizenet\Helper\HelperInterface" type="Magento\Authorizenet\Helper\Data" />
     <type name="Magento\Authorizenet\Model\Directpost\Session">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </type>
     <type name="Magento\Authorizenet\Model\Directpost">
-        <param name="session">
-            <instance type="Magento\Checkout\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="authorizenet"><value>/authorizenet/payment</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="authorizenet" xsi:type="string">/authorizenet/payment</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Authorizenet\Model\Authorizenet">
-        <param name="session">
-            <instance type="Magento\Checkout\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+        </arguments>
     </type>
 </config>

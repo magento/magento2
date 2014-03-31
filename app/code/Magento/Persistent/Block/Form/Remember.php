@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Persistent\Block\Form;
 
 /**
  * Remember Me block
@@ -31,9 +32,6 @@
  * @package     Magento_Persistent
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Persistent\Block\Form;
-
 class Remember extends \Magento\View\Element\Template
 {
     /**
@@ -72,8 +70,8 @@ class Remember extends \Magento\View\Element\Template
      */
     protected function _toHtml()
     {
-        return ($this->_persistentData->isEnabled() && $this->_persistentData->isRememberMeEnabled())
-            ? parent::_toHtml() : '';
+        return $this->_persistentData->isEnabled() &&
+            $this->_persistentData->isRememberMeEnabled() ? parent::_toHtml() : '';
     }
 
     /**
@@ -83,9 +81,9 @@ class Remember extends \Magento\View\Element\Template
      */
     public function isRememberMeChecked()
     {
-        return $this->_persistentData->isEnabled()
-            && $this->_persistentData->isRememberMeEnabled()
-            && $this->_persistentData->isRememberMeCheckedDefault();
+        return $this->_persistentData->isEnabled() &&
+            $this->_persistentData->isRememberMeEnabled() &&
+            $this->_persistentData->isRememberMeCheckedDefault();
     }
 
     /**

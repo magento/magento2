@@ -53,30 +53,18 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
 
         $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $storeMock->expects($this->any())
-            ->method('isUseStoreInUrl')
-            ->will($this->returnValue($isUseStoreInUrl));
+        $storeMock->expects($this->any())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
 
         $storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
-        $appMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
-        $appMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-        $appMock->expects($this->any())
-            ->method('getDefaultStoreView')
-            ->will($this->returnValue($storeMock));
         $urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
 
-        $urlBuilderMock->expects($this->any())
-            ->method('getUrl')
-            ->will($this->returnValue('some_url'));
+        $urlBuilderMock->expects($this->any())->method('getUrl')->will($this->returnValue('some_url'));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $block = $helper->getObject('Magento\Backend\Block\Widget\Grid', array(
-            'app' => $appMock,
             'storeManager' => $storeManagerMock,
             'urlModel' => $urlMock,
             'urlBuilder' => $urlBuilderMock,
@@ -101,9 +89,6 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function addGetClearRssDataProvider()
     {
-         return array(
-            array(true),
-            array(false)
-         );
+        return array(array(true), array(false));
     }
 }

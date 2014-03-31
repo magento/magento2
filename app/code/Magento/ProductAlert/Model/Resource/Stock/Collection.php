@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Model\Resource\Stock;
 
 /**
  * Product alert for back in stock collection
@@ -32,13 +32,12 @@
  * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model\Resource\Stock;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define stock collection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +48,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add customer filter
      *
      * @param mixed $customer
-     * @return \Magento\ProductAlert\Model\Resource\Stock\Collection
+     * @return $this
      */
     public function addCustomerFilter($customer)
     {
@@ -69,7 +68,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add website filter
      *
      * @param mixed $website
-     * @return \Magento\ProductAlert\Model\Resource\Stock\Collection
+     * @return $this
      */
     public function addWebsiteFilter($website)
     {
@@ -92,7 +91,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add status filter
      *
      * @param int $status
-     * @return \Magento\ProductAlert\Model\Resource\Stock\Collection
+     * @return $this
      */
     public function addStatusFilter($status)
     {
@@ -105,7 +104,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set order by customer
      *
      * @param string $sort
-     * @return \Magento\ProductAlert\Model\Resource\Stock\Collection
+     * @return $this
      */
     public function setCustomerOrder($sort = 'ASC')
     {

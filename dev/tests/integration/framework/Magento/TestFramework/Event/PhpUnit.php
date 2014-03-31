@@ -165,7 +165,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {
-        if (!($test instanceof \PHPUnit_Framework_TestCase) || ($test instanceof \PHPUnit_Framework_Warning)) {
+        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
             return;
         }
         $this->_eventManager->fireEvent('startTest', array($test));
@@ -182,7 +182,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      */
     public function endTest(\PHPUnit_Framework_Test $test, $time)
     {
-        if (!($test instanceof \PHPUnit_Framework_TestCase) || ($test instanceof \PHPUnit_Framework_Warning)) {
+        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
             return;
         }
         $this->_eventManager->fireEvent('endTest', array($test), true);

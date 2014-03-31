@@ -50,17 +50,17 @@ class ConcreteImplementationTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $content = file_get_contents($file);
 
-                $result = (bool)preg_match(
-                    '/function __construct\(([^\)]*)\)/iS',
-                    $content,
-                    $matches
-                );
+                if (strpos($content, "namespace Magento\Core") !== false) {
+                    return;
+                }
+
+                $result = (bool)preg_match('/function __construct\(([^\)]*)\)/iS', $content, $matches);
                 if ($result && !empty($matches[1])) {
                     $arguments = explode(',', $matches[1]);
                     foreach ($arguments as $argument) {
                         $type = explode(' ', trim($argument));
                         if (in_array(trim($type[0]), self::$_classesBlacklist)) {
-                            $this->fail("Incorrect class dependency found in $file:" . trim($type[0]));
+                            $this->fail("Incorrect class dependency found in {$file}:" . trim($type[0]));
                         }
                     }
                 }

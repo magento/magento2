@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class DraggableHandle
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Render grid row
@@ -37,8 +35,12 @@ class DraggableHandle
      */
     public function render(\Magento\Object $row)
     {
-        return '<span class="' . $this->getColumn()->getInlineCss() . '"></span>'
-            . '<input type="hidden" name="entity_id" value="' . $row->getData($this->getColumn()->getIndex()) . '"/>'
-            . '<input type="hidden" name="position" value=""/>';
+        return '<span class="' .
+            $this->getColumn()->getInlineCss() .
+            '"></span>' .
+            '<input type="hidden" name="entity_id" value="' .
+            $row->getData(
+                $this->getColumn()->getIndex()
+            ) . '"/>' . '<input type="hidden" name="position" value=""/>';
     }
 }

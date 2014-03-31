@@ -55,8 +55,8 @@ class DomTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 include __DIR__ . '/_files/converted_valid_acl.php',
-                file_get_contents(__DIR__ . '/_files/valid_acl.xml'),
-            ),
+                file_get_contents(__DIR__ . '/_files/valid_acl.xml')
+            )
         );
     }
 
@@ -79,9 +79,9 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'resource without "id" attribute' => '<?xml version="1.0"?><config><acl>'
-                    . '<resources><resource/></resources></acl></config>',
-            ),
+                'resource without "id" attribute' => '<?xml version="1.0"?><config><acl>' .
+                '<resources><resource/></resources></acl></config>'
+            )
         );
     }
 }

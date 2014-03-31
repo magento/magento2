@@ -21,11 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Model\Config\Source;
 
-class Allowedmethods
-    extends \Magento\Payment\Model\Config\Source\Allmethods
+class Allowedmethods extends \Magento\Payment\Model\Config\Source\Allmethods
 {
     /**
      * Payment config model
@@ -48,6 +46,11 @@ class Allowedmethods
         $this->_paymentConfig = $paymentConfig;
     }
 
+    /**
+     * Get payment methods
+     *
+     * @return array
+     */
     protected function _getPaymentMethods()
     {
         return $this->_paymentConfig->getActiveMethods();

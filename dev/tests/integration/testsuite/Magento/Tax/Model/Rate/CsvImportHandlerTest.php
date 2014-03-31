@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Rate;
 
 class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
@@ -55,22 +54,28 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         // assert that both tax rates, specified in import file, have been imported correctly
-        $importedRuleCA = $objectManager->create('Magento\Tax\Model\Calculation\Rate')
-            ->loadByCode('US-CA-*-Rate Import Test');
+        $importedRuleCA = $objectManager->create(
+            'Magento\Tax\Model\Calculation\Rate'
+        )->loadByCode(
+            'US-CA-*-Rate Import Test'
+        );
         $this->assertNotEmpty($importedRuleCA->getId());
-        $this->assertEquals(8.25, (float)$importedRuleCA->getRate());
+        $this->assertEquals(8.25, (double)$importedRuleCA->getRate());
         $this->assertEquals('US', $importedRuleCA->getTaxCountryId());
 
-        $importedRuleFL = $objectManager->create('Magento\Tax\Model\Calculation\Rate')
-            ->loadByCode('US-FL-*-Rate Import Test');
+        $importedRuleFL = $objectManager->create(
+            'Magento\Tax\Model\Calculation\Rate'
+        )->loadByCode(
+            'US-FL-*-Rate Import Test'
+        );
         $this->assertNotEmpty($importedRuleFL->getId());
-        $this->assertEquals(15, (float)$importedRuleFL->getRate());
+        $this->assertEquals(15, (double)$importedRuleFL->getRate());
         $this->assertEquals('US', $importedRuleFL->getTaxCountryId());
     }
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      * @expectedExceptionMessage One of the countries has invalid code.
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()

@@ -23,15 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Centinel\Model\StateFactory">
-        <param name="stateClassMap">
-            <array>
-                <item key="VI"><value>Magento\Centinel\Model\State\Visa</value></item>
-                <item key="MC"><value>Magento\Centinel\Model\State\Mastercard</value></item>
-                <item key="JCB"><value>Magento\Centinel\Model\State\Jcb</value></item>
-                <item key="SM"><value>Magento\Centinel\Model\State\Mastercard</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="stateClassMap" xsi:type="array">
+                <item name="VI" xsi:type="string">Magento\Centinel\Model\State\Visa</item>
+                <item name="MC" xsi:type="string">Magento\Centinel\Model\State\Mastercard</item>
+                <item name="JCB" xsi:type="string">Magento\Centinel\Model\State\Jcb</item>
+                <item name="SM" xsi:type="string">Magento\Centinel\Model\State\Mastercard</item>
+            </argument>
+        </arguments>
     </type>
 </config>

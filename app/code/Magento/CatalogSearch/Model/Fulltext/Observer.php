@@ -122,9 +122,7 @@ class Observer
     {
         $product = $observer->getEvent()->getProduct();
 
-        $this->_getFulltextModel()
-            ->rebuildIndex(null, $product->getId())
-            ->resetSearchResults();
+        $this->_getFulltextModel()->rebuildIndex(null, $product->getId())->resetSearchResults();
 
         return $this;
     }
@@ -140,9 +138,7 @@ class Observer
     {
         $product = $observer->getEvent()->getProduct();
 
-        $this->_getFulltextModel()
-            ->cleanIndex(null, $product->getId())
-            ->resetSearchResults();
+        $this->_getFulltextModel()->cleanIndex(null, $product->getId())->resetSearchResults();
 
         return $this;
     }
@@ -174,15 +170,17 @@ class Observer
             if ($attribute->getIsSearchable()) {
                 $showNotice = true;
             }
-        }
-        elseif ($attribute->dataHasChangedFor('is_searchable')) {
+        } elseif ($attribute->dataHasChangedFor('is_searchable')) {
             $showNotice = true;
         }
 
         if ($showNotice) {
             $url = $this->_backendUrl->getUrl('adminhtml/system_cache');
             $this->messageManager->addNotice(
-                __('Attribute setting change related with Search Index. Please run <a href="%1">Rebuild Search Index</a> process.', $url)
+                __(
+                    'Attribute setting change related with Search Index. Please run <a href="%1">Rebuild Search Index</a> process.',
+                    $url
+                )
             );
         }
 
@@ -196,8 +194,7 @@ class Observer
      */
     public function refreshIndexAfterImport()
     {
-        $this->_getFulltextModel()
-            ->rebuildIndex();
+        $this->_getFulltextModel()->rebuildIndex();
         return $this;
     }
 
@@ -230,14 +227,9 @@ class Observer
         foreach ($websiteIds as $websiteId) {
             foreach ($this->_storeManager->getWebsite($websiteId)->getStoreIds() as $storeId) {
                 if ($actionType == 'remove') {
-                    $this->_getFulltextModel()
-                        ->cleanIndex($storeId, $productIds)
-                        ->resetSearchResults();
-                }
-                elseif ($actionType == 'add') {
-                    $this->_getFulltextModel()
-                        ->rebuildIndex($storeId, $productIds)
-                        ->resetSearchResults();
+                    $this->_getFulltextModel()->cleanIndex($storeId, $productIds)->resetSearchResults();
+                } elseif ($actionType == 'add') {
+                    $this->_getFulltextModel()->rebuildIndex($storeId, $productIds)->resetSearchResults();
                 }
             }
         }
@@ -256,8 +248,7 @@ class Observer
         $store = $observer->getEvent()->getStore();
         /* @var $store \Magento\Core\Model\Store */
 
-        $this->_getFulltextModel()
-            ->cleanIndex($store->getId());
+        $this->_getFulltextModel()->cleanIndex($store->getId());
 
         return $this;
     }

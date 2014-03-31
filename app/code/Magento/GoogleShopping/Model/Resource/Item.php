@@ -33,8 +33,11 @@
  */
 namespace Magento\GoogleShopping\Model\Resource;
 
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Model\Resource\Db\AbstractDb
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('googleshopping_items', 'item_id');
@@ -44,11 +47,11 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Load Item model by product
      *
      * @param \Magento\GoogleShopping\Model\Item $model
-     * @return \Magento\GoogleShopping\Model\Resource\Item
+     * @return $this
      */
     public function loadByProduct($model)
     {
-        if (!($model->getProduct() instanceof \Magento\Object)) {
+        if (!$model->getProduct() instanceof \Magento\Object) {
             return $this;
         }
 
@@ -60,9 +63,15 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
         $select = $read->select();
 
         if ($productId !== null) {
-            $select->from($this->getMainTable())
-                ->where("product_id = ?", $productId)
-                ->where('store_id = ?', (int)$storeId);
+            $select->from(
+                $this->getMainTable()
+            )->where(
+                "product_id = ?",
+                $productId
+            )->where(
+                'store_id = ?',
+                (int)$storeId
+            );
 
             $data = $read->fetchRow($select);
             $data = is_array($data) ? $data : array();

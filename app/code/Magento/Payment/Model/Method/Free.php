@@ -23,23 +23,25 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Method;
 
 /**
  * Free payment method
  */
-namespace Magento\Payment\Model\Method;
-
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * XML Paths for configuration constants
      */
     const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+
     const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+
     const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
+     *
      * @var bool
      */
     protected $_canAuthorize = true;
@@ -64,7 +66,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
@@ -72,7 +74,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
@@ -88,8 +90,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function isAvailable($quote = null)
     {
-        return parent::isAvailable($quote) && !empty($quote)
-            && $this->_storeManager->getStore()->roundPrice($quote->getGrandTotal()) == 0;
+        return parent::isAvailable(
+            $quote
+        ) && !empty($quote) && $this->_storeManager->getStore()->roundPrice(
+            $quote->getGrandTotal()
+        ) == 0;
     }
 
     /**

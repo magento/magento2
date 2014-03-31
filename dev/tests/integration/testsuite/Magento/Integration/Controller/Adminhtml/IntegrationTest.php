@@ -70,7 +70,7 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $saveLink = 'integration/save/';
 
         $this->assertContains('entry-edit form-inline', $response);
-        $this->assertContains('Edit &quot;'. $this->_integration->getName() .'&quot; Integration', $response);
+        $this->assertContains('Edit &quot;' . $this->_integration->getName() . '&quot; Integration', $response);
         $this->assertContains($saveLink, $response);
         $this->assertSelectCount('#integration_properties_base_fieldset', 1, $response);
         $this->assertSelectCount('#integration_edit_tabs_info_section_content', 1, $response);
@@ -82,15 +82,17 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $integrationName = $this->_integration->getName();
         $this->getRequest()->setParam('id', $integrationId);
         $url = 'http://magento.ll/endpoint_url';
-        $this->getRequest()->setPost(array(
+        $this->getRequest()->setPost(
+            array(
                 'name' => $integrationName,
                 'email' => 'test@magento.com',
                 'authentication' => '1',
                 'endpoint' => $url
-        ));
+            )
+        );
         $this->dispatch('backend/admin/integration/save');
         $this->assertSessionMessages(
-            $this->equalTo(array("The integration '$integrationName' has been saved.")),
+            $this->equalTo(array("The integration '{$integrationName}' has been saved.")),
             \Magento\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('backend/admin/integration/index/'));
@@ -100,16 +102,18 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
     {
         $url = 'http://magento.ll/endpoint_url';
         $integrationName = md5(rand());
-        $this->getRequest()->setPost(array(
-            'name' => $integrationName,
-            'email' => 'test@magento.com',
-            'authentication' => '1',
-            'endpoint' => $url
-        ));
+        $this->getRequest()->setPost(
+            array(
+                'name' => $integrationName,
+                'email' => 'test@magento.com',
+                'authentication' => '1',
+                'endpoint' => $url
+            )
+        );
         $this->dispatch('backend/admin/integration/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(array("The integration '$integrationName' has been saved.")),
+            $this->equalTo(array("The integration '{$integrationName}' has been saved.")),
             \Magento\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('backend/admin/integration/index/'));
@@ -123,9 +127,7 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         /** @var $factory \Magento\Integration\Model\Integration\Factory */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $factory = $objectManager->create('Magento\Integration\Model\Integration\Factory');
-        $this->_integration = $factory->create()
-            ->setName(md5(rand()))
-            ->save();
+        $this->_integration = $factory->create()->setName(md5(rand()))->save();
 
         /** Grant permissions to integrations */
         /** @var \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory */

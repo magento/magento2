@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage\Payment;
 
 /**
  * Checkout payment information data
@@ -31,8 +32,6 @@
  * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage\Payment;
-
 class Info extends \Magento\Payment\Block\Info\AbstractContainer
 {
     /**
@@ -60,7 +59,7 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
     /**
      * Retrieve payment info model
      *
-     * @return \Magento\Payment\Model\Info
+     * @return \Magento\Payment\Model\Info|false
      */
     public function getPaymentInfo()
     {
@@ -71,6 +70,9 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
         return false;
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $html = '';

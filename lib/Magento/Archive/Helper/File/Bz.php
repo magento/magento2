@@ -75,4 +75,3 @@ class Bz extends \Magento\Archive\Helper\File
         bzclose($this->_fileHandler);
     }
 }
-

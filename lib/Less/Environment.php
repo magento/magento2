@@ -1,33 +1,31 @@
 <?php
 
-//less.js : lib/less/functions.js
 
-
+/**
+ * Environment
+ *
+ * @package Less
+ * @subpackage environment
+ */
 class Less_Environment{
 
-	public $paths = array();			// option - unmodified - paths to search for imports on
-	static $files = array();			// list of files that have been imported, used for import-once
-	public $relativeUrls;				// option - whether to adjust URL's to be relative
-	public $rootpath;					// option - rootpath to append to URL's
-	public $strictImports = null;		// option -
-	public $insecure;					// option - whether to allow imports from insecure ssl hosts
-	public static $compress = false;	// option - whether to compress
-	public $processImports;				// option - whether to process imports. if false then imports will not be imported
-	public $javascriptEnabled;			// option - whether JavaScript is enabled. if undefined, defaults to true
-	public $useFileCache;				// browser only - whether to use the per file session cache
-	public $currentFileInfo;			// information about the current file - for error reporting and importing and making urls relative etc.
+	//public $paths = array();				// option - unmodified - paths to search for imports on
+	//public static $files = array();		// list of files that have been imported, used for import-once
+	//public $rootpath;						// option - rootpath to append to URL's
+	//public static $strictImports = null;	// option -
+	//public $insecure;						// option - whether to allow imports from insecure ssl hosts
+	//public $processImports;				// option - whether to process imports. if false then imports will not be imported
+	//public $javascriptEnabled;			// option - whether JavaScript is enabled. if undefined, defaults to true
+	//public $useFileCache;					// browser only - whether to use the per file session cache
+	public $currentFileInfo;				// information about the current file - for error reporting and importing and making urls relative etc.
+
+	public $importMultiple = false; 		// whether we are currently importing multiple copies
+
 
 	/**
 	 * @var array
 	 */
 	public $frames = array();
-
-
-	/**
-	 * @var bool
-	 */
-	public $debug = false;
-
 
 	/**
 	 * @var array
@@ -39,96 +37,73 @@ class Less_Environment{
 	 */
 	public $mediaPath = array();
 
-	public $selectors = array();
+	public static $parensStack = 0;
 
-	public $charset;
+	public static $tabLevel = 0;
 
-	public $parensStack = array();
+	public static $lastRule = false;
 
-	public $strictMath = false;
+	public static $_outputMap;
 
-	public $strictUnits = false;
-
-	public $tabLevel = 0;
-
-	public $lastRule = false;
-
-	public $importMultiple = false;
-
-	//public $type = 'Environment';
+	public static $mixin_stack = 0;
 
 
-	public static $comma_space;
-	public static $colon_space;
-	public static $firstSelector;
+	public function Init(){
 
-	public function __construct( $options = null ){
-		$this->frames = array();
+		self::$parensStack = 0;
+		self::$tabLevel = 0;
+		self::$lastRule = false;
+		self::$mixin_stack = 0;
 
+		if( Less_Parser::$options['compress'] ){
 
-		if( isset($options['compress']) ){
-			self::$compress = (bool)$options['compress'];
-		}
-		if( isset($options['strictUnits']) ){
-			$this->strictUnits = (bool)$options['strictUnits'];
-		}
+			Less_Environment::$_outputMap = array(
+				','	=> ',',
+				': ' => ':',
+				''  => '',
+				' ' => ' ',
+				':' => ' :',
+				'+' => '+',
+				'~' => '~',
+				'>' => '>',
+				'|' => '|',
+		        '^' => '^',
+		        '^^' => '^^'
+			);
 
-
-		if( self::$compress ){
-			self::$comma_space = ',';
-			self::$colon_space = ':';
 		}else{
-			self::$comma_space = ', ';
-			self::$colon_space = ': ';
+
+			Less_Environment::$_outputMap = array(
+				','	=> ', ',
+				': ' => ': ',
+				''  => '',
+				' ' => ' ',
+				':' => ' :',
+				'+' => ' + ',
+				'~' => ' ~ ',
+				'>' => ' > ',
+				'|' => '|',
+		        '^' => ' ^ ',
+		        '^^' => ' ^^ '
+			);
+
 		}
-
-
 	}
 
 
-	//may want to just use the __clone()?
 	public function copyEvalEnv($frames = array() ){
-
-		$evalCopyProperties = array(
-			//'silent',      // whether to swallow errors and warnings
-			//'verbose',     // whether to log more activity
-			//'yuicompress', // whether to compress with the outside tool yui compressor
-			//'ieCompat',    // whether to enforce IE compatibility (IE8 data-uri)
-			'strictMath',  // whether math has to be within parenthesis
-			'strictUnits', // whether units need to evaluate correctly
-			//'cleancss',    // whether to compress with clean-css
-			//'sourceMap',   // whether to output a source map
-			//'importMultiple'// whether we are currently importing multiple copies
-			);
-
 		$new_env = new Less_Environment();
-		foreach($evalCopyProperties as $property){
-			$new_env->$property = $this->$property;
-		}
 		$new_env->frames = $frames;
 		return $new_env;
 	}
 
-	public function inParenthesis(){
-		$this->parensStack[] = true;
-	}
 
-	public function outOfParenthesis() {
-		array_pop($this->parensStack);
-	}
-
-	public function isMathOn() {
-		return $this->strictMath ? !!$this->parensStack : true;
+	public static function isMathOn(){
+		return !Less_Parser::$options['strictMath'] || Less_Environment::$parensStack;
 	}
 
 	public static function isPathRelative($path){
-		/**
-		 * - return !preg_match('/^(?:[a-z-]+:|\/)/',$path);
-		 * + return !preg_match('/^(?:[A-Za-z-_]+:|\/)/',$path);
-		 *
-		 * For identification paths such as Magento_Theme::validation_advice_bg.gif as an absolute paths.
-		 */
-		return !preg_match('/^(?:[A-Za-z-_]+:|\/)/',$path);
+		return !preg_match('/^(?:[a-z-]+:|\/)/',$path);
 	}
 
 
@@ -175,21 +150,6 @@ class Less_Environment{
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public function getDebug(){
-		return $this->debug;
-	}
-
-	/**
-	 * @param $debug
-	 * @return void
-	 */
-	public function setDebug($debug){
-		$this->debug = $debug;
-	}
-
 	public function unshiftFrame($frame){
 		array_unshift($this->frames, $frame);
 	}
@@ -198,11 +158,4 @@ class Less_Environment{
 		return array_shift($this->frames);
 	}
 
-	public function addFrame($frame){
-		$this->frames[] = $frame;
-	}
-
-	public function addFrames(array $frames){
-		$this->frames = array_merge($this->frames, $frames);
-	}
 }

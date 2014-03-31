@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 /**
@@ -35,31 +34,43 @@ class Url
     const XML_PATH_STATIC_FILE_SIGNATURE = 'dev/static/sign';
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $_viewService;
 
     /**
+     * Publisher
+     *
      * @var \Magento\View\Publisher
      */
     protected $_publisher;
 
     /**
+     * Deployed file manager
+     *
      * @var \Magento\View\DeployedFilesManager
      */
     protected $_deployedFileManager;
 
     /**
+     * URL builder
+     *
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
+     * Config
+     *
      * @var \Magento\View\Url\ConfigInterface
      */
     protected $_config;
@@ -72,18 +83,22 @@ class Url
     protected $_fileUrlMap;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\UrlInterface $urlBuilder
-     * @param Url\ConfigInterface $config
-     * @param Service $viewService
-     * @param Publisher $publisher
-     * @param DeployedFilesManager $deployedFileManager
-     * @param \Magento\View\FileSystem $viewFileSystem,
+     * @param \Magento\View\Url\ConfigInterface $config
+     * @param \Magento\View\Service $viewService
+     * @param \Magento\View\Publisher $publisher
+     * @param \Magento\View\DeployedFilesManager $deployedFileManager
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param array $fileUrlMap
      */
     public function __construct(
@@ -118,7 +133,7 @@ class Url
      */
     public function getViewFileUrl($fileId, array $params = array())
     {
-        $isSecure = isset($params['_secure']) ? (bool) $params['_secure'] : null;
+        $isSecure = isset($params['_secure']) ? (bool)$params['_secure'] : null;
         unset($params['_secure']);
 
         $publicFilePath = $this->getViewFilePublicPath($fileId, $params);
@@ -160,11 +175,8 @@ class Url
             if (strpos($publicFilePath, $dir) === 0) {
                 $relativePath = ltrim(substr($publicFilePath, strlen($dir)), '\\/');
                 $url = $this->_urlBuilder->getBaseUrl(
-                        array(
-                            '_type' => $urlMap['key'],
-                            '_secure' => $isSecure
-                        )
-                    ) . $relativePath;
+                    array('_type' => $urlMap['key'], '_secure' => $isSecure)
+                ) . $relativePath;
 
                 if ($this->_isStaticFilesSigned() && $this->_viewService->isViewFileOperationAllowed()) {
                     $directory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
@@ -176,7 +188,7 @@ class Url
         }
 
         throw new \Magento\Exception(
-            "Cannot build URL for the file '$publicFilePath' because it does not reside in a public directory."
+            "Cannot build URL for the file '{$publicFilePath}' because it does not reside in a public directory."
         );
     }
 

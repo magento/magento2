@@ -44,35 +44,26 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
-     * @param $installDate
+     * @param string $installDate
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         $installDate,
         $dbCompatibleMode = true
     ) {
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $locale,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
         $this->_installDate = $installDate;
     }
 
     /**
      * Retrieve stores configured in system.
      *
-     * @return array
+     * @return \Magento\Data\Collection\Db
      */
     public function getStores()
     {
@@ -101,10 +92,10 @@ class Data extends \Magento\Core\Helper\Data
     {
         return array(
             '24h' => __('Last 24 Hours'),
-            '7d'  => __('Last 7 Days'),
-            '1m'  => __('Current Month'),
-            '1y'  => __('YTD'),
-            '2y'  => __('2YTD')
+            '7d' => __('Last 7 Days'),
+            '1m' => __('Current Month'),
+            '1y' => __('YTD'),
+            '2y' => __('2YTD')
         );
     }
 

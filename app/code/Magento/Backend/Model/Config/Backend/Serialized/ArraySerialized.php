@@ -35,6 +35,7 @@ class ArraySerialized extends \Magento\Backend\Model\Config\Backend\Serialized
     /**
      * Unset array element with '__empty' key
      *
+     * @return void
      */
     protected function _beforeSave()
     {

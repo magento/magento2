@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Bootstrap;
 
 /**
@@ -74,13 +73,17 @@ class DocBlock
             new \Magento\TestFramework\Workaround\Cleanup\StaticProperties(),
             new \Magento\TestFramework\Isolation\WorkingDirectory(),
             new \Magento\TestFramework\Annotation\AppIsolation($application),
-            new \Magento\TestFramework\Event\Transaction(new \Magento\TestFramework\EventManager(array(
-                new \Magento\TestFramework\Annotation\DbIsolation(),
-                new \Magento\TestFramework\Annotation\DataFixture($this->_fixturesBaseDir)
-            ))),
+            new \Magento\TestFramework\Event\Transaction(
+                new \Magento\TestFramework\EventManager(
+                    array(
+                        new \Magento\TestFramework\Annotation\DbIsolation(),
+                        new \Magento\TestFramework\Annotation\DataFixture($this->_fixturesBaseDir)
+                    )
+                )
+            ),
             new \Magento\TestFramework\Annotation\AppArea($application),
             new \Magento\TestFramework\Annotation\ConfigFixture(),
-            new \Magento\TestFramework\Annotation\AdminConfigFixture(),
+            new \Magento\TestFramework\Annotation\AdminConfigFixture()
         );
     }
 }

@@ -31,7 +31,7 @@
             opacity: 0.5, // CSS opacity for the 'Place Order' button when it's clicked and then disabled.
             pleaseWaitLoader: 'span.please-wait', // 'Submitting order information...' Ajax loader.
             placeOrderSubmit: 'button[type="submit"]', // The 'Place Order' button.
-            agreements: '#checkout-agreements' // Container for all of the checkout billing agreements.
+            agreements: '#checkout-agreements' // Container for all of the checkout agreements and terms/conditions
         },
 
         /**

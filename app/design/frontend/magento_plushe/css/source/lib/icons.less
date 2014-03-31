@@ -1,0 +1,73 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.example.icon {
+    display: inline-block;
+    margin: 0 0 16px;
+    width: 20%;
+    text-align: center;
+    .iconBefore("", 32px, 0 0 10px 0, 'icons');
+    &:before {
+        content: attr(data-icon);
+        display: block;
+    }
+    &:hover {
+        color: @secondary2;
+    }
+}
+
+// #iconBefore
+//Add an icon *before* the specified element
+//
+//**.iconBefore(["content"], [height], [margin], ["font"]);**
+//  ```
+//  <a class="action primary showcart1" href="#"><span>My Cart</span></a>
+//  ```
+.action.showcart1 {
+    .iconBefore(@icon-cart, 16px, 0 5px 0 0, "icons");
+}
+
+// #iconAfter
+//Add an icon *after* the specified element
+//
+//**.iconAfter(["content"], [height], [margin], ["font"]);**
+//  ```
+//  <a class="action showcart2" href="#"><span>My Cart</span></a>
+//  ```
+.action.showcart2 {
+    .iconAfter(@icon-cart, 16px, 0 0 0 10px, "icons");
+}
+
+// #iconHideText
+//Hide the text to the specified element (not hide the icon)
+//
+//**.iconHideText([limitWidth]);**
+//  ```
+//  <a class="action showcart3" href="#"><span>My Cart</span></a>
+//  ```
+.action.showcart3 {
+    .iconAfter(@icon-cart, 16px, 10px,"icons");
+    .iconHideText(16px);
+}

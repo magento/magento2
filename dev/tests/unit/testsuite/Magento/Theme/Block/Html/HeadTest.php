@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
 
 class HeadTest extends \PHPUnit_Framework_TestCase
@@ -66,18 +65,25 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testAddRss()
     {
-        $this->_pageAssets->expects($this->once())
-            ->method('add')
-            ->with(
-                'link/http://127.0.0.1/test.rss',
-                $this->isInstanceOf('Magento\View\Asset\Remote'),
-                array('attributes' => 'rel="alternate" type="application/rss+xml" title="RSS Feed"')
-            );
+        $this->_pageAssets->expects(
+            $this->once()
+        )->method(
+            'add'
+        )->with(
+            'link/http://127.0.0.1/test.rss',
+            $this->isInstanceOf('Magento\View\Asset\Remote'),
+            array('attributes' => 'rel="alternate" type="application/rss+xml" title="RSS Feed"')
+        );
         $assetRemoteFile = $this->getMock('Magento\View\Asset\Remote', array(), array(), '', false);
-        $this->_objectManager->expects($this->once(''))
-            ->method('create')
-            ->with('Magento\View\Asset\Remote')
-            ->will($this->returnValue($assetRemoteFile));
+        $this->_objectManager->expects(
+            $this->once('')
+        )->method(
+            'create'
+        )->with(
+            'Magento\View\Asset\Remote'
+        )->will(
+            $this->returnValue($assetRemoteFile)
+        );
 
         $this->_block->addRss('RSS Feed', 'http://127.0.0.1/test.rss');
     }
@@ -85,28 +91,40 @@ class HeadTest extends \PHPUnit_Framework_TestCase
     public function testGetFaviconFile()
     {
         $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $storeMock->expects($this->any())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('baseUrl/'));
-        $this->_context->getStoreManager()
-            ->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
+        $storeMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue('baseUrl/'));
+        $this->_context->getStoreManager()->expects(
+            $this->any()
+        )->method(
+            'getStore'
+        )->will(
+            $this->returnValue($storeMock)
+        );
 
-        $this->_context->getStoreConfig()
-            ->expects($this->any())
-            ->method('getConfig')
-            ->will($this->returnValue('storeConfig'));
+        $this->_context->getStoreConfig()->expects(
+            $this->any()
+        )->method(
+            'getConfig'
+        )->will(
+            $this->returnValue('storeConfig')
+        );
 
         $mediaDirMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $mediaDirMock->expects($this->any())
-            ->method('isFile')
-            ->with('favicon/storeConfig')
-            ->will($this->returnValue(true));
-        $this->_context->getFilesystem()
-            ->expects($this->once())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($mediaDirMock));
+        $mediaDirMock->expects(
+            $this->any()
+        )->method(
+            'isFile'
+        )->with(
+            'favicon/storeConfig'
+        )->will(
+            $this->returnValue(true)
+        );
+        $this->_context->getFilesystem()->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($mediaDirMock)
+        );
 
         $this->assertEquals('baseUrl/favicon/storeConfig', $this->_block->getFaviconFile());
     }

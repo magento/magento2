@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
 class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
@@ -31,6 +30,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Product $duplicate
+     * @return void
      */
     public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
     {
@@ -56,7 +56,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
                 'required' => $option->getData('required'),
                 'position' => $option->getData('position'),
                 'type' => $option->getData('type'),
-                'title' => $option->getData('title')?$option->getData('title'):$option->getData('default_title'),
+                'title' => $option->getData('title') ? $option->getData('title') : $option->getData('default_title'),
                 'delete' => ''
             );
             foreach ($option->getSelections() as $selection) {

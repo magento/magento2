@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\HTTP;
 
 /**
  * Interface for different HTTP clients
@@ -31,117 +32,142 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\HTTP;
-
 interface IClient
 {
     /**
      * Set request timeout
+     *
      * @param int $value
+     * @return void
      */
-    function setTimeout($value);
-    
-    
+    public function setTimeout($value);
+
     /**
      * Set request headers from hash
+     *
      * @param array $headers
+     * @return void
      */
-    function setHeaders($headers);
-    
+    public function setHeaders($headers);
+
     /**
-     * Add header to request 
+     * Add header to request
+     *
      * @param string $name
      * @param string $value
+     * @return void
      */
-    function addHeader($name, $value);
-    
-    
+    public function addHeader($name, $value);
+
     /**
      * Remove header from request
+     *
      * @param string $name
+     * @return void
      */
-    function removeHeader($name);
-
+    public function removeHeader($name);
 
     /**
      * Set login credentials
      * for basic auth.
+     *
      * @param string $login
      * @param string $pass
+     * @return void
      */
-    function setCredentials($login, $pass);
-    
+    public function setCredentials($login, $pass);
+
     /**
-     * Add cookie to request 
+     * Add cookie to request
+     *
      * @param string $name
      * @param string $value
+     * @return void
      */
-    function addCookie($name, $value);
+    public function addCookie($name, $value);
 
     /**
      * Remove cookie from request
+     *
      * @param string $name
+     * @return void
      */
-    function removeCookie($name);
-    
+    public function removeCookie($name);
+
     /**
      * Set request cookies from hash
+     *
      * @param array $cookies
-     */ 
-    function setCookies($cookies);
+     * @return void
+     */
+    public function setCookies($cookies);
 
     /**
      * Remove cookies from request
+     *
+     * @return void
      */
-    function removeCookies();
+    public function removeCookies();
 
     /**
      * Make GET request
+     *
      * @param string full uri
+     * @return void
      */
-    function get($uri);
+    public function get($uri);
 
     /**
      * Make POST request
+     *
      * @param string $uri full uri
      * @param array $params POST fields array
-     */ 
-    function post($uri, $params);
-    
+     * @return void
+     */
+    public function post($uri, $params);
+
     /**
      * Get response headers
+     *
      * @return array
-     */ 
-    function getHeaders();
-    
+     */
+    public function getHeaders();
+
     /**
      * Get response body
+     *
      * @return string
      */
-    function getBody(); 
-    
+    public function getBody();
+
     /**
      * Get response status code
+     *
      * @return int
      */
-    function getStatus();
-    
+    public function getStatus();
+
     /**
-     * Get response cookies (k=>v) 
+     * Get response cookies (k=>v)
+     *
      * @return array
      */
-    function getCookies();
-    
+    public function getCookies();
+
     /**
      * Set additional option
+     *
      * @param string $key
      * @param string $value
+     * @return void
      */
-    function setOption($key, $value);
+    public function setOption($key, $value);
 
     /**
      * Set additional options
+     *
      * @param array $arr
+     * @return void
      */
-    function setOptions($arr);
+    public function setOptions($arr);
 }

@@ -23,25 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml grid item renderer currency
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
-
-class Currency
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
+class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
 {
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
-     * @return  string
+     * @param \Magento\Object $row
+     * @return string
      */
     public function render(\Magento\Object $row)
     {
@@ -54,7 +49,7 @@ class Currency
 
         $data = floatval($data) * $this->_getRate($row);
         $data = sprintf("%f", $data);
-        $data = $this->_locale->currency($currency_code)->toCurrency($data);
+        $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
         return $data;
     }
 }

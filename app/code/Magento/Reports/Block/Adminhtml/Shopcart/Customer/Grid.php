@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Shopcart\Customer;
 
 /**
  * Adminhtml items in carts report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Shopcart\Customer;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
@@ -56,68 +53,80 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('grid');
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid
+     */
     protected function _prepareCollection()
     {
         //TODO: add full name logic
-        $collection = $this->_customersFactory->create()
-          ->addAttributeToSelect('firstname')
-          ->addAttributeToSelect('lastname');
+        $collection = $this->_customersFactory->create()->addAttributeToSelect(
+            'firstname'
+        )->addAttributeToSelect(
+            'lastname'
+        );
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid|void
+     */
     protected function _afterLoadCollection()
     {
         $this->getCollection()->addCartInfo();
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array(
-            'header'    =>__('ID'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'entity_id'
-        ));
+        $this->addColumn(
+            'entity_id',
+            array('header' => __('ID'), 'width' => '50px', 'align' => 'right', 'index' => 'entity_id')
+        );
 
-        $this->addColumn('firstname', array(
-            'header'    =>__('First Name'),
-            'index'     =>'firstname'
-        ));
+        $this->addColumn('firstname', array('header' => __('First Name'), 'index' => 'firstname'));
 
-        $this->addColumn('lastname', array(
-            'header'    =>__('Last Name'),
-            'index'     =>'lastname'
-        ));
+        $this->addColumn('lastname', array('header' => __('Last Name'), 'index' => 'lastname'));
 
-        $this->addColumn('items', array(
-            'header'    =>__('Items in Cart'),
-            'width'     =>'70px',
-            'sortable'  =>false,
-            'align'     =>'right',
-            'index'     =>'items'
-        ));
+        $this->addColumn(
+            'items',
+            array(
+                'header' => __('Items in Cart'),
+                'width' => '70px',
+                'sortable' => false,
+                'align' => 'right',
+                'index' => 'items'
+            )
+        );
 
         $currencyCode = $this->getCurrentCurrencyCode();
 
-        $this->addColumn('total', array(
-            'header'    =>__('Total'),
-            'width'     =>'70px',
-            'sortable'  =>false,
-            'type'      =>'currency',
-            'align'     =>'right',
-            'currency_code' => $currencyCode,
-            'index'     =>'total',
-            'renderer'  =>'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
-            'rate'          => $this->getRate($currencyCode),
-        ));
+        $this->addColumn(
+            'total',
+            array(
+                'header' => __('Total'),
+                'width' => '70px',
+                'sortable' => false,
+                'type' => 'currency',
+                'align' => 'right',
+                'currency_code' => $currencyCode,
+                'index' => 'total',
+                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'rate' => $this->getRate($currencyCode)
+            )
+        );
 
         $this->setFilterVisibility(false);
 
@@ -126,5 +135,4 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         return parent::_prepareColumns();
     }
-
 }

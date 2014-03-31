@@ -23,9 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model;
+
+use Magento\Sales\Model\Order\Shipment;
 
 class Info extends \Magento\Object
 {
@@ -91,7 +91,7 @@ class Info extends \Magento\Object
      * Generating tracking info
      *
      * @param array $hash
-     * @return \Magento\Shipping\Model\Info
+     * @return $this
      */
     public function loadByHash($hash)
     {
@@ -104,7 +104,7 @@ class Info extends \Magento\Object
 
             if ($this->getOrderId() > 0) {
                 $this->getTrackingInfoByOrder();
-            } elseif($this->getShipId() > 0) {
+            } elseif ($this->getShipId() > 0) {
                 $this->getTrackingInfoByShip();
             } else {
                 $this->getTrackingInfoByTrackId();
@@ -143,11 +143,11 @@ class Info extends \Magento\Object
     /**
      * Instantiate ship model
      *
-     * @return \Magento\Sales\Model\Order\Shipment|bool
+     * @return Shipment|bool
      */
     protected function _initShipment()
     {
-        /* @var $model \Magento\Sales\Model\Order\Shipment */
+        /* @var $model Shipment */
         $model = $this->_shipmentFactory->create();
         $ship = $model->load($this->getShipId());
         if (!$ship->getEntityId() || $this->getProtectCode() != $ship->getProtectCode()) {
@@ -168,12 +168,12 @@ class Info extends \Magento\Object
         $order = $this->_initOrder();
         if ($order) {
             $shipments = $order->getShipmentsCollection();
-            foreach ($shipments as $shipment){
+            foreach ($shipments as $shipment) {
                 $increment_id = $shipment->getIncrementId();
                 $tracks = $this->_getTracksCollection($shipment);
 
-                $trackingInfos=array();
-                foreach ($tracks as $track){
+                $trackingInfos = array();
+                foreach ($tracks as $track) {
                     $trackingInfos[] = $track->getNumberDetail();
                 }
                 $shipTrack[$increment_id] = $trackingInfos;
@@ -196,12 +196,11 @@ class Info extends \Magento\Object
             $increment_id = $shipment->getIncrementId();
             $tracks = $this->_getTracksCollection($shipment);
 
-            $trackingInfos=array();
-            foreach ($tracks as $track){
+            $trackingInfos = array();
+            foreach ($tracks as $track) {
                 $trackingInfos[] = $track->getNumberDetail();
             }
             $shipTrack[$increment_id] = $trackingInfos;
-
         }
         $this->_trackingInfo = $shipTrack;
         return $this->_trackingInfo;
@@ -223,10 +222,10 @@ class Info extends \Magento\Object
     }
 
     /**
-     * @param $shipment \Magento\Sales\Model\Order\Shipment
+     * @param Shipment $shipment
      * @return \Magento\Shipping\Model\Resource\Order\Track\Collection
      */
-    protected function _getTracksCollection(\Magento\Sales\Model\Order\Shipment $shipment)
+    protected function _getTracksCollection(Shipment $shipment)
     {
         $tracks = $this->_trackCollectionFactory->create()->setShipmentFilter($shipment->getId());
 

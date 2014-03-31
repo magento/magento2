@@ -30,8 +30,12 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-class AbstractTest
-    extends \PHPUnit_Framework_TestCase
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
+use Magento\Customer\Service\V1\Data\Eav\OptionBuilder;
+use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
+
+class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -39,40 +43,46 @@ class AbstractTest
     public function testAddAttributesToForm()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $objectManager->get('Magento\View\DesignInterface')
-            ->setDefaultDesignTheme();
+        $objectManager->get('Magento\View\DesignInterface')->setDefaultDesignTheme();
         $arguments = array(
             $objectManager->get('Magento\Backend\Block\Template\Context'),
             $objectManager->get('Magento\Backend\Model\Session\Quote'),
             $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
-            $objectManager->get('Magento\Data\FormFactory'),
+            $objectManager->get('Magento\Data\FormFactory')
         );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */
-        $block = $this
-            ->getMockForAbstractClass('Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm', $arguments);
+        $block = $this->getMockForAbstractClass(
+            'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
+            $arguments
+        );
         $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));
 
         $method = new \ReflectionMethod(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm', '_addAttributesToForm');
+            'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
+            '_addAttributesToForm'
+        );
         $method->setAccessible(true);
 
         /** @var $formFactory \Magento\Data\FormFactory */
         $formFactory = $objectManager->get('Magento\Data\FormFactory');
         $form = $formFactory->create();
         $fieldset = $form->addFieldset('test_fieldset', array());
-        $arguments = array(
-            'data' => array(
-                'attribute_code' => 'date',
-                'backend_type' => 'datetime',
-                'front_end_input' => 'date',
-                'frontend_label' => 'Date',
-            )
-        );
-        $dateAttribute = $objectManager->create('\Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', $arguments);
+        $dateAttribute = (new AttributeMetadataBuilder(
+            new OptionBuilder(),
+            new ValidationRuleBuilder()
+        ))->setAttributeCode(
+            'date'
+        )->setBackendType(
+            'datetime'
+        )->setFrontendInput(
+            'date'
+        )->setFrontendLabel(
+            'Date'
+        )->create();
         $attributes = array('date' => $dateAttribute);
         $method->invoke($block, $attributes, $fieldset);
 

@@ -27,8 +27,7 @@
  */
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-class Severity
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\AdminNotification\Model\Inbox

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backup;
 
 class SnapshotTest extends \PHPUnit_Framework_TestCase
@@ -40,9 +39,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
         );
 
         $file = 'var/backup/2.gz';
-        $manager->expects($this->once())
-            ->method('getBackupFilename')
-            ->will($this->returnValue($file));
+        $manager->expects($this->once())->method('getBackupFilename')->will($this->returnValue($file));
 
         $model = new \Magento\Backup\Snapshot($filesystem, $backupFactory);
         $model->setDbBackupManager($manager);

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filesystem\File;
 
 use Magento\Filesystem\DriverInterface;
@@ -72,11 +71,7 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->fileWrite($this->resource, $data);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(
-                sprintf('Cannot write to the "%s" file. %s',
-                    $this->path,
-                    $e->getMessage()
-                ));
+            throw new FilesystemException(sprintf('Cannot write to the "%s" file. %s', $this->path, $e->getMessage()));
         }
     }
 
@@ -94,11 +89,7 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->filePutCsv($this->resource, $data, $delimiter, $enclosure);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(
-                sprintf('Cannot write to the "%s" file. %s',
-                    $this->path,
-                    $e->getMessage()
-                ));
+            throw new FilesystemException(sprintf('Cannot write to the "%s" file. %s', $this->path, $e->getMessage()));
         }
     }
 
@@ -113,11 +104,7 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->fileFlush($this->resource);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(
-                sprintf('Cannot flush the "%s" file. %s',
-                    $this->path,
-                    $e->getMessage()
-                ));
+            throw new FilesystemException(sprintf('Cannot flush the "%s" file. %s', $this->path, $e->getMessage()));
         }
     }
 

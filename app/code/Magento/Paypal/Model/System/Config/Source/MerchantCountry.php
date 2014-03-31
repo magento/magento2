@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Source model for merchant countries supported by PayPal
  */
-namespace Magento\Paypal\Model\System\Config\Source;
-
-class MerchantCountry implements \Magento\Core\Model\Option\ArrayInterface
+class MerchantCountry implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -54,15 +53,17 @@ class MerchantCountry implements \Magento\Core\Model\Option\ArrayInterface
     }
 
     /**
-     * @param bool $isMultiselect
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray($isMultiselect = false)
     {
         $supported = $this->_configFactory->create()->getSupportedMerchantCountryCodes();
-        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter($supported, 'iso2')
-            ->loadData()
-            ->toOptionArray($isMultiselect ? false : __('--Please Select--'));
+        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter(
+            $supported,
+            'iso2'
+        )->loadData()->toOptionArray(
+            $isMultiselect ? false : __('--Please Select--')
+        );
 
         return $options;
     }

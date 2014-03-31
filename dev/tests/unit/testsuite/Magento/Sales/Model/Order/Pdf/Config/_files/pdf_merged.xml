@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../app/code/Magento/Sales/etc/pdf_file.xsd">
     <renderers>
         <page type="type_one">
-            <renderer product_type="product_type_one">Renderer_Type_One_Product_One</renderer>
-            <renderer product_type="product_type_two">Renderer_Type_One_Product_Two</renderer>
+            <renderer product_type="product_type_one">Renderer\Type\One\Product\One</renderer>
+            <renderer product_type="product_type_two">Renderer\Type\One\Product\Two</renderer>
         </page>
         <page type="type_two">
-            <renderer product_type="product_type_three">Renderer_Type_Two_Product_Two</renderer>
+            <renderer product_type="product_type_three">Renderer\Type\Two\Product\Two</renderer>
         </page>
     </renderers>
     <totals>
@@ -39,9 +39,9 @@
             <source_field>source1</source_field>
             <title_source_field>title_source1</title_source_field>
             <font_size>1</font_size>
-            <display_zero>0</display_zero>
+            <display_zero>false</display_zero>
             <sort_order>1</sort_order>
-            <model>model1</model>
+            <model>Model1</model>
             <amount_prefix>prefix1</amount_prefix>
         </total>
         <total name="total2">
@@ -49,9 +49,9 @@
             <source_field>source2</source_field>
             <title_source_field>title_source2</title_source_field>
             <font_size>2</font_size>
-            <display_zero>1</display_zero>
+            <display_zero>true</display_zero>
             <sort_order>2</sort_order>
-            <model>model2</model>
+            <model>Model2</model>
             <amount_prefix>prefix2</amount_prefix>
         </total>
         <total name="total3">
@@ -59,9 +59,9 @@
             <source_field>source3</source_field>
             <title_source_field>title_source3</title_source_field>
             <font_size>3</font_size>
-            <display_zero>0</display_zero>
+            <display_zero>false</display_zero>
             <sort_order>3</sort_order>
-            <model>model3</model>
+            <model>Model3</model>
             <amount_prefix>prefix3</amount_prefix>
         </total>
     </totals>

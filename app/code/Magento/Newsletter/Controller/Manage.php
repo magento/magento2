@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Controller;
 
 use Magento\App\Action\NotFoundException;
@@ -103,7 +102,7 @@ class Manage extends \Magento\App\Action\Action
     /**
      * Save newsletter subscription preference action
      *
-     * @return void
+     * @return void|null
      */
     public function saveAction()
     {
@@ -111,11 +110,12 @@ class Manage extends \Magento\App\Action\Action
             return $this->_redirect('customer/account/');
         }
         try {
-            $this->_customerSession->getCustomer()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->setIsSubscribed((boolean)$this->getRequest()->getParam('is_subscribed', false))
-                ->save();
-            if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
+            $this->_customerSession->getCustomer()->setStoreId(
+                $this->_storeManager->getStore()->getId()
+            )->setIsSubscribed(
+                (bool)$this->getRequest()->getParam('is_subscribed', false)
+            )->save();
+            if ((bool)$this->getRequest()->getParam('is_subscribed', false)) {
                 $this->messageManager->addSuccess(__('We saved the subscription.'));
             } else {
                 $this->messageManager->addSuccess(__('We removed the subscription.'));

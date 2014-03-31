@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product;
 
 /**
  * Adminhtml bundle product edit
@@ -31,19 +32,21 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product;
-
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
 {
+    /**
+     * @return void
+     */
     public function formAction()
     {
         $product = $this->_initProduct();
         $this->getResponse()->setBody(
-            $this->_view->getLayout()
-                ->createBlock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle',
-                    'admin.product.bundle.items')
-                ->setProductId($product->getId())
-                ->toHtml()
+            $this->_view->getLayout()->createBlock(
+                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle',
+                'admin.product.bundle.items'
+            )->setProductId(
+                $product->getId()
+            )->toHtml()
         );
     }
 }

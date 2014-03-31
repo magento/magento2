@@ -23,25 +23,33 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Downloadable\Helper\Download">
-        <param name="coreFileStorageDb">
-            <instance type="Magento\Core\Helper\File\Storage\Database\Proxy" />
-        </param>
+        <arguments>
+            <argument name="coreFileStorageDb" xsi:type="object">Magento\Core\Helper\File\Storage\Database\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product">
-        <param name="typeSwitcherLabel">
-            <value>Virtual / Downloadable</value>
-        </param>
+        <arguments>
+            <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="downloadable_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="downloadable_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
+        <plugin name="downloadable_product_transition" type="Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable" />
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="downloadable" xsi:type="const">Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE</item>
+            </argument>
+        </arguments>
     </type>
 </config>

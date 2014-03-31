@@ -54,9 +54,12 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->driver = $this->getMock('Magento\Filesystem\Driver\File', array(), array(), '', false);
         $this->fileFactory = $this->getMock('Magento\Filesystem\File\WriteFactory', array(), array(), '', false);
         $this->write = new \Magento\Filesystem\Directory\Write(
-            array(), $this->fileFactory, $this->driver, 'cool-permissions');
+            array(),
+            $this->fileFactory,
+            $this->driver,
+            'cool-permissions'
+        );
     }
-
 
     /**
      * Tear down
@@ -79,21 +82,15 @@ class WriteTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->driver->expects($this->once())
-            ->method('isDirectory')
-            ->will($this->returnValue(false));
-        $this->driver->expects($this->once())
-            ->method('createDirectory')
-            ->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isDirectory')->will($this->returnValue(false));
+        $this->driver->expects($this->once())->method('createDirectory')->will($this->returnValue(true));
 
         $this->assertTrue($this->write->create('correct-path'));
     }
 
     public function testIsWritable()
     {
-        $this->driver->expects($this->once())
-            ->method('isWritable')
-            ->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isWritable')->will($this->returnValue(true));
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 }

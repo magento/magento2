@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="page_two_columns_left"/>
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
@@ -32,7 +32,7 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
-            <block class="Magento\Catalog\Block\Product\ListProduct" name="search_result_list" template="product/list.phtml">
+            <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml">
                 <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
                     <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
                 </block>

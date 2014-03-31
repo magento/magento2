@@ -37,18 +37,18 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $fileResolver = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $converter = $this->getMockBuilder('Magento\Cron\Model\Config\Converter\Xml')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $schema = $this->getMockBuilder('Magento\Cron\Model\Config\SchemaLocator')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $validator = $this->getMockBuilder('\Magento\Config\ValidationStateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileResolver = $this->getMockBuilder(
+            'Magento\Core\Model\Config\FileResolver'
+        )->disableOriginalConstructor()->getMock();
+        $converter = $this->getMockBuilder(
+            'Magento\Cron\Model\Config\Converter\Xml'
+        )->disableOriginalConstructor()->getMock();
+        $schema = $this->getMockBuilder(
+            'Magento\Cron\Model\Config\SchemaLocator'
+        )->disableOriginalConstructor()->getMock();
+        $validator = $this->getMockBuilder(
+            '\Magento\Config\ValidationStateInterface'
+        )->disableOriginalConstructor()->getMock();
         $this->_xmlReader = new \Magento\Cron\Model\Config\Reader\Xml($fileResolver, $converter, $schema, $validator);
     }
 

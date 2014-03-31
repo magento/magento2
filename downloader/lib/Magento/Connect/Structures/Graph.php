@@ -23,19 +23,33 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Structures;
+
+use Magento\Connect\Structures\Node;
 
 class Graph
 {
+    /**
+     * @var Node[]
+     */
     protected $_nodes = array();
+
+    /**
+     * @var bool
+     */
     protected $_directed = false;
+
+    /**
+     * @var string
+     */
     protected $_nodeClassName = 'Magento\Connect\Structures\Node';
 
     const ACYCLIC_VISITED_KEY = 'acyclic-test-visited';
+
     const SORT_VISITED_KEY = 'topological-sort-visited';
+
     const SORT_LEVEL_KEY = 'topological-sort-level';
-     
+
     /**
      * Constructor
      * @param bool $directed directed graph?
@@ -46,7 +60,6 @@ class Graph
         $this->_directed = $directed;
     }
 
-
     /**
      * Is graph directed?
      *
@@ -54,23 +67,26 @@ class Graph
      */
     public function isDirected()
     {
-        return (boolean) $this->_directed;
+        return (bool)$this->_directed;
     }
 
     /**
      * Add node to list
      *
-     * @param \Magento\Connect\Structures\Graph_Node $newNode
+     * @param Node &$newNode
      * @return void
+     * @throws \Exception
      */
     public function addNode(&$newNode)
     {
-        if(!$newNode instanceof $this->_nodeClassName) {
-            throw new \Exception(__METHOD__." : invalid node class, should be instance of: ".$this->_nodeClassName);
+        if (!$newNode instanceof $this->_nodeClassName) {
+            throw new \Exception(
+                __METHOD__ . " : invalid node class, should be instance of: " . $this->_nodeClassName
+            );
         }
-        foreach($this->_nodes as $key => $node) {
-            if($newNode === $node) {
-                throw new \Exception(__METHOD__." : received duplicate object");
+        foreach ($this->_nodes as $key => $node) {
+            if ($newNode === $node) {
+                throw new \Exception(__METHOD__ . " : received duplicate object");
             }
         }
         $this->_nodes[] =& $newNode;
@@ -79,16 +95,17 @@ class Graph
 
     /**
      * Remove a Node from the Graph
-     * @param  \Magento\Connect\Structures\Graph_Node  $node
+     * @param  Node &$node
+     * @return void
      */
     public function removeNode(&$node)
     {
-
     }
 
     /**
      * Return set of nodes
-     * @return   array
+     *
+     * @return Node[]
      */
     public function &getNodes()
     {
@@ -97,7 +114,8 @@ class Graph
 
     /**
      * Is asyclic
-     * @return unknown_type
+     *
+     * @return bool
      */
     public function isAcyclic()
     {
@@ -108,18 +126,19 @@ class Graph
     }
 
     /**
-     *
      * This is a variant of Graph::inDegree which does
      * not count nodes marked as visited.
      *
-     * @return integer
+     * @param Node &$node
+     * @param string $metadataKey
+     * @return int
      */
     protected static function _nonVisitedInDegree(&$node, $metadataKey)
     {
         $result = 0;
         $graphNodes =& $node->getGraph()->getNodes();
         foreach (array_keys($graphNodes) as $key) {
-            if ((!$graphNodes[$key]->getMetadata($metadataKey)) && $graphNodes[$key]->connectsTo($node)) {
+            if (!$graphNodes[$key]->getMetadata($metadataKey) && $graphNodes[$key]->connectsTo($node)) {
                 $result++;
             }
         }
@@ -128,7 +147,8 @@ class Graph
 
     /**
      * Is graph acyclic?
-     * @param $graph
+     *
+     * @param Graph &$graph
      * @return bool
      */
     protected static function _isAcyclic(&$graph)
@@ -137,7 +157,7 @@ class Graph
         $nodes =& $graph->getNodes();
         $nodeKeys = array_keys($nodes);
         $refGenerator = array();
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             $refGenerator[] = false;
             $nodes[$key]->setMetadata(self::ACYCLIC_VISITED_KEY, $refGenerator[sizeof($refGenerator) - 1]);
         }
@@ -146,14 +166,19 @@ class Graph
         do {
             // Find out which nodes are leafs (excluding visited nodes)
             $leafNodes = array();
-            foreach($nodeKeys as $key) {
-                if ((!$nodes[$key]->getMetadata(self::ACYCLIC_VISITED_KEY)) &&
-                self::_nonVisitedInDegree($nodes[$key], self::ACYCLIC_VISITED_KEY) == 0) {
+            foreach ($nodeKeys as $key) {
+                if (!$nodes[$key]->getMetadata(
+                    self::ACYCLIC_VISITED_KEY
+                ) && self::_nonVisitedInDegree(
+                    $nodes[$key],
+                    self::ACYCLIC_VISITED_KEY
+                ) == 0
+                ) {
                     $leafNodes[] =& $nodes[$key];
                 }
             }
             // Mark leafs as visited
-            for ($i=sizeof($leafNodes) - 1; $i>=0; $i--) {
+            for ($i = sizeof($leafNodes) - 1; $i >= 0; $i--) {
                 $visited =& $leafNodes[$i]->getMetadata(self::ACYCLIC_VISITED_KEY);
                 $visited = true;
                 $leafNodes[$i]->setMetadata(self::ACYCLIC_VISITED_KEY, $visited);
@@ -164,7 +189,7 @@ class Graph
         // If graph is a DAG, there should be no non-visited nodes.
         // Let's try to prove otherwise
         $result = true;
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             if (!$nodes[$key]->getMetadata(self::ACYCLIC_VISITED_KEY)) {
                 $result = false;
                 break;
@@ -172,7 +197,7 @@ class Graph
         }
 
         // Cleanup visited marks
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             $nodes[$key]->unsetMetadata(self::ACYCLIC_VISITED_KEY);
         }
 
@@ -180,8 +205,7 @@ class Graph
     }
 
     /**
-     *
-     * sort returns the graph's nodes, sorted by topological order.
+     * Sort returns the graph's nodes, sorted by topological order.
      *
      * The result is an array with
      * as many entries as topological levels.
@@ -199,10 +223,10 @@ class Graph
         // Fill out result array
         $nodes =& $this->getNodes();
         $nodeKeys = array_keys($nodes);
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             $k = $nodes[$key]->getMetadata(self::SORT_LEVEL_KEY);
             if (!array_key_exists($k, $result)) {
-                $result[$k] = array();   
+                $result[$k] = array();
             }
             $result[$k][] =& $nodes[$key];
             $nodes[$key]->unsetMetadata(self::SORT_LEVEL_KEY);
@@ -210,13 +234,17 @@ class Graph
         return $result;
     }
 
+    /**
+     * @param Graph &$graph
+     * @return void
+     */
     protected static function _topologicalSort(&$graph)
     {
         // Mark every node as not visited
         $nodes =& $graph->getNodes();
         $nodeKeys = array_keys($nodes);
         $refGenerator = array();
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             $refGenerator[] = false;
             $nodes[$key]->setMetadata(self::SORT_VISITED_KEY, $refGenerator[sizeof($refGenerator) - 1]);
         }
@@ -226,14 +254,20 @@ class Graph
         do {
             // Find out which nodes are leafs (excluding visited nodes)
             $leafNodes = array();
-            foreach($nodeKeys as $key) {
-                if ((!$nodes[$key]->getMetadata(self::SORT_VISITED_KEY)) && self::_nonVisitedInDegree($nodes[$key], self::SORT_VISITED_KEY) == 0) {
+            foreach ($nodeKeys as $key) {
+                if (!$nodes[$key]->getMetadata(
+                    self::SORT_VISITED_KEY
+                ) && self::_nonVisitedInDegree(
+                    $nodes[$key],
+                    self::SORT_VISITED_KEY
+                ) == 0
+                ) {
                     $leafNodes[] =& $nodes[$key];
                 }
             }
             // Mark leafs as visited
             $refGenerator[] = $topologicalLevel;
-            for ($i=sizeof($leafNodes) - 1; $i>=0; $i--) {
+            for ($i = sizeof($leafNodes) - 1; $i >= 0; $i--) {
                 $visited =& $leafNodes[$i]->getMetadata(self::SORT_VISITED_KEY);
                 $visited = true;
                 $leafNodes[$i]->setMetadata(self::SORT_VISITED_KEY, $visited);
@@ -242,9 +276,8 @@ class Graph
             $topologicalLevel++;
         } while (sizeof($leafNodes) > 0);
 
-        foreach($nodeKeys as $key) {
+        foreach ($nodeKeys as $key) {
             $nodes[$key]->unsetMetadata(self::SORT_VISITED_KEY);
         }
     }
-
 }

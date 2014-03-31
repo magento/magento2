@@ -32,7 +32,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Cache\Config\Converter;
+        $this->_model = new \Magento\Cache\Config\Converter();
     }
 
     public function testConvert()
@@ -63,10 +63,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function wrongXmlDataProvider()
     {
-        return array(
-            array(
-                '<?xml version="1.0"?><config>',
-            )
-        );
+        return array(array('<?xml version="1.0"?><config>'));
     }
 }

@@ -58,9 +58,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($type)
     {
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue('ModelInstance'));
+        $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue('ModelInstance'));
 
         $this->assertEquals('ModelInstance', $this->_model->create($type));
     }
@@ -70,12 +68,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function allowedTypesDataProvider()
     {
-        return array(
-            array('db'),
-            array('snapshot'),
-            array('filesystem'),
-            array('media'),
-            array('nomedia'),
-        );
+        return array(array('db'), array('snapshot'), array('filesystem'), array('media'), array('nomedia'));
     }
 }

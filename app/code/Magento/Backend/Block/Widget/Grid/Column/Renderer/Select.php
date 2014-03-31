@@ -31,11 +31,9 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class Select
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter
@@ -63,7 +61,7 @@ class Select
      */
     protected function _getOptions()
     {
-         return $this->_converter->toFlatArray($this->getColumn()->getOptions());
+        return $this->_converter->toFlatArray($this->getColumn()->getOptions());
     }
 
     /**
@@ -78,12 +76,11 @@ class Select
         $html = '<select name="' . $this->escapeHtml($name) . '" ' . $this->getColumn()->getValidateClass() . '>';
         $value = $row->getData($this->getColumn()->getIndex());
         foreach ($this->_getOptions() as $val => $label) {
-            $selected = ( ($val == $value && (!is_null($value))) ? ' selected="selected"' : '' );
+            $selected = $val == $value && !is_null($value) ? ' selected="selected"' : '';
             $html .= '<option value="' . $this->escapeHtml($val) . '"' . $selected . '>';
             $html .= $this->escapeHtml($label) . '</option>';
         }
-        $html.='</select>';
+        $html .= '</select>';
         return $html;
     }
-
 }

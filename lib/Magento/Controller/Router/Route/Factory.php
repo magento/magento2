@@ -32,21 +32,11 @@ class Factory
      * @return \Zend_Controller_Router_Route_Interface
      * @throws \LogicException If specified route class does not implement proper interface.
      */
-    public function createRoute(
-        $routeClass,
-        $route,
-        $defaults = array(),
-        $reqs = array(),
-        $locale = null
-    ) {
+    public function createRoute($routeClass, $route, $defaults = array(), $reqs = array(), $locale = null)
+    {
         $route = $this->_objectManager->create(
             $routeClass,
-            array(
-                'route' => $route,
-                'defaults' => $defaults,
-                'regs' => $reqs,
-                'locale' => $locale
-            )
+            array('route' => $route, 'defaults' => $defaults, 'regs' => $reqs, 'locale' => $locale)
         );
         if (!$route instanceof \Zend_Controller_Router_Route_Interface) {
             throw new \LogicException('Route must implement "Zend_Controller_Router_Route_Interface".');

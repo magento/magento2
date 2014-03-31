@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Pack;
 
 use Magento\Tools\I18n\Code\Dictionary;
@@ -36,7 +35,9 @@ interface WriterInterface
      * Save pack modes
      */
     const MODE_REPLACE = 'replace';
+
     const MODE_MERGE = 'merge';
+
     /**#@-*/
 
     /**
@@ -46,6 +47,7 @@ interface WriterInterface
      * @param string $packPath
      * @param \Magento\Tools\I18n\Code\Locale $locale
      * @param string $mode One of const of WriterInterface::MODE_
+     * @return void
      */
     public function write(Dictionary $dictionary, $packPath, Locale $locale, $mode);
 }

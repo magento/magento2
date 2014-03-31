@@ -23,17 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer;
+
+use Magento\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Block that renders JS tab
  *
  * @method \Magento\View\Design\ThemeInterface getTheme()
  * @method setTheme($theme)
- *
- */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer;
-
-/**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Factory
@@ -51,42 +49,23 @@ class Factory
      * @var array
      */
     protected $_rendererByElement = array(
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Column',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Logo'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Font',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\LogoUploader'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\LogoUploader',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Background'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker'
-            => 'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader',
-
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ImageUploader'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ImageUploader',
-
-        'Magento\Data\Form\Element\Checkbox'
-            => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox'
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Column',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Logo' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Font',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\LogoUploader' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\LogoUploader',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Background' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker' => 'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ImageUploader' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ImageUploader',
+        'Magento\Data\Form\Element\Checkbox' => 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox'
     );
 
     /**
      * Storage of renderers that could be shared between elements
      *
-     * @see self::create()
      * @var array
+     * @see self::create()
      */
     protected $_sharedRenderers = array();
 
@@ -103,13 +82,13 @@ class Factory
      *
      * @param string $elementClassName
      * @param string $rendererName
-     * @return \Magento\Data\Form\Element\Renderer\RendererInterface
-     * @throws \Magento\Core\Exception
+     * @return RendererInterface
+     * @throws \Magento\Model\Exception
      */
     public function create($elementClassName, $rendererName)
     {
         if (!isset($this->_rendererByElement[$elementClassName])) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 sprintf('No renderer registered for elements of class "%s"', $elementClassName)
             );
         }
@@ -125,6 +104,10 @@ class Factory
      *   If Renderer01 used to render Element01 that should render some other Element02 using same Renderer01 it will
      *   cause an error. Cause internal Renderer01 property '_element' will be overwritten with Element02 during
      *   reuse of renderer and then will not be restored.
+     *
+     * @param string $elementClassName
+     * @param string $rendererName
+     * @return RendererInterface
      */
     public function getSharedInstance($elementClassName, $rendererName = null)
     {

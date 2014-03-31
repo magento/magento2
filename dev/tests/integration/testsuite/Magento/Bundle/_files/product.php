@@ -33,39 +33,28 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
-$product->setTypeId('bundle')
-    ->setId(3)
-    ->setAttributeSetId(4)
-    ->setWebsiteIds(array(1))
-    ->setName('Bundle Product')
-    ->setSku('bundle-product')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
-    ->setStockData(array(
-        'use_config_manage_stock'   => 1,
-        'qty'                       => 100,
-        'is_qty_decimal'            => 0,
-        'is_in_stock'               => 1,
-    ))
-    ->setBundleOptionsData(array(
-        array(
-            'title'    => 'Bundle Product Items',
-            'type'     => 'select',
-            'required' => 1,
-            'delete'   => '',
-        ),
-    ))
-    ->setBundleSelectionsData(array(
-        array(
-            array(
-                'product_id'               => 1, // fixture product
-                'selection_qty'            => 1,
-                'selection_can_change_qty' => 1,
-                'delete'                   => '',
-            ),
-        ),
-    ))
-    ->save()
-;
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->setTypeId(
+    'bundle'
+)->setId(
+    3
+)->setAttributeSetId(
+    4
+)->setWebsiteIds(
+    array(1)
+)->setName(
+    'Bundle Product'
+)->setSku(
+    'bundle-product'
+)->setVisibility(
+    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+)->setStatus(
+    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+)->setStockData(
+    array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1)
+)->setBundleOptionsData(
+    array(array('title' => 'Bundle Product Items', 'type' => 'select', 'required' => 1, 'delete' => ''))
+)->setBundleSelectionsData(
+    array(array(array('product_id' => 1, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => '')))
+    // fixture product
+)->save();

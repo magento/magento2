@@ -1,5 +1,6 @@
 <?php
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
+
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
@@ -39,11 +40,14 @@ class FileTest extends \Magento\Backend\Utility\Controller
                 'size' => 0
             )
         );
-        
+
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
-        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Data')
-            ->jsonDecode($body);
+        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Helper\Data'
+        )->jsonDecode(
+            $body
+        );
         $this->assertEquals(0, $result['error']);
     }
 }

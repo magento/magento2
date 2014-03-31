@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order information tab
@@ -31,11 +32,8 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
-
-class Info
-    extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Retrieve order model instance
@@ -65,24 +63,37 @@ class Info
     public function getOrderTotalData()
     {
         return array(
-            'can_display_total_due'      => true,
-            'can_display_total_paid'     => true,
-            'can_display_total_refunded' => true,
+            'can_display_total_due' => true,
+            'can_display_total_paid' => true,
+            'can_display_total_refunded' => true
         );
     }
 
+    /**
+     * Get order info data
+     *
+     * @return array
+     */
     public function getOrderInfoData()
     {
-        return array(
-            'no_use_order_link' => true,
-        );
+        return array('no_use_order_link' => true);
     }
 
+    /**
+     * Get tracking html
+     *
+     * @return string
+     */
     public function getTrackingHtml()
     {
         return $this->getChildHtml('order_tracking');
     }
 
+    /**
+     * Get items html
+     *
+     * @return string
+     */
     public function getItemsHtml()
     {
         return $this->getChildHtml('order_items');
@@ -98,34 +109,58 @@ class Info
         return $this->getChildHtml('gift_options');
     }
 
+    /**
+     * Get payment html
+     *
+     * @return string
+     */
     public function getPaymentHtml()
     {
         return $this->getChildHtml('order_payment');
     }
 
+    /**
+     * View URL getter
+     *
+     * @param int $orderId
+     * @return string
+     */
     public function getViewUrl($orderId)
     {
-        return $this->getUrl('sales/*/*', array('order_id'=>$orderId));
+        return $this->getUrl('sales/*/*', array('order_id' => $orderId));
     }
 
     /**
      * ######################## TAB settings #################################
+     */
+
+    /**
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
         return __('Information');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTabTitle()
     {
         return __('Order Information');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function canShowTab()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isHidden()
     {
         return false;

@@ -22,6 +22,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $this */
 ?>
 <div class="block dashboard info">
     <div class="title"><strong><?php echo __('Account Information') ?></strong></div>
@@ -32,7 +34,7 @@
                 <a class="action edit" href="<?php echo $this->getUrl('customer/account/edit') ?>"><span><?php echo __('Edit') ?></span></a>
             </strong>
             <p>
-                <?php echo $this->escapeHtml($this->getCustomer()->getName()) ?><br>
+                <?php echo $this->escapeHtml($this->getName()) ?><br>
                 <?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?><br>
                 <a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo __('Change Password') ?></a>
             </p>

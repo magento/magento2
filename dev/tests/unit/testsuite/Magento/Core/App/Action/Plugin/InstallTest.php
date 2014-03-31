@@ -46,44 +46,54 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     protected $_urlMock;
 
     /**
+     * @var \Closure
+     */
+    protected $closureMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_invocationChainMock;
+    protected $subjectMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
 
     protected function setUp()
     {
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\App\ResponseInterface', array('setRedirect', 'sendResponse'));
         $this->_urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
-        $this->_invocationChainMock =
-            $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
+        $this->closureMock = function () {
+            return 'ExpectedValue';
+        };
+        $this->subjectMock = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\App\RequestInterface');
         $this->_plugin = new \Magento\Core\App\Action\Plugin\Install(
             $this->_appStateMock,
             $this->_response,
             $this->_urlMock,
-            $this->getMock('\Magento\App\ActionFlag', array(), array(), '', false)
+            $this->getMock('Magento\App\ActionFlag', array(), array(), '', false)
         );
     }
 
-    public function testAroundDispatch()
+    public function testAroundDispatchWhenApplicationIsNotInstalled()
     {
         $url = 'http://example.com';
         $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
         $this->_urlMock->expects($this->once())->method('getUrl')->with('install')->will($this->returnValue($url));
         $this->_response->expects($this->once())->method('setRedirect')->with($url);
-        $this->_invocationChainMock->expects($this->never())->method('proceed');
-        $this->_plugin->aroundDispatch(array(), $this->_invocationChainMock);
+        $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock);
     }
 
     public function testAroundDispatchWhenApplicationIsInstalled()
     {
         $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
 
-        $this->_invocationChainMock
-            ->expects($this->once())
-            ->method('proceed')
-            ->with(array())
-            ->will($this->returnValue('ExpectedValue'));
-        $this->_plugin->aroundDispatch(array(), $this->_invocationChainMock);
+        $this->assertEquals(
+            'ExpectedValue',
+            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
     }
 }

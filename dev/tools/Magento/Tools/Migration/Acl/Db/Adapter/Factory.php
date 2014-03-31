@@ -60,7 +60,7 @@ class Factory
         }
 
         $adapter = $this->_objectManager->create($dbAdapterClassName, array('config' => $config));
-        if (false == ($adapter instanceof \Zend_Db_Adapter_Abstract)) {
+        if (false == $adapter instanceof \Zend_Db_Adapter_Abstract) {
             unset($adapter);
             throw new \InvalidArgumentException('Specified adapter is not instance of \Zend_Db_Adapter_Abstract');
         }

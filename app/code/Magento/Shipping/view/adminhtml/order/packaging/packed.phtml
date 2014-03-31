@@ -48,7 +48,7 @@
                                     <th><?php echo __('Length') ?></th>
                                     <td>
                                         <?php if ($params->getLength() != null): ?>
-                                            <?php echo $params->getLength() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                            <?php echo $params->getLength() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                         <?php else: ?>
                                             --
                                         <?php endif; ?>
@@ -67,12 +67,12 @@
                                         <td><?php echo $this->displayCustomsPrice($params->getCustomsValue()) ?></td>
                                     <?php else: ?>
                                         <th><?php echo __('Total Weight') ?></th>
-                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureWeightName($params->getWeightUnits()) ?></td>
+                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
                                     <?php endif; ?>
                                     <th><?php echo __('Width') ?></th>
                                     <td>
                                         <?php if ($params->getWidth() != null): ?>
-                                            <?php echo $params->getWidth() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                            <?php echo $params->getWidth() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                         <?php else: ?>
                                             --
                                         <?php endif; ?>
@@ -92,7 +92,7 @@
                                 <tr>
                                     <?php if ($this->displayCustomsValue()): ?>
                                         <th><?php echo __('Total Weight') ?></th>
-                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureWeightName($params->getWeightUnits()) ?></td>
+                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
                                     <?php else: ?>
                                         <th>&nbsp;</th>
                                         <td>&nbsp;</td>
@@ -100,7 +100,7 @@
                                     <th><?php echo __('Height') ?></th>
                                     <td>
                                         <?php if ($params->getHeight() != null): ?>
-                                            <?php echo $params->getHeight() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                            <?php echo $params->getHeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
                                         <?php else: ?>
                                             --
                                         <?php endif; ?>
@@ -118,7 +118,7 @@
                                     <?php endif; ?>
                                     <?php if ($params->getGirth()): ?>
                                         <th><?php echo __('Girth') ?></th>
-                                        <td><?php echo $params->getGirth() .' '. $this->helper('Magento\Usa\Helper\Data')->getMeasureDimensionName($params->getGirthDimensionUnits()) ?></td>
+                                        <td><?php echo $params->getGirth() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getGirthDimensionUnits()) ?></td>
                                     <?php else: ?>
                                         <th>&nbsp;</th>
                                         <td>&nbsp;</td>

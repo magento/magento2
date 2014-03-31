@@ -23,7 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento;
 
 /**
  * Universal data container with array access implementation
@@ -32,11 +32,8 @@
  * @package     Magento_Object
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento;
-
 class Object implements \ArrayAccess
 {
-
     /**
      * Object attributes
      *
@@ -74,7 +71,7 @@ class Object implements \ArrayAccess
     /**
      * Object delete flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_isDeleted = false;
 
@@ -95,7 +92,7 @@ class Object implements \ArrayAccess
      * Set _isDeleted flag value (if $isDeleted parameter is defined) and return current flag value
      *
      * @param boolean $isDeleted
-     * @return boolean
+     * @return bool
      */
     public function isDeleted($isDeleted = null)
     {
@@ -182,7 +179,7 @@ class Object implements \ArrayAccess
     /**
      * Overwrite data in the object.
      *
-     * $key can be string or array.
+     * The $key parameter can be string or array.
      * If $key is string, the attribute value will be overwritten by $value
      *
      * If $key is an array, it will overwrite all the data in the object.
@@ -330,7 +327,7 @@ class Object implements \ArrayAccess
     public function setDataUsingMethod($key, $args = array())
     {
         $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        $this->$method($args);
+        $this->{$method}($args);
         return $this;
     }
 
@@ -344,7 +341,7 @@ class Object implements \ArrayAccess
     public function getDataUsingMethod($key, $args = null)
     {
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        return $this->$method($args);
+        return $this->{$method}($args);
     }
 
     /**
@@ -367,7 +364,7 @@ class Object implements \ArrayAccess
      * Otherwise checks if the specified attribute is set.
      *
      * @param string $key
-     * @return boolean
+     * @return bool
      */
     public function hasData($key = '')
     {
@@ -401,7 +398,7 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * "__" style wrapper for toArray method
+     * The "__" style wrapper for toArray method
      *
      * @param  array $keys
      * @return array
@@ -416,8 +413,8 @@ class Object implements \ArrayAccess
      *
      * @param array   $keys array of keys that must be represented
      * @param string  $rootName root node name
-     * @param boolean $addOpenTag flag that allow to add initial xml node
-     * @param boolean $addCdata flag that require wrap all values in CDATA
+     * @param bool $addOpenTag flag that allow to add initial xml node
+     * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string
      */
     public function toXml(array $keys = array(), $rootName = 'item', $addOpenTag = false, $addCdata = true)
@@ -426,7 +423,7 @@ class Object implements \ArrayAccess
         $data = $this->toArray($keys);
         foreach ($data as $fieldName => $fieldValue) {
             if ($addCdata === true) {
-                $fieldValue = "<![CDATA[$fieldValue]]>";
+                $fieldValue = "<![CDATA[{$fieldValue}]]>";
             } else {
                 $fieldValue = str_replace(
                     array('&', '"', "'", '<', '>'),
@@ -446,16 +443,20 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * "__" style wrapper for toXml method
+     * The "__" style wrapper for toXml method
      *
-     * @param array   $keys array of keys that must be represented
-     * @param string  $rootName root node name
-     * @param boolean $addOpenTag flag that allow to add initial xml node
-     * @param boolean $addCdata flag that require wrap all values in CDATA
+     * @param array $arrAttributes array of keys that must be represented
+     * @param string $rootName root node name
+     * @param bool $addOpenTag flag that allow to add initial xml node
+     * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string
      */
-    public function convertToXml(array $arrAttributes = array(), $rootName = 'item', $addOpenTag = false, $addCdata = true)
-    {
+    public function convertToXml(
+        array $arrAttributes = array(),
+        $rootName = 'item',
+        $addOpenTag = false,
+        $addCdata = true
+    ) {
         return $this->toXml($arrAttributes, $rootName, $addOpenTag, $addCdata);
     }
 
@@ -472,7 +473,7 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * "__" style wrapper for toJson
+     * The "__" style wrapper for toJson
      *
      * @param  array $keys
      * @return string
@@ -515,18 +516,18 @@ class Object implements \ArrayAccess
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-            case 'get' :
-                $key    = $this->_underscore(substr($method, 3));
-                $index  = isset($args[0]) ? $args[0] : null;
+            case 'get':
+                $key = $this->_underscore(substr($method, 3));
+                $index = isset($args[0]) ? $args[0] : null;
                 return $this->getData($key, $index);
-            case 'set' :
-                $key    = $this->_underscore(substr($method, 3));
-                $value  = isset($args[0]) ? $args[0] : null;
+            case 'set':
+                $key = $this->_underscore(substr($method, 3));
+                $value = isset($args[0]) ? $args[0] : null;
                 return $this->setData($key, $value);
-            case 'uns' :
+            case 'uns':
                 $key = $this->_underscore(substr($method, 3));
                 return $this->unsetData($key);
-            case 'has' :
+            case 'has':
                 $key = $this->_underscore(substr($method, 3));
                 return isset($this->_data[$key]);
         }
@@ -536,9 +537,9 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * checks whether the object is empty
+     * Checks whether the object is empty
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -549,10 +550,10 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * Converts field names for setters and geters
+     * Converts field names for setters and getters
      *
      * $this->setMyField($value) === $this->setData('my_field', $value)
-     * Uses cache to eliminate unneccessary preg_replace
+     * Uses cache to eliminate unnecessary preg_replace
      *
      * @param string $name
      * @return string
@@ -631,7 +632,7 @@ class Object implements \ArrayAccess
      * Compare object data with original data
      *
      * @param string $field
-     * @return boolean
+     * @return bool
      */
     public function dataHasChangedFor($field)
     {
@@ -643,7 +644,7 @@ class Object implements \ArrayAccess
     /**
      * Clears data changes status
      *
-     * @param boolean $value
+     * @param bool $value
      * @return $this
      */
     public function setDataChanges($value)
@@ -656,8 +657,8 @@ class Object implements \ArrayAccess
      * Present object data as string in debug mode
      *
      * @param mixed $data
-     * @param array $objects
-     * @return string
+     * @param array &$objects
+     * @return array
      */
     public function debug($data = null, &$objects = array())
     {
@@ -670,7 +671,7 @@ class Object implements \ArrayAccess
             $data = $this->getData();
         }
         $debug = array();
-        foreach ($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             if (is_scalar($value)) {
                 $debug[$key] = $value;
             } elseif (is_array($value)) {
@@ -685,10 +686,10 @@ class Object implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetSet()
      *
-     * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      * @param string $offset
      * @param mixed $value
      * @return void
+     * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
     public function offsetSet($offset, $value)
     {
@@ -698,9 +699,9 @@ class Object implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetExists()
      *
-     * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      * @param string $offset
-     * @return boolean
+     * @return bool
+     * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
     public function offsetExists($offset)
     {
@@ -710,9 +711,9 @@ class Object implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetUnset()
      *
-     * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      * @param string $offset
      * @return void
+     * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
     public function offsetUnset($offset)
     {
@@ -722,9 +723,9 @@ class Object implements \ArrayAccess
     /**
      * Implementation of \ArrayAccess::offsetGet()
      *
-     * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      * @param string $offset
      * @return mixed
+     * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
     public function offsetGet($offset)
     {

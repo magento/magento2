@@ -22,11 +22,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php
+
 /** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
 $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
-$_registerParam = $this->getRequest()->getParam('register');
 ?>
 <div class="opc wrapper">
     <ol class="opc" id="checkoutSteps">
@@ -57,40 +55,13 @@ $_registerParam = $this->getRequest()->getParam('register');
                         .accordion({
                             activeSelector: '#opc-<?php echo $this->getActiveStep() ?>'
                         })
-                        .opcheckout({
-                            quoteBaseGrandTotal: <?php echo (float)$_paymentBlock->getQuoteBaseGrandTotal() ?>,
-                            hasRecurringItems: <?php echo $_paymentBlock->hasRecurringItems() ? 'true' : 'false' ?>,
-                            progressUrl: '<?php echo $this->getUrl('checkout/onepage/progress') ?>',
-                            reviewUrl: '<?php echo $this->getUrl('checkout/onepage/review') ?>',
-                            failureUrl: '<?php echo $this->getUrl('checkout/cart') ?>',
-                            getAddressUrl: '<?php echo $this->getUrl('checkout/onepage/getAddress') ?>address/',
+                        .opcheckout($.extend({
                             checkoutAgreements: '#checkout-agreements',
                             checkoutProgressContainer: '#checkout-progress-wrapper',
-                            checkout: {
-                                suggestRegistration: <?php echo ($_registerParam || $_registerParam === '') ? 'true' : 'false' ?>,
-                                saveUrl: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>'
+                            methodDescription: '.items'
                             },
-                            billing: {
-                                saveUrl: '<?php echo $this->getUrl('checkout/onepage/saveBilling') ?>'
-                            },
-                            shipping: {
-                                saveUrl: '<?php echo $this->getUrl('checkout/onepage/saveShipping') ?>'
-                            },
-                            shippingMethod: {
-                                saveUrl: "<?php echo $this->getUrl('checkout/onepage/saveShippingMethod') ?>"
-                            },
-                            payment: {
-                                <?php if ($_paymentBlock->getChildBlock('methods')->getSelectedMethodCode()): ?>
-                                    defaultPaymentMethod: "<?php echo $_paymentBlock->getChildBlock('methods')->getSelectedMethodCode() ?>",
-                                <?php endif ?>
-                                saveUrl: '<?php echo $this->getUrl('checkout/onepage/savePayment') ?>'
-                            },
-                            review: {
-                                saveUrl: '<?php echo $this->getUrl('checkout/onepage/saveOrder') ?>',
-                                successUrl: '<?php echo $this->getUrl('checkout/onepage/success') ?>'
-                            },
-                            methodDescription : '.items'
-                        });
+                            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
+                        ));
                 });
         })(jQuery);
     </script>

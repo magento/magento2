@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Section
-    extends \Magento\Backend\Model\Config\Structure\Element\AbstractComposite
+class Section extends AbstractComposite
 {
     /**
      * Authorization service
@@ -38,12 +36,12 @@ class Section
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+     * @param Iterator $childrenIterator
      * @param \Magento\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator,
+        Iterator $childrenIterator,
         \Magento\AuthorizationInterface $authorization
     ) {
         parent::__construct($storeManager, $childrenIterator);

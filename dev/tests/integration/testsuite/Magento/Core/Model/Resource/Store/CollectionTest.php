@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Store;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Store\Collection');
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Resource\Store\Collection'
+        );
     }
 
     public function testSetGetLoadDefault()
@@ -109,12 +109,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($this->_collection->toOptionHash()));
         $this->assertNotEmpty($this->_collection->toOptionHash());
-
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::addFieldToSelect
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::removeFieldFromSelect
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::addFieldToSelect
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::removeFieldFromSelect
      */
     public function testAddRemoveFieldToSelect()
     {
@@ -133,7 +132,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::addExpressionFieldToSelect
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::addExpressionFieldToSelect
      */
     public function testAddExpressionFieldToSelect()
     {
@@ -143,7 +142,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::getAllIds
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::getAllIds
      */
     public function testGetAllIds()
     {
@@ -151,7 +150,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::getData
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::getData
      */
     public function testGetData()
     {
@@ -159,7 +158,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Db\Collection\AbstractCollection::join
+     * @covers \Magento\Model\Resource\Db\Collection\AbstractCollection::join
      */
     public function testJoin()
     {

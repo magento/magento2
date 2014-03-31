@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Grid\Row;
 
 /**
  * Sales orders grid row url generator
  */
-namespace Magento\Sales\Model\Order\Grid\Row;
-
 class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
 {
     /**
@@ -48,7 +47,6 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
     ) {
         $this->_authorization = $authorization;
         parent::__construct($backendUrl, $args);
-
     }
 
     /**

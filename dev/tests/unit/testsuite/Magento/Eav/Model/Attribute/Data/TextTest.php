@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Attribute\Data;
 
 class TextTest extends \PHPUnit_Framework_TestCase
@@ -36,21 +35,16 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $locale = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false, false);
+        $locale = $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false, false);
+        $localeResolver = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false, false);
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false, false);
         $helper = $this->getMock('Magento\Stdlib\String', array(), array(), '', false, false);
-
-
 
         $attributeData = array(
             'store_label' => 'Test',
             'attribute_code' => 'test',
             'is_required' => 1,
-            'validate_rules' => array(
-                'min_text_length' => 0,
-                'max_text_length' => 0,
-                'input_validation' => 0
-            )
+            'validate_rules' => array('min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0)
         );
 
         $attributeClass = 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute';
@@ -65,7 +59,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
          * \PHPUnit_Framework_MockObject_MockObject
          */
         $attribute = $this->getMock($attributeClass, array('_init'), $arguments);
-        $this->_model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $helper);
+        $this->_model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $localeResolver, $helper);
         $this->_model->setAttribute($attribute);
     }
 

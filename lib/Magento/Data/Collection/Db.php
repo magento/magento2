@@ -23,11 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- * Base items collection class
- */
 namespace Magento\Data\Collection;
 
 use Magento\Data\Collection\Db\FetchStrategyInterface;
@@ -35,6 +30,9 @@ use Magento\DB\Adapter\AdapterInterface;
 use Magento\DB\Select;
 use Magento\Logger;
 
+/**
+ * Base items collection class
+ */
 class Db extends \Magento\Data\Collection
 {
     /**
@@ -310,9 +308,10 @@ class Db extends \Magento\Data\Collection
     {
         $this->_isOrdersRendered = false;
         $field = (string)$this->_getMappedField($field);
-        $direction = (strtoupper($direction) == self::SORT_ORDER_ASC) ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
+        $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
-        unset($this->_orders[$field]); // avoid ordering by the same field twice
+        unset($this->_orders[$field]);
+        // avoid ordering by the same field twice
         if ($unshift) {
             $orders = array($field => $direction);
             foreach ($this->_orders as $key => $dir) {
@@ -340,22 +339,20 @@ class Db extends \Magento\Data\Collection
 
         foreach ($this->_filters as $filter) {
             switch ($filter['type']) {
-                case 'or' :
-                    $condition = $this->_conn->quoteInto($filter['field'].'=?', $filter['value']);
+                case 'or':
+                    $condition = $this->_conn->quoteInto($filter['field'] . '=?', $filter['value']);
                     $this->_select->orWhere($condition);
                     break;
-                case 'string' :
+                case 'string':
                     $this->_select->where($filter['value']);
                     break;
                 case 'public':
                     $field = $this->_getMappedField($filter['field']);
                     $condition = $filter['value'];
-                    $this->_select->where(
-                        $this->_getConditionSql($field, $condition), null, Select::TYPE_CONDITION
-                    );
+                    $this->_select->where($this->_getConditionSql($field, $condition), null, Select::TYPE_CONDITION);
                     break;
                 default:
-                    $condition = $this->_conn->quoteInto($filter['field'].'=?', $filter['value']);
+                    $condition = $this->_conn->quoteInto($filter['field'] . '=?', $filter['value']);
                     $this->_select->where($condition);
             }
         }
@@ -559,9 +556,7 @@ class Db extends \Magento\Data\Collection
 
         $this->_beforeLoad();
 
-        $this->_renderFilters()
-             ->_renderOrders()
-             ->_renderLimit();
+        $this->_renderFilters()->_renderOrders()->_renderLimit();
 
         $this->printLogQuery($printQuery, $logQuery);
         $data = $this->getData();
@@ -592,11 +587,9 @@ class Db extends \Magento\Data\Collection
     public function fetchItem()
     {
         if (null === $this->_fetchStmt) {
-            $this->_renderOrders()
-                 ->_renderLimit();
+            $this->_renderOrders()->_renderLimit();
 
-            $this->_fetchStmt = $this->getConnection()
-                ->query($this->getSelect());
+            $this->_fetchStmt = $this->getConnection()->query($this->getSelect());
         }
         $data = $this->_fetchStmt->fetch();
         if (!empty($data) && is_array($data)) {
@@ -643,33 +636,6 @@ class Db extends \Magento\Data\Collection
     }
 
     /**
-     * Convert items array to hash for select options
-     * using fetchItem method
-     *
-     * The difference between _toOptionHash() and this one is that this
-     * method fetch items one by one and does not load all collection items at once
-     * return items hash
-     * array($value => $label)
-     *
-     * @see     fetchItem()
-     *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
-     */
-    protected function _toOptionHashOptimized($valueField = null, $labelField = 'name')
-    {
-        if ($valueField === null) {
-            $valueField = $this->getIdFieldName();
-        }
-        $result = array();
-        while ($item = $this->fetchItem()) {
-            $result[$item->getData($valueField)] = $item->getData($labelField);
-        }
-        return $result;
-    }
-
-    /**
      * Get all data array for collection
      *
      * @return array
@@ -677,9 +643,7 @@ class Db extends \Magento\Data\Collection
     public function getData()
     {
         if ($this->_data === null) {
-            $this->_renderFilters()
-                 ->_renderOrders()
-                 ->_renderLimit();
+            $this->_renderFilters()->_renderOrders()->_renderLimit();
             $select = $this->getSelect();
             $this->_data = $this->_fetchAll($select);
             $this->_afterLoadData();
@@ -799,7 +763,7 @@ class Db extends \Magento\Data\Collection
     {
         if (is_null($this->_map)) {
             $this->_map = array($group => array());
-        } elseif (is_null($this->_map[$group])) {
+        } elseif (empty($this->_map[$group])) {
             $this->_map[$group] = array();
         }
         $this->_map[$group][$filter] = $alias;
@@ -809,6 +773,8 @@ class Db extends \Magento\Data\Collection
 
     /**
      * Clone $this->_select during cloning collection, otherwise both collections will share the same $this->_select
+     *
+     * @return void
      */
     public function __clone()
     {

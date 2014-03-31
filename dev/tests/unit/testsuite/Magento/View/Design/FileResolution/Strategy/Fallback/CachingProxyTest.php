@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
 use Magento\App\Filesystem;
@@ -96,9 +95,7 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->themeModel->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue('t'));
+        $this->themeModel->expects($this->any())->method('getId')->will($this->returnValue('t'));
 
         $this->model = new CachingProxy(
             $this->fallback,
@@ -138,18 +135,27 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testDestruct()
     {
-        $this->fallback->expects($this->once())
-            ->method('getFile')
-            ->will($this->returnValue(TESTS_TEMP_DIR . '/' . 'test.txt'));
+        $this->fallback->expects(
+            $this->once()
+        )->method(
+            'getFile'
+        )->will(
+            $this->returnValue(TESTS_TEMP_DIR . '/' . 'test.txt')
+        );
 
         $expectedFile = $this->tmpDir . '/a_t_.ser';
 
         $this->model->getFile('a', $this->themeModel, 'does not matter', 'Some_Module');
         $this->assertFileNotExists($expectedFile);
         unset($this->model);
-        $this->directoryWrite->expects($this->any())
-            ->method('writeFile')
-            ->with($expectedFile, $this->contains('Some_Module'));
+        $this->directoryWrite->expects(
+            $this->any()
+        )->method(
+            'writeFile'
+        )->with(
+            $expectedFile,
+            $this->contains('Some_Module')
+        );
     }
 
     /**
@@ -157,21 +163,18 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testDestructNoMapSaved()
     {
-        $this->fallback->expects($this->once())
-            ->method('getFile')
-            ->will($this->returnValue(TESTS_TEMP_DIR . '/test.txt'));
-        $model = new CachingProxy(
-            $this->fallback,
-            $this->getFilesystemMock(),
-            $this->tmpDir,
-            TESTS_TEMP_DIR,
-            false
+        $this->fallback->expects(
+            $this->once()
+        )->method(
+            'getFile'
+        )->will(
+            $this->returnValue(TESTS_TEMP_DIR . '/test.txt')
         );
+        $model = new CachingProxy($this->fallback, $this->getFilesystemMock(), $this->tmpDir, TESTS_TEMP_DIR, false);
 
         $model->getFile('a', $this->themeModel, 'does not matter', 'Some_Module');
         unset($model);
-        $this->directoryWrite->expects($this->never())
-            ->method('writeFile');
+        $this->directoryWrite->expects($this->never())->method('writeFile');
     }
 
     /**
@@ -218,18 +221,18 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
             'getFile' => array(
                 'getFile',
                 array('area51', $themeModel, 'file.txt', 'Some_Module'),
-                TESTS_TEMP_DIR . '/fallback/file.txt',
+                TESTS_TEMP_DIR . '/fallback/file.txt'
             ),
             'getLocaleFile' => array(
                 'getLocaleFile',
                 array('area51', $themeModel, 'sq_AL', 'file.txt'),
-                'path/to/locale_file.txt',
+                'path/to/locale_file.txt'
             ),
             'getViewFile' => array(
                 'getViewFile',
                 array('area51', $themeModel, 'uk_UA', 'file.txt', 'Some_Module'),
-                'path/to/view_file.txt',
-            ),
+                'path/to/view_file.txt'
+            )
         );
     }
 
@@ -250,8 +253,7 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($this->model, $result);
 
-        $this->fallback->expects($this->never())
-            ->method('getViewFile');
+        $this->fallback->expects($this->never())->method('getViewFile');
         $result = $this->model->getViewFile('area51', $this->themeModel, 'en_US', 'file.txt', 'Some_Module');
         $this->assertEquals($materializedFilePath, $result);
     }
@@ -271,30 +273,36 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $directoryRead->expects($this->once())
-            ->method('isDirectory')
-            ->will($this->returnValue($isDirectory));
-        $directoryRead->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
+        $directoryRead->expects($this->once())->method('isDirectory')->will($this->returnValue($isDirectory));
+        $directoryRead->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $this->directoryWrite = $this->getMock(
             'Magento\Filesystem\Directory\Write',
-            array('getRelativePath','isFile', 'readFile', 'isDirectory', 'create', 'writeFile'),
-            array(), '', false
+            array('getRelativePath', 'isFile', 'readFile', 'isDirectory', 'create', 'writeFile'),
+            array(),
+            '',
+            false
         );
-        $this->directoryWrite->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
+        $this->directoryWrite->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $methods = array('getDirectoryRead', 'getDirectoryWrite', '__wakeup');
         $filesystem = $this->getMock('Magento\App\Filesystem', $methods, array(), '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue($directoryRead));
-        $filesystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::VAR_DIR)
-            ->will($this->returnValue($this->directoryWrite));
+        $filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue($directoryRead)
+        );
+        $filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::VAR_DIR
+        )->will(
+            $this->returnValue($this->directoryWrite)
+        );
         return $filesystem;
     }
 }

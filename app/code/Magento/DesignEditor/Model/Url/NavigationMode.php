@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Url;
 
 /**
  * Navigation mode design editor url model
  */
-namespace Magento\DesignEditor\Model\Url;
-
 class NavigationMode extends \Magento\Url
 {
     /**
@@ -57,7 +56,7 @@ class NavigationMode extends \Magento\Url
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Url\ScopeResolverInterface $scopeResolver
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\Generic $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
@@ -69,7 +68,7 @@ class NavigationMode extends \Magento\Url
         \Magento\App\RequestInterface $request,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Url\ScopeResolverInterface $scopeResolver,
-        \Magento\Core\Model\Session $session,
+        \Magento\Session\Generic $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
@@ -109,9 +108,7 @@ class NavigationMode extends \Magento\Url
         $this->_hasThemeAndMode();
         $url = parent::getRouteUrl($routePath, $routeParams);
         $baseUrl = trim($this->getBaseUrl(), '/');
-        $vdeBaseUrl = implode('/', array(
-            $baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId
-        ));
+        $vdeBaseUrl = implode('/', array($baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId));
         if (strpos($url, $baseUrl) === 0 && strpos($url, $vdeBaseUrl) === false) {
             $url = str_replace($baseUrl, $vdeBaseUrl, $url);
         }

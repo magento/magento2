@@ -23,37 +23,23 @@
  */
 return array(
     'backend' => array(
-        'id'        => 'backend',
-        'routes'    => array(
+        'id' => 'backend',
+        'routes' => array(
             'adminhtml' => array(
-                'id'        => 'adminhtml',
+                'id' => 'adminhtml',
                 'frontName' => 'admin',
-                'modules'   => array(
-                    'Magento_Sales',
-                    'Magento_Catalog',
-                    'Magento_Wishlist',
-                    'Magento_Adminhtml',
-                    'Magento_Customer',
-                    'Magento_Paypal',
-                ),
+                'modules' => array(
+                    'Magento_ModuleA',
+                    'Magento_ModuleB',
+                    'Magento_ModuleC',
+                    'Magento_ModuleD',
+                    'Magento_ModuleE',
+                    'Magento_ModuleF'
+                )
             ),
-            'customer' => array(
-                'id'        => 'customer',
-                'frontName' => 'customer',
-                'modules'   => array(
-                    'Magento_Customer',
-                ),
-            ),
-            'wishlist' => array(
-                'id'        => 'wishlist',
-                'frontName' => 'wishlist',
-                'modules'   => array(
-                    'Magento_Wishlist',
-                ),
-            ),
-        ),
+            'customer' => array('id' => 'customer', 'frontName' => 'customer', 'modules' => array('Magento_ModuleE')),
+            'wishlist' => array('id' => 'wishlist', 'frontName' => 'wishlist', 'modules' => array('Magento_ModuleC'))
+        )
     ),
-    'front' => array(
-        'id'        => 'front',
-    ),
+    'front' => array('id' => 'front')
 );

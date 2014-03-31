@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block\Adminhtml\Agreement;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -31,18 +30,18 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -52,6 +51,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Init class
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -74,8 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($this->_coreRegistry->registry('checkout_agreement')->getId()) {
             return __('Edit Terms and Conditions');
-        }
-        else {
+        } else {
             return __('New Terms and Conditions');
         }
     }

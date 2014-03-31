@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar;
 
 /**
  * VDE buttons block
@@ -30,10 +31,7 @@
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons setVirtualThemeId(int $id)
  * @method int getVirtualThemeId()
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar;
-
-class Buttons
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\AbstractBlock
+class Buttons extends \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\AbstractBlock
 {
     /**
      * Current theme used for preview
@@ -75,7 +73,7 @@ class Buttons
      * Get current theme id
      *
      * @param int $themeId
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons
+     * @return $this
      */
     public function setThemeId($themeId)
     {

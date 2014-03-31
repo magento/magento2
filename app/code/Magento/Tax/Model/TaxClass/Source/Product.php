@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\TaxClass\Source;
 
 class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
@@ -70,7 +69,10 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         if (is_null($this->_options)) {
             /** @var $classCollection \Magento\Tax\Model\Resource\TaxClass\Collection */
             $classCollection = $this->_classesFactory->create();
-            $classCollection->addFieldToFilter('class_type', \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)->load();
+            $classCollection->addFieldToFilter(
+                'class_type',
+                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+            )->load();
             $this->_options = $classCollection->toOptionArray();
         }
 
@@ -105,23 +107,14 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatColums()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array(
-            'unsigned'  => true,
-            'default'   => null,
-            'extra'     => null
-        );
+        $column = array('unsigned' => true, 'default' => null, 'extra' => null);
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'int';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $column['nullable'] = true;
-            $column['comment']  = $attributeCode . ' tax column';
-        }
+        $column['type'] = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $column['nullable'] = true;
+        $column['comment'] = $attributeCode . ' tax column';
 
         return array($attributeCode => $column);
-   }
+    }
 
     /**
      * Retrieve Select for update attribute value in flat table

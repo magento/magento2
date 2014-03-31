@@ -29,11 +29,12 @@
  */
 namespace Magento\Sales\Model\Config\Source\Order;
 
-class Status implements \Magento\Core\Model\Option\ArrayInterface
+class Status implements \Magento\Option\ArrayInterface
 {
-    // set null to enable all possible
+    const UNDEFINED_OPTION_LABEL = '-- Please Select --';
+
     /**
-     * @var array
+     * @var string[]
      */
     protected $_stateStatuses = array(
         \Magento\Sales\Model\Order::STATE_NEW,
@@ -41,7 +42,7 @@ class Status implements \Magento\Core\Model\Option\ArrayInterface
         \Magento\Sales\Model\Order::STATE_COMPLETE,
         \Magento\Sales\Model\Order::STATE_CLOSED,
         \Magento\Sales\Model\Order::STATE_CANCELED,
-        \Magento\Sales\Model\Order::STATE_HOLDED,
+        \Magento\Sales\Model\Order::STATE_HOLDED
     );
 
     /**
@@ -62,21 +63,13 @@ class Status implements \Magento\Core\Model\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        if ($this->_stateStatuses) {
-            $statuses = $this->_orderConfig->getStateStatuses($this->_stateStatuses);
-        } else {
-            $statuses = $this->_orderConfig->getStatuses();
-        }
-        $options = array();
-        $options[] = array(
-           'value' => '',
-           'label' => __('-- Please Select --')
-        );
+        $statuses = $this->_stateStatuses
+            ? $this->_orderConfig->getStateStatuses($this->_stateStatuses)
+            : $this->_orderConfig->getStatuses();
+
+        $options = [['value' => '', 'label' => __(self::UNDEFINED_OPTION_LABEL)]];
         foreach ($statuses as $code => $label) {
-            $options[] = array(
-               'value' => $code,
-               'label' => $label
-            );
+            $options[] = ['value' => $code, 'label' => $label];
         }
         return $options;
     }

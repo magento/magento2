@@ -25,8 +25,9 @@
  */
 ?>
 
+<dl class="payment method">
 <?php if (!$this->getHideTitle()): ?>
-    <p><strong><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></strong></p>
+    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
 <?php endif; ?>
 
 <?php
@@ -34,21 +35,23 @@
     $showCount = count($cards) > 1;
 ?>
 
-<dl class="cards items">
+    <dl class="cards items">
 <?php foreach ($cards as $key => $card): ?>
 
     <?php if ($showCount): ?>
-        <dt><?php echo sprintf(__('Credit Card %s'), $key + 1); ?></dt>
+        <dt><?php echo __('Credit Card %1', $key + 1); ?></dt>
     <?php endif; ?>
-
-    <dd>
-        <dl class="card item">
-        <?php foreach ($card as $_label => $_value): ?>
-            <dt><?php echo $this->escapeHtml($_label); ?>:</dt>
-            <dd><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n")); ?></dd>
-        <?php endforeach; ?>
-        </dl>
+    <dd class="content">
+        <table class="data table">
+            <?php foreach ($card as $_label => $_value): ?>
+                <tr>
+                    <th><?php echo $this->escapeHtml($_label) ?></th>
+                    <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n")) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
     </dd>
 
 <?php endforeach; ?>
+    </dl>
 </dl>

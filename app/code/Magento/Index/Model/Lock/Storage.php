@@ -59,11 +59,9 @@ class Storage
      * @param FileFactory $fileFactory
      * @param Filesystem $filesystem
      */
-    public function __construct(
-        FileFactory $fileFactory,
-        Filesystem $filesystem
-    ) {
-        $this->_fileFactory   = $fileFactory;
+    public function __construct(FileFactory $fileFactory, Filesystem $filesystem)
+    {
+        $this->_fileFactory = $fileFactory;
         $this->_varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
     }
 

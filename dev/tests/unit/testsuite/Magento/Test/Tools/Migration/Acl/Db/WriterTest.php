@@ -23,12 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl\Db;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Writer.php';
 
+require_once realpath(__DIR__ . '/../../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Db/Writer.php';
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,7 +43,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_adapterMock = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract',
+        $this->_adapterMock = $this->getMockForAbstractClass(
+            'Zend_Db_Adapter_Abstract',
             array(),
             '',
             false,
@@ -64,9 +63,15 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        $this->_adapterMock->expects($this->once())
-            ->method('update')->with('dummy', array('resource_id' => 'new'), array('resource_id = ?' => 'old'));
+        $this->_adapterMock->expects(
+            $this->once()
+        )->method(
+            'update'
+        )->with(
+            'dummy',
+            array('resource_id' => 'new'),
+            array('resource_id = ?' => 'old')
+        );
         $this->_model->update('old', 'new');
     }
 }
-

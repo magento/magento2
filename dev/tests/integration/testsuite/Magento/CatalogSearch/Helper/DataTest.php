@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\CatalogSearch\Helper\Data');
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\CatalogSearch\Helper\Data'
+        );
     }
 
     public function testGetResultUrl()
@@ -68,17 +68,25 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
-        $catalogSearchHelper = $this->getMock('Magento\CatalogSearch\Helper\Data', array('getQueryText'), array(
-            $objectManager->get('Magento\App\Helper\Context'),
-            $objectManager->get('Magento\Stdlib\String'),
-            $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
-            $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
-            $objectManager->get('Magento\Escaper'),
-            $objectManager->get('Magento\Filter\FilterManager'),
-        ));
-        $catalogSearchHelper->expects($this->any())
-            ->method('getQueryText')
-            ->will($this->returnValue('five <words> here <being> tested'));
+        $catalogSearchHelper = $this->getMock(
+            'Magento\CatalogSearch\Helper\Data',
+            array('getQueryText'),
+            array(
+                $objectManager->get('Magento\App\Helper\Context'),
+                $objectManager->get('Magento\Stdlib\String'),
+                $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
+                $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
+                $objectManager->get('Magento\Escaper'),
+                $objectManager->get('Magento\Filter\FilterManager')
+            )
+        );
+        $catalogSearchHelper->expects(
+            $this->any()
+        )->method(
+            'getQueryText'
+        )->will(
+            $this->returnValue('five <words> here <being> tested')
+        );
 
         $catalogSearchHelper->checkNotes();
 

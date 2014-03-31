@@ -45,7 +45,7 @@ class Config extends \Magento\Downloader\Model\Config\AbstractConfig
         $channel = trim($this->get('root_channel'));
         if (!empty($channel)) {
             try {
-                return $this->controller()->model('config_'.$channel, true);
+                return $this->controller()->model('config_' . $channel, true);
             } catch (\Exception $e) {
                 throw new \Exception('Not valid config.ini file.');
             }
@@ -55,11 +55,11 @@ class Config extends \Magento\Downloader\Model\Config\AbstractConfig
     }
 
     /**
-    * Save post data to config
-    *
-    * @param array $p
-    * @return \Magento\Downloader\Model\Config
-    */
+     * Save post data to config
+     *
+     * @param array $p
+     * @return \Magento\Downloader\Model\Config
+     */
     public function saveConfigPost($p)
     {
         $configParams = array(
@@ -72,11 +72,11 @@ class Config extends \Magento\Downloader\Model\Config\AbstractConfig
             'downloader_path',
             'root_channel_uri',
             'root_channel',
-            'ftp',
+            'ftp'
         );
-        foreach ($configParams as $paramName){
+        foreach ($configParams as $paramName) {
             if (isset($p[$paramName])) {
-               $this->set($paramName, $p[$paramName]);
+                $this->set($paramName, $p[$paramName]);
             }
         }
         $this->save();

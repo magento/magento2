@@ -23,16 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\System\Config;
 
 /**
  * Custom renderer for PayPal API credentials wizard popup
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config;
-
 class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
      * Set template to itself
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -64,14 +65,16 @@ class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
     protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
-        $this->addData(array(
-            'button_label' => __($originalData['button_label']),
-            'button_url'   => $originalData['button_url'],
-            'html_id' => $element->getHtmlId(),
-            'sandbox_button_label' => __($originalData['sandbox_button_label']),
-            'sandbox_button_url'   => $originalData['sandbox_button_url'],
-            'sandbox_html_id' => 'sandbox_' . $element->getHtmlId(),
-        ));
+        $this->addData(
+            array(
+                'button_label' => __($originalData['button_label']),
+                'button_url' => $originalData['button_url'],
+                'html_id' => $element->getHtmlId(),
+                'sandbox_button_label' => __($originalData['sandbox_button_label']),
+                'sandbox_button_url' => $originalData['sandbox_button_url'],
+                'sandbox_html_id' => 'sandbox_' . $element->getHtmlId()
+            )
+        );
         return $this->_toHtml();
     }
 }

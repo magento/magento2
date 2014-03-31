@@ -28,8 +28,7 @@
 require __DIR__ . '/../../../Magento/Bundle/_files/product.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->load(3);
 
 /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
@@ -49,15 +48,12 @@ foreach ($optionCollection as $option) {
     $bundleOptionsQty[$option->getId()] = 1;
 }
 
-$requestInfo = new \Magento\Object(array(
-    'qty' => 1,
-    'bundle_option' => $bundleOptions,
-    'bundle_option_qty' => $bundleOptionsQty
-));
+$requestInfo = new \Magento\Object(
+    array('qty' => 1, 'bundle_option' => $bundleOptions, 'bundle_option_qty' => $bundleOptionsQty)
+);
 
 /** @var $cart \Magento\Checkout\Model\Cart */
-$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Checkout\Model\Cart');
+$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Cart');
 $cart->addProduct($product, $requestInfo);
 $cart->save();
 

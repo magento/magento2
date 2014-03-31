@@ -33,15 +33,13 @@ class SessionManager implements SessionManagerInterface
     /**
      * Default options when a call destroy()
      *
+     * Description:
      * - send_expire_cookie: whether or not to send a cookie expiring the current session cookie
      * - clear_storage: whether or not to empty the storage object of any stored values
      *
      * @var array
      */
-    protected $defaultDestroyOptions = array(
-        'send_expire_cookie' => true,
-        'clear_storage'      => true,
-    );
+    protected $defaultDestroyOptions = array('send_expire_cookie' => true, 'clear_storage' => true);
 
     /**
      * URL host cache
@@ -51,36 +49,50 @@ class SessionManager implements SessionManagerInterface
     protected static $urlHostCache = array();
 
     /**
+     * Validator
+     *
      * @var \Magento\Session\ValidatorInterface
      */
     protected $validator;
 
     /**
+     * Request
+     *
      * @var \Magento\App\RequestInterface
      */
     protected $request;
 
     /**
+     * SID resolver
+     *
      * @var \Magento\Session\SidResolverInterface
      */
     protected $sidResolver;
 
     /**
+     * Session config
+     *
      * @var \Magento\Session\Config\ConfigInterface
      */
     protected $sessionConfig;
 
     /**
+     * Save handler
+     *
      * @var \Magento\Session\SaveHandlerInterface
      */
     protected $saveHandler;
 
     /**
+     * Storage
+     *
      * @var \Magento\Session\StorageInterface
      */
     protected $storage;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param SidResolverInterface $sidResolver
      * @param Config\ConfigInterface $sessionConfig
@@ -106,6 +118,7 @@ class SessionManager implements SessionManagerInterface
 
     /**
      * This method needs to support sessions with APC enabled
+     * @return void
      */
     public function writeClose()
     {
@@ -135,7 +148,7 @@ class SessionManager implements SessionManagerInterface
      * Configure session handler and start session
      *
      * @param string $sessionName
-     * @return \Magento\Session\SessionManager
+     * @return $this
      */
     public function start($sessionName = null)
     {
@@ -230,7 +243,7 @@ class SessionManager implements SessionManagerInterface
      * Set session name
      *
      * @param string $name
-     * @return \Magento\Session\SessionManager
+     * @return $this
      */
     public function setName($name)
     {
@@ -242,6 +255,7 @@ class SessionManager implements SessionManagerInterface
      * Destroy/end a session
      *
      * @param  array $options
+     * @return void
      */
     public function destroy(array $options = null)
     {
@@ -310,7 +324,7 @@ class SessionManager implements SessionManagerInterface
      * Specify session identifier
      *
      * @param   string|null $sessionId
-     * @return  \Magento\Session\SessionManager
+     * @return  $this
      */
     public function setSessionId($sessionId)
     {
@@ -360,7 +374,7 @@ class SessionManager implements SessionManagerInterface
     {
         $hostArr = explode(':', $host);
         $hosts = $this->_getHosts();
-        return (!empty($hosts[$hostArr[0]]));
+        return !empty($hosts[$hostArr[0]]);
     }
 
     /**
@@ -383,7 +397,7 @@ class SessionManager implements SessionManagerInterface
     /**
      * Register request host name as used with session
      *
-     * @return \Magento\Session\SessionManager
+     * @return $this
      */
     protected function _addHost()
     {
@@ -411,7 +425,7 @@ class SessionManager implements SessionManagerInterface
     /**
      * Clean all host names that were registered with session
      *
-     * @return \Magento\Session\SessionManager
+     * @return $this
      */
     protected function _cleanHosts()
     {
@@ -423,7 +437,7 @@ class SessionManager implements SessionManagerInterface
      * Renew session id and update session cookie
      *
      * @param bool $deleteOldSession
-     * @return \Magento\Session\SessionManager
+     * @return $this
      */
     public function regenerateId($deleteOldSession = true)
     {
@@ -440,6 +454,8 @@ class SessionManager implements SessionManagerInterface
 
     /**
      * Expire the session cookie for sub domains
+     *
+     * @return void
      */
     protected function clearSubDomainSessionCookie()
     {
@@ -463,6 +479,8 @@ class SessionManager implements SessionManagerInterface
      * Expire the session cookie
      *
      * Sends a session cookie with no value, and with an expiry in the past.
+     *
+     * @return void
      */
     public function expireSessionCookie()
     {

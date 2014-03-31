@@ -61,6 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Initialize Grid block
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -97,22 +98,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('folder', array(
-            'header'  => __('Folder'),
-            'index'   => 'folder',
-            'width'   => 100,
-            'type'    => 'options',
-            'options' => $this->getCollection()->collectFolders()
-        ));
+        $this->addColumn(
+            'folder',
+            array(
+                'header' => __('Folder'),
+                'index' => 'folder',
+                'width' => 100,
+                'type' => 'options',
+                'options' => $this->getCollection()->collectFolders()
+            )
+        );
 
-        $this->addColumn('package', array(
-            'header' => __('Package'),
-            'index'  => 'package',
-        ));
+        $this->addColumn('package', array('header' => __('Package'), 'index' => 'package'));
 
         return parent::_prepareColumns();
     }
@@ -120,6 +121,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Self URL getter
      *
+     * @param array $params
      * @return string
      */
     public function getCurrentUrl($params = array())
@@ -133,10 +135,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row URL getter
      *
+     * @param string $row
      * @return string
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('adminhtml/*/load', array('id' => strtr(base64_encode($row->getFilenameId()), '+/=', '-_,')));
+        return $this->getUrl(
+            'adminhtml/*/load',
+            array('id' => strtr(base64_encode($row->getFilenameId()), '+/=', '-_,'))
+        );
     }
 }

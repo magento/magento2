@@ -21,14 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Payflow;
 
 /**
  * PayPal Website Payments Pro (Payflow Edition) implementation for payment method instances
  * This model was created because right now PayPal Direct and PayPal Express payment
  * (Payflow Edition) methods cannot have same abstract
  */
-namespace Magento\Paypal\Model\Payflow;
-
 class Pro extends \Magento\Paypal\Model\Pro
 {
     /**
@@ -55,6 +54,7 @@ class Pro extends \Magento\Paypal\Model\Pro
      *
      * @param \Magento\Object $payment
      * @param float $amount
+     * @return void
      */
     public function refund(\Magento\Object $payment, $amount)
     {
@@ -85,8 +85,11 @@ class Pro extends \Magento\Paypal\Model\Pro
     protected function _getParentTransactionId(\Magento\Object $payment)
     {
         if ($payment->getParentTransactionId()) {
-            return $payment->getTransaction($payment->getParentTransactionId())
-                ->getAdditionalInformation(self::TRANSPORT_PAYFLOW_TXN_ID);
+            return $payment->getTransaction(
+                $payment->getParentTransactionId()
+            )->getAdditionalInformation(
+                self::TRANSPORT_PAYFLOW_TXN_ID
+            );
         }
         return $payment->getParentTransactionId();
     }
@@ -94,16 +97,19 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Import capture results to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return void
      */
     protected function _importCaptureResultToPayment($api, $payment)
     {
-        $payment->setTransactionId($api->getPaypalTransactionId())
-            ->setIsTransactionClosed(false)
-            ->setTransactionAdditionalInfo(
-                self::TRANSPORT_PAYFLOW_TXN_ID,
-                $api->getTransactionId()
+        $payment->setTransactionId(
+            $api->getPaypalTransactionId()
+        )->setIsTransactionClosed(
+            false
+        )->setTransactionAdditionalInfo(
+            self::TRANSPORT_PAYFLOW_TXN_ID,
+            $api->getTransactionId()
         );
         $payment->setPreparedMessage(__('Payflow PNREF: #%1.', $api->getTransactionId()));
         $this->_infoFactory->create()->importToPayment($api, $payment);
@@ -114,29 +120,33 @@ class Pro extends \Magento\Paypal\Model\Pro
      *
      * @param \Magento\Payment\Model\Info $payment
      * @param string $transactionId
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return void
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
-        throw new \Magento\Core\Exception(__('Fetch transaction details method does not exists in Payflow'));
+        throw new \Magento\Model\Exception(__('Fetch transaction details method does not exists in Payflow'));
     }
 
     /**
      * Import refund results to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
      * @param bool $canRefundMore
+     * @return void
      */
     protected function _importRefundResultToPayment($api, $payment, $canRefundMore)
     {
-        $payment->setTransactionId($api->getPaypalTransactionId())
-            ->setIsTransactionClosed(1) // refund initiated by merchant
-            ->setShouldCloseParentTransaction(!$canRefundMore)
-            ->setTransactionAdditionalInfo(
-                self::TRANSPORT_PAYFLOW_TXN_ID,
-                $api->getTransactionId()
+        $payment->setTransactionId(
+            $api->getPaypalTransactionId()
+        )->setIsTransactionClosed(
+            1 // refund initiated by merchant
+        )->setShouldCloseParentTransaction(
+            !$canRefundMore
+        )->setTransactionAdditionalInfo(
+            self::TRANSPORT_PAYFLOW_TXN_ID,
+            $api->getTransactionId()
         );
         $payment->setPreparedMessage(__('Payflow PNREF: #%1.', $api->getTransactionId()));
         $this->_infoFactory->create()->importToPayment($api, $payment);

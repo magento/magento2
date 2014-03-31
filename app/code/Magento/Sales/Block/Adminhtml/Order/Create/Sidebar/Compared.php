@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 /**
  * Adminhtml sales order create sidebar compared block
@@ -31,12 +32,13 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
-
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -44,6 +46,11 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
         $this->setDataId('compared');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Products in Comparison List');
@@ -59,25 +66,37 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
         $collection = $this->getData('item_collection');
         if (is_null($collection)) {
             if ($collection = $this->getCreateOrderModel()->getCustomerCompareList()) {
-                $collection = $collection->getItemCollection()
-                    ->useProductItem(true)
-                    ->setStoreId($this->getQuote()->getStoreId())
-                    ->addStoreFilter($this->getQuote()->getStoreId())
-                    ->setCustomerId($this->getCustomerId())
-                    ->addAttributeToSelect('name')
-                    ->addAttributeToSelect('price')
-                    ->addAttributeToSelect('image')
-                    ->addAttributeToSelect('status')
-                    ->load();
+                $collection = $collection->getItemCollection()->useProductItem(
+                    true
+                )->setStoreId(
+                    $this->getQuote()->getStoreId()
+                )->addStoreFilter(
+                    $this->getQuote()->getStoreId()
+                )->setCustomerId(
+                    $this->getCustomerId()
+                )->addAttributeToSelect(
+                    'name'
+                )->addAttributeToSelect(
+                    'price'
+                )->addAttributeToSelect(
+                    'image'
+                )->addAttributeToSelect(
+                    'status'
+                )->load();
             }
             $this->setData('item_collection', $collection);
         }
         return $collection;
     }
 
+    /**
+     * Get item id
+     *
+     * @param \Magento\Object $item
+     * @return int
+     */
     public function getItemId($item)
     {
         return $item->getCatalogCompareItemId();
     }
-
 }

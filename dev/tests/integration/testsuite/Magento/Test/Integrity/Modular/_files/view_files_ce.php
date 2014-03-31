@@ -44,5 +44,5 @@ return array(
     array('frontend', 'Magento_Theme::favicon.ico'),
     array('frontend', 'Magento_Catalog::images/product/placeholder/image.jpg'),
     array('frontend', 'Magento_Catalog::images/product/placeholder/small_image.jpg'),
-    array('install',  'Magento_Theme::favicon.ico')
+    array('install', 'Magento_Theme::favicon.ico')
 );

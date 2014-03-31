@@ -50,11 +50,16 @@ class Dom
     protected $_dom;
 
     /**
-     * List of id attributes for merge
-     *
-     * @var array
+     * @var Dom\NodeMergingConfig
      */
-    protected $_idAttributes;
+    protected $_nodeMergingConfig;
+
+    /**
+     * Name of attribute that specifies type of argument node
+     *
+     * @var string|null
+     */
+    protected $_typeAttributeName;
 
     /**
      * Schema validation file
@@ -85,16 +90,22 @@ class Dom
      *
      * @param string $xml
      * @param array $idAttributes
+     * @param string $typeAttributeName
      * @param string $schemaFile
      * @param string $errorFormat
      */
     public function __construct(
-        $xml, array $idAttributes = array(), $schemaFile = null, $errorFormat = self::ERROR_FORMAT_DEFAULT
+        $xml,
+        array $idAttributes = array(),
+        $typeAttributeName = null,
+        $schemaFile = null,
+        $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        $this->_schemaFile    = $schemaFile;
-        $this->_idAttributes  = $idAttributes;
-        $this->_errorFormat   = $errorFormat;
-        $this->_dom           = $this->_initDom($xml);
+        $this->_schemaFile = $schemaFile;
+        $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
+        $this->_typeAttributeName = $typeAttributeName;
+        $this->_errorFormat = $errorFormat;
+        $this->_dom = $this->_initDom($xml);
         $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
     }
 
@@ -120,6 +131,7 @@ class Dom
      *
      * @param \DOMElement $node
      * @param string $parentPath path to parent node
+     * @return void
      */
     protected function _mergeNode(\DOMElement $node, $parentPath)
     {
@@ -129,6 +141,24 @@ class Dom
 
         /* Update matched node attributes and value */
         if ($matchedNode) {
+
+            //different node type
+            if ($this->_typeAttributeName && $node->hasAttribute(
+                $this->_typeAttributeName
+            ) && $matchedNode->hasAttribute(
+                $this->_typeAttributeName
+            ) && $node->getAttribute(
+                $this->_typeAttributeName
+            ) !== $matchedNode->getAttribute(
+                $this->_typeAttributeName
+            )
+            ) {
+                $parentMatchedNode = $this->_getMatchedNode($parentPath);
+                $newNode = $this->_dom->importNode($node, true);
+                $parentMatchedNode->replaceChild($newNode, $matchedNode);
+                return;
+            }
+
             $this->_mergeAttributes($matchedNode, $node);
             if (!$node->hasChildNodes()) {
                 return;
@@ -139,7 +169,8 @@ class Dom
                 if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
-            } else { /* recursive merge for all child nodes */
+            } else {
+                /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
                     if ($childNode instanceof \DOMElement) {
                         $this->_mergeNode($childNode, $path);
@@ -157,7 +188,7 @@ class Dom
     /**
      * Check if the node content is text
      *
-     * @param $node
+     * @param \DOMElement $node
      * @return bool
      */
     protected function _isTextNode($node)
@@ -168,9 +199,9 @@ class Dom
     /**
      * Merges attributes of the merge node to the base node
      *
-     * @param $baseNode
-     * @param $mergeNode
-     * @return null
+     * @param \DOMElement $baseNode
+     * @param \DOMNode $mergeNode
+     * @return void
      */
     protected function _mergeAttributes($baseNode, $mergeNode)
     {
@@ -190,41 +221,23 @@ class Dom
     {
         $prefix = is_null($this->_rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
-        $idAttribute = $this->_findIdAttribute($path);
-        if ($idAttribute && $value = $node->getAttribute($idAttribute)) {
+        $idAttribute = $this->_nodeMergingConfig->getIdAttribute($path);
+        if ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
         return $path;
     }
 
     /**
-     * Determine whether an XPath matches registered identifiable attribute
-     *
-     * @param string $xPath
-     * @return string|false
-     */
-    protected function _findIdAttribute($xPath)
-    {
-        $path = preg_replace('/\[@[^\]]+?\]/', '', $xPath);
-        $path = preg_replace('/\/[^:]+?\:/', '/', $path);
-        foreach ($this->_idAttributes as $pathPattern => $id) {
-            if (preg_match("#^$pathPattern$#", $path)) {
-                return $id;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Exception an exception is possible if original document contains multiple nodes for identifier
-     * @return \DOMElement | null
+     * @throws \Magento\Exception An exception is possible if original document contains multiple nodes for identifier
+     * @return \DOMElement|null
      */
     protected function _getMatchedNode($nodePath)
     {
-        $xPath  = new \DOMXPath($this->_dom);
+        $xPath = new \DOMXPath($this->_dom);
         if ($this->_rootNamespace) {
             $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
         }
@@ -248,7 +261,9 @@ class Dom
      * @throws \Exception
      */
     public static function validateDomDocument(
-        \DOMDocument $dom, $schemaFileName, $errorFormat = self::ERROR_FORMAT_DEFAULT
+        \DOMDocument $dom,
+        $schemaFileName,
+        $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
         libxml_use_internal_errors(true);
         try {
@@ -289,7 +304,7 @@ class Dom
             $result = str_replace($placeholder, $value, $result);
         }
         if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException("Error format '$format' contains unsupported placeholders.");
+            throw new \InvalidArgumentException("Error format '{$format}' contains unsupported placeholders.");
         }
         return $result;
     }
@@ -341,7 +356,7 @@ class Dom
      * Set schema file
      *
      * @param string $schemaFile
-     * @return \Magento\Config\Dom
+     * @return $this
      */
     public function setSchemaFile($schemaFile)
     {
@@ -352,15 +367,15 @@ class Dom
     /**
      * Returns the attribute name with prefix, if there is one
      *
-     * @param DOMAttr $attribute
+     * @param \DOMAttr $attribute
      * @return string
      */
     private function _getAttributeName($attribute)
     {
         if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
-            $attributeName = $attribute->prefix . ':' .$attribute->name;
+            $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
-            $attributeName =  $attribute->name;
+            $attributeName = $attribute->name;
         }
         return $attributeName;
     }

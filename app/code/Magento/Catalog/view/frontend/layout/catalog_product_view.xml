@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="page_one_column"/>
     <referenceBlock name="page.main.title">
         <arguments>
@@ -47,12 +47,17 @@
                 <argument name="file" xsi:type="string">mage/gallery.css</argument>
             </arguments>
         </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-terms">
+            <arguments>
+                <argument name="file" xsi:type="string">mage/terms.js</argument>
+            </arguments>
+        </block>
     </referenceBlock>
     <update handle="page_calendar"/>
     <referenceContainer name="content">
         <container name="product.info.main" label="invisible" htmlTag="div" htmlClass="product info main" before="-">
-            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml" before="-"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.price">
+            <container name="product.info.type" label="invisible" before="-"/>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
                 <arguments>
                     <argument name="at_call" xsi:type="string">getSku</argument>
                     <argument name="at_code" xsi:type="string">sku</argument>
@@ -61,19 +66,9 @@
                     <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
                 </arguments>
             </block>
+            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml" after="product.info.rating"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.info.rating" template="product/view/rating.phtml" after="product.info.sku"/>
-            <container name="alert.urls" as="alert_urls" label="Alert Urls" after="product.info.rating"/>
-            <container name="product.info.type" label="invisible" after="product.info.overview"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info" after="alert.urls">
-                <arguments>
-                    <argument name="at_call" xsi:type="string">getShortDescription</argument>
-                    <argument name="at_code" xsi:type="string">short_description</argument>
-                    <argument name="css_class" xsi:type="string">overview</argument>
-                    <argument name="at_label" translate="true" xsi:type="string">none</argument>
-                    <argument name="title" translate="true" xsi:type="string">Overview</argument>
-                    <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
-                </arguments>
-            </block>
+            <container name="alert.urls" as="alert_urls" label="Alert Urls" after="product.price"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" template="product/view/tierprices.phtml" before="product.info"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml">
                 <container name="product.info.form.content" label="invisible" as="product_info_form_content">
@@ -98,7 +93,17 @@
             </block>
             <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
-            <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="social links product" after="product.info.addto">
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info" after="addto">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getShortDescription</argument>
+                    <argument name="at_code" xsi:type="string">short_description</argument>
+                    <argument name="css_class" xsi:type="string">overview</argument>
+                    <argument name="at_label" translate="true" xsi:type="string">none</argument>
+                    <argument name="title" translate="true" xsi:type="string">Overview</argument>
+                    <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
+                </arguments>
+            </block>
+            <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="social links product" after="product.info.overview">
                 <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
             </container>
         </container>
@@ -124,6 +129,13 @@
                 </arguments>
             </block>
         </block>
+        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                    <item name="compareProductLink" xsi:type="string">.action.tocompare</item>
+                </argument>
+            </arguments>
+        </block>
     </referenceContainer>
     <referenceContainer name="content.aside">
         <block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.related" template="Magento_Catalog::product/list/items.phtml">
@@ -138,6 +150,9 @@
         </block>
         <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.additional" as="product_additional_data"/>
     </referenceContainer>
+    <referenceBlock name="product.info.addtocart">
+        <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons"/>
+    </referenceBlock>
     <update handle="MAP_popup"/>
     <update handle="MAP_price_msrp_item"/>
 </layout>

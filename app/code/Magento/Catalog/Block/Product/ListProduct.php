@@ -34,7 +34,11 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\View\Element\AbstractBlock;
+
+class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\View\Block\IdentityInterface
 {
     /**
      * Default toolbar block name
@@ -46,7 +50,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Product Collection
      *
-     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @var AbstractCollection
      */
     protected $_productCollection;
 
@@ -65,36 +69,14 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_categoryFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
      * @param array $priceBlockTypes
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array(),
@@ -104,16 +86,6 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_catalogLayer = $catalogLayer;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $data,
             $priceBlockTypes
         );
@@ -122,7 +94,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve loaded category collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     protected function _getProductCollection()
     {
@@ -136,9 +108,12 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
             // if this is a product view page
             if ($this->_coreRegistry->registry('product')) {
                 // get collection of categories this product is associated with
-                $categories = $this->_coreRegistry->registry('product')->getCategoryCollection()
-                    ->setPage(1, 1)
-                    ->load();
+                $categories = $this->_coreRegistry->registry(
+                    'product'
+                )->getCategoryCollection()->setPage(
+                    1,
+                    1
+                )->load();
                 // if the product is associated with any category
                 if ($categories->count()) {
                     // show products from this category
@@ -174,17 +149,13 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getLayer()
     {
-        $layer = $this->_coreRegistry->registry('current_layer');
-        if ($layer) {
-            return $layer;
-        }
         return $this->_catalogLayer;
     }
 
     /**
      * Retrieve loaded category collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     public function getLoadedProductCollection()
     {
@@ -204,6 +175,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Need use as _prepareLayout - but problem in declaring collection from
      * another block (was problem with search result)
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -234,9 +206,10 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         $toolbar->setCollection($collection);
 
         $this->setChild('toolbar', $toolbar);
-        $this->_eventManager->dispatch('catalog_block_product_list_collection', array(
-            'collection' => $this->_getProductCollection()
-        ));
+        $this->_eventManager->dispatch(
+            'catalog_block_product_list_collection',
+            array('collection' => $this->_getProductCollection())
+        );
 
         $this->_getProductCollection()->load();
 
@@ -281,18 +254,29 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this->getChildHtml('toolbar');
     }
 
+    /**
+     * @param AbstractCollection $collection
+     * @return $this
+     */
     public function setCollection($collection)
     {
         $this->_productCollection = $collection;
         return $this;
     }
 
+    /**
+     * @param array|string|integer|\Magento\Core\Model\Config\Element $code
+     * @return $this
+     */
     public function addAttribute($code)
     {
         $this->_getProductCollection()->addAttributeToSelect($code);
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPriceBlockTemplate()
     {
         return $this->_getData('price_block_template');
@@ -314,7 +298,8 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Block\Product\ListProduct
      */
-    public function prepareSortableFieldsByCategory($category) {
+    public function prepareSortableFieldsByCategory($category)
+    {
         if (!$this->getAvailableOrders()) {
             $this->setAvailableOrders($category->getAvailableSortByOptions());
         }
@@ -332,5 +317,19 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         }
 
         return $this;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->_getProductCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+        return array_merge($this->getLayer()->getCurrentCategory()->getIdentities(), $identities);
     }
 }

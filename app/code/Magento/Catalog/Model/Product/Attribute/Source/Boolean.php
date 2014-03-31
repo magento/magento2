@@ -44,18 +44,9 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\Boolean
     {
         if (!$this->_options) {
             $this->_options = array(
-                array(
-                    'label' => __('Yes'),
-                    'value' => 1
-                ),
-                array(
-                    'label' => __('No'),
-                    'value' => 0
-                ),
-                array(
-                    'label' => __('Use config'),
-                    'value' => 2
-                )
+                array('label' => __('Yes'), 'value' => 1),
+                array('label' => __('No'), 'value' => 0),
+                array('label' => __('Use config'), 'value' => 2)
             );
         }
         return $this->_options;

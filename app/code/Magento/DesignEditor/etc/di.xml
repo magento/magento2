@@ -23,24 +23,33 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\DesignEditor\Controller\Varien\Router\Standard">
-        <param name="routerId">
-            <value>vde</value>
-        </param>
+        <arguments>
+            <argument name="routerId" xsi:type="string">vde</argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Model\CopyService">
         <plugin name="design_editor_theme_copy_service_plugin" type="Magento\DesignEditor\Model\Plugin\ThemeCopyService"/>
     </type>
     <type name="Magento\DesignEditor\Helper\Data">
-        <param name="frontName">
-            <value>vde</value>
-        </param>
-        <param name="disabledCacheTypes">
-            <array>
-                <item key="block_html"><value>block_html</value></item>
-                <item key="configType"><value>config</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="frontName" xsi:type="string">vde</argument>
+            <argument name="disabledCacheTypes" xsi:type="array">
+                <item name="block_html" xsi:type="string">block_html</item>
+                <item name="configType" xsi:type="string">config</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\DesignEditor\Model\Translate\Inline\Provider">
+        <arguments>
+            <argument name="vdeInlineTranslate" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Proxy</argument>
+            <argument name="inlineTranslate" xsi:type="object">\Magento\Translate\Inline\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Phrase\Renderer\Inline">
+        <arguments>
+            <argument name="inlineProvider" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Provider</argument>
+        </arguments>
     </type>
 </config>

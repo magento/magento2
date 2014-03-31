@@ -66,7 +66,7 @@
     $.fn.mage = function(name) {
         var args = Array.prototype.slice.call(arguments, 1);
         return this.each(function(){
-            var inits = _getInitData(this);
+            var inits = $(this).data('mage-init') || {};
             if (name) {
                 inits[name] = args;
             }
@@ -77,7 +77,7 @@
     window.onerror = function (message) {
         if ($.mage.isDevMode()) {
             $('[data-container-for=messages]').append(
-                '<ul class="messages"><li class="error-msg" data-role="js-error"><ul><li>' + message + '</li></ul></li></ul>'
+                '<div class="messages"><div class="message error" data-role="js-error"><div>' + message + '</div></div></div>'
             );
         }
     };
@@ -145,27 +145,6 @@
             }
         }, $(this));
         _onload(init.resources, handler);
-    }
-
-    /**
-     * Define init-data from an element,
-     *     if JSON is not well-formed then evaluate init-data by manually
-     * @param {Element} elem
-     * @return {Object}
-     * @private
-     */
-    function _getInitData(elem) {
-        /*jshint evil:true*/
-        var inits = $(elem).data('mage-init') || {};
-        // in case it's not well-formed JSON inside data attribute, evaluate it manually
-        if (typeof inits === 'string') {
-            try {
-                inits = eval('(' + inits + ')');
-            } catch (e) {
-                inits = {};
-            }
-        }
-        return inits;
     }
 
     /**

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 class OptionTest extends \PHPUnit_Framework_TestCase
@@ -35,17 +34,25 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_block =
-            $objectManagerHelper->getObject('\Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option');
+        $this->_block = $objectManagerHelper->getObject(
+            '\Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option'
+        );
 
         $product = $this->getMock(
-            '\Magento\Catalog\Model\Product', array('hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'),
-            array(), '', false
+            '\Magento\Catalog\Model\Product',
+            array('hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $product->expects($this->atLeastOnce())->method('hasPreconfiguredValues')->will($this->returnValue(true));
-        $product->expects($this->atLeastOnce())
-            ->method('getPreconfiguredValues')
-            ->will($this->returnValue(new \Magento\Object(array('bundle_option' => array(15 => 315, 16 => 316)))));
+        $product->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getPreconfiguredValues'
+        )->will(
+            $this->returnValue(new \Magento\Object(array('bundle_option' => array(15 => 315, 16 => 316))))
+        );
 
         $this->_block->setData('product', $product);
     }
@@ -59,7 +66,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $otherOption->expects($this->any())->method('getId')->will($this->returnValue(16));
 
         $selection = $this->getMock(
-            '\Magento\Catalog\Model\Product', array('getSelectionId', '__wakeup'), array(), '', false
+            '\Magento\Catalog\Model\Product',
+            array('getSelectionId', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $selection->expects($this->atLeastOnce())->method('getSelectionId')->will($this->returnValue(315));
 

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Message;
 
 /**
@@ -50,17 +49,21 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddMessage()
     {
-        $errorMessage = $this->objectManager
-            ->create('Magento\Message\Error', array('text' => 'some text'));
+        $errorMessage = $this->objectManager->create('Magento\Message\Error', array('text' => 'some text'));
         $this->model->addMessage($errorMessage);
 
         $customGroup = 'custom-group';
-        $errorMessageCustom = $this->objectManager
-            ->create('Magento\Message\Error', array('text' => 'some custom group'));
+        $errorMessageCustom = $this->objectManager->create(
+            'Magento\Message\Error',
+            array('text' => 'some custom group')
+        );
         $this->model->addMessage($errorMessageCustom, $customGroup);
 
         $this->assertEquals($errorMessage, $this->model->getMessages()->getLastAddedMessage());
-        $this->assertEquals($errorMessageCustom, $this->model->getMessages(false, $customGroup)->getLastAddedMessage());
+        $this->assertEquals(
+            $errorMessageCustom,
+            $this->model->getMessages(false, $customGroup)->getLastAddedMessage()
+        );
         $this->assertEquals($errorMessageCustom, $this->model->getMessages(true, $customGroup)->getLastAddedMessage());
 
         $this->assertEmpty($this->model->getMessages(false, $customGroup)->getItems());
@@ -77,7 +80,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->objectManager->create('Magento\Message\Error', array('text' => 'some text 1')),
             $this->objectManager->create('Magento\Message\Error', array('text' => 'some text 2')),
             $this->objectManager->create('Magento\Message\Error', array('text' => 'some text 3')),
-            $this->objectManager->create('Magento\Message\Error', array('text' => 'some text 4')),
+            $this->objectManager->create('Magento\Message\Error', array('text' => 'some text 4'))
         );
 
         $this->model->addMessages($messages);
@@ -92,10 +95,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddUniqueMessages()
     {
-        $errorMessageFirst = $this->objectManager
-            ->create('Magento\Message\Error', array('text' => 'some text'));
-        $errorMessageSecond = $this->objectManager
-            ->create('Magento\Message\Error', array('text' => 'some text'));
+        $errorMessageFirst = $this->objectManager->create('Magento\Message\Error', array('text' => 'some text'));
+        $errorMessageSecond = $this->objectManager->create('Magento\Message\Error', array('text' => 'some text'));
         $this->model->addUniqueMessages($errorMessageFirst);
         $this->model->addUniqueMessages($errorMessageSecond);
 
@@ -119,10 +120,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
         $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
         $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
-        $this->assertEquals(
-            'some text',
-            $this->model->getMessages()->getLastAddedMessage()->getText()
-        );
+        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
 
         $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
         $this->assertEquals(

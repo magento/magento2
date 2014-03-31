@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filesystem;
 
 interface WrapperInterface
@@ -34,8 +33,8 @@ interface WrapperInterface
     public function dir_closedir();
 
     /**
-     * @param $path
-     * @param $options
+     * @param string $path
+     * @param array $options
      * @return mixed
      */
     public function dir_opendir($path, $options);
@@ -51,29 +50,29 @@ interface WrapperInterface
     public function dir_rewinddir();
 
     /**
-     * @param $path
-     * @param $mode
-     * @param $options
+     * @param string $path
+     * @param int $mode
+     * @param array $options
      * @return mixed
      */
     public function mkdir($path, $mode, $options);
 
     /**
-     * @param $from
-     * @param $to
+     * @param string $from
+     * @param string $to
      * @return mixed
      */
     public function rename($from, $to);
 
     /**
-     * @param $path
-     * @param $options
+     * @param string $path
+     * @param array $options
      * @return mixed
      */
     public function rmdir($path, $options);
 
     /**
-     * @param $cast
+     * @param mixed $cast
      * @return mixed
      */
     public function stream_cast($cast);
@@ -94,45 +93,45 @@ interface WrapperInterface
     public function stream_flush();
 
     /**
-     * @param $operation
+     * @param mixed $operation
      * @return mixed
      */
     public function stream_lock($operation);
 
     /**
-     * @param $path
-     * @param $option
-     * @param $value
+     * @param string $path
+     * @param mixed $option
+     * @param mixed $value
      * @return mixed
      */
     public function stream_metadata($path, $option, $value);
 
     /**
-     * @param $path
-     * @param $mode
-     * @param $options
-     * @param $openedPath
+     * @param string $path
+     * @param int $mode
+     * @param array $options
+     * @param string $openedPath
      * @return mixed
      */
     public function stream_open($path, $mode, $options, &$openedPath);
 
     /**
-     * @param $count
+     * @param int $count
      * @return mixed
      */
     public function stream_read($count);
 
     /**
-     * @param $offset
+     * @param int $offset
      * @param int $whence
      * @return mixed
      */
     public function stream_seek($offset, $whence = SEEK_SET);
 
     /**
-     * @param $option
-     * @param $arg1
-     * @param $arg2
+     * @param mixed $option
+     * @param mixed $arg1
+     * @param mixed $arg2
      * @return mixed
      */
     public function stream_set_option($option, $arg1, $arg2);
@@ -148,27 +147,27 @@ interface WrapperInterface
     public function stream_tell();
 
     /**
-     * @param $newSize
+     * @param int $newSize
      * @return mixed
      */
-    public function stream_truncate ($newSize);
+    public function stream_truncate($newSize);
 
     /**
-     * @param $data
+     * @param array $data
      * @return mixed
      */
     public function stream_write($data);
 
     /**
-     * @param $path
+     * @param string $path
      * @return mixed
      */
     public function unlink($path);
 
     /**
-     * @param $path
-     * @param $flags
+     * @param string $path
+     * @param mixed $flags
      * @return mixed
      */
     public function url_stat($path, $flags);
-} 
+}

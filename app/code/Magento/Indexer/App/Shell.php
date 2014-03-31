@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\App;
 
-class Shell implements \Magento\LauncherInterface
+class Shell implements \Magento\AppInterface
 {
     /**
      * Filename of the entry point script
@@ -44,7 +43,7 @@ class Shell implements \Magento\LauncherInterface
     protected $shellFactory;
 
     /**
-     * @param $entryFileName
+     * @param string $entryFileName
      * @param \Magento\Indexer\Model\ShellFactory $shellFactory
      * @param \Magento\App\Console\Response $response
      */

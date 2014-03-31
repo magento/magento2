@@ -34,4 +34,3 @@ interface ProviderInterface
      */
     public function getAclResources();
 }
-

@@ -23,15 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Controller;
-
-use Magento\PageCache\Helper\Data;
 
 class Block extends \Magento\App\Action\Action
 {
     /**
      * Returns block content depends on ajax request
+     *
+     * @return void
      */
     public function renderAction()
     {
@@ -39,37 +38,68 @@ class Block extends \Magento\App\Action\Action
             $this->_forward('noroute');
             return;
         }
-        $blocks = $this->getRequest()->getParam('blocks', array());
-        $handles = $this->getRequest()->getParam('handles', array());
 
-        if (!$handles || !$blocks) {
-            return;
-        }
-        $this->_view->loadLayout($handles);
+        $blocks = $this->_getBlocks();
         $data = array();
-
-        foreach ($blocks as $blockName) {
-            $blockInstance = $this->_view->getLayout()->getBlock($blockName);
-            if (is_object($blockInstance)) {
-                $data[$blockName] = $blockInstance->toHtml();
-            }
+        foreach ($blocks as $blockName => $blockInstance) {
+            $data[$blockName] = $blockInstance->toHtml();
         }
 
-        $this->setPrivateHeaders();
-
+        $this->getResponse()->setPrivateHeaders(\Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
         $this->getResponse()->appendBody(json_encode($data));
     }
 
     /**
-     * Set header parameters for private cache
+     * Returns block content as part of ESI request from Varnish
+     *
+     * @return void
      */
-    protected function setPrivateHeaders()
+    public function esiAction()
     {
-        $this->getResponse()->setHeader('cache-control', 'private, max-age=' . Data::PRIVATE_MAX_AGE_CACHE, true);
-        $this->getResponse()->setHeader(
-            'expires',
-            gmdate('D, d M Y H:i:s T', strtotime('+' . Data::PRIVATE_MAX_AGE_CACHE . ' seconds')),
-            true
-        );
+        $response = $this->getResponse();
+        $blocks = $this->_getBlocks();
+        $html = '';
+        $ttl = 0;
+
+        if (!empty($blocks)) {
+            $blockInstance = array_shift($blocks);
+            $html = $blockInstance->toHtml();
+            $ttl = $blockInstance->getTtl();
+            if ($blockInstance instanceof \Magento\View\Block\IdentityInterface) {
+                $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
+            }
+        }
+        $response->appendBody($html);
+        $response->setPublicHeaders($ttl);
+    }
+
+    /**
+     * Get blocks from layout by handles
+     *
+     * @return array [\Element\BlockInterface]
+     */
+    protected function _getBlocks()
+    {
+        $blocks = $this->getRequest()->getParam('blocks', '');
+        $handles = $this->getRequest()->getParam('handles', '');
+
+        if (!$handles || !$blocks) {
+            return array();
+        }
+        $blocks = json_decode($blocks);
+        $handles = json_decode($handles);
+
+        $this->_view->loadLayout($handles);
+        $data = array();
+
+        $layout = $this->_view->getLayout();
+        foreach ($blocks as $blockName) {
+            $blockInstance = $layout->getBlock($blockName);
+            if (is_object($blockInstance)) {
+                $data[$blockName] = $blockInstance;
+            }
+        }
+
+        return $data;
     }
 }

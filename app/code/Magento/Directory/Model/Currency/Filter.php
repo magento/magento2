@@ -34,21 +34,21 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Rate value
      *
-     * @var decimal
+     * @var float
      */
     protected $_rate;
 
     /**
      * Currency object
      *
-     * @var \Zend_Currency
+     * @var \Magento\CurrencyInterface
      */
     protected $_currency;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\FormatInterface
      */
-    protected $_locale;
+    protected $_localeFormat;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -56,27 +56,35 @@ class Filter implements \Zend_Filter_Interface
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @var \Magento\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param string $code
      * @param int $rate
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         $code,
         $rate = 1
     ) {
-        $this->_locale = $locale;
+        $this->_localeFormat = $localeFormat;
         $this->_storeManager = $storeManager;
-        $this->_currency = $this->_locale->currency($code);
+        $this->_currency = $localeCurrency->getCurrency($code);
         $this->_rate = $rate;
     }
 
     /**
      * Set filter rate
      *
-     * @param double $rate
+     * @param float $rate
+     * @return void
      */
     public function setRate($rate)
     {
@@ -86,13 +94,13 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
-     * @param   double $value
-     * @return  string
+     * @param float $value
+     * @return string
      */
     public function filter($value)
     {
-        $value = $this->_locale->getNumber($value);
-        $value = $this->_storeManager->getStore()->roundPrice($this->_rate*$value);
+        $value = $this->_localeFormat->getNumber($value);
+        $value = $this->_storeManager->getStore()->roundPrice($this->_rate * $value);
         $value = sprintf("%f", $value);
         return $this->_currency->toCurrency($value);
     }

@@ -41,39 +41,44 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @var string
      */
-    protected $_idFieldName    = 'link_id';
+    protected $_idFieldName = 'link_id';
 
     /**
      * Add downloads summary grouping by product
      *
-     * @return \Magento\Reports\Model\Resource\Product\Downloads\Collection
+     * @return $this
      */
     public function addSummary()
     {
-        $adapter  = $this->getConnection();
+        $adapter = $this->getConnection();
         $linkExpr = $adapter->getIfNullSql('l_store.title', 'l.title');
 
-        $this->getSelect()
-            ->joinInner(
-                array('d' =>  $this->getTable('downloadable_link_purchased_item')),
-                'e.entity_id = d.product_id',
+        $this->getSelect()->joinInner(
+            array('d' => $this->getTable('downloadable_link_purchased_item')),
+            'e.entity_id = d.product_id',
+            array(
+                'purchases' => new \Zend_Db_Expr('SUM(d.number_of_downloads_bought)'),
+                'downloads' => new \Zend_Db_Expr('SUM(d.number_of_downloads_used)')
+            )
+        )->joinInner(
+            array('l' => $this->getTable('downloadable_link_title')),
+            'd.link_id = l.link_id',
+            array('l.link_id')
+        )->joinLeft(
+            array('l_store' => $this->getTable('downloadable_link_title')),
+            $adapter->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int)$this->getStoreId()),
+            array('link_title' => $linkExpr)
+        )->where(
+            implode(
+                ' OR ',
                 array(
-                    'purchases' => new \Zend_Db_Expr('SUM(d.number_of_downloads_bought)'),
-                    'downloads' => new \Zend_Db_Expr('SUM(d.number_of_downloads_used)'),
-                ))
-            ->joinInner(
-                array('l' => $this->getTable('downloadable_link_title')),
-                'd.link_id = l.link_id',
-                array('l.link_id'))
-            ->joinLeft(
-                array('l_store' => $this->getTable('downloadable_link_title')),
-                $adapter->quoteInto('l.link_id = l_store.link_id AND l_store.store_id = ?', (int)$this->getStoreId()),
-                array('link_title' => $linkExpr))
-            ->where(implode(' OR ', array(
-                $adapter->quoteInto('d.number_of_downloads_bought > ?', 0),
-                $adapter->quoteInto('d.number_of_downloads_used > ?', 0),
-            )))
-            ->group('d.link_id');
+                    $adapter->quoteInto('d.number_of_downloads_bought > ?', 0),
+                    $adapter->quoteInto('d.number_of_downloads_used > ?', 0)
+                )
+            )
+        )->group(
+            'd.link_id'
+        );
         return $this;
     }
 
@@ -82,7 +87,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Product\Downloads\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
@@ -98,8 +103,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add filtering
      *
      * @param string $field
-     * @param string $condition
-     * @return \Magento\Reports\Model\Resource\Product\Downloads\Collection
+     * @param null|string $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {

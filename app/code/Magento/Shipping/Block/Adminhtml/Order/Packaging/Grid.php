@@ -21,18 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
 
 class Grid extends \Magento\Backend\Block\Template
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'order/packaging/grid.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -44,13 +45,13 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Sales\Model\Order\Shipment\ItemFactory $shipmentItemFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_shipmentItemFactory = $shipmentItemFactory;
@@ -66,8 +67,9 @@ class Grid extends \Magento\Backend\Block\Template
     public function getCollection()
     {
         if ($this->getShipment()->getId()) {
-            $collection = $this->_shipmentItemFactory->create()->getCollection()
-                    ->setShipmentFilter($this->getShipment()->getId());
+            $collection = $this->_shipmentItemFactory->create()->getCollection()->setShipmentFilter(
+                $this->getShipment()->getId()
+            );
         } else {
             $collection = $this->getShipment()->getAllItems();
         }
@@ -108,8 +110,8 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * Format price
      *
-     * @param   decimal $value
-     * @return  double
+     * @param   float $value
+     * @return  string
      */
     public function formatPrice($value)
     {

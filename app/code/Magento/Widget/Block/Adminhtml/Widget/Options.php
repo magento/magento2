@@ -31,7 +31,6 @@
  * @package    Magento_Widget
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
@@ -41,31 +40,30 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @var string
      */
     protected $_defaultElementType = 'text';
-    
+
     /**
      * @var \Magento\Widget\Model\Widget
      */
     protected $_widget;
 
     /**
-     * @var \Magento\Widget\Model\Widget\Instance\OptionsFactory
-     * @var \Magento\Core\Model\Option\ArrayPool
+     * @var \Magento\Option\ArrayPool
      */
     protected $_sourceModelPool;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Option\ArrayPool $sourceModelPool
+     * @param \Magento\Option\ArrayPool $sourceModelPool
      * @param \Magento\Widget\Model\Widget $widget
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Option\ArrayPool $sourceModelPool,
+        \Magento\Option\ArrayPool $sourceModelPool,
         \Magento\Widget\Model\Widget $widget,
         array $data = array()
     ) {
@@ -77,8 +75,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare Widget Options Form and values according to specified type
      *
-     * widget_type must be set in data before
+     * The widget_type must be set in data before
      * widget_values may be set before to render element values
+     *
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -115,10 +115,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         }
         $mainFieldsetHtmlId = 'options_fieldset' . md5($this->getWidgetType());
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
-        $fieldset = $this->getForm()->addFieldset($mainFieldsetHtmlId, array(
-            'legend'    => __('Widget Options'),
-            'class'     => 'fieldset-wide',
-        ));
+        $fieldset = $this->getForm()->addFieldset(
+            $mainFieldsetHtmlId,
+            array('legend' => __('Widget Options'), 'class' => 'fieldset-wide')
+        );
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
@@ -131,14 +131,14 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fields to main fieldset based on specified widget type
      *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Backend\Block\Widget\Form
+     * @throws \Magento\Model\Exception
+     * @return $this
      */
     public function addFields()
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            throw new \Magento\Core\Exception(__('Please specify a Widget Type.'));
+            throw new \Magento\Model\Exception(__('Please specify a Widget Type.'));
         }
         $config = $this->_widget->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {
@@ -160,22 +160,22 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _addField($parameter)
     {
         $form = $this->getForm();
-        $fieldset = $this->getMainFieldset(); //$form->getElement('options_fieldset');
+        $fieldset = $this->getMainFieldset();
+        //$form->getElement('options_fieldset');
 
         // prepare element data with values (either from request of from default values)
         $fieldName = $parameter->getKey();
         $data = array(
-            'name'      => $form->addSuffixToName($fieldName, 'parameters'),
-            'label'     => __($parameter->getLabel()),
-            'required'  => $parameter->getRequired(),
-            'class'     => 'widget-option',
-            'note'      => __($parameter->getDescription()),
+            'name' => $form->addSuffixToName($fieldName, 'parameters'),
+            'label' => __($parameter->getLabel()),
+            'required' => $parameter->getRequired(),
+            'class' => 'widget-option',
+            'note' => __($parameter->getDescription())
         );
 
         if ($values = $this->getWidgetValues()) {
-            $data['value'] = (isset($values[$fieldName]) ? $values[$fieldName] : '');
-        }
-        else {
+            $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
+        } else {
             $data['value'] = $parameter->getValue();
             //prepare unique id value
             if ($fieldName == 'unique_id' && $data['value'] == '') {
@@ -188,14 +188,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             // dropdown options are specified in configuration
             $data['values'] = array();
             foreach ($values as $option) {
-                $data['values'][] = array(
-                    'label' => __($option['label']),
-                    'value' => $option['value']
-                );
+                $data['values'][] = array('label' => __($option['label']), 'value' => $option['value']);
             }
-        }
-        // otherwise, a source model is specified
-        elseif ($sourceModel = $parameter->getSourceModel()) {
+            // otherwise, a source model is specified
+        } elseif ($sourceModel = $parameter->getSourceModel()) {
             $data['values'] = $this->_sourceModelPool->get($sourceModel)->toOptionArray();
         }
 
@@ -205,9 +201,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         // hidden element
         if (!$parameter->getVisible()) {
             $fieldType = 'hidden';
-        }
-        // just an element renderer
-        elseif ($fieldType && $this->_isClassName($fieldType)) {
+            // just an element renderer
+        } elseif ($fieldType && $this->_isClassName($fieldType)) {
             $fieldRenderer = $this->getLayout()->createBlock($fieldType);
             $fieldType = $this->_defaultElementType;
         }
@@ -220,11 +215,19 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         // extra html preparations
         if ($helper = $parameter->getHelperBlock()) {
-            $helperBlock = $this->getLayout()->createBlock($helper->getType(), '', array('data' => $helper->getData()));
+            $helperBlock = $this->getLayout()->createBlock(
+                $helper->getType(),
+                '',
+                array('data' => $helper->getData())
+            );
             if ($helperBlock instanceof \Magento\Object) {
-                $helperBlock->setConfig($helper->getData())
-                    ->setFieldsetId($fieldset->getId())
-                    ->prepareElementHtml($field);
+                $helperBlock->setConfig(
+                    $helper->getData()
+                )->setFieldsetId(
+                    $fieldset->getId()
+                )->prepareElementHtml(
+                    $field
+                );
             }
         }
 

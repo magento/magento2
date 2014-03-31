@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogRule\Model;
 
-class Flag extends \Magento\Core\Model\Flag
+class Flag extends \Magento\Flag
 {
     /**
      * Flag code

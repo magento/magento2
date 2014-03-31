@@ -30,16 +30,21 @@
  */
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
+use Magento\Model\Exception;
+
 class Qtyincrements extends \Magento\Core\Model\Config\Value
 {
     /**
      * Validate data before save
+     *
+     * @return void
+     * @throws Exception
      */
     protected function _beforeSave()
     {
         $value = $this->getValue();
         if (floor($value) != $value) {
-            throw new \Magento\Core\Exception('Decimal qty increments is not allowed.');
+            throw new Exception('Decimal qty increments is not allowed.');
         }
     }
 }

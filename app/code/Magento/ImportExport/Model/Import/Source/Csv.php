@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * CSV import adapter
  */
-namespace Magento\ImportExport\Model\Import\Source;
-
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
@@ -65,7 +64,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     ) {
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($fileOrStream), 'r');
-        } catch(\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \LogicException("Unable to open file or stream: '{$fileOrStream}'");
         }
         $this->_delimiter = $delimiter;
@@ -95,11 +94,14 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 
     /**
      * Rewind the \Iterator to the first element (\Iterator interface)
+     *
+     * @return void
      */
     public function rewind()
     {
         $this->_file->seek(0);
-        $this->_getNextRow(); // skip first line with the header
+        $this->_getNextRow();
+        // skip first line with the header
         parent::rewind();
     }
 }

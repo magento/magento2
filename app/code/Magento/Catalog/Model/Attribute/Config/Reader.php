@@ -1,7 +1,5 @@
 <?php
 /**
- * Loads catalog attributes configuration from multiple XML files by merging them together
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Catalog\Model\Attribute\Config;
 
+/**
+ * Loads catalog attributes configuration from multiple XML files by merging them together
+ */
 class Reader extends \Magento\Config\Reader\Filesystem
 {
     /**
@@ -32,12 +33,11 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/group' => 'name',
-        '/config/group/attribute' => 'name',
-    );
+    protected $_idAttributes = array('/config/group' => 'name', '/config/group/attribute' => 'name');
 
     /**
+     * Construct the FileSystem Reader Class
+     *
      * @param \Magento\Config\FileResolverInterface $fileResolver
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
@@ -49,8 +49,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Catalog\Model\Attribute\Config\Converter $converter,
-        \Magento\Catalog\Model\Attribute\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'catalog_attributes.xml',
         $idAttributes = array(),

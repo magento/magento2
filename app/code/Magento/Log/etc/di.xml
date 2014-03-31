@@ -23,19 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Log\Model\Shell\Command\Clean">
-        <param name="storeManager">
-            <instance type="Magento\Core\Model\StoreManager\Proxy" />
-        </param>
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Core\Model\StoreManager\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Log\Model\Visitor">
-        <param name="ignoredUserAgents">
-            <array>
-                <item key="google1"><value>Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</value></item>
-                <item key="google2"><value>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</value></item>
-                <item key="google3"><value>Googlebot/2.1 (+http://www.googlebot.com/bot.html)</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="ignoredUserAgents" xsi:type="array">
+                <item name="google1" xsi:type="string">Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</item>
+                <item name="google2" xsi:type="string">Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</item>
+                <item name="google3" xsi:type="string">Googlebot/2.1 (+http://www.googlebot.com/bot.html)</item>
+            </argument>
+        </arguments>
     </type>
 </config>

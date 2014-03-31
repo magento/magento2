@@ -23,6 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup;
+
 /**
  * Class to work with archives
  *
@@ -30,9 +32,7 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup;
-
-abstract class AbstractBackup implements \Magento\Backup\BackupInterface
+abstract class AbstractBackup implements BackupInterface
 {
     /**
      * Backup name
@@ -90,12 +90,11 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      */
     protected $_lastErrorMessage;
 
-
     /**
      * Set Backup Extension
      *
      * @param string $backupExtension
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setBackupExtension($backupExtension)
     {
@@ -117,7 +116,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      * Set Resource Model
      *
      * @param object $resourceModel
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setResourceModel($resourceModel)
     {
@@ -139,7 +138,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      * Set Time
      *
      * @param int $time
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setTime($time)
     {
@@ -162,7 +161,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      *
      * @param string $rootDir
      * @throws \Magento\Exception
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setRootDir($rootDir)
     {
@@ -187,7 +186,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      * Set path to directory where backups stored
      *
      * @param string $backupsDir
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setBackupsDir($backupsDir)
     {
@@ -259,7 +258,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      * Set error message
      *
      * @param string $errorMessage
-     * @return string
+     * @return void
      */
     public function setErrorMessage($errorMessage)
     {
@@ -271,7 +270,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      *
      * @param string $name
      * @param bool $applyFilter
-     * @return \Magento\Backup\BackupInterface
+     * @return $this
      */
     public function setName($name, $applyFilter = true)
     {

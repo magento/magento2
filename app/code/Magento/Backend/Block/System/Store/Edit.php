@@ -23,30 +23,28 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Store;
 
 /**
  * Adminhtml store edit
  */
-
-namespace Magento\Backend\Block\System\Store;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -56,33 +54,34 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Init class
      *
+     * @return void
      */
     protected function _construct()
     {
         switch ($this->_coreRegistry->registry('store_type')) {
             case 'website':
                 $this->_objectId = 'website_id';
-                $saveLabel   = __('Save Web Site');
+                $saveLabel = __('Save Web Site');
                 $deleteLabel = __('Delete Web Site');
-                $deleteUrl   = $this->getUrl(
+                $deleteUrl = $this->getUrl(
                     '*/*/deleteWebsite',
                     array('item_id' => $this->_coreRegistry->registry('store_data')->getId())
                 );
                 break;
             case 'group':
                 $this->_objectId = 'group_id';
-                $saveLabel   = __('Save Store');
+                $saveLabel = __('Save Store');
                 $deleteLabel = __('Delete Store');
-                $deleteUrl   = $this->getUrl(
+                $deleteUrl = $this->getUrl(
                     '*/*/deleteGroup',
                     array('item_id' => $this->_coreRegistry->registry('store_data')->getId())
                 );
                 break;
             case 'store':
                 $this->_objectId = 'store_id';
-                $saveLabel   = __('Save Store View');
+                $saveLabel = __('Save Store View');
                 $deleteLabel = __('Delete Store View');
-                $deleteUrl   = $this->getUrl(
+                $deleteUrl = $this->getUrl(
                     '*/*/deleteStore',
                     array('item_id' => $this->_coreRegistry->registry('store_data')->getId())
                 );
@@ -99,7 +98,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->_updateButton('save', 'label', $saveLabel);
         $this->_updateButton('delete', 'label', $deleteLabel);
-        $this->_updateButton('delete', 'onclick', 'setLocation(\''.$deleteUrl.'\');');
+        $this->_updateButton('delete', 'onclick', 'setLocation(\'' . $deleteUrl . '\');');
 
         if (!$this->_coreRegistry->registry('store_data')) {
             return;
@@ -123,15 +122,15 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         switch ($this->_coreRegistry->registry('store_type')) {
             case 'website':
                 $editLabel = __('Edit Web Site');
-                $addLabel  = __('New Web Site');
+                $addLabel = __('New Web Site');
                 break;
             case 'group':
                 $editLabel = __('Edit Store');
-                $addLabel  = __('New Store');
+                $addLabel = __('New Store');
                 break;
             case 'store':
                 $editLabel = __('Edit Store View');
-                $addLabel  = __('New Store View');
+                $addLabel = __('New Store View');
                 break;
         }
 

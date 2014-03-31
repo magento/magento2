@@ -52,15 +52,16 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function create($className, array $data = array())
     {
         $option = $this->_objectManager->create($className, $data);
 
         if (!$option instanceof \Magento\Catalog\Model\Product\Option\Type\DefaultType) {
-            throw new \Magento\Core\Exception($className
-                . ' doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType');
+            throw new \Magento\Model\Exception(
+                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType'
+            );
         }
         return $option;
     }

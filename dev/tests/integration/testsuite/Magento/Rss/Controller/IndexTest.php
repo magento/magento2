@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rss\Controller;
 
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -59,14 +58,18 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testWishlistAction()
     {
-        $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Wishlist\Model\Wishlist');
+        $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Wishlist\Model\Wishlist'
+        );
         $wishlist->load('fixture_unique_code', 'sharing_code');
-        $this->getRequest()->setParam('wishlist_id', $wishlist->getId())
-            ->setParam('data', base64_encode('1'))
-        ;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session')
-            ->login('customer@example.com', 'password');
+        $this->getRequest()->setParam('wishlist_id', $wishlist->getId())->setParam('data', base64_encode('1'));
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\CustomerAccountService'
+        );
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $session->setCustomerDataAsLoggedIn($customer);
+
         $this->dispatch('rss/index/wishlist');
         $this->assertContains('<![CDATA[Simple Product]]>', $this->getResponse()->getBody());
     }

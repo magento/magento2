@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogRule\Model\Resource\Rule;
 
 class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
@@ -36,13 +35,15 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     protected $_associatedEntitiesMap = array(
         'website' => array(
             'associations_table' => 'catalogrule_website',
-            'rule_id_field'      => 'rule_id',
-            'entity_id_field'    => 'website_id'
+            'rule_id_field' => 'rule_id',
+            'entity_id_field' => 'website_id'
         )
     );
 
     /**
      * Set resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -53,7 +54,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * Find product attribute in conditions or actions
      *
      * @param string $attributeCode
-     * @return \Magento\CatalogRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function addAttributeInConditionFilter($attributeCode)
     {

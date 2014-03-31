@@ -42,16 +42,15 @@ class Collection
      * @var array
      */
     protected $_observers;
-    
+
     /**
      * Initializes observers
-     *
      */
     public function __construct()
     {
         $this->_observers = array();
     }
-    
+
     /**
      * Returns all observers in the collection
      *
@@ -61,7 +60,7 @@ class Collection
     {
         return $this->_observers;
     }
-    
+
     /**
      * Returns observer by its name
      *
@@ -72,36 +71,36 @@ class Collection
     {
         return $this->_observers[$observerName];
     }
-    
+
     /**
      * Adds an observer to the collection
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function addObserver(\Magento\Event\Observer $observer)
     {
         $this->_observers[$observer->getName()] = $observer;
         return $this;
     }
-    
+
     /**
      * Removes an observer from the collection by its name
      *
      * @param string $observerName
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function removeObserverByName($observerName)
     {
         unset($this->_observers[$observerName]);
         return $this;
     }
-    
+
     /**
      * Dispatches an event to all observers in the collection
      *
      * @param \Magento\Event $event
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function dispatch(\Magento\Event $event)
     {

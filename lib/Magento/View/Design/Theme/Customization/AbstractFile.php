@@ -21,32 +21,39 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Theme\Customization;
 
 /**
  * Theme file service abstract class
  */
-abstract class AbstractFile
-    implements \Magento\View\Design\Theme\Customization\FileInterface,
-               \Magento\View\Design\Theme\Customization\FileAssetInterface
+abstract class AbstractFile implements
+    \Magento\View\Design\Theme\Customization\FileInterface,
+    \Magento\View\Design\Theme\Customization\FileAssetInterface
 {
     /**
+     * Customization path
+     *
      * @var \Magento\View\Design\Theme\Customization\Path
      */
     protected $_customizationPath;
 
     /**
+     * File factory
+     *
      * @var \Magento\View\Design\Theme\FileFactory
      */
     protected $_fileFactory;
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Design\Theme\Customization\Path $customizationPath
      * @param \Magento\View\Design\Theme\FileFactory $fileFactory
      * @param \Magento\App\Filesystem $filesystem
@@ -86,6 +93,8 @@ abstract class AbstractFile
     }
 
     /**
+     * Prepare the file
+     *
      * @param \Magento\View\Design\Theme\FileInterface $file
      * @return $this
      */
@@ -128,6 +137,7 @@ abstract class AbstractFile
      * Prepares filename of file
      *
      * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return void
      */
     protected function _prepareFileName(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -149,6 +159,7 @@ abstract class AbstractFile
      * Prepares relative path of file
      *
      * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return void
      */
     protected function _prepareFilePath(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -159,6 +170,7 @@ abstract class AbstractFile
      * Prepares sort order of custom file
      *
      * @param \Magento\View\Design\Theme\FileInterface $file
+     * @return void
      */
     protected function _prepareSortOrder(\Magento\View\Design\Theme\FileInterface $file)
     {
@@ -178,6 +190,7 @@ abstract class AbstractFile
      *
      * @param string $filePath
      * @param string $content
+     * @return void
      */
     protected function _saveFileContent($filePath, $content)
     {
@@ -191,6 +204,7 @@ abstract class AbstractFile
      * Deletes file of customization in filesystem
      *
      * @param string $filePath
+     * @return void
      */
     protected function _deleteFileContent($filePath)
     {

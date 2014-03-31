@@ -23,21 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="catalog_product_superconfig_config"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="product_tabs">
         <action method="addTab">
             <argument name="name" xsi:type="string">downloadable_items</argument>
             <argument name="block" xsi:type="string">Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable</argument>
         </action>
     </referenceBlock>
-    <referenceContainer name="product-type-tabs">
-        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_Catalog::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_Catalog::catalog/product/edit/super/attribute-js-template.phtml" as="template"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_Catalog::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix" template="Magento_Catalog::catalog/product/edit/super/matrix.phtml" as="matrix"/>
-            </block>
-        </block>
-    </referenceContainer>
 </layout>

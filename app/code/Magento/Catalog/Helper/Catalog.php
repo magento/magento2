@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Helper;
 
 /**
  * Adminhtml Catalog helper
@@ -31,14 +32,12 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper;
-
 class Catalog extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Config path to valid file paths
      */
-    const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
+    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
 
     /**
      * Config path to sitemap valid paths
@@ -94,7 +93,7 @@ class Catalog extends \Magento\App\Helper\AbstractHelper
      * Set Custom Attribute Tab Block Name for Product Edit
      *
      * @param string $attributeTabBlock
-     * @return \Magento\Catalog\Helper\Catalog
+     * @return $this
      */
     public function setAttributeTabBlock($attributeTabBlock)
     {
@@ -116,7 +115,7 @@ class Catalog extends \Magento\App\Helper\AbstractHelper
      * Set Custom Attribute Tab Block Name for Category Edit
      *
      * @param string $attributeTabBlock
-     * @return \Magento\Catalog\Helper\Catalog
+     * @return $this
      */
     public function setCategoryAttributeTabBlock($attributeTabBlock)
     {

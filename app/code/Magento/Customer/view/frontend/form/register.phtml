@@ -137,9 +137,9 @@
             </div>
             <?php $addressAttributes = $this->getChildBlock('customer_form_address_user_attributes');?>
             <?php if ($addressAttributes): ?>
-                <?php $addressAttributes->setEntity($this->getAddress());?>
+                <?php $addressAttributes->setEntityType('customer_address'); ?>
                 <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat('address[%1$s]');?>
-                <?php $this->restoreSessionData($addressAttributes->getForm(), 'address');?>
+                <?php $this->restoreSessionData($addressAttributes->getMetadataForm(), 'address');?>
                 <?php echo $addressAttributes->setShowContainer(false)->toHtml()?>
             <?php endif;?>
             <input type="hidden" name="default_billing" value="1">
@@ -164,9 +164,9 @@
         </div>
         <?php echo $this->getChildHtml('form_additional_info'); ?>
     </fieldset>
-    <div class="actions">
+    <div class="actions toolbar">
         <div class="primary">
-            <button type="submit" class="action submit" title="<?php echo __('Submit') ?>"><span><?php echo __('Submit') ?></span></button>
+            <button type="submit" class="action submit" title="<?php echo __('Create account') ?>"><span><?php echo __('Create account') ?></span></button>
         </div>
         <div class="secondary">
             <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>

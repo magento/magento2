@@ -74,14 +74,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getPath returns right path
-     */
-    public function testGetPath()
-    {
-        $this->assertContains('design', $this->filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR));
-    }
-
-    /**
      * Test getUri returns right uri
      */
     public function testGetUri()

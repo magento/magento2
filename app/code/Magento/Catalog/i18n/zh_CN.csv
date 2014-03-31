@@ -60,7 +60,6 @@
 "Amount","数量"
 "An error occurred while adding products to websites.","添加产品到网站时发生错误。"
 "An error occurred while clearing comparison list.","清除对照表时发生错误。"
-"An error occurred while deleting this review.","删除该评论时出错。"
 "An error occurred while removing products from websites.","从网站移除产品时发生错误。"
 "An error occurred while saving the URL rewrite","保存重写的URL时发生错误。"
 "An error occurred while saving the attribute set.","保存属性集时发生错误。"
@@ -68,7 +67,6 @@
 "An error occurred while saving the product. ","保存产品时发生错误。"
 "An error occurred while saving the search query.","保存搜索查询时发生错误。"
 "An error occurred while saving this group.","保存这个分组时发生错误。"
-"An error occurred while saving this review.","保存该评论时出错。"
 "An error occurred while trying to delete the category.","删除该类别时发生错误。"
 "An error occurred while updating the product(s) attributes.","更新产品属性时发生错误。"
 "An error occurred while updating the product(s) status.","更新产品状态时发生错误。"
@@ -131,7 +129,7 @@
 "Can be Divided into Multiple Boxes for Shipping","可拆分为多个箱发货"
 "Can be used only with catalog input type Dropdown","仅可用于类别输入类型 下拉"
 "Can be used only with catalog input type Dropdown, Multiple Select and Price","仅可用于类别输入类型　下拉、多选和价格"
-"Can\'t create image.","无法创建图片。"
+"Can't create image.","无法创建图片。"
 "Cancel","取消"
 "Cannot create image.","无法创建图片。"
 "Cannot create writeable directory '%s'.","无法创建可写的目录 '%s'。"
@@ -147,7 +145,6 @@
 "Catalog Product Image Gallery Popup","分类产品图像库弹出窗口"
 "Catalog Product Link","分类产品链接"
 "Catalog Product View (Any)","分类产品视图（任意）"
-"Catalog Product View (Configurable)","分类产品视图（可配置）"
 "Catalog Product View (Simple)","分类产品视图（简单）"
 "Catalog Product View (Virtual)","分类产品视图（虚拟）"
 "Catalog Section","分类选择"
@@ -171,51 +168,57 @@
 "Category Products","分类产品"
 "Category Top Navigation","分类顶部导航"
 "Category URL Suffix","分类 URL 后缀"
-Center,中心
-Change,更改
-"Change Price",改变价格
-"Change status",更改状态
-"Check items to add to the cart or",检查要加入购物车的内容
-Choose,选择
-"Choose Affected Attribute Set",选择受影响的属性集
-"Choose an Option...",选择选项...
-"Clear All",清除全部
-"Clear Price",清除价格
-"Click for price",单击获取价格
-"Click here or drag and drop to add images",单击这里拖拽来添加图片
-"Close Window",关闭窗口
-"Close panel",关闭面板
-"Collapse All",折叠全部
-Comma-separated.,逗号分隔。
-Comparable,可比较
-"Comparable on Frontend",前端比较
-Compare,比较
-"Compare Products",比较产品
-"Conditions Combination",条件组合
-"Configurable Product Settings",可配置的产品设置
-"Configure Product",配置产品
-Confirm,确认
-Continue,继续
-"Copy From Configurable",从配置中复制
-Country/State,国家/州
-Create,创建
-"Create Empty",创建空的
-"Create New Variation Set",创建新的变量组
+"Category attributes API","分类属性 API"
+"Category move error","分类移动错误"
+"Category move operation is not possible: parent category is equal to child category.","无法进行分类移动操作：母类别与子类别相同。"
+"Category move operation is not possible: the current category was not found.","无法进行分类移动操作：无法找到当前类别。"
+"Category move operation is not possible: the new parent category was not found.","无法进行分类移动操作：无法找到新的母类别。"
+"Category must be an instance of \Magento\Catalog\Model\Category.","分类必须为 \Magento\Catalog\Model\Category 的一个实例。"
+"Center","中心"
+"Change","更改"
+"Change or Retrieve attribute store view","更改或取回属性商店视图"
+"Change status","更改状态"
+"Check items to add to the cart or","检查要加入购物车的内容"
+"Choose an Option...","选择选项..."
+"Clear All","清除全部"
+"Clear Price","清除价格"
+"Click for price","单击获取价格"
+"Close Window","关闭窗口"
+"Collapse All","折叠全部"
+"Comma-separated.","逗号分隔。"
+"Comparable","可比较"
+"Comparable on Front-end","前端可比较"
+"Comparable on the Frontend","前端可比较"
+"Compare","比较"
+"Compare Products","比较产品"
+"Conditions Combination","条件组合"
+"Continue","继续"
+"Country/State","国家/州"
+"Create","创建"
+"Create (Upload)","创建（上传）"
+"Create Empty","创建空的"
 "Create Permanent Redirect for URLs if URL Key Changed","如果 URL 键有变动，为该 URL 创建永久重定向"
-"Create Permanent Redirect for old URL",为老URL创建永久重定向
-Cross-sells,交叉销售
-"Current Variations",当前变量
-"Currently Shopping by:",目前的购物者：
-"Custom Design",自定义设计
-"Custom Options",自定义选项
-"Customer Group",顾客组
-"Customers Reviews",顾客评论
-"Data Type for Saving in Database",要保存在数据库中的数据类型
-"Date & Time Custom Options",日期和时间定制设置
-"Date Fields Order",日期字段顺序
-Datetime,日期时间
-Decimal,十进制
-"Declare attribute value saving scope",声明属性值保存范围
+"Create Permanent Redirect for old URL","为老URL创建永久重定向"
+"Create Product Settings","创建产品设置"
+"Create Simple Associated Product","创建简单的关联产品"
+"Create attribute set based on another set","根据另一个集创建属性集"
+"Create new attribute","创建新属性"
+"Create new category","创建新分类"
+"Create new product","创建新产品"
+"Cross-sells","交叉销售"
+"Currently Shopping by:","目前的购物者："
+"Custom Design","自定义设计"
+"Custom Options","自定义选项"
+"Custom options","自定义选项"
+"Customer Group","客户组"
+"Customers Tagged Product","客户标记的产品"
+"Data Type for Saving in Database","要保存在数据库中的数据类型"
+"Date & Time Custom Options","日期和时间自定义选项"
+"Date Fields Order","日期字段顺序"
+"Subscribe Date","订阅日期"
+"Datetime","日期时间"
+"Decimal","十进制"
+"Declare attribute value saving scope","声明属性值保存范围"
 "Default ""What's This"" Text Message","默认“这是什么” 文字信息"
 "Default Popup Text Message","默认弹出窗口文字信息"
 "Default Price","默认价格"
@@ -389,7 +392,7 @@ Decimal,十进制
 "Minimum Advertised Price","最低广告价格"
 "Minimum Lines per Page","每页最低行数"
 "Minimum Quantity Allowed in Shopping Cart","购物车里允许的最少数量"
-"Minimum Quantity for Item\'s Status to be Out of Stock","商品状态的最小数量为缺货"
+"Minimum Quantity for Item's Status to be Out of Stock","商品状态的最小数量为缺货"
 "Missing SKU, skipping the record.","丢失SKU，正在跳过该记录。"
 "More Views","更多视图"
 "Move","移动"
@@ -438,7 +441,6 @@ Decimal,十进制
 "Page Title Separator","页面标题分隔器"
 "Parent Category","父分类"
 "Pending","挂起"
-"Pending Reviews RSS","挂起评测RSS"
 "Percentage","百分率"
 "Please add rows to option.","请添加选项行。"
 "Please be careful as once you click on the row it will load package data form the selected file and all unsaved form data will be lost.","请小心，一旦您点击这一行，就会从所选文件中加载包裹数据，所有未保存的数据都将丢失。"
@@ -456,8 +458,8 @@ Decimal,十进制
 "Please specify the number of products, that will not be divided into subintervals.","请注明不会被划分成子区间的产品的数量。"
 "Please specify the product required option(s)","请指定产品需要的选项"
 "Please specify the product required option(s).","请指定产品需要的选项。"
-"Please specify the product\'s option(s).","请指定产品的选项。"
-"Please specify the product\'s required option(s).","请指定产品的必要选项。"
+"Please specify the product's option(s).","请指定产品的选项。"
+"Please specify the product's required option(s).","请指定产品的必要选项。"
 "Please specify the quantity of product(s).","请指定产品数量。"
 "Please specify time required option(s).","请指定时间需要的选项。"
 "Please wait...","请稍候..."
@@ -495,7 +497,6 @@ Decimal,十进制
 "Product Listing Sort by","产品列表排列顺序"
 "Product","产品名"
 "Product Prices","产品价格"
-"Product Reviews","产品评测"
 "Product Tags","产品标签"
 "Product Tier Price API","产品层级价格 API"
 "Product Type","产品类型"
@@ -508,11 +509,9 @@ Decimal,十进制
 "Product links API (related, cross sells, up sells)","产品链接API（相关、交叉销售、超售）"
 "Product name","产品名"
 "Product types API","产品类型API"
-"Product with this combination of attributes already associated to configurable.","具有此属性组合的产品已与可配置产品关联。"
 "Products","产品"
 "Products Comparison List","产品比较列表"
 "Products Information","产品信息"
-"Products Reviews","产品评论"
 "Products Sitemap","产品网站地图"
 "Products only","仅产品"
 "Products per Page on Grid Allowed Values","网格允许的数值中的每页产品数量"
@@ -523,7 +522,7 @@ Decimal,十进制
 "Quantity","数量"
 "Quantity Increments","数量增量"
 "Quantity Uses Decimals","数量使用小数"
-"Quantity for Item\'s Status to Become Out of Stock","项目的状态变为无货时的数量"
+"Quantity for Item's Status to Become Out of Stock","项目的状态变为无货时的数量"
 "Quantity:","数量："
 "Quantity","数量"
 "Quick Create","快速创建"
@@ -576,7 +575,6 @@ Decimal,十进制
 "Retrieve product types","获取产品类型"
 "Retrieve products data","获取产品数据"
 "Retrieve products list by filters","按照筛选器获取产品列表"
-"Reviews","评测"
 "Roll Over for preview","翻转预览"
 "Root","根"
 "SKU","SKU"
@@ -589,7 +587,6 @@ Decimal,十进制
 "Save and Continue Edit","保存并继续编辑"
 "Saved %d record(s)","已保存 %s 条记录"
 "Scope","范围"
-"Scope must not be changed, because the attribute is used in configurable products.","范围不能更改，因为可配置产品中使用了属性。"
 "Search","搜索"
 "Search Engine Optimizations","搜索引擎优化"
 "Search Information","搜索信息"
@@ -599,7 +596,6 @@ Decimal,十进制
 "Searchable","可搜索"
 "See price before order confirmation.","确认订单前显示价格。"
 "Select Category...","选择分类..."
-"Select Configurable Attributes ","选择可配置属性"
 "Select Product...","选择产品..."
 "Select type of option","选择选项类型"
 "Select type options required values rows.","选择需要值的选项类型。"
@@ -647,75 +643,92 @@ Decimal,十进制
 "Store View","店铺视图"
 "Stretch","拉伸"
 "Subscribe to RSS Feed","订阅到 RSS 源"
-"Synonym For",同义词
-"System Properties",系统属性
-Tax,传真
-Template,模板
-Text,文字
-"The BuyRequest instance in options group is incorrect.",选项组中BuyRequest实例是不正确的。
-"The From Date value should be less than or equal to the To Date value.",开始日期应该小于等于结束如期。
-"The attribute model is not defined.",属性模型未定义。
-"The attribute set has been removed.",属性集已删除。
-"The base directory to upload file is not specified.",文件上传的基本目录尚未指定。
-"The category must be an instance of \Magento\Catalog\Model\Category.","分类必须是\Magento\Catalog\Model\Category的实例。"
-"The configuration item instance in options group is incorrect.",选项组中配置条目实例是不正确的。
-"The configuration item option instance in options group is incorrect.",选项组中配置条目选项实例是不正确的。
-"The filter model name must be declared.",筛选器模型必须被声明。
-"The filter must be an object. Please set correct filter.",筛选器必须是一个对象。请设置正确的筛选器。
-"The filters must be an array.",筛选器必须为数组。
-"The image does not exist.",该图片不存在。
-"The option instance type in options group is incorrect.",选项组中选项实例类型是不正确的。
-"The option type to get group instance is incorrect.",用来获得组实例的该选项类别是不正确的。
-"The product attribute has been deleted.",产品属性已被删除。
-"The product has required options.",该产品有要求的选项。
-"The product instance type in options group is incorrect.",选项组中产品实例类型是不正确的。
-"The product is not loaded.",该产品为加载。
-"The product type to extract configurable options is incorrect.",要提取配置选项的产品类型是不正确的。
-"The review has been deleted.",该评论已经被删除。
-"The review was removed by another user or does not exist.",评论已被另一用户删除，或评论不存在。
-"The text is too long.",文本太长。
-"The value of attribute ""%1"" must be unique.","属性""%1""的值得必须是唯一的。"
-"There are no customers for this alert.",没有顾客适用于此提醒。
-"There are no grouped products.",没有分组的产品。
-"There are no products matching the selection.",没有产品匹配该选择。
-"There was a category move error %1",分类%1移动错误
-"There was a category move error.",分类移动错误。
-"This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.",这仅应用到目录产品和分类。媒介内容将被作为静态URL插入到编辑器。如果系统配置基础URL改变媒介内容将不被更新。
-"This attribute cannot be deleted.",该属性无法被删除。
-"This attribute cannot be edited.",该属性无法编辑。
-"This attribute is used in configurable products.",该属性已用于可配置产品。
-"This attribute is used in configurable products. You cannot remove it from the attribute set.",该属性用于可配置的产品。您无法从属性集中将其删除。
-"This attribute no longer exists.",该属性不再存在。
-"This attribute set no longer exists.",该属性已不存在。
-"This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"").","这里定义基础货币范围（""货币设置"" > ""货币选项"" > ""基础货币""）。"
-"This group contains attributes used in configurable products. Please move these attributes to another group and try again.",该组包含使用在配置产品中的属性。请移动这些属性到另一个组再试。
-"This group contains system attributes. Please move system attributes to another group and try again.",该组包含系统属性。请移动系统属性到另一组并重试。
-"This is a required option.",这是一个必须的选项。
-"This product no longer exists.",该产品已不存在。
-"This search no longer exists.",该搜索已不存在。
-"This setting will be applied when all prices in the specific price interval are equal.",如果指定价格间隔的所有价格都相等，将应用该设置。
-"Tier Pricing",层级价格
-Tile,平铺
-"Time Format",时间格式
-Title,标题
-"To reindex the enabled product(s), please specify the store or product.",为了重新索引启用的产品，请指定店铺或产品。
-"To see product price, add this item to your cart. You can always remove it later.",要查看产品价格，请添加该条目到您的购物车。您总是可以稍后删除它。
-Top/Left,顶部/左侧
-Top/Right,顶部/右侧
-"Total incl. Tax: %1","含税总价： %1"
-"Total of %1 record(s) were deleted",共删除%1条记录
-Type,类型
-"URL Redirects",URL转向
-"URL Rewrite Management",URL重写管理
-"Unable to save product",不能存储产品
-"Unable to save the category",不能存储分类
-"Unassigned Attributes",未分配的属性
-"Unsupported product type ""%1"".","不支持的产品类型 ""%1""。"
-Up-sells,追加销售
-Update,更新
-"Update Attributes",更新属性
-"Upload Image",上传图片
-"Use All Available Attributes",使用全部可用属性
+"Super product attributes configuration","超级产品属性配置"
+"Synonym For","同义词"
+"System Properties","系统属性"
+"Tag","标签名称"
+"Tax","传真"
+"Template","模板"
+"Text","文字"
+"The Flat Catalog module has a limit of %2\$d filterable and/or sortable attributes. Currently there are %1\$d of them. Please reduce the number of filterable/sortable attributes in order to use this module","平坦分类模块被限制为 %2\$d 个筛选器和/或可排序属性。目前已经使用了 %1\$d 个。为了使用该模块，请减少所用筛选器/排序属性的数量"
+"The attribute model is not defined","属性型号未定义"
+"The attribute set has been saved.","属性集已保存。"
+"The base directory to upload file is not specified.","文件上传的基本目录尚未指定。"
+"The category has been deleted.","分类已保存。"
+"The category has been saved.","类别已保存。"
+"The comparison list was cleared.","比较列表被清空。"
+"The file '%s' for '%s' has an invalid extension","'%s' 的文件 '%s' 扩展有误"
+"The file '%s' you uploaded is larger than %s Megabytes allowed by server","您上传的文件 '％s' 大于服务器允许的 ％s 兆"
+"The file you uploaded is larger than %s Megabytes allowed by server","您上传的文件大于服务器所允许的 %s 兆字节"
+"The filters must be an array.","过滤器必须为数组。"
+"The image contents is not valid base64 data.","图像内容不是有效的 base64 数据。"
+"The image is not specified.","图片未指定。"
+"The model collection resource name is not defined.","型号集合资源名称未定义。"
+"The product %s has been added to comparison list.","产品 %s 已被添加至比较列表。"
+"The product %s has been removed from comparison list.","产品 %s 已从比较列表中删除。"
+"The product attribute has been deleted.","产品属性已被删除。"
+"The product attribute has been saved.","产品属性已保存。"
+"The product has been created.","产品已创建。"
+"The product has been deleted.","产品已被删除。"
+"The product has been duplicated.","产品已复制。"
+"The product has been saved.","产品已保存。"
+"The product has required options","产品包含必需的选项"
+"The search was deleted.","搜索被删除。"
+"The text is too long","文本过长"
+"There are no %s available.","没有可用的 %s。"
+"There are no customers for this alert","没有客户适用于此提醒"
+"There are no customers for this alert.","没有客户适用于此提醒。"
+"There are no products matching the selection.","没有产品匹配该选择。"
+"There was an error while request processing.","处理请求时遇到了错误。"
+"This Attribute no longer exists","该属性已不存在"
+"This attribute cannot be deleted.","该属性无法被删除。"
+"This attribute cannot be edited.","该属性无法编辑。"
+"This attribute cannot be updated.","该属性无法更新。"
+"This attribute no longer exists","该属性不存在"
+"This attribute set no longer exists.","该属性已不存在。"
+"This group contains system attributes. Please move system attributes to another group and try again.","该群组包含系统属性。请移动系统属性到另一群组并重试。"
+"This is a required option","这是必选的选项"
+"This product no longer exists.","该产品已不存在。"
+"This search no longer exists.","该搜索已不存在。"
+"This setting will be applied when all prices in the specific price interval are equal.","如果指定价格间隔的所有价格都相等，将应用该设置。"
+"Tier Pricing","层级价格"
+"Tile","平铺"
+"Time Format","时间格式"
+"Title","标题"
+"To reindex the enabled product(s), the store or product must be specified","要对已启用的产品重新索引，必须指定商店或产品"
+"To see product price, add this item to your cart. You can always remove it later.","要查看产品价格，请添加该项目到您的购物车。您总是可以稍后删除它。"
+"Top/Left","顶部/左侧"
+"Top/Right","顶部/右侧"
+"Total Quantity Base Items","总数量 基础项目"
+"Total incl. Tax: %1$s","含税总额：%1$s"
+"Total of %d record(s) have been deleted.","总共%d记录已被删除。"
+"Total of %d record(s) have been updated.","总共%d记录已被更新。"
+"Total of %d record(s) were updated","共更新 %d 条记录"
+"Type","类型"
+"URL Rewrite Management","URL重写管理"
+"Unable to complete this request.","无法完成该请求。"
+"Unable to find a search term to delete.","无法找到搜索词来删除。"
+"Unable to find an attribute to delete.","无法找到要删除的属性。"
+"Unable to get the product ID.","无法获得产品 ID。"
+"Unassigned Attributes","未分配的属性"
+"Unknown EAV indexer type ""%s"".","未知 EAV 索引类型 ""%s"" 。"
+"Unknown attribute: %s.","未知属性：%s。"
+"Unsupported product type ""%s"".","不支持的产品类型 ""%s""。"
+"Up-sells","超售"
+"Update","更新"
+"Update Attributes","更新属性"
+"Update Tier Price","更新层级价格"
+"Update assigned product","更新分配的产品"
+"Update attribute","更新属性"
+"Update attributes","更新属性"
+"Update category","更新类别"
+"Update custom option of product","更新产品的自定义选项"
+"Update product","更新产品"
+"Update product image","更新产品图像"
+"Update product link","更新产品链接"
+"Update product tier prices","更新产品层价格"
+"Update value of custom option","更新自定义选项的值"
+"Upload new product image ","上传新产品图片"
 "Use Canonical Link Meta Tag For Categories","类别使用规范链接 Meta 标签"
 "Use Canonical Link Meta Tag For Products",为产品使用标准的链接元数据标签
 "Use Categories Path for Product URLs","产品 URL 使用分类路径"
@@ -724,84 +737,57 @@ Update,更新
 "Use Flat Catalog Category",使用扁平产品目录分类
 "Use Flat Catalog Product",使用扁平目录产品
 "Use JavaScript Calendar","使用 JavaScript 日历"
-"Use Parent Category Settings",使用父分类设置
-"Use Static URLs for Media Content in WYSIWYG for Catalog",为产品目录的所见即所得编辑中的媒体内容使用静态URL
-"Use To Create Configurable Product",用于创建可配置的产品
-"Use config",用户配置
-"Use for Promo Rule Conditions",使用促销规则条件
-"Use in Advanced Search",使用高级搜索
-"Use in Layered Navigation",用在分层式导航中
-"Use in Quick Search",使用快速搜索
-"Use {{name}} and {{description}} as Product Name and Product Description placeholders",使用{{name}}和{{description}}作为产品名和产品描述占位符
-"Use {{name}} as Product Name or {{sku}} as Product SKU placeholders",使用{{name}}作为产品名{{sku}}作为产品SKU占位符
-"Use {{name}} as Product Name placeholder",使用{{name}}作为产品名占位符
-"Used for Sorting in Product Listing",在产品列表中使用排序
-"Used in Product Listing",用于产品清单
-Uses,用户数
-Varchar,可变长字符串
-"Variation Label",变量标签
-Variations,变量
-"View as",查看为
-Visibility,可见性
-Visible,可见
-"Visible on Catalog Pages on Frontend",在前端目录也可见
-"WYSIWYG Editor",所见即所得编辑器
-Watermark,水印
-"Watermark Default Size",水印默认大小
-"Watermark File for %1",%1的水印文件
-"Watermark Opacity, Percent",水印不透明度，百分比
-"Watermark Position",水印位置
-"We can't find a search term to delete.",找不到要删除的搜索词。
-"We can't find an attribute to delete.",找不到要删除的属性。
-"We can't find the image file.",找不到图片文件。
-"We can't get the product ID.",得不到产品ID。
-"We can't perform this category move operation because the parent category matches the child category.",由于父分类匹配子分类所以不能执行该分类移动操作。
-"We cannot process the item.",不能处理该条目。
-"We couldn't add the product to the cart because of an option validation issue.",由于选项校验问题不能添加产品到购物车。
-"We couldn't copy file %1. Please delete media with non-existing images and try again.",不能复制文件%1。请用不存在的图片删除媒体然后再试。
-"We couldn't move this file: %1.",不能移动文件%1。
-"We found a duplicate website group price customer group.",发现重复的站点组价格顾客组。
-"We found a duplicate website, tier price, customer group and quantity.",发现重复站点、层级价格、顾客组和数量。
-"We found an unknown EAV indexer type ""%1"".","找不到未知的EAV索引器类型""%1""。"
-"We found an unsupported product type ""%1"".","找不到不支持的产品类型""%1""。"
-"We saved the price alert subscription.",存储了价格警报订阅。
-"We saved the stock notification.",存储了库存通知。
-"We're unable to complete this request.",不能完成该请求。
-"Web Site",站点
-Website,网站
-Websites,网站
-"What's this?",这是什么？
-"Whether to show ""All"" option in the ""Show X Per Page"" dropdown","是否在""显示X每页""下拉框显示""所有""选项"
-"Will make search for the query above return results for this search",将要执行上面查询条件的搜索返回搜索结果
-"Year Range",年份范围
-Yes,是
-"You added product %1 to the comparison list.",您已经添加了产品%1比较列表。
-"You already have an identical search term query.",您已经有了一个同样的搜索词查询。
-"You are about to delete all products in this set. Are you sure you want to delete this attribute set?",此操作将要删除该集合里的所有产品。你确定要删除该属性集吗？
-"You can't update your attribute.",不能更新您的属性。
-"You cannot remove system attributes from this set.",不能从该属性集移除系统属性。
-"You cleared the comparison list.",您清除了比较列表。
-"You deleted the category.",您已经删除分类。
-"You deleted the search.",您已经删除了该搜索。
-"You duplicated the product.",您已复制了该产品。
-"You have no items to compare.",您没有可比较的条目。
-"You may also be interested in the following product(s)",你可能页感兴趣下列产品
-"You may also be interested in the following product(s):",您也可以感兴趣下面的产品：
-"You need to refresh the cache.",您需要刷新缓存。
-"You removed product %1 from the comparison list.",您已经从比较列表中移除了%1。
-"You saved the attribute set.",您已经存储了属性集。
-"You saved the category.",您已经存储该分类。
-"You saved the product attribute.",您已经存储了产品属性。
-"You saved the product.",您已经存储该产品。
-"You saved the review.",您已经存储了该评论。
-"Zoom In",放大
-"Zoom Out",缩小
-[GLOBAL],[全局]
-"[STORE VIEW]",[店铺视图]
-[WEBSITE],[网站]
-and,和
-"begin typing to add value",开始输入来添加值
-each,每个
+"Use Static URLs for Media Content in WYSIWYG for Catalog","为分类的所见即所得编辑中的媒体内容使用静态URL"
+"Use Tree Like Category Sitemap","使用树形分类站点地图"
+"Use config","用户配置"
+"Use default","使用默认"
+"Use for Promo Rule Conditions","使用促销规则条件"
+"Use four-digit year format.","使用四位年份格式。"
+"Use in Advanced Search","使用高级搜索"
+"Use in Layered Navigation","用在层次式导航中"
+"Use in Layered Navigation<br/>(Can be used only with catalog input type 'Dropdown')","使用分层导航<br/>（仅在分类输入类型为“下拉”时使用）"
+"Use in Quick Search","使用快速搜索"
+"Used for Sorting in Product Listing","在产品列表中使用排序"
+"Used in Product Listing","用于产品清单"
+"Value for ""%s"" is invalid.","""%s"" 的值无效。"
+"Value for ""%s"" is invalid: %s","""%s"" 的值是无效的： %s"
+"Varchar","可变长字符串"
+"View as","查看为"
+"Virtual Product","虚拟产品"
+"Visibility","可见性"
+"Visible","可见"
+"Visible on Catalog Pages on Front-end","前端分类页面的可见性"
+"Visible on Product View Page on Front-end","在前端产品视图页面可见"
+"WYSIWYG Editor","所见即所得编辑器"
+"Watermark","水印"
+"Watermark Default Size","水印默认大小"
+"Watermark Opacity, Percent","水印不透明度，百分比"
+"Watermark Position","水印位置"
+"Website","网站"
+"Website Item Must be checked","网站项目必须检查"
+"Website Store Must be checked","网站店铺必须被选中"
+"Websites","网站"
+"What's this?","这是什么？"
+"Whether to show ""All"" option in the ""Show X Per Page"" dropdown.","是否在“每页显示 X 个”下拉菜单中显示“全部” 选项。"
+"Will make search for the query above return results for this search.","执行上述查询的搜索是否返回该搜索的结果。"
+"Wrong BuyRequest instance in options group.","选项组中错误的购买请求实例。"
+"Wrong configuration item instance in options group.","选项组中错误的配置项目实例。"
+"Wrong configuration item option instance in options group.","选项组中存在错误配置项目选项的实例。"
+"Wrong option instance type in options group.","选项组中错误的选项实例类型。"
+"Wrong option type to get group instance.","错误的选项类型来获得群组实例。"
+"Wrong product instance type in options group.","选项组中错误的产品实例类型。"
+"Wrong product type filter specified","错误的已指定产品类型过滤器"
+"Year Range","年份范围"
+"Yes","是"
+"You cannot remove system attribute from this set.","您无法从此集合中移除系统属性。"
+"You have no items to compare.","您没有可比较的项目。"
+"You may also be interested in the following product(s)","您还可能对下列产品感兴趣"
+"Zoom In","放大"
+"Zoom Out","缩小"
+"and","和"
+"and above","及以上"
+"categories","类别"
+"each","每个"
 "ex. http://domain.com","例如 http://domain.com"
 lbs,磅
 "per page",每页

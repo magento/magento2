@@ -89,17 +89,20 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if (is_array($value) && !empty($value['delete'])) {
             $object->setData($this->getAttribute()->getName(), '');
-            $this->getAttribute()->getEntity()
-                ->saveAttribute($object, $this->getAttribute()->getName());
+            $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
             return $this;
         }
 
-        $path = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR)->getAbsolutePath('catalog/category/');
+        $path = $this->_filesystem->getDirectoryRead(
+            \Magento\App\Filesystem::MEDIA_DIR
+        )->getAbsolutePath(
+            'catalog/category/'
+        );
 
         try {
             /** @var $uploader \Magento\Core\Model\File\Uploader */
             $uploader = $this->_fileUploaderFactory->create(array('fileId' => $this->getAttribute()->getName()));
-            $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+            $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
             $uploader->setAllowRenameFiles(true);
             $result = $uploader->save($path);
 

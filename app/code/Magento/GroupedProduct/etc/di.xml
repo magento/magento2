@@ -23,41 +23,41 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="groupedproduct_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="groupedproduct_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Sales\Model\Quote\Item\RelatedProducts">
-        <param name="relatedProductTypes">
-            <array>
-                <item key="grouped"><value type="const">\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="relatedProductTypes" xsi:type="array">
+                <item name="grouped" xsi:type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
-        <param name="linkTypes">
-            <array>
-                <item key="associated"><value type="const">Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="associated" xsi:type="const">Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
-        <param name="ignoredProductTypes">
-            <array>
-                <item key="grouped"><value type="const">\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="ignoredProductTypes" xsi:type="array">
+                <item name="grouped" xsi:type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\CatalogPrice">
-        <param name="priceModelPool">
-            <array>
-                <item key="grouped"><value>Magento\GroupedProduct\Model\Product\CatalogPrice</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="priceModelPool" xsi:type="array">
+                <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Product\CatalogPrice</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="grouped_output" type="Magento\GroupedProduct\Model\Product\Type\Plugin" />
@@ -65,6 +65,7 @@
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="isProductConfigured" type="Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped" />
     </type>
+    <type name="Magento\Catalog\Helper\Product\Configuration">
+        <plugin name="grouped_options" type="Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped"/>
+    </type>
 </config>
-
-

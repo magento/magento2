@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model;
 
 class InstallerTest extends \PHPUnit_Framework_TestCase
@@ -73,9 +72,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             'Magento\App\Filesystem\DirectoryList',
             array(
                 'root' => __DIR__,
-                'directories' => array(
-                    \Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir)
-                )
+                'directories' => array(\Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir))
             )
         );
         $objectManager->get('\Magento\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
@@ -103,15 +100,14 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $userName = 'installer_test';
         $userPassword = '123123q';
         $userData = array(
-            'username'  => $userName,
+            'username' => $userName,
             'firstname' => 'First Name',
-            'lastname'  => 'Last Name',
-            'email'     => 'installer_test@example.com',
+            'lastname' => 'Last Name',
+            'email' => 'installer_test@example.com'
         );
 
         /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User');
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
         $user->loadByUsername($userName);
         $this->assertEmpty($user->getId());
 
@@ -122,7 +118,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($userData, array_intersect_assoc($user->getData(), $userData));
         $this->assertNotEmpty($user->getPassword(), 'Password hash is expected to be loaded.');
         $this->assertNotEquals(
-            $userPassword, $user->getPassword(),
+            $userPassword,
+            $user->getPassword(),
             'Original password should not be stored/loaded as is for security reasons.'
         );
         $this->assertInstanceOf('Magento\User\Model\Role', $user->getRole());
@@ -135,7 +132,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testInstallEncryptionKey()
     {
         $keyPlaceholder = \Magento\Install\Model\Installer\Config::TMP_ENCRYPT_KEY_VALUE;
-        $fixtureConfigData = "<key>$keyPlaceholder</key>";
+        $fixtureConfigData = "<key>{$keyPlaceholder}</key>";
         $expectedConfigData = '<key>d41d8cd98f00b204e9800998ecf8427e</key>';
 
         file_put_contents(self::$_tmpConfigFile, $fixtureConfigData);
@@ -228,7 +225,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         foreach ($types as $type) {
             $this->assertTrue(
                 $cacheState->isEnabled($type),
-                "'$type' cache type has not been enabled after installation"
+                "'{$type}' cache type has not been enabled after installation"
             );
         }
     }

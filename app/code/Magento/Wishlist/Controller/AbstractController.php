@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Wishlist\Controller;
 
 use Magento\App\Action\Context;
@@ -35,6 +34,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
 {
     /**
      * Filter to convert localized values to internal ones
+     *
      * @var \Zend_Filter_LocalizedToNormalized
      */
     protected $_localFilter = null;
@@ -48,10 +48,8 @@ abstract class AbstractController extends \Magento\App\Action\Action
      * @param Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
-    public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-    ) {
+    public function __construct(Context $context, \Magento\Core\App\Action\FormKeyValidator $formKeyValidator)
+    {
         $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
@@ -66,10 +64,10 @@ abstract class AbstractController extends \Magento\App\Action\Action
     {
         if (!$this->_localFilter) {
             $this->_localFilter = new \Zend_Filter_LocalizedToNormalized(
-                array('locale' => $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->getLocaleCode())
+                array('locale' => $this->_objectManager->get('Magento\Locale\ResolverInterface')->getLocaleCode())
             );
         }
-        $qty = $this->_localFilter->filter((float)$qty);
+        $qty = $this->_localFilter->filter((double)$qty);
         if ($qty < 0) {
             $qty = null;
         }
@@ -85,29 +83,30 @@ abstract class AbstractController extends \Magento\App\Action\Action
 
     /**
      * Add all items from wishlist to shopping cart
+     *
+     * @return void
      */
     public function allcartAction()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             $this->_forward('noroute');
-            return ;
+            return;
         }
 
-        $wishlist   = $this->_getWishlist();
+        $wishlist = $this->_getWishlist();
         if (!$wishlist) {
             $this->_forward('noroute');
-            return ;
+            return;
         }
-        $isOwner    = $wishlist->isOwner($this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId());
+        $isOwner = $wishlist->isOwner($this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId());
 
-        $messages   = array();
+        $messages = array();
         $addedItems = array();
         $notSalable = array();
         $hasOptions = array();
 
-        $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-        $collection = $wishlist->getItemCollection()
-                ->setVisibilityFilter();
+        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        $collection = $wishlist->getItemCollection()->setVisibilityFilter();
 
         $qtys = $this->getRequest()->getParam('qty');
         foreach ($collection as $item) {
@@ -128,8 +127,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
                 if ($item->addToCart($cart, $isOwner)) {
                     $addedItems[] = $item->getProduct();
                 }
-
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
                     $notSalable[] = $item;
                 } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
@@ -151,8 +149,12 @@ abstract class AbstractController extends \Magento\App\Action\Action
         if ($isOwner) {
             $indexUrl = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId());
         } else {
-            $indexUrl = $this->_objectManager->create('Magento\UrlInterface')
-                ->getUrl('wishlist/shared', array('code' => $wishlist->getSharingCode()));
+            $indexUrl = $this->_objectManager->create(
+                'Magento\UrlInterface'
+            )->getUrl(
+                'wishlist/shared',
+                array('code' => $wishlist->getSharingCode())
+            );
         }
         if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
             $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
@@ -167,7 +169,10 @@ abstract class AbstractController extends \Magento\App\Action\Action
             foreach ($notSalable as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
-            $messages[] = __('We couldn\'t add the following product(s) to the shopping cart: %1.', join(', ', $products));
+            $messages[] = __(
+                'We couldn\'t add the following product(s) to the shopping cart: %1.',
+                join(', ', $products)
+            );
         }
 
         if ($hasOptions) {
@@ -175,11 +180,14 @@ abstract class AbstractController extends \Magento\App\Action\Action
             foreach ($hasOptions as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
-            $messages[] = __('Product(s) %1 have required options. Each product can only be added individually.', join(', ', $products));
+            $messages[] = __(
+                'Product(s) %1 have required options. Each product can only be added individually.',
+                join(', ', $products)
+            );
         }
 
         if ($messages) {
-            $isMessageSole = (count($messages) == 1);
+            $isMessageSole = count($messages) == 1;
             if ($isMessageSole && count($hasOptions) == 1) {
                 $item = $hasOptions[0];
                 if ($isOwner) {

@@ -35,8 +35,9 @@ class ModelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Encryption\Encryptor');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Encryption\Encryptor'
+        );
     }
 
     public function testEncryptDecrypt()

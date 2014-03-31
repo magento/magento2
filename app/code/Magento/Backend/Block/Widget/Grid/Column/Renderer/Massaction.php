@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid widget column renderer massaction
@@ -32,11 +32,11 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-class Massaction
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
+class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
+    /**
+     * @var int
+     */
     protected $_defaultWidth = 20;
 
     /**
@@ -89,5 +89,4 @@ class Massaction
         $html .= 'value="' . $this->escapeHtml($value) . '" class="massaction-checkbox"' . $checked . '/>';
         return $html;
     }
-
 }

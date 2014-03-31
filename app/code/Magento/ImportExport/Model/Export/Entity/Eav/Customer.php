@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Eav;
 
 /**
  * Export entity customer model
@@ -33,10 +34,7 @@
  *
  * @method \Magento\Customer\Model\Resource\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
-namespace Magento\ImportExport\Model\Export\Entity\Eav;
-
-class Customer
-    extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
+class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
     /**#@+
      * Permanent column names.
@@ -44,21 +42,26 @@ class Customer
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL   = 'email';
+    const COLUMN_EMAIL = 'email';
+
     const COLUMN_WEBSITE = '_website';
-    const COLUMN_STORE   = '_store';
+
+    const COLUMN_STORE = '_store';
+
     /**#@-*/
 
     /**#@+
      * Attribute collection name
      */
     const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Attribute\Collection';
+
     /**#@-*/
 
     /**#@+
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
+
     /**#@-*/
 
     /**
@@ -67,29 +70,29 @@ class Customer
      * @var array
      */
     protected $_attributeOverrides = array(
-        'created_at'                  => array('backend_type' => 'datetime'),
-        'reward_update_notification'  => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
+        'created_at' => array('backend_type' => 'datetime'),
+        'reward_update_notification' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
         'reward_warning_notification' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean')
     );
 
     /**
      * Array of attributes codes which are disabled for export
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttributes = array('default_billing', 'default_shipping');
 
     /**
      * Attributes with index (not label) value.
      *
-     * @var array
+     * @var string[]
      */
     protected $_indexValueAttributes = array('group_id', 'website_id', 'store_id');
 
     /**
      * Permanent entity columns.
      *
-     * @var array
+     * @var string[]
      */
     protected $_permanentAttributes = array(self::COLUMN_EMAIL, self::COLUMN_WEBSITE, self::COLUMN_STORE);
 
@@ -105,7 +108,7 @@ class Customer
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory
      * @param array $data
@@ -115,21 +118,26 @@ class Customer
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory,
         array $data = array()
     ) {
         parent::__construct(
-            $coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $locale, $eavConfig, $data
+            $coreStoreConfig,
+            $storeManager,
+            $collectionFactory,
+            $resourceColFactory,
+            $localeDate,
+            $eavConfig,
+            $data
         );
 
-        $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
-            : $customerColFactory->create();
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $customerColFactory->create();
 
-        $this->_initAttributeValues()
-            ->_initStores()
-            ->_initWebsites(true);
+        $this->_initAttributeValues()->_initStores()->_initWebsites(true);
     }
 
     /**
@@ -160,7 +168,7 @@ class Customer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _getHeaderColumns()
     {
@@ -172,16 +180,15 @@ class Customer
      * Export given customer data
      *
      * @param \Magento\Customer\Model\Customer $item
-     * @return string
+     * @return void
      */
     public function exportItem($item)
     {
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
-        $row[self::COLUMN_STORE]   = $this->_storeIdToCode[$item->getStoreId()];
+        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
 
-        $this->getWriter()
-            ->writeRow($row);
+        $this->getWriter()->writeRow($row);
     }
 
     /**
@@ -198,7 +205,7 @@ class Customer
                 $data = $this->_attributeOverrides[$attribute->getAttributeCode()];
 
                 if (isset($data['options_method']) && method_exists($this, $data['options_method'])) {
-                    $data['filter_options'] = $this->$data['options_method']();
+                    $data['filter_options'] = $this->{$data['options_method']}();
                 }
                 $attribute->addData($data);
             }

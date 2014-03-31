@@ -26,19 +26,13 @@ namespace TypeDuplication;
 
 interface ArgumentInterface
 {
-
 }
-
 class ArgumentBaseClass
 {
-
 }
-
 class ArgumentClassOne extends ArgumentBaseClass
 {
-
 }
-
 class ValidClassWithTheSameInterfaceTypeArguments
 {
     /**
@@ -71,7 +65,6 @@ class ValidClassWithTheSameInterfaceTypeArguments
         $this->argumentThree = $argumentThree;
     }
 }
-
 class ValidClassWithSubTypeArguments
 {
     /**
@@ -104,7 +97,6 @@ class ValidClassWithSubTypeArguments
         $this->argumentThree = $argumentThree;
     }
 }
-
 class ValidClassWithSuppressWarnings
 {
     /**
@@ -139,7 +131,6 @@ class ValidClassWithSuppressWarnings
         $this->argumentThree = $argumentThree;
     }
 }
-
 class InvalidClassWithDuplicatedTypes
 {
     /**
@@ -172,4 +163,3 @@ class InvalidClassWithDuplicatedTypes
         $this->argumentThree = $argumentThree;
     }
 }
-

@@ -23,27 +23,28 @@
  */
 require __DIR__ . '/../../../bootstrap.php';
 $rootDir = realpath(__DIR__ . '/../../../../../');
-
-use Magento\Tools\Layout\Reference\Processor,
-    Magento\Tools\Layout\Formatter;
+use Magento\Tools\Layout\Reference\Processor;
+use Magento\Tools\Layout\Formatter;
 
 try {
-    $opt = new \Zend_Console_Getopt(array(
-        'dir=s' => "Directory to process(optional, default {$rootDir})",
-        'file|f=s' => 'File to process(optional)',
-        'overwrite|o' => 'Overwrite file',
-        'collect|c' => 'Collect names for a dictionary',
-        'process|p' => 'Process references using dictionary',
-        'dictionary|d=s' => 'Dictionary file (required)',
-        'processor=s' => 'Processor file (optional)',
-    ));
+    $opt = new \Zend_Console_Getopt(
+        array(
+            'dir=s' => "Directory to process(optional, default {$rootDir})",
+            'file|f=s' => 'File to process(optional)',
+            'overwrite|o' => 'Overwrite file',
+            'collect|c' => 'Collect names for a dictionary',
+            'process|p' => 'Process references using dictionary',
+            'dictionary|d=s' => 'Dictionary file (required)',
+            'processor=s' => 'Processor file (optional)'
+        )
+    );
     $opt->parse();
 
     if ($opt->dir) {
         $rootDir = realpath($opt->dir);
     }
     if (!file_exists($rootDir) || !is_dir($rootDir)) {
-        throw new \Exception("Directory to process ($rootDir) not found");
+        throw new \Exception("Directory to process ({$rootDir}) not found");
     }
     if (empty($opt->dictionary)) {
         throw new \Exception("Dictionary file is required");
@@ -67,8 +68,7 @@ try {
     }
 
     if ($opt->collect) {
-        $processor->getReferences($layouts)
-            ->writeToFile();
+        $processor->getReferences($layouts)->writeToFile();
     }
 
     if ($opt->process) {

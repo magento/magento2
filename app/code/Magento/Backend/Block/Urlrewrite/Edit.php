@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Urlrewrite;
 
 /**
  * Block for URL rewrites edit page
@@ -34,8 +35,6 @@
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Urlrewrite;
-
 class Edit extends \Magento\Backend\Block\Widget\Container
 {
     /**
@@ -89,7 +88,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Prepare URL rewrite editing layout
      *
-     * @return \Magento\Backend\Block\Urlrewrite\Edit
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -103,6 +102,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Prepare featured blocks for layout of URL rewrite editing
+     *
+     * @return void
      */
     protected function _prepareLayoutFeatures()
     {
@@ -121,6 +122,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add child edit form block
+     *
+     * @return void
      */
     protected function _addEditFormBlock()
     {
@@ -136,34 +139,45 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add reset button
+     *
+     * @return void
      */
     protected function _addResetButton()
     {
-        $this->_addButton('reset', array(
-            'label'   => __('Reset'),
-            'onclick' => '$(\'edit_form\').reset()',
-            'class'   => 'scalable',
-            'level'   => -1
-        ));
+        $this->_addButton(
+            'reset',
+            array(
+                'label' => __('Reset'),
+                'onclick' => '$(\'edit_form\').reset()',
+                'class' => 'scalable',
+                'level' => -1
+            )
+        );
     }
 
     /**
      * Add back button
+     *
+     * @return void
      */
     protected function _addBackButton()
     {
-        $this->_addButton('back', array(
-            'label'   => __('Back'),
-            'onclick' => 'setLocation(\'' . $this->_adminhtmlData->getUrl('adminhtml/*/') . '\')',
-            'class'   => 'back',
-            'level'   => -1
-        ));
+        $this->_addButton(
+            'back',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->_adminhtmlData->getUrl('adminhtml/*/') . '\')',
+                'class' => 'back',
+                'level' => -1
+            )
+        );
     }
 
     /**
      * Update Back button location link
      *
      * @param string $link
+     * @return void
      */
     protected function _updateBackButtonLink($link)
     {
@@ -172,36 +186,45 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add delete button
+     *
+     * @return void
      */
     protected function _addDeleteButton()
     {
-        $this->_addButton('delete', array(
-            'label'   => __('Delete'),
-            'onclick' => 'deleteConfirm(\''
-                . addslashes(__('Are you sure you want to do this?'))
-                . '\', \''
-                . $this->_adminhtmlData->getUrl('adminhtml/*/delete', array('id' => $this->getUrlRewrite()->getId()))
-                . '\')',
-            'class'   => 'scalable delete',
-            'level'   => -1
-        ));
+        $this->_addButton(
+            'delete',
+            array(
+                'label' => __('Delete'),
+                'onclick' => 'deleteConfirm(\'' . addslashes(
+                    __('Are you sure you want to do this?')
+                ) . '\', \'' . $this->_adminhtmlData->getUrl(
+                    'adminhtml/*/delete',
+                    array('id' => $this->getUrlRewrite()->getId())
+                ) . '\')',
+                'class' => 'scalable delete',
+                'level' => -1
+            )
+        );
     }
 
     /**
      * Add save button
+     *
+     * @return void
      */
     protected function _addSaveButton()
     {
-        $this->_addButton('save', array(
-            'label'   => __('Save'),
-            'class'   => 'save',
-            'level'   => -1,
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '#edit_form'),
-                ),
-            ),
-        ));
+        $this->_addButton(
+            'save',
+            array(
+                'label' => __('Save'),
+                'class' => 'save',
+                'level' => -1,
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form'))
+                )
+            )
+        );
     }
 
     /**
@@ -211,15 +234,17 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      */
     protected function _createEditFormBlock()
     {
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Urlrewrite\Edit\Form', '',
-            array('data' => array(
-                'url_rewrite' => $this->_getUrlRewrite()
-            ))
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Urlrewrite\Edit\Form',
+            '',
+            array('data' => array('url_rewrite' => $this->_getUrlRewrite()))
         );
     }
 
     /**
      * Add child URL rewrite selector block
+     *
+     * @return void
      */
     protected function _addUrlRewriteSelectorBlock()
     {

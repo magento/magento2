@@ -23,15 +23,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 /**
  * Adminhtml grid item renderer date
  */
-namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
-
-class Date
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
+class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
+
     /**
      * Retrieve date format
      *
@@ -43,26 +55,24 @@ class Date
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    $localeCode = $this->_locale->getLocaleCode();
-                    $localeData = new \Zend_Locale_Data;
+                    $localeCode = $this->_localeResolver->getLocaleCode();
+                    $localeData = new \Zend_Locale_Data();
                     switch ($this->getColumn()->getPeriodType()) {
-                        case 'month' :
+                        case 'month':
                             self::$_format = $localeData->getContent($localeCode, 'dateitem', 'yM');
                             break;
 
-                        case 'year' :
+                        case 'year':
                             self::$_format = $localeData->getContent($localeCode, 'dateitem', 'y');
                             break;
 
                         default:
-                            self::$_format = $this->_locale->getDateFormat(
-                                \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
+                            self::$_format = $this->_localeDate->getDateFormat(
+                                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                             );
                             break;
                     }
-                }
-                catch (\Exception $e) {
-
+                } catch (\Exception $e) {
                 }
             }
             $format = self::$_format;
@@ -80,10 +90,10 @@ class Date
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {
-                case 'month' :
+                case 'month':
                     $dateFormat = 'yyyy-MM';
                     break;
-                case 'year' :
+                case 'year':
                     $dateFormat = 'yyyy';
                     break;
                 default:
@@ -93,14 +103,33 @@ class Date
 
             $format = $this->_getFormat();
             try {
-                $data = ($this->getColumn()->getGmtoffset())
-                    ? $this->_locale->date($data, $dateFormat)->toString($format)
-                    : $this->_locale->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
-            }
-            catch (\Exception $e) {
-                $data = ($this->getColumn()->getTimezone())
-                    ? $this->_locale->date($data, $dateFormat)->toString($format)
-                    : $this->_locale->date($data, $dateFormat, null, false)->toString($format);
+                $data = $this->getColumn()->getGmtoffset() ? $this->_localeDate->date(
+                    $data,
+                    $dateFormat
+                )->toString(
+                    $format
+                ) : $this->_localeDate->date(
+                    $data,
+                    \Zend_Date::ISO_8601,
+                    null,
+                    false
+                )->toString(
+                    $format
+                );
+            } catch (\Exception $e) {
+                $data = $this->getColumn()->getTimezone() ? $this->_localeDate->date(
+                    $data,
+                    $dateFormat
+                )->toString(
+                    $format
+                ) : $this->_localeDate->date(
+                    $data,
+                    $dateFormat,
+                    null,
+                    false
+                )->toString(
+                    $format
+                );
             }
             return $data;
         }

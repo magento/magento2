@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authz\Model\UserLocator;
 
 use Magento\Authz\Model\UserLocatorInterface;
@@ -33,7 +32,9 @@ use Magento\Backend\Model\Auth\Session as AdminSession;
  */
 class Admin implements UserLocatorInterface
 {
-    /** @var AdminSession */
+    /**
+     * @var AdminSession
+     */
     protected $_adminSession;
 
     /**

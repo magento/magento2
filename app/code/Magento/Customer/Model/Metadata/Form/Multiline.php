@@ -25,16 +25,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class Multiline extends Text
 {
     /**
-     * Extract data from request and return value
-     *
-     * @param \Magento\App\RequestInterface $request
-     * @return array|string
+     * {@inheritdoc}
      */
     public function extractValue(\Magento\App\RequestInterface $request)
     {
@@ -48,16 +44,12 @@ class Multiline extends Text
     }
 
     /**
-     * Validate data
-     * Return true or array of errors
-     *
-     * @param array|string $value
-     * @return boolean|array
+     * {@inheritdoc}
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
+        $errors = array();
+        $attribute = $this->getAttribute();
 
         if ($value === false) {
             // try to load original value and validate it
@@ -70,7 +62,7 @@ class Multiline extends Text
         if (!is_array($value)) {
             $value = array($value);
         }
-        for ($i = 0; $i < $attribute->getMultilineCount(); $i ++) {
+        for ($i = 0; $i < $attribute->getMultilineCount(); $i++) {
             if (!isset($value[$i])) {
                 $value[$i] = null;
             }
@@ -97,24 +89,18 @@ class Multiline extends Text
     }
 
     /**
-     * Export attribute value to entity model
-     *
-     * @param array|string $value
-     * @return \Magento\Customer\Model\Metadata\Form\Multiline
+     * {@inheritdoc}
      */
     public function compactValue($value)
     {
-        if (is_array($value)) {
-            $value = trim(implode("\n", $value));
+        if (!is_array($value)) {
+            $value = array($value);
         }
         return parent::compactValue($value);
     }
 
     /**
-     * Restore attribute value from SESSION to entity model
-     *
-     * @param array|string $value
-     * @return \Magento\Customer\Model\Metadata\Form\Multiline
+     * {@inheritdoc}
      */
     public function restoreValue($value)
     {
@@ -122,12 +108,9 @@ class Multiline extends Text
     }
 
     /**
-     * Return formated attribute value from entity model
-     *
-     * @param string $format
-     * @return array|string
+     * {@inheritdoc}
      */
-    public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $values = $this->_value;
         if (!is_array($values)) {
@@ -135,13 +118,13 @@ class Multiline extends Text
         }
         $values = array_map(array($this, '_applyOutputFilter'), $values);
         switch ($format) {
-            case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ARRAY:
+            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_ARRAY:
                 $output = $values;
                 break;
-            case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML:
+            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_HTML:
                 $output = implode("<br />", $values);
                 break;
-            case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ONELINE:
+            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_ONELINE:
                 $output = implode(" ", $values);
                 break;
             default:

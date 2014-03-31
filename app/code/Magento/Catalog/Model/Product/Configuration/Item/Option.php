@@ -33,11 +33,12 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
-class Option extends \Magento\Object
-    implements \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+class Option extends \Magento\Object implements
+    \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
     /**
      * Returns value of this option
+     *
      * @return mixed
      */
     public function getValue()

@@ -23,16 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Block\Adminhtml;
+
+use Magento\View\Element\AbstractBlock;
 
 /**
  * Adminhtml backup page content block
  *
- * @category   Magento
- * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Block\Adminhtml;
-
 class Backup extends \Magento\Backend\Block\Template
 {
     /**
@@ -42,28 +41,46 @@ class Backup extends \Magento\Backend\Block\Template
      */
     protected $_template = 'Magento_Backup::backup/list.phtml';
 
+    /**
+     * @return AbstractBlock|void
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->addChild('createButton', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Database Backup'),
-            'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_DB . "')",
-            'class'  => 'task'
-        ));
-        $this->addChild('createSnapshotButton', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('System Backup'),
-            'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT . "')",
-            'class'  => ''
-        ));
-        $this->addChild('createMediaBackupButton', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Database and Media Backup'),
-            'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_MEDIA . "')",
-            'class'  => ''
-        ));
+        $this->addChild(
+            'createButton',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Database Backup'),
+                'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_DB . "')",
+                'class' => 'task'
+            )
+        );
+        $this->addChild(
+            'createSnapshotButton',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('System Backup'),
+                'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT . "')",
+                'class' => ''
+            )
+        );
+        $this->addChild(
+            'createMediaBackupButton',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Database and Media Backup'),
+                'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_MEDIA . "')",
+                'class' => ''
+            )
+        );
 
         $this->addChild('dialogs', 'Magento\Backup\Block\Adminhtml\Dialogs');
     }
 
+    /**
+     * @return string
+     */
     public function getCreateButtonHtml()
     {
         return $this->getChildHtml('createButton');
@@ -89,6 +106,9 @@ class Backup extends \Magento\Backend\Block\Template
         return $this->getChildHtml('createMediaBackupButton');
     }
 
+    /**
+     * @return string
+     */
     public function getGridHtml()
     {
         return $this->getChildHtml('backupsGrid');

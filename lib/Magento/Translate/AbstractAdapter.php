@@ -30,8 +30,7 @@
  */
 namespace Magento\Translate;
 
-abstract class AbstractAdapter extends \Zend_Translate_Adapter
-    implements AdapterInterface
+abstract class AbstractAdapter extends \Zend_Translate_Adapter implements AdapterInterface
 {
     /**
      * Load translation data
@@ -74,7 +73,6 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter
     {
         return $this;
     }
-
 
     /**
      * Returns the adapter name

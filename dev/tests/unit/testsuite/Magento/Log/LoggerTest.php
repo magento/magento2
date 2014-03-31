@@ -52,19 +52,24 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $logDir = TESTS_TEMP_DIR . '/var/log';
         $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_filesystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::LOG_DIR)
-            ->will($this->returnValue($this->_directory));
-        $this->_directory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue(true));
-        $this->_directory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
-        $this->_directory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnValue($logDir));
+        $this->_filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::LOG_DIR
+        )->will(
+            $this->returnValue($this->_directory)
+        );
+        $this->_directory->expects($this->any())->method('create')->will($this->returnValue(true));
+        $this->_directory->expects($this->any())->method('getAbsolutePath')->will(
+            $this->returnCallback(
+                function ($path) use ($logDir) {
+                    $path = ltrim($path, '\/');
+                    return $logDir . '/' . $path;
+                }
+            )
+        );
 
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);
@@ -110,11 +115,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function addStreamLogDataProvider()
     {
-        return array(
-            array('test', 'php://output'),
-            array('test', 'custom_file.log'),
-            array('test', ''),
-        );
+        return array(array('test', 'php://output'), array('test', 'custom_file.log'), array('test', ''));
     }
 
     /**
@@ -132,7 +133,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $messageOne = uniqid();
         $messageTwo = uniqid();
         $messageThree = uniqid();
-        $this->expectOutputRegex('/' . 'DEBUG \(7\).+?' . $messageTwo . '.+?' . 'CRIT \(2\).+?' . $messageThree . '/s');
+        $this->expectOutputRegex(
+            '/' . 'DEBUG \(7\).+?' . $messageTwo . '.+?' . 'CRIT \(2\).+?' . $messageThree . '/s'
+        );
         $this->_model->addStreamLog('test', 'php://output');
         $this->_model->log($messageOne);
         $this->_model->log($messageTwo, \Zend_Log::DEBUG, 'test');
@@ -144,7 +147,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputRegex('/Array\s\(\s+\[0\] => 1\s\).+stdClass Object/s');
         $this->_model->addStreamLog(\Magento\Logger::LOGGER_SYSTEM, 'php://output');
         $this->_model->log(array(1));
-        $this->_model->log(new \StdClass);
+        $this->_model->log(new \StdClass());
     }
 
     public function testLogDebug()
@@ -152,22 +155,35 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $message = uniqid();
         /** @var $model \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMock('Magento\Logger', array('log'), array(), '', false);
-        $model->expects($this->at(0))->method('log')
-            ->with($message, \Zend_Log::DEBUG, \Magento\Logger::LOGGER_SYSTEM);
-        $model->expects($this->at(1))->method('log')
-            ->with($message, \Zend_Log::DEBUG, \Magento\Logger::LOGGER_EXCEPTION);
+        $model->expects($this->at(0))->method('log')->with($message, \Zend_Log::DEBUG, \Magento\Logger::LOGGER_SYSTEM);
+        $model->expects(
+            $this->at(1)
+        )->method(
+            'log'
+        )->with(
+            $message,
+            \Zend_Log::DEBUG,
+            \Magento\Logger::LOGGER_EXCEPTION
+        );
         $model->logDebug($message);
         $model->logDebug($message, \Magento\Logger::LOGGER_EXCEPTION);
     }
 
     public function testLogException()
     {
-        $exception = new \Exception;
+        $exception = new \Exception();
         $expected = "\n{$exception}";
         /** @var $model \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMock('Magento\Logger', array('log'), array(), '', false);
-        $model->expects($this->at(0))->method('log')
-            ->with($expected, \Zend_Log::ERR, \Magento\Logger::LOGGER_EXCEPTION);
+        $model->expects(
+            $this->at(0)
+        )->method(
+            'log'
+        )->with(
+            $expected,
+            \Zend_Log::ERR,
+            \Magento\Logger::LOGGER_EXCEPTION
+        );
         $model->logException($exception);
     }
 }

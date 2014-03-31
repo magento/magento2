@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Link;
 
 /**
  * Catalog product links collection
@@ -32,9 +32,7 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Link;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Product object
@@ -59,6 +57,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -69,7 +69,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Declare link model and initialize type attributes join
      *
      * @param \Magento\Catalog\Model\Product\Link $linkModel
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return $this
      */
     public function setLinkModel(\Magento\Catalog\Model\Product\Link $linkModel)
     {
@@ -94,7 +94,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Initialize collection parent product and add limitation join
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return $this
      */
     public function setProduct(\Magento\Catalog\Model\Product $product)
     {
@@ -115,7 +115,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add link's type to filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return $this
      */
     public function addLinkTypeIdFilter()
     {
@@ -128,12 +128,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add product to filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return $this
      */
     public function addProductIdFilter()
     {
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $this->addFieldToFilter('product_id',  array('eq' => $this->getProduct()->getId()));
+            $this->addFieldToFilter('product_id', array('eq' => $this->getProduct()->getId()));
         }
         return $this;
     }
@@ -141,7 +141,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Join attributes
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Collection
+     * @return $this
      */
     public function joinAttributes()
     {
@@ -157,8 +157,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             $aliasInCondition = $adapter->quoteColumnAs($alias, null);
             $this->getSelect()->joinLeft(
                 array($alias => $table),
-                $aliasInCondition . '.link_id = main_table.link_id AND '
-                    . $aliasInCondition . '.product_link_attribute_id = ' . (int) $attribute['id'],
+                $aliasInCondition .
+                '.link_id = main_table.link_id AND ' .
+                $aliasInCondition .
+                '.product_link_attribute_id = ' .
+                (int)$attribute['id'],
                 array($attribute['code'] => 'value')
             );
         }

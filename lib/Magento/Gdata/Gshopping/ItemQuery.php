@@ -141,7 +141,7 @@ class ItemQuery extends \Zend_Gdata_Query
         $uri = $this->_defaultFeedUri;
         $itemId = $this->_getItemId();
 
-        return ($itemId !== null) ? "$uri/$itemId" : $uri . $this->getQueryString();
+        return $itemId !== null ? "{$uri}/{$itemId}" : $uri . $this->getQueryString();
     }
 
     /**
@@ -151,8 +151,8 @@ class ItemQuery extends \Zend_Gdata_Query
      */
     protected function _getItemId()
     {
-        return ($this->_targetCountry !== null && $this->_language !== null && $this->_id !== null)
-            ? "online:$this->_language:$this->_targetCountry:$this->_id"
-            : null;
+        return $this->_targetCountry !== null &&
+            $this->_language !== null &&
+            $this->_id !== null ? "online:{$this->_language}:{$this->_targetCountry}:{$this->_id}" : null;
     }
 }

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Attribute\Data;
 
 /**
  * Customer Address Postal/Zip Code Attribute Data Model
@@ -33,8 +33,6 @@
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Attribute\Data;
-
 class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
 {
     /**
@@ -52,25 +50,31 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
     protected $_directoryData = null;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Stdlib\String $stringHelper
      * @param \Magento\Directory\Helper\Data $directoryData
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Stdlib\String $stringHelper,
         \Magento\Directory\Helper\Data $directoryData
     ) {
         $this->_directoryData = $directoryData;
-        parent::__construct($locale, $logger, $stringHelper);
+        parent::__construct($localeDate, $logger, $localeResolver, $stringHelper);
     }
 
+    /**
+     * @param string $value
+     * @return true|string[]
+     */
     public function validateValue($value)
     {
-        $countryId      = $this->getExtractedData('country_id');
-        $optionalZip    = $this->_directoryData->getCountriesWithOptionalZip();
+        $countryId = $this->getExtractedData('country_id');
+        $optionalZip = $this->_directoryData->getCountriesWithOptionalZip();
         if (!in_array($countryId, $optionalZip)) {
             return parent::validateValue($value);
         }

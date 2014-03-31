@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Backend;
 
 /**
  * Backend model for merchant country. Default country used instead of empty value.
  */
-namespace Magento\Paypal\Model\System\Config\Backend;
-
 class MerchantCountry extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -39,22 +38,22 @@ class MerchantCountry extends \Magento\Core\Model\Config\Value
     protected $_coreData;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -64,14 +63,19 @@ class MerchantCountry extends \Magento\Core\Model\Config\Value
 
     /**
      * Substitute empty value with Default country.
+     *
+     * @return void
      */
     protected function _afterLoad()
     {
         $value = (string)$this->getValue();
         if (empty($value)) {
             if ($this->getWebsite()) {
-                $defaultCountry = $this->_storeManager->getWebsite($this->getWebsite())
-                    ->getConfig(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY);
+                $defaultCountry = $this->_storeManager->getWebsite(
+                    $this->getWebsite()
+                )->getConfig(
+                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+                );
             } else {
                 $defaultCountry = $this->_coreData->getDefaultCountry($this->getStore());
             }

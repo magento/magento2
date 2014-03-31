@@ -34,30 +34,21 @@ $installer->startSetup();
  * Report Event Types default data
  */
 $eventTypeData = array(
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,
-        'event_name'    => 'catalog_product_view'
-    ),
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND,
-        'event_name'    => 'sendfriend_product'
-    ),
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW, 'event_name' => 'catalog_product_view'),
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND, 'event_name' => 'sendfriend_product'),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE,
-        'event_name'    => 'catalog_product_compare_add_product'
+        'event_name' => 'catalog_product_compare_add_product'
     ),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_CART,
-        'event_name'    => 'checkout_cart_add_product'
+        'event_name' => 'checkout_cart_add_product'
     ),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_WISHLIST,
-        'event_name'    => 'wishlist_add_product'
+        'event_name' => 'wishlist_add_product'
     ),
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE,
-        'event_name'    => 'wishlist_share'
-    )
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE, 'event_name' => 'wishlist_share')
 );
 
 foreach ($eventTypeData as $row) {
@@ -75,7 +66,7 @@ $installer->endSetup();
 /** @var $cms \Magento\Cms\Model\Page */
 $cms = $installer->getPage()->load('home', 'identifier');
 
-$reportLayoutUpdate    = '<!--<referenceContainer name="content">
+$reportLayoutUpdate = '<!--<referenceContainer name="content">
         <block class="Magento\Catalog\Block\Product\NewProduct" name="home.catalog.product.new" alias="product_new" template="product/new.phtml" after="cms_page">
             <action method="addPriceBlockType">
                 <argument name="type" xsi:type="string">bundle</argument>

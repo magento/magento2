@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class Iterator implements \Iterator
@@ -69,6 +68,7 @@ class Iterator implements \Iterator
      *
      * @param array $elements
      * @param string $scope
+     * @return void
      */
     public function setElements(array $elements, $scope)
     {
@@ -110,6 +110,7 @@ class Iterator implements \Iterator
      * Initialize current flyweight
      *
      * @param array $element
+     * @return void
      */
     protected function _initFlyweight(array $element)
     {
@@ -119,7 +120,7 @@ class Iterator implements \Iterator
     /**
      * Return the key of the current element
      *
-     * @return mixed scalar on success, or null on failure.
+     * @return void
      */
     public function key()
     {
@@ -129,12 +130,12 @@ class Iterator implements \Iterator
     /**
      * Checks if current position is valid
      *
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
     public function valid()
     {
-        return (bool) current($this->_elements);
+        return (bool)current($this->_elements);
     }
 
     /**

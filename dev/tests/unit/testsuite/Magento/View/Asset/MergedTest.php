@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 class MergedTest extends \PHPUnit_Framework_TestCase
@@ -65,30 +64,45 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     {
         $this->_assetJsOne = $this->getMockForAbstractClass('Magento\View\Asset\MergeableInterface');
         $this->_assetJsOne->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
-        $this->_assetJsOne->expects($this->any())->method('getSourceFile')
-            ->will($this->returnValue('pub/lib/script_one.js'));
+        $this->_assetJsOne->expects(
+            $this->any()
+        )->method(
+            'getSourceFile'
+        )->will(
+            $this->returnValue('pub/lib/script_one.js')
+        );
 
         $this->_assetJsTwo = $this->getMockForAbstractClass('Magento\View\Asset\MergeableInterface');
         $this->_assetJsTwo->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
-        $this->_assetJsTwo->expects($this->any())->method('getSourceFile')
-            ->will($this->returnValue('pub/static/script_two.js'));
+        $this->_assetJsTwo->expects(
+            $this->any()
+        )->method(
+            'getSourceFile'
+        )->will(
+            $this->returnValue('pub/static/script_two.js')
+        );
 
         $this->_logger = $this->getMock('Magento\Logger', array('logException'), array(), '', false);
 
         $this->_mergeStrategy = $this->getMock('Magento\View\Asset\MergeStrategyInterface');
 
         $this->_objectManager = $this->getMockForAbstractClass(
-            'Magento\ObjectManager', array(), '', true, true, true, array('create', 'get')
+            'Magento\ObjectManager',
+            array(),
+            '',
+            true,
+            true,
+            true,
+            array('create', 'get')
         );
 
-        $this->_filesystem = $this->getMock(
-            'Magento\App\Filesystem', array(), array(), '', false);
-        $this->_objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($this->_filesystem));
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_objectManager->expects($this->any())->method('get')->will($this->returnValue($this->_filesystem));
 
         $this->_object = new \Magento\View\Asset\Merged(
-            $this->_objectManager, $this->_logger, $this->_mergeStrategy,
+            $this->_objectManager,
+            $this->_logger,
+            $this->_mergeStrategy,
             array($this->_assetJsOne, $this->_assetJsTwo)
         );
     }
@@ -100,7 +114,10 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNothingToMerge()
     {
         $this->_object = new \Magento\View\Asset\Merged(
-            $this->_objectManager, $this->_logger, $this->_mergeStrategy, array()
+            $this->_objectManager,
+            $this->_logger,
+            $this->_mergeStrategy,
+            array()
         );
     }
 
@@ -112,7 +129,9 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     {
         $assetUrl = new \Magento\View\Asset\Remote('http://example.com/style.css', 'css');
         $this->_object = new \Magento\View\Asset\Merged(
-            $this->_objectManager, $this->_logger, $this->_mergeStrategy,
+            $this->_objectManager,
+            $this->_logger,
+            $this->_mergeStrategy,
             array($this->_assetJsOne, $assetUrl)
         );
     }
@@ -128,7 +147,9 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $assetCss->expects($this->any())->method('getSourceFile')->will($this->returnValue('style.css'));
 
         $this->_object = new \Magento\View\Asset\Merged(
-            $this->_objectManager, $this->_logger, $this->_mergeStrategy,
+            $this->_objectManager,
+            $this->_logger,
+            $this->_mergeStrategy,
             array($this->_assetJsOne, $assetCss)
         );
     }
@@ -145,41 +166,71 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'pub/static/script_two.js' => 'pub/static/script_two.js'
         );
 
-        $this->_filesystem->expects($this->at(0))
-            ->method('getPath')
-            ->with($this->equalTo(\Magento\App\Filesystem::PUB_LIB_DIR))
-            ->will($this->returnValue('pub/lib'));
-        $this->_filesystem->expects($this->at(1))
-            ->method('getPath')
-            ->with($this->equalTo(\Magento\App\Filesystem::STATIC_VIEW_DIR))
-            ->will($this->returnValue('pub/static'));
-        $readDirectoryMock = $this->getMockBuilder('\Magento\Filesystem\Directory\Read')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_filesystem->expects(
+            $this->at(0)
+        )->method(
+            'getPath'
+        )->with(
+            $this->equalTo(\Magento\App\Filesystem::PUB_LIB_DIR)
+        )->will(
+            $this->returnValue('pub/lib')
+        );
+        $this->_filesystem->expects(
+            $this->at(1)
+        )->method(
+            'getPath'
+        )->with(
+            $this->equalTo(\Magento\App\Filesystem::STATIC_VIEW_DIR)
+        )->will(
+            $this->returnValue('pub/static')
+        );
+        $readDirectoryMock = $this->getMockBuilder(
+            '\Magento\Filesystem\Directory\Read'
+        )->disableOriginalConstructor()->getMock();
         $merged = $this->_object;
-        $readDirectoryMock->expects($this->once())
-            ->method('getAbsolutePath')
-            ->with($this->equalTo($merged::PUBLIC_MERGE_DIR))
-            ->will($this->returnValue('pub/cache/_merged'));
+        $readDirectoryMock->expects(
+            $this->once()
+        )->method(
+            'getAbsolutePath'
+        )->with(
+            $this->equalTo($merged::PUBLIC_MERGE_DIR)
+        )->will(
+            $this->returnValue('pub/cache/_merged')
+        );
 
-        $this->_filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with($this->equalTo(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR))
-            ->will($this->returnValue($readDirectoryMock));
+        $this->_filesystem->expects(
+            $this->any()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            $this->equalTo(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
+        )->will(
+            $this->returnValue($readDirectoryMock)
+        );
 
-        $this->_mergeStrategy
-            ->expects($this->once())
-            ->method('mergeFiles')
-            ->with($publicFiles, $mergedFile, 'js')
-            ->will($this->returnValue(null));
+        $this->_mergeStrategy->expects(
+            $this->once()
+        )->method(
+            'mergeFiles'
+        )->with(
+            $publicFiles,
+            $mergedFile,
+            'js'
+        )->will(
+            $this->returnValue(null)
+        );
 
         $mergedAsset = $this->getMockForAbstractClass('Magento\View\Asset\MergeableInterface');
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\View\Asset\PublicFile', array('file' => $mergedFile, 'contentType' => 'js'))
-            ->will($this->returnValue($mergedAsset))
-        ;
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\View\Asset\PublicFile',
+            array('file' => $mergedFile, 'contentType' => 'js')
+        )->will(
+            $this->returnValue($mergedAsset)
+        );
 
         $expectedResult = array($mergedAsset);
 
@@ -192,11 +243,12 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $mergeError = new \Exception('File not found');
         $assetBroken = $this->getMockForAbstractClass('Magento\View\Asset\MergeableInterface');
         $assetBroken->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
-        $assetBroken->expects($this->any())->method('getSourceFile')
-            ->will($this->throwException($mergeError));
+        $assetBroken->expects($this->any())->method('getSourceFile')->will($this->throwException($mergeError));
 
         $this->_object = new \Magento\View\Asset\Merged(
-            $this->_objectManager, $this->_logger, $this->_mergeStrategy,
+            $this->_objectManager,
+            $this->_logger,
+            $this->_mergeStrategy,
             array($this->_assetJsOne, $this->_assetJsTwo, $assetBroken)
         );
 

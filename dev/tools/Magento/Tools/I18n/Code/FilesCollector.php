@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code;
 
 /**
@@ -59,8 +58,10 @@ class FilesCollector
     protected function _getIterator($path, $fileMask = false)
     {
         try {
-            $directoryIterator = new \RecursiveDirectoryIterator($path,
-                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
+            $directoryIterator = new \RecursiveDirectoryIterator(
+                $path,
+                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS
+            );
             $iterator = new \RecursiveIteratorIterator($directoryIterator);
         } catch (\UnexpectedValueException $valueException) {
             throw new \InvalidArgumentException(sprintf('Cannot read directory for parse phrase: "%s".', $path));

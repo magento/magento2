@@ -35,4 +35,4 @@ class FileTransferFactory
     {
         return new \Zend_File_Transfer_Adapter_Http($options);
     }
-} 
+}

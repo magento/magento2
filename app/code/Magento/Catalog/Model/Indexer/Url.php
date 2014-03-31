@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Indexer;
 
 /**
  * Catalog url rewrites index model.
@@ -33,8 +34,6 @@
  *  - Store group save (changed root category or group website) - require reindex all data
  *  - Seo config settings change - require reindex all data
  */
-namespace Magento\Catalog\Model\Indexer;
-
 class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
 {
     /**
@@ -49,27 +48,22 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * @var array
      */
     protected $_matchedEntities = array(
-        \Magento\Catalog\Model\Product::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE
-        ),
-        \Magento\Catalog\Model\Category::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE
-        ),
-        \Magento\Core\Model\Store::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE
-        ),
-        \Magento\Core\Model\Store\Group::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE
-        ),
-        \Magento\App\Config\ValueInterface::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE
-        ),
+        \Magento\Catalog\Model\Product::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Catalog\Model\Category::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Core\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Core\Model\Store\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\App\Config\ValueInterface::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
     );
 
+    /**
+     * Related Config Settings
+     *
+     * @var array
+     */
     protected $_relatedConfigSettings = array(
         \Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_URL_SUFFIX,
         \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_SUFFIX,
-        \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY,
+        \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY
     );
 
     /**
@@ -87,24 +81,26 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_catalogResourceUrl;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Url $catalogResourceUrl
+     * Constructor
+     *
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory
      * @param \Magento\Catalog\Model\Url $catalogUrl
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Catalog\Model\Resource\Url $catalogResourceUrl,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory,
         \Magento\Catalog\Model\Url $catalogUrl,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_catalogResourceUrl = $catalogResourceUrl;
+        $this->_catalogResourceUrl = $catalogResourceUrlFactory->create();
         $this->_catalogUrl = $catalogUrl;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -138,7 +134,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      */
     public function matchEvent(\Magento\Index\Model\Event $event)
     {
-        $data       = $event->getNewData();
+        $data = $event->getNewData();
         if (isset($data[self::EVENT_MATCH_RESULT_KEY])) {
             return $data[self::EVENT_MATCH_RESULT_KEY];
         }
@@ -153,8 +149,11 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
             }
         } else if ($entity == \Magento\Core\Model\Store\Group::ENTITY) {
             $storeGroup = $event->getDataObject();
-            $hasDataChanges = $storeGroup && ($storeGroup->dataHasChangedFor('root_category_id')
-                || $storeGroup->dataHasChangedFor('website_id'));
+            $hasDataChanges = $storeGroup && ($storeGroup->dataHasChangedFor(
+                'root_category_id'
+            ) || $storeGroup->dataHasChangedFor(
+                'website_id'
+            ));
             if ($storeGroup && !$storeGroup->isObjectNew() && $hasDataChanges) {
                 $result = true;
             } else {
@@ -180,6 +179,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return $this
      */
     protected function _registerEvent(\Magento\Index\Model\Event $event)
     {
@@ -187,7 +187,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
         $entity = $event->getEntity();
         switch ($entity) {
             case \Magento\Catalog\Model\Product::ENTITY:
-               $this->_registerProductEvent($event);
+                $this->_registerProductEvent($event);
                 break;
 
             case \Magento\Catalog\Model\Category::ENTITY:
@@ -208,13 +208,14 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register event data during product save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerProductEvent(\Magento\Index\Model\Event $event)
     {
         $product = $event->getDataObject();
-        $dataChange = $product->dataHasChangedFor('url_key')
-            || $product->getIsChangedCategories()
-            || $product->getIsChangedWebsites();
+        $dataChange = $product->dataHasChangedFor(
+            'url_key'
+        ) || $product->getIsChangedCategories() || $product->getIsChangedWebsites();
 
         if (!$product->getExcludeUrlRewrite() && $dataChange) {
             $event->addNewData('rewrite_product_ids', array($product->getId()));
@@ -225,6 +226,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register event data during category save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCategoryEvent(\Magento\Index\Model\Event $event)
     {
@@ -246,6 +248,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _processEvent(\Magento\Index\Model\Event $event)
     {
@@ -260,14 +263,16 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
             $this->_catalogUrl->setShouldSaveRewritesHistory($dataObject->getData('save_rewrites_history'));
         }
 
-        if(isset($data['rewrite_product_ids'])) {
-            $this->_catalogUrl->clearStoreInvalidRewrites(); // Maybe some products were moved or removed from website
+        if (isset($data['rewrite_product_ids'])) {
+            $this->_catalogUrl->clearStoreInvalidRewrites();
+            // Maybe some products were moved or removed from website
             foreach ($data['rewrite_product_ids'] as $productId) {
                 $this->_catalogUrl->refreshProductRewrite($productId);
             }
         }
         if (isset($data['rewrite_category_ids'])) {
-            $this->_catalogUrl->clearStoreInvalidRewrites(); // Maybe some categories were moved
+            $this->_catalogUrl->clearStoreInvalidRewrites();
+            // Maybe some categories were moved
             foreach ($data['rewrite_category_ids'] as $categoryId) {
                 $this->_catalogUrl->refreshCategoryRewrite($categoryId);
             }
@@ -276,6 +281,9 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
 
     /**
      * Rebuild all index data
+     *
+     * @return void
+     * @throws \Exception
      */
     public function reindexAll()
     {

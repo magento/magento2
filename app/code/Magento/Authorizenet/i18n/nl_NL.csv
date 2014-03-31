@@ -59,7 +59,7 @@
 "Payment canceling error.","Probleem met het annuleren van de betaling."
 "Payment capturing error.","Fout in het ophalen van de betaling."
 "Payment error. Order was not found.","Betalingsfout. Bestelling is niet gevonden."
-"Payment error. Paid amount doesn\'t match the order amount.","Betalingsfout. Betaalde bedrag is niet hetzelfde als bedrag van bestelling."
+"Payment error. Paid amount doesn't match the order amount.","Betalingsfout. Betaalde bedrag is niet hetzelfde als bedrag van bestelling."
 "Payment from Applicable Countries","Betaling vanuit toegestane landen"
 "Payment from Applicable Countries","Betaling van Geëigende Landen"
 "Payment from Specific Countries","Betaling van Specifieke Landen"

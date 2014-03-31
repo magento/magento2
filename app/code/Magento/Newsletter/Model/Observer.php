@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Model;
 
 use Magento\Cron\Model\Schedule;
@@ -72,7 +71,7 @@ class Observer
     public function subscribeCustomer($observer)
     {
         $customer = $observer->getEvent()->getCustomer();
-        if (($customer instanceof \Magento\Customer\Model\Customer)) {
+        if ($customer instanceof \Magento\Customer\Model\Customer) {
             $this->_subscriberFactory->create()->subscribeCustomer($customer);
         }
         return $this;
@@ -89,7 +88,7 @@ class Observer
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->_subscriberFactory->create();
         $subscriber->loadByEmail($observer->getEvent()->getCustomer()->getEmail());
-        if($subscriber->getId()) {
+        if ($subscriber->getId()) {
             $subscriber->delete();
         }
         return $this;
@@ -103,16 +102,13 @@ class Observer
      */
     public function scheduledSend($schedule)
     {
-        $countOfQueue  = 3;
+        $countOfQueue = 3;
         $countOfSubscritions = 20;
 
         /** @var \Magento\Newsletter\Model\Resource\Queue\Collection $collection */
         $collection = $this->_queueCollectionFactory->create();
-        $collection->setPageSize($countOfQueue)
-            ->setCurPage(1)
-            ->addOnlyForSendingFilter()
-            ->load();
+        $collection->setPageSize($countOfQueue)->setCurPage(1)->addOnlyForSendingFilter()->load();
 
-         $collection->walk('sendPerSubscriber', array($countOfSubscritions));
+        $collection->walk('sendPerSubscriber', array($countOfSubscritions));
     }
 }

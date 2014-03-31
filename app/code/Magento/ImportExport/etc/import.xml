@@ -23,12 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../ImportExport/etc/import.xsd">
     <entity name="catalog_product" label="Products" model="Magento\ImportExport\Model\Import\Entity\Product" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Basic" />
     <entity name="customer_composite" label="Customers" model="Magento\ImportExport\Model\Import\Entity\CustomerComposite" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Basic" />
     <entity name="customer" label="Customers Main File" model="Magento\ImportExport\Model\Import\Entity\Eav\Customer" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Custom" />
     <entity name="customer_address" label="Customer Addresses" model="Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address" behaviorModel="Magento\ImportExport\Model\Source\Import\Behavior\Custom" />
     <productType name="simple" model="Magento\ImportExport\Model\Import\Entity\Product\Type\Simple" />
-    <productType name="configurable" model="Magento\ImportExport\Model\Import\Entity\Product\Type\Configurable" />
     <productType name="virtual" model="Magento\ImportExport\Model\Import\Entity\Product\Type\Simple" />
 </config>

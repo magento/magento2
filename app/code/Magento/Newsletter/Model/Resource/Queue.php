@@ -23,7 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Model\Resource;
 
+use Magento\Newsletter\Model\Queue as ModelQueue;
+use Magento\Model\AbstractModel;
 
 /**
  * Newsletter queue resource model
@@ -32,12 +35,7 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource;
-
-use Magento\Newsletter\Model\Queue as ModelQueue;
-use Magento\Core\Model\AbstractModel;
-
-class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Queue extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Subscriber collection
@@ -63,6 +61,7 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -74,24 +73,32 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param ModelQueue $queue
      * @param array $subscriberIds
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Model\Exception
      */
     public function addSubscribersToQueue(ModelQueue $queue, array $subscriberIds)
     {
-        if (count($subscriberIds)==0) {
-            throw new \Magento\Core\Exception(__('There are no subscribers selected.'));
+        if (count($subscriberIds) == 0) {
+            throw new \Magento\Model\Exception(__('There are no subscribers selected.'));
         }
 
-        if (!$queue->getId() && $queue->getQueueStatus()!=Magento_Newsletter_Model_Queue::STATUS_NEVER) {
-            throw new \Magento\Core\Exception(__('You selected an invalid queue.'));
+        if (!$queue->getId() && $queue->getQueueStatus() != Magento_Newsletter_Model_Queue::STATUS_NEVER) {
+            throw new \Magento\Model\Exception(__('You selected an invalid queue.'));
         }
 
         $adapter = $this->_getWriteAdapter();
 
         $select = $adapter->select();
-        $select->from($this->getTable('newsletter_queue_link'), 'subscriber_id')
-            ->where('queue_id = ?', $queue->getId())
-            ->where('subscriber_id in (?)', $subscriberIds);
+        $select->from(
+            $this->getTable('newsletter_queue_link'),
+            'subscriber_id'
+        )->where(
+            'queue_id = ?',
+            $queue->getId()
+        )->where(
+            'subscriber_id in (?)',
+            $subscriberIds
+        );
 
         $usedIds = $adapter->fetchCol($select);
         $adapter->beginTransaction();
@@ -106,8 +113,7 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $adapter->insert($this->getTable('newsletter_queue_link'), $data);
             }
             $adapter->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $adapter->rollBack();
         }
     }
@@ -126,15 +132,11 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
             $adapter->beginTransaction();
             $adapter->delete(
                 $this->getTable('newsletter_queue_link'),
-                array(
-                    'queue_id = ?' => $queue->getId(),
-                    'letter_sent_at IS NULL'
-                )
+                array('queue_id = ?' => $queue->getId(), 'letter_sent_at IS NULL')
             );
 
             $adapter->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $adapter->rollBack();
             throw $e;
         }
@@ -149,10 +151,7 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function setStores(ModelQueue $queue)
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->delete(
-            $this->getTable('newsletter_queue_store_link'),
-            array('queue_id = ?' => $queue->getId())
-        );
+        $adapter->delete($this->getTable('newsletter_queue_store_link'), array('queue_id = ?' => $queue->getId()));
 
         $stores = $queue->getStores();
         if (!is_array($stores)) {
@@ -171,9 +170,10 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $subscribers = $this->_subscriberCollection->addFieldToFilter('store_id', array('in'=>$stores))
-            ->useOnlySubscribed()
-            ->load();
+        $subscribers = $this->_subscriberCollection->addFieldToFilter(
+            'store_id',
+            array('in' => $stores)
+        )->useOnlySubscribed()->load();
 
         $subscriberIds = array();
 
@@ -197,10 +197,14 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getStores(ModelQueue $queue)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from($this->getTable('newsletter_queue_store_link'), 'store_id')
-            ->where('queue_id = :queue_id');
+        $select = $adapter->select()->from(
+            $this->getTable('newsletter_queue_store_link'),
+            'store_id'
+        )->where(
+            'queue_id = :queue_id'
+        );
 
-        if (!($result = $adapter->fetchCol($select, array('queue_id'=>$queue->getId())))) {
+        if (!($result = $adapter->fetchCol($select, array('queue_id' => $queue->getId())))) {
             $result = array();
         }
 

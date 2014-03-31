@@ -21,32 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview\View\State;
 
-class CollectionFactory
+class CollectionFactory extends \Magento\Mview\View\AbstractFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * Instance name
      */
-    protected $objectManager;
-
-    /**
-     * @param \Magento\ObjectManager $objectManager
-     */
-    public function __construct(\Magento\ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Create class instance with specified parameters
-     *
-     * @param array $data
-     * @return CollectionInterface
-     */
-    public function create(array $data = array())
-    {
-        return $this->objectManager->create('Magento\Mview\View\State\CollectionInterface', $data);
-    }
+    const INSTANCE_NAME = 'Magento\Mview\View\State\CollectionInterface';
 }

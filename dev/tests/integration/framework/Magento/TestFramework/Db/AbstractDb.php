@@ -86,7 +86,7 @@ abstract class AbstractDb
     public function __construct($host, $user, $password, $schema, $varPath, \Magento\Shell $shell)
     {
         if (!is_dir($varPath) || !is_writable($varPath)) {
-            throw new \Magento\Exception("The specified '$varPath' is not a directory or not writable.");
+            throw new \Magento\Exception("The specified '{$varPath}' is not a directory or not writable.");
         }
         $this->_host = $host;
         $this->_user = $user;
@@ -100,6 +100,30 @@ abstract class AbstractDb
      * Remove all DB objects
      */
     abstract public function cleanup();
+
+    /**
+     * Get filename for setup db dump
+     *
+     * @return string
+     */
+    abstract protected function getSetupDbDumpFilename();
+
+    /**
+     * Is dump esxists
+     *
+     * @return bool
+     */
+    abstract public function isDbDumpExists();
+
+    /**
+     * Store setup db dump
+     */
+    abstract public function storeDbDump();
+
+    /**
+     * Restore db from setup db dump
+     */
+    abstract public function restoreFromDbDump();
 
     /**
      * Create file with sql script content.

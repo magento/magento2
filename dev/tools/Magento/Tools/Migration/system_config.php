@@ -30,15 +30,18 @@ require __DIR__ . '/../../../app/autoload.php';
 $defaultReportFile = 'report.log';
 
 try {
-    $options = new Zend_Console_Getopt(array(
-        'mode|w' => "Application mode.  Preview mode is default. If set to 'write' - file system is updated",
-        'output|f-w' => "Report output type. Report is flushed to console by default."
-            . "If set to 'file', report is written to file /log/report.log",
-    ));
+    $options = new Zend_Console_Getopt(
+        array(
+            'mode|w' => "Application mode.  Preview mode is default. If set to 'write' - file system is updated",
+            'output|f-w' => "Report output type. Report is flushed to console by default." .
+            "If set to 'file', report is written to file /log/report.log"
+        )
+    );
 
     $writerFactory = new \Magento\Tools\Migration\System\Writer\Factory();
 
-    $fileManager = new \Magento\Tools\Migration\System\FileManager(new \Magento\Tools\Migration\System\FileReader(),
+    $fileManager = new \Magento\Tools\Migration\System\FileManager(
+        new \Magento\Tools\Migration\System\FileReader(),
         $writerFactory->getWriter($options->getOption('mode'))
     );
 
@@ -46,7 +49,7 @@ try {
     $logger = $loggerFactory->getLogger($options->getOption('output'), $defaultReportFile, $fileManager);
 
     $generator = new \Magento\Tools\Migration\System\Configuration\Generator(
-        new  \Magento\Tools\Migration\System\Configuration\Formatter(),
+        new \Magento\Tools\Migration\System\Configuration\Formatter(),
         $fileManager,
         $logger
     );

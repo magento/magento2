@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Widget\Grid;
 
 class SubTotalsTest extends \PHPUnit_Framework_TestCase
@@ -47,34 +46,41 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_parserMock = $this->getMock(
-            'Magento\Backend\Model\Widget\Grid\Parser', array(), array(), '', false, false, false
+            'Magento\Backend\Model\Widget\Grid\Parser',
+            array(),
+            array(),
+            '',
+            false,
+            false,
+            false
         );
 
         $this->_factoryMock = $this->getMock(
-            'Magento\Object\Factory', array('create'), array(), '', false, false, false
+            'Magento\Object\Factory',
+            array('create'),
+            array(),
+            '',
+            false,
+            false,
+            false
         );
-        $this->_factoryMock->expects($this->any())
-            ->method('create')
-            ->with(array('sub_test1' => 3, 'sub_test2' => 2))
-            ->will(
-                $this->returnValue(
-                    new \Magento\Object(array('sub_test1' => 3, 'sub_test2' => 2))
-                )
-            );
+        $this->_factoryMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->with(
+            array('sub_test1' => 3, 'sub_test2' => 2)
+        )->will(
+            $this->returnValue(new \Magento\Object(array('sub_test1' => 3, 'sub_test2' => 2)))
+        );
 
-        $arguments = array(
-            'factory' => $this->_factoryMock,
-            'parser' =>  $this->_parserMock
-        );
+        $arguments = array('factory' => $this->_factoryMock, 'parser' => $this->_parserMock);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Magento\Backend\Model\Widget\Grid\SubTotals', $arguments);
 
         // setup columns
-        $columns = array(
-            'sub_test1' => 'sum',
-            'sub_test2' => 'avg',
-        );
+        $columns = array('sub_test1' => 'sum', 'sub_test2' => 'avg');
         foreach ($columns as $index => $expression) {
             $this->_model->setColumn($index, $expression);
         }
@@ -88,9 +94,7 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testCountTotals()
     {
-        $expected = new \Magento\Object(
-            array('sub_test1' => 3, 'sub_test2' => 2)
-        );
+        $expected = new \Magento\Object(array('sub_test1' => 3, 'sub_test2' => 2));
         $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
     }
 

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page\Widget;
 
 /**
  * CMS page chooser for Wysiwyg CMS widget
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page\Widget;
-
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -82,6 +81,8 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Block construction, prepare grid params
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -102,12 +103,19 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('cms/page_widget/chooser', array('uniq_id' => $uniqId));
 
-        $chooser = $this->getLayout()->createBlock('Magento\Widget\Block\Adminhtml\Widget\Chooser')
-            ->setElement($element)
-            ->setConfig($this->getConfig())
-            ->setFieldsetId($this->getFieldsetId())
-            ->setSourceUrl($sourceUrl)
-            ->setUniqId($uniqId);
+        $chooser = $this->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+        )->setElement(
+            $element
+        )->setConfig(
+            $this->getConfig()
+        )->setFieldsetId(
+            $this->getFieldsetId()
+        )->setSourceUrl(
+            $sourceUrl
+        )->setUniqId(
+            $uniqId
+        );
 
 
         if ($element->getValue()) {
@@ -134,9 +142,15 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
                 var trElement = Event.findElement(event, "tr");
                 var pageTitle = trElement.down("td").next().innerHTML;
                 var pageId = trElement.down("td").innerHTML.replace(/^\s+|\s+$/g,"");
-                '.$chooserJsObject.'.setElementValue(pageId);
-                '.$chooserJsObject.'.setElementLabel(pageTitle);
-                '.$chooserJsObject.'.close();
+                ' .
+            $chooserJsObject .
+            '.setElementValue(pageId);
+                ' .
+            $chooserJsObject .
+            '.setElementLabel(pageTitle);
+                ' .
+            $chooserJsObject .
+            '.close();
             }
         ';
         return $js;
@@ -160,52 +174,72 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare columns for pages grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('chooser_id', array(
-            'header'    => __('ID'),
-            'index'     => 'page_id',
-            'header_css_class'  => 'col-id',
-            'column_css_class'  => 'col-id'
-        ));
+        $this->addColumn(
+            'chooser_id',
+            array(
+                'header' => __('ID'),
+                'index' => 'page_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
-        $this->addColumn('chooser_title', array(
-            'header'    => __('Title'),
-            'index'     => 'title',
-            'header_css_class'  => 'col-title',
-            'column_css_class'  => 'col-title'
-        ));
+        $this->addColumn(
+            'chooser_title',
+            array(
+                'header' => __('Title'),
+                'index' => 'title',
+                'header_css_class' => 'col-title',
+                'column_css_class' => 'col-title'
+            )
+        );
 
-        $this->addColumn('chooser_identifier', array(
-            'header'    => __('URL Key'),
-            'index'     => 'identifier',
-            'header_css_class'  => 'col-url',
-            'column_css_class'  => 'col-url'
-        ));
+        $this->addColumn(
+            'chooser_identifier',
+            array(
+                'header' => __('URL Key'),
+                'index' => 'identifier',
+                'header_css_class' => 'col-url',
+                'column_css_class' => 'col-url'
+            )
+        );
 
-        $this->addColumn('chooser_root_template', array(
-            'header'    => __('Layout'),
-            'index'     => 'root_template',
-            'type'      => 'options',
-            'options'   => $this->_pageLayout->getOptions(),
-            'header_css_class'  => 'col-layout',
-            'column_css_class'  => 'col-layout'
-        ));
+        $this->addColumn(
+            'chooser_root_template',
+            array(
+                'header' => __('Layout'),
+                'index' => 'root_template',
+                'type' => 'options',
+                'options' => $this->_pageLayout->getOptions(),
+                'header_css_class' => 'col-layout',
+                'column_css_class' => 'col-layout'
+            )
+        );
 
-        $this->addColumn('chooser_is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'type'      => 'options',
-            'options'   => $this->_cmsPage->getAvailableStatuses(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'chooser_is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => $this->_cmsPage->getAvailableStatuses(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
         return parent::_prepareColumns();
     }
 
+    /**
+     * Get grid url
+     *
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('cms/page_widget/chooser', array('_current' => true));

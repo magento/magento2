@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Adminhtml\Edit" name="customer_edit"/>
     </referenceContainer>
@@ -32,11 +32,6 @@
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="varien-configurable-js">
-            <arguments>
-                <argument name="file" xsi:type="string">varien/configurable.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-customer-edit-tab-js-addresses.js">
@@ -60,14 +55,4 @@
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" template="Magento_Customer::edit/js.phtml" name="customer.edit.js" as="customer_edit_js"/>
     </referenceContainer>
-    <referenceBlock name="customer_edit_tabs">
-        <action method="addTab">
-            <argument name="name" xsi:type="string">customer_edit_tab_agreements</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Agreement</argument>
-        </action>
-        <action method="addTab">
-            <argument name="name" xsi:type="string">customer_edit_tab_recurring_profile</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Recurring\Profile</argument>
-        </action>
-    </referenceBlock>
 </layout>

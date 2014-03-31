@@ -23,19 +23,16 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml;
 
 /**
  * Adminhtml cms blocks content block
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml;
-
 class Block extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_blockGroup = 'Magento_Cms';
@@ -44,5 +41,4 @@ class Block extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Add New Block');
         parent::_construct();
     }
-
 }

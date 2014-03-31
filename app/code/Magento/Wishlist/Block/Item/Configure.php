@@ -46,20 +46,20 @@ class Configure extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Helper\Data $wishlistData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Wishlist\Helper\Data $wishlistData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_wishlistData = $wishlistData;
@@ -100,7 +100,7 @@ class Configure extends \Magento\View\Element\Template
     /**
      * Configure product view blocks
      *
-     * @return \Magento\Wishlist\Block\Item\Configure
+     * @return $this
      */
     protected function _prepareLayout()
     {

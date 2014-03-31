@@ -46,7 +46,7 @@
         <span><?php echo __('Print Shipment') ?></span
     </a>
     <a href="#"
-       data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>',windowName:'trackshipment',width:800,height:600,top:0,left:0,resizable:1,scrollbars:1}}"
+       data-mage-init='{"popupWindow": {"windowURL":"<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'
        title="<?php echo __('Track this shipment') ?>"
        class="action track">
         <span><?php echo __('Track this shipment') ?></span>
@@ -67,7 +67,7 @@
                     <?php echo $this->escapeHtml($track->getNumber()) ?>
                 <?php else: ?>
                     <a href="#"
-                       data-mage-init="{popupWindow: {windowURL:'<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>',windowName:'trackorder',width:800,height:600,left:0,top:0,resizable:1,scrollbars:1}}"
+                       data-mage-init='{"popupWindow": {"windowURL":"<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
                        class="action track">
                         <span><?php echo $this->escapeHtml($track->getNumber()) ?></span>
                     </a>
@@ -83,6 +83,7 @@
 <div class="order subtitle caption"><strong><?php echo __('Items Shipped') ?></strong></div>
 <div class="wrapper table order items shipment">
     <table class="data table order items shipment" id="my-shipment-table-<?php echo $_shipment->getId(); ?>">
+        <caption class="table caption"><?php echo __('Items Shipped') ?></caption>
         <thead>
             <tr>
                 <th class="col name"><?php echo __('Product Name') ?></th>

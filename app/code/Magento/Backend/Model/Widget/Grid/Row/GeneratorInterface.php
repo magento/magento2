@@ -27,6 +27,9 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 
 interface GeneratorInterface
 {
+    /**
+     * @param \Magento\Object $item
+     * @return string
+     */
     public function getUrl($item);
-
 }

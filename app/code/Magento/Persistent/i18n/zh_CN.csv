@@ -57,9 +57,6 @@ State/Province,州/省
 Submit,提交
 "To check out, please log in using your email address.",为了结账，请使用您的邮件地址登录。
 "VAT Number","VAT 编号"
-"We cannot load the configuration from file %1.",无法从文件%1加载配置。
-"Welcome, %1!",欢迎，%1！
-"What's this?",这是什么？
-"With your own account, you can check out faster, store multiple shipping addesses, see your shopping activity and more.",用自己的账号便于更快结账、使用店铺多货运地址、查看购买活动等更多。
-"Your shopping cart has been updated with new prices.",您的购物车已经更新了价格。
-"Zip/Postal Code",邮政编码
+"Welcome, %s!","欢迎，%s！"
+"What's this?","这是什么？"
+"Zip/Postal Code","邮政编码"

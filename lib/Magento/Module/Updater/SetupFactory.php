@@ -24,8 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Module\Updater;
-use Magento\Module\Updater\SetupInterface;
-use \Magento\ObjectManager;
+
+use Magento\ObjectManager;
 
 class SetupFactory
 {
@@ -59,17 +59,17 @@ class SetupFactory
      */
     public function create($resourceName, $moduleName)
     {
-        $className = isset($this->_resourceTypes[$resourceName])
-            ? $this->_resourceTypes[$resourceName]
-            : 'Magento\Module\Updater\SetupInterface';
+        $className = isset(
+            $this->_resourceTypes[$resourceName]
+        ) ? $this->_resourceTypes[$resourceName] : 'Magento\Module\Updater\SetupInterface';
 
-        if (false == (is_subclass_of($className, self::INSTANCE_TYPE)) && $className !== self::INSTANCE_TYPE) {
+        if (false == is_subclass_of($className, self::INSTANCE_TYPE) && $className !== self::INSTANCE_TYPE) {
             throw new \LogicException($className . ' is not a \Magento\Module\Updater\SetupInterface');
         }
 
-        return $this->_objectManager->create($className, array(
-            'resourceName' => $resourceName,
-            'moduleName' => $moduleName,
-        ));
+        return $this->_objectManager->create(
+            $className,
+            array('resourceName' => $resourceName, 'moduleName' => $moduleName)
+        );
     }
 }

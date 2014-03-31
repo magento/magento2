@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order;
 
 /**
  * Sales order history block
  */
-namespace Magento\Sales\Block\Order;
-
 class Recent extends \Magento\View\Element\Template
 {
     /**
@@ -67,20 +66,40 @@ class Recent extends \Magento\View\Element\Template
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
 
         //TODO: add full name logic
-        $orders = $this->_orderCollectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->joinAttribute('shipping_firstname', 'order_address/firstname', 'shipping_address_id', null, 'left')
-            ->joinAttribute('shipping_lastname', 'order_address/lastname', 'shipping_address_id', null, 'left')
-            ->addAttributeToFilter('customer_id', $this->_customerSession->getCustomer()->getId())
-            ->addAttributeToFilter('state', array('in' => $this->_orderConfig->getVisibleOnFrontStates()))
-            ->addAttributeToSort('created_at', 'desc')
-            ->setPageSize('5')
-            ->load();
+        $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
+            '*'
+        )->joinAttribute(
+            'shipping_firstname',
+            'order_address/firstname',
+            'shipping_address_id',
+            null,
+            'left'
+        )->joinAttribute(
+            'shipping_lastname',
+            'order_address/lastname',
+            'shipping_address_id',
+            null,
+            'left'
+        )->addAttributeToFilter(
+            'customer_id',
+            $this->_customerSession->getCustomer()->getId()
+        )->addAttributeToFilter(
+            'state',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+        )->addAttributeToSort(
+            'created_at',
+            'desc'
+        )->setPageSize(
+            '5'
+        )->load();
 
         $this->setOrders($orders);
     }

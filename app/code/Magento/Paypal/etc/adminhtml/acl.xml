@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Acl/etc/acl.xsd">
     <acl>
         <resources>
             <resource id="Magento_Adminhtml::admin">
@@ -41,6 +41,17 @@
                         <resource id="Magento_Paypal::paypal_settlement_reports" title="PayPal Settlement" sortOrder="70">
                             <resource id="Magento_Paypal::paypal_settlement_reports_view" title="View" sortOrder="10" />
                             <resource id="Magento_Paypal::fetch" title="Fetch" sortOrder="20" />
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Sales::sales">
+                    <resource id="Magento_Sales::sales_operation">
+                        <resource id="Magento_Paypal::billing_agreement"  title="Billing Agreements" sortOrder="60">
+                            <resource id="Magento_Paypal::billing_agreement_actions" title="Actions" sortOrder="10">
+                                <resource id="Magento_Paypal::billing_agreement_actions_view" title="View" sortOrder="5" />
+                                <resource id="Magento_Paypal::actions_manage" title="Manage" sortOrder="10" />
+                                <resource id="Magento_Paypal::use" title="Place Order Using Billing Agreements" sortOrder="15" />
+                            </resource>
                         </resource>
                     </resource>
                 </resource>

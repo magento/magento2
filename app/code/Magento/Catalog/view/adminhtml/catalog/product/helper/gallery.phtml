@@ -28,7 +28,7 @@ $elementName = $this->getElement()->getName() . '[images]';
 ?>
 <div id="<?php echo $this->getHtmlId() ?>"
      class='gallery'
-     data-mage-init="{'productGallery':{template:'#<?php echo $this->getHtmlId() ?>-template'}}"
+     data-mage-init='{"productGallery":{"template":"#<?php echo $this->getHtmlId() ?>-template"}}'
      data-images="<?php echo $this->escapeHtml($this->getImagesJson()) ?>"
      data-types="<?php echo $this->escapeHtml(
          $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getImageTypes())

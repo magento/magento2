@@ -54,55 +54,48 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModuleName($path, $expectedResult)
     {
-        $this->_moduleList
-            ->expects($this->once())
-            ->method('getModules')
-            ->will($this->returnValue(array(
-                'Fixture_ModuleOne' => array('name' => 'Fixture_ModuleOne'),
-                'Fixture_ModuleTwo' => array('name' => 'Fixture_ModuleTwo'),
-            )))
-        ;
-        $this->_moduleDirs
-            ->expects($this->atLeastOnce())
-            ->method('getDir')
-            ->will($this->returnValueMap(array(
-                array('Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'),
-                array('Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo'),
-            )))
-        ;
+        $this->_moduleList->expects(
+            $this->once()
+        )->method(
+            'getModules'
+        )->will(
+            $this->returnValue(
+                array(
+                    'Fixture_ModuleOne' => array('name' => 'Fixture_ModuleOne'),
+                    'Fixture_ModuleTwo' => array('name' => 'Fixture_ModuleTwo')
+                )
+            )
+        );
+        $this->_moduleDirs->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getDir'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'),
+                    array('Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo')
+                )
+            )
+        );
         $this->assertSame($expectedResult, $this->_model->getModuleName($path));
     }
 
     public function getModuleNameDataProvider()
     {
         return array(
-            'module root dir' => array(
-                'app/code/Fixture/ModuleOne', 'Fixture_ModuleOne'
-            ),
-            'module root dir trailing slash' => array(
-                'app/code/Fixture/ModuleOne/', 'Fixture_ModuleOne'
-            ),
-            'module root dir backward slash' => array(
-                'app/code\\Fixture\\ModuleOne', 'Fixture_ModuleOne'
-            ),
-            'dir in module' => array(
-                'app/code/Fixture/ModuleTwo/etc', 'Fixture_ModuleTwo'
-            ),
-            'dir in module trailing slash' => array(
-                'app/code/Fixture/ModuleTwo/etc/', 'Fixture_ModuleTwo'
-            ),
-            'dir in module backward slash' => array(
-                'app/code/Fixture/ModuleTwo\\etc', 'Fixture_ModuleTwo'
-            ),
-            'file in module' => array(
-                'app/code/Fixture/ModuleOne/etc/config.xml', 'Fixture_ModuleOne'
-            ),
+            'module root dir' => array('app/code/Fixture/ModuleOne', 'Fixture_ModuleOne'),
+            'module root dir trailing slash' => array('app/code/Fixture/ModuleOne/', 'Fixture_ModuleOne'),
+            'module root dir backward slash' => array('app/code\\Fixture\\ModuleOne', 'Fixture_ModuleOne'),
+            'dir in module' => array('app/code/Fixture/ModuleTwo/etc', 'Fixture_ModuleTwo'),
+            'dir in module trailing slash' => array('app/code/Fixture/ModuleTwo/etc/', 'Fixture_ModuleTwo'),
+            'dir in module backward slash' => array('app/code/Fixture/ModuleTwo\\etc', 'Fixture_ModuleTwo'),
+            'file in module' => array('app/code/Fixture/ModuleOne/etc/config.xml', 'Fixture_ModuleOne'),
             'file in module backward slash' => array(
-                'app\\code\\Fixture\\ModuleOne\\etc\\config.xml', 'Fixture_ModuleOne'
+                'app\\code\\Fixture\\ModuleOne\\etc\\config.xml',
+                'Fixture_ModuleOne'
             ),
-            'unknown module' => array(
-                'app/code/Unknown/Module', null
-            ),
+            'unknown module' => array('app/code/Unknown/Module', null)
         );
     }
 }

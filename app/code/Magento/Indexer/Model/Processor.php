@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model;
 
 class Processor
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     protected $config;
 
@@ -47,13 +46,13 @@ class Processor
     protected $mviewProcessor;
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param IndexerFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param \Magento\Mview\ProcessorInterface $mviewProcessor
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         IndexerFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
         \Magento\Mview\ProcessorInterface $mviewProcessor
@@ -66,13 +65,15 @@ class Processor
 
     /**
      * Regenerate indexes for all invalid indexers
+     *
+     * @return void
      */
     public function reindexAllInvalid()
     {
-        foreach ($this->config->getIndexerIds() as $indexerId) {
+        foreach (array_keys($this->config->getIndexers()) as $indexerId) {
             $indexer = $this->indexerFactory->create();
             $indexer->load($indexerId);
-            if ($indexer->getState()->getStatus() == Indexer\State::STATUS_INVALID) {
+            if ($indexer->isInvalid()) {
                 $indexer->reindexAll();
             }
         }
@@ -80,10 +81,12 @@ class Processor
 
     /**
      * Regenerate indexes for all indexers
+     *
+     * @return void
      */
     public function reindexAll()
     {
-        /** @var Indexer[] $indexers */
+        /** @var IndexerInterface[] $indexers */
         $indexers = $this->indexersFactory->create()->getItems();
         foreach ($indexers as $indexer) {
             $indexer->reindexAll();
@@ -92,6 +95,8 @@ class Processor
 
     /**
      * Update indexer views
+     *
+     * @return void
      */
     public function updateMview()
     {
@@ -100,6 +105,8 @@ class Processor
 
     /**
      * Clean indexer view changelogs
+     *
+     * @return void
      */
     public function clearChangelog()
     {

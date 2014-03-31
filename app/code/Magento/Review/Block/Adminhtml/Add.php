@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Adminhtml;
 
 /**
@@ -35,6 +34,11 @@ namespace Magento\Review\Block\Adminhtml;
  */
 class Add extends \Magento\Backend\Block\Widget\Form\Container
 {
+    /**
+     * Initialize add review
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -91,7 +95,11 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         if (!params.form_key) {
                             params.form_key = FORM_KEY;
                         }
-                        new Ajax.Updater("rating_detail", "'.$this->getUrl('catalog/*/ratingItems').'", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
+                        new Ajax.Updater("rating_detail", "' .
+            $this->getUrl(
+                'review/product/ratingItems'
+            ) .
+            '", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
 
                     reqSuccess :function(o) {
@@ -101,8 +109,12 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         } else if( response.id ){
                             $("product_id").value = response.id;
 
-                            $("product_name").innerHTML = \'<a href="' . $this->getUrl('catalog/product/edit') . 'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
-                        } else if( response.message ) {
+                            $("product_name").innerHTML = \'<a href="' .
+            $this->getUrl(
+                'catalog/product/edit'
+            ) .
+            'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
+                        } else if ( response.message ) {
                             alert(response.message);
                         }
                     }
@@ -119,6 +131,8 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get add new review header text
+     *
      * @return string
      */
     public function getHeaderText()

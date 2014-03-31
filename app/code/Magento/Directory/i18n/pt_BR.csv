@@ -2,7 +2,7 @@
 "Allowed Currencies","Moedas Permitidas"
 "Base Currency","Moeda Padrão"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","A Moeda Padrão é usada em todas as transações de pagamento online. O escopo é definido pelo escopo do preço de catálogo (""Catálogo"" > ""Preço"" > ""Escopo do Preço de Catálogo"")."
-"Can\'t convert rate from ""%s-%s"".","Não é possível converter taxa de ""%s-%s""."
+"Can't convert rate from ""%s-%s"".","Não é possível converter taxa de ""%s-%s""."
 "Cannot retrieve rate from %s.","Não foi possível recuperar a taxa do %s."
 "Connection Timeout in Seconds","Duração da Conexão em Segundos"
 "Continue &raquo;","Continuar &raquo;"

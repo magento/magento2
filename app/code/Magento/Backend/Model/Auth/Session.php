@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Auth;
 
 /**
@@ -39,9 +38,7 @@ namespace Magento\Backend\Model\Auth;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  */
-class Session
-    extends \Magento\Session\SessionManager
-    implements \Magento\Backend\Model\Auth\StorageInterface
+class Session extends \Magento\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {
     const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
@@ -143,7 +140,6 @@ class Session
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
-
                 }
             }
         }
@@ -161,7 +157,7 @@ class Session
         $currentTime = time();
 
         /* Validate admin session lifetime that should be more than 60 seconds */
-        if ($lifetime >= 60 && ($this->getUpdatedAt() < $currentTime - $lifetime)) {
+        if ($lifetime >= 60 && $this->getUpdatedAt() < $currentTime - $lifetime) {
             return false;
         }
 

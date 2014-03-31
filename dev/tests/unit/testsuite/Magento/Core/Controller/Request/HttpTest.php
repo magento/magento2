@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Controller\Request;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
@@ -64,7 +63,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => 'index.php',
             'HTTP_HOST' => 'sample.host.com',
             'SERVER_PORT' => '80',
-            'HTTPS' => '1',
+            'HTTPS' => '1'
         );
 
         $secureUnusualPort = $noHttpsData = $httpsOffData = $noHostData = $noScriptNameData = $defaultServerData;

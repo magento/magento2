@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Config\Source\TaxClass;
 
-class Customer implements \Magento\Core\Model\Option\ArrayInterface
+class Customer implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Tax\Model\TaxClass\Source\CustomerFactory

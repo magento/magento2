@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Form;
 
 /**
@@ -39,10 +38,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         // Create block with blocking _prepateLayout(), which is used by block to instantly add 'form' child
         /** @var $block \Magento\Backend\Block\Widget\Form\Container */
-        $block = $this->getMock('Magento\Backend\Block\Widget\Form\Container', array('_prepareLayout'),
-            array(
-                $objectManager->create('Magento\Backend\Block\Template\Context')
-            )
+        $block = $this->getMock(
+            'Magento\Backend\Block\Widget\Form\Container',
+            array('_prepareLayout'),
+            array($objectManager->create('Magento\Backend\Block\Template\Context'))
         );
 
         $layout->addBlock($block, 'block');

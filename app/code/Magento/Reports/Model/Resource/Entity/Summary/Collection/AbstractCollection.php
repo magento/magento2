@@ -52,10 +52,8 @@ class AbstractCollection extends \Magento\Data\Collection
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      */
-    public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Stdlib\DateTime $dateTime
-    ) {
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Stdlib\DateTime $dateTime)
+    {
         $this->dateTime = $dateTime;
         parent::__construct($entityFactory);
     }
@@ -66,29 +64,29 @@ class AbstractCollection extends \Magento\Data\Collection
      * @param string $periodType
      * @param string|int|null $customStart
      * @param string|int|null $customEnd
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setSelectPeriod($periodType, $customStart = null, $customEnd = null)
     {
         switch ($periodType) {
             case "24h":
                 $customStart = $this->dateTime->toTimestamp(true) - 86400;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "7d":
                 $customStart = $this->dateTime->toTimestamp(true) - 604800;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "30d":
                 $customStart = $this->dateTime->toTimestamp(true) - 2592000;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "1y":
                 $customStart = $this->dateTime->toTimestamp(true) - 31536000;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             default:
@@ -99,9 +97,7 @@ class AbstractCollection extends \Magento\Data\Collection
                     $customEnd = strtotime($customEnd);
                 }
                 break;
-
         }
-
 
         return $this;
     }
@@ -110,7 +106,7 @@ class AbstractCollection extends \Magento\Data\Collection
      * Set date period
      *
      * @param int $period
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setDatePeriod($period)
     {
@@ -121,7 +117,7 @@ class AbstractCollection extends \Magento\Data\Collection
      * Set store filter
      *
      * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setStoreFilter($storeId)
     {
@@ -144,7 +140,7 @@ class AbstractCollection extends \Magento\Data\Collection
     /**
      * Init collection
      *
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initCollection()
     {

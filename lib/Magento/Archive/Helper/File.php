@@ -76,14 +76,12 @@ class File
         $pathInfo = pathinfo($filePath);
 
         $this->_filePath = $filePath;
-        $this->_fileLocation = isset($pathInfo['dirname'])  ? $pathInfo['dirname'] : '';
-        $this->_fileName     = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
+        $this->_fileLocation = isset($pathInfo['dirname']) ? $pathInfo['dirname'] : '';
+        $this->_fileName = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
     }
 
     /**
      * Close file if it's not closed before object destruction
-     *
-     * @return void
      */
     public function __destruct()
     {
@@ -108,7 +106,9 @@ class File
             }
 
             if (is_file($this->_filePath) && !is_writable($this->_filePath)) {
-                throw new \Magento\Exception("Can't open file " . $this->_fileName . " for writing. Permission denied.");
+                throw new \Magento\Exception(
+                    "Can't open file " . $this->_fileName . " for writing. Permission denied."
+                );
             }
         }
 
@@ -262,12 +262,13 @@ class File
     }
 
     /**
-    * Check whether requested mode is readable mode
-    *
-    * @param string $mode
-    * @return bool
-    */
-    protected function _isReadableMode($mode) {
+     * Check whether requested mode is readable mode
+     *
+     * @param string $mode
+     * @return bool
+     */
+    protected function _isReadableMode($mode)
+    {
         return !$this->_isWritableMode($mode);
     }
 

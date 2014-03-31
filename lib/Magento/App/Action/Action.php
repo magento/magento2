@@ -28,14 +28,17 @@ namespace Magento\App\Action;
 use Magento\App\RequestInterface;
 use Magento\App\ResponseInterface;
 
-class Action extends \Magento\App\Action\AbstractAction
+class Action extends AbstractAction
 {
-    const FLAG_NO_DISPATCH              = 'no-dispatch';
-    const FLAG_NO_POST_DISPATCH         = 'no-postDispatch';
-    const FLAG_NO_DISPATCH_BLOCK_EVENT  = 'no-beforeGenerateLayoutBlocksDispatch';
+    const FLAG_NO_DISPATCH = 'no-dispatch';
 
-    const PARAM_NAME_BASE64_URL         = 'r64';
-    const PARAM_NAME_URL_ENCODED        = 'uenc';
+    const FLAG_NO_POST_DISPATCH = 'no-postDispatch';
+
+    const FLAG_NO_DISPATCH_BLOCK_EVENT = 'no-beforeGenerateLayoutBlocksDispatch';
+
+    const PARAM_NAME_BASE64_URL = 'r64';
+
+    const PARAM_NAME_URL_ENCODED = 'uenc';
 
     /**
      * @var \Magento\ObjectManager
@@ -83,16 +86,16 @@ class Action extends \Magento\App\Action\AbstractAction
     /**
      * @param Context $context
      */
-    public function __construct(\Magento\App\Action\Context $context)
+    public function __construct(Context $context)
     {
         parent::__construct($context->getRequest(), $context->getResponse());
-        $this->_objectManager     = $context->getObjectManager();
-        $this->_eventManager      = $context->getEventManager();
-        $this->_url               = $context->getUrl();
-        $this->_actionFlag        = $context->getActionFlag();
-        $this->_redirect          = $context->getRedirect();
-        $this->_view              = $context->getView();
-        $this->messageManager     = $context->getMessageManager();
+        $this->_objectManager = $context->getObjectManager();
+        $this->_eventManager = $context->getEventManager();
+        $this->_url = $context->getUrl();
+        $this->_actionFlag = $context->getActionFlag();
+        $this->_redirect = $context->getRedirect();
+        $this->_view = $context->getView();
+        $this->messageManager = $context->getMessageManager();
     }
 
     /**
@@ -118,15 +121,16 @@ class Action extends \Magento\App\Action\AbstractAction
         if ($request->isDispatched() && !$this->_actionFlag->get('', self::FLAG_NO_DISPATCH)) {
             \Magento\Profiler::start('action_body');
             $actionMethodName = $request->getActionName() . 'Action';
-            $this->$actionMethodName();
+            $this->{$actionMethodName}();
             \Magento\Profiler::start('postdispatch');
-            if (!$this->_actionFlag->get('', \Magento\App\Action\Action::FLAG_NO_POST_DISPATCH)) {
+            if (!$this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
                 $this->_eventManager->dispatch(
                     'controller_action_postdispatch_' . $request->getFullActionName(),
                     $eventParameters
                 );
                 $this->_eventManager->dispatch(
-                    'controller_action_postdispatch_' . $request->getRouteName(), $eventParameters
+                    'controller_action_postdispatch_' . $request->getRouteName(),
+                    $eventParameters
                 );
                 $this->_eventManager->dispatch('controller_action_postdispatch', $eventParameters);
             }

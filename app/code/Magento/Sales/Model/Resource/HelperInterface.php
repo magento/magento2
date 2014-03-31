@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource;
 
 /**
  * Sales resource helper interface
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource;
-
 interface HelperInterface
 {
     /**
@@ -43,9 +41,12 @@ interface HelperInterface
      * @param array $aggregationAliases
      * @param string $mainTable
      * @param string $aggregationTable
-     * @return \Magento\Sales\Model\Resource\Helper
+     * @return $this
      */
-    public function getBestsellersReportUpdateRatingPos($aggregation, $aggregationAliases,
-        $mainTable, $aggregationTable
+    public function getBestsellersReportUpdateRatingPos(
+        $aggregation,
+        $aggregationAliases,
+        $mainTable,
+        $aggregationTable
     );
 }

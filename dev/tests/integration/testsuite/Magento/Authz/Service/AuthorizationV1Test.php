@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authz\Service;
 
 use Magento\Authz\Service\AuthorizationV1Test\UserLocatorStub;
@@ -113,8 +112,8 @@ class AuthorizationV1Test extends \PHPUnit_Framework_TestCase
             'integration clear permissions' => array(
                 'userType' => UserIdentifier::USER_TYPE_INTEGRATION,
                 'initialResources' => array('Magento_Sales::capture', 'Magento_Cms::page_delete'),
-                'newResources' => array(),
-            ),
+                'newResources' => array()
+            )
         );
     }
 
@@ -198,7 +197,7 @@ class AuthorizationV1Test extends \PHPUnit_Framework_TestCase
      */
     protected function _createUserIdentifier($userType)
     {
-        $userId = ($userType == UserIdentifier::USER_TYPE_GUEST) ? 0 : rand(1, 1000);
+        $userId = $userType == UserIdentifier::USER_TYPE_GUEST ? 0 : rand(1, 1000);
         $userLocatorStub = new UserLocatorStub();
         return new UserIdentifier($userLocatorStub, $userType, $userId);
     }

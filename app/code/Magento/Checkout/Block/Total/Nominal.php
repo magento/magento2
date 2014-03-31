@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Total;
 
 /**
  * Nominal total rendered
  *
  * Each item is rendered as separate total with its details
  */
-namespace Magento\Checkout\Block\Total;
-
 class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
 {
     /**

@@ -1,0 +1,258 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+//    List default styles reset
+//--------------------------------------
+
+.reset-list {
+    .list-reset-styles();
+    > li {
+        margin: 0;
+    }
+}
+
+//
+//    Primary button
+//--------------------------------------
+.action-primary {
+    .button-primary();
+    border-radius: @button-border-radius;
+}
+
+//
+//    Link as a button
+//--------------------------------------
+.action-link-button {
+  .button();
+  .link-as-button();
+  border-radius: @button-border-radius;
+}
+
+
+//
+//    Product grid item
+//--------------------------------------
+.product-list-item {
+    &:extend(.reset-list all);
+    .product.item {
+        .box-sizing();
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+    }
+    .img.container {
+        max-width: 100%;
+        margin-bottom: @indent-base;
+        > .image {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+    .name {
+        .product-name();
+        display: block;
+    }
+    .price-box {
+        margin-top: @indent-s-base;
+        .price {
+            font-weight: @font-weight-bold;
+        }
+    }
+    .actions {
+        .actions-toolbar(
+            @_actions-toolbar-actions-position: left,
+            @_actions-toolbar-actions-margin: @indent-s-base 0 0,
+            @_actions-toolbar-primary-actions-margin: @indent-s-base @indent-xs-base 0 0,
+            @_actions-toolbar-secondary-actions-links-margin-top: @indent-s-base
+        );
+    }
+    .action {
+        &.towishlist {
+            .icon-font(
+                @icon-wishlist-empty,
+                @_icon-font-size: 28px,
+                @_icon-font-color: @text-color-muted,
+                @_icon-font-text-hide: true,
+                @_icon-font-vertical-align: baseline
+            );
+            .icon-text-hide();
+        }
+        &.tocompare {
+            .icon-font(
+                @icon-compare-empty,
+                @_icon-font-size: 28px,
+                @_icon-font-color: @text-color-muted,
+                @_icon-font-text-hide: true,
+                @_icon-font-vertical-align: baseline
+            );
+        }
+        &.tocart {
+            &:extend(.action-primary all);
+        }
+    }
+}
+
+//
+//    Product options list
+//--------------------------------------
+
+.product-options-list {
+    dt:after {
+        content: ': ';
+    }
+    dt {
+        float: left;
+        clear: left;
+        margin: 0 10px 5px 0;
+    }
+    dd {
+        display: inline-block;
+        margin: 0 0 5px;
+    }
+}
+
+
+//
+//    Action with icon remove with text
+//--------------------------------------
+.action-remove {
+    .icon-font(
+        @_icon-font-content: @icon-remove,
+        @_icon-font-size: 26px
+    );
+}
+
+//
+//    Responsive reset width, floats, margins
+//--------------------------------------
+.responsive(@break) when (@break = @mobile) {
+    .button-responsive {
+        .button-responsive();
+    }
+}
+
+
+//
+//    Blocks in 2 columns
+//--------------------------------------
+.blocks-2columns {
+    width: 48.8%;
+    &:nth-child(odd) {
+        float: left;
+        clear: left;
+    }
+    &:nth-child(even) {
+        float: right;
+    }
+}
+
+//
+//    Title for login blocks
+//--------------------------------------
+.login-block-title {
+    strong {
+        .heading(h3);
+    }
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid @color-secondary;
+}
+
+//
+//    Simple Dropdown
+//--------------------------------------
+.dropdown-simple {
+    line-height: normal;
+    .dropdown();
+    ul.items.dropdown {
+        min-width: 155px;
+    }
+}
+
+//
+//    Input quantity
+//--------------------------------------
+.input-qty {
+    .form-element-size(@_width: 50px);
+    text-align: center;
+}
+
+//
+//    Marging for blocks & widgets
+//--------------------------------------
+.margin-for-blocks-and-widgets {
+    margin-bottom: @indent-xl-base;
+}
+
+//
+//    Form fields for widgets
+//--------------------------------------
+.form-fields-for-widgets {
+    .field,
+    .fields .field {
+        .form-field(
+            @_type: block,
+            @_column: none,
+            @_type-block-margin: 0 0 10px,
+            @_label-font-size: 14px,
+            @_label-font-weight: normal,
+            @_type-block-label-margin: 0 0 5px
+        );
+    }
+}
+
+//
+//    Remove button for blocks
+//--------------------------------------
+.remove-button-for-blocks {
+    .icon-font(
+        @icon-remove,
+        @_icon-font-size: 26px,
+        @_icon-font-line-height: 15px,
+        @_icon-font-text-hide: true,
+        @_icon-font-color: #303030,
+        @_icon-font-color-hover: #303030,
+        @_icon-font-color-active: #303030
+    );
+}
+
+//
+//    Product link
+//--------------------------------------
+.product-link {
+    .link(
+        @_link-color: #303030,
+        @_link-color-hover: #303030,
+        @_link-color-active: #303030,
+        @_link-color-visited: #303030
+    );
+}
+
+//
+//    Action toolbar reset margins
+//--------------------------------------
+.action-toolbar-reset-margin {
+    margin-left: 0;
+}

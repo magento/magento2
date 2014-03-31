@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Backend;
 
 class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
@@ -50,12 +49,15 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
     {
         $this->_quoteMock = $this->getMock('Magento\Sales\Model\Resource\Quote', array(), array(), '', false);
         $this->_observerMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
-        $this->_eventMock =
-            $this->getMock('Magento\Event', array('getProduct', 'getStatus', 'getProductId'), array(), '', false);
-        $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
-        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogProductQuote(
-            $this->_quoteMock
+        $this->_eventMock = $this->getMock(
+            'Magento\Event',
+            array('getProduct', 'getStatus', 'getProductId'),
+            array(),
+            '',
+            false
         );
+        $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
+        $this->_model = new \Magento\Sales\Model\Observer\Backend\CatalogProductQuote($this->_quoteMock);
     }
 
     /**
@@ -79,25 +81,9 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
         $this->_model->catalogProductSaveAfter($this->_observerMock);
     }
 
-    /**
-     * @param int $productId
-     * @param int $productStatus
-     * @dataProvider statusUpdateDataProvider
-     */
-    public function testStatusUpdate($productId, $productStatus)
-    {
-        $this->_eventMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
-        $this->_eventMock->expects($this->once())->method('getProductId')->will($this->returnValue($productId));
-        $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
-        $this->_model->catalogProductStatusUpdate($this->_observerMock);
-    }
-
     public function statusUpdateDataProvider()
     {
-        return array(
-            array(125, 1),
-            array(100, 0)
-        );
+        return array(array(125, 1), array(100, 0));
     }
 
     public function testSubtractQtyFromQuotes()

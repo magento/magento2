@@ -21,11 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Model\Resource\Product\Type\Grouped;
 
-class AssociatedProductsCollectionTest
-    extends \PHPUnit_Framework_TestCase
+class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
@@ -34,12 +32,13 @@ class AssociatedProductsCollectionTest
     public function testGetColumnValues()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $product->load(9);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Registry')->register('current_product', $product);
 
         /** @var \Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection $collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -58,12 +58,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $result = $model->create(
             array(
                 'backend' => 'Zend_Cache_Backend_Static',
-                'frontend_options' => array(
-                    'lifetime' => 2601
-                ),
-                'backend_options' => array(
-                    'file_extension' => '.wtf'
-                ),
+                'frontend_options' => array('lifetime' => 2601),
+                'backend_options' => array('file_extension' => '.wtf')
             )
         );
 
@@ -102,26 +98,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public static function idPrefixDataProvider()
     {
         return array(
-            'default id prefix' => array(
-                array(
-                    'backend' => 'Zend_Cache_Backend_BlackHole',
-                ),
-                'a3c_', // start of md5('CONFIG_DIR')
-            ),
+            // start of md5('CONFIG_DIR')
+            'default id prefix' => array(array('backend' => 'Zend_Cache_Backend_BlackHole'), 'a3c_'),
             'id prefix in "id_prefix" option' => array(
-                array(
-                    'backend' => 'Zend_Cache_Backend_BlackHole',
-                    'id_prefix' => 'id_prefix_value'
-                ),
-                'id_prefix_value',
+                array('backend' => 'Zend_Cache_Backend_BlackHole', 'id_prefix' => 'id_prefix_value'),
+                'id_prefix_value'
             ),
             'id prefix in "prefix" option' => array(
-                array(
-                    'backend' => 'Zend_Cache_Backend_BlackHole',
-                    'prefix' => 'prefix_value'
-                ),
-                'prefix_value',
-            ),
+                array('backend' => 'Zend_Cache_Backend_BlackHole', 'prefix' => 'prefix_value'),
+                'prefix_value'
+            )
         );
     }
 
@@ -169,25 +155,26 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         };
         /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
         $objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
-        $objectManager->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback($processFrontendFunc));
+        $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
         $map = array(
             array(\Magento\App\Filesystem::CACHE_DIR, 'CACHE_DIR'),
-            array(\Magento\App\Filesystem::CONFIG_DIR, 'CONFIG_DIR'),
+            array(\Magento\App\Filesystem::CONFIG_DIR, 'CONFIG_DIR')
         );
 
         $filesystem = $this->getMock('Magento\App\Filesystem', array('getPath'), array(), '', false);
 
-        $filesystem->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($map));
+        $filesystem->expects($this->any())->method('getPath')->will($this->returnValueMap($map));
 
         $resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
 
-        $model = new \Magento\App\Cache\Frontend\Factory($objectManager, $filesystem, $resource,
-            $enforcedOptions, $decorators);
+        $model = new \Magento\App\Cache\Frontend\Factory(
+            $objectManager,
+            $filesystem,
+            $resource,
+            $enforcedOptions,
+            $decorators
+        );
 
         return $model;
     }

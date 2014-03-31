@@ -37,28 +37,25 @@ class ResourceResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleReaderMock = $this->getMock('Magento\Module\Dir\Reader',
-            array(), array(), '', false);
+        $this->_moduleReaderMock = $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false);
         $this->_model = new \Magento\Module\ResourceResolver($this->_moduleReaderMock);
     }
 
     public function testGetResourceList()
     {
         $moduleName = 'Module';
-        $this->_moduleReaderMock->expects($this->any())
-            ->method('getModuleDir')
-            ->will($this->returnValueMap(array(
+        $this->_moduleReaderMock->expects(
+            $this->any()
+        )->method(
+            'getModuleDir'
+        )->will(
+            $this->returnValueMap(
                 array(
-                    'data',
-                    $moduleName,
-                    __DIR__ . '/_files/Module/data',
-                ),
-                array(
-                    'sql',
-                    $moduleName,
-                    __DIR__ . '/_files/Module/sql',
-                ),
-            )));
+                    array('data', $moduleName, __DIR__ . '/_files/Module/data'),
+                    array('sql', $moduleName, __DIR__ . '/_files/Module/sql')
+                )
+            )
+        );
 
 
         $expectedResult = array('module_first_setup', 'module_second_setup');

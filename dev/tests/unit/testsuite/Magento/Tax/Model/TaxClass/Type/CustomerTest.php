@@ -24,42 +24,41 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\TaxClass\Type;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetAssignedObjects()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Core\Model\Resource\Db\Collection\AbstractCollection')
-            ->setMethods(array(
-                'addFieldToFilter'
-            ))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with($this->equalTo('tax_class_id'), $this->equalTo(5))
-            ->will($this->returnSelf());
+        $collectionMock = $this->getMockBuilder(
+            'Magento\Model\Resource\Db\Collection\AbstractCollection'
+        )->setMethods(
+            array('addFieldToFilter')
+        )->disableOriginalConstructor()->getMock();
+        $collectionMock->expects(
+            $this->once()
+        )->method(
+            'addFieldToFilter'
+        )->with(
+            $this->equalTo('tax_class_id'),
+            $this->equalTo(5)
+        )->will(
+            $this->returnSelf()
+        );
 
-        $customerGroupMock = $this->getMockBuilder('Magento\Customer\Model\Group')
-            ->setMethods(array('getCollection', '__wakeup'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerGroupMock->expects($this->once())
-            ->method('getCollection')
-            ->will($this->returnValue($collectionMock));
+        $customerGroupMock = $this->getMockBuilder(
+            'Magento\Customer\Model\Group'
+        )->setMethods(
+            array('getCollection', '__wakeup')
+        )->disableOriginalConstructor()->getMock();
+        $customerGroupMock->expects($this->once())->method('getCollection')->will($this->returnValue($collectionMock));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $objectManagerHelper->getObject(
             'Magento\Tax\Model\TaxClass\Type\Customer',
-            array(
-                'modelCustomerGroup' => $customerGroupMock,
-                'data' => array('id' => 5)
-            )
+            array('modelCustomerGroup' => $customerGroupMock, 'data' => array('id' => 5))
         );
         $this->assertEquals($collectionMock, $model->getAssignedToObjects());
     }
-
 }

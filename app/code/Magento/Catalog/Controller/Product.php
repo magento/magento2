@@ -23,22 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller;
 
-class Product
-    extends \Magento\App\Action\Action
-    implements \Magento\Catalog\Controller\Product\View\ViewInterface
+use Magento\Catalog\Model\Product as ModelProduct;
+
+class Product extends \Magento\App\Action\Action implements \Magento\Catalog\Controller\Product\View\ViewInterface
 {
     /**
      * Initialize requested product object
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return ModelProduct
      */
     protected function _initProduct()
     {
         $categoryId = (int)$this->getRequest()->getParam('category', false);
-        $productId  = (int)$this->getRequest()->getParam('id');
+        $productId = (int)$this->getRequest()->getParam('id');
 
         $params = new \Magento\Object();
         $params->setCategoryId($categoryId);
@@ -49,8 +48,8 @@ class Product
     /**
      * Initialize product view layout
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Catalog\Controller\Product
+     * @param ModelProduct $product
+     * @return $this
      */
     protected function _initProductLayout($product)
     {
@@ -60,12 +59,14 @@ class Product
 
     /**
      * Product view action
+     *
+     * @return void
      */
     public function viewAction()
     {
         // Get initial data from request
         $categoryId = (int)$this->getRequest()->getParam('category', false);
-        $productId  = (int)$this->getRequest()->getParam('id');
+        $productId = (int)$this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
         // Prepare helper and params
@@ -95,6 +96,8 @@ class Product
 
     /**
      * View product gallery action
+     *
+     * @return void
      */
     public function galleryAction()
     {

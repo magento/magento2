@@ -23,9 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <preference for="Magento\Customer\Service\V1\CustomerServiceInterface"
-                type="Magento\Customer\Service\V1\CustomerService" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Customer\Service\V1\CustomerAddressServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerAddressService" />
     <preference for="Magento\Customer\Service\V1\CustomerGroupServiceInterface"
@@ -34,41 +32,39 @@
                 type="Magento\Customer\Service\V1\CustomerAccountService" />
     <preference for="Magento\Customer\Service\V1\CustomerMetadataServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerMetadataService" />
+    <preference for="Magento\Customer\Service\V1\CustomerCurrentServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerCurrentService" />
+    <preference for="Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerAddressCurrentService" />
     <type name="Magento\Customer\Model\Session">
-        <param name="configShare">
-            <instance type="Magento\Customer\Model\Config\Share\Proxy" />
-        </param>
-        <param name="customerData">
-            <instance type="Magento\Customer\Helper\Data\Proxy" />
-        </param>
-        <param name="customerResource">
-            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
-        </param>
-        <param name="storage">
-            <instance type="Magento\Customer\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
+            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
+            <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="customer_setup"><value>Magento\Customer\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="customer_setup" xsi:type="string">Magento\Customer\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">
-        <param name="addressConfig">
-            <instance type="Magento\Customer\Model\Address\Config\Proxy" />
-        </param>
+        <arguments>
+            <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Model\Config\Share">
-        <param name="customerResource">
-            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Model\Customer">
-        <param name="customerData">
-            <instance type="Magento\Customer\Helper\Data\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Service\V1\Dto\AddressBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Dto\CustomerBuilder" shared="false" />
@@ -81,4 +77,23 @@
     <type name="Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Dto\SearchCriteriaBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Dto\SearchResultsBuilder" shared="false" />
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\Model\Resource\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Service\V1\CustomerAccountService">
+        <arguments>
+            <argument name="url" xsi:type="object">Magento\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Model\ActionValidator\RemoveAction">
+        <arguments>
+            <argument name="protectedModels" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\Model\Customer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

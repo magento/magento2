@@ -38,18 +38,16 @@ class Queue extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -77,7 +75,6 @@ class Queue extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
-
     /**
      * Drop Newsletter queue template
      *
@@ -104,8 +101,9 @@ class Queue extends \Magento\Backend\App\Action
         }
 
         // set default value for selected store
-        $data['preview_store_id'] = $this->_objectManager->get('Magento\Core\Model\StoreManager')
-            ->getDefaultStoreView()->getId();
+        $data['preview_store_id'] = $this->_objectManager->get(
+            'Magento\Core\Model\StoreManager'
+        )->getDefaultStoreView()->getId();
 
         $this->_view->getLayout()->getBlock('preview_form')->setFormData($data);
         $this->_view->renderLayout();
@@ -129,19 +127,26 @@ class Queue extends \Magento\Backend\App\Action
      */
     public function startAction()
     {
-        $queue = $this->_objectManager->create('Magento\Newsletter\Model\Queue')
-            ->load($this->getRequest()->getParam('id'));
+        $queue = $this->_objectManager->create(
+            'Magento\Newsletter\Model\Queue'
+        )->load(
+            $this->getRequest()->getParam('id')
+        );
         if ($queue->getId()) {
-            if (!in_array($queue->getQueueStatus(),
-                          array(\Magento\Newsletter\Model\Queue::STATUS_NEVER,
-                                 \Magento\Newsletter\Model\Queue::STATUS_PAUSE))) {
-                   $this->_redirect('*/*');
+            if (!in_array(
+                $queue->getQueueStatus(),
+                array(\Magento\Newsletter\Model\Queue::STATUS_NEVER, \Magento\Newsletter\Model\Queue::STATUS_PAUSE)
+            )
+            ) {
+                $this->_redirect('*/*');
                 return;
             }
 
-            $queue->setQueueStartAt($this->_objectManager->get('Magento\Core\Model\Date')->gmtDate())
-                ->setQueueStatus(\Magento\Newsletter\Model\Queue::STATUS_SENDING)
-                ->save();
+            $queue->setQueueStartAt(
+                $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate()
+            )->setQueueStatus(
+                \Magento\Newsletter\Model\Queue::STATUS_SENDING
+            )->save();
         }
 
         $this->_redirect('*/*');
@@ -154,12 +159,14 @@ class Queue extends \Magento\Backend\App\Action
      */
     public function pauseAction()
     {
-        $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
-            ->load($this->getRequest()->getParam('id'));
+        $queue = $this->_objectManager->get(
+            'Magento\Newsletter\Model\Queue'
+        )->load(
+            $this->getRequest()->getParam('id')
+        );
 
-        if (!in_array($queue->getQueueStatus(),
-                      array(\Magento\Newsletter\Model\Queue::STATUS_SENDING))) {
-               $this->_redirect('*/*');
+        if (!in_array($queue->getQueueStatus(), array(\Magento\Newsletter\Model\Queue::STATUS_SENDING))) {
+            $this->_redirect('*/*');
             return;
         }
 
@@ -176,12 +183,14 @@ class Queue extends \Magento\Backend\App\Action
      */
     public function resumeAction()
     {
-        $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
-            ->load($this->getRequest()->getParam('id'));
+        $queue = $this->_objectManager->get(
+            'Magento\Newsletter\Model\Queue'
+        )->load(
+            $this->getRequest()->getParam('id')
+        );
 
-        if (!in_array($queue->getQueueStatus(),
-                      array(\Magento\Newsletter\Model\Queue::STATUS_PAUSE))) {
-               $this->_redirect('*/*');
+        if (!in_array($queue->getQueueStatus(), array(\Magento\Newsletter\Model\Queue::STATUS_PAUSE))) {
+            $this->_redirect('*/*');
             return;
         }
 
@@ -198,12 +207,14 @@ class Queue extends \Magento\Backend\App\Action
      */
     public function cancelAction()
     {
-        $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
-            ->load($this->getRequest()->getParam('id'));
+        $queue = $this->_objectManager->get(
+            'Magento\Newsletter\Model\Queue'
+        )->load(
+            $this->getRequest()->getParam('id')
+        );
 
-        if (!in_array($queue->getQueueStatus(),
-                      array(\Magento\Newsletter\Model\Queue::STATUS_SENDING))) {
-               $this->_redirect('*/*');
+        if (!in_array($queue->getQueueStatus(), array(\Magento\Newsletter\Model\Queue::STATUS_SENDING))) {
+            $this->_redirect('*/*');
             return;
         }
 
@@ -221,14 +232,16 @@ class Queue extends \Magento\Backend\App\Action
     public function sendingAction()
     {
         // Todo: put it somewhere in config!
-        $countOfQueue  = 3;
+        $countOfQueue = 3;
         $countOfSubscritions = 20;
 
-        $collection = $this->_objectManager->create('Magento\Newsletter\Model\Resource\Queue\Collection')
-            ->setPageSize($countOfQueue)
-            ->setCurPage(1)
-            ->addOnlyForSendingFilter()
-            ->load();
+        $collection = $this->_objectManager->create(
+            'Magento\Newsletter\Model\Resource\Queue\Collection'
+        )->setPageSize(
+            $countOfQueue
+        )->setCurPage(
+            1
+        )->addOnlyForSendingFilter()->load();
 
         $collection->walk('sendPerSubscriber', array($countOfSubscritions));
     }
@@ -260,11 +273,7 @@ class Queue extends \Magento\Backend\App\Action
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_queue');
 
-        $this->_addBreadcrumb(
-            __('Newsletter Queue'),
-            __('Newsletter Queue'),
-            $this->getUrl('*/*')
-        );
+        $this->_addBreadcrumb(__('Newsletter Queue'), __('Newsletter Queue'), $this->getUrl('*/*'));
         $this->_addBreadcrumb(__('Edit Queue'), __('Edit Queue'));
 
         $this->_view->renderLayout();
@@ -273,7 +282,7 @@ class Queue extends \Magento\Backend\App\Action
     /**
      * Save Newsletter queue
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return void
      */
     public function saveAction()
@@ -288,18 +297,22 @@ class Queue extends \Magento\Backend\App\Action
                 $template = $this->_objectManager->create('Magento\Newsletter\Model\Template')->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {
-                    throw new \Magento\Core\Exception(__('Please correct the newsletter template and try again.'));
+                    throw new \Magento\Model\Exception(__('Please correct the newsletter template and try again.'));
                 }
 
-                $queue->setTemplateId($template->getId())
-                    ->setQueueStatus(\Magento\Newsletter\Model\Queue::STATUS_NEVER);
+                $queue->setTemplateId(
+                    $template->getId()
+                )->setQueueStatus(
+                    \Magento\Newsletter\Model\Queue::STATUS_NEVER
+                );
             } else {
                 $queue->load($this->getRequest()->getParam('id'));
             }
 
-            if (!in_array($queue->getQueueStatus(),
-                   array(\Magento\Newsletter\Model\Queue::STATUS_NEVER,
-                         \Magento\Newsletter\Model\Queue::STATUS_PAUSE))
+            if (!in_array(
+                $queue->getQueueStatus(),
+                array(\Magento\Newsletter\Model\Queue::STATUS_NEVER, \Magento\Newsletter\Model\Queue::STATUS_PAUSE)
+            )
             ) {
                 $this->_redirect('*/*');
                 return;
@@ -309,15 +322,26 @@ class Queue extends \Magento\Backend\App\Action
                 $queue->setQueueStartAtByString($this->getRequest()->getParam('start_at'));
             }
 
-            $queue->setStores($this->getRequest()->getParam('stores', array()))
-                ->setNewsletterSubject($this->getRequest()->getParam('subject'))
-                ->setNewsletterSenderName($this->getRequest()->getParam('sender_name'))
-                ->setNewsletterSenderEmail($this->getRequest()->getParam('sender_email'))
-                ->setNewsletterText($this->getRequest()->getParam('text'))
-                ->setNewsletterStyles($this->getRequest()->getParam('styles'));
+            $queue->setStores(
+                $this->getRequest()->getParam('stores', array())
+            )->setNewsletterSubject(
+                $this->getRequest()->getParam('subject')
+            )->setNewsletterSenderName(
+                $this->getRequest()->getParam('sender_name')
+            )->setNewsletterSenderEmail(
+                $this->getRequest()->getParam('sender_email')
+            )->setNewsletterText(
+                $this->getRequest()->getParam('text')
+            )->setNewsletterStyles(
+                $this->getRequest()->getParam('styles')
+            );
 
-            if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_PAUSE
-                && $this->getRequest()->getParam('_resume', false)) {
+            if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_PAUSE &&
+                $this->getRequest()->getParam(
+                    '_resume',
+                    false
+                )
+            ) {
                 $queue->setQueueStatus(\Magento\Newsletter\Model\Queue::STATUS_SENDING);
             }
 
@@ -327,7 +351,7 @@ class Queue extends \Magento\Backend\App\Action
             $this->_getSession()->setFormData(false);
 
             $this->_redirect('*/*');
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $id = $this->getRequest()->getParam('id');
             if ($id) {

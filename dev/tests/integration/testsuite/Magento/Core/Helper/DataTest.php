@@ -24,22 +24,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-    const DATE_TIMEZONE = 'America/Los_Angeles'; // hardcoded in the installation
+    const DATE_TIMEZONE = 'America/Los_Angeles';
+
+    // hardcoded in the installation
 
     /**
      * @var \Magento\Core\Helper\Data
      */
     protected $_helper = null;
-
-    /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $locale;
 
     /**
      * @var \DateTime
@@ -49,9 +45,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Data');
-        $this->locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\LocaleInterface');
-        $this->_dateTime = new \DateTime;
+        $this->_dateTime = new \DateTime();
         $this->_dateTime->setTimezone(new \DateTimeZone(self::DATE_TIMEZONE));
     }
 

@@ -27,16 +27,18 @@ namespace Magento\GroupedProduct\Block\Product\View\Type;
 
 class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+    /**
+     * @return array
+     */
     public function getAssociatedProducts()
     {
-        return $this->getProduct()->getTypeInstance()
-            ->getAssociatedProducts($this->getProduct());
+        return $this->getProduct()->getTypeInstance()->getAssociatedProducts($this->getProduct());
     }
 
     /**
      * Set preconfigured values to grouped associated products
      *
-     * @return \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+     * @return $this
      */
     public function setPreconfiguredValue()
     {
@@ -55,7 +57,7 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Returns product tier price block html
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|null $product
      * @return string
      */
     public function getTierPriceHtml($product = null)
@@ -63,12 +65,18 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
         if (is_null($product)) {
             $product = $this->getProduct();
         }
-        return $this->_getPriceBlock($product->getTypeId())
-            ->setTemplate($this->getTierPriceTemplate())
-            ->setProduct($product)
-            ->setListClass('tier prices grouped items')
-            ->setShowDetailedPrice(false)
-            ->setCanDisplayQty(false)
-            ->toHtml();
+        return $this->_getPriceBlock(
+            $product->getTypeId()
+        )->setTemplate(
+            $this->getTierPriceTemplate()
+        )->setProduct(
+            $product
+        )->setListClass(
+            'tier prices grouped items'
+        )->setShowDetailedPrice(
+            false
+        )->setCanDisplayQty(
+            false
+        )->toHtml();
     }
 }

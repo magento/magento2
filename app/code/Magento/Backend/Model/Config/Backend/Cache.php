@@ -42,6 +42,7 @@ class Cache extends \Magento\Core\Model\Config\Value
     /**
      * Clean cache, value was changed
      *
+     * @return void
      */
     protected function _afterSave()
     {

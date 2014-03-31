@@ -23,28 +23,25 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Customer\Model\Session">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="customer"><value>/customer/</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="customer" xsi:type="string">/customer/</item>
+            </argument>
+        </arguments>
     </type>
-    <virtualType name="customerAccountInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <param name="cookieCheckActions">
-            <array>
-                <item key="customerLogin"><value>loginPost</value></item>
-                <item key="customerCreate"><value>createpost</value></item>
-            </array>
-        </param>
-    </virtualType>
-    <type name="Magento\Customer\Controller\Account">
-        <plugin name="sessionInitializer" type="customerAccountInitSession" />
+    <type name="Magento\Core\Model\Layout">
+        <plugin name="customer-session-depersonalize"
+                type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\App\Action\Action">
+        <plugin name="customer-app-action-dispatchController-context-plugin"
+                type="Magento\Customer\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
 </config>

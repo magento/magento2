@@ -46,6 +46,7 @@ class Tabs extends \Magento\View\Element\Template
      * @param string $block
      * @param string $template
      * @param string $header
+     * @return void
      */
     public function addTab($alias, $title, $block, $template, $header = null)
     {
@@ -53,16 +54,9 @@ class Tabs extends \Magento\View\Element\Template
             return;
         }
 
-        $this->_tabs[] = array(
-            'alias' => $alias,
-            'title' => $title,
-            'header' => $header,
-        );
+        $this->_tabs[] = array('alias' => $alias, 'title' => $title, 'header' => $header);
 
-        $this->setChild($alias,
-            $this->getLayout()->createBlock($block, $alias)
-                ->setTemplate($template)
-            );
+        $this->setChild($alias, $this->getLayout()->createBlock($block, $alias)->setTemplate($template));
     }
 
     /**

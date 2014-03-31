@@ -28,7 +28,8 @@
     $.widget('mage.dataPost', {
         options: {
             formTemplate: '<form action="${action}" method="post">{{each data}}<input name="${$index}" value="${$value}">{{/each}}</form>',
-            postTrigger: ['a[data-post]', 'button[data-post]', 'span[data-post]']
+            postTrigger: ['a[data-post]', 'button[data-post]', 'span[data-post]'],
+            formKeyInputSelector: 'input[name="form_key"]'
         },
         _create: function() {
             this._bind();
@@ -42,10 +43,15 @@
         },
         _postDataAction: function(e) {
             e.preventDefault();
-            this.postData($(e.currentTarget).data('post'));
+            var params = $(e.currentTarget).data('post');
+            this.postData(params);
         },
-        postData: function(data) {
-            $.tmpl(this.options.formTemplate, data).appendTo('body').hide().submit();
+        postData: function(params) {
+            var formKey = $(this.options.formKeyInputSelector).val();
+            if (formKey) {
+                params.data.form_key = formKey;
+            }
+            $.tmpl(this.options.formTemplate, params).appendTo('body').hide().submit();
         }
     });
     $(document).dataPost();

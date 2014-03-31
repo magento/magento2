@@ -23,18 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model\Resource\Catalog;
 
 /**
  * Sitemap resource catalog collection model
  *
- * @category    Magento
- * @package     Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model\Resource\Catalog;
-
-class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Category extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Collection Zend Db select
@@ -48,7 +44,7 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_attributesCache    = array();
+    protected $_attributesCache = array();
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -75,6 +71,9 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
         parent::__construct($resource);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('catalog_category_entity', 'entity_id');
@@ -84,7 +83,7 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get category collection array
      *
      * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
-     * @return array
+     * @return array|bool
      */
     public function getCollection($storeId)
     {
@@ -97,9 +96,12 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
             return false;
         }
 
-        $this->_select = $this->_getWriteAdapter()->select()
-            ->from($this->getMainTable())
-            ->where($this->getIdFieldName() . '=?', $store->getRootCategoryId());
+        $this->_select = $this->_getWriteAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            $this->getIdFieldName() . '=?',
+            $store->getRootCategoryId()
+        );
         $categoryRow = $this->_getWriteAdapter()->fetchRow($this->_select);
 
         if (!$categoryRow) {
@@ -110,16 +112,19 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
             'e.entity_id = ur.category_id',
             $this->_getWriteAdapter()->quoteInto('ur.store_id=?', $store->getId()),
             'ur.product_id IS NULL',
-            $this->_getWriteAdapter()->quoteInto('ur.is_system=?', 1),
+            $this->_getWriteAdapter()->quoteInto('ur.is_system=?', 1)
         );
-        $this->_select = $this->_getWriteAdapter()->select()
-            ->from(array('e' => $this->getMainTable()), array($this->getIdFieldName(), 'updated_at'))
-            ->joinLeft(
-                array('ur' => $this->getTable('core_url_rewrite')),
-                join(' AND ', $urConditions),
-                array('url'=>'request_path')
-            )
-            ->where('e.path LIKE ?', $categoryRow['path'] . '/%');
+        $this->_select = $this->_getWriteAdapter()->select()->from(
+            array('e' => $this->getMainTable()),
+            array($this->getIdFieldName(), 'updated_at')
+        )->joinLeft(
+            array('ur' => $this->getTable('core_url_rewrite')),
+            join(' AND ', $urConditions),
+            array('url' => 'request_path')
+        )->where(
+            'e.path LIKE ?',
+            $categoryRow['path'] . '/%'
+        );
 
         $this->_addFilter($storeId, 'is_active', 1);
 
@@ -142,8 +147,8 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $category = new \Magento\Object();
         $category->setId($categoryRow[$this->getIdFieldName()]);
-        $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] :
-            'catalog/category/view/id/' . $category->getId();
+        $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] : 'catalog/category/view/id/' .
+            $category->getId();
         $category->setUrl($categoryUrl);
         $category->setUpdatedAt($categoryRow['updated_at']);
         return $category;
@@ -168,11 +173,11 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
             $attribute = $this->_categoryResource->getAttribute($attributeCode);
 
             $this->_attributesCache[$attributeCode] = array(
-                'entity_type_id'    => $attribute->getEntityTypeId(),
-                'attribute_id'      => $attribute->getId(),
-                'table'             => $attribute->getBackend()->getTable(),
-                'is_global'         => $attribute->getIsGlobal(),
-                'backend_type'      => $attribute->getBackendType()
+                'entity_type_id' => $attribute->getEntityTypeId(),
+                'attribute_id' => $attribute->getId(),
+                'table' => $attribute->getBackend()->getTable(),
+                'is_global' => $attribute->getIsGlobal(),
+                'backend_type' => $attribute->getBackendType()
             );
         }
         $attribute = $this->_attributesCache[$attributeCode];
@@ -196,22 +201,40 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
                 array('t1_' . $attributeCode => $attribute['table']),
                 'e.entity_id = t1_' . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.store_id = 0',
                 array()
-            )
-            ->where('t1_' . $attributeCode . '.attribute_id=?', $attribute['attribute_id']);
+            )->where(
+                't1_' . $attributeCode . '.attribute_id=?',
+                $attribute['attribute_id']
+            );
 
             if ($attribute['is_global']) {
-                $this->_select->where('t1_'.$attributeCode.'.value'.$conditionRule, $value);
+                $this->_select->where('t1_' . $attributeCode . '.value' . $conditionRule, $value);
             } else {
-                $ifCase = $this->_select->getAdapter()->getCheckSql('t2_' . $attributeCode . '.value_id > 0',
-                    't2_' . $attributeCode . '.value', 't1_' . $attributeCode . '.value');
+                $ifCase = $this->_select->getAdapter()->getCheckSql(
+                    't2_' . $attributeCode . '.value_id > 0',
+                    't2_' . $attributeCode . '.value',
+                    't1_' . $attributeCode . '.value'
+                );
                 $this->_select->joinLeft(
                     array('t2_' . $attributeCode => $attribute['table']),
-                    $this->_getWriteAdapter()->quoteInto('t1_' . $attributeCode . '.entity_id = t2_'
-                        . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.attribute_id = t2_'
-                        . $attributeCode . '.attribute_id AND t2_' . $attributeCode . '.store_id=?', $storeId),
+                    $this->_getWriteAdapter()->quoteInto(
+                        't1_' .
+                        $attributeCode .
+                        '.entity_id = t2_' .
+                        $attributeCode .
+                        '.entity_id AND t1_' .
+                        $attributeCode .
+                        '.attribute_id = t2_' .
+                        $attributeCode .
+                        '.attribute_id AND t2_' .
+                        $attributeCode .
+                        '.store_id=?',
+                        $storeId
+                    ),
                     array()
-                )
-                ->where('(' . $ifCase . ')' . $conditionRule, $value);
+                )->where(
+                    '(' . $ifCase . ')' . $conditionRule,
+                    $value
+                );
             }
         }
 

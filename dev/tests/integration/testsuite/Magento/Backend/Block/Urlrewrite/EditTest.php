@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Urlrewrite;
 
 /**
@@ -51,9 +50,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $block \Magento\Backend\Block\Urlrewrite\Edit */
-        $block = $layout->createBlock(
-            'Magento\Backend\Block\Urlrewrite\Edit', '', array('data' => $blockAttributes)
-        );
+        $block = $layout->createBlock('Magento\Backend\Block\Urlrewrite\Edit', '', array('data' => $blockAttributes));
 
         $this->_checkSelector($block, $expected);
         $this->_checkButtons($block, $expected);
@@ -74,8 +71,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $selectorBlock = $layout->getChildBlock($block->getNameInLayout(), 'selector');
 
         if ($expected['selector']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Selector', $selectorBlock,
-                'Child block with entity selector is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Selector',
+                $selectorBlock,
+                'Child block with entity selector is invalid'
+            );
         } else {
             $this->assertFalse($selectorBlock, 'Child block with entity selector should not present in block');
         }
@@ -96,11 +96,17 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $formBlock = $layout->getChildBlock($blockName, 'form');
 
         if ($expected['form']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Edit\Form', $formBlock,
-                'Child block with form is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Edit\Form',
+                $formBlock,
+                'Child block with form is invalid'
+            );
 
-            $this->assertSame($expected['form']['url_rewrite'], $formBlock->getUrlRewrite(),
-                'Form block should have same URL rewrite attribute');
+            $this->assertSame(
+                $expected['form']['url_rewrite'],
+                $formBlock->getUrlRewrite(),
+                'Form block should have same URL rewrite attribute'
+            );
         } else {
             $this->assertFalse($formBlock, 'Child block with form should not present in block');
         }
@@ -117,35 +123,32 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $buttonsHtml = $block->getButtonsHtml();
 
         if ($expected['back_button']) {
-            $this->assertSelectCount('button.back', 1, $buttonsHtml,
-                'Back button is not present in block');
+            $this->assertSelectCount('button.back', 1, $buttonsHtml, 'Back button is not present in block');
         } else {
-            $this->assertSelectCount('button.back', 0, $buttonsHtml,
-                'Back button should not present in block');
+            $this->assertSelectCount('button.back', 0, $buttonsHtml, 'Back button should not present in block');
         }
 
         if ($expected['save_button']) {
-            $this->assertSelectCount('button.save', 1, $buttonsHtml,
-                'Save button is not present in block');
+            $this->assertSelectCount('button.save', 1, $buttonsHtml, 'Save button is not present in block');
         } else {
-            $this->assertSelectCount('button.save', 0, $buttonsHtml,
-                'Save button should not present in block');
+            $this->assertSelectCount('button.save', 0, $buttonsHtml, 'Save button should not present in block');
         }
 
         if ($expected['reset_button']) {
-            $this->assertSelectCount('button[title="Reset"]', 1, $buttonsHtml,
-                'Reset button is not present in block');
+            $this->assertSelectCount('button[title="Reset"]', 1, $buttonsHtml, 'Reset button is not present in block');
         } else {
-            $this->assertSelectCount('button[title="Reset"]', 0, $buttonsHtml,
-                'Reset button should not present in block');
+            $this->assertSelectCount(
+                'button[title="Reset"]',
+                0,
+                $buttonsHtml,
+                'Reset button should not present in block'
+            );
         }
 
         if ($expected['delete_button']) {
-            $this->assertSelectCount('button.delete', 1, $buttonsHtml,
-                'Delete button is not present in block');
+            $this->assertSelectCount('button.delete', 1, $buttonsHtml, 'Delete button is not present in block');
         } else {
-            $this->assertSelectCount('button.delete', 0, $buttonsHtml,
-                'Delete button should not present in block');
+            $this->assertSelectCount('button.delete', 0, $buttonsHtml, 'Delete button should not present in block');
         }
     }
 
@@ -157,8 +160,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function prepareLayoutDataProvider()
     {
         /** @var $urlRewrite \Magento\Core\Model\Url\Rewrite */
-        $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Url\Rewrite');
+        $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Url\Rewrite'
+        );
         /** @var $existingUrlRewrite \Magento\Core\Model\Url\Rewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Url\Rewrite',
@@ -168,34 +172,26 @@ class EditTest extends \PHPUnit_Framework_TestCase
         return array(
             // Creating new URL rewrite
             array(
-                array(
-                    'url_rewrite' => $urlRewrite
-                ),
+                array('url_rewrite' => $urlRewrite),
                 array(
                     'selector' => true,
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => false,
                     'delete_button' => false,
-                    'form' => array(
-                        'url_rewrite' => $urlRewrite
-                    )
+                    'form' => array('url_rewrite' => $urlRewrite)
                 )
             ),
             // Editing URL rewrite
             array(
-                array(
-                    'url_rewrite' => $existingUrlRewrite
-                ),
+                array('url_rewrite' => $existingUrlRewrite),
                 array(
                     'selector' => true,
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => true,
                     'delete_button' => true,
-                    'form' => array(
-                        'url_rewrite' => $existingUrlRewrite
-                    )
+                    'form' => array('url_rewrite' => $existingUrlRewrite)
                 )
             )
         );

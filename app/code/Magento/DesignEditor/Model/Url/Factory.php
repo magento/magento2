@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Model\Url;
 
 class Factory
@@ -50,7 +49,7 @@ class Factory
      * Replace name of url model
      *
      * @param string $className
-     * @return \Magento\DesignEditor\Model\Url\Factory
+     * @return $this
      */
     public function replaceClassName($className)
     {

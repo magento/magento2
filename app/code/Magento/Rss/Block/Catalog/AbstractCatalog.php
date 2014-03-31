@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rss\Block\Catalog;
 
 class AbstractCatalog extends \Magento\Rss\Block\AbstractBlock
@@ -61,18 +60,18 @@ class AbstractCatalog extends \Magento\Rss\Block\AbstractBlock
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Data $catalogData,
         array $data = array()
     ) {
         $this->_catalogData = $catalogData;
-        parent::__construct($context, $customerSession, $data);
+        parent::__construct($context, $httpContext, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -86,16 +85,20 @@ class AbstractCatalog extends \Magento\Rss\Block\AbstractBlock
     {
         if (!isset($this->_priceBlock[$type])) {
             /** @var \Magento\View\Element\RendererList $rendererList */
-            $rendererList = $this->getRendererListName()
-                ? $this->getLayout()->getBlock($this->getRendererListName())
-                : $this->getChildBlock('renderer.list');
+            $rendererList = $this->getRendererListName() ? $this->getLayout()->getBlock(
+                $this->getRendererListName()
+            ) : $this->getChildBlock(
+                'renderer.list'
+            );
             if (!$rendererList) {
                 throw new \RuntimeException(
                     'Renderer list for block "' . $this->getNameInLayout() . '" is not defined'
                 );
             }
             $overriddenTemplates = $this->getOverriddenTemplates() ?: array();
-            $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
+            $template = isset(
+                $overriddenTemplates[$type]
+            ) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
             $renderer = $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
             $this->_priceBlock[$type] = $renderer;
         }
@@ -110,18 +113,23 @@ class AbstractCatalog extends \Magento\Rss\Block\AbstractBlock
      * @param string $idSuffix Suffix for HTML containers
      * @return string
      */
-    public function getPriceHtml($product, $displayMinimalPrice = false, $idSuffix='')
+    public function getPriceHtml($product, $displayMinimalPrice = false, $idSuffix = '')
     {
         $typeId = $product->getTypeId();
         if ($this->_catalogData->canApplyMsrp($product)) {
             $typeId = $this->_mapRenderer;
         }
 
-        return $this->_getPriceBlock($typeId)
-            ->setProduct($product)
-            ->setDisplayMinimalPrice($displayMinimalPrice)
-            ->setIdSuffix($idSuffix)
-            ->setUseLinkForAsLowAs($this->_useLinkForAsLowAs)
-            ->toHtml();
+        return $this->_getPriceBlock(
+            $typeId
+        )->setProduct(
+            $product
+        )->setDisplayMinimalPrice(
+            $displayMinimalPrice
+        )->setIdSuffix(
+            $idSuffix
+        )->setUseLinkForAsLowAs(
+            $this->_useLinkForAsLowAs
+        )->toHtml();
     }
 }

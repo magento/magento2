@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -36,19 +35,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetDesignConfigException($config)
     {
         // \Magento\Core\Model\Template is an abstract class
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Email\Model\Template');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Email\Model\Template');
         $model->setDesignConfig($config);
     }
 
     public function setDesignConfigExceptionDataProvider()
     {
-        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
-        return array(
-            array(array()),
-            array(array('area' => 'frontend')),
-            array(array('store' => $storeId)),
-        );
+        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->getId();
+        return array(array(array()), array(array('area' => 'frontend')), array(array('store' => $storeId)));
     }
 }

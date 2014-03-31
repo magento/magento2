@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 
 /**
  * Form element renderer to display font picker element for VDE
@@ -31,8 +32,6 @@
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker setOptions(array $options)
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker setCssClass($class)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
-
 class FontPicker extends \Magento\Data\Form\Element\Select
 {
     /**
@@ -43,17 +42,19 @@ class FontPicker extends \Magento\Data\Form\Element\Select
     /**
      * Default options which can be limited further by element's 'options' data
      *
-     * @var array
+     * @var string[]
      */
     protected $_defaultOptions = array(
         'Arial, Helvetica, sans-serif',
         'Verdana, Geneva, sans-serif',
         'Tahoma, Geneva, sans-serif',
-        'Georgia, serif',
+        'Georgia, serif'
     );
 
     /**
      * Constructor helper
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -66,4 +67,3 @@ class FontPicker extends \Magento\Data\Form\Element\Select
         $this->setCssClass('element-' . self::CONTROL_TYPE);
     }
 }
-

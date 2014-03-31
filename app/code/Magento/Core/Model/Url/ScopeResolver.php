@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Url;
 
 class ScopeResolver implements \Magento\Url\ScopeResolverInterface
@@ -40,10 +39,8 @@ class ScopeResolver implements \Magento\Url\ScopeResolverInterface
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param string|null $areaCode
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        $areaCode = null
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager, $areaCode = null)
+    {
         $this->_storeManager = $storeManager;
         $this->_areaCode = $areaCode;
     }
@@ -54,7 +51,7 @@ class ScopeResolver implements \Magento\Url\ScopeResolverInterface
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
-        if (!($scope instanceof \Magento\Url\ScopeInterface)) {
+        if (!$scope instanceof \Magento\Url\ScopeInterface) {
             throw new \Magento\Exception('Invalid scope object');
         }
 

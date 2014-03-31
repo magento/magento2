@@ -28,6 +28,8 @@ class Noroute extends \Magento\Backend\App\Action
 {
     /**
      * Noroute action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -36,4 +38,4 @@ class Noroute extends \Magento\Backend\App\Action
         $this->_view->loadLayout(array('default', 'adminhtml_noroute'));
         $this->_view->renderLayout();
     }
-} 
+}

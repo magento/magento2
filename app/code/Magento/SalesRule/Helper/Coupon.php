@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Helper;
 
 /**
  * Helper for coupon codes creating and managing
@@ -31,16 +32,16 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Helper;
-
 class Coupon extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Constants which defines all possible coupon codes formats
      */
-    const COUPON_FORMAT_ALPHANUMERIC    = 'alphanum';
-    const COUPON_FORMAT_ALPHABETICAL    = 'alpha';
-    const COUPON_FORMAT_NUMERIC         = 'num';
+    const COUPON_FORMAT_ALPHANUMERIC = 'alphanum';
+
+    const COUPON_FORMAT_ALPHABETICAL = 'alpha';
+
+    const COUPON_FORMAT_NUMERIC = 'num';
 
     /**
      * Defines type of Coupon
@@ -50,10 +51,14 @@ class Coupon extends \Magento\App\Helper\AbstractHelper
     /**
      * XML paths to coupon codes generation options
      */
-    const XML_PATH_SALES_RULE_COUPON_LENGTH        = 'promo/auto_generated_coupon_codes/length';
-    const XML_PATH_SALES_RULE_COUPON_FORMAT        = 'promo/auto_generated_coupon_codes/format';
-    const XML_PATH_SALES_RULE_COUPON_PREFIX        = 'promo/auto_generated_coupon_codes/prefix';
-    const XML_PATH_SALES_RULE_COUPON_SUFFIX        = 'promo/auto_generated_coupon_codes/suffix';
+    const XML_PATH_SALES_RULE_COUPON_LENGTH = 'promo/auto_generated_coupon_codes/length';
+
+    const XML_PATH_SALES_RULE_COUPON_FORMAT = 'promo/auto_generated_coupon_codes/format';
+
+    const XML_PATH_SALES_RULE_COUPON_PREFIX = 'promo/auto_generated_coupon_codes/prefix';
+
+    const XML_PATH_SALES_RULE_COUPON_SUFFIX = 'promo/auto_generated_coupon_codes/suffix';
+
     const XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL = 'promo/auto_generated_coupon_codes/dash';
 
     /**
@@ -93,7 +98,7 @@ class Coupon extends \Magento\App\Helper\AbstractHelper
         return array(
             self::COUPON_FORMAT_ALPHANUMERIC => __('Alphanumeric'),
             self::COUPON_FORMAT_ALPHABETICAL => __('Alphabetical'),
-            self::COUPON_FORMAT_NUMERIC      => __('Numeric'),
+            self::COUPON_FORMAT_NUMERIC => __('Numeric')
         );
     }
 

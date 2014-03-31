@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Fallback\Rule;
 
 /**
@@ -44,6 +43,8 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
+     * Constructor
+     *
      * @param string $pattern
      * @param array $optionalParams
      */
@@ -69,7 +70,7 @@ class Simple implements RuleInterface
                     if (in_array($placeholder, $this->optionalParams)) {
                         return array();
                     } else {
-                        throw new \InvalidArgumentException("Required parameter '$placeholder' was not passed");
+                        throw new \InvalidArgumentException("Required parameter '{$placeholder}' was not passed");
                     }
                 }
                 $pattern = str_replace('<' . $placeholder . '>', $params[$placeholder], $pattern);

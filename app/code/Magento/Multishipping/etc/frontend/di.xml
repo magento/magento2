@@ -23,12 +23,30 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="multishipping_checkout"><value>/multishipping/checkout</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="multishipping_checkout" xsi:type="string">/multishipping/checkout</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="multishippingPaymentSpecification" type="Magento\Payment\Model\Method\Specification\Composite">
+        <arguments>
+            <argument name="specifications" xsi:type="array">
+                <item name="enabled" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Enabled</item>
+                <item name="3dsecure" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Multishipping\Block\Checkout\Billing">
+        <arguments>
+            <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
+        <arguments>
+            <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
+        </arguments>
     </type>
 </config>

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Reader;
 
 class ArgumentsReader
@@ -42,8 +41,9 @@ class ArgumentsReader
         /**
          * Skip native PHP types, classes without constructor
          */
-        if (!$class->getFileName() || false == $class->hasMethod('__construct')
-            || (!$inherited && $class->getConstructor()->class != $class->getName())
+        if (!$class->getFileName() || false == $class->hasMethod(
+            '__construct'
+        ) || !$inherited && $class->getConstructor()->class != $class->getName()
         ) {
             return $output;
         }
@@ -52,7 +52,7 @@ class ArgumentsReader
             $name = $parameter->getName();
             $position = $parameter->getPosition();
             $parameterClass = $parameter->getClass();
-            $type = $parameterClass ?  '\\' . $parameterClass->getName() : ($parameter->isArray() ? 'array' : null);
+            $type = $parameterClass ? '\\' . $parameterClass->getName() : ($parameter->isArray() ? 'array' : null);
             $index = $groupByPosition ? $position : $name;
             $default = null;
             if ($parameter->isOptional()) {
@@ -63,9 +63,9 @@ class ArgumentsReader
                     } elseif (true == is_int($value)) {
                         $default = $value;
                     } else {
-                        $default = is_null($parameter->getDefaultValue())
-                            ? 'null'
-                            : "'" . $parameter->getDefaultValue() . "'";
+                        $default = is_null(
+                            $parameter->getDefaultValue()
+                        ) ? 'null' : "'" . $parameter->getDefaultValue() . "'";
                     }
                 } elseif ($parameter->allowsNull()) {
                     $default = 'null';
@@ -78,7 +78,7 @@ class ArgumentsReader
                 'position' => $position,
                 'type' => $type,
                 'isOptional' => $parameter->isOptional(),
-                'default' => $default,
+                'default' => $default
             );
         }
         return $output;
@@ -109,8 +109,14 @@ class ArgumentsReader
 
         $source = file($class->getFileName());
         $content = implode('', array_slice($source, $start, $length));
-        $pattern = '/parent::__construct\(([ ' . PHP_EOL . ']*[$]{1}[a-zA-Z0-9_]*,)*[ ' . PHP_EOL . ']*'
-            . '([$]{1}[a-zA-Z0-9_]*){1}[' . PHP_EOL . ' ]*\);/';
+        $pattern = '/parent::__construct\(([ ' .
+            PHP_EOL .
+            ']*[$]{1}[a-zA-Z0-9_]*,)*[ ' .
+            PHP_EOL .
+            ']*' .
+            '([$]{1}[a-zA-Z0-9_]*){1}[' .
+            PHP_EOL .
+            ' ]*\);/';
 
         if (!preg_match($pattern, $content, $matches)) {
             return null;
@@ -131,7 +137,7 @@ class ArgumentsReader
             $output[$argumentPosition] = array(
                 'name' => $argumentName,
                 'position' => $argumentPosition,
-                'type' => $type,
+                'type' => $type
             );
         }
         return $output;
@@ -180,7 +186,7 @@ class ArgumentsReader
             foreach ($var as $key => $value) {
                 $toImplode[] = var_export($key, true) . ' => ' . $this->_varExportMin($value);
             }
-            $code = 'array('.implode(', ', $toImplode).')';
+            $code = 'array(' . implode(', ', $toImplode) . ')';
             return $code;
         } else {
             return var_export($var, true);
@@ -200,11 +206,11 @@ class ArgumentsReader
         $annotations = array();
         preg_match_all($regexp, $docBlock, $matches);
         foreach (array_keys($matches[0]) as $index) {
-            $name  = $matches[1][$index];
+            $name = $matches[1][$index];
             $value = trim($matches[2][$index], '" ');
             $annotations[$name] = $value;
         }
 
         return $annotations;
     }
-} 
+}

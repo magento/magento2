@@ -22,38 +22,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class ClassA
 {
-
 }
 class ClassB
 {
-
 }
 class ClassC
 {
-
 }
-
 interface InterfaceA
 {
-
 }
 class ImplementationOfInterfaceA implements InterfaceA
 {
-
 }
-
 interface InterfaceB
 {
-
 }
 class ImplementationOfInterfaceB implements InterfaceB
 {
-
 }
-
 class Context implements \Magento\ObjectManager\ContextInterface
 {
     /**
@@ -82,7 +71,9 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_implOfBInterface;
 
     public function __construct(
-        \ClassA $exA, \ClassB $exB, \ClassC $exC,
+        \ClassA $exA,
+        \ClassB $exB,
+        \ClassC $exC,
         \InterfaceA $interfaceA,
         \ImplementationOfInterfaceB $implOfBInterface
     ) {
@@ -93,13 +84,13 @@ class Context implements \Magento\ObjectManager\ContextInterface
         $this->_implOfBInterface = $implOfBInterface;
     }
 }
-
 class ClassArgumentAlreadyInjectedIntoContext
 {
     /**
      * @var Context
      */
     protected $_context;
+
     /**
      * @var ClassA
      */
@@ -115,7 +106,6 @@ class ClassArgumentAlreadyInjectedIntoContext
         $this->_exA = $exA;
     }
 }
-
 class ClassArgumentWrongOrderForParentArguments extends ClassArgumentAlreadyInjectedIntoContext
 {
     /**
@@ -146,7 +136,6 @@ class ClassArgumentWrongOrderForParentArguments extends ClassArgumentAlreadyInje
         $this->_exB = $exB;
     }
 }
-
 class ClassArgumentWithOptionalParams
 {
     /**
@@ -169,7 +158,6 @@ class ClassArgumentWithOptionalParams
         $this->_data = $data;
     }
 }
-
 class ClassArgumentWithWrongParentArgumentsType extends ClassArgumentWithOptionalParams
 {
     /**

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
 
 class CollectTotalsTest extends \PHPUnit_Framework_TestCase
@@ -33,8 +32,9 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals');
+        $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals'
+        );
     }
 
     /**
@@ -64,7 +64,8 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $quoteAddress = $quote->getBillingAddress();
 
-        $eventObserver = $objectManager->create('Magento\Event\Observer',
+        $eventObserver = $objectManager->create(
+            'Magento\Event\Observer',
             array('data' => array('quote_address' => $quoteAddress))
         );
         $this->model->dispatch($eventObserver);
@@ -99,7 +100,8 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $quoteAddress = $quote->getBillingAddress();
 
-        $eventObserver = $objectManager->create('Magento\Event\Observer',
+        $eventObserver = $objectManager->create(
+            'Magento\Event\Observer',
             array('data' => array('quote_address' => $quoteAddress))
         );
         $this->model->dispatch($eventObserver);

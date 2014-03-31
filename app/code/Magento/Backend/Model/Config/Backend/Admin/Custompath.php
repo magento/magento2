@@ -38,12 +38,12 @@ class Custompath extends \Magento\Core\Model\Config\Value
     /**
      * Check whether redirect should be set
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Custom
+     * @return $this
      */
     protected function _beforeSave()
     {
         if ($this->getOldValue() != $this->getValue()) {
-            $this->_coreRegistry->register('custom_admin_path_redirect', true, true);
+            $this->_registry->register('custom_admin_path_redirect', true, true);
         }
         return $this;
     }

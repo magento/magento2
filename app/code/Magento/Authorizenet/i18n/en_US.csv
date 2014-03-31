@@ -47,7 +47,7 @@
 "Payment canceling error.","Payment canceling error."
 "Payment capturing error.","Payment capturing error."
 "Payment error. Order was not found.","Payment error. Order was not found."
-"Payment error. Paid amount doesn\'t match the order amount.","Payment error. Paid amount doesn\'t match the order amount."
+"Payment error. Paid amount doesn't match the order amount.","Payment error. Paid amount doesn't match the order amount."
 "Payment from Applicable Countries","Payment from Applicable Countries"
 "Payment from Specific Countries","Payment from Specific Countries"
 "Payment partial authorization error.","Payment partial authorization error."

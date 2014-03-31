@@ -188,11 +188,24 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
             <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->getRandomString(20); ?>
             <?php
-            $addToCartUrl = $this->getProduct()->isSalable()
-                ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
-                : '';
+            $tierPriceData = [
+                'addToCartUrl' => $this->getProduct()->isSalable()
+                        ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
+                        : '',
+                'name' => $_product->getName(),
+                'price' => $_price['real_price_html'],
+                'msrp' => $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(), true, false),
+            ];
+            if ($this->getCanDisplayQty() !== false) {
+                $tierPriceData['qty'] = $_price['price_qty'];
+            }
             ?>
-            <a href="#" id="<?php echo($popupId);?>" data-tier-price='{addToCartUrl:"<?php echo $addToCartUrl; ?>", name:"<?php echo $_product->getName() ?>", price:<?php echo json_encode($_price['real_price_html']) ?>, msrp:"<?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(),true,false) ?>"<?php if ($this->getCanDisplayQty() !== false): ?>, qty:"<?php echo $_price['price_qty']?>"<?php endif ?>}'><?php echo __('Click for price'); ?></a>
+            <a href="#"
+               id="<?php echo($popupId);?>"
+               data-tier-price="<?php $this->escapeHtml(
+                   $this->helper('Magento\Core\Helper\Data')->jsonEncode($tierPriceData)
+               )?>"
+            ><?php echo __('Click for price'); ?></a>
         <?php else: ?>
             <span class="msrp-price-hide-message">
                 <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>

@@ -31,9 +31,7 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/job' => 'name'
-    );
+    protected $_idAttributes = array('/config/group' => 'id', '/config/group/job' => 'name');
 
     /**
      * Path to tough XSD for merged file validation
@@ -54,7 +52,7 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $files = \Magento\TestFramework\Utility\Files::init()->getConfigFiles('crontab.xml');
         $mergedConfig = new \Magento\Config\Dom(
-            '<config></config>',
+            '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></config>',
             $this->_idAttributes
         );
 

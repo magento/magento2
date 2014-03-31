@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout Customer Address Edit Form" design_abstraction="custom">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd" label="Multishipping Checkout Customer Address Edit Form" design_abstraction="custom">
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml" cacheable="false"/>
+        <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml"/>
     </referenceContainer>
     <update handle="customer_form_template_handle"/>
 </layout>

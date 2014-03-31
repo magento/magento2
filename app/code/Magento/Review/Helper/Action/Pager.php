@@ -23,29 +23,36 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Helper\Action;
+
+use Magento\Model\Exception;
 
 /**
  * Action pager helper for iterating over search results
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Helper\Action;
-
 class Pager extends \Magento\App\Helper\AbstractHelper
 {
     const STORAGE_PREFIX = 'search_result_ids';
 
     /**
+     * Storage id
+     *
      * @var int
      */
     protected $_storageId = null;
 
     /**
+     * Array of items
+     *
      * @var array
      */
     protected $_items = null;
 
     /**
+     * Backend session model
+     *
      * @var \Magento\Backend\Model\Session
      */
     protected $_backendSession;
@@ -54,10 +61,8 @@ class Pager extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Backend\Model\Session $backendSession
      */
-    public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Backend\Model\Session $backendSession
-    ) {
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\Backend\Model\Session $backendSession)
+    {
         $this->_backendSession = $backendSession;
         parent::__construct($context);
     }
@@ -65,7 +70,7 @@ class Pager extends \Magento\App\Helper\AbstractHelper
     /**
      * Set storage id
      *
-     * @param $storageId
+     * @param int $storageId
      * @return void
      */
     public function setStorageId($storageId)
@@ -95,7 +100,7 @@ class Pager extends \Magento\App\Helper\AbstractHelper
     protected function _loadItems()
     {
         if (is_null($this->_items)) {
-            $this->_items = (array) $this->_backendSession->getData($this->_getStorageKey());
+            $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
         }
     }
 
@@ -132,6 +137,7 @@ class Pager extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Return item position based on passed in value
      *
      * @param mixed $value
      * @return int|bool
@@ -146,11 +152,12 @@ class Pager extends \Magento\App\Helper\AbstractHelper
      * Get storage key
      *
      * @return string
+     * @throws Exception
      */
     protected function _getStorageKey()
     {
         if (!$this->_storageId) {
-            throw new \Magento\Core\Exception(__('Storage key was not set'));
+            throw new Exception(__('Storage key was not set'));
         }
 
         return self::STORAGE_PREFIX . $this->_storageId;

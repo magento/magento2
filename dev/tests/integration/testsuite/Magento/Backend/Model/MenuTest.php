@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model;
 
 /**
@@ -42,7 +41,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Backend\Model\Auth');
@@ -53,32 +52,43 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testMenuItemManipulation()
     {
         /* @var $menu \Magento\Backend\Model\Menu */
-        $menu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Menu\Config')
-            ->getMenu();
+        $menu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Menu\Config'
+        )->getMenu();
         /* @var $itemFactory \Magento\Backend\Model\Menu\Item\Factory */
-        $itemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Menu\Item\Factory');
+        $itemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\Menu\Item\Factory'
+        );
 
         // Add new item in top level
-        $menu->add($itemFactory->create(array(
-            'id' => 'Magento_Backend::system2',
-            'title' => 'Extended System',
-            'module' => 'Magento_Backend',
-            'resource' => 'Magento_Backend::system2'
-        )));
+        $menu->add(
+            $itemFactory->create(
+                array(
+                    'id' => 'Magento_Backend::system2',
+                    'title' => 'Extended System',
+                    'module' => 'Magento_Backend',
+                    'resource' => 'Magento_Backend::system2'
+                )
+            )
+        );
 
-         //Add submenu
-        $menu->add($itemFactory->create(array(
-            'id' => 'Magento_Backend::system2_acl',
-            'title' => 'Acl',
-            'module' => 'Magento_Backend',
-            'action' => 'admin/backend/acl/index',
-            'resource' => 'Magento_Backend::system2_acl',
-        )), 'Magento_Backend::system2');
+        //Add submenu
+        $menu->add(
+            $itemFactory->create(
+                array(
+                    'id' => 'Magento_Backend::system2_acl',
+                    'title' => 'Acl',
+                    'module' => 'Magento_Backend',
+                    'action' => 'admin/backend/acl/index',
+                    'resource' => 'Magento_Backend::system2_acl'
+                )
+            ),
+            'Magento_Backend::system2'
+        );
 
         // Modify existing menu item
-        $menu->get('Magento_Backend::system2')->setTitle('Base system')
-            ->setAction('admin/backend/system/base'); // remove dependency from config
+        $menu->get('Magento_Backend::system2')->setTitle('Base system')->setAction('admin/backend/system/base');
+        // remove dependency from config
 
         // Change sort order
         $menu->reorder('Magento_Backend::system', 40);

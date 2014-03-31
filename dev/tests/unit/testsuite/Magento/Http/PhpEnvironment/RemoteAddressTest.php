@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Http\PhpEnvironment;
 
 class RemoteAddressTest extends \PHPUnit_Framework_TestCase
@@ -35,20 +34,19 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
     protected $_request;
 
     /**
-     * @var TestFramework\Helper\ObjectManager
+     * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 
-
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getServer'))
-            ->getMock();
+        $this->_request = $this->getMockBuilder(
+            'Magento\App\Request\Http'
+        )->disableOriginalConstructor()->setMethods(
+            array('getServer')
+        )->getMock();
 
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-
     }
 
     /**
@@ -56,13 +54,11 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRemoteAddress($alternativeHeaders, $serverValueMap, $expected, $ipToLong)
     {
-        $remoteAddress = $this->_objectManager->getObject('Magento\HTTP\PhpEnvironment\RemoteAddress', array(
-            'httpRequest' => $this->_request,
-            'alternativeHeaders' => $alternativeHeaders
-        ));
-        $this->_request->expects($this->any())
-            ->method('getServer')
-            ->will($this->returnValueMap($serverValueMap));
+        $remoteAddress = $this->_objectManager->getObject(
+            'Magento\HTTP\PhpEnvironment\RemoteAddress',
+            array('httpRequest' => $this->_request, 'alternativeHeaders' => $alternativeHeaders)
+        );
+        $this->_request->expects($this->any())->method('getServer')->will($this->returnValueMap($serverValueMap));
         $this->assertEquals($expected, $remoteAddress->getRemoteAddress($ipToLong));
     }
 

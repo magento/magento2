@@ -45,7 +45,12 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_application = $this->getMock(
-            'Magento\TestFramework\Application', array('reinitialize'), array(), '', false);
+            'Magento\TestFramework\Application',
+            array('reinitialize'),
+            array(),
+            '',
+            false
+        );
         $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }
 

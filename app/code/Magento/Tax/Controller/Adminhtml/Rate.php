@@ -31,8 +31,9 @@
  * @package    Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Tax\Controller\Adminhtml;
+
+use Magento\App\ResponseInterface;
 
 class Rate extends \Magento\Backend\App\Action
 {
@@ -56,24 +57,24 @@ class Rate extends \Magento\Backend\App\Action
     /**
      * Show Main Grid
      *
+     * @return void
      */
     public function indexAction()
     {
         $this->_title->add(__('Tax Zones and Rates'));
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
+        $this->_initAction()->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
         $this->_view->renderLayout();
     }
 
     /**
      * Show Add Form
      *
+     * @return void
      */
     public function addAction()
     {
-        $rateModel = $this->_objectManager->get('Magento\Tax\Model\Calculation\Rate')
-            ->load(null);
+        $rateModel = $this->_objectManager->get('Magento\Tax\Model\Calculation\Rate')->load(null);
 
         $this->_title->add(__('Tax Zones and Rates'));
 
@@ -85,16 +86,24 @@ class Rate extends \Magento\Backend\App\Action
             $rateModel->setTaxPostcode($rateModel->getZipFrom() . '-' . $rateModel->getZipTo());
         }
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
-            ->_addBreadcrumb(__('New Tax Rate'), __('New Tax Rate'))
-            ->_addContent(
-                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
-                ->assign('header', __('Add New Tax Rate'))
-                ->assign('form',
-                    $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
-                )
-            );
+        $this->_initAction()->_addBreadcrumb(
+            __('Manage Tax Rates'),
+            __('Manage Tax Rates'),
+            $this->getUrl('tax/rate')
+        )->_addBreadcrumb(
+            __('New Tax Rate'),
+            __('New Tax Rate')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save'
+            )->assign(
+                'header',
+                __('Add New Tax Rate')
+            )->assign(
+                'form',
+                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
+            )
+        );
         $this->_view->renderLayout();
     }
 
@@ -123,7 +132,7 @@ class Rate extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('The tax rate has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                 return true;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -138,35 +147,47 @@ class Rate extends \Magento\Backend\App\Action
 
     /**
      * Save Tax Rate via AJAX
+     *
+     * @return void
      */
     public function ajaxSaveAction()
     {
         $responseContent = '';
         try {
             $rateData = $this->_processRateData($this->getRequest()->getPost());
-            $rate = $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate')
-                ->setData($rateData)
-                ->save();
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => true,
-                'error_message' => '',
-                'tax_calculation_rate_id' => $rate->getId(),
-                'code' => $rate->getCode(),
-            ));
-        } catch (\Magento\Core\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => false,
-                'error_message' => $e->getMessage(),
-                'tax_calculation_rate_id' => '',
-                'code' => '',
-            ));
+            $rate = $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate')->setData($rateData)->save();
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array(
+                    'success' => true,
+                    'error_message' => '',
+                    'tax_calculation_rate_id' => $rate->getId(),
+                    'code' => $rate->getCode()
+                )
+            );
+        } catch (\Magento\Model\Exception $e) {
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array(
+                    'success' => false,
+                    'error_message' => $e->getMessage(),
+                    'tax_calculation_rate_id' => '',
+                    'code' => ''
+                )
+            );
         } catch (\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => false,
-                'error_message' => __('Something went wrong saving this rate.'),
-                'tax_calculation_rate_id' => '',
-                'code' => '',
-            ));
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array(
+                    'success' => false,
+                    'error_message' => __('Something went wrong saving this rate.'),
+                    'tax_calculation_rate_id' => '',
+                    'code' => ''
+                )
+            );
         }
         $this->getResponse()->setBody($responseContent);
     }
@@ -193,6 +214,7 @@ class Rate extends \Magento\Backend\App\Action
     /**
      * Show Edit Form
      *
+     * @return void
      */
     public function editAction()
     {
@@ -211,17 +233,29 @@ class Rate extends \Magento\Backend\App\Action
 
         $this->_title->add(sprintf("%s", $rateModel->getCode()));
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
-            ->_addBreadcrumb(__('Edit Tax Rate'), __('Edit Tax Rate'))
-            ->_addContent(
-                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
-                ->assign('header', __('Edit Tax Rate'))
-                ->assign('form',
-                    $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
-                        ->setShowLegend(true)
+        $this->_initAction()->_addBreadcrumb(
+            __('Manage Tax Rates'),
+            __('Manage Tax Rates'),
+            $this->getUrl('tax/rate')
+        )->_addBreadcrumb(
+            __('Edit Tax Rate'),
+            __('Edit Tax Rate')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save'
+            )->assign(
+                'header',
+                __('Edit Tax Rate')
+            )->assign(
+                'form',
+                $this->_view->getLayout()->createBlock(
+                    'Magento\Tax\Block\Adminhtml\Rate\Form',
+                    'tax_rate_form'
+                )->setShowLegend(
+                    true
                 )
-            );
+            )
+        );
         $this->_view->renderLayout();
     }
 
@@ -241,17 +275,14 @@ class Rate extends \Magento\Backend\App\Action
                     $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
                     $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                     return true;
-                }
-                catch (\Magento\Core\Exception $e) {
+                } catch (\Magento\Model\Exception $e) {
                     $this->messageManager->addError($e->getMessage());
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $this->messageManager->addError(__('Something went wrong deleting this rate.'));
                 }
                 if ($referer = $this->getRequest()->getServer('HTTP_REFERER')) {
                     $this->getResponse()->setRedirect($referer);
-                }
-                else {
+                } else {
                     $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                 }
             } else {
@@ -265,6 +296,8 @@ class Rate extends \Magento\Backend\App\Action
 
     /**
      * Delete Tax Rate via AJAX
+     *
+     * @return void
      */
     public function ajaxDeleteAction()
     {
@@ -274,20 +307,23 @@ class Rate extends \Magento\Backend\App\Action
         try {
             $rate = $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate')->load($rateId);
             $rate->delete();
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => true,
-                'error_message' => ''
-            ));
-        } catch (\Magento\Core\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => false,
-                'error_message' => $e->getMessage()
-            ));
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array('success' => true, 'error_message' => '')
+            );
+        } catch (\Magento\Model\Exception $e) {
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array('success' => false, 'error_message' => $e->getMessage())
+            );
         } catch (\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
-                'success' => false,
-                'error_message' => __('An error occurred while deleting this tax rate.')
-            ));
+            $responseContent = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                array('success' => false, 'error_message' => __('An error occurred while deleting this tax rate.'))
+            );
         }
         $this->getResponse()->setBody($responseContent);
     }
@@ -295,6 +331,7 @@ class Rate extends \Magento\Backend\App\Action
     /**
      * Export rates grid to CSV format
      *
+     * @return ResponseInterface
      */
     public function exportCsvAction()
     {
@@ -305,6 +342,8 @@ class Rate extends \Magento\Backend\App\Action
 
     /**
      * Export rates grid to XML format
+     *
+     * @return ResponseInterface
      */
     public function exportXmlAction()
     {
@@ -321,15 +360,22 @@ class Rate extends \Magento\Backend\App\Action
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Tax::sales_tax_rates')
-            ->_addBreadcrumb(__('Sales'), __('Sales'))
-            ->_addBreadcrumb(__('Tax'), __('Tax'));
+        $this->_setActiveMenu(
+            'Magento_Tax::sales_tax_rates'
+        )->_addBreadcrumb(
+            __('Sales'),
+            __('Sales')
+        )->_addBreadcrumb(
+            __('Tax'),
+            __('Tax')
+        );
         return $this;
     }
 
     /**
      * Import and export Page
      *
+     * @return void
      */
     public function importExportAction()
     {
@@ -338,15 +384,20 @@ class Rate extends \Magento\Backend\App\Action
         $this->_title->add(__('Import and Export Tax Rates'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Tax::system_convert_tax')
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExportHeader'))
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExport'));
+        $this->_setActiveMenu(
+            'Magento_Tax::system_convert_tax'
+        )->_addContent(
+            $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExportHeader')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\ImportExport')
+        );
         $this->_view->renderLayout();
     }
 
     /**
      * import action from import/export tax
      *
+     * @return void
      */
     public function importPostAction()
     {
@@ -357,7 +408,7 @@ class Rate extends \Magento\Backend\App\Action
                 $importHandler->importFromCsvFile($this->getRequest()->getFiles('import_rates_file'));
 
                 $this->messageManager->addSuccess(__('The tax rate has been imported.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Invalid file upload attempt'));
@@ -371,41 +422,50 @@ class Rate extends \Magento\Backend\App\Action
     /**
      * export action from import/export tax
      *
+     * @return ResponseInterface
      */
     public function exportPostAction()
     {
         /** start csv content and set template */
-        $headers = new \Magento\Object(array(
-            'code'         => __('Code'),
-            'country_name' => __('Country'),
-            'region_name'  => __('State'),
-            'tax_postcode' => __('Zip/Post Code'),
-            'rate'         => __('Rate'),
-            'zip_is_range' => __('Zip/Post is Range'),
-            'zip_from'     => __('Range From'),
-            'zip_to'       => __('Range To')
-        ));
-        $template = '"{{code}}","{{country_name}}","{{region_name}}","{{tax_postcode}}","{{rate}}"'
-                . ',"{{zip_is_range}}","{{zip_from}}","{{zip_to}}"';
+        $headers = new \Magento\Object(
+            array(
+                'code' => __('Code'),
+                'country_name' => __('Country'),
+                'region_name' => __('State'),
+                'tax_postcode' => __('Zip/Post Code'),
+                'rate' => __('Rate'),
+                'zip_is_range' => __('Zip/Post is Range'),
+                'zip_from' => __('Range From'),
+                'zip_to' => __('Range To')
+            )
+        );
+        $template = '"{{code}}","{{country_name}}","{{region_name}}","{{tax_postcode}}","{{rate}}"' .
+            ',"{{zip_is_range}}","{{zip_from}}","{{zip_to}}"';
         $content = $headers->toString($template);
 
-        $storeTaxTitleTemplate       = array();
+        $storeTaxTitleTemplate = array();
         $taxCalculationRateTitleDict = array();
 
-        foreach ($this->_objectManager->create('Magento\Core\Model\Store')->getCollection()->setLoadDefault(false) as $store) {
+        foreach ($this->_objectManager->create(
+            'Magento\Core\Model\Store'
+        )->getCollection()->setLoadDefault(
+            false
+        ) as $store) {
             $storeTitle = 'title_' . $store->getId();
-            $content   .= ',"' . $store->getCode() . '"';
-            $template  .= ',"{{' . $storeTitle . '}}"';
+            $content .= ',"' . $store->getCode() . '"';
+            $template .= ',"{{' . $storeTitle . '}}"';
             $storeTaxTitleTemplate[$storeTitle] = null;
         }
         unset($store);
 
         $content .= "\n";
 
-        foreach ($this->_objectManager->create('Magento\Tax\Model\Calculation\Rate\Title')->getCollection() as $title) {
+        foreach ($this->_objectManager->create(
+            'Magento\Tax\Model\Calculation\Rate\Title'
+        )->getCollection() as $title) {
             $rateId = $title->getTaxCalculationRateId();
 
-            if (! array_key_exists($rateId, $taxCalculationRateTitleDict)) {
+            if (!array_key_exists($rateId, $taxCalculationRateTitleDict)) {
                 $taxCalculationRateTitleDict[$rateId] = $storeTaxTitleTemplate;
             }
 
@@ -413,9 +473,9 @@ class Rate extends \Magento\Backend\App\Action
         }
         unset($title);
 
-        $collection = $this->_objectManager->create('Magento\Tax\Model\Resource\Calculation\Rate\Collection')
-            ->joinCountryTable()
-            ->joinRegionTable();
+        $collection = $this->_objectManager->create(
+            'Magento\Tax\Model\Resource\Calculation\Rate\Collection'
+        )->joinCountryTable()->joinRegionTable();
 
         while ($rate = $collection->fetchItem()) {
             if ($rate->getTaxRegionId() == 0) {
@@ -434,6 +494,9 @@ class Rate extends \Magento\Backend\App\Action
         return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {
@@ -447,8 +510,11 @@ class Rate extends \Magento\Backend\App\Action
 
             case 'importPost':
             case 'exportPost':
-                return $this->_authorization->isAllowed('Magento_Tax::manage_tax')
-                    || $this->_authorization->isAllowed('Magento_Tax::import_export');
+                return $this->_authorization->isAllowed(
+                    'Magento_Tax::manage_tax'
+                ) || $this->_authorization->isAllowed(
+                    'Magento_Tax::import_export'
+                );
                 break;
 
             default:

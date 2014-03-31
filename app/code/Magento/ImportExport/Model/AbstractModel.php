@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model;
 
 /**
  * Operation abstract class
@@ -31,34 +32,32 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model;
-
 abstract class AbstractModel extends \Magento\Object
 {
     /**
      * Enable loging
      *
-     * @var boolean
+     * @var bool
      */
     protected $_debugMode = false;
 
     /**
-     * Loger instance
-     * @var \Magento\Core\Model\Log\Adapter
+     * Logger instance
+     * @var \Magento\Logger\Adapter
      */
     protected $_logInstance;
 
     /**
      * Fields that should be replaced in debug with '***'
      *
-     * @var array
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = array();
 
     /**
      * Contains all log information
      *
-     * @var array
+     * @var string[]
      */
     protected $_logTrace = array();
 
@@ -73,20 +72,20 @@ abstract class AbstractModel extends \Magento\Object
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Core\Model\Log\AdapterFactory
+     * @var \Magento\Logger\AdapterFactory
      */
     protected $_adapterFactory;
 
     /**
      * @param \Magento\Logger $logger
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
+     * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
+        \Magento\Logger\AdapterFactory $adapterFactory,
         array $data = array()
     ) {
         $this->_logger = $logger;
@@ -100,7 +99,7 @@ abstract class AbstractModel extends \Magento\Object
      * Log file dir: var/log/import_export/%Y/%m/%d/%time%_%operation_type%_%entity_type%.log
      *
      * @param mixed $debugData
-     * @return \Magento\ImportExport\Model\AbstractModel
+     * @return $this
      */
     public function addLogComment($debugData)
     {
@@ -114,20 +113,25 @@ abstract class AbstractModel extends \Magento\Object
         }
 
         if (!$this->_logInstance) {
-            $dirName  = date('Y/m/d/');
-            $fileName = join('_', array(
-                str_replace(':', '-', $this->getRunAt()),
-                $this->getScheduledOperationId(),
-                $this->getOperationType(),
-                $this->getEntity()
-            ));
-            $path = 'import_export/'. $dirName;
+            $dirName = date('Y/m/d/');
+            $fileName = join(
+                '_',
+                array(
+                    str_replace(':', '-', $this->getRunAt()),
+                    $this->getScheduledOperationId(),
+                    $this->getOperationType(),
+                    $this->getEntity()
+                )
+            );
+            $path = 'import_export/' . $dirName;
             $this->_varDirectory->create($path);
 
             $fileName = $path . $fileName . '.log';
-            $this->_logInstance = $this->_adapterFactory
-                ->create(array('fileName' => $this->_varDirectory->getAbsolutePath($fileName)))
-                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys);
+            $this->_logInstance = $this->_adapterFactory->create(
+                array('fileName' => $this->_varDirectory->getAbsolutePath($fileName))
+            )->setFilterDataKeys(
+                $this->_debugReplacePrivateDataKeys
+            );
         }
         $this->_logInstance->log($debugData);
         return $this;
@@ -136,7 +140,7 @@ abstract class AbstractModel extends \Magento\Object
     /**
      * Return human readable debug trace.
      *
-     * @return array
+     * @return string
      */
     public function getFormatedLogTrace()
     {

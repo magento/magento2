@@ -38,7 +38,7 @@
 
     <?php foreach ($cards as $key => $card): ?>
         <?php if ($showCount): ?>
-            <span><?php echo sprintf(__('Credit Card %s'), $key + 1); ?></span>
+            <span><?php echo __('Credit Card %1', $key + 1); ?></span>
         <?php endif;?>
 
         <table class="data-table<?php if ($showCount):?> offset<?php endif;?>">

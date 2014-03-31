@@ -23,41 +23,42 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 
-class Action
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @var \Magento\UrlFactory
+     * @var Action\UrlBuilder
      */
-    protected $_urlFactory;
+    protected $actionUrlBuilder;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\UrlFactory $urlFactory
+     * @param Action\UrlBuilder $actionUrlBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\UrlFactory $urlFactory,
+        Action\UrlBuilder $actionUrlBuilder,
         array $data = array()
     ) {
-        $this->_urlFactory = $urlFactory;
+        $this->actionUrlBuilder = $actionUrlBuilder;
         parent::__construct($context, $data);
     }
 
+    /**
+     * Render action
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
-        /** @var \Magento\UrlInterface $urlModel */
-        $urlModel = $this->_urlFactory->create()->setScope($row->getData('_first_store_id'));
-        $href = $urlModel->getUrl(
-            $row->getIdentifier(), array(
-                '_current' => false,
-                '_query' => '___store='.$row->getStoreCode()
-           )
+        $href = $this->actionUrlBuilder->getUrl(
+            $row->getIdentifier(),
+            $row->getData('_first_store_id'),
+            $row->getStoreCode()
         );
-        return '<a href="'.$href.'" target="_blank">'.__('Preview').'</a>';
+        return '<a href="' . $href . '" target="_blank">' . __('Preview') . '</a>';
     }
 }

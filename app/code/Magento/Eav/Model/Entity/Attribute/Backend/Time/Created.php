@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Entity\Attribute\Backend\Time;
 
 /**
@@ -40,10 +39,8 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      * @param \Magento\Logger $logger
      * @param \Magento\Stdlib\DateTime $dateTime
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Stdlib\DateTime $dateTime
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Stdlib\DateTime $dateTime)
+    {
         $this->dateTime = $dateTime;
         parent::__construct($logger);
     }
@@ -52,7 +49,7 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      * Set created date
      *
      * @param \Magento\Core\Model\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Created
+     * @return $this
      */
     public function beforeSave($object)
     {

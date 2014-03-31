@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Base class for invoice total
@@ -31,15 +32,13 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Invoice\Total;
-
 abstract class AbstractTotal extends \Magento\Sales\Model\Order\Total\AbstractTotal
 {
     /**
      * Collect invoice subtotal
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
-     * @return \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

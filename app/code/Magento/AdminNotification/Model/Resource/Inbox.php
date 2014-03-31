@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\AdminNotification\Model\Resource;
 
 /**
  * AdminNotification Inbox model
@@ -32,13 +32,12 @@
  * @package     Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\AdminNotification\Model\Resource;
-
-class Inbox extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Inbox extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * AdminNotification Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,17 +48,22 @@ class Inbox extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Load latest notice
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
-     * @return \Magento\AdminNotification\Model\Resource\Inbox
+     * @return $this
      */
     public function loadLatestNotice(\Magento\AdminNotification\Model\Inbox $object)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable())
-            ->order($this->getIdFieldName() . ' DESC')
-            ->where('is_read != 1')
-            ->where('is_remove != 1')
-            ->limit(1);
+        $select = $adapter->select()->from(
+            $this->getMainTable()
+        )->order(
+            $this->getIdFieldName() . ' DESC'
+        )->where(
+            'is_read != 1'
+        )->where(
+            'is_remove != 1'
+        )->limit(
+            1
+        );
         $data = $adapter->fetchRow($select);
 
         if ($data) {
@@ -80,13 +84,21 @@ class Inbox extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array(
-                'severity'     => 'severity',
-                'count_notice' => new \Zend_Db_Expr('COUNT(' . $this->getIdFieldName() . ')')))
-            ->group('severity')
-            ->where('is_remove=?', 0)
-            ->where('is_read=?', 0);
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array(
+                'severity' => 'severity',
+                'count_notice' => new \Zend_Db_Expr('COUNT(' . $this->getIdFieldName() . ')')
+            )
+        )->group(
+            'severity'
+        )->where(
+            'is_remove=?',
+            0
+        )->where(
+            'is_read=?',
+            0
+        );
         $return = $adapter->fetchPairs($select);
         return $return;
     }
@@ -96,14 +108,13 @@ class Inbox extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @param array $data
+     * @return void
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {
         $adapter = $this->_getWriteAdapter();
         foreach ($data as $item) {
-            $select = $adapter->select()
-                ->from($this->getMainTable())
-                ->where('title = ?', $item['title']);
+            $select = $adapter->select()->from($this->getMainTable())->where('title = ?', $item['title']);
 
             if (empty($item['url'])) {
                 $select->where('url IS NULL');

@@ -25,8 +25,4 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array(
-    '_website'   => 'website1',
-    '_email'     => 'test1@email.com',
-    '_entity_id' => '1',
-);
+return array('_website' => 'website1', '_email' => 'test1@email.com', '_entity_id' => '1');

@@ -35,53 +35,76 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $renderer = $this->getMock('Magento\View\Element\RendererList', array(), array(), '', false);
+        $rendererType = 'some-type';
+        $renderer = $this->getMock(
+            'Magento\View\Element\AbstractBlock',
+            array('setRenderedBlock'),
+            array(),
+            '',
+            false
+        );
 
-        $renderer->expects($this->once())->method('getRenderer')
-            ->with('some-type', AbstractItems::DEFAULT_TYPE)->will($this->returnValue('rendererObject'));
+        $rendererList = $this->getMock('Magento\View\Element\RendererList', array(), array(), '', false);
+        $rendererList->expects(
+            $this->once()
+        )->method(
+            'getRenderer'
+        )->with(
+            $rendererType,
+            AbstractItems::DEFAULT_TYPE
+        )->will(
+            $this->returnValue($renderer)
+        );
 
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
+        $layout = $this->getMock('Magento\Core\Model\Layout', array('getChildName', 'getBlock'), array(), '', false);
 
-        $layout->expects($this->once())
-            ->method('getChildName')
-            ->will($this->returnValue('renderer.list'));
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
 
-        $layout->expects($this->once())
-            ->method('getBlock')
-            ->with('renderer.list')
-            ->will($this->returnValue($renderer));
+        $layout->expects(
+            $this->once()
+        )->method(
+            'getBlock'
+        )->with(
+            'renderer.list'
+        )->will(
+            $this->returnValue($rendererList)
+        );
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
-        $block = $this->_objectManager->getObject('Magento\Sales\Block\Items\AbstractItems', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Sales\Block\Items\AbstractItems',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
-        $this->assertSame('rendererObject', $block->getItemRenderer('some-type'));
+        $renderer->expects($this->once())->method('setRenderedBlock')->with($block);
+
+        $this->assertSame($renderer, $block->getItemRenderer($rendererType));
     }
 
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Renderer list for block "" is not defined
      */
-    public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
+    public function te1stGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
-        $layout->expects($this->once())
-            ->method('getChildName')
-            ->will($this->returnValue(null));
+        $layout = $this->getMock('Magento\Core\Model\Layout', array('getChildName', 'getBlock'), array(), '', false);
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
-        $block = $this->_objectManager->getObject('Magento\Sales\Block\Items\AbstractItems', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Sales\Block\Items\AbstractItems',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $block->getItemRenderer('some-type');
     }

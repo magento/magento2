@@ -27,7 +27,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:redefine schemaLocation="types.xsd">
+    <xs:redefine schemaLocation="../../../../../lib/Magento/Data/etc/argument/types.xsd">
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
                 <xs:extension base="argumentType">
@@ -38,6 +38,44 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:redefine>
+
+    <xs:complexType name="options">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:attribute name="model" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="url" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="helper" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="helper" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
     <xs:complexType name="layoutType">
         <xs:annotation>
@@ -65,12 +103,6 @@
         </xs:attribute>
     </xs:complexType>
 
-    <xs:complexType name="argumentsType">
-        <xs:sequence>
-            <xs:element ref="argument" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
     <xs:complexType name="updaterType">
         <xs:annotation>
             <xs:documentation>
@@ -84,13 +116,6 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
-
-    <xs:element name="argument" type="argumentType">
-        <xs:key name="argumentItemName">
-            <xs:selector xpath="item"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
-        </xs:key>
-    </xs:element>
 
     <xs:element type="actionType" name="action">
         <xs:annotation>
@@ -111,7 +136,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:key name="blockArgumentName">
-            <xs:selector xpath="./argumens/argument"></xs:selector>
+            <xs:selector xpath="./arguments/argument"></xs:selector>
             <xs:field xpath="@name"></xs:field>
         </xs:key>
     </xs:element>
@@ -123,7 +148,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:unique name="referenceBlockArgumentName">
-            <xs:selector xpath="./argumens/argument"></xs:selector>
+            <xs:selector xpath="./arguments/argument"></xs:selector>
             <xs:field xpath="@name"></xs:field>
         </xs:unique>
     </xs:element>
@@ -232,7 +257,8 @@
         <xs:attribute type="xs:string" name="acl" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
-        <xs:attribute name="cacheable" type="xs:boolean" default="true" use="optional"/>
+        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
+        <xs:attribute type="xs:int" name="ttl" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="actionType">
@@ -242,7 +268,12 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="argument" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded">
+                <xs:key name="actionArgumentItemName">
+                    <xs:selector xpath="item"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
         </xs:sequence>
         <xs:attribute type="xs:string" name="method" use="required"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Console;
 
 /**
@@ -49,6 +48,7 @@ class Response implements \Magento\App\ResponseInterface
 
     /**
      * Send response to client
+     * @return int
      */
     public function sendResponse()
     {
@@ -60,6 +60,7 @@ class Response implements \Magento\App\ResponseInterface
 
     /**
      * @param int $code
+     * @return void
      */
     public function setCode($code)
     {
@@ -73,6 +74,7 @@ class Response implements \Magento\App\ResponseInterface
      * Set whether to terminate process on send or not
      *
      * @param bool $terminate
+     * @return void
      */
     public function terminateOnSend($terminate)
     {

@@ -33,7 +33,7 @@
  */
 namespace Magento\Review\Model\Resource\Review\Status;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Review status table
@@ -45,6 +45,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Collection model initialization
      *
+     * @return void
      */
     protected function _construct()
     {

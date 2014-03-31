@@ -23,27 +23,30 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Model\Product\CartConfiguration\Plugin;
 
-class Downloadable 
+class Downloadable
 {
     /**
      * Decide whether product has been configured for cart or not
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Catalog\Model\Product\CartConfiguration $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $config
+     *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundIsProductConfigured(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var $product \Magento\Catalog\Model\Product */
-        list($product, $config) = $arguments;
-
+    public function aroundIsProductConfigured(
+        \Magento\Catalog\Model\Product\CartConfiguration $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product $product,
+        $config
+    ) {
         if ($product->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return isset($config['links']);
         }
-
-        return $invocationChain->proceed($arguments);
+        return $proceed($product, $config);
     }
-} 
+}

@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Assignment
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Assignment extends Less_Tree{
 
 	public $key;
@@ -16,24 +21,19 @@ class Less_Tree_Assignment extends Less_Tree{
 		$this->value = $visitor->visitObj( $this->value );
 	}
 
-
 	public function compile($env) {
-		if( Less_Parser::is_method($this->value,'compile') ){
-			return new Less_Tree_Assignment( $this->key, $this->value->compile($env));
-		}
-		return $this;
+		return new Less_Tree_Assignment( $this->key, $this->value->compile($env));
 	}
 
-	public function genCSS( $env, &$strs ){
-		self::OutputAdd( $strs, $this->key . '=' );
-		if( is_string($this->value) ){
-			self::OutputAdd( $strs, $this->value );
-		}else{
-			$this->value->genCSS( $env, $strs );
-		}
+    /**
+     * @see Less_Tree::genCSS
+     */
+	public function genCSS( $output ){
+		$output->add( $this->key . '=' );
+		$this->value->genCSS( $output );
 	}
 
-	public function toCss($env = null){
-		return $this->key . '=' . (is_string($this->value) ? $this->value : $this->value->toCSS());
+	public function toCss(){
+		return $this->key . '=' . $this->value->toCSS();
 	}
 }

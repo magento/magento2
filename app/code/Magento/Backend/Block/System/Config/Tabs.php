@@ -136,4 +136,3 @@ class Tabs extends \Magento\Backend\Block\Widget
         return $section->getId() == $this->_currentSectionId;
     }
 }
-

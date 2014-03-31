@@ -46,10 +46,11 @@ class Json extends \Magento\Backend\App\Action
 
         $countryId = $this->getRequest()->getParam('parent');
         if (!empty($countryId)) {
-            $arrRegions = $this->_objectManager->create('Magento\Directory\Model\Resource\Region\Collection')
-                ->addCountryFilter($countryId)
-                ->load()
-                ->toOptionArray();
+            $arrRegions = $this->_objectManager->create(
+                'Magento\Directory\Model\Resource\Region\Collection'
+            )->addCountryFilter(
+                $countryId
+            )->load()->toOptionArray();
 
             if (!empty($arrRegions)) {
                 foreach ($arrRegions as $region) {

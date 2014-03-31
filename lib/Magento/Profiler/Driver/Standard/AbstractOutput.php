@@ -48,11 +48,11 @@ abstract class AbstractOutput implements OutputInterface
      */
     protected $_columns = array(
         'Timer Id' => Stat::ID,
-        'Time'     => Stat::TIME,
-        'Avg'      => Stat::AVG,
-        'Cnt'      => Stat::COUNT,
-        'Emalloc'  => Stat::EMALLOC,
-        'RealMem'  => Stat::REALMEM
+        'Time' => Stat::TIME,
+        'Avg' => Stat::AVG,
+        'Cnt' => Stat::COUNT,
+        'Emalloc' => Stat::EMALLOC,
+        'RealMem' => Stat::REALMEM
     );
 
     /**

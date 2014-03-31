@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Quote\Item;
 
 class RelatedProducts
@@ -46,7 +45,7 @@ class RelatedProducts
      * Retrieve Array of product ids which have special relation with products in Cart
      *
      * @param \Magento\Sales\Model\Quote\Item[] $quoteItems
-     * @return array
+     * @return int[]
      */
     public function getRelatedProductIds(array $quoteItems)
     {
@@ -55,8 +54,10 @@ class RelatedProducts
         foreach ($quoteItems as $quoteItem) {
             $productTypeOpt = $quoteItem->getOptionByCode('product_type');
             if ($productTypeOpt instanceof \Magento\Sales\Model\Quote\Item\Option) {
-                if (in_array($productTypeOpt->getValue(), $this->_relatedProductTypes)
-                    && $productTypeOpt->getProductId()
+                if (in_array(
+                    $productTypeOpt->getValue(),
+                    $this->_relatedProductTypes
+                ) && $productTypeOpt->getProductId()
                 ) {
                     $productIds[] = $productTypeOpt->getProductId();
                 }
@@ -64,4 +65,4 @@ class RelatedProducts
         }
         return $productIds;
     }
-} 
+}

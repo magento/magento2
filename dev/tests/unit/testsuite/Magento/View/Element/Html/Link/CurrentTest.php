@@ -58,10 +58,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $path = 'test/path';
         $url = 'http://example.com/asdasd';
 
-        $this->_urlBuilderMock->expects($this->once())
-            ->method('getUrl')
-            ->with($path)
-            ->will($this->returnValue($url));
+        $this->_urlBuilderMock->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url));
 
         /** @var \Magento\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
@@ -72,7 +69,6 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $link->setPath($path);
         $this->assertEquals($url, $link->getHref());
     }
-
 
     public function testIsCurrentIfIsset()
     {
@@ -90,24 +86,21 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->once())->method('getModuleName')->will($this->returnValue('a'));
         $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
         $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('d'));
-        $this->_defaultPathMock->expects($this->atLeastOnce())
-            ->method('getPart')
-            ->will($this->returnValue('d'));
+        $this->_defaultPathMock->expects($this->atLeastOnce())->method('getPart')->will($this->returnValue('d'));
 
         $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->with($path)->will($this->returnValue($url));
-        $this->_urlBuilderMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with('a/b')
-            ->will($this->returnValue($url));
+        $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->with('a/b')->will($this->returnValue($url));
 
         $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
         /** @var \Magento\View\Element\Html\Link\Current $link */
-        $link = $this->_objectManager->getObject('\Magento\View\Element\Html\Link\Current',
+        $link = $this->_objectManager->getObject(
+            '\Magento\View\Element\Html\Link\Current',
             array(
                 'urlBuilder' => $this->_urlBuilderMock,
                 'request' => $this->_requestMock,
                 'defaultPath' => $this->_defaultPathMock
-            ));
+            )
+        );
         $link->setPath($path);
         $this->assertTrue($link->isCurrent());
     }
@@ -119,11 +112,10 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
 
         /** @var \Magento\View\Element\Html\Link\Current $link */
-        $link = $this->_objectManager->getObject('\Magento\View\Element\Html\Link\Current',
-            array(
-                'urlBuilder' => $this->_urlBuilderMock,
-                'request' => $this->_requestMock
-            ));
+        $link = $this->_objectManager->getObject(
+            '\Magento\View\Element\Html\Link\Current',
+            array('urlBuilder' => $this->_urlBuilderMock, 'request' => $this->_requestMock)
+        );
         $this->assertFalse($link->isCurrent());
     }
 }

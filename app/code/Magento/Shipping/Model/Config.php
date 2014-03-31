@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model;
 
 class Config extends \Magento\Object
@@ -33,9 +31,12 @@ class Config extends \Magento\Object
      * Shipping origin settings
      */
     const XML_PATH_ORIGIN_COUNTRY_ID = 'shipping/origin/country_id';
-    const XML_PATH_ORIGIN_REGION_ID  = 'shipping/origin/region_id';
-    const XML_PATH_ORIGIN_CITY       = 'shipping/origin/city';
-    const XML_PATH_ORIGIN_POSTCODE   = 'shipping/origin/postcode';
+
+    const XML_PATH_ORIGIN_REGION_ID = 'shipping/origin/region_id';
+
+    const XML_PATH_ORIGIN_CITY = 'shipping/origin/city';
+
+    const XML_PATH_ORIGIN_POSTCODE = 'shipping/origin/postcode';
 
     /**
      * Core store config

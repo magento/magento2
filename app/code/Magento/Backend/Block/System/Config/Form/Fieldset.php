@@ -29,9 +29,8 @@
  */
 namespace Magento\Backend\Block\System\Config\Form;
 
-class Fieldset
-    extends \Magento\Backend\Block\AbstractBlock
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
+    \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -98,14 +97,22 @@ class Fieldset
             $html = '<div class="' . $this->_getFrontendClass($element) . ' ">';
         }
 
-        $html .= '<div class="entry-edit-head collapseable">'
-            . '<span id="' . $element->getHtmlId() . '-link" class="entry-edit-head-link"></span>';
+        $html .= '<div class="entry-edit-head collapseable">' .
+            '<span id="' .
+            $element->getHtmlId() .
+            '-link" class="entry-edit-head-link"></span>';
 
         $html .= $this->_getHeaderTitleHtml($element);
 
         $html .= '</div>';
-        $html .= '<input id="'.$element->getHtmlId() . '-state" name="config_state[' . $element->getId()
-            . ']" type="hidden" value="' . (int)$this->_isCollapseState($element) . '" />';
+        $html .= '<input id="' .
+            $element->getHtmlId() .
+            '-state" name="config_state[' .
+            $element->getId() .
+            ']" type="hidden" value="' .
+            (int)$this->_isCollapseState(
+                $element
+            ) . '" />';
         $html .= '<fieldset class="' . $this->_getFieldsetCss() . '" id="' . $element->getHtmlId() . '">';
         $html .= '<legend>' . $element->getLegend() . '</legend>';
 
@@ -143,9 +150,16 @@ class Fieldset
      */
     protected function _getHeaderTitleHtml($element)
     {
-        return '<a id="' . $element->getHtmlId() . '-head" href="#' . $element->getHtmlId()
-            . '-link" onclick="Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \''
-            . $this->getUrl('*/*/state') . '\'); return false;">' . $element->getLegend() . '</a>';
+        return '<a id="' .
+            $element->getHtmlId() .
+            '-head" href="#' .
+            $element->getHtmlId() .
+            '-link" onclick="Fieldset.toggleCollapse(\'' .
+            $element->getHtmlId() .
+            '\', \'' .
+            $this->getUrl(
+                '*/*/state'
+            ) . '\'); return false;">' . $element->getLegend() . '</a>';
     }
 
     /**
@@ -169,7 +183,7 @@ class Fieldset
         /** @var \Magento\Backend\Model\Config\Structure\Element\Group $group */
         $group = $this->getGroup();
         $configCss = $group->getFieldsetCss();
-        return 'config collapseable' . ($configCss ? ' ' . $configCss: '');
+        return 'config collapseable' . ($configCss ? ' ' . $configCss : '');
     }
 
     /**
@@ -184,8 +198,10 @@ class Fieldset
         $html = '</tbody></table>';
         foreach ($element->getElements() as $field) {
             if ($field->getTooltip()) {
-                $html .= sprintf('<div id="row_%s_comment" class="system-tooltip-box" style="display:none;">%s</div>',
-                    $field->getId(), $field->getTooltip()
+                $html .= sprintf(
+                    '<div id="row_%s_comment" class="system-tooltip-box" style="display:none;">%s</div>',
+                    $field->getId(),
+                    $field->getTooltip()
                 );
             }
         }

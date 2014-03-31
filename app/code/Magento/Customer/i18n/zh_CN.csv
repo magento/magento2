@@ -223,146 +223,148 @@ Online,在线
 "Online Customers Options",在线顾客选项
 "Online Minutes Interval",在线分钟数间隔
 "Order #","订单 #"
-"Order Total",订单总数
-Orders,订单
-Password,密码
-"Password Management",密码管理
-"Password Options",密码选项
-"Password Template Email Sender",密码模板邮件地址发送者
-"Password forgotten",密码忘记
-Password:,密码：
-Paused,已暂停
-Pending,挂起
-"Per Website",每网站
-"Personal Information",个人信息
-"Please correct the email address.",请纠正邮件地址。
-"Please correct the quote items and try again.",请纠正报价条目再试一次。
-"Please correct this email address: ""%1"".","请纠正该邮件地址： ""%1""。"
-"Please enter a number 1 or greater in this field.",请在该字段输入数字1或更大值。
-"Please enter a valid date between %1 and %2 at %3.","请在%1输入介于%2 与 %3 之间的有效日期。"
-"Please enter a valid date equal to or greater than %1 at %2.","请在 %1 输入等于或大于 %2 的有效日期。"
-"Please enter a valid date less than or equal to %1 at %2.","请在 %2 输入小于或等于 %1 的有效日期。"
-"Please enter the city.",请输入城市。
-"Please enter the country.",请输入国家。
-"Please enter the first name.",请输入名字。
-"Please enter the last name.",请输入姓氏。
-"Please enter the state/province.",请输入州/省。
-"Please enter the street.",请输入街道。
-"Please enter the telephone number.",请输入电话号码。
-"Please enter the zip/postal code.",请输入邮编。
-"Please enter your email address below. You will receive a link to reset your password.",在下面输入邮件地址，您将接收到一封带有密码重置链接的邮件。
-"Please enter your email below and we will send you the confirmation link for it.",在下面输入邮件地址我们将发送一封带有确认链接的邮件给您。
-"Please enter your email below and we'll send you confirmation link for it.",请在下面输入您的邮件地址，我们将发送确认链接。
-"Please enter your email.",请输入您的电子邮件。
-"Please load the wish list item.",请装载收藏条目。
-"Please make sure your passwords match.",请确保密码匹配。
-"Please select",请选择
-"Please select a region, state or province.",请选择地区、州或省。
-"Please select a website which contains store view",请选择包含该店铺视图的网站
-"Please select customer(s).",请选择顾客。
-"Please select region, state or province",请选择地区、州，或省
-"Please, check your email for confirmation key.",请检查您的电子邮件以获取确认密钥。
-Prefix,前缀
-"Prefix Dropdown Options",前缀下拉菜单选项
-Price,价格
-Product,产品
-"Product Name",产品名
-"Product Reviews",产品评论
-"Purchase Date",购买日期
-Qty,数量
-"Receive Date",接收日期
-"Recent Orders",近期订单
-"Recovery Link Expiration Period (days)",恢复链接过期周期（天）
-"Recurring Profiles",周期配置
-"Redirect Customer to Account Dashboard after Logging in",登录后，重定向顾客到账户显示板
-Refunded,已存储
-"Registered Customers",已注册的顾客
-"Remind Email Template",提醒邮件模板
-Remove,删除
-"Require Emails Confirmation",需要确认电子邮件
-"Reset Password",重设密码
-"Reset Password Template","Reset Password Template"
-"Reset a Password",重置密码
-"Retrieve your confirmation link here",在这里获取您的确认链接
-"Retrieve your password here",在这里获取您的密码
-SKU,SKU
-"Sales Statistics",销售数据统计
-Save,保存
-"Save Address",保存地址
-"Save Customer",保存顾客
-"Save Customer Group",保存顾客组
-"Save Password",保存密码
-"Save and Continue Edit",保存并继续编辑
-"Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.",用分号（；）分隔值。<br/>将分号放在第一个选项前面的空白处。<br/>对于打开文字的字段请留空。
-"Send From",发送自
-"Send Welcome Email",发送欢迎邮件
-"Send Welcome Email after Confirmation",在确认后发送欢迎邮件
-"Send confirmation link",发送确认链接
-Sending,正在发送
-Sent,已发送
-"Session Start Time",会话开始时间
-"Set as Default Billing Address",设置为默认账单地址
-"Set as Default Shipping Address",设置为默认运送地址
-"Share Customer Accounts",分享顾客账户
-"Shipped-to Name",收货名字
-"Shopping Cart",购物车
-"Shopping Cart - %1 item(s)","购物车 - %1 个条目"
-"Shopping Cart from %1",%1的购物车
-"Shopping Cart of %1 - %2 item(s)","%1 - %2个条目（s）的购物车"
-"Show Date of Birth",显示出生日期
-"Show Gender",显示性别
-"Show Middle Name (initial)",显示中间名（初始）
-"Show Prefix",显示前缀
-"Show Suffix",显示后缀
-"Show Tax/VAT Number",显示税/增值税号码
-"Show VAT Number on Frontend",在前端显示VAT号
-"Sign Up for Newsletter",订阅新闻邮件
-"Start date",开始日期
-State/Province,州/省
-Status,状态
-Store,商店
-"Store View",店铺视图
-"Street Address",街道地址
-"Street Address %1","街道地址 %1"
-Subject,主题
-Submit,提交
-"Subscribe to Newsletter",订阅到新闻邮件
-"Subscribed to Newsletter",订阅新闻邮件
-"Subscription option",订阅选项
-Suffix,后缀
-"Suffix Dropdown Options",后缀下拉菜单选项
-"Tax Calculation Based On",税金的计算基于
-"Tax Class",税率
-"Tax/VAT Number",税/增值税号
-"Tax/VAT number",税/增值税号码
-Telephone,电话
-Text,文字
-"Text One Line",一行文字
-"Thank you for registering with %1.","感谢您注册 %1。"
-"The Date of Birth is required.",需提供生日。
+"Order Total","订单总数"
+"Orders","订单"
+"PDF","PDF"
+"Password","密码"
+"Password Management","密码管理"
+"Password Options","密码选项"
+"Password forgotten","密码忘记"
+"Password:","密码："
+"Paused","已暂停"
+"Pending","挂起"
+"Per Website","每网站"
+"Personal Information","个人信息"
+"Please enter a number 1 or greater in this field.","请在该字段输入数字1或更大值。"
+"Please enter a valid date between %s and %s at %s.","请在%s输入介于%s 与 %s 之间的有效日期。"
+"Please enter a valid date equal to or greater than %s at %s.","请在 %s 输入等于或大于 %s 的有效日期。"
+"Please enter a valid date less than or equal to %s at %s.","请在 %s 输入小于或等于 %s 的有效日期。"
+"Please enter the city.","请输入城市。"
+"Please enter the country.","请输入国家。"
+"Please enter the first name.","请输入名字。"
+"Please enter the last name.","请输入姓氏。"
+"Please enter the state/province.","请输入州/省。"
+"Please enter the street.","请输入街道。"
+"Please enter the telephone number.","请输入电话号码。"
+"Please enter the zip/postal code.","请输入邮编。"
+"Please enter your email address below. You will receive a link to reset your password.","请在下面输入你的电子邮件地址。你将收到一个重置密码的链接。"
+"Please enter your email below and we'll send you confirmation link for it.","请在下面输入您的邮件地址，我们将发送确认链接。"
+"Please enter your email.","请输入您的电子邮件。"
+"Please make sure your passwords match.","请确保密码匹配。"
+"Please select","请选择"
+"Please select a website which contains store view","请选择包含该店铺视图的网站"
+"Please select region, state or province","请选择地区、州，或省"
+"Please, check your email for confirmation key.","请检查您的电子邮件以获取确认密钥。"
+"Prefix Dropdown Options","前缀下拉菜单选项"
+"Price","价格"
+"Product","产品"
+"Product ID","产品 ID"
+"Product Name","产品名"
+"Product Reviews","产品评测"
+"Product Tags","产品标签"
+"Purchase On","购买时间："
+"Purchased At","购买地点："
+"Qty","数量"
+"Recent Orders","近期订单"
+"Records for %s store found.","%s 店铺的记录已找到。"
+"Recovery Link Expiration Period (days)","恢复链接过期周期（天）"
+"Redirect Customer to Account Dashboard after Logging in","登录后，重定向客户到账户显示板"
+"Refunded","已存储"
+"Registered Customers","已注册的客户"
+"Remind Email Template","提醒邮件模板"
+"Remind Password","提醒密码"
+"Remove","删除"
+"Require Emails Confirmation","需要确认电子邮件"
+"Reset a Password","重置密码"
+"Retrieve address data","获取地址数据"
+"Retrieve address info","获取地址信息"
+"Retrieve customer addresses","获取客户地址"
+"Retrieve customer data","获取用户数据"
+"Retrieve customer groups","获取客户组"
+"Retrieve customer info","获取客户信息"
+"Retrieve customers","获取客户、"
+"Retrieve your confirmation link here","在这里获取您的确认链接"
+"Retrieve your password here","在这里获取您的密码"
+"SKU","SKU"
+"Sales Statistics","销售数据统计"
+"Save","保存"
+"Save Address","保存地址"
+"Save Customer","保存客户"
+"Save Customer Group","保存客户群组"
+"Save Password","保存密码"
+"Save and Continue Edit","保存并继续编辑"
+"Saved %d record(s)","已保存 %s 条记录"
+"Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.","用分号（;）分隔值。<br/>将分号放在第一个选项前面的空白处。<br/>对于打开文字的字段请留空。"
+"Send From","发送自"
+"Send Welcome Email","发送欢迎邮件"
+"Send Welcome Email after Confirmation","在确认后发送欢迎邮件"
+"Send auto-generated password","发送自动生成的密码"
+"Send confirmation link","发送确认链接"
+"Sending","正在发送"
+"Sent","已发送"
+"Session Start Time","会话开始时间"
+"Set as Default Billing Address","设置为默认账单地址"
+"Set as Default Shipping Address","设置为默认运送地址"
+"Share Customer Accounts","分享客户账户"
+"Shipped to First Name","运送至名字"
+"Shipped to Last Name","发送给姓氏"
+"Shipped to Name","运送至姓名"
+"Shopping Cart","购物车"
+"Shopping Cart - %d item(s)","购物车 - %d 个项目"
+"Shopping Cart of %1$s - %2$d item(s)","购物车包含 %1$s - %2$d 件商品"
+"Show Date of Birth","显示出生日期"
+"Show Gender","显示性别"
+"Show Middle Name (initial)","显示中间名（初始）"
+"Show Prefix","显示前缀"
+"Show Suffix","显示后缀"
+"Show Tax/VAT Number","显示税/增值税号码"
+"Sign Up for Newsletter","订阅新闻邮件"
+"Skipping import row, required field ""%s"" is not defined.","跳过导入的行，必须的 ""%s"" 字段未定义。"
+"Skipping import row, website ""%s"" field does not exist.","跳过导入的行，网站 ""%s"" 字段不存在。"
+"State/Province","州/省"
+"Status","状态"
+"Store","商店"
+"Store View","店铺视图"
+"Street Address","街道地址"
+"Street Address %s","街道地址 %s"
+"Subject","主题"
+"Submit","提交"
+"Subscribe to Newsletter","订阅到新闻通讯"
+"Subscribed to Newsletter?","是否订阅新闻邮件？"
+"Suffix Dropdown Options","后缀下拉菜单选项"
+"Tag Name","标签名称"
+"Tax Calculation Based On","税金的计算基于"
+"Tax Class","税率"
+"Tax/VAT number","税/增值税号码"
+"Telephone","电话"
+"Text","文字"
+"Text One Line","一行文字"
+"Thank you for registering with %s.","感谢您注册 %s。"
+"The Date of Birth is required.","需提供生日。"
 "The TAX/VAT number is required.","需提供 TAX/VAT 号码。"
 "The VAT ID entered (%1) is not a valid VAT ID.",输入的增值税ID（%1）不是一个有效的ID。
 "The VAT ID is valid. The current Customer Group will be used.","VAT ID 有效。将使用当前的顾客群体。"
-"The account information has been saved.",账户信息已保存。
-"The address does not belong to this customer.",该地址不输入此用户。
-"The address has been deleted.",地址已删除。
-"The address has been saved.",地址已保存。
-"The address with the specified ID not found.",找不到指定ID的地址。
-"The customer does not have default billing address.",顾客未设置默认账单地址。
-"The customer group has been deleted.",顾客组已删除。
-"The customer group has been saved.",顾客组已保存。
-"The customer group no longer exists.",顾客组不在存在。
-"The customer is currently assigned to Customer Group %1.",客户当前被分配到客户组%1。
-"The first name cannot be empty.",名字不能为空。
-"The group ""%1"" cannot be deleted","组 ""%1"" 无法删除"
-"The last name cannot be empty.",姓氏不能为空。
-"The password can not begin or end with a space.",密码不能以空格开头或者结束。
-"The password must have at least %1 characters.",密码必须有至少%1个字符。
-"The suffix that goes after name (Jr., Sr., etc.)",名字后面的后缀（Jr.、Sr.等）
-"The title that goes before name (Mr., Mrs., etc.)",姓名前称谓（先生、女士等）
-"There are no items in customer's shopping cart at the moment",顾客的购物车中目前没内容
-"There are no recurring profiles yet.",还没有周期配置。
-"There is already an account with this email address. If you are sure that it is your email address, <a href=""%1"">click here</a> to get your password and access your account.","已经存在一个同名邮件地址的账号。如果您确定这就是您的邮件地址，<a href=""%1"">点击这里</a>得到密码来访问您的账户信息。"
+"The account information has been saved.","帐户信息已保存。"
+"The address does not belong to this customer.","该地址不输入此用户。"
+"The address has been deleted.","地址已删除。"
+"The address has been saved.","地址已保存。"
+"The customer ID and email did not match, skipping the record, line: %s","顾客 ID 与电子邮件不匹配，跳过该记录，行：%s"
+"The customer does not have default billing address.","客户未设置默认账单地址。"
+"The customer email (%s) already exists, skipping the record, line: %s","顾客邮件（%s）已经存在，跳过该记录，行：%s"
+"The customer group has been deleted.","客户组已删除。"
+"The customer group has been saved.","客户群组已保存。"
+"The customer is currently assigned to Customer Group %s.","该顾客被分配到顾客群体 %s。"
+"The first name cannot be empty.","名字不能为空。"
+"The group ""%s"" cannot be deleted","组 ""%s"" 无法删除"
+"The last name cannot be empty.","姓氏不能为空。"
+"The minimum password length is %s","密码长度最小值为 %s"
+"The password cannot be empty.","密码不能为空。"
+"The password must have at least 6 characters. Leading or trailing spaces will be ignored.","密码必须包含至少 6 个字符。前导或尾随空格将被忽略。"
+"The suffix that goes after name (Jr., Sr., etc.)","名字后面的后缀（Jr.、Sr.等）"
+"The title that goes before name (Mr., Mrs., etc.)","姓名前称谓（先生、女士等）"
+"There are no items in customer's wishlist at the moment","客户的愿望清单中目前没内容"
+"There are no items in customer's shopping cart at the moment","客户的购物车中目前没内容"
+"There is already an account with this email address. If you are sure that it is your email address, <a href=""%s"">click here</a> to get your password and access your account.","已有帐户使用该电子邮件地址。如果您确认这是您自己的电子邮件地址，请 <a href=""%s"">点击这里</a> 获取您的密码并访问帐户。"
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
 "This account is not confirmed.",该账户尚未确认。
 "This email does not require confirmation.",该电子邮件不需要确认。

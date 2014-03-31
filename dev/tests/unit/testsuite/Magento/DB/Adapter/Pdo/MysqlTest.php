@@ -39,14 +39,17 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Adapter for test
-     * @var \Magento\DB\Adapter\Pdo\Mysql
+     *
+     * @var \Magento\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_adapter;
+    protected $_adapter;
 
-    /*
+    /**
      * Mock DB adapter for DDL query tests
+     *
+     * @var \Magento\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_mockAdapter;
+    protected $_mockAdapter;
 
     /**
      * Setup
@@ -56,7 +59,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $this->_mockAdapter = $this->getMock(
             'Magento\DB\Adapter\Pdo\Mysql',
             array('beginTransaction', 'getTransactionLevel'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
 
         $this->_mockAdapter->expects($this->any())
@@ -65,7 +70,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
         $this->_adapter = $this->getMock(
             'Magento\DB\Adapter\Pdo\Mysql',
-            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query', '_debugWriteToFile'),
+            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query', '_debugWriteToFile', 'fetchRow'),
             array(
                 'dbname' => 'not_exists',
                 'username' => 'not_valid',
@@ -80,8 +85,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
 
         $resourceProperty = new \ReflectionProperty(
-                get_class($this->_adapter),
-                '_profiler'
+            get_class($this->_adapter),
+            '_profiler'
         );
         $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->_adapter, $profiler);
@@ -406,5 +411,76 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($stmtMock));
 
         $this->_adapter->insertOnDuplicate($table, $data, $fields);
+    }
+
+    public function testSelectsByRange()
+    {
+        $rangeField = 'test_id';
+        $tableName = 'test';
+
+        $this->_adapter->expects($this->once())
+            ->method('fetchRow')
+            ->with(
+                $this->_adapter->select()
+                    ->from(
+                        $tableName,
+                        [
+                            new \Zend_Db_Expr('MIN(' . $this->_adapter->quoteIdentifier($rangeField) . ') AS min'),
+                            new \Zend_Db_Expr('MAX(' . $this->_adapter->quoteIdentifier($rangeField) . ') AS max'),
+                        ]
+                    )
+            )
+            ->will($this->returnValue(['min' => 1, 'max' => 200]));
+        $this->_adapter->expects($this->any())
+            ->method('quote')
+            ->will(
+                $this->returnCallback(
+                    function ($values) {
+                        if (!is_array($values)) {
+                            $values = [$values];
+                        }
+                        foreach ($values as &$value) {
+                            $value = "'" . $value . "'";
+                        }
+                        return implode(',', $values);
+                    }
+                )
+            );
+
+        $expectedSelect = $this->_adapter->select()
+            ->from($tableName);
+
+        $result = $this->_adapter->selectsByRange($rangeField, $expectedSelect, 50);
+        $this->assertCount(200/50, $result);
+        $prepareField = $this->_adapter->quoteIdentifier($tableName)
+            . '.' . $this->_adapter->quoteIdentifier($rangeField);
+        $this->assertEquals(
+            $this->_adapter->select()
+                ->from($tableName)
+                ->where($prepareField . ' >= ?', 1)
+                ->where($prepareField . ' < ?', 51),
+            $result[0]
+        );
+        $this->assertEquals(
+            $this->_adapter->select()
+                ->from($tableName)
+                ->where($prepareField . ' >= ?', 51)
+                ->where($prepareField . ' < ?', 101),
+            $result[1]
+        );
+        $this->assertEquals(
+            $this->_adapter->select()
+                ->from($tableName)
+                ->where($prepareField . ' >= ?', 101)
+                ->where($prepareField . ' < ?', 151),
+            $result[2]
+        );
+        $this->assertEquals(
+            $this->_adapter->select()
+                ->from($tableName)
+                ->where($prepareField . ' >= ?', 151)
+                ->where($prepareField . ' < ?', 201),
+            $result[3]
+        );
     }
 }

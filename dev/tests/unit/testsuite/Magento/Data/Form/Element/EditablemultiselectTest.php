@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Form\Element;
 
 class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +40,7 @@ class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
         $values = array(
             array('value' => 1, 'label' => 'Value1'),
             array('value' => 2, 'label' => 'Value2'),
-            array('value' => 3, 'label' => 'Value3'),
+            array('value' => 3, 'label' => 'Value3')
         );
         $value = array(1, 3);
         $this->_model->setForm(new \Magento\Object());

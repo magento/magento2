@@ -39,12 +39,10 @@ class MetadataProcessor
 
     /**
      * @param \Magento\App\Config\Data\ProcessorFactory $processorFactory
-     * @param \Magento\App\Config\Initial $initialConfig
+     * @param Initial $initialConfig
      */
-    public function __construct(
-        \Magento\App\Config\Data\ProcessorFactory $processorFactory,
-        \Magento\App\Config\Initial $initialConfig
-    ) {
+    public function __construct(\Magento\App\Config\Data\ProcessorFactory $processorFactory, Initial $initialConfig)
+    {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();
     }
@@ -72,19 +70,20 @@ class MetadataProcessor
     /**
      * Set array value by path
      *
-     * @param array $container
+     * @param array &$container
      * @param string $path
      * @param string $value
+     * @return void
      */
     protected function _setValue(array &$container, $path, $value)
     {
         $segments = explode('/', $path);
-        $currentPointer = &$container;
+        $currentPointer =& $container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {
                 $currentPointer[$segment] = array();
             }
-            $currentPointer = &$currentPointer[$segment];
+            $currentPointer =& $currentPointer[$segment];
         }
         $currentPointer = $value;
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -49,10 +48,8 @@ class Base implements SourceInterface
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
-    public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory
-    ) {
+    public function __construct(Filesystem $filesystem, Factory $fileFactory)
+    {
         $this->modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
         $this->fileFactory = $fileFactory;
     }
@@ -72,7 +69,7 @@ class Base implements SourceInterface
 
         $namespace = $module = '*';
         $area = $theme->getArea();
-        $files = $this->modulesDirectory->search("$namespace/$module/view/{$area}/{$filePath}");
+        $files = $this->modulesDirectory->search("{$namespace}/{$module}/view/{$area}/{$filePath}");
         $result = array();
         $filePath = strtr(preg_quote($filePath), array('\*' => '[^/]+'));
         $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/" . $filePath . "$#i";

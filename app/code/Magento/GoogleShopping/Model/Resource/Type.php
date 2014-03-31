@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Resource;
 
 /**
  * Google Content Type resource model
@@ -31,10 +32,11 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Resource;
-
-class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Type extends \Magento\Model\Resource\Db\AbstractDb
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('googleshopping_types', 'type_id');
@@ -50,10 +52,15 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function loadByAttributeSetIdAndTargetCountry($model, $attributeSetId, $targetCountry)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('attribute_set_id=?', $attributeSetId)
-            ->where('target_country=?', $targetCountry);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'attribute_set_id=?',
+            $attributeSetId
+        )->where(
+            'target_country=?',
+            $targetCountry
+        );
 
         $data = $this->_getReadAdapter()->fetchRow($select);
         $data = is_array($data) ? $data : array();

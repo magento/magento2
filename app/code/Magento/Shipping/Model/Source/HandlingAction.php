@@ -25,13 +25,22 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingAction implements \Magento\Core\Model\Option\ArrayInterface
+class HandlingAction implements \Magento\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
-            array('value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERORDER, 'label' => __('Per Order')),
-            array('value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERPACKAGE , 'label' => __('Per Package')),
+            array(
+                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERORDER,
+                'label' => __('Per Order')
+            ),
+            array(
+                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERPACKAGE,
+                'label' => __('Per Package')
+            )
         );
     }
 }

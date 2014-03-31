@@ -46,7 +46,7 @@ interface ConfigInterface
     public function getRouteByFrontName($frontName, $scope = null);
 
     /**
-     * Retrieve list of moudles by route front name
+     * Retrieve list of modules by route front name
      *
      * @param string $frontName
      * @param string $scope

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
 /**
@@ -53,8 +52,11 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->create('Magento\Backend\Model\Config\Backend\Admin\Robots');
         $this->model->setPath('design/search_engine_robots/custom_instructions');
         $this->model->afterLoad();
-        $this->rootDirectory = $objectManager->get('Magento\App\Filesystem')
-            ->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->rootDirectory = $objectManager->get(
+            'Magento\App\Filesystem'
+        )->getDirectoryRead(
+            \Magento\App\Filesystem::ROOT_DIR
+        );
     }
 
     /**
@@ -109,10 +111,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     {
         $robotsTxt = "User-Agent: *\nDisallow: /checkout";
         $this->model->setValue($robotsTxt)->save();
-        $this->assertStringEqualsFile(
-            $this->rootDirectory->getAbsolutePath('robots.txt'),
-            $robotsTxt
-        );
+        $this->assertStringEqualsFile($this->rootDirectory->getAbsolutePath('robots.txt'), $robotsTxt);
     }
 
     /**

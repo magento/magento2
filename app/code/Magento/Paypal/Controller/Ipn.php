@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Controller;
 
 /**
  * Unified IPN controller for all supported PayPal methods
  */
-namespace Magento\Paypal\Controller;
-
 class Ipn extends \Magento\App\Action\Action
 {
     /**
@@ -40,29 +39,24 @@ class Ipn extends \Magento\App\Action\Action
     protected $_ipnFactory;
 
     /**
-     * @var \Magento\HTTP\Adapter\CurlFactory
-     */
-    protected $_curlFactory;
-
-    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
-     * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
-        \Magento\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Logger $logger
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;
-        $this->_curlFactory = $curlFactory;
         parent::__construct($context);
     }
 
     /**
      * Instantiate IPN model and pass IPN request to it
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -72,7 +66,7 @@ class Ipn extends \Magento\App\Action\Action
 
         try {
             $data = $this->getRequest()->getPost();
-            $this->_ipnFactory->create()->processIpnRequest($data, $this->_curlFactory->create());
+            $this->_ipnFactory->create(array('data' => $data))->processIpnRequest();
         } catch (\Exception $e) {
             $this->_logger->logException($e);
         }

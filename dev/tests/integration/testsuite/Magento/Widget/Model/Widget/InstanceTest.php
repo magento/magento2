@@ -35,8 +35,9 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
     }
 
     public function testSetGetType()
@@ -48,12 +49,10 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetThemeId()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->setAreaCode('frontend');
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface')
-            ->setDefaultDesignTheme()
-            ->getDesignTheme();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\DesignInterface'
+        )->setDefaultDesignTheme()->getDesignTheme();
         $this->_model->setThemeId($theme->getId());
 
         $this->assertEquals($theme->getId(), $this->_model->getThemeId());
@@ -64,15 +63,23 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWidgetConfigAsArray()
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
+        $this->markTestIncomplete(
+            'Functionality is failed because widget' .
+            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "new_products" widget in Catalog module'
+        );
         $config = $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget')->getWidgetConfigAsArray();
         $this->assertTrue(is_array($config));
         $element = null;
-        if (isset($config['parameters']) && isset($config['parameters']['template'])
-            && isset($config['parameters']['template']['values'])
-            && isset($config['parameters']['template']['values']['list'])
+        if (isset(
+            $config['parameters']
+        ) && isset(
+            $config['parameters']['template']
+        ) && isset(
+            $config['parameters']['template']['values']
+        ) && isset(
+            $config['parameters']['template']['values']['list']
+        )
         ) {
             $element = $config['parameters']['template']['values']['list'];
         }
@@ -91,9 +98,11 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWidgetSupportedContainers()
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
+        $this->markTestIncomplete(
+            'Functionality is failed because widget' .
+            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "new_products" widget in Catalog module'
+        );
         $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget');
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertInternalType('array', $containers);
@@ -124,10 +133,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateLayoutUpdateXml(\Magento\Widget\Model\Widget\Instance $model)
     {
-        $params = array(
-            'display_mode' => 'fixed',
-            'types'        => array('type_1', 'type_2'),
-        );
+        $params = array('display_mode' => 'fixed', 'types' => array('type_1', 'type_2'));
         $model->setData('widget_parameters', $params);
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
         $model->setId('test_id')->setPackageTheme('magento_plushe');

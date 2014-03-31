@@ -23,39 +23,39 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml;
 
 /**
  * Adminhtml shipment create
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Block\Adminhtml;
-
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'shipment_id';
@@ -74,9 +74,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $this->_updateButton(
                 'save',
                 'onclick',
-                "deleteConfirm('"
-                . __('Are you sure you want to send a Shipment email to customer?')
-                . "', '" . $this->getEmailUrl() . "')"
+                "deleteConfirm('" . __(
+                    'Are you sure you want to send a Shipment email to customer?'
+                ) . "', '" . $this->getEmailUrl() . "')"
             );
         }
 
@@ -102,6 +102,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_coreRegistry->registry('current_shipment');
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->getShipment()->getEmailSent()) {
@@ -117,6 +120,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         );
     }
 
+    /**
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl(
@@ -128,21 +134,26 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         );
     }
 
+    /**
+     * @return string
+     */
     public function getEmailUrl()
     {
         return $this->getUrl('adminhtml/order_shipment/email', array('shipment_id' => $this->getShipment()->getId()));
     }
 
+    /**
+     * @return string
+     */
     public function getPrintUrl()
     {
-        return $this->getUrl(
-            'sales/shipment/print',
-            array(
-                'shipment_id' => $this->getShipment()->getId()
-            )
-        );
+        return $this->getUrl('sales/shipment/print', array('shipment_id' => $this->getShipment()->getId()));
     }
 
+    /**
+     * @param bool $flag
+     * @return $this
+     */
     public function updateBackButtonUrl($flag)
     {
         if ($flag) {
@@ -153,7 +164,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'setLocation(\'' . $this->getShipment()->getBackUrl() . '\')'
                 );
             }
-            return $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('sales/shipment/') . '\')');
+            return $this->_updateButton(
+                'back',
+                'onclick',
+                'setLocation(\'' . $this->getUrl('sales/shipment/') . '\')'
+            );
         }
         return $this;
     }

@@ -50,33 +50,27 @@ class ReindexTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $fulltextReindex->expects($this->once())
-            ->method('rebuildIndex')
-            ->with(
-                $this->logicalOr(
-                    $this->equalTo(null),
-                    $this->equalTo($affectedProduct)
-                )
-            );
-
-        $objectManager = $this->getMock(
-            'Magento\ObjectManager\ObjectManager',
-            array('get'),
-            array(),
-            '',
-            false
+        $fulltextReindex->expects(
+            $this->once()
+        )->method(
+            'rebuildIndex'
+        )->with(
+            $this->logicalOr($this->equalTo(null), $this->equalTo($affectedProduct))
         );
-        $objectManager->expects($this->once())
-            ->method('get')
-            ->with('Magento\CatalogSearch\Model\Resource\Fulltext')
-            ->will($this->returnValue($fulltextReindex));
+
+        $objectManager = $this->getMock('Magento\ObjectManager\ObjectManager', array('get'), array(), '', false);
+        $objectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Magento\CatalogSearch\Model\Resource\Fulltext'
+        )->will(
+            $this->returnValue($fulltextReindex)
+        );
 
         $observer = new \Magento\Event\Observer(
-            array(
-                'data_object' => new \Magento\Object(
-                    array('affected_product_ids' => $affectedProduct)
-                )
-            )
+            array('data_object' => new \Magento\Object(array('affected_product_ids' => $affectedProduct)))
         );
 
         /** @var $objectManager \Magento\ObjectManager */

@@ -31,12 +31,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'username' => 'admin',
             'email' => 'admin@example.com',
             'firstname' => 'First',
-            'lastname' => 'Last',
+            'lastname' => 'Last'
         );
-        $omit = array(
-            'password' => 'password_with_1_number',
-            'password_confirmation' => 'password_with_1_number',
-        );
+        $omit = array('password' => 'password_with_1_number', 'password_confirmation' => 'password_with_1_number');
 
         /** @var $session \Magento\Session\Generic */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Install\Model\Session');
@@ -45,8 +42,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('install');
 
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
         /** @var $block \Magento\Install\Block\Admin */
         $block = $layout->createBlock('Magento\Install\Block\Admin');
         $output = $block->toHtml();

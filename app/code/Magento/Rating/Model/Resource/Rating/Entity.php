@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Rating\Model\Resource\Rating;
 
 /**
  * Rating entity resource
@@ -32,13 +32,12 @@
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rating\Model\Resource\Rating;
-
-class Entity extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Entity extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Rating entity resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -55,9 +54,12 @@ class Entity extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
 
-        $select  = $adapter->select()
-            ->from($this->getTable('rating_entity'), $this->getIdFieldName())
-            ->where('entity_code = :entity_code');
+        $select = $adapter->select()->from(
+            $this->getTable('rating_entity'),
+            $this->getIdFieldName()
+        )->where(
+            'entity_code = :entity_code'
+        );
         return $adapter->fetchOne($select, array(':entity_code' => $entityCode));
     }
 }

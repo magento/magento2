@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Request;
+
 class RewriteServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,7 +56,11 @@ class RewriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->_configMock = $this->getMock('\Magento\App\ConfigInterface', array(), array(), '', false);
         $this->_requestMock = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
         $this->_rewriteFactoryMock = $this->getMock(
-            '\Magento\Core\Model\Url\RewriteFactory', array('create'), array(), '', false
+            '\Magento\Core\Model\Url\RewriteFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
 
         $this->_model = new \Magento\Core\App\Request\RewriteService(
@@ -76,7 +81,13 @@ class RewriteServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_requestMock->expects($this->once())->method('isStraight')->will($this->returnValue(false));
         $urlRewriteMock = $this->getMock('\Magento\Core\Model\Url\Rewrite', array(), array(), '', false);
-        $this->_rewriteFactoryMock->expects($this->once())->method('create')->will($this->returnValue($urlRewriteMock));
+        $this->_rewriteFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($urlRewriteMock)
+        );
         $this->_model->applyRewrites($this->_requestMock);
     }
 }

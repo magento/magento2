@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Bundle option renderer
@@ -31,30 +34,28 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
-
 class Option extends \Magento\Backend\Block\Widget
 {
     /**
      * Form element
      *
-     * @var \Magento\Data\Form\Element\AbstractElement|null
+     * @var AbstractElement|null
      */
     protected $_element = null;
 
     /**
      * List of customer groups
      *
-     * @deprecated since 1.7.0.0
      * @var array|null
+     * @deprecated since 1.7.0.0
      */
     protected $_customerGroups = null;
 
     /**
      * List of websites
      *
-     * @deprecated since 1.7.0.0
      * @var array|null
+     * @deprecated since 1.7.0.0
      */
     protected $_websites = null;
 
@@ -65,12 +66,15 @@ class Option extends \Magento\Backend\Block\Widget
      */
     protected $_options = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/bundle/option.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -88,14 +92,14 @@ class Option extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Type $optionTypes
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Type $optionTypes,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -108,6 +112,8 @@ class Option extends \Magento\Backend\Block\Widget
      * Bundle option renderer class constructor
      *
      * Sets block template and necessary data
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -116,11 +122,17 @@ class Option extends \Magento\Backend\Block\Widget
         $this->setCanEditPrice(true);
     }
 
+    /**
+     * @return string
+     */
     public function getFieldId()
     {
         return 'bundle_option';
     }
 
+    /**
+     * @return string
+     */
     public function getFieldName()
     {
         return 'bundle_options';
@@ -139,48 +151,73 @@ class Option extends \Magento\Backend\Block\Widget
         return $this->getData('product');
     }
 
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
     {
         $this->setElement($element);
         return $this->toHtml();
     }
 
-    public function setElement(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return $this
+     */
+    public function setElement(AbstractElement $element)
     {
         $this->_element = $element;
         return $this;
     }
 
+    /**
+     * @return AbstractElement|null
+     */
     public function getElement()
     {
         return $this->_element;
     }
 
+    /**
+     * @return bool
+     */
     public function isMultiWebsites()
     {
         return !$this->_storeManager->hasSingleStore();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
-        $this->addChild('add_selection_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id'    => $this->getFieldId() . '_{{index}}_add_button',
-            'label' => __('Add Products to Option'),
-            'class' => 'add add-selection'
-        ));
+        $this->addChild(
+            'add_selection_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'id' => $this->getFieldId() . '_{{index}}_add_button',
+                'label' => __('Add Products to Option'),
+                'class' => 'add add-selection'
+            )
+        );
 
-        $this->addChild('close_search_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id'    => $this->getFieldId().'_{{index}}_close_button',
-            'label'     => __('Close'),
-            'on_click'   => 'bSelection.closeSearch(event)',
-            'class' => 'back no-display'
-        ));
+        $this->addChild(
+            'close_search_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'id' => $this->getFieldId() . '_{{index}}_close_button',
+                'label' => __('Close'),
+                'on_click' => 'bSelection.closeSearch(event)',
+                'class' => 'back no-display'
+            )
+        );
 
-        $this->addChild('option_delete_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Delete Option'),
-            'class' => 'action-delete',
-            'on_click' => 'bOption.remove(event)'
-        ));
+        $this->addChild(
+            'option_delete_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('label' => __('Delete Option'), 'class' => 'action-delete', 'on_click' => 'bOption.remove(event)')
+        );
 
         $this->addChild(
             'selection_template',
@@ -190,16 +227,25 @@ class Option extends \Magento\Backend\Block\Widget
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getAddButtonHtml()
     {
         return $this->getChildHtml('add_button');
     }
 
+    /**
+     * @return string
+     */
     public function getCloseSearchButtonHtml()
     {
         return $this->getChildHtml('close_search_button');
     }
 
+    /**
+     * @return string
+     */
     public function getAddSelectionButtonHtml()
     {
         return $this->getChildHtml('add_selection_button');
@@ -213,8 +259,10 @@ class Option extends \Magento\Backend\Block\Widget
     public function getOptions()
     {
         if (!$this->_options) {
-            $this->getProduct()->getTypeInstance()->setStoreFilter($this->getProduct()->getStoreId(),
-                $this->getProduct());
+            $this->getProduct()->getTypeInstance()->setStoreFilter(
+                $this->getProduct()->getStoreId(),
+                $this->getProduct()
+            );
 
             $optionCollection = $this->getProduct()->getTypeInstance()->getOptionsCollection($this->getProduct());
 
@@ -238,51 +286,74 @@ class Option extends \Magento\Backend\Block\Widget
         return $this->_options;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAddButtonId()
     {
-        $buttonId = $this->getLayout()
-                ->getBlock('admin.product.bundle.items')
-                ->getChildBlock('add_button')->getId();
+        $buttonId = $this->getLayout()->getBlock('admin.product.bundle.items')->getChildBlock('add_button')->getId();
         return $buttonId;
     }
 
+    /**
+     * @return string
+     */
     public function getOptionDeleteButtonHtml()
     {
         return $this->getChildHtml('option_delete_button');
     }
 
+    /**
+     * @return string
+     */
     public function getSelectionHtml()
     {
         return $this->getChildHtml('selection_template');
     }
 
+    /**
+     * @return mixed
+     */
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setData(array(
-                'id' => $this->getFieldId().'_{{index}}_type',
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setData(
+            array(
+                'id' => $this->getFieldId() . '_{{index}}_type',
                 'class' => 'select select-product-option-type required-option-select',
                 'extra_params' => 'onchange="bOption.changeType(event)"'
-            ))
-            ->setName($this->getFieldName().'[{{index}}][type]')
-            ->setOptions($this->_optionTypes->toOptionArray());
+            )
+        )->setName(
+            $this->getFieldName() . '[{{index}}][type]'
+        )->setOptions(
+            $this->_optionTypes->toOptionArray()
+        );
 
         return $select->getHtml();
     }
 
+    /**
+     * @return mixed
+     */
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setData(array(
-                'id' => $this->getFieldId().'_{{index}}_required',
-                'class' => 'select'
-            ))
-            ->setName($this->getFieldName().'[{{index}}][required]')
-            ->setOptions($this->_yesno->toOptionArray());
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setData(
+            array('id' => $this->getFieldId() . '_{{index}}_required', 'class' => 'select')
+        )->setName(
+            $this->getFieldName() . '[{{index}}][required]'
+        )->setOptions(
+            $this->_yesno->toOptionArray()
+        );
 
         return $select->getHtml();
     }
 
+    /**
+     * @return bool
+     */
     public function isDefaultStore()
     {
         return $this->getProduct()->getStoreId() == '0';

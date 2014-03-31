@@ -21,10 +21,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less;
-
-use Magento\Less\PreProcessor\InstructionFactory;
 
 /**
  * LESS instruction preprocessor
@@ -32,130 +29,89 @@ use Magento\Less\PreProcessor\InstructionFactory;
 class PreProcessor
 {
     /**
-     * Folder for publication preprocessed less files
-     */
-    const PUBLICATION_PREFIX_PATH = 'less';
-
-    /**
-     * @var \Magento\View\FileSystem
-     */
-    protected $viewFileSystem;
-
-    /**
-     * @var \Magento\Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * @var InstructionFactory
+     * @var PreProcessor\InstructionFactory
      */
     protected $instructionFactory;
 
     /**
-     * @var \Magento\Logger
+     * @var PreProcessor\File\FileListFactory
      */
-    protected $logger;
+    protected $fileListFactory;
 
     /**
+     * List of instruction pre-processors
+     *
      * @var array
      */
     protected $preProcessors;
 
     /**
-     * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\Filesystem $filesystem
-     * @param InstructionFactory $instructionFactory
-     * @param \Magento\Logger $logger
+     * @param PreProcessor\InstructionFactory $instructionFactory
+     * @param PreProcessor\File\FileListFactory $fileListFactory
      * @param array $preProcessors
      */
     public function __construct(
-        \Magento\View\FileSystem $viewFileSystem,
-        \Magento\Filesystem $filesystem,
-        InstructionFactory $instructionFactory,
-        \Magento\Logger $logger,
+        PreProcessor\InstructionFactory $instructionFactory,
+        PreProcessor\File\FileListFactory $fileListFactory,
         array $preProcessors = array()
     ) {
-        $this->viewFileSystem = $viewFileSystem;
-        $this->filesystem = $filesystem;
         $this->instructionFactory = $instructionFactory;
-        $this->logger = $logger;
+        $this->fileListFactory = $fileListFactory;
         $this->preProcessors = $preProcessors;
     }
 
     /**
-     * Instantiate instruction less preprocessors
+     * Instantiate instruction less pre-processors
      *
-     * @param array $params
-     * @return \Magento\Less\PreProcessorInterface[]
+     * @param PreProcessor\File\FileList $fileList
+     * @return PreProcessorInterface[]
      */
-    protected function getLessPreProcessors(array $params)
+    protected function initLessPreProcessors(PreProcessor\File\FileList $fileList)
     {
-        $preProcessors = [];
+        $preProcessorsInstances = array();
         foreach ($this->preProcessors as $preProcessorClass) {
-            $preProcessors[] = $this->instructionFactory->create($preProcessorClass['class'], $params);
+            $preProcessorsInstances[] = $this->instructionFactory->create(
+                $preProcessorClass['class'],
+                array('fileList' => $fileList)
+            );
         }
-        return $preProcessors;
+        return $preProcessorsInstances;
     }
 
     /**
-     * Get base directory with source of less files
-     *
-     * @return \Magento\Filesystem\Directory\ReadInterface
-     */
-    protected function getDirectoryRead()
-    {
-        return $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
-    }
-
-    /**
-     * Get directory for publication temporary less files
-     *
-     * @return \Magento\Filesystem\Directory\WriteInterface
-     */
-    protected function getDirectoryWrite()
-    {
-        return $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::TMP_DIR);
-    }
-
-    /**
-     * Generate new source path for less file into temporary folder
-     *
-     * @param string $lessFileSourcePath
-     * @return string
-     */
-    protected function generateNewPath($lessFileSourcePath)
-    {
-        $sourcePathPrefix = $this->getDirectoryRead()->getAbsolutePath();
-        $targetPathPrefix = $this->getDirectoryWrite()->getAbsolutePath() . self::PUBLICATION_PREFIX_PATH . '/';
-        return str_replace($sourcePathPrefix, $targetPathPrefix, $lessFileSourcePath);
-    }
-
-    /**
-     * Process less content throughout all existed instruction preprocessors
+     * Process less file through pre-processors and all child files that was added during pre-processing
      *
      * @param string $lessFilePath
-     * @param array $params
-     * @return string of saved or original preprocessed less file
+     * @param array $viewParams
+     * @return PreProcessor\File\FileList list of pre-processed files
      */
-    public function processLessInstructions($lessFilePath, $params)
+    public function processLessInstructions($lessFilePath, $viewParams)
     {
-        $lessFileSourcePath = $this->viewFileSystem->getViewFile($lessFilePath, $params);
-        $directoryRead = $this->getDirectoryRead();
-        $lessContent = $lessSourceContent = $directoryRead->readFile(
-            $directoryRead->getRelativePath($lessFileSourcePath)
+        /** @var $fileList PreProcessor\File\FileList */
+        $fileList = $this->fileListFactory->create(
+            array('lessFilePath' => $lessFilePath, 'viewParams' => $viewParams)
         );
-
-        foreach ($this->getLessPreProcessors($params) as $processor) {
-            $lessContent = $processor->process($lessContent);
+        $preProcessors = $this->initLessPreProcessors($fileList);
+        /** @var $lessFile PreProcessor\File\Less */
+        foreach ($fileList as $lessFile) {
+            $this->publishProcessedContent($preProcessors, $lessFile);
         }
+        return $fileList;
+    }
 
-        $lessFileTargetPath = $this->generateNewPath($lessFileSourcePath);
-        if ($lessFileSourcePath != $lessFileTargetPath && $lessSourceContent != $lessContent) {
-            $directoryWrite = $this->getDirectoryWrite();
-            $directoryWrite->writeFile($directoryWrite->getRelativePath($lessFileTargetPath), $lessContent);
-            return $lessFileTargetPath;
+    /**
+     * Process less content and save
+     *
+     * @param PreProcessorInterface[] $preProcessors
+     * @param PreProcessor\File\Less $lessFile
+     * @return void
+     */
+    protected function publishProcessedContent(array $preProcessors, PreProcessor\File\Less $lessFile)
+    {
+        $lessContent = $lessFile->getContent();
+        foreach ($preProcessors as $processor) {
+            $lessContent = $processor->process($lessFile, $lessContent);
         }
-
-        return $lessFileSourcePath;
+        $lessFile->saveContent($lessContent);
     }
 }

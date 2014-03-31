@@ -5,7 +5,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element\Template;
 
 /**
@@ -32,21 +31,29 @@ class Context extends \Magento\View\Element\Context
     protected $_filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
+     * Template engine pool
+     *
      * @var \Magento\View\TemplateEnginePool
      */
     protected $enginePool;
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
+     * Store manager
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -62,21 +69,19 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\App\FrontController $frontController
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\App $app
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEnginePool $enginePool
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -91,21 +96,19 @@ class Context extends \Magento\View\Element\Context
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\App\FrontController $frontController,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Logger $logger,
-        \Magento\Core\Model\App $app,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\App\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEnginePool $enginePool,
         \Magento\App\State $appState,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        array $data = array()
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct(
             $request,
@@ -118,16 +121,14 @@ class Context extends \Magento\View\Element\Context
             $session,
             $sidResolver,
             $storeConfig,
-            $frontController,
             $viewUrl,
             $viewConfig,
             $cacheState,
             $logger,
-            $app,
             $escaper,
             $filterManager,
-            $locale,
-            $data
+            $localeDate,
+            $inlineTranslation
         );
 
         $this->_storeManager = $storeManager;

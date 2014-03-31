@@ -59,11 +59,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->_persistentSession = $this->_objectManager->get('Magento\Persistent\Helper\Session');
         $this->_cookieMock = $this->getMock('Magento\Stdlib\Cookie', array('set'), array(), '', false);
         $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
-        $this->_model = $this->_objectManager->create('Magento\Persistent\Model\Observer\Session', array(
-            'persistentSession' => $this->_persistentSession,
-            'cookie'            => $this->_cookieMock,
-            'customerSession'   => $this->_customerSession
-        ));
+        $this->_model = $this->_objectManager->create(
+            'Magento\Persistent\Model\Observer\Session',
+            array(
+                'persistentSession' => $this->_persistentSession,
+                'cookie' => $this->_cookieMock,
+                'customerSession' => $this->_customerSession
+            )
+        );
     }
 
     /**
@@ -71,14 +74,18 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSynchronizePersistentOnLogin()
     {
-        $event = new \Magento\Event;
+        $event = new \Magento\Event();
         $observer = new \Magento\Event\Observer(array('event' => $event));
 
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->_objectManager->create('Magento\Customer\Model\Customer')->load(1);
         $event->setData('customer', $customer);
         $this->_persistentSession->setRememberMeChecked(true);
-        $this->_cookieMock->expects($this->once())->method('set')->with(
+        $this->_cookieMock->expects(
+            $this->once()
+        )->method(
+            'set'
+        )->with(
             \Magento\Persistent\Model\Session::COOKIE_NAME,
             $this->anything(),
             $this->anything(),

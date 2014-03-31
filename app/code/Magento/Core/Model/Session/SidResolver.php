@@ -27,7 +27,10 @@
  */
 namespace Magento\Core\Model\Session;
 
-class SidResolver implements \Magento\Session\SidResolverInterface
+use Magento\Session\SessionManagerInterface;
+use Magento\Session\SidResolverInterface;
+
+class SidResolver implements SidResolverInterface
 {
     /**
      * Config path for flag whether use SID on frontend
@@ -64,8 +67,8 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     /**
      * Use session in URL flag
      *
-     * @see \Magento\UrlInterface
      * @var bool
+     * @see \Magento\UrlInterface
      */
     protected $_useSessionInUrl = true;
 
@@ -88,15 +91,18 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     }
 
     /**
-     * @param \Magento\Session\SessionManagerInterface $session
+     * @param SessionManagerInterface $session
      * @return string
      */
-    public function getSid(\Magento\Session\SessionManagerInterface $session)
+    public function getSid(SessionManagerInterface $session)
     {
         $sidKey = null;
-        if ($this->coreStoreConfig->getConfig(self::XML_PATH_USE_FRONTEND_SID)
-            && $this->request->getQuery($this->getSessionIdQueryParam($session), false)
-            && $this->urlBuilder->isOwnOriginUrl()
+        if ($this->coreStoreConfig->getConfig(
+            self::XML_PATH_USE_FRONTEND_SID
+        ) && $this->request->getQuery(
+            $this->getSessionIdQueryParam($session),
+            false
+        ) && $this->urlBuilder->isOwnOriginUrl()
         ) {
             $sidKey = $this->request->getQuery($this->getSessionIdQueryParam($session));
         }
@@ -106,10 +112,10 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     /**
      * Get session id query param
      *
-     * @param \Magento\Session\SessionManagerInterface $session
+     * @param SessionManagerInterface $session
      * @return string
      */
-    public function getSessionIdQueryParam(\Magento\Session\SessionManagerInterface $session)
+    public function getSessionIdQueryParam(SessionManagerInterface $session)
     {
         $sessionName = $session->getName();
         if ($sessionName && isset($this->sidNameMap[$sessionName])) {
@@ -122,7 +128,7 @@ class SidResolver implements \Magento\Session\SidResolverInterface
      * Set use session var instead of SID for URL
      *
      * @param bool $var
-     * @return \Magento\Session\SidResolverInterface
+     * @return $this
      */
     public function setUseSessionVar($var)
     {
@@ -144,7 +150,7 @@ class SidResolver implements \Magento\Session\SidResolverInterface
      * Set Use session in URL flag
      *
      * @param bool $flag
-     * @return \Magento\Session\SidResolverInterface
+     * @return $this
      */
     public function setUseSessionInUrl($flag = true)
     {

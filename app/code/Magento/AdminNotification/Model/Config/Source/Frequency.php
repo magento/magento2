@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\AdminNotification\Model\Config\Source;
 
 /**
  * AdminNotification update frequency source
@@ -32,18 +32,19 @@
  * @package    Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\AdminNotification\Model\Config\Source;
-
-class Frequency implements \Magento\Core\Model\Option\ArrayInterface
+class Frequency implements \Magento\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            1   => __('1 Hour'),
-            2   => __('2 Hours'),
-            6   => __('6 Hours'),
-            12  => __('12 Hours'),
-            24  => __('24 Hours')
+            1 => __('1 Hour'),
+            2 => __('2 Hours'),
+            6 => __('6 Hours'),
+            12 => __('12 Hours'),
+            24 => __('24 Hours')
         );
     }
 }

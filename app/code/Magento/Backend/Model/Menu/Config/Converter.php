@@ -43,7 +43,7 @@ class Converter implements \Magento\Config\ConverterInterface
             'parent',
             'resource',
             'dependsOnModule',
-            'dependsOnConfig',
+            'dependsOnConfig'
         );
         $xpath = new \DOMXPath($dom);
         $nodeList = $xpath->query('/config/menu/*');

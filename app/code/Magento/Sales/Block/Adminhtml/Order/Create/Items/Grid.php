@@ -23,6 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
+
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Sales\Model\Quote\Item;
+use Magento\Session\SessionManagerInterface;
 
 /**
  * Adminhtml sales order create items grid block
@@ -31,8 +36,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
-
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
@@ -50,21 +53,29 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_taxData = null;
 
     /**
+     * Wishlist factory
+     *
      * @var \Magento\Wishlist\Model\WishlistFactory
      */
     protected $_wishlistFactory;
 
     /**
+     * Gift message save
+     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
     /**
+     * Tax config
+     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
 
     /**
+     * Message helper
+     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;
@@ -99,12 +110,22 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         parent::__construct($context, $sessionQuote, $orderCreate, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('sales_order_create_search_grid');
     }
 
+    /**
+     * Get items
+     *
+     * @return Item[]
+     */
     public function getItems()
     {
         $items = $this->getParentBlock()->getItems();
@@ -121,7 +142,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $item->setMessage($check->getMessage());
                 $item->setHasError($check->getHasError());
                 */
-                if ($item->getProduct()->getStatus() == \Magento\Catalog\Model\Product\Status::STATUS_DISABLED) {
+                if ($item->getProduct()->getStatus() == ProductStatus::STATUS_DISABLED) {
                     $item->setMessage(__('This product is disabled.'));
                     $item->setHasError(true);
                 }
@@ -131,51 +152,82 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $items;
     }
 
+    /**
+     * Get session
+     *
+     * @return SessionManagerInterface
+     */
     public function getSession()
     {
         return $this->getParentBlock()->getSession();
     }
 
+    /**
+     * Get item editable price
+     *
+     * @param Item $item
+     * @return float
+     */
     public function getItemEditablePrice($item)
     {
-        return $item->getCalculationPrice()*1;
+        return $item->getCalculationPrice() * 1;
     }
 
+    /**
+     * Get original editable price
+     *
+     * @param Item $item
+     * @return float
+     */
     public function getOriginalEditablePrice($item)
     {
         if ($item->hasOriginalCustomPrice()) {
-            $result = $item->getOriginalCustomPrice()*1;
+            $result = $item->getOriginalCustomPrice() * 1;
         } elseif ($item->hasCustomPrice()) {
-            $result = $item->getCustomPrice()*1;
+            $result = $item->getCustomPrice() * 1;
         } else {
             if ($this->_taxData->priceIncludesTax($this->getStore())) {
-                $result = $item->getPriceInclTax()*1;
+                $result = $item->getPriceInclTax() * 1;
             } else {
-                $result = $item->getOriginalPrice()*1;
+                $result = $item->getOriginalPrice() * 1;
             }
         }
         return $result;
     }
 
+    /**
+     * Get item original price
+     *
+     * @param Item $item
+     * @return float
+     */
     public function getItemOrigPrice($item)
     {
-//        return $this->convertPrice($item->getProduct()->getPrice());
+        //        return $this->convertPrice($item->getProduct()->getPrice());
         return $this->convertPrice($item->getPrice());
     }
 
-    public function isGiftMessagesAvailable($item=null)
+    /**
+     * Check gift messages availability
+     *
+     * @param Item|null $item
+     * @return bool|null|string
+     */
+    public function isGiftMessagesAvailable($item = null)
     {
-        if(is_null($item)) {
-            return $this->_messageHelper->getIsMessagesAvailable(
-                'items', $this->getQuote(), $this->getStore()
-            );
+        if (is_null($item)) {
+            return $this->_messageHelper->getIsMessagesAvailable('items', $this->getQuote(), $this->getStore());
         }
 
-        return $this->_messageHelper->getIsMessagesAvailable(
-            'item', $item, $this->getStore()
-        );
+        return $this->_messageHelper->getIsMessagesAvailable('item', $item, $this->getStore());
     }
 
+    /**
+     * Check if allowed for gift message
+     *
+     * @param Item $item
+     * @return bool
+     */
     public function isAllowedForGiftMessage($item)
     {
         return $this->_giftMessageSave->getIsAllowedQuoteItem($item);
@@ -188,11 +240,19 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function displayTotalsIncludeTax()
     {
-        $res = $this->_taxConfig->displayCartSubtotalInclTax($this->getStore())
-            || $this->_taxConfig->displayCartSubtotalBoth($this->getStore());
+        $res = $this->_taxConfig->displayCartSubtotalInclTax(
+            $this->getStore()
+        ) || $this->_taxConfig->displayCartSubtotalBoth(
+            $this->getStore()
+        );
         return $res;
     }
 
+    /**
+     * Get subtotal
+     *
+     * @return false|float
+     */
     public function getSubtotal()
     {
         $address = $this->getQuoteAddress();
@@ -200,23 +260,33 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             if ($address->getSubtotalInclTax()) {
                 return $address->getSubtotalInclTax();
             }
-            return $address->getSubtotal()+$address->getTaxAmount();
+            return $address->getSubtotal() + $address->getTaxAmount();
         } else {
             return $address->getSubtotal();
         }
         return false;
     }
 
+    /**
+     * Get subtotal with discount
+     *
+     * @return float
+     */
     public function getSubtotalWithDiscount()
     {
         $address = $this->getQuoteAddress();
         if ($this->displayTotalsIncludeTax()) {
-            return $address->getSubtotal()+$address->getTaxAmount()+$this->getDiscountAmount();
+            return $address->getSubtotal() + $address->getTaxAmount() + $this->getDiscountAmount();
         } else {
-            return $address->getSubtotal()+$this->getDiscountAmount();
+            return $address->getSubtotal() + $this->getDiscountAmount();
         }
     }
 
+    /**
+     * Get discount amount
+     *
+     * @return float
+     */
     public function getDiscountAmount()
     {
         return $this->getQuote()->getShippingAddress()->getDiscountAmount();
@@ -231,8 +301,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         if ($this->getQuote()->isVirtual()) {
             return $this->getQuote()->getBillingAddress();
-        }
-        else {
+        } else {
             return $this->getQuote()->getShippingAddress();
         }
     }
@@ -240,7 +309,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Define if specified item has already applied custom price
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return bool
      */
     public function usedCustomPriceForItem($item)
@@ -251,7 +320,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Define if custom price can be applied for specified item
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return bool
      */
     public function canApplyCustomPrice($item)
@@ -259,19 +328,24 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return !$item->isChildrenCalculated();
     }
 
+    /**
+     * Get qty title
+     *
+     * @param Item $item
+     * @return string
+     */
     public function getQtyTitle($item)
     {
         $prices = $item->getProduct()->getTierPrice();
         if ($prices) {
             $info = array();
             foreach ($prices as $data) {
-                $qty    = $data['price_qty']*1;
-                $price  = $this->convertPrice($data['price']);
+                $qty = $data['price_qty'] * 1;
+                $price = $this->convertPrice($data['price']);
                 $info[] = __('Buy %1 for price %2', $qty, $price);
             }
             return implode(', ', $info);
-        }
-        else {
+        } else {
             return __('Item ordered qty');
         }
     }
@@ -279,7 +353,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Get tier price html
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return string
      */
     public function getTierHtml($item)
@@ -287,9 +361,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $html = '';
         $prices = $item->getProduct()->getTierPrice();
         if ($prices) {
-            $info = $item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-                ? $this->_getBundleTierPriceInfo($prices)
-                : $this->_getTierPriceInfo($prices);
+            $info = $item->getProductType() ==
+                \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE ? $this->_getBundleTierPriceInfo(
+                    $prices
+                ) : $this->_getTierPriceInfo(
+                    $prices
+                );
             $html = implode('<br/>', $info);
         }
         return $html;
@@ -299,14 +376,14 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get tier price info to display in grid for Bundle product
      *
      * @param array $prices
-     * @return array
+     * @return string[]
      */
     protected function _getBundleTierPriceInfo($prices)
     {
         $info = array();
         foreach ($prices as $data) {
-            $qty    = $data['price_qty'] * 1;
-            $info[] = __('%1 with %2 discount each', $qty, ($data['price'] * 1) . '%');
+            $qty = $data['price_qty'] * 1;
+            $info[] = __('%1 with %2 discount each', $qty, $data['price'] * 1 . '%');
         }
         return $info;
     }
@@ -315,25 +392,26 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get tier price info to display in grid
      *
      * @param array $prices
-     * @return array
+     * @return string[]
      */
     protected function _getTierPriceInfo($prices)
     {
         $info = array();
         foreach ($prices as $data) {
-            $qty    = $data['price_qty'] * 1;
-            $price  = $this->convertPrice($data['price']);
+            $qty = $data['price_qty'] * 1;
+            $price = $this->convertPrice($data['price']);
             $info[] = __('%1 for %2', $qty, $price);
         }
         return $info;
     }
+
     /**
      * Get Custom Options of item
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
-     * @return array
+     * @param Item $item
+     * @return string
      */
-    public function getCustomOptions(\Magento\Sales\Model\Quote\Item $item)
+    public function getCustomOptions(Item $item)
     {
         $optionStr = '';
         $this->_moveToCustomerStorage = true;
@@ -345,9 +423,13 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                     $optionStr .= $option->getTitle() . ':';
 
                     $quoteItemOption = $item->getOptionByCode('option_' . $option->getId());
-                    $group = $option->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setQuoteItemOption($quoteItemOption);
+                    $group = $option->groupFactory(
+                        $option->getType()
+                    )->setOption(
+                        $option
+                    )->setQuoteItemOption(
+                        $quoteItemOption
+                    );
 
                     $optionStr .= $group->getEditableOptionValue($quoteItemOption->getValue());
                     $optionStr .= "\n";
@@ -367,6 +449,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $this->_moveToCustomerStorage;
     }
 
+    /**
+     * Display subtotal including tax
+     *
+     * @param Item $item
+     * @return string
+     */
     public function displaySubtotalInclTax($item)
     {
         if ($item->getTaxBeforeDiscount()) {
@@ -377,21 +465,38 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $this->formatPrice($item->getRowTotal() + $tax);
     }
 
+    /**
+     * Display original price including tax
+     *
+     * @param Item $item
+     * @return float
+     */
     public function displayOriginalPriceInclTax($item)
     {
         $tax = 0;
         if ($item->getTaxPercent()) {
             $tax = $item->getPrice() * ($item->getTaxPercent() / 100);
         }
-        return $this->convertPrice($item->getPrice()+($tax/$item->getQty()));
+        return $this->convertPrice($item->getPrice() + $tax / $item->getQty());
     }
 
+    /**
+     * Display row total with discount including tax
+     *
+     * @param Item $item
+     * @return string
+     */
     public function displayRowTotalWithDiscountInclTax($item)
     {
-        $tax = ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        return $this->formatPrice($item->getRowTotal()-$item->getDiscountAmount()+$tax);
+        $tax = $item->getTaxAmount() ? $item->getTaxAmount() : 0;
+        return $this->formatPrice($item->getRowTotal() - $item->getDiscountAmount() + $tax);
     }
 
+    /**
+     * Get including/excluding tax message
+     *
+     * @return string
+     */
     public function getInclExclTaxMessage()
     {
         if ($this->_taxData->priceIncludesTax($this->getStore())) {
@@ -401,6 +506,11 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         }
     }
 
+    /**
+     * Get store
+     *
+     * @return \Magento\Core\Model\Store
+     */
     public function getStore()
     {
         return $this->getQuote()->getStore();
@@ -409,7 +519,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Return html button which calls configure window
      *
-     * @param  $item
+     * @param Item $item
      * @return string
      */
     public function getConfigureButtonHtml($item)
@@ -424,35 +534,30 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $options['title'] = __('This product does not have any configurable options');
         }
 
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData($options)
-            ->toHtml();
+        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData($options)->toHtml();
     }
 
     /**
      * Get order item extra info block
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return \Magento\View\Element\AbstractBlock
      */
     public function getItemExtraInfo($item)
     {
-        return $this->getLayout()
-            ->getBlock('order_item_extra_info')
-            ->setItem($item);
+        return $this->getLayout()->getBlock('order_item_extra_info')->setItem($item);
     }
 
     /**
      * Returns whether moving to wishlist is allowed for this item
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return bool
      */
     public function isMoveToWishlistAllowed($item)
     {
         return $item->getProduct()->isVisibleInSiteVisibility();
     }
-
 
     /**
      * Retrieve collection of customer wishlists
@@ -461,7 +566,6 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getCustomerWishlists()
     {
-        return $this->_wishlistFactory->create()->getCollection()
-            ->filterByCustomerId($this->getCustomerId());
+        return $this->_wishlistFactory->create()->getCollection()->filterByCustomerId($this->getCustomerId());
     }
 }

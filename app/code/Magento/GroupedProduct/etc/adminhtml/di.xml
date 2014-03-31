@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\GroupedProduct\Model\Product\Type\Grouped" type="Magento\GroupedProduct\Model\Product\Type\Grouped\Backend" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks">
         <plugin name="GroupedProduct" type="Magento\GroupedProduct\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks\Plugin\Grouped" />
@@ -32,20 +32,13 @@
         <plugin name="GroupedProduct" type="Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar" sortOrder="100"/>
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
-        <param name="constructors">
-            <array>
-                <item key="grouped"><value>Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Sales\Model\AdminOrder\Product\Quote\Initializer">
         <plugin name="sales_adminorder_quote_initializer_plugin" type="Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer" sortOrder="100"/>
-    </type>
-    <type name="Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock">
-        <param name="complexProductTypes">
-            <array>
-                <item key="grouped"><value type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
-            </array>
-        </param>
     </type>
 </config>

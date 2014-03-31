@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Widget\Grid;
 
 class ParserTest extends \PHPUnit_Framework_TestCase
@@ -55,42 +54,18 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function parseExpressionDataProvider()
     {
         return array(
-            array(
-                '1-2',
-                array('1', '2', '-')
-            ),
-            array(
-                '1*2',
-                array('1', '2', '*')
-            ),
-            array(
-                '1/2',
-                array('1', '2', '/')
-            ),
-            array(
-                '1+2+3',
-                array('1', '2', '+', '3', '+')
-            ),
-            array(
-                '1*2*3+4',
-                array('1', '2', '*', '3', '*', '4', '+')
-            ),
-            array(
-                '1-2-3',
-                array('1', '2', '-', '3', '-')
-            ),
-            array(
-                '1*2*3',
-                array('1', '2', '*', '3', '*')
-            ),
-            array(
-                '1/2/3',
-                array('1', '2', '/', '3', '/')
-            ),
+            array('1-2', array('1', '2', '-')),
+            array('1*2', array('1', '2', '*')),
+            array('1/2', array('1', '2', '/')),
+            array('1+2+3', array('1', '2', '+', '3', '+')),
+            array('1*2*3+4', array('1', '2', '*', '3', '*', '4', '+')),
+            array('1-2-3', array('1', '2', '-', '3', '-')),
+            array('1*2*3', array('1', '2', '*', '3', '*')),
+            array('1/2/3', array('1', '2', '/', '3', '/')),
             array(
                 '1 * 2 / 3 + 4 * 5 * 6 - 7 - 8',
                 array('1', '2', '*', '3', '/', '4', '5', '*', '6', '*', '+', '7', '-', '8', '-')
-            ),
+            )
         );
     }
 

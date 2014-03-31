@@ -25,6 +25,10 @@
  */
 namespace Magento\Rss\App\Action\Plugin;
 
+use Magento\App\RequestInterface;
+use Magento\App\ResponseInterface;
+use Magento\Backend\App\AbstractAction;
+
 class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
     /**
@@ -47,17 +51,14 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      */
     protected $_aclResources = array(
         'authenticate' => 'Magento_Rss::rss',
-        'catalog' => array(
-            'notifystock' => 'Magento_Catalog::products',
-            'review' => 'Magento_Review::reviews_all'
-        ),
+        'catalog' => array('notifystock' => 'Magento_Catalog::products', 'review' => 'Magento_Review::reviews_all'),
         'order' => 'Magento_Sales::sales_order'
     );
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\App\ResponseInterface $response
+     * @param ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\HTTP\Authentication $httpAuthentication
@@ -67,7 +68,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $url,
-        \Magento\App\ResponseInterface $response,
+        ResponseInterface $response,
         \Magento\App\ActionFlag $actionFlag,
         \Magento\Message\ManagerInterface $messageManager,
         \Magento\HTTP\Authentication $httpAuthentication,
@@ -83,21 +84,25 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
     /**
      * Replace standard admin login form with HTTP Basic authentication
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param AbstractAction $subject
+     * @param callable $proceed
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {
-        /** @var \Magento\App\RequestInterface $request */
-        $request = $arguments[0];
-        $resource = isset($this->_aclResources[$request->getControllerName()])
-            ? (isset($this->_aclResources[$request->getControllerName()][$request->getActionName()])
-                ? $this->_aclResources[$request->getControllerName()][$request->getActionName()]
-                : $this->_aclResources[$request->getControllerName()])
-            : null;
+        $resource = isset(
+            $this->_aclResources[$request->getControllerName()]
+        ) ? isset(
+            $this->_aclResources[$request->getControllerName()][$request->getActionName()]
+        ) ? $this->_aclResources[$request
+            ->getControllerName()][$request
+            ->getActionName()] : $this
+            ->_aclResources[$request
+            ->getControllerName()] : null;
         if (!$resource) {
-            return parent::aroundDispatch($arguments, $invocationChain);
+            return parent::aroundDispatch($subject, $proceed, $request);
         }
 
         $session = $this->_auth->getAuthStorage();
@@ -118,6 +123,6 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
             return $this->_response;
         }
 
-        return parent::aroundDispatch($arguments, $invocationChain);
+        return parent::aroundDispatch($subject, $proceed, $request);
     }
 }

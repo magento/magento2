@@ -34,8 +34,6 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 
     $type = $type . '-' . $mode;
 
-    $class = 'widget viewed' . ' ' . $mode;
-
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_images_names_widget';
     $title = __('Recently Viewed');
@@ -49,7 +47,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block <?php echo $class; ?>">
+<div class="block widget viewed <?php echo $mode; ?>">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>
@@ -77,7 +75,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                             <div class="primary">
                                 <?php if ($_product->getTypeInstance()->hasRequiredOptions($_item)): ?>
                                     <button class="action tocart"
-                                            data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_item) ?>
+                                            data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}'
                                                             type="button" title="<?php echo __('Add to Cart') ?>">
                                     <span><?php echo __('Add to Cart') ?></span>
                                 <?php else: ?>

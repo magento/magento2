@@ -46,7 +46,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
         $messageFormat = '%message%';
-        $dom = new \Magento\Config\Dom($fixtureXml, array(), null, $messageFormat);
+        $dom = new \Magento\Config\Dom($fixtureXml, array(), null, null, $messageFormat);
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
@@ -87,7 +87,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </integrations>',
                 array()
             ),
-
             /** Missing required nodes */
             'empty root node' => array(
                 '<integrations/>',
@@ -112,7 +111,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 '<integration name="TestIntegration"/>',
                 array("Element 'integration': No matching global declaration available for the validation root.")
             ),
-
             /** Excessive nodes */
             'irrelevant node in root' => array(
                 '<integrations>
@@ -162,11 +160,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'resource': Element content is not allowed, "
-                        . "because the content type is a simple type definition."
+                    "Element 'resource': Element content is not allowed, " .
+                    "because the content type is a simple type definition."
                 )
             ),
-
             /** Excessive attributes */
             'invalid attribute in root' => array(
                 '<integrations invalid="invalid">
@@ -212,7 +209,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </integrations>',
                 array("Element 'resource', attribute 'invalid': The attribute 'invalid' is not allowed.")
             ),
-
             /** Missing or empty required attributes */
             'integration without name' => array(
                 '<integrations>
@@ -234,12 +230,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         </resources>
                     </integration>
                 </integrations>',
-                array
-                (
-                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; "
-                        . "this underruns the allowed minimum length of '2'.",
-                    "Element 'integration', attribute 'name': "
-                        . "'' is not a valid value of the atomic type 'integrationNameType'."
+                array(
+                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; " .
+                    "this underruns the allowed minimum length of '2'.",
+                    "Element 'integration', attribute 'name': " .
+                    "'' is not a valid value of the atomic type 'integrationNameType'."
                 )
             ),
             'resource without name' => array(
@@ -263,13 +258,12 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'resource', attribute 'name': [facet 'pattern'] "
-                        . "The value '' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': '' "
-                        . "is not a valid value of the atomic type 'resourceNameType'."
+                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
+                    "The value '' is not accepted by the pattern '.+_.+::.+'.",
+                    "Element 'resource', attribute 'name': '' " .
+                    "is not a valid value of the atomic type 'resourceNameType'."
                 )
             ),
-
             /** Invalid values */
             'resource with invalid name' => array(
                 '<integrations>
@@ -281,11 +275,12 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'resource', attribute 'name': [facet 'pattern'] "
-                        . "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': 'customer_manage' "
-                        . "is not a valid value of the atomic type 'resourceNameType'."
-                )            ),
+                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
+                    "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'.",
+                    "Element 'resource', attribute 'name': 'customer_manage' " .
+                    "is not a valid value of the atomic type 'resourceNameType'."
+                )
+            )
         );
     }
 }

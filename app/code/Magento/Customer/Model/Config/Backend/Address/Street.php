@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config\Backend\Address;
 
 /**
  * Line count config model for customer address street attribute
  *
  * @method string getWebsiteCode
  */
-namespace Magento\Customer\Model\Config\Backend\Address;
-
 class Street extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -39,22 +38,22 @@ class Street extends \Magento\Core\Model\Config\Value
     protected $_eavConfig;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -65,12 +64,12 @@ class Street extends \Magento\Core\Model\Config\Value
     /**
      * Actions after save
      *
-     * @return \Magento\Customer\Model\Config\Backend\Address\Street
+     * @return $this
      */
     protected function _afterSave()
     {
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
-        $value  = $this->getValue();
+        $value = $this->getValue();
         switch ($this->getScope()) {
             case 'websites':
                 $website = $this->_storeManager->getWebsite($this->getWebsiteCode());
@@ -92,7 +91,7 @@ class Street extends \Magento\Core\Model\Config\Value
     /**
      * Processing object after delete data
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _afterDelete()
     {

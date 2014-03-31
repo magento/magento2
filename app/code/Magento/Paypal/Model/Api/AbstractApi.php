@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Api;
 
 /**
  * Abstract class for Paypal API wrappers
  */
-namespace Magento\Paypal\Model\Api;
-
 abstract class AbstractApi extends \Magento\Object
 {
     /**
@@ -64,7 +63,15 @@ abstract class AbstractApi extends \Magento\Object
      * @var array
      */
     protected $_lineItemExportItemsFormat = array();
+
+    /**
+     * @var array
+     */
     protected $_lineItemExportItemsFilters = array();
+
+    /**
+     * @var array
+     */
     protected $_lineItemTotalExportMap = array();
 
     /**
@@ -80,13 +87,6 @@ abstract class AbstractApi extends \Magento\Object
      * @var array
      */
     protected $_shippingOptionsExportItemsFormat = array();
-
-    /**
-     * Imported recurring profiles array
-     *
-     * @var array
-     */
-    protected $_recurringPaymentProfiles = array();
 
     /**
      * Fields that should be replaced in debug with '***'
@@ -108,9 +108,9 @@ abstract class AbstractApi extends \Magento\Object
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @var \Magento\Directory\Model\RegionFactory
@@ -118,7 +118,7 @@ abstract class AbstractApi extends \Magento\Object
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Core\Model\Log\AdapterFactory
+     * @var \Magento\Logger\AdapterFactory
      */
     protected $_logAdapterFactory;
 
@@ -130,22 +130,22 @@ abstract class AbstractApi extends \Magento\Object
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         array $data = array()
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_logger = $logger;
-        $this->_locale = $locale;
+        $this->_localeResolver = $localeResolver;
         $this->_regionFactory = $regionFactory;
         $this->_logAdapterFactory = $logAdapterFactory;
         parent::__construct($data);
@@ -293,6 +293,8 @@ abstract class AbstractApi extends \Magento\Object
 
     /**
      * PayPal merchant email getter
+     *
+     * @return string
      */
     public function getBusinessAccount()
     {
@@ -316,7 +318,7 @@ abstract class AbstractApi extends \Magento\Object
      *
      * @param array|\Magento\Object $from
      * @param array $publicMap
-     * @return \Magento\Paypal\Model\Api\AbstractApi
+     * @return $this
      */
     public function export($from, array $publicMap = array())
     {
@@ -328,7 +330,7 @@ abstract class AbstractApi extends \Magento\Object
      * Set PayPal cart instance
      *
      * @param \Magento\Paypal\Model\Cart $cart
-     * @return \Magento\Paypal\Model\Api\AbstractApi
+     * @return $this
      */
     public function setPaypalCart(\Magento\Paypal\Model\Cart $cart)
     {
@@ -340,7 +342,7 @@ abstract class AbstractApi extends \Magento\Object
      * Config instance setter
      *
      * @param \Magento\Paypal\Model\Config $config
-     * @return \Magento\Paypal\Model\Api\AbstractApi
+     * @return $this
      */
     public function setConfigObject(\Magento\Paypal\Model\Config $config)
     {
@@ -355,29 +357,17 @@ abstract class AbstractApi extends \Magento\Object
      */
     public function getLocaleCode()
     {
-        return $this->_locale->getLocaleCode();
+        return $this->_localeResolver->getLocaleCode();
     }
 
     /**
      * Always take into account
+     *
+     * @return int
      */
     public function getFraudManagementFiltersEnabled()
     {
         return 1;
-    }
-
-    /**
-     * Set recurring profiles
-     *
-     * @param array $items
-     * @return \Magento\Paypal\Model\Api\AbstractApi
-     */
-    public function addRecurringPaymentProfiles(array $items)
-    {
-        if ($items) {
-            $this->_recurringPaymentProfiles = $items;
-        }
-        return $this;
     }
 
     /**
@@ -398,9 +388,9 @@ abstract class AbstractApi extends \Magento\Object
         $result = \Magento\Object\Mapper::accumulateByMap(array($this, 'getDataUsingMethod'), $request, $map);
         foreach ($privateRequestMap as $key) {
             if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
-                $callback   = $this->_exportToRequestFilters[$key];
+                $callback = $this->_exportToRequestFilters[$key];
                 $privateKey = $result[$key];
-                $publicKey  = $map[$this->_globalMap[$key]];
+                $publicKey = $map[$this->_globalMap[$key]];
                 $result[$key] = call_user_func(array($this, $callback), $privateKey, $publicKey);
             }
         }
@@ -412,6 +402,7 @@ abstract class AbstractApi extends \Magento\Object
      *
      * @param array $privateResponseMap
      * @param array $response
+     * @return void
      */
     protected function _importFromResponse(array $privateResponseMap, array $response)
     {
@@ -435,7 +426,7 @@ abstract class AbstractApi extends \Magento\Object
      *
      * @param array &$request
      * @param int $i
-     * @return true|bool
+     * @return true|null
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
@@ -445,8 +436,9 @@ abstract class AbstractApi extends \Magento\Object
 
         // always add cart totals, even if line items are not requested
         if ($this->_lineItemTotalExportMap) {
-            foreach ($this->_cart->getTotals() as $key => $total) {
-                if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
+            foreach ($this->_cart->getAmounts() as $key => $total) {
+                if (isset($this->_lineItemTotalExportMap[$key])) {
+                    // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
                     $request[$privateKey] = $this->_filterAmount($total);
                 }
@@ -454,7 +446,7 @@ abstract class AbstractApi extends \Magento\Object
         }
 
         // add cart line items
-        $items = $this->_cart->getItems();
+        $items = $this->_cart->getAllItems();
         if (empty($items) || !$this->getIsLineItemsEnabled()) {
             return;
         }
@@ -464,7 +456,7 @@ abstract class AbstractApi extends \Magento\Object
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
                 if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback   = $this->_lineItemExportItemsFilters[$publicKey];
+                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
                     $value = call_user_func(array($this, $callback), $value);
                 }
                 if (is_float($value)) {
@@ -509,6 +501,7 @@ abstract class AbstractApi extends \Magento\Object
 
     /**
      * Filter amounts in API calls
+     *
      * @param float|string $value
      * @return string
      */
@@ -525,7 +518,7 @@ abstract class AbstractApi extends \Magento\Object
      */
     protected function _filterBool($value)
     {
-        return ($value) ? 'true' : 'false';
+        return $value ? 'true' : 'false';
     }
 
     /**
@@ -543,7 +536,7 @@ abstract class AbstractApi extends \Magento\Object
      * Unified getter that looks in data or falls back to config
      *
      * @param string $key
-     * @param mixed $default
+     * @param mixed|null $default
      * @return mixed
      */
     protected function _getDataOrConfig($key, $default = null)
@@ -551,9 +544,8 @@ abstract class AbstractApi extends \Magento\Object
         if ($this->hasData($key)) {
             return $this->getData($key);
         }
-        return $this->_config->$key ? $this->_config->$key : $default;
+        return $this->_config->{$key} ? $this->_config->{$key} : $default;
     }
-
 
     /**
      * region_id workaround: PayPal requires state code, try to find one in the address
@@ -579,21 +571,23 @@ abstract class AbstractApi extends \Magento\Object
      *
      * @param \Magento\Object $address
      * @param array $to
+     * @return void
      */
     protected function _importStreetFromAddress(\Magento\Object $address, array &$to)
     {
-        $keys = func_get_args(); array_shift($keys); array_shift($keys);
+        $keys = func_get_args();
+        array_shift($keys);
+        array_shift($keys);
         $street = $address->getStreet();
         if (!$keys || !$street || !is_array($street)) {
             return;
         }
 
-        $street = $this->_customerAddress
-            ->convertStreetLines($address->getStreet(), count($keys));
+        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), count($keys));
 
         $i = 0;
         foreach ($keys as $key) {
-            $to[$key] = isset($street[$i]) ? $street[$i]: '';
+            $to[$key] = isset($street[$i]) ? $street[$i] : '';
             $i++;
         }
     }
@@ -625,13 +619,18 @@ abstract class AbstractApi extends \Magento\Object
      * Log debug data to file
      *
      * @param mixed $debugData
+     * @return void
      */
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
             $this->_logAdapterFactory->create(
                 array('fileName' => 'payment_' . $this->_config->getMethodCode() . '.log')
-            )->setFilterDataKeys($this->_debugReplacePrivateDataKeys)->log($debugData);
+            )->setFilterDataKeys(
+                $this->_debugReplacePrivateDataKeys
+            )->log(
+                $debugData
+            );
         }
     }
 

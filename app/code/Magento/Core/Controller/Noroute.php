@@ -31,6 +31,8 @@ class Noroute extends Action
 {
     /**
      * Noroute application handler
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -51,8 +53,7 @@ class Noroute extends Action
             $request->setParams(array('__status__' => $status));
             $request->setControllerName($status->getForwardController());
             $request->setModuleName($status->getForwardModule());
-            $request->setActionName($status->getForwardAction())
-                ->setDispatched(false);
+            $request->setActionName($status->getForwardAction())->setDispatched(false);
         }
     }
 }

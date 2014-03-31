@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
 
 /**
  * Bundle Price View Attribute Renderer
@@ -32,10 +32,7 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
-
-class View
-    extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * Core data
@@ -70,14 +67,8 @@ class View
     {
         if (is_null($this->_options)) {
             $this->_options = array(
-                array(
-                    'label' => __('As Low as'),
-                    'value' =>  1
-                ),
-                array(
-                    'label' => __('Price Range'),
-                    'value' =>  0
-                ),
+                array('label' => __('As Low as'), 'value' => 1),
+                array('label' => __('Price Range'), 'value' => 0)
             );
         }
         return $this->_options;
@@ -87,7 +78,7 @@ class View
      * Get a text for option value
      *
      * @param string|integer $value
-     * @return string
+     * @return string|bool
      */
     public function getOptionText($value)
     {
@@ -108,23 +99,14 @@ class View
     public function getFlatColums()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array(
-            'unsigned'  => false,
-            'default'   => null,
-            'extra'     => null
-        );
+        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'int';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $column['nullable'] = true;
-            $column['comment']  = 'Bundle Price View ' . $attributeCode . ' column';
-        }
+        $column['type'] = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $column['nullable'] = true;
+        $column['comment'] = 'Bundle Price View ' . $attributeCode . ' column';
 
         return array($attributeCode => $column);
-   }
+    }
 
     /**
      * Retrieve Select for update Attribute value in flat table
@@ -134,7 +116,6 @@ class View
      */
     public function getFlatUpdateSelect($store)
     {
-        return $this->_entityAttribute->create()
-            ->getFlatUpdateSelect($this->getAttribute(), $store, false);
+        return $this->_entityAttribute->create()->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }
 }

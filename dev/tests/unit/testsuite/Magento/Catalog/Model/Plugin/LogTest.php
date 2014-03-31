@@ -28,25 +28,35 @@ class LogTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Model\Plugin\Log
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_compareItemMock;
+    protected $compareItemMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_logResourceMock;
+    protected $logResourceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
 
     protected function setUp()
     {
-        $this->_logResourceMock = $this->getMock('Magento\Log\Model\Resource\Log', array(), array(), '', false);
-        $this->_compareItemMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Compare\Item', array(), array(), '', false
+        $this->logResourceMock = $this->getMock('Magento\Log\Model\Resource\Log', array(), array(), '', false);
+        $this->compareItemMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Compare\Item',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->_model = new \Magento\Catalog\Model\Plugin\Log($this->_compareItemMock);
+        $this->subjectMock = $this->getMock('Magento\Log\Model\Resource\Log', array(), array(), '', false);
+        $this->model = new \Magento\Catalog\Model\Plugin\Log($this->compareItemMock);
     }
 
     /**
@@ -54,9 +64,11 @@ class LogTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterClean()
     {
-        $this->_compareItemMock->expects($this->once())
-            ->method('clean');
+        $this->compareItemMock->expects($this->once())->method('clean');
 
-        $this->assertEquals($this->_logResourceMock, $this->_model->afterClean($this->_logResourceMock));
+        $this->assertEquals(
+            $this->logResourceMock,
+            $this->model->afterClean($this->subjectMock, $this->logResourceMock)
+        );
     }
 }

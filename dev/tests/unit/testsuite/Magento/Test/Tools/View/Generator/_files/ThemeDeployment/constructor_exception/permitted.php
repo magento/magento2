@@ -24,10 +24,4 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array(
-    'permitted1',
-    'permitted2',
-    'conflict1',
-    'conflict2',
-    'permitted3',
-);
+return array('permitted1', 'permitted2', 'conflict1', 'conflict2', 'permitted3');

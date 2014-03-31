@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
 /**
  * Fieldset renderer for PayPal solution
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
-
-class Payment
-    extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Backend\Model\Config
@@ -109,25 +107,36 @@ class Payment
         $disabledAttributeString = $this->_isPaymentEnabled($element) ? '' : ' disabled="disabled"';
         $disabledClassString = $this->_isPaymentEnabled($element) ? '' : ' disabled';
         $htmlId = $element->getHtmlId();
-        $html .= '<div class="button-container"><button type="button"' . $disabledAttributeString
-            . ' class="button action-configure'
-            . (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate')
-            . $disabledClassString . '" id="' . $htmlId
-            . '-head" onclick="paypalToggleSolution.call(this, \'' . $htmlId . "', '"
-            . $this->getUrl('adminhtml/*/state') . '\'); return false;"><span class="state-closed">'
-            . __('Configure') . '</span><span class="state-opened">'
-            . __('Close') . '</span></button>';
+        $html .= '<div class="button-container"><button type="button"' .
+            $disabledAttributeString .
+            ' class="button action-configure' .
+            (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate') .
+            $disabledClassString .
+            '" id="' .
+            $htmlId .
+            '-head" onclick="paypalToggleSolution.call(this, \'' .
+            $htmlId .
+            "', '" .
+            $this->getUrl(
+                'adminhtml/*/state'
+            ) . '\'); return false;"><span class="state-closed">' . __(
+                'Configure'
+            ) . '</span><span class="state-opened">' . __(
+                'Close'
+            ) . '</span></button>';
 
         if (!empty($groupConfig['more_url'])) {
-            $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">'
-                . __('Learn More') . '</a>';
+            $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">' . __(
+                'Learn More'
+            ) . '</a>';
         }
         if (!empty($groupConfig['demo_url'])) {
-            $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">'
-                . __('View Demo') . '</a>';
+            $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">' . __(
+                'View Demo'
+            ) . '</a>';
         }
 
-            $html .= '</div></div>';
+        $html .= '</div></div>';
 
         return $html;
     }
@@ -147,7 +156,7 @@ class Payment
      * Get collapsed state on-load
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return bool
+     * @return false
      */
     protected function _isCollapseState($element)
     {

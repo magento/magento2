@@ -65,28 +65,36 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->_invoker = $this->getMock('Magento\Event\InvokerInterface');
         $this->_eventConfigMock = $this->getMock('Magento\Event\ConfigInterface');
 
-        $this->_eventManager = new \Magento\Event\Manager(
-            $this->_invoker, $this->_eventConfigMock
-        );
+        $this->_eventManager = new \Magento\Event\Manager($this->_invoker, $this->_eventConfigMock);
     }
 
     public function testDispatch()
     {
-        $this->_eventConfigMock->expects($this->once())
-            ->method('getObservers')
-            ->with('some_event')
-            ->will($this->returnValue(array(
-                'observer' => array('instance' => 'class', 'method' => 'method', 'name' => 'observer')
-            )));
+        $this->_eventConfigMock->expects(
+            $this->once()
+        )->method(
+            'getObservers'
+        )->with(
+            'some_event'
+        )->will(
+            $this->returnValue(
+                array('observer' => array('instance' => 'class', 'method' => 'method', 'name' => 'observer'))
+            )
+        );
         $this->_eventManager->dispatch('some_event', array('123'));
     }
 
     public function testDispatchWithEmptyEventObservers()
     {
-        $this->_eventConfigMock->expects($this->once())
-            ->method('getObservers')
-            ->with('some_event')
-            ->will($this->returnValue(array()));
+        $this->_eventConfigMock->expects(
+            $this->once()
+        )->method(
+            'getObservers'
+        )->with(
+            'some_event'
+        )->will(
+            $this->returnValue(array())
+        );
         $this->_invoker->expects($this->never())->method('dispatch');
         $this->_eventManager->dispatch('some_event');
     }

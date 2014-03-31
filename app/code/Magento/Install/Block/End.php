@@ -62,7 +62,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      * @param \Magento\Session\Generic $session
      * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\AdminNotification\Model\Survey $survey
-     * @param $cryptKey
+     * @param string $cryptKey
      * @param array $data
      */
     public function __construct(
@@ -101,8 +101,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      */
     public function getIframeSourceUrl()
     {
-        if (!$this->_survey->isSurveyUrlValid()
-            || $this->_installer->getHideIframe()) {
+        if (!$this->_survey->isSurveyUrlValid() || $this->_installer->getHideIframe()) {
             return null;
         }
         return $this->_survey->getSurveyUrl();

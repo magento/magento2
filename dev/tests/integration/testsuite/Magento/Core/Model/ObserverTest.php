@@ -64,14 +64,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'Magento\Core\Model\Theme\Registration',
             array('register'),
             array(
-                $this->_objectManager->create('Magento\Core\Model\Resource\Theme\CollectionFactory'),
-                $this->_objectManager->create('Magento\Core\Model\Theme\Collection'),
+                $this->_objectManager->create('Magento\Core\Model\Resource\Theme\Data\CollectionFactory'),
+                $this->_objectManager->create('Magento\Core\Model\Theme\Data\Collection'),
                 $this->_objectManager->create('Magento\App\Filesystem')
             )
         );
-        $themeRegistration->expects($this->once())
-            ->method('register')
-            ->with($this->equalTo($pattern));
+        $themeRegistration->expects($this->once())->method('register')->with($this->equalTo($pattern));
         $this->_objectManager->addSharedInstance($themeRegistration, 'Magento\Core\Model\Theme\Registration');
 
         /** @var $observer \Magento\Core\Model\Observer */
@@ -86,10 +84,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createEventObserverForThemeRegistration()
     {
-        $response = $this->_objectManager->create('Magento\Object', array(
-            'data' => array('additional_options' => array())
-        ));
-        $event = $this->_objectManager->create('Magento\Event', array('data' => array('response_object' => $response)));
+        $response = $this->_objectManager->create(
+            'Magento\Object',
+            array('data' => array('additional_options' => array()))
+        );
+        $event = $this->_objectManager->create(
+            'Magento\Event',
+            array('data' => array('response_object' => $response))
+        );
         return $this->_objectManager->create('Magento\Event\Observer', array('data' => array('event' => $event)));
     }
 }

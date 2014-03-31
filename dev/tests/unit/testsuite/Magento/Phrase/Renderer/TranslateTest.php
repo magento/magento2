@@ -26,7 +26,7 @@ namespace Magento\Phrase\Renderer;
 class TranslateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Translate|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Translate|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_translator;
 
@@ -37,22 +37,53 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_renderer = $objectManagerHelper->getObject('Magento\Phrase\Renderer\Translate', array(
-            'translator' => $this->_translator,
-        ));
+        $this->_renderer = $objectManagerHelper->getObject(
+            'Magento\Phrase\Renderer\Translate',
+            array('translator' => $this->_translator)
+        );
     }
 
-    public function testTranslate()
+    public function testRenderByCode()
     {
+        $text = 'original text';
         $result = 'rendered text';
 
-        $this->_translator->expects($this->once())->method('translate')
-            ->with(array('text', 'param1', 'param2', 'param3'))
-            ->will($this->returnValue($result));
+        $this->_translator->expects(
+            $this->once()
+        )->method(
+            'getTheme'
+        )->will(
+            $this->returnValue('theme')
+        );
+        $this->_translator->expects(
+            $this->once()
+        )->method(
+            'getData'
+        )->will(
+            $this->returnValue(['theme::' . $text => $result])
+        );
 
-        $this->assertEquals($result, $this->_renderer->render('text', array('param1', 'param2', 'param3')));
+        $this->assertEquals($result, $this->_renderer->render([$text], []));
+    }
+
+    public function testRenderByText()
+    {
+        $text = 'original text';
+        $result = 'rendered text';
+
+        $this->_translator->expects($this->once())
+            ->method('getTheme')
+            ->will($this->returnValue('theme'));
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue([
+                'theme::' . $text => $result,
+                $text => $result,
+            ]));
+
+        $this->assertEquals($result, $this->_renderer->render([$text], []));
     }
 }

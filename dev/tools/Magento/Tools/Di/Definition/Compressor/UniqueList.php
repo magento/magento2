@@ -40,8 +40,8 @@ class UniqueList
      */
     public function getNumber($item)
     {
-        if (in_array($item, $this->_items)) {
-            return array_search($item, $this->_items);
+        if (in_array($item, $this->_items, true)) {
+            return array_search($item, $this->_items, true);
         } else {
             $this->_items[] = $item;
             return count($this->_items) - 1;

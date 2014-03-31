@@ -29,17 +29,19 @@
  */
 namespace Magento\Backend\Model\Config\Source\Storage\Media;
 
-class Database implements \Magento\Core\Model\Option\ArrayInterface
+use Magento\App\Arguments;
+
+class Database implements \Magento\Option\ArrayInterface
 {
     /**
-     * @var \Magento\App\Arguments
+     * @var Arguments
      */
     protected $_arguments;
 
     /**
-     * @param \Magento\App\Arguments
+     * @param Arguments $arguments
      */
-    public function __construct(\Magento\App\Arguments $arguments)
+    public function __construct(Arguments $arguments)
     {
         $this->_arguments = $arguments;
     }

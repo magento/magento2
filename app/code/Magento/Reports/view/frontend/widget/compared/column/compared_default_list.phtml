@@ -29,8 +29,6 @@ if ($exist = $this->getRecentlyComparedProducts()) {
 
     $type = $type . '-' . $mode;
 
-    $class = 'widget viewed' . ' ' . $mode;
-
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_compared_products_images_names_widget';
     $title = __('Recently Compared');
@@ -44,7 +42,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block <?php echo $class; ?>">
+<div class="block widget compared <?php echo $mode; ?>">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>
@@ -69,7 +67,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                     <div class="actions">
                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                             <button class="action tocart"
-                                    data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_product) ?>'}}"
+                                    data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
                                     type="button" title="<?php echo __('Add to Cart') ?>">
                                 <span><?php echo __('Add to Cart') ?></span>
                             </button>

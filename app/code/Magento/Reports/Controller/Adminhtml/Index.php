@@ -33,6 +33,8 @@
  */
 namespace Magento\Reports\Controller\Adminhtml;
 
+use Magento\App\ResponseInterface;
+
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -52,6 +54,11 @@ class Index extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Add reports to breadcrumb
+     *
+     * @return $this
+     */
     public function _initAction()
     {
         $this->_view->loadLayout();
@@ -59,21 +66,30 @@ class Index extends \Magento\Backend\App\Action
         return $this;
     }
 
-
+    /**
+     * Search terms report action
+     *
+     * @return void
+     */
     public function searchAction()
     {
         $this->_title->add(__('Search Terms Report'));
 
         $this->_eventManager->dispatch('on_view_report', array('report' => 'search'));
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_search')
-            ->_addBreadcrumb(__('Search Terms'), __('Search Terms'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_search'
+        )->_addBreadcrumb(
+            __('Search Terms'),
+            __('Search Terms')
+        );
         $this->_view->renderLayout();
     }
 
     /**
      * Export search report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportSearchCsvAction()
     {
@@ -84,6 +100,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Export search report to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportSearchExcelAction()
     {
@@ -92,6 +110,11 @@ class Index extends \Magento\Backend\App\Action
         return $this->_fileFactory->create('search.xml', $content->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
+    /**
+     * Determine if action is allowed for reports module
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

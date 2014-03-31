@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -43,8 +42,9 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
     }
 
     /**
@@ -97,7 +97,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testMoveWrongParent()
     {
@@ -106,7 +106,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testMoveWrongId()
     {
@@ -172,7 +172,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->unsetData();
         $this->_model->setPath('1/2/3');
-        $this->assertEquals(array(1,2,3), $this->_model->getPathIds());
+        $this->assertEquals(array(1, 2, 3), $this->_model->getPathIds());
     }
 
     public function testGetLevel()
@@ -203,7 +203,6 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
         $parents = $this->_model->getParentCategories();
         $this->assertEquals(0, count($parents));
     }
-
 
     public function testGetChildrenCategories()
     {

@@ -23,8 +23,7 @@
  */
 namespace Magento\Interception\Custom\Module\Model\ItemContainer;
 
-class Enhanced extends
-\Magento\Interception\Custom\Module\Model\ItemContainer
+class Enhanced extends \Magento\Interception\Custom\Module\Model\ItemContainer
 {
     /**
      * @return string

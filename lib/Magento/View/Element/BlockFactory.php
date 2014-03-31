@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 use Magento\ObjectManager;
@@ -32,11 +31,15 @@ use Magento\ObjectManager;
 class BlockFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      */
     public function __construct(ObjectManager $objectManager)
@@ -45,9 +48,11 @@ class BlockFactory
     }
 
     /**
+     * Create block
+     *
      * @param string $blockName
      * @param array $arguments
-     * @return mixed
+     * @return \Magento\View\Element\BlockInterface
      * @throws \LogicException
      */
     public function createBlock($blockName, array $arguments = array())

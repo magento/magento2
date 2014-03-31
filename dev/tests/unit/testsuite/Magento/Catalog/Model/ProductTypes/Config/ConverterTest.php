@@ -46,7 +46,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $source = $this->_filePath . 'product_types.xml';
         $dom = new \DOMDocument();
         $dom->load($source);
-        $expected = include($this->_filePath . 'product_types.php');
+        $expected = include $this->_filePath . 'product_types.php';
         $this->assertEquals($expected, $this->_model->convert($dom));
     }
 }

@@ -23,20 +23,25 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Config\Form\Field;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Backend system config datetime field renderer
  */
-namespace Magento\Backend\Block\System\Config\Form\Field;
-
 class Notification extends \Magento\Backend\Block\System\Config\Form\Field
 {
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
-        $element->setValue($this->_app->loadCache('admin_notifications_lastcheck'));
-        $format = $this->_app->getLocale()->getDateTimeFormat(
-            \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
+        $element->setValue($this->_cache->load('admin_notifications_lastcheck'));
+        $format = $this->_localeDate->getDateTimeFormat(
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
         );
-        return $this->_app->getLocale()->date(intval($element->getValue()))->toString($format);
+        return $this->_localeDate->date(intval($element->getValue()))->toString($format);
     }
 }

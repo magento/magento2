@@ -23,42 +23,41 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Core\Model\Session">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
     </type>
     <type name="Magento\Core\Model\Layout">
-        <param name="area">
-            <value>frontend</value>
-        </param>
+        <arguments>
+            <argument name="area" xsi:type="string">frontend</argument>
+        </arguments>
+        <plugin name="core-session-depersonalize"
+                type="Magento\Core\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
     </type>
     <type name="Magento\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
         <plugin name="urlRewrite" type="Magento\Core\App\FrontController\Plugin\UrlRewrite" sortOrder="60"/>
     </type>
     <type name="Magento\App\Action\Action">
+        <plugin name="core-app-action-dispatchController-context-plugin" type="Magento\Core\Model\App\Action\ContextPlugin" sortOrder="10"/>
         <plugin name="lastUrl" type="Magento\Core\App\Action\Plugin\LastUrl" sortOrder="70"/>
     </type>
     <type name="Magento\App\RouterList" shared="true">
-        <param name="routerList">
-            <array>
-                <item key="standard">
-                    <array>
-                        <item key="instance"><value>Magento\Core\App\Router\Base</value></item>
-                        <item key="disable"><value type="bool">false</value></item>
-                        <item key="sortOrder"><value>20</value></item>
-                    </array>
+        <arguments>
+            <argument name="routerList" xsi:type="array">
+                <item name="standard" xsi:type="array">
+                    <item name="instance" xsi:type="string">Magento\Core\App\Router\Base</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
                 </item>
-                <item key="default">
-                    <array>
-                        <item key="instance"><value>Magento\App\Router\DefaultRouter</value></item>
-                        <item key="disable"><value type="bool">false</value></item>
-                        <item key="sortOrder"><value>100</value></item>
-                    </array>
+                <item name="default" xsi:type="array">
+                    <item name="instance" xsi:type="string">Magento\App\Router\DefaultRouter</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
 </config>

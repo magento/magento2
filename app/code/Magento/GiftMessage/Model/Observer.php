@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\GiftMessage\Model;
 
 /**
  * Gift Message Observer Model
@@ -32,14 +32,12 @@
  * @package    Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Model;
-
 class Observer extends \Magento\Object
 {
     /**
      * Gift message message
      *
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
 
@@ -64,13 +62,14 @@ class Observer extends \Magento\Object
      * Set gift messages to order from quote address
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GiftMessage\Model\Observer
+     * @return $this
      */
     public function salesEventConvertQuoteAddressToOrder($observer)
     {
         if ($observer->getEvent()->getAddress()->getGiftMessageId()) {
-            $observer->getEvent()->getOrder()
-                ->setGiftMessageId($observer->getEvent()->getAddress()->getGiftMessageId());
+            $observer->getEvent()->getOrder()->setGiftMessageId(
+                $observer->getEvent()->getAddress()->getGiftMessageId()
+            );
         }
         return $this;
     }
@@ -79,20 +78,19 @@ class Observer extends \Magento\Object
      * Set gift messages to order from quote address
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GiftMessage\Model\Observer
+     * @return $this
      */
     public function salesEventConvertQuoteToOrder($observer)
     {
-        $observer->getEvent()->getOrder()
-            ->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
+        $observer->getEvent()->getOrder()->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
         return $this;
     }
 
     /**
      * Operate with gift messages on checkout proccess
      *
-     * @param Varien_Object $observer
-     * @return \Magento\GiftMessage\Model\Observer
+     * @param \Magento\Object $observer
+     * @return $this
      */
     public function checkoutEventCreateGiftMessage($observer)
     {
@@ -100,7 +98,7 @@ class Observer extends \Magento\Object
         $quote = $observer->getEvent()->getQuote();
         /* @var $quote \Magento\Sales\Model\Quote */
         if (is_array($giftMessages)) {
-            foreach ($giftMessages as $entityId=>$message) {
+            foreach ($giftMessages as $entityId => $message) {
 
                 $giftMessage = $this->_messageFactory->create();
 
@@ -126,29 +124,29 @@ class Observer extends \Magento\Object
                     $giftMessage->load($entity->getGiftMessageId());
                 }
 
-                if (trim($message['message'])=='') {
+                if (trim($message['message']) == '') {
                     if ($giftMessage->getId()) {
-                        try{
+                        try {
                             $giftMessage->delete();
-                            $entity->setGiftMessageId(0)
-                                ->save();
+                            $entity->setGiftMessageId(0)->save();
+                        } catch (\Exception $e) {
                         }
-                        catch (\Exception $e) { }
                     }
                     continue;
                 }
 
                 try {
-                    $giftMessage->setSender($message['from'])
-                        ->setRecipient($message['to'])
-                        ->setMessage($message['message'])
-                        ->save();
+                    $giftMessage->setSender(
+                        $message['from']
+                    )->setRecipient(
+                        $message['to']
+                    )->setMessage(
+                        $message['message']
+                    )->save();
 
-                    $entity->setGiftMessageId($giftMessage->getId())
-                        ->save();
-
+                    $entity->setGiftMessageId($giftMessage->getId())->save();
+                } catch (\Exception $e) {
                 }
-                catch (\Exception $e) { }
             }
         }
         return $this;
@@ -158,7 +156,7 @@ class Observer extends \Magento\Object
      * Duplicates giftmessage from order to quote on import or reorder
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\GiftMessage\Model\Observer
+     * @return $this
      */
     public function salesEventOrderToQuote($observer)
     {
@@ -173,9 +171,7 @@ class Observer extends \Magento\Object
         }
         $giftMessageId = $order->getGiftMessageId();
         if ($giftMessageId) {
-            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)
-                ->setId(null)
-                ->save();
+            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();
             $observer->getEvent()->getQuote()->setGiftMessageId($giftMessage->getId());
         }
 
@@ -186,7 +182,7 @@ class Observer extends \Magento\Object
      * Duplicates giftmessage from order item to quote item on import or reorder
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\GiftMessage\Model\Observer
+     * @return $this
      */
     public function salesEventOrderItemToQuoteItem($observer)
     {
@@ -210,9 +206,7 @@ class Observer extends \Magento\Object
         /** @var $quoteItem \Magento\Sales\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getQuoteItem();
         if ($giftMessageId = $orderItem->getGiftMessageId()) {
-            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)
-                ->setId(null)
-                ->save();
+            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();
             $quoteItem->setGiftMessageId($giftMessage->getId());
         }
         return $this;

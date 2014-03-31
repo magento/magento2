@@ -48,18 +48,19 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 5;
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $theme->expects($this->exactly(3))
-            ->method('getId')
-            ->will($this->returnValue($themeId));
+        $theme->expects($this->exactly(3))->method('getId')->will($this->returnValue($themeId));
 
-        $theme->expects($this->once())
-            ->method('getFullPath')
-            ->will($this->returnValue(null));
+        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue(null));
 
-        $this->themeProviderMock->expects($this->once())
-            ->method('getThemeById')
-            ->with($themeId)
-            ->will($this->returnValue($theme));
+        $this->themeProviderMock->expects(
+            $this->once()
+        )->method(
+            'getThemeById'
+        )->with(
+            $themeId
+        )->will(
+            $this->returnValue($theme)
+        );
 
         $this->assertSame($theme, $this->factory->create($themeId));
     }
@@ -72,18 +73,19 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
         $path = 'frontend/magento_plushe';
         $themeId = 7;
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $theme->expects($this->exactly(3))
-            ->method('getId')
-            ->will($this->returnValue($themeId));
+        $theme->expects($this->exactly(3))->method('getId')->will($this->returnValue($themeId));
 
-        $theme->expects($this->once())
-            ->method('getFullPath')
-            ->will($this->returnValue($path));
+        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue($path));
 
-        $this->themeProviderMock->expects($this->once())
-            ->method('getThemeByFullPath')
-            ->with('frontend/frontend/magento_plushe')
-            ->will($this->returnValue($theme));
+        $this->themeProviderMock->expects(
+            $this->once()
+        )->method(
+            'getThemeByFullPath'
+        )->with(
+            'frontend/frontend/magento_plushe'
+        )->will(
+            $this->returnValue($theme)
+        );
 
         $this->assertSame($theme, $this->factory->create($path));
     }
@@ -92,14 +94,17 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 0;
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $theme->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($themeId));
+        $theme->expects($this->once())->method('getId')->will($this->returnValue($themeId));
 
-        $this->themeProviderMock->expects($this->once())
-            ->method('getThemeById')
-            ->with($themeId)
-            ->will($this->returnValue($theme));
+        $this->themeProviderMock->expects(
+            $this->once()
+        )->method(
+            'getThemeById'
+        )->with(
+            $themeId
+        )->will(
+            $this->returnValue($theme)
+        );
 
         $this->assertNull($this->factory->create($themeId));
     }

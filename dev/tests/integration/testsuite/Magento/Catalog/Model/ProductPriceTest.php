@@ -43,8 +43,9 @@ class ProductPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
     }
 
     public function testGetPrice()
@@ -59,11 +60,6 @@ class ProductPriceTest extends \PHPUnit_Framework_TestCase
         $default = $this->_model->getPriceModel();
         $this->assertInstanceOf('Magento\Catalog\Model\Product\Type\Price', $default);
         $this->assertSame($default, $this->_model->getPriceModel());
-
-        $this->_model->setTypeId('configurable');
-        $type = $this->_model->getPriceModel();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Type\Configurable\Price', $type);
-        $this->assertSame($type, $this->_model->getPriceModel());
     }
 
     /**

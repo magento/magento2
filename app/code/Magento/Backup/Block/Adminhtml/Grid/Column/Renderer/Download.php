@@ -33,8 +33,7 @@
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column\Renderer;
 
-class Download
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
      * Renders grid column
@@ -44,12 +43,17 @@ class Download
      */
     public function _getValue(\Magento\Object $row)
     {
-        $url7zip = __('The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.', 'http://www.7-zip.org/',
-            '7-Zip');
+        $url7zip = __(
+            'The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.',
+            'http://www.7-zip.org/',
+            '7-Zip'
+        );
 
-        return '<a href="' . $this->getUrl('*/*/download',
-            array('time' => $row->getData('time'), 'type' => $row->getData('type'))) . '">' . $row->getData('extension')
-               . '</a> &nbsp; <small>(' . $url7zip . ')</small>';
-
+        return '<a href="' . $this->getUrl(
+            '*/*/download',
+            array('time' => $row->getData('time'), 'type' => $row->getData('type'))
+        ) . '">' . $row->getData(
+            'extension'
+        ) . '</a> &nbsp; <small>(' . $url7zip . ')</small>';
     }
 }

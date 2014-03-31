@@ -25,13 +25,13 @@
  */
 namespace Magento\Core\App;
 
-use Magento\App\State,
-    Magento\LauncherInterface,
-    Magento\ObjectManager,
-    Magento\Core\Model\File\Storage\Request,
-    Magento\Core\Model\File\Storage\Response;
+use Magento\App\State;
+use Magento\AppInterface;
+use Magento\ObjectManager;
+use Magento\Core\Model\File\Storage\Request;
+use Magento\Core\Model\File\Storage\Response;
 
-class Media implements LauncherInterface
+class Media implements AppInterface
 {
     /**
      * @var \Magento\App\State
@@ -51,7 +51,7 @@ class Media implements LauncherInterface
     /**
      * Authorization function
      *
-     * @var callable
+     * @var \Closure
      */
     protected $_isAllowed;
 
@@ -103,12 +103,12 @@ class Media implements LauncherInterface
      * @param ObjectManager $objectManager
      * @param Request $request
      * @param Response $response
-     * @param callable $isAllowed
-     * @param $workingDirectory
-     * @param $mediaDirectory
-     * @param $configCacheFile
-     * @param $relativeFileName
-     * @param \Magento\App\Filesystem $filesytem
+     * @param \Closure $isAllowed
+     * @param string $workingDirectory
+     * @param string $mediaDirectory
+     * @param string $configCacheFile
+     * @param string $relativeFileName
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         State $applicationState,
@@ -149,13 +149,16 @@ class Media implements LauncherInterface
             }
             if (!$this->_mediaDirectory) {
                 $config = $this->_objectManager->create(
-                    'Magento\Core\Model\File\Storage\Config', array('cacheFile' => $this->_configCacheFile)
+                    'Magento\Core\Model\File\Storage\Config',
+                    array('cacheFile' => $this->_configCacheFile)
                 );
                 $config->save();
                 $this->_mediaDirectory = str_replace($this->_workingDirectory, '', $config->getMediaDirectory());
                 $allowedResources = $config->getAllowedResources();
                 $this->_relativeFileName = str_replace(
-                    $this->_mediaDirectory . '/', '', $this->_request->getPathInfo()
+                    $this->_mediaDirectory . '/',
+                    '',
+                    $this->_request->getPathInfo()
                 );
                 $isAllowed = $this->_isAllowed;
                 if (!$isAllowed($this->_relativeFileName, $allowedResources)) {

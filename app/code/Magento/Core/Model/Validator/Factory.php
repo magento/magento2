@@ -33,14 +33,9 @@ class Factory
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Translate
-     */
-    protected $_translator;
-
-    /**
      * Validator config files
      *
-     * @var array
+     * @var array|null
      */
     protected $_configFiles = null;
 
@@ -49,31 +44,27 @@ class Factory
      *
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Core\Model\Translate $translator
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Core\Model\Translate $translator
+        \Magento\Module\Dir\Reader $moduleReader
     ) {
         $this->_objectManager = $objectManager;
-        $this->_translator = $translator;
-
         $this->_configFiles = $moduleReader->getConfigurationFiles('validation.xml');
         $this->_initializeDefaultTranslator();
     }
 
     /**
      * Create and set default translator to \Magento\Validator\AbstractValidator.
+     *
+     * @return void
      */
     protected function _initializeDefaultTranslator()
     {
-        $translateAdapter = $this->_translator;
-        $objectManager = $this->_objectManager;
-        // Pass translations to \Magento\Core\Model\Translate from validators
-        $translatorCallback = function () use ($translateAdapter, $objectManager) {
-            /** @var \Magento\Core\Model\Translate $translateAdapter */
-            return $translateAdapter->translate(func_get_args());
+        // Pass translations to \Magento\TranslateInterface from validators
+        $translatorCallback = function () {
+            $argc = func_get_args();
+            return (string)new \Magento\Phrase(array_shift($argc), $argc);
         };
         /** @var \Magento\Translate\Adapter $translator */
         $translator = $this->_objectManager->create('Magento\Translate\Adapter');

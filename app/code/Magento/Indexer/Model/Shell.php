@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model;
 
-class Shell extends \Magento\Core\Model\AbstractShell
+class Shell extends \Magento\App\AbstractShell
 {
     /**
      * Error status - whether errors have happened
@@ -125,20 +124,12 @@ class Shell extends \Magento\Core\Model\AbstractShell
                     case \Magento\Indexer\Model\Indexer\State::STATUS_INVALID:
                         $status = 'Reindex required';
                         break;
-
                     case \Magento\Indexer\Model\Indexer\State::STATUS_WORKING:
                         $status = 'Processing';
                         break;
                 }
             } else {
-                switch ($indexer->getMode()) {
-                    case \Magento\Mview\View\StateInterface::MODE_DISABLED:
-                        $status = 'Update on Save';
-                        break;
-                    case \Magento\Mview\View\StateInterface::MODE_ENABLED:
-                        $status = 'Update by Schedule';
-                        break;
-                }
+                $status = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
             }
             echo sprintf('%-50s ', $indexer->getTitle() . ':') . $status . PHP_EOL;
         }
@@ -163,9 +154,9 @@ class Shell extends \Magento\Core\Model\AbstractShell
 
         foreach ($indexers as $indexer) {
             try {
-                $indexer->$method();
+                $indexer->{$method}();
                 echo $indexer->getTitle() . " indexer was successfully changed index mode" . PHP_EOL;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {
@@ -195,7 +186,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
             try {
                 $indexer->reindexAll();
                 echo $indexer->getTitle() . " index has been rebuilt successfully" . PHP_EOL;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {
@@ -212,7 +203,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
      * Parses string with indexers and return array of indexer instances
      *
      * @param string $string
-     * @return Indexer[]
+     * @return IndexerInterface[]
      */
     protected function parseIndexerString($string)
     {

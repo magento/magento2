@@ -23,19 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Resource\Page;
 
 /**
  * Cms page url rewrite resource model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Resource\Page;
-
-class Urlrewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Urlrewrite extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Init cms page urlrewrite model
      *
+     * @return void
      */
     protected function _construct()
     {

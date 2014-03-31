@@ -25,6 +25,4 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array(
-    'Fixture Label' => array('fixture_key_one', 'fixture_key_two'),
-);
+return array('Fixture Label' => array('fixture_key_one', 'fixture_key_two'));

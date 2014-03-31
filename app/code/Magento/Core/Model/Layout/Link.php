@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Layout;
 
 /**
  * Layout Link model class
@@ -34,12 +35,12 @@
  * @method \Magento\Core\Model\Layout\Link setThemeId($id)
  * @method \Magento\Core\Model\Layout\Link setLayoutUpdateId($id)
  */
-namespace Magento\Core\Model\Layout;
-
-class Link extends \Magento\Core\Model\AbstractModel
+class Link extends \Magento\Model\AbstractModel
 {
     /**
      * Layout Update model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {

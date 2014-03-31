@@ -21,8 +21,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Interception\Config;
+
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -31,78 +31,40 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemContainer/Enhanced.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemContainerPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
-
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Interception\Config\Config
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_model;
+    protected $configScopeMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configScopeMock;
+    protected $readerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $omConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $definitionMock;
 
     protected function setUp()
     {
-        $fixtureBasePath = __DIR__ . '/..';
-        $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
-        $fileResolverMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap(array(
-                array(
-                    'di.xml',
-                    'global',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/di.xml'))
-                ),
-                array(
-                    'di.xml',
-                    'backend',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/backend/di.xml'))
-                ),
-                array(
-                    'di.xml',
-                    'frontend',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/frontend/di.xml'))
-                ),
-            )));
-
-        $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())
-            ->method('isValidated')
-            ->will($this->returnValue(true));
-
-        $reader = new \Magento\ObjectManager\Config\Reader\Dom(
-            $fileResolverMock,
-            new \Magento\ObjectManager\Config\Mapper\Dom(),
-            new \Magento\ObjectManager\Config\SchemaLocator(),
-            $validationStateMock
-        );
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
-        $this->_configScopeMock->expects($this->any())
-            ->method('getAllScopes')
-            ->will($this->returnValue(array('global', 'backend', 'frontend')));
-        $cacheMock = $this->getMock('Magento\Cache\FrontendInterface');
-        // turn cache off
-        $cacheMock->expects($this->any())
-            ->method('load')
-            ->will($this->returnValue(false));
-
-        $omConfigMock = $this->getMock('Magento\ObjectManager\Config');
-        $omConfigMock->expects($this->any())
-            ->method('getInstanceType')
-            ->will($this->returnArgument(0));
-        $this->_model = new \Magento\Interception\Config\Config(
-            $reader,
-            $this->_configScopeMock,
-            $cacheMock,
-            new \Magento\ObjectManager\Relations\Runtime(),
-            $omConfigMock,
-            null,
-            null,
-            'interception'
-        );
+        $this->readerMock = $this->getMock('\Magento\ObjectManager\Config\Reader\Dom', array(), array(), '', false);
+        $this->configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
+        $this->cacheMock = $this->getMock('Magento\Cache\FrontendInterface');
+        $this->omConfigMock = $this->getMock('Magento\Interception\ObjectManager\Config');
+        $this->definitionMock = $this->getMock('Magento\ObjectManager\Definition');
     }
 
     /**
@@ -110,9 +72,100 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param string $type
      * @dataProvider hasPluginsDataProvider
      */
-    public function testHasPlugins($expectedResult, $type)
+    public function testHasPluginsWhenDataIsNotCached($expectedResult, $type)
     {
-        $this->assertEquals($expectedResult, $this->_model->hasPlugins($type));
+        $readerMap = include(__DIR__ . '/../_files/reader_mock_map.php');
+        $this->readerMock->expects($this->any())
+            ->method('read')
+            ->will($this->returnValueMap($readerMap));
+        $this->configScopeMock->expects($this->any())
+            ->method('getAllScopes')
+            ->will($this->returnValue(array('global', 'backend', 'frontend')));
+        // turn cache off
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnValue(false));
+        $this->omConfigMock->expects($this->any())
+            ->method('getOriginalInstanceType')
+            ->will($this->returnValueMap(
+                array(
+                    array(
+                        'Magento\Interception\Custom\Module\Model\ItemContainer',
+                        'Magento\Interception\Custom\Module\Model\ItemContainer',
+                    ),
+                    array(
+                        'Magento\Interception\Custom\Module\Model\Item',
+                        'Magento\Interception\Custom\Module\Model\Item',
+                    ),
+                    array(
+                        'Magento\Interception\Custom\Module\Model\Item\Enhanced',
+                        'Magento\Interception\Custom\Module\Model\Item\Enhanced',
+                    ),
+                    array(
+                        'Magento\Interception\Custom\Module\Model\ItemContainer\Enhanced',
+                        'Magento\Interception\Custom\Module\Model\ItemContainer\Enhanced',
+                    ),
+                    array(
+                        'Magento\Interception\Custom\Module\Model\ItemProxy',
+                        'Magento\Interception\Custom\Module\Model\ItemProxy',
+                    ),
+                    array(
+                        'virtual_custom_item',
+                        'Magento\Interception\Custom\Module\Model\Item',
+                    ),
+                )
+            ));
+        $this->definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(
+            array(
+                'Magento\Interception\Custom\Module\Model\ItemProxy',
+            )
+        ));
+        $model = new \Magento\Interception\Config\Config(
+            $this->readerMock,
+            $this->configScopeMock,
+            $this->cacheMock,
+            new \Magento\ObjectManager\Relations\Runtime(),
+            $this->omConfigMock,
+            $this->definitionMock,
+            'interception'
+        );
+
+        $this->assertEquals($expectedResult, $model->hasPlugins($type));
+    }
+
+    /**
+     * @param boolean $expectedResult
+     * @param string $type
+     * @dataProvider hasPluginsDataProvider
+     */
+    public function testHasPluginsWhenDataIsCached($expectedResult, $type)
+    {
+        $cacheId = 'interception';
+        $interceptionData = array(
+            'Magento\Interception\Custom\Module\Model\ItemContainer' => true,
+            'Magento\Interception\Custom\Module\Model\Item' => true,
+            'Magento\Interception\Custom\Module\Model\Item\Enhanced' => true,
+            'Magento\Interception\Custom\Module\Model\ItemContainer\Enhanced' => true,
+            'Magento\Interception\Custom\Module\Model\ItemProxy' => false,
+            'virtual_custom_item' => true,
+        );
+        $this->readerMock->expects($this->never())->method('read');
+        $this->cacheMock->expects($this->never())->method('save');
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->with($cacheId)
+            ->will($this->returnValue(serialize($interceptionData)));
+        $model = new \Magento\Interception\Config\Config(
+            $this->readerMock,
+            $this->configScopeMock,
+            $this->cacheMock,
+            new \Magento\ObjectManager\Relations\Runtime(),
+            $this->omConfigMock,
+            $this->definitionMock,
+            $cacheId
+        );
+
+        $this->assertEquals($expectedResult, $model->hasPlugins($type));
     }
 
     public function hasPluginsDataProvider()
@@ -135,6 +188,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 // the following model has only inherited plugins
                 true,
                 'Magento\Interception\Custom\Module\Model\ItemContainer\Enhanced',
+            ),
+            array(
+                false,
+                'Magento\Interception\Custom\Module\Model\ItemProxy',
+            ),
+            array(
+                true,
+                'virtual_custom_item',
             )
         );
     }

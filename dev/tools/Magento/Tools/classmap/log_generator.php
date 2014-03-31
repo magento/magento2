@@ -46,7 +46,7 @@ foreach ($files as $file) {
 
 sort($classes);
 $baseDir = realpath(__DIR__ . '/../../../../../') . '/';
-$sources = array('app/code', 'lib',);
+$sources = array('app/code', 'lib');
 
 $map = array();
 foreach ($classes as $class) {

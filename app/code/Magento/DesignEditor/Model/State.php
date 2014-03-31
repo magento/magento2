@@ -23,19 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model;
 
 /**
  * Design editor state model
  */
-namespace Magento\DesignEditor\Model;
-
 class State
 {
-    /**
-     * Name of layout classes that will be used as main layout
-     */
-    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
-
     /**
      * Url model classes that will be used instead of \Magento\UrlInterface in navigation vde modes
      */
@@ -49,8 +43,10 @@ class State
     /**#@+
      * Session keys
      */
-    const CURRENT_URL_SESSION_KEY    = 'vde_current_url';
-    const CURRENT_MODE_SESSION_KEY   = 'vde_current_mode';
+    const CURRENT_URL_SESSION_KEY = 'vde_current_url';
+
+    const CURRENT_MODE_SESSION_KEY = 'vde_current_mode';
+
     /**#@-*/
 
     /**
@@ -59,9 +55,9 @@ class State
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Layout\Factory
+     * @var AreaEmulator
      */
-    protected $_layoutFactory;
+    protected $_areaEmulator;
 
     /**
      * @var \Magento\DesignEditor\Model\Url\Factory
@@ -86,9 +82,9 @@ class State
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\ConfigInterface
      */
-    protected $_application;
+    protected $_configuration;
 
     /**
      * Store list manager
@@ -99,35 +95,35 @@ class State
 
     /**
      * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Core\Model\Layout\Factory $layoutFactory
-     * @param \Magento\DesignEditor\Model\Url\Factory $urlModelFactory
+     * @param AreaEmulator $areaEmulator
+     * @param Url\Factory $urlModelFactory
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\App $application
-     * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
+     * @param \Magento\App\ConfigInterface $configuration
+     * @param Theme\Context $themeContext
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\Core\Model\Layout\Factory $layoutFactory,
+        AreaEmulator $areaEmulator,
         \Magento\DesignEditor\Model\Url\Factory $urlModelFactory,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\App $application,
+        \Magento\App\ConfigInterface $configuration,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_backendSession  = $backendSession;
-        $this->_layoutFactory   = $layoutFactory;
+        $this->_backendSession = $backendSession;
+        $this->_areaEmulator = $areaEmulator;
         $this->_urlModelFactory = $urlModelFactory;
-        $this->_cacheState      = $cacheState;
-        $this->_dataHelper      = $dataHelper;
-        $this->_objectManager   = $objectManager;
-        $this->_application     = $application;
-        $this->_themeContext    = $themeContext;
-        $this->_storeManager    = $storeManager;
+        $this->_cacheState = $cacheState;
+        $this->_dataHelper = $dataHelper;
+        $this->_objectManager = $objectManager;
+        $this->_configuration = $configuration;
+        $this->_themeContext = $themeContext;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -135,6 +131,7 @@ class State
      *
      * @param string $areaCode
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     public function update($areaCode, \Magento\App\RequestInterface $request)
     {
@@ -146,7 +143,7 @@ class State
             $this->_backendSession->setData(self::CURRENT_MODE_SESSION_KEY, $mode);
         }
         $this->_injectUrlModel($mode);
-        $this->_injectLayout($mode, $areaCode);
+        $this->_emulateArea($mode, $areaCode);
         $this->_setTheme();
         $this->_disableCache();
     }
@@ -154,34 +151,37 @@ class State
     /**
      * Reset VDE state data
      *
-     * @return \Magento\DesignEditor\Model\State
+     * @return $this
      */
     public function reset()
     {
-        $this->_backendSession->unsetData(self::CURRENT_URL_SESSION_KEY)
-            ->unsetData(self::CURRENT_MODE_SESSION_KEY);
+        $this->_backendSession->unsetData(self::CURRENT_URL_SESSION_KEY)->unsetData(self::CURRENT_MODE_SESSION_KEY);
         $this->_themeContext->reset();
         return $this;
     }
 
     /**
-     * Create layout instance that will be used as main layout for whole system
+     * Emulate environment of an area
      *
      * @param string $mode
      * @param string $areaCode
+     * @return void
      */
-    protected function _injectLayout($mode, $areaCode)
+    protected function _emulateArea($mode, $areaCode)
     {
         switch ($mode) {
             case self::MODE_NAVIGATION:
             default:
-                $this->_layoutFactory->createLayout(array('area' => $areaCode), self::LAYOUT_NAVIGATION_CLASS_NAME);
+                $this->_areaEmulator->emulateLayoutArea($areaCode);
                 break;
         }
     }
 
     /**
      * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
+     *
+     * @param string $mode
+     * @return void
      */
     protected function _injectUrlModel($mode)
     {
@@ -195,24 +195,22 @@ class State
 
     /**
      * Set current VDE theme
+     *
+     * @return void
      */
     protected function _setTheme()
     {
         if ($this->_themeContext->getEditableTheme()) {
             $themeId = $this->_themeContext->getVisibleTheme()->getId();
-            $this->_storeManager->getStore()->setConfig(
-                \Magento\View\DesignInterface::XML_PATH_THEME_ID,
-                $themeId
-            );
-            $this->_application->getConfig()->setValue(
-                \Magento\View\DesignInterface::XML_PATH_THEME_ID,
-                $themeId
-            );
+            $this->_storeManager->getStore()->setConfig(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
+            $this->_configuration->setValue(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
         }
     }
 
     /**
      * Disable some cache types in VDE mode
+     *
+     * @return void
      */
     protected function _disableCache()
     {

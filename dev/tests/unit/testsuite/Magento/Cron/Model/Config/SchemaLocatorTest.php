@@ -42,11 +42,19 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_moduleReaderMock = $this->getMockBuilder('Magento\Module\Dir\Reader')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_moduleReaderMock->expects($this->once())
-            ->method('getModuleDir')->with('etc', 'Magento_Cron')->will($this->returnValue('schema_dir'));
+        $this->_moduleReaderMock = $this->getMockBuilder(
+            'Magento\Module\Dir\Reader'
+        )->disableOriginalConstructor()->getMock();
+        $this->_moduleReaderMock->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Cron'
+        )->will(
+            $this->returnValue('schema_dir')
+        );
         $this->_locator = new \Magento\Cron\Model\Config\SchemaLocator($this->_moduleReaderMock);
     }
 

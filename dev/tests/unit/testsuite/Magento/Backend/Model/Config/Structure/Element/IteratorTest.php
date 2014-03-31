@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
@@ -41,19 +40,13 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $elementData = array(
-            'group1' => array(
-                'id' => 1
-            ),
-            'group2' => array(
-                'id' => 2
-            ),
-            'group3' => array(
-                'id' => 3
-            )
-        );
+        $elementData = array('group1' => array('id' => 1), 'group2' => array('id' => 2), 'group3' => array('id' => 3));
         $this->_flyweightMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Group', array(), array(), '', false
+            'Magento\Backend\Model\Config\Structure\Element\Group',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Iterator($this->_flyweightMock);
@@ -97,18 +90,19 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsLast($elementId, $result)
     {
-        $elementMock = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Field', array(), array(), '',
-            false);
+        $elementMock = $this->getMock(
+            'Magento\Backend\Model\Config\Structure\Element\Field',
+            array(),
+            array(),
+            '',
+            false
+        );
         $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }
 
     public function isLastDataProvider()
     {
-        return array(
-            array(1, false),
-            array(2, false),
-            array(3, true)
-        );
+        return array(array(1, false), array(2, false), array(3, true));
     }
 }

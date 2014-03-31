@@ -24,11 +24,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Layout\Update;
 
-class CollectionTest
-    extends \Magento\Core\Model\Resource\Layout\AbstractTestCase
+class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCase
 {
     /**
      * Retrieve layout update collection instance
@@ -55,9 +53,7 @@ class CollectionTest
     {
         $themeId = 1;
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
-        $select->expects($this->once())
-            ->method('where')
-            ->with('link.theme_id = ?', $themeId);
+        $select->expects($this->once())->method('where')->with('link.theme_id = ?', $themeId);
 
         $collection = $this->_getCollection($select);
         $collection->addThemeFilter($themeId);
@@ -67,9 +63,7 @@ class CollectionTest
     {
         $storeId = 1;
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
-        $select->expects($this->once())
-            ->method('where')
-            ->with('link.store_id = ?', $storeId);
+        $select->expects($this->once())->method('where')->with('link.store_id = ?', $storeId);
 
         $collection = $this->_getCollection($select);
         $collection->addStoreFilter($storeId);
@@ -81,13 +75,15 @@ class CollectionTest
     public function testJoinWithLink()
     {
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
-        $select->expects($this->once())
-            ->method('join')
-            ->with(
-                array('link' => 'core_layout_link'),
-                'link.layout_update_id = main_table.layout_update_id',
-                $this->isType('array')
-            );
+        $select->expects(
+            $this->once()
+        )->method(
+            'join'
+        )->with(
+            array('link' => 'core_layout_link'),
+            'link.layout_update_id = main_table.layout_update_id',
+            $this->isType('array')
+        );
 
         $collection = $this->_getCollection($select);
         $collection->addStoreFilter(1);
@@ -97,25 +93,31 @@ class CollectionTest
     public function testAddNoLinksFilter()
     {
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
-        $select->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                array('link' => 'core_layout_link'),
-                'link.layout_update_id = main_table.layout_update_id',
-                array(array())
-            );
-        $select->expects($this->once())
-            ->method('where')
-            ->with(self::TEST_WHERE_CONDITION);
+        $select->expects(
+            $this->once()
+        )->method(
+            'joinLeft'
+        )->with(
+            array('link' => 'core_layout_link'),
+            'link.layout_update_id = main_table.layout_update_id',
+            array(array())
+        );
+        $select->expects($this->once())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
         $connection = $collection->getResource()->getReadConnection();
-        $connection->expects($this->once())
-            ->method('prepareSqlCondition')
-            ->with('link.layout_update_id', array('null' => true))
-            ->will($this->returnValue(self::TEST_WHERE_CONDITION));
+        $connection->expects(
+            $this->once()
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            'link.layout_update_id',
+            array('null' => true)
+        )->will(
+            $this->returnValue(self::TEST_WHERE_CONDITION)
+        );
 
         $collection->addNoLinksFilter();
     }

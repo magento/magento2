@@ -42,7 +42,7 @@ $connection = $installer->getConnection();
 $memoryTables = array(
     'catalog_product_index_price_bundle_opt_tmp',
     'catalog_product_index_price_bundle_sel_tmp',
-    'catalog_product_index_price_bundle_tmp',
+    'catalog_product_index_price_bundle_tmp'
 );
 
 foreach ($memoryTables as $table) {

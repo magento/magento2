@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 
 class CustomTest extends \PHPUnit_Framework_TestCase
@@ -66,20 +65,31 @@ class CustomTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::TEST_THEME_ID));
-        $this->_themeContext->expects($this->any())->method('getEditableTheme')
-            ->will($this->returnValue($this->_theme));
-        $this->_themeContext->expects($this->any())->method('getStagingTheme')
-            ->will($this->returnValue($this->_theme));
+        $this->_themeContext->expects(
+            $this->any()
+        )->method(
+            'getEditableTheme'
+        )->will(
+            $this->returnValue($this->_theme)
+        );
+        $this->_themeContext->expects(
+            $this->any()
+        )->method(
+            'getStagingTheme'
+        )->will(
+            $this->returnValue($this->_theme)
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom',
             array(
-                'config'       => $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
-                'formFactory'  => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
-                'urlBuilder'   => $this->_urlBuilder,
+                'config' => $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
+                'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
+                'urlBuilder' => $this->_urlBuilder,
                 'themeContext' => $this->_themeContext
-        ));
+            )
+        );
     }
 
     protected function tearDown()
@@ -97,10 +107,16 @@ class CustomTest extends \PHPUnit_Framework_TestCase
     {
         $expectedUrl = 'some_url';
 
-        $this->_urlBuilder->expects($this->once())
-            ->method('getUrl')
-            ->with('adminhtml/system_design_theme/downloadCustomCss', array('theme_id' => self::TEST_THEME_ID))
-            ->will($this->returnValue($expectedUrl));
+        $this->_urlBuilder->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            'adminhtml/system_design_theme/downloadCustomCss',
+            array('theme_id' => self::TEST_THEME_ID)
+        )->will(
+            $this->returnValue($expectedUrl)
+        );
 
         $this->assertEquals($expectedUrl, $this->_model->getDownloadCustomCssUrl());
     }
@@ -109,10 +125,16 @@ class CustomTest extends \PHPUnit_Framework_TestCase
     {
         $expectedUrl = 'some_url';
 
-        $this->_urlBuilder->expects($this->once())
-            ->method('getUrl')
-            ->with('adminhtml/system_design_editor_tools/saveCssContent', array('theme_id' => self::TEST_THEME_ID))
-            ->will($this->returnValue($expectedUrl));
+        $this->_urlBuilder->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            'adminhtml/system_design_editor_tools/saveCssContent',
+            array('theme_id' => self::TEST_THEME_ID)
+        )->will(
+            $this->returnValue($expectedUrl)
+        );
 
         $this->assertEquals($expectedUrl, $this->_model->getSaveCustomCssUrl());
     }
@@ -126,17 +148,24 @@ class CustomTest extends \PHPUnit_Framework_TestCase
 
         /** @var $cssFile \Magento\View\Design\Theme\Customization\File\Css */
         $cssFile = $this->getMock(
-            'Magento\View\Design\Theme\Customization\File\Css', array('getContent'), array(), '', false
+            'Magento\View\Design\Theme\Customization\File\Css',
+            array('getContent'),
+            array(),
+            '',
+            false
         );
 
-        $customization->expects($this->once())
-            ->method('getFilesByType')
-            ->with(\Magento\Theme\Model\Theme\Customization\File\CustomCss::TYPE)
-            ->will($this->returnValue(array($cssFile)));
+        $customization->expects(
+            $this->once()
+        )->method(
+            'getFilesByType'
+        )->with(
+            \Magento\Theme\Model\Theme\Customization\File\CustomCss::TYPE
+        )->will(
+            $this->returnValue(array($cssFile))
+        );
 
-        $cssFile->expects($this->once())
-            ->method('getContent')
-            ->will($this->returnValue('New file content'));
+        $cssFile->expects($this->once())->method('getContent')->will($this->returnValue('New file content'));
 
         $this->assertEquals($expectedContent, $this->_model->getCustomCssContent());
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Model\Product;
 
 /**
@@ -40,19 +39,19 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     protected $commonPriceModel;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $coreRegistry;
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->storeManager = $storeManager;
         $this->commonPriceModel = $commonPriceModel;
@@ -75,10 +74,16 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
         }
 
         $this->coreRegistry->unregister('rule_data');
-        $this->coreRegistry->register('rule_data', new \Magento\Object(array(
-            'store_id'          => $product->getStoreId(),
-            'website_id'        => $product->getWebsiteId(),
-            'customer_group_id' => $product->getCustomerGroupId())));
+        $this->coreRegistry->register(
+            'rule_data',
+            new \Magento\Object(
+                array(
+                    'store_id' => $product->getStoreId(),
+                    'website_id' => $product->getWebsiteId(),
+                    'customer_group_id' => $product->getCustomerGroupId()
+                )
+            )
+        );
 
         $minPrice = $product->getPriceModel()->getTotalPrices($product, 'min', $inclTax);
 

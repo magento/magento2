@@ -50,10 +50,16 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_memoryLimit = $this->getMock(
-            'Magento\TestFramework\MemoryLimit', array('printStats'), array(), '', false);
+            'Magento\TestFramework\MemoryLimit',
+            array('printStats'),
+            array(),
+            '',
+            false
+        );
         $this->_activationPolicy = $this->getMock('stdClass', array('register_shutdown_function'));
         $this->_object = new \Magento\TestFramework\Bootstrap\Memory(
-            $this->_memoryLimit, array($this->_activationPolicy, 'register_shutdown_function')
+            $this->_memoryLimit,
+            array($this->_activationPolicy, 'register_shutdown_function')
         );
     }
 
@@ -77,31 +83,37 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
     {
         $eol = PHP_EOL;
         $this->expectOutputString("{$eol}=== Memory Usage System Stats ==={$eol}Dummy Statistics{$eol}");
-        $this->_memoryLimit
-            ->expects($this->once())
-            ->method('printStats')
-            ->will($this->returnValue('Dummy Statistics'))
-        ;
+        $this->_memoryLimit->expects(
+            $this->once()
+        )->method(
+            'printStats'
+        )->will(
+            $this->returnValue('Dummy Statistics')
+        );
         $this->_object->displayStats();
     }
 
     public function testActivateStatsDisplaying()
     {
-        $this->_activationPolicy
-            ->expects($this->once())
-            ->method('register_shutdown_function')
-            ->with($this->identicalTo(array($this->_object, 'displayStats')))
-        ;
+        $this->_activationPolicy->expects(
+            $this->once()
+        )->method(
+            'register_shutdown_function'
+        )->with(
+            $this->identicalTo(array($this->_object, 'displayStats'))
+        );
         $this->_object->activateStatsDisplaying();
     }
 
     public function testActivateLimitValidation()
     {
-        $this->_activationPolicy
-            ->expects($this->once())
-            ->method('register_shutdown_function')
-            ->with($this->identicalTo(array($this->_memoryLimit, 'validateUsage')))
-        ;
+        $this->_activationPolicy->expects(
+            $this->once()
+        )->method(
+            'register_shutdown_function'
+        )->with(
+            $this->identicalTo(array($this->_memoryLimit, 'validateUsage'))
+        );
         $this->_object->activateLimitValidation();
     }
 }

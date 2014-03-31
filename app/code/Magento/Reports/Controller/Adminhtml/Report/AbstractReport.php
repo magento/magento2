@@ -42,19 +42,19 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Core\Filter\Date
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Core\Filter\Date $dateFilter
+        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
@@ -84,7 +84,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     /**
      * Add report breadcrumbs
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     public function _initAction()
     {
@@ -97,7 +97,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * Report action init operations
      *
      * @param array|\Magento\Object $blocks
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     public function _initReportAction($blocks)
     {
@@ -105,10 +105,16 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             $blocks = array($blocks);
         }
 
-        $requestData = $this->_objectManager->get('Magento\Backend\Helper\Data')
-            ->prepareFilterString($this->getRequest()->getParam('filter'));
-        $inputFilter = new \Zend_Filter_Input(array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
-            array(), $requestData);
+        $requestData = $this->_objectManager->get(
+            'Magento\Backend\Helper\Data'
+        )->prepareFilterString(
+            $this->getRequest()->getParam('filter')
+        );
+        $inputFilter = new \Zend_Filter_Input(
+            array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
+            array(),
+            $requestData
+        );
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
         $params = new \Magento\Object();
@@ -134,23 +140,38 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      *
      * @param string $flagCode
      * @param string $refreshCode
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
-        $updatedAt = ($flag->hasData())
-            ? $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->storeDate(
-                0, new \Zend_Date($flag->getLastUpdate(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT), true
-            )
-            : 'undefined';
+        $updatedAt = 'undefined';
+        if ($flag->hasData()) {
+            $date = new \Magento\Stdlib\DateTime\Date(
+                $flag->getLastUpdate(),
+                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            );
+            $updatedAt = $this->_objectManager->get(
+                'Magento\Stdlib\DateTime\TimezoneInterface'
+            )->scopeDate(
+                0,
+                $date,
+                true
+            );
+        }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', array('code' => $refreshCode));
 
-        $this->messageManager
-            ->addNotice(__('Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, '
-                . 'click <a href="%3">here</a>.', $updatedAt, $refreshStatsLink, $directRefreshLink));
+        $this->messageManager->addNotice(
+            __(
+                'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
+                'click <a href="%3">here</a>.',
+                $updatedAt,
+                $refreshStatsLink,
+                $directRefreshLink
+            )
+        );
         return $this;
     }
 }

@@ -30,10 +30,13 @@ class Clickjacking
     /**
      * Process response
      *
+     * @param \Magento\App\FrontController $subject
      * @param \Magento\App\ResponseInterface $response
+     *
      * @return \Magento\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(\Magento\App\ResponseInterface $response)
+    public function afterDispatch(\Magento\App\FrontController $subject, \Magento\App\ResponseInterface $response)
     {
         if (!$response->getHeader('X-Frame-Options')) {
             $response->setHeader('X-Frame-Options', 'SAMEORIGIN');

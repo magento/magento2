@@ -51,7 +51,7 @@
         <div class="bundle summary">
             <strong class="subtitle"><?php echo __('Summary'); ?></strong>
             <div id="bundle-summary" data-container="product-summary">
-                <ul data-mage-init='{productSummary: []}'></ul>
+                <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
                 <script data-template="bundle-summary" type="text/x-jQuery-tmpl">
                     <li>
                         <strong class="label">${_label_}:</strong>
@@ -68,7 +68,7 @@
 <script>
     //<![CDATA[
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('js/sticky.js') ?>",function() {
+        head.js("<?php echo $this->getViewFileUrl('mage/sticky.js') ?>",function() {
             $('#bundleSummary').sticky({
                 container: '.product.add.form'
             });

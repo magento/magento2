@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
 /**
@@ -44,20 +43,23 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\LayoutInterface');
-        $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface');
+        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        );
+        $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\ThemeInterface'
+        );
         $this->_theme->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL);
-        $this->_block = $this->_layout
-            ->createBlock('Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General');
+        $this->_block = $this->_layout->createBlock(
+            'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General'
+        );
     }
 
     public function testToHtmlPreviewImageNote()
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_theme', $this->_theme);
+        $objectManager->get('Magento\Registry')->register('current_theme', $this->_theme);
         $this->_block->setArea('adminhtml');
 
         $this->_block->toHtml();

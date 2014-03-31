@@ -40,9 +40,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_stat = $this->getMock('Magento\Profiler\Driver\Standard\Stat');
-        $this->_driver = new \Magento\Profiler\Driver\Standard(array(
-            'stat' => $this->_stat
-        ));
+        $this->_driver = new \Magento\Profiler\Driver\Standard(array('stat' => $this->_stat));
     }
 
     protected function tearDown()
@@ -73,7 +71,11 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testStart()
     {
-        $this->_stat->expects($this->once())->method('start')->with(
+        $this->_stat->expects(
+            $this->once()
+        )->method(
+            'start'
+        )->with(
             'timer_id',
             $this->greaterThanOrEqual(microtime(true)),
             $this->greaterThanOrEqual(0),
@@ -87,7 +89,11 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testStop()
     {
-        $this->_stat->expects($this->once())->method('stop')->with(
+        $this->_stat->expects(
+            $this->once()
+        )->method(
+            'stop'
+        )->with(
             'timer_id',
             $this->greaterThanOrEqual(microtime(true)),
             $this->greaterThanOrEqual(0),
@@ -104,12 +110,8 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $outputFactory = $this->getMock('Magento\Profiler\Driver\Standard\Output\Factory');
         $config = array(
             'outputs' => array(
-                'outputTypeOne' => array(
-                    'baseDir' => '/custom/base/dir'
-                ),
-                'outputTypeTwo' => array(
-                    'type' => 'specificOutputTypeTwo'
-                ),
+                'outputTypeOne' => array('baseDir' => '/custom/base/dir'),
+                'outputTypeTwo' => array('type' => 'specificOutputTypeTwo')
             ),
             'baseDir' => '/base/dir',
             'outputFactory' => $outputFactory
@@ -118,21 +120,25 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $outputOne = $this->getMock('Magento\Profiler\Driver\Standard\OutputInterface');
         $outputTwo = $this->getMock('Magento\Profiler\Driver\Standard\OutputInterface');
 
-        $outputFactory->expects($this->at(0))
-            ->method('create')
-            ->with(array(
-                'baseDir' => '/custom/base/dir',
-                'type' => 'outputTypeOne'
-            ))
-            ->will($this->returnValue($outputOne));
+        $outputFactory->expects(
+            $this->at(0)
+        )->method(
+            'create'
+        )->with(
+            array('baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne')
+        )->will(
+            $this->returnValue($outputOne)
+        );
 
-        $outputFactory->expects($this->at(1))
-            ->method('create')
-            ->with(array(
-                'type' => 'specificOutputTypeTwo',
-                'baseDir' => '/base/dir'
-            ))
-            ->will($this->returnValue($outputTwo));
+        $outputFactory->expects(
+            $this->at(1)
+        )->method(
+            'create'
+        )->with(
+            array('type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir')
+        )->will(
+            $this->returnValue($outputTwo)
+        );
 
         $driver = new \Magento\Profiler\Driver\Standard($config);
         $this->assertAttributeCount(2, '_outputs', $driver);
@@ -164,9 +170,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
     {
         $method = new \ReflectionMethod($this->_driver, '_getOutputFactory');
         $method->setAccessible(true);
-        $this->assertInstanceOf(
-            'Magento\Profiler\Driver\Standard\Output\Factory',
-            $method->invoke($this->_driver)
-        );
+        $this->assertInstanceOf('Magento\Profiler\Driver\Standard\Output\Factory', $method->invoke($this->_driver));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Front controller responsible for dispatcing application requests
+ * Front controller responsible for dispatching application requests
  *
  * Magento
  *
@@ -28,7 +28,7 @@ namespace Magento\App;
 class FrontController implements FrontControllerInterface
 {
     /**
-     * @var \Magento\App\RouterInterface[]
+     * @var RouterList
      */
     protected $_routerList;
 
@@ -58,6 +58,7 @@ class FrontController implements FrontControllerInterface
                     $actionInstance = $router->match($request);
                     if ($actionInstance) {
                         $request->setDispatched(true);
+                        $actionInstance->getResponse()->setNoCacheHeaders();
                         $response = $actionInstance->dispatch($request);
                         break;
                     }
@@ -73,8 +74,6 @@ class FrontController implements FrontControllerInterface
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
-        $response->setHeader('cache-control', 'no-store, no-cache, must-revalidate, max-age=0', true);
-        $response->setHeader('pragma', 'no-cache', true);
         return $response;
     }
 }

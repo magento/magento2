@@ -55,6 +55,8 @@ class Url extends \Magento\Core\Helper\Url
 
     /**
      * One Page (OP) checkout urls
+     *
+     * @return string
      */
     public function getOPCheckoutUrl()
     {

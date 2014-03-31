@@ -23,23 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
-class Subtotal extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
+class Subtotal extends AbstractTotal
 {
     /**
      * Collect Creditmemo subtotal
      *
-     * @param   \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return  \Magento\Sales\Model\Order\Creditmemo\Total\Subtotal
+     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
-        $subtotal       = 0;
-        $baseSubtotal   = 0;
-        $subtotalInclTax= 0;
+        $subtotal = 0;
+        $baseSubtotal = 0;
+        $subtotalInclTax = 0;
         $baseSubtotalInclTax = 0;
 
         foreach ($creditmemo->getAllItems() as $item) {
@@ -49,9 +47,9 @@ class Subtotal extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 
             $item->calcRowTotal();
 
-            $subtotal       += $item->getRowTotal();
-            $baseSubtotal   += $item->getBaseRowTotal();
-            $subtotalInclTax+= $item->getRowTotalInclTax();
+            $subtotal += $item->getRowTotal();
+            $baseSubtotal += $item->getBaseRowTotal();
+            $subtotalInclTax += $item->getRowTotalInclTax();
             $baseSubtotalInclTax += $item->getBaseRowTotalInclTax();
         }
 

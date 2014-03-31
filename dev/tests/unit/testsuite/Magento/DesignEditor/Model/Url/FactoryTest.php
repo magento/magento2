@@ -51,19 +51,29 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testReplaceClassName()
     {
-        $this->_objectManager->expects($this->once())
-            ->method('configure')
-            ->with(array('preferences' => array('Magento\UrlInterface' => 'TestClass')));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'configure'
+        )->with(
+            array('preferences' => array('Magento\UrlInterface' => 'TestClass'))
+        );
 
         $this->assertEquals($this->_model, $this->_model->replaceClassName('TestClass'));
     }
 
     public function testCreate()
     {
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with('Magento\UrlInterface', array())
-            ->will($this->returnValue('ModelInstance'));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\UrlInterface',
+            array()
+        )->will(
+            $this->returnValue('ModelInstance')
+        );
 
         $this->assertEquals('ModelInstance', $this->_model->create());
     }

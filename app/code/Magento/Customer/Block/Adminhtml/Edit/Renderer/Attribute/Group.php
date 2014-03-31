@@ -18,24 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
+
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
+use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Renderer for customer group ID
  *
- * @category   Magento
- * @package    Magento_Customer
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @method \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata getDisableAutoGroupChangeAttribute()
+ * @method mixed getDisableAutoGroupChangeAttributeValue()
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
-
-class Group
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Group extends Element
 {
+    /**
+     * @var string
+     */
     protected $_template = 'edit/tab/account/form/renderer/group.phtml';
 
     /**
@@ -43,29 +44,29 @@ class Group
      *
      * @var \Magento\Customer\Helper\Address
      */
-    protected $_customerAddress = null;
+    protected $_addressHelper = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_customerAddress = $customerAddress;
+        $this->_addressHelper = $customerAddress;
         parent::__construct($context, $data);
     }
 
@@ -86,7 +87,7 @@ class Group
      */
     public function getDisableAutoGroupChangeCheckboxLabel()
     {
-        return __($this->getDisableAutoGroupChangeAttribute()->getFrontend()->getLabel());
+        return __($this->getDisableAutoGroupChangeAttribute()->getFrontendLabel());
     }
 
     /**
@@ -96,9 +97,8 @@ class Group
      */
     public function getDisableAutoGroupChangeCheckboxState()
     {
-        $customer = $this->_coreRegistry->registry('current_customer');
-        $checkedByDefault = ($customer && $customer->getId())
-            ? false : $this->_customerAddress->getDisableAutoGroupAssignDefaultValue();
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $checkedByDefault = $customerId ? false : $this->_addressHelper->isDisableAutoGroupAssignDefaultValue();
 
         $value = $this->getDisableAutoGroupChangeAttributeValue();
         $state = '';
@@ -115,8 +115,10 @@ class Group
      */
     public function getDisableAutoGroupChangeCheckboxElementName()
     {
-        return $this->getElement()->getForm()->getFieldNameSuffix()
-            . '[' . $this->_getDisableAutoGroupChangeElementHtmlId() . ']';
+        return $this->getElement()->getForm()->getFieldNameSuffix() .
+            '[' .
+            $this->_getDisableAutoGroupChangeElementHtmlId() .
+            ']';
     }
 
     /**

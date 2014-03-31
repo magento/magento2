@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
 
 /**
  * Attributes Factory
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
 class AttributeFactory
 {
     /**
@@ -77,18 +76,19 @@ class AttributeFactory
      */
     public function createAttribute($name)
     {
-        $modelName = 'Magento\GoogleShopping\Model\Attribute\\'
-            . $this->_string->upperCaseWords($this->_gsData->normalizeName($name));
+        $modelName = 'Magento\GoogleShopping\Model\Attribute\\' . $this->_string->upperCaseWords(
+            $this->_gsData->normalizeName($name)
+        );
         try {
             /** @var \Magento\GoogleShopping\Model\Attribute\DefaultAttribute $attributeModel */
             $attributeModel = $this->_objectManager->create($modelName);
             if (!$attributeModel) {
-                $attributeModel = $this->_objectManager
-                    ->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
+                $attributeModel = $this->_objectManager->create(
+                    'Magento\GoogleShopping\Model\Attribute\DefaultAttribute'
+                );
             }
         } catch (\Exception $e) {
-            $attributeModel = $this->_objectManager
-                ->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
+            $attributeModel = $this->_objectManager->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
         }
 
         $attributeModel->setName($name);

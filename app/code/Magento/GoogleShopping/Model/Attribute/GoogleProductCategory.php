@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Attribute;
 
 /**
  * GoogleProductCategory attribute model
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Attribute;
-
 class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
     /**
@@ -50,8 +49,8 @@ class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\Defa
     protected $_typeFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
@@ -63,8 +62,8 @@ class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\Defa
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
@@ -102,9 +101,8 @@ class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\Defa
         $targetCountry = $this->_config->getTargetCountry($product->getStoreId());
         $value = $this->_typeFactory->create()->loadByAttributeSetId($product->getAttributeSetId(), $targetCountry);
 
-        $val = ($value->getCategory() == \Magento\GoogleShopping\Helper\Category::CATEGORY_OTHER)
-            ? ''
-            : $value->getCategory();
+        $val = $value->getCategory() ==
+            \Magento\GoogleShopping\Helper\Category::CATEGORY_OTHER ? '' : $value->getCategory();
 
         $this->_setAttribute(
             $entry,

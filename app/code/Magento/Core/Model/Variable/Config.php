@@ -66,17 +66,22 @@ class Config
         $variableConfig = array();
         $onclickParts = array(
             'search' => array('html_id'),
-            'subject' => 'MagentovariablePlugin.loadChooser(\'' . $this->getVariablesWysiwygActionUrl()
-                . '\', \'{{html_id}}\');'
+            'subject' => 'MagentovariablePlugin.loadChooser(\'' .
+            $this->getVariablesWysiwygActionUrl() .
+            '\', \'{{html_id}}\');'
         );
-        $variableWysiwyg = array(array('name' => 'magentovariable',
-            'src' => $this->getWysiwygJsPluginSrc(),
-            'options' => array(
-                'title' => __('Insert Variable...'),
-                'url' => $this->getVariablesWysiwygActionUrl(),
-                'onclick' => $onclickParts,
-                'class'   => 'add-variable plugin'
-        )));
+        $variableWysiwyg = array(
+            array(
+                'name' => 'magentovariable',
+                'src' => $this->getWysiwygJsPluginSrc(),
+                'options' => array(
+                    'title' => __('Insert Variable...'),
+                    'url' => $this->getVariablesWysiwygActionUrl(),
+                    'onclick' => $onclickParts,
+                    'class' => 'add-variable plugin'
+                )
+            )
+        );
         $configPlugins = $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
         return $variableConfig;

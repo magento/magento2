@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filesystem\Directory;
 
 use Magento\Filesystem\FilesystemException;
@@ -65,6 +64,7 @@ class Write extends Read implements WriteInterface
      * Set properties from config
      *
      * @param array $config
+     * @return void
      * @throws \Magento\Filesystem\FilesystemException
      */
     protected function setProperties(array $config)
@@ -74,7 +74,7 @@ class Write extends Read implements WriteInterface
             $this->permissions = $config['permissions'];
         }
         if (isset($config['allow_create_dirs'])) {
-            $this->allowCreateDirs = (bool) $config['allow_create_dirs'];
+            $this->allowCreateDirs = (bool)$config['allow_create_dirs'];
         }
     }
 
@@ -137,7 +137,7 @@ class Write extends Read implements WriteInterface
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
         $this->assertIsFile($path);
-        $targetDirectory = $targetDirectory ? : $this;
+        $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($newPath))) {
             $targetDirectory->create($this->driver->getParentDirectory($newPath));
         }
@@ -159,7 +159,7 @@ class Write extends Read implements WriteInterface
     {
         $this->assertIsFile($path);
 
-        $targetDirectory = $targetDirectory ? : $this;
+        $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($destination))) {
             $targetDirectory->create($this->driver->getParentDirectory($destination));
         }

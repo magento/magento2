@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
 
 /**
  * Adminhtml most viewed products report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
@@ -47,10 +44,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @var string
      */
-    protected $_resourceCollectionName  = 'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection';
+    protected $_resourceCollectionName = 'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection';
 
     /**
      * Init grid parameters
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,53 +64,65 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('period', array(
-            'header'        => __('Interval'),
-            'index'         => 'period',
-            'width'         => 100,
-            'sortable'      => false,
-            'period_type'   => $this->getPeriodType(),
-            'renderer'      => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
-            'totals_label'  => __('Total'),
-            'html_decorators' => array('nobr'),
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'period',
+            array(
+                'header' => __('Interval'),
+                'index' => 'period',
+                'width' => 100,
+                'sortable' => false,
+                'period_type' => $this->getPeriodType(),
+                'renderer' => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
+                'totals_label' => __('Total'),
+                'html_decorators' => array('nobr'),
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('product_name', array(
-            'header'    => __('Product'),
-            'index'     => 'product_name',
-            'type'      => 'string',
-            'sortable'  => false,
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'product_name',
+            array(
+                'header' => __('Product'),
+                'index' => 'product_name',
+                'type' => 'string',
+                'sortable' => false,
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
         if ($this->getFilterData()->getStoreIds()) {
             $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
         }
         $currencyCode = $this->getCurrentCurrencyCode();
 
-        $this->addColumn('product_price', array(
-            'header'        => __('Price'),
-            'type'          => 'currency',
-            'currency_code' => $currencyCode,
-            'index'         => 'product_price',
-            'sortable'      => false,
-            'rate'          => $this->getRate($currencyCode),
-            'header_css_class'  => 'col-price',
-            'column_css_class'  => 'col-price'
-        ));
+        $this->addColumn(
+            'product_price',
+            array(
+                'header' => __('Price'),
+                'type' => 'currency',
+                'currency_code' => $currencyCode,
+                'index' => 'product_price',
+                'sortable' => false,
+                'rate' => $this->getRate($currencyCode),
+                'header_css_class' => 'col-price',
+                'column_css_class' => 'col-price'
+            )
+        );
 
-        $this->addColumn('views_num', array(
-            'header'    => __('Views'),
-            'index'     => 'views_num',
-            'type'      => 'number',
-            'total'     => 'sum',
-            'sortable'  => false,
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
-        ));
+        $this->addColumn(
+            'views_num',
+            array(
+                'header' => __('Views'),
+                'index' => 'views_num',
+                'type' => 'number',
+                'total' => 'sum',
+                'sortable' => false,
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            )
+        );
 
 
         $this->addExportType('*/*/exportViewedCsv', __('CSV'));
@@ -125,7 +136,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
      * @param \Magento\Object $filterData
-     * @return \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addOrderStatusFilter($collection, $filterData)

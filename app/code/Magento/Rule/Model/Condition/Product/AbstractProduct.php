@@ -88,12 +88,18 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_attrSetCollection;
 
     /**
+     * @var \Magento\Locale\FormatInterface
+     */
+    protected $_localeFormat;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param array $data
      */
     public function __construct(
@@ -103,6 +109,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Catalog\Model\Product $product,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Locale\FormatInterface $localeFormat,
         array $data = array()
     ) {
         $this->_backendData = $backendData;
@@ -110,6 +117,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $this->_product = $product;
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
+        $this->_localeFormat = $localeFormat;
         parent::__construct($context, $data);
     }
 
@@ -140,11 +148,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $obj = new \Magento\Object();
-            $obj->setEntity($this->_product)
-                ->setFrontendInput('text');
+            $obj->setEntity($this->_product)->setFrontendInput('text');
         }
         return $obj;
     }
@@ -152,7 +158,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Add special attributes
      *
-     * @param array $attributes
+     * @param array &$attributes
+     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -163,7 +170,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Load attribute options
      *
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function loadAttributeOptions()
     {
@@ -172,8 +179,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attributes = array();
         foreach ($productAttributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            if (!$attribute->isAllowedForRuleCondition()
-                || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
+            if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
+                $this->_isUsedForRuleProperty
+            )
             ) {
                 continue;
             }
@@ -194,7 +202,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *  'value_select_options' - normal select array: array(array('value' => $value, 'label' => $label), ...)
      *  'value_option' - hashed array: array($value => $label, ...),
      *
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     protected function _prepareValueOptions()
     {
@@ -213,7 +221,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 ->setEntityTypeFilter($entityTypeId)
                 ->load()
                 ->toOptionArray();
-        } else if (is_object($this->getAttributeObject())) {
+        } elseif (is_object($this->getAttributeObject())) {
             $attributeObject = $this->getAttributeObject();
             if ($attributeObject->usesSource()) {
                 if ($attributeObject->getFrontendInput() == 'multiselect') {
@@ -249,13 +257,13 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve value by option
      *
-     * @param mixed $option
+     * @param string|null $option
      * @return string
      */
     public function getValueOption($option = null)
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_option' . (!is_null($option) ? '/'.$option : ''));
+        return $this->getData('value_option' . (!is_null($option) ? '/' . $option : ''));
     }
 
     /**
@@ -286,9 +294,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         }
 
         if (!empty($image)) {
-            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' . $image
-                . '" alt="" class="v-middle rule-chooser-trigger" title="'
-                . __('Open Chooser') . '" /></a>';
+            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' .
+                $image .
+                '" alt="" class="v-middle rule-chooser-trigger" title="' .
+                __(
+                    'Open Chooser'
+                ) . '" /></a>';
         }
         return $html;
     }
@@ -309,7 +320,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Collect validated attributes
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {
@@ -463,7 +474,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Load array
      *
      * @param array $arr
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function loadArray($arr)
     {
@@ -473,24 +484,31 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $isContainsOperator = !empty($arr['operator']) && in_array($arr['operator'], array('{}', '!{}'));
         if ($attribute && $attribute->getBackendType() == 'decimal' && !$isContainsOperator) {
             if (isset($arr['value'])) {
-                if (!empty($arr['operator'])
-                    && in_array($arr['operator'], array('!()', '()'))
-                    && false !== strpos($arr['value'], ',')
+                if (!empty($arr['operator']) && in_array(
+                    $arr['operator'],
+                    array('!()', '()')
+                ) && false !== strpos(
+                    $arr['value'],
+                    ','
+                )
                 ) {
 
                     $tmp = array();
                     foreach (explode(',', $arr['value']) as $value) {
-                        $tmp[] = $this->_locale->getNumber($value);
+                        $tmp[] = $this->_localeFormat->getNumber($value);
                     }
-                    $arr['value'] =  implode(',', $tmp);
+                    $arr['value'] = implode(',', $tmp);
                 } else {
-                    $arr['value'] =  $this->_locale->getNumber($arr['value']);
+                    $arr['value'] = $this->_localeFormat->getNumber($arr['value']);
                 }
             } else {
                 $arr['value'] = false;
             }
-            $arr['is_value_parsed'] = isset($arr['is_value_parsed'])
-                ? $this->_locale->getNumber($arr['is_value_parsed']) : false;
+            $arr['is_value_parsed'] = isset(
+                $arr['is_value_parsed']
+            ) ? $this->_localeFormat->getNumber(
+                $arr['is_value_parsed']
+            ) : false;
         }
 
         return parent::loadArray($arr);
@@ -528,7 +546,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             return parent::validate($object);
         } else {
-            $result = false; // any valid value will set it to TRUE
+            $result = false;
+            // any valid value will set it to TRUE
             // remember old attribute state
             $oldAttrValue = $object->hasData($attrCode) ? $object->getData($attrCode) : null;
 

@@ -34,7 +34,7 @@
  */
 namespace Magento\Event;
 
-use \Magento\Event;
+use Magento\Event;
 
 class Collection
 {
@@ -44,7 +44,7 @@ class Collection
      * @var array
      */
     protected $_events;
-    
+
     /**
      * Global observers
      * 
@@ -53,17 +53,16 @@ class Collection
      * @var Observer\Collection
      */
     protected $_observers;
-    
+
     /**
      * Initializes global observers collection
-     * 
      */
     public function __construct()
     {
         $this->_events = array();
         $this->_globalObservers = new Observer\Collection();
     }
-    
+
     /**
      * Returns all registered events in collection
      *
@@ -73,7 +72,7 @@ class Collection
     {
         return $this->_events;
     }
-    
+
     /**
      * Returns all registered global observers for the collection of events
      *
@@ -83,7 +82,7 @@ class Collection
     {
         return $this->_globalObservers;
     }
-    
+
     /**
      * Returns event by its name
      *
@@ -95,11 +94,11 @@ class Collection
     public function getEventByName($eventName)
     {
         if (!isset($this->_events[$eventName])) {
-            $this->addEvent(new Event(array('name'=>$eventName)));
+            $this->addEvent(new Event(array('name' => $eventName)));
         }
         return $this->_events[$eventName];
     }
-    
+
     /**
      * Register an event for this collection
      *
@@ -111,7 +110,7 @@ class Collection
         $this->_events[$event->getName()] = $event;
         return $this;
     }
-    
+
     /**
      * Register an observer
      * 
@@ -141,7 +140,7 @@ class Collection
      * @param array $data
      * @return $this
      */
-    public function dispatch($eventName, array $data=array())
+    public function dispatch($eventName, array $data = array())
     {
         $event = $this->getEventByName($eventName);
         $event->addData($data)->dispatch();

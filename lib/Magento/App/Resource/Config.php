@@ -22,15 +22,15 @@
  *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */ 
+ */
 namespace Magento\App\Resource;
 
-class Config extends \Magento\Config\Data\Scoped
-    implements \Magento\App\Resource\ConfigInterface
+class Config extends \Magento\Config\Data\Scoped implements ConfigInterface
 {
     const DEFAULT_SETUP_CONNECTION = 'default';
 
     const PARAM_INITIAL_RESOURCES = 'resource';
+
     /**
      * List of connection names per resource
      *

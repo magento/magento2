@@ -24,9 +24,11 @@
 
 // refresh report statistics
 /** @var \Magento\Sales\Model\Resource\Report\Shipping $reportResource */
-$reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Resource\Report\Shipping');
-$reportResource->beginTransaction(); // prevent table truncation by incrementing the transaction nesting level counter
+$reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Sales\Model\Resource\Report\Shipping'
+);
+$reportResource->beginTransaction();
+// prevent table truncation by incrementing the transaction nesting level counter
 try {
     $reportResource->aggregate();
     $reportResource->commit();

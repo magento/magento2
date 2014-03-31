@@ -1,7 +1,5 @@
 <?php
 /**
- * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,16 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Class \Magento\Customer\Controller\Adminhtml\IndexTest
- */
 namespace Magento\Customer\Controller\Adminhtml;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\Data\Customer;
+
+/**
+ * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
+ */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,6 +61,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     */
+    protected $_acctServiceMock;
+
+    /**
      * Session mock instance
      *
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
@@ -81,219 +86,376 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Prepare required values
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')->disableOriginalConstructor()->getMock();
 
-        $this->_response = $this->getMockBuilder('Magento\App\Response\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setRedirect', 'getHeader'))
-            ->getMock();
+        $this->_response = $this->getMockBuilder(
+            'Magento\App\Response\Http'
+        )->disableOriginalConstructor()->setMethods(
+            array('setRedirect', 'getHeader')
+        )->getMock();
 
-        $this->_response->expects($this->any())
-            ->method('getHeader')
-            ->with($this->equalTo('X-Frame-Options'))
-            ->will($this->returnValue(true));
+        $this->_response->expects(
+            $this->any()
+        )->method(
+            'getHeader'
+        )->with(
+            $this->equalTo('X-Frame-Options')
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $this->_objectManager = $this->getMockBuilder('Magento\App\ObjectManager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('get', 'create'))
-            ->getMock();
-        $frontControllerMock = $this->getMockBuilder('Magento\App\FrontController')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_objectManager = $this->getMockBuilder(
+            'Magento\App\ObjectManager'
+        )->disableOriginalConstructor()->setMethods(
+            array('get', 'create')
+        )->getMock();
+        $frontControllerMock = $this->getMockBuilder(
+            'Magento\App\FrontController'
+        )->disableOriginalConstructor()->getMock();
 
-        $actionFlagMock = $this->getMockBuilder('Magento\App\ActionFlag')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actionFlagMock = $this->getMockBuilder('Magento\App\ActionFlag')->disableOriginalConstructor()->getMock();
 
-        $this->_session = $this->getMockBuilder('Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setIsUrlNotice', '__wakeup'))
-            ->getMock();
+        $this->_session = $this->getMockBuilder(
+            'Magento\Backend\Model\Session'
+        )->disableOriginalConstructor()->setMethods(
+            array('setIsUrlNotice', '__wakeup')
+        )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
-        $this->_helper = $this->getMockBuilder('Magento\Backend\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getUrl'))
-            ->getMock();
+        $this->_helper = $this->getMockBuilder(
+            'Magento\Backend\Helper\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('getUrl')
+        )->getMock();
 
-        $translator = $this->getMockBuilder('Magento\Core\Model\Translate')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getTranslateInline', '__wakeup'))
-            ->getMock();
-
-        $this->messageManager = $this->getMockBuilder('Magento\Message\Manager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('addSuccess'))
-            ->getMock();
+        $this->messageManager = $this->getMockBuilder(
+            'Magento\Message\Manager'
+        )->disableOriginalConstructor()->setMethods(
+            array('addSuccess', 'addMessage', 'addException')
+        )->getMock();
 
         $contextArgs = array(
-            'getHelper', 'getSession', 'getAuthorization', 'getTranslator', 'getObjectManager',
-            'getFrontController', 'getActionFlag', 'getMessageManager',
-            'getLayoutFactory', 'getEventManager', 'getRequest', 'getResponse'
+            'getHelper',
+            'getSession',
+            'getAuthorization',
+            'getTranslator',
+            'getObjectManager',
+            'getFrontController',
+            'getActionFlag',
+            'getMessageManager',
+            'getLayoutFactory',
+            'getEventManager',
+            'getRequest',
+            'getResponse'
         );
-        $contextMock = $this->getMockBuilder('\Magento\Backend\App\Action\Context')
-            ->disableOriginalConstructor()
-            ->setMethods($contextArgs)
-            ->getMock();
+        $contextMock = $this->getMockBuilder(
+            '\Magento\Backend\App\Action\Context'
+        )->disableOriginalConstructor()->setMethods(
+            $contextArgs
+        )->getMock();
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_response));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->_objectManager));
-        $contextMock->expects($this->any())
-            ->method('getFrontController')
-            ->will($this->returnValue($frontControllerMock));
-        $contextMock->expects($this->any())
-            ->method('getActionFlag')
-            ->will($this->returnValue($actionFlagMock));
+        $contextMock->expects(
+            $this->any()
+        )->method(
+            'getObjectManager'
+        )->will(
+            $this->returnValue($this->_objectManager)
+        );
+        $contextMock->expects(
+            $this->any()
+        )->method(
+            'getFrontController'
+        )->will(
+            $this->returnValue($frontControllerMock)
+        );
+        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
 
         $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helper));
         $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->_session));
-        $contextMock->expects($this->any())->method('getTranslator')->will($this->returnValue($translator));
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
+        $contextMock->expects(
+            $this->any()
+        )->method(
+            'getMessageManager'
+        )->will(
+            $this->returnValue($this->messageManager)
+        );
 
-        $args = array('context' => $contextMock);
+        $this->_acctServiceMock = $this->getMockBuilder(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        )->getMock();
+
+        $args = array('context' => $contextMock, 'accountService' => $this->_acctServiceMock);
+
+
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject('Magento\Customer\Controller\Adminhtml\Index', $args);
     }
 
-    /**
-     * Test \Magento\Backend\Controller\Customer::resetPasswordAction()
-     */
     public function testResetPasswordActionNoCustomer()
     {
         $redirectLink = 'http://example.com/customer/';
-        $this->_request->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo('customer_id'), $this->equalTo(0))
-            ->will($this->returnValue(false)
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue(false)
         );
-        $this->_helper->expects($this->once())
-            ->method('getUrl')
-            ->with($this->equalTo('customer/index'), $this->equalTo(array()))
-            ->will($this->returnValue($redirectLink));
+
+        $this->_helper->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            $this->equalTo('customer/index'),
+            $this->equalTo(array())
+        )->will(
+            $this->returnValue($redirectLink)
+        );
 
         $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
         $this->_testedObject->resetPasswordAction();
     }
 
-    /**
-     * Test \Magento\Backend\Controller\Customer::resetPasswordAction()
-     */
-    public function testResetPasswordActionNoCustomerId()
+    public function testResetPasswordActionInvalidCustomerId()
     {
         $redirectLink = 'http://example.com/customer/';
         $customerId = 1;
 
-        $this->_request->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo('customer_id'), $this->equalTo(0))
-            ->will($this->returnValue($customerId)
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
         );
 
-        $customerMock = $this->_getCustomerMock($customerId, false);
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'getCustomer'
+        )->with(
+            $customerId
+        )->will(
+            $this->throwException(new NoSuchEntityException('customerId', $customerId))
+        );
 
-        $this->_objectManager->expects($this->any())
-            ->method('create')
-            ->with($this->equalTo('Magento\Customer\Model\Customer'))
-            ->will($this->returnValue($customerMock));
-
-        $this->_helper->expects($this->any())
-            ->method('getUrl')
-            ->with($this->equalTo('customer/index'), $this->equalTo(array()))
-            ->will($this->returnValue($redirectLink));
+        $this->_helper->expects(
+            $this->any()
+        )->method(
+            'getUrl'
+        )->with(
+            $this->equalTo('customer/index'),
+            $this->equalTo(array())
+        )->will(
+            $this->returnValue($redirectLink)
+        );
 
         $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
         $this->_testedObject->resetPasswordAction();
     }
 
-    /**
-     * Test that sendPasswordReminderEmail() is called
-     */
-    public function testResetPasswordActionSendEmail()
+    public function testResetPasswordActionCoreException()
     {
         $customerId = 1;
-        $token = 2;
-        $testUrl = 'http://example.com';
 
-        $this->_request->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo('customer_id'), $this->equalTo(0))
-            ->will($this->returnValue($customerId)
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
         );
 
-        $customerMock = $this->_getCustomerMock($customerId, true);
-        $customerMock->expects($this->once())
-            ->method('changeResetPasswordLinkToken')
-            ->with($this->equalTo($token));
-        $customerMock->expects($this->once())
-            ->method('setResetPasswordUrl')
-            ->with($this->equalTo($testUrl));
-        $customerMock->expects($this->once())
-            ->method('sendPasswordReminderEmail');
+        // Setup a core exception to return
+        $exception = new \Magento\Model\Exception();
+        $error = new \Magento\Message\Error('Something Bad happened');
+        $exception->addMessage($error);
 
-        $customerHelperMock = $this->getMock('Magento\Customer\Helper\Data',
-            array('generateResetPasswordLinkToken'), array(), '', false
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'getCustomer'
+        )->with(
+            $customerId
+        )->will(
+            $this->throwException($exception)
         );
-        $customerHelperMock->expects($this->any())
-            ->method('generateResetPasswordLinkToken')
-            ->will($this->returnValue($token));
 
-        $coreHelperMock = $this->getMockBuilder('Magento\Url')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getUrl', '__wakeup'))
-            ->getMock();
-        $coreHelperMock->expects($this->any())->method('getUrl')->will($this->returnValue($testUrl));
+        // Verify error message is set
+        $this->messageManager->expects($this->once())->method('addMessage')->with($this->equalTo($error));
 
-        $this->_objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($this->equalTo('Magento\Customer\Model\Customer'))
-            ->will($this->returnValue($customerMock));
-
-        $this->_objectManager->expects($this->at(1))
-            ->method('get')
-            ->with($this->equalTo('Magento\Customer\Helper\Data'))
-            ->will($this->returnValue($customerHelperMock));
-
-        $this->_objectManager->expects($this->at(2))
-            ->method('create')
-            ->with($this->equalTo('Magento\UrlInterface'))
-            ->will($this->returnValue($coreHelperMock));
-
-        $this->messageManager->expects($this->once())
-            ->method('addSuccess')
-            ->with($this->equalTo('Customer will receive an email with a link to reset password.'));
         $this->_testedObject->resetPasswordAction();
     }
 
-    /**
-     * Return customer mock instance
-     *
-     * @param int $customerId
-     * @param null|int $returnId
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Customer
-     */
-    protected function _getCustomerMock($customerId, $returnId = null)
+    public function testResetPasswordActionCoreExceptionWarn()
     {
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
-            ->disableOriginalConstructor()
-            ->setMethods(array('load', 'getId', 'changeResetPasswordLinkToken', 'setResetPasswordUrl',
-                'sendPasswordReminderEmail', '__wakeup'))
-            ->getMock();
-        $customerMock->expects($this->any())
-            ->method('load')
-            ->with($this->equalTo($customerId));
-        $customerMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($returnId));
-        return $customerMock;
+        $warningText = 'Warning';
+        $customerId = 1;
+
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
+        );
+
+        // Setup a core exception to return
+        $exception = new \Magento\Model\Exception($warningText);
+        $error = new \Magento\Message\Warning('Something Not So Bad happened');
+        $exception->addMessage($error);
+
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'getCustomer'
+        )->with(
+            $customerId
+        )->will(
+            $this->throwException($exception)
+        );
+
+        // Verify Warning is converted to an Error and message text is set to exception text
+        $this->messageManager->expects(
+            $this->once()
+        )->method(
+            'addMessage'
+        )->with(
+            $this->equalTo(new \Magento\Message\Error($warningText))
+        );
+
+        $this->_testedObject->resetPasswordAction();
+    }
+
+    public function testResetPasswordActionException()
+    {
+        $customerId = 1;
+
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
+        );
+
+        // Setup a core exception to return
+        $exception = new \Exception('Something Really Bad happened');
+
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'getCustomer'
+        )->with(
+            $customerId
+        )->will(
+            $this->throwException($exception)
+        );
+
+        // Verify error message is set
+        $this->messageManager->expects(
+            $this->once()
+        )->method(
+            'addException'
+        )->with(
+            $this->equalTo($exception),
+            $this->equalTo('An error occurred while resetting customer password.')
+        );
+
+        $this->_testedObject->resetPasswordAction();
+    }
+
+    public function testResetPasswordActionSendEmail()
+    {
+        $customerId = 1;
+        $email = "test@example.com";
+        $websiteId = 1;
+        $redirectLink = 'http://example.com';
+
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
+        );
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        /** @var $customerBuilder \Magento\Customer\Service\V1\Data\CustomerBuilder' */
+        $customerBuilder = $objectManager->getObject('\Magento\Customer\Service\V1\Data\CustomerBuilder');
+        $customer = $customerBuilder->setId($customerId)->setEmail($email)->setWebsiteId($websiteId)->create();
+
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'getCustomer'
+        )->with(
+            $customerId
+        )->will(
+            $this->returnValue($customer)
+        );
+
+        // verify initiatePasswordReset() is called
+        $this->_acctServiceMock->expects(
+            $this->once()
+        )->method(
+            'initiatePasswordReset'
+        )->with(
+            $email,
+            $websiteId,
+            CustomerAccountServiceInterface::EMAIL_REMINDER
+        );
+
+        // verify success message
+        $this->messageManager->expects(
+            $this->once()
+        )->method(
+            'addSuccess'
+        )->with(
+            $this->equalTo('Customer will receive an email with a link to reset password.')
+        );
+
+        // verify redirect
+        $this->_helper->expects(
+            $this->any()
+        )->method(
+            'getUrl'
+        )->with(
+            $this->equalTo('customer/*/edit'),
+            $this->equalTo(array('id' => $customerId, '_current' => true))
+        )->will(
+            $this->returnValue($redirectLink)
+        );
+
+        $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
+
+        $this->_testedObject->resetPasswordAction();
     }
 }

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Resource;
 
 class CalculationTest extends \PHPUnit_Framework_TestCase
@@ -39,20 +38,20 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $taxRule = $objectManager->get('Magento\Core\Model\Registry')
-            ->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
+        $taxRule = $objectManager->get('Magento\Registry')->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $customerTaxClasses = $taxRule->getTaxCustomerClass();
         $productTaxClasses = $taxRule->getTaxProductClass();
-        $taxRate =  $objectManager->get('Magento\Core\Model\Registry')
-            ->registry('_fixture/Magento_Tax_Model_Calculation_Rate');
+        $taxRate = $objectManager->get('Magento\Registry')->registry('_fixture/Magento_Tax_Model_Calculation_Rate');
         $data = new \Magento\Object();
-        $data->setData(array(
-            'country_id' => 'US',
-            'region_id' => '12',
-            'postcode' => '5555',
-            'customer_class_id' => $customerTaxClasses[0],
-            'product_class_id' => $productTaxClasses[0]
-        ));
+        $data->setData(
+            array(
+                'country_id' => 'US',
+                'region_id' => '12',
+                'postcode' => '5555',
+                'customer_class_id' => $customerTaxClasses[0],
+                'product_class_id' => $productTaxClasses[0]
+            )
+        );
         $taxCalculation = $objectManager->get('Magento\Tax\Model\Resource\Calculation');
         $this->assertEquals($taxRate->getRate(), $taxCalculation->getRate($data));
     }

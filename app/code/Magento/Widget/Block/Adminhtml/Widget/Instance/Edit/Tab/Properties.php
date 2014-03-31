@@ -33,9 +33,8 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
-class Properties
-    extends \Magento\Widget\Block\Adminhtml\Widget\Options
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Prepare label for tab
@@ -91,12 +90,15 @@ class Properties
      * Prepare block children and data.
      * Set widget type and widget parameters if available
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties
+     * @return $this
      */
     protected function _preparelayout()
     {
-        $this->setWidgetType($this->getWidgetInstance()->getType())
-            ->setWidgetValues($this->getWidgetInstance()->getWidgetParameters());
+        $this->setWidgetType(
+            $this->getWidgetInstance()->getType()
+        )->setWidgetValues(
+            $this->getWidgetInstance()->getWidgetParameters()
+        );
         return parent::_prepareLayout();
     }
 

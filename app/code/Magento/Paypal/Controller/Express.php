@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Controller;
 
 /**
  * Express Checkout Controller
  */
-namespace Magento\Paypal\Controller;
-
 class Express extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
@@ -100,6 +99,8 @@ class Express extends \Magento\Paypal\Controller\Express\AbstractExpress
 
     /**
      * Redirect to login page
+     *
+     * @return void
      */
     public function redirectLogin()
     {

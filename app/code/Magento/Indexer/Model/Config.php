@@ -21,39 +21,41 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Indexer\Model;
 
-class Config extends \Magento\Config\Data implements ConfigInterface
+class Config implements ConfigInterface
 {
     /**
-     * @param \Magento\Indexer\Model\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @var Config\Data
      */
-    public function __construct(
-        \Magento\Indexer\Model\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
-        $cacheId = 'indexer_config'
-    ) {
-        parent::__construct($reader, $cache, $cacheId);
-    }
+    protected $configData;
 
     /**
-     * Get indexer's config
-     *
-     * @return mixed
+     * @param Config\Data $configData
      */
-    public function getAll()
+    public function __construct(Config\Data $configData)
     {
-        return $this->get();
+        $this->configData = $configData;
     }
 
     /**
+     * Get indexers list
+     *
+     * @return array[]
+     */
+    public function getIndexers()
+    {
+        return $this->configData->get();
+    }
+
+    /**
+     * Get indexer by ID
+     *
+     * @param string $indexerId
      * @return array
      */
-    public function getIndexerIds()
+    public function getIndexer($indexerId)
     {
-        return array_keys($this->get());
+        return $this->configData->get($indexerId);
     }
 }

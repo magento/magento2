@@ -67,6 +67,5 @@ class FileIterator extends \Magento\Config\FileIterator
             $this->cached[$this->key()] = $contents;
         }
         return $this->cached[$this->key()];
-
     }
 }

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Attribute\Backend\Data;
 
 /**
  * Boolean customer attribute backend model
@@ -32,22 +32,19 @@
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Attribute\Backend\Data;
-
-class Boolean
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Prepare data before attribute save
      *
      * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Customer\Model\Attribute\Backend\Data\Boolean
+     * @return $this
      */
     public function beforeSave($customer)
     {
         $attributeName = $this->getAttribute()->getName();
         $inputValue = $customer->getData($attributeName);
-        $sanitizedValue = (!empty($inputValue)) ? '1' : '0';
+        $sanitizedValue = !empty($inputValue) ? '1' : '0';
         $customer->setData($attributeName, $sanitizedValue);
         return $this;
     }

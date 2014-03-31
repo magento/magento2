@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller;
 
 /**
@@ -39,7 +38,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         parent::assert404NotFound();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Core\Model\Registry')->registry('current_category'));
+        $this->assertNull($objectManager->get('Magento\Registry')->registry('current_category'));
     }
 
     public function getViewActionDataProvider()
@@ -47,24 +46,19 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         return array(
             'category without children' => array(
                 '$categoryId' => 5,
-                array(
-                    'catalog_category_view_type_default',
-                    'catalog_category_view_type_default_without_children',
-                ),
+                array('catalog_category_view_type_default', 'catalog_category_view_type_default_without_children'),
                 array(
                     '%acategorypath-category-1-category-1-1-category-1-1-1-html%a',
                     '%acategory-category-1-1-1%a',
                     '%a<title>Category 1.1.1 - Category 1.1 - Category 1</title>%a',
                     '%a<h1%S>%SCategory 1.1.1%S</h1>%a',
                     '%aSimple Product Two%a',
-                    '%a$45.67%a',
-                ),
+                    '%a$45.67%a'
+                )
             ),
             'anchor category' => array(
                 '$categoryId' => 4,
-                array(
-                    'catalog_category_view_type_layered',
-                ),
+                array('catalog_category_view_type_layered'),
                 array(
                     '%acategorypath-category-1-category-1-1-html%a',
                     '%acategory-category-1-1%a',
@@ -73,9 +67,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
                     '%aSimple Product%a',
                     '%a$10.00%a',
                     '%aSimple Product Two%a',
-                    '%a$45.67%a',
-                ),
-            ),
+                    '%a$45.67%a'
+                )
+            )
         );
     }
 
@@ -84,23 +78,25 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
-        $this->dispatch("catalog/category/view/id/$categoryId");
+        $this->dispatch("catalog/category/view/id/{$categoryId}");
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $currentCategory \Magento\Catalog\Model\Category */
-        $currentCategory = $objectManager->get('Magento\Core\Model\Registry')->registry('current_category');
+        $currentCategory = $objectManager->get('Magento\Registry')->registry('current_category');
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $currentCategory);
         $this->assertEquals($categoryId, $currentCategory->getId(), 'Category in registry.');
 
-        $lastCategoryId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Session')->getLastVisitedCategoryId();
+        $lastCategoryId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Session'
+        )->getLastVisitedCategoryId();
         $this->assertEquals($categoryId, $lastCategoryId, 'Last visited category.');
 
         /* Layout updates */
-        $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->getUpdate()->getHandles();
+        $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->getUpdate()->getHandles();
         foreach ($expectedHandles as $expectedHandleName) {
             $this->assertContains($expectedHandleName, $handles);
         }

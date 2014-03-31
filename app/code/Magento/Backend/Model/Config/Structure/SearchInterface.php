@@ -31,7 +31,7 @@ interface SearchInterface
      * Find element by path
      *
      * @param string $path
-     * @return \Magento\Backend\Model\Config\Structure\ElementInterface|null
+     * @return ElementInterface|null
      */
     public function getElement($path);
 }

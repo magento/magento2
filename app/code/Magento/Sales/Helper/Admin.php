@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Helper;
 
 class Admin extends \Magento\App\Helper\AbstractHelper
@@ -66,7 +65,7 @@ class Admin extends \Magento\App\Helper\AbstractHelper
     {
         return $this->displayPrices(
             $dataObject,
-            $dataObject->getData('base_'.$code),
+            $dataObject->getData('base_' . $code),
             $dataObject->getData($code),
             $strong,
             $separator
@@ -94,18 +93,18 @@ class Admin extends \Magento\App\Helper\AbstractHelper
 
         if ($order && $order->isCurrencyDifferent()) {
             $res = '<strong>';
-            $res.= $order->formatBasePrice($basePrice);
-            $res.= '</strong>'.$separator;
-            $res.= '['.$order->formatPrice($price).']';
+            $res .= $order->formatBasePrice($basePrice);
+            $res .= '</strong>' . $separator;
+            $res .= '[' . $order->formatPrice($price) . ']';
         } elseif ($order) {
             $res = $order->formatPrice($price);
             if ($strong) {
-                $res = '<strong>'.$res.'</strong>';
+                $res = '<strong>' . $res . '</strong>';
             }
         } else {
             $res = $this->_storeManager->getStore()->formatPrice($price);
             if ($strong) {
-                $res = '<strong>'.$res.'</strong>';
+                $res = '<strong>' . $res . '</strong>';
             }
         }
         return $res;
@@ -114,13 +113,13 @@ class Admin extends \Magento\App\Helper\AbstractHelper
     /**
      * Filter collection by removing not available product types
      *
-     * @param \Magento\Core\Model\Resource\Db\Collection\AbstractCollection $collection
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @param \Magento\Model\Resource\Db\Collection\AbstractCollection $collection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function applySalableProductTypesFilter($collection)
     {
         $productTypes = $this->_salesConfig->getAvailableProductTypes();
-        foreach($collection->getItems() as $key => $item) {
+        foreach ($collection->getItems() as $key => $item) {
             if ($item instanceof \Magento\Catalog\Model\Product) {
                 $type = $item->getTypeId();
             } else if ($item instanceof \Magento\Sales\Model\Order\Item) {

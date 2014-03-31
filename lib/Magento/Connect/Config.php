@@ -23,100 +23,120 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect;
 
-class Config
-implements \Iterator
+class Config implements \Iterator
 {
-    protected $_configFile;
     const HEADER = "::ConnectConfig::v::1.0::";
+
     const DEFAULT_DOWNLOADER_PATH = "downloader";
+
     const DEFAULT_CACHE_PATH = ".cache";
 
+    /**
+     * @var string
+     */
+    protected $_configFile;
+
+    /**
+     * @var array
+     */
     protected $properties = array();
 
+    /**
+     * @return void
+     */
     protected function initProperties()
     {
-        $this->properties = array (
-           'php_ini' => array(
+        $this->properties = array(
+            'php_ini' => array(
                 'type' => 'file',
                 'value' => '',
                 'prompt' => 'location of php.ini',
                 'doc' => "It's a location of PHP.ini to use blah",
-                'possible' => '/path/php.ini',
-        ),
-           'protocol' => array(
+                'possible' => '/path/php.ini'
+            ),
+            'protocol' => array(
                 'type' => 'set',
                 'value' => 'http',
                 'prompt' => 'preffered protocol',
                 'doc' => 'preffered protocol',
                 'rules' => array('http', 'ftp')
-        ),
-           'preferred_state' => array(
+            ),
+            'preferred_state' => array(
                 'type' => 'set',
                 'value' => 'stable',
                 'prompt' => 'preferred package state',
                 'doc' => 'preferred package state',
-                'rules' => array('beta','alpha','stable','devel')
-        ),
-           'global_dir_mode' => array (
+                'rules' => array('beta', 'alpha', 'stable', 'devel')
+            ),
+            'global_dir_mode' => array(
                 'type' => 'octal',
                 'value' => 0777,
                 'prompt' => 'directory creation mode',
                 'doc' => 'directory creation mode',
-                'possible' => '0777, 0666 etc.',
-        ),
-           'global_file_mode' => array (
+                'possible' => '0777, 0666 etc.'
+            ),
+            'global_file_mode' => array(
                 'type' => 'octal',
                 'value' => 0666,
                 'prompt' => 'file creation mode',
                 'doc' => 'file creation mode',
-                'possible' => '0777, 0666 etc.',
-        ),
+                'possible' => '0777, 0666 etc.'
+            ),
             'downloader_path' => array(
                 'type' => 'dir',
                 'value' => 'downloader',
                 'prompt' => 'relative path, location of magento downloader',
                 'doc' => "relative path, location of magento downloader",
-                'possible' => 'path',
-        ),
+                'possible' => 'path'
+            ),
             'magento_root' => array(
                 'type' => 'dir',
                 'value' => '',
                 'prompt' => 'location of magento root dir',
                 'doc' => "Location of magento",
-                'possible' => '/path',
-        ),
+                'possible' => '/path'
+            ),
             'root_channel' => array(
                 'type' => 'string',
                 'value' => 'core',
                 'prompt' => '',
                 'doc' => "",
-                'possible' => '',
-        ),
-        
+                'possible' => ''
+            )
         );
-
     }
-    
+
+    /**
+     * @return string
+     */
     public function getDownloaderPath()
     {
         return $this->magento_root . '/' . $this->downloader_path;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getPackagesCacheDir()
     {
         return $this->getDownloaderPath() . '/' . self::DEFAULT_CACHE_PATH;
     }
-    
+
+    /**
+     * @param string $channel
+     * @return string
+     */
     public function getChannelCacheDir($channel)
     {
-        $channel = trim( $channel, "\\/");
+        $channel = trim($channel, "\\/");
         return $this->getPackagesCacheDir() . '/' . $channel;
     }
-    
-    
+
+    /**
+     * @param string $configFile
+     */
     public function __construct($configFile = "connect.cfg")
     {
         $this->initProperties();
@@ -124,11 +144,17 @@ implements \Iterator
         $this->load();
     }
 
+    /**
+     * @return string
+     */
     public function getFilename()
     {
         return $this->_configFile;
     }
-    
+
+    /**
+     * @return void
+     */
     public function load()
     {
         /**
@@ -139,7 +165,7 @@ implements \Iterator
         $f = fopen($this->_configFile, "a+");
         fseek($f, 0, SEEK_SET);
         $size = filesize($this->_configFile);
-        if(!$size) {
+        if (!$size) {
             $this->store();
             return;
         }
@@ -147,7 +173,7 @@ implements \Iterator
         $headerLen = strlen(self::HEADER);
         $contents = fread($f, $headerLen);
 
-        if(self::HEADER != $contents) {
+        if (self::HEADER != $contents) {
             $this->store();
             return;
         }
@@ -156,16 +182,19 @@ implements \Iterator
         $contents = fread($f, $size);
 
         $data = @unserialize($contents);
-        if($data === unserialize(false)) {
+        if ($data === unserialize(false)) {
             $this->store();
             return;
         }
-        foreach($data as $k=>$v) {
-            $this->$k = $v;
+        foreach ($data as $k => $v) {
+            $this->{$k} = $v;
         }
         fclose($f);
     }
 
+    /**
+     * @return void
+     */
     public function store()
     {
         $data = serialize($this->toArray());
@@ -175,86 +204,137 @@ implements \Iterator
         @fclose($f);
     }
 
-
+    /**
+     * @param string $key
+     * @param mixed $val
+     * @return bool
+     */
     public function validate($key, $val)
     {
         $rules = $this->extractField($key, 'rules');
-        if(null === $rules) {
+        if (null === $rules) {
             return true;
-        } elseif( is_array($rules) ) {
+        } elseif (is_array($rules)) {
             return in_array($val, $rules);
         }
         return false;
     }
 
+    /**
+     * @param string $key
+     * @return null|string
+     */
     public function possible($key)
     {
         $data = $this->getKey($key);
-        if(! $data) {
+        if (!$data) {
             return null;
         }
-        if('set' == $data['type']) {
+        if ('set' == $data['type']) {
             return implode("|", $data['rules']);
         }
-        if(!empty($data['possible'])) {
+        if (!empty($data['possible'])) {
             return $data['possible'];
         }
-        return "<".$data['type'].">";
+        return "<" . $data['type'] . ">";
     }
 
+    /**
+     * @param string $key
+     * @return null|string
+     */
     public function type($key)
     {
         return $this->extractField($key, 'type');
     }
 
+    /**
+     * @param string $key
+     * @return null|string
+     */
     public function doc($key)
     {
         return $this->extractField($key, 'doc');
     }
 
-
+    /**
+     * @param string $key
+     * @param string $field
+     * @return null|string
+     */
     public function extractField($key, $field)
     {
-        if(!isset($this->properties[$key][$field])) {
+        if (!isset($this->properties[$key][$field])) {
             return null;
         }
         return $this->properties[$key][$field];
     }
 
-
+    /**
+     * @param string $fld
+     * @return bool
+     */
     public function hasKey($fld)
     {
         return isset($this->properties[$fld]);
     }
 
+    /**
+     * @param string $fld
+     * @return null|bool
+     */
     public function getKey($fld)
     {
-        if($this->hasKey($fld)) {
+        if ($this->hasKey($fld)) {
             return $this->properties[$fld];
         }
         return null;
     }
 
-    public function rewind() {
+    /**
+     * @return void
+     */
+    public function rewind()
+    {
         reset($this->properties);
     }
 
-    public function valid() {
+    /**
+     * @return bool
+     */
+    public function valid()
+    {
         return current($this->properties) !== false;
     }
 
-    public function key() {
+    /**
+     * @return string
+     */
+    public function key()
+    {
         return key($this->properties);
     }
 
-    public function current() {
+    /**
+     * @return array
+     */
+    public function current()
+    {
         return current($this->properties);
     }
 
-    public function next() {
+    /**
+     * @return void
+     */
+    public function next()
+    {
         next($this->properties);
     }
 
+    /**
+     * @param string $var
+     * @return null|string
+     */
     public function __get($var)
     {
         if (isset($this->properties[$var]['value'])) {
@@ -263,6 +343,11 @@ implements \Iterator
         return null;
     }
 
+    /**
+     * @param string $var
+     * @param string $value
+     * @return void
+     */
     public function __set($var, $value)
     {
         if (is_string($value)) {
@@ -272,20 +357,23 @@ implements \Iterator
             if ($value === null) {
                 $value = '';
             }
-            if($this->properties[$var]['value'] !== $value) {
+            if ($this->properties[$var]['value'] !== $value) {
                 $this->properties[$var]['value'] = $value;
                 $this->store();
             }
         }
     }
 
+    /**
+     * @param bool $withRules
+     * @return array
+     */
     public function toArray($withRules = false)
     {
         $out = array();
-        foreach($this as $k=>$v) {
+        foreach ($this as $k => $v) {
             $out[$k] = $withRules ? $v : $v['value'];
         }
         return $out;
     }
-
 }

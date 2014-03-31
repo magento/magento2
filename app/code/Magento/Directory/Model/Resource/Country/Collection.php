@@ -29,14 +29,14 @@
  */
 namespace Magento\Directory\Model\Resource\Country;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Locale model
      *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
      * Core store config
@@ -58,35 +58,44 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_arrayUtils;
 
     /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ListsInterface $localeLists
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Directory\Model\Resource\CountryFactory $countryFactory
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ListsInterface $localeLists,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Directory\Model\Resource\CountryFactory $countryFactory,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
+        \Magento\Locale\ResolverInterface $localeResolver,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
+        $this->_localeResolver = $localeResolver;
         $this->_countryFactory = $countryFactory;
         $this->_arrayUtils = $arrayUtils;
     }
+
     /**
      * Foreground countries
      *
@@ -97,6 +106,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -140,9 +150,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * $iso can be either array containing 'iso2', 'iso3' values or string with containing one of that values directly.
      * The collection will contain countries where at least one of contry $iso fields matches $countryCode.
      *
-     * @param string|array $countryCode
-     * @param string|array $iso
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @param string|string[] $countryCode
+     * @param string|string[] $iso
+     * @return $this
      */
     public function addCountryCodeFilter($countryCode, $iso = array('iso3', 'iso2'))
     {
@@ -175,8 +185,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by country code(s) to collection
      *
-     * @param string|array $countryId
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @param string|string[] $countryId
+     * @return $this
      */
     public function addCountryIdFilter($countryId)
     {
@@ -202,12 +212,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
         $sort = array();
         foreach ($options as $data) {
-            $name = (string)$this->_locale->getCountryTranslation($data['value']);
+            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
             if (!empty($name)) {
                 $sort[$name] = $data['value'];
             }
         }
-        $this->_arrayUtils->ksortMultibyte($sort, $this->_locale->getLocaleCode());
+        $this->_arrayUtils->ksortMultibyte($sort, $this->_localeResolver->getLocaleCode());
         foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
             $name = array_search($foregroundCountry, $sort);
             unset($sort[$name]);
@@ -215,10 +225,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         }
         $options = array();
         foreach ($sort as $label => $value) {
-            $options[] = array(
-               'value' => $value,
-               'label' => $label
-            );
+            $options[] = array('value' => $value, 'label' => $label);
         }
 
         if (count($options) > 0 && $emptyLabel !== false) {
@@ -232,7 +239,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set foreground countries array
      *
      * @param string|array $foregroundCountries
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return $this
      */
     public function setForegroundCountries($foregroundCountries)
     {

@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Helper;
 
 /**
@@ -48,11 +45,9 @@ abstract class AbstractHelper
     protected $_request;
 
     /**
-     * Translator model
-     *
-     * @var \Magento\TranslateInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $translateInline;
 
     /**
      * @var \Magento\Module\Manager
@@ -63,11 +58,6 @@ abstract class AbstractHelper
      * @var \Magento\Logger
      */
     protected $_logger;
-
-    /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_app;
 
     /**
      * @var \Magento\UrlInterface
@@ -92,15 +82,14 @@ abstract class AbstractHelper
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param Context $context
      */
-    public function __construct(\Magento\App\Helper\Context $context)
+    public function __construct(Context $context)
     {
-        $this->_translator = $context->getTranslator();
+        $this->translateInline = $context->getTranslateInline();
         $this->_moduleManager = $context->getModuleManager();
         $this->_logger = $context->getLogger();
         $this->_request = $context->getRequest();
-        $this->_app = $context->getApp();
         $this->_urlBuilder = $context->getUrlBuilder();
         $this->_httpHeader = $context->getHttpHeader();
         $this->_eventManager = $context->getEventManager();

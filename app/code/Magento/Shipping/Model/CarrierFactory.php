@@ -97,22 +97,27 @@ class CarrierFactory implements CarrierFactoryInterface
      */
     public function getIfActive($carrierCode)
     {
-        return $this->_coreStoreConfig->getConfigFlag('carriers/' . $carrierCode . '/active')
-            ? $this->get($carrierCode)
-            : false;
+        return $this->_coreStoreConfig->getConfigFlag(
+            'carriers/' . $carrierCode . '/active'
+        ) ? $this->get(
+            $carrierCode
+        ) : false;
     }
 
     /**
      * Create carrier by its code if it is active
      *
-     * @param $carrierCode
+     * @param string $carrierCode
      * @param null|int $storeId
      * @return bool|Carrier\AbstractCarrier
      */
     public function createIfActive($carrierCode, $storeId = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag('carriers/' . $carrierCode . '/active')
-            ? $this->create($carrierCode, $storeId)
-            : false;
+        return $this->_coreStoreConfig->getConfigFlag(
+            'carriers/' . $carrierCode . '/active'
+        ) ? $this->create(
+            $carrierCode,
+            $storeId
+        ) : false;
     }
 }

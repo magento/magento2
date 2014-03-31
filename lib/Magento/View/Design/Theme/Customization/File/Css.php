@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Theme\Customization\File;
 
 /**
@@ -33,10 +32,14 @@ class Css extends \Magento\View\Design\Theme\Customization\AbstractFile
      * CSS file customization types
      */
     const TYPE = 'css';
+
     const CONTENT_TYPE = 'css';
+
     /**#@-*/
 
     /**
+     * Get type
+     *
      * @return string
      */
     public function getType()
@@ -45,6 +48,8 @@ class Css extends \Magento\View\Design\Theme\Customization\AbstractFile
     }
 
     /**
+     * Get content type
+     *
      * @return string
      */
     public function getContentType()

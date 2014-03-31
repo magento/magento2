@@ -36,7 +36,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/type/indexerModel' => 'instance',
         '/config/type/stockIndexerModel' => 'instance',
         '/config/type/allowedSelectionTypes/type' => 'name',
-        '/config/composableTypes/type' => 'name',
+        '/config/composableTypes/type' => 'name'
     );
 
     /**

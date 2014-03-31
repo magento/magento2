@@ -83,15 +83,14 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             'decorator setting is not an array' => array(array('decorator' => 'string')),
             'decorator setting is empty array' => array(array('decorator' => array())),
             'no class index in array' => array(array('decorator' => array('somedata'))),
-            'non-existing class passed' => array(array('decorator' => array('class' => 'NonExistingClass'))),
+            'non-existing class passed' => array(array('decorator' => array('class' => 'NonExistingClass')))
         );
     }
 
     public function testSaveDisabled()
     {
         $backendMock = $this->getMock('Zend_Cache_Backend_BlackHole');
-        $backendMock->expects($this->never())
-            ->method('save');
+        $backendMock->expects($this->never())->method('save');
         $frontend = new \Magento\Cache\Core(array('disable_save' => true));
         $frontend->setBackend($backendMock);
         $result = $frontend->save('data', 'id');

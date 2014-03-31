@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Resource\Quote;
 
 /**
@@ -36,9 +35,7 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
      * @var \Magento\Sales\Model\Payment\Method\Converter
@@ -61,6 +58,8 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
 
     /**
      * Main table and field initialization
+     *
+     * @return void
      */
     protected function _construct()
     {

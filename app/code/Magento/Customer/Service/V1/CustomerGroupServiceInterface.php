@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer Service Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,15 +23,16 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Customer\Service\V1\Dto\CustomerGroup;
-use Magento\Customer\Service\V1\Dto\SearchCriteria;
-use Magento\Validator\Test\True;
-
+/**
+ * Interface CustomerGroupServiceInterface
+ */
 interface CustomerGroupServiceInterface
 {
-    const NOT_LOGGED_IN_ID          = 0;
-    const CUST_GROUP_ALL            = 32000;
-    const GROUP_CODE_MAX_LENGTH     = 32;
+    const NOT_LOGGED_IN_ID = 0;
+
+    const CUST_GROUP_ALL = 32000;
+
+    const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
      * Retrieve Customer Groups
@@ -41,54 +40,64 @@ interface CustomerGroupServiceInterface
      * The list of groups can be filtered to exclude the NOT_LOGGED_IN group using the first parameter and/or it can
      * be filtered by tax class.
      *
-     * @param boolean $includeNotLoggedIn
+     * @param bool $includeNotLoggedIn
      * @param int $taxClassId
      *
-     * @return \Magento\Customer\Service\V1\Dto\CustomerGroup[]
+     * @return \Magento\Customer\Service\V1\Data\CustomerGroup[]
      */
     public function getGroups($includeNotLoggedIn = true, $taxClassId = null);
 
     /**
-     * @param \Magento\Customer\Service\V1\Dto\SearchCriteria $searchCriteria
+     * Search groups
      *
-     * @return \Magento\Customer\Service\V1\Dto\SearchResults
+     * @param \Magento\Customer\Service\V1\Data\SearchCriteria $searchCriteria
+     * @throws \Magento\Exception\InputException If there is a problem with the input
+     * @return \Magento\Customer\Service\V1\Data\SearchResults containing Data\CustomerGroup objects
      */
-    public function searchGroups(Dto\SearchCriteria $searchCriteria);
+    public function searchGroups(\Magento\Customer\Service\V1\Data\SearchCriteria $searchCriteria);
 
     /**
      * Get a customer group by group ID.
      *
      * @param int $groupId
-     * @throws \Magento\Customer\Service\Entity\V1\Exception if groupId is not found
-     * @return \Magento\Customer\Service\V1\Dto\CustomerGroup
+     * @throws \Magento\Exception\NoSuchEntityException If $groupId is not found
+     * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
     public function getGroup($groupId);
 
     /**
-     * @param int $storeId
+     * Get default group
      *
-     * @return \Magento\Customer\Service\V1\Dto\CustomerGroup
+     * @param int $storeId
+     * @throws \Magento\Exception\NoSuchEntityException If default group for $storeId is not found
+     * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
     public function getDefaultGroup($storeId);
 
     /**
-     * @param int $groupId
+     * Check if the group can be deleted
      *
-     * @return boolean true, if this group can be deleted
+     * @param int $groupId
+     * @return bool True, if this group can be deleted
      */
     public function canDelete($groupId);
 
     /**
-     * @param \Magento\Customer\Service\V1\Dto\CustomerGroup $group
+     * Save group
      *
+     * @param \Magento\Customer\Service\V1\Data\CustomerGroup $group
+     * @throws \Exception If something goes wrong during save
      * @return int customer group ID
      */
-    public function saveGroup(CustomerGroup $group);
+    public function saveGroup(\Magento\Customer\Service\V1\Data\CustomerGroup $group);
 
     /**
-     * @param int $groupId
+     * Delete group
      *
-     * @return null
+     * @param int $groupId
+     * @throws \Magento\Exception\NoSuchEntityException If $groupId is not found
+     * @throws \Exception If something goes wrong during delete
+     * @return bool True if the group was deleted
      */
     public function deleteGroup($groupId);
 }

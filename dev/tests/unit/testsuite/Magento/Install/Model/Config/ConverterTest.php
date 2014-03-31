@@ -27,7 +27,6 @@ namespace Magento\Install\Model\Config;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Install\Model\Config\Converter
      */

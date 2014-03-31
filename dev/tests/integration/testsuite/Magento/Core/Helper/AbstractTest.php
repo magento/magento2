@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -38,11 +37,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Helper\Context');
         $this->_helper = $this->getMock('Magento\App\Helper\AbstractHelper', array('_getModuleName'), array($context));
-        $this->_helper
-            ->expects($this->any())
-            ->method('_getModuleName')
-            ->will($this->returnValue('Magento_Core'))
-        ;
+        $this->_helper->expects($this->any())->method('_getModuleName')->will($this->returnValue('Magento_Core'));
     }
 
     /**

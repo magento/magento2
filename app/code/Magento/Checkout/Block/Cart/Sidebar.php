@@ -18,25 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Checkout\Block\Cart;
 
 /**
  * Wishlist sidebar block
- *
- * @category    Magento
- * @package     Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Cart;
-
-class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
+class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Magento\View\Block\IdentityInterface
 {
-    const XML_PATH_CHECKOUT_SIDEBAR_COUNT   = 'checkout/sidebar/count';
+    const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
 
     /**
      * Tax data
@@ -82,7 +74,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Checkout\Helper\Url $urlHelper
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,6 +118,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Get array of last added items
      *
+     * @param int|null $count
      * @return array
      */
     public function getRecentItems($count = null)
@@ -145,8 +138,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
             /* @var $item \Magento\Sales\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
                 $productId = $item->getProduct()->getId();
-                $products  = $this->_catalogUrl
-                    ->getRewriteByProductStore(array($productId => $item->getStoreId()));
+                $products = $this->_catalogUrl->getRewriteByProductStore(array($productId => $item->getStoreId()));
                 if (!isset($products[$productId])) {
                     continue;
                 }
@@ -169,7 +161,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      * It will include tax, if required by config settings.
      *
      * @param   bool $skipTax flag for getting price with tax or not. Ignored in case when we display just subtotal incl.tax
-     * @return  decimal
+     * @return  float
      */
     public function getSubtotal($skipTax = true)
     {
@@ -182,12 +174,12 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
                 } else {
                     $subtotal = $totals['subtotal']->getValueInclTax();
                 }
-            } elseif($this->_taxConfig->displayCartSubtotalInclTax()) {
+            } elseif ($this->_taxConfig->displayCartSubtotalInclTax()) {
                 $subtotal = $totals['subtotal']->getValueInclTax();
             } else {
                 $subtotal = $totals['subtotal']->getValue();
                 if (!$skipTax && isset($totals['tax'])) {
-                    $subtotal+= $totals['tax']->getValue();
+                    $subtotal += $totals['tax']->getValue();
                 }
             }
         }
@@ -198,7 +190,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get subtotal, including tax.
      * Will return > 0 only if appropriate config settings are enabled.
      *
-     * @return decimal
+     * @return float
      */
     public function getSubtotalInclTax()
     {
@@ -215,11 +207,12 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param bool $exclShippingTax
      * @return float
      */
-    private function _addTax($price, $exclShippingTax=true) {
+    private function _addTax($price, $exclShippingTax = true)
+    {
         $totals = $this->getTotals();
         if (isset($totals['tax'])) {
             if ($exclShippingTax) {
-                $price += $totals['tax']->getValue()-$this->_getShippingTaxAmount();
+                $price += $totals['tax']->getValue() - $this->_getShippingTaxAmount();
             } else {
                 $price += $totals['tax']->getValue();
             }
@@ -241,7 +234,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Get shopping cart items qty based on configuration (summary qty or items qty)
      *
-     * @return int | float
+     * @return int|float
      */
     public function getSummaryCount()
     {
@@ -260,7 +253,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getIncExcTax($flag)
     {
         $text = $this->_taxData->getIncExcText($flag);
-        return $text ? ' ('.$text.')' : '';
+        return $text ? ' (' . $text . ')' : '';
     }
 
     /**
@@ -290,7 +283,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getIsNeedToDisplaySideBar()
     {
-        return (bool) $this->_storeManager->getStore()->getConfig('checkout/sidebar/display');
+        return (bool)$this->_storeManager->getStore()->getConfig('checkout/sidebar/display');
     }
 
     /**
@@ -307,7 +300,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
         return parent::getItems();
     }
 
-    /*
+    /**
      * Return totals from custom quote if needed
      *
      * @return array
@@ -341,20 +334,25 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     protected function _serializeRenders()
     {
         $result = array();
-        foreach ($this->getLayout()->getChildBlocks($this->_getRendererList()->getNameInLayout()) as $alias => $block) {
+        foreach ($this->getLayout()->getChildBlocks(
+            $this->_getRendererList()->getNameInLayout()
+        ) as $alias => $block) {
             /** @var $block \Magento\View\Element\Template */
-            $result[] = implode('|', array(
-                // skip $this->getNameInLayout() and '.'
-                $alias,
-                get_class($block),
-                $block->getTemplate()
-            ));
+            $result[] = implode(
+                '|',
+                array(
+                    // skip $this->getNameInLayout() and '.'
+                    $alias,
+                    get_class($block),
+                    $block->getTemplate()
+                )
+            );
         }
         return implode('|', $result);
     }
 
     /**
-     * Deserialize renders from string
+     * De-serialize renders from string
      *
      * @param string $renders
      * @return $this
@@ -380,5 +378,20 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
             }
         }
         return $this;
+    }
+
+    /**
+     * Retrieve block cache tags
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        /** @var $item \Magento\Sales\Model\Quote\Item */
+        foreach ($this->getItems() as $item) {
+            $identities = array_merge($identities, $item->getProduct()->getIdentities());
+        }
+        return $identities;
     }
 }

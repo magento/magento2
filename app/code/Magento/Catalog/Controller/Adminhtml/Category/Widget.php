@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Category;
+
+use Magento\View\Element\BlockInterface;
 
 /**
  * Catalog category widgets controller for CMS WYSIWYG
@@ -31,41 +34,39 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Controller\Adminhtml\Category;
-
 class Widget extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
     /**
      * Chooser Source action
+     *
+     * @return void
      */
     public function chooserAction()
     {
-        $this->getResponse()->setBody(
-            $this->_getCategoryTreeBlock()->toHtml()
-        );
+        $this->getResponse()->setBody($this->_getCategoryTreeBlock()->toHtml());
     }
 
     /**
      * Categories tree node (Ajax version)
+     *
+     * @return void
      */
     public function categoriesJsonAction()
     {
@@ -77,19 +78,24 @@ class Widget extends \Magento\Backend\App\Action
                 $this->_coreRegistry->register('category', $category);
                 $this->_coreRegistry->register('current_category', $category);
             }
-            $this->getResponse()->setBody(
-                $this->_getCategoryTreeBlock()->getTreeJson($category)
-            );
+            $this->getResponse()->setBody($this->_getCategoryTreeBlock()->getTreeJson($category));
         }
     }
 
+    /**
+     * @return BlockInterface
+     */
     protected function _getCategoryTreeBlock()
     {
-        return $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser', '', array(
-            'data' => array(
-                'id' => $this->getRequest()->getParam('uniq_id'),
-                'use_massaction' => $this->getRequest()->getParam('use_massaction', false)
+        return $this->_view->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
+            '',
+            array(
+                'data' => array(
+                    'id' => $this->getRequest()->getParam('uniq_id'),
+                    'use_massaction' => $this->getRequest()->getParam('use_massaction', false)
+                )
             )
-        ));
+        );
     }
 }

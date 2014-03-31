@@ -63,26 +63,27 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_orderMock = $this->getMockBuilder('\Magento\Sales\Model\Order')
-            ->disableOriginalConstructor()
-            ->setMethods(array('__wakeup', 'getRealOrderId'))
-            ->getMock();
+        $this->_orderMock = $this->getMockBuilder(
+            '\Magento\Sales\Model\Order'
+        )->disableOriginalConstructor()->setMethods(
+            array('__wakeup', 'getRealOrderId')
+        )->getMock();
 
-        $this->_messageMock = $this->getMockBuilder('\Magento\Message')
-            ->disableOriginalConstructor()
-            ->setMethods(array('addError'))
-            ->getMock();
+        $this->_messageMock = $this->getMockBuilder(
+            '\Magento\Message'
+        )->disableOriginalConstructor()->setMethods(
+            array('addError')
+        )->getMock();
 
         $titleMock = $this->getMock('\Magento\App\Action\Title', array('__wakeup', 'add'), array(), '', false);
         $viewMock = $this->getMockForAbstractClass('\Magento\App\ViewInterface');
 
-        $this->_controllerMock= $this->getMockBuilder('\Magento\Sales\Controller\Adminhtml\Stub\Order')
-            ->disableOriginalConstructor()
-            ->setMethods(array('__wakeup', '_initOrder', '_initAction', '__', 'renderLayout', '_redirect'))
-            ->getMock();
-        $this->_controllerMock->expects($this->any())
-            ->method('__')
-            ->will($this->returnArgument(0));
+        $this->_controllerMock = $this->getMockBuilder(
+            '\Magento\Sales\Controller\Adminhtml\Stub\Order'
+        )->disableOriginalConstructor()->setMethods(
+            array('__wakeup', '_initOrder', '_initAction', '__', 'renderLayout', '_redirect')
+        )->getMock();
+        $this->_controllerMock->expects($this->any())->method('__')->will($this->returnArgument(0));
 
         $this->_controllerMock->_title = $titleMock;
         $this->_controllerMock->_view = $viewMock;
@@ -96,17 +97,22 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testViewActionWithError()
     {
         $msg = 'You need more permissions to view this item.';
-        $this->_messageMock->expects($this->once())
-            ->method('addError')
-            ->with($this->equalTo($msg));
-        $this->_controllerMock->expects($this->once())
-            ->method('_initOrder')
-            ->will($this->returnValue($this->_orderMock));
-        $this->_controllerMock->expects($this->once())
-            ->method('_initAction')
-            ->will($this->throwException(new \Magento\App\Action\Exception($msg)));
-        $this->_orderMock->expects($this->never())
-            ->method('getRealOrderId');
+        $this->_messageMock->expects($this->once())->method('addError')->with($this->equalTo($msg));
+        $this->_controllerMock->expects(
+            $this->once()
+        )->method(
+            '_initOrder'
+        )->will(
+            $this->returnValue($this->_orderMock)
+        );
+        $this->_controllerMock->expects(
+            $this->once()
+        )->method(
+            '_initAction'
+        )->will(
+            $this->throwException(new \Magento\App\Action\Exception($msg))
+        );
+        $this->_orderMock->expects($this->never())->method('getRealOrderId');
 
         $this->_controllerMock->viewAction();
     }
@@ -118,14 +124,15 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testViewActionWithoutError()
     {
         $this->_orderMock->setRealOrderId(1);
-        $this->_controllerMock->expects($this->once())
-            ->method('_initOrder')
-            ->will($this->returnValue($this->_orderMock));
-        $this->_messageMock->expects($this->never())
-            ->method('addError');
-        $this->_orderMock->expects($this->once())
-            ->method('getRealOrderId')
-            ->will($this->returnValue(1));
+        $this->_controllerMock->expects(
+            $this->once()
+        )->method(
+            '_initOrder'
+        )->will(
+            $this->returnValue($this->_orderMock)
+        );
+        $this->_messageMock->expects($this->never())->method('addError');
+        $this->_orderMock->expects($this->once())->method('getRealOrderId')->will($this->returnValue(1));
 
         $this->_controllerMock->viewAction();
     }

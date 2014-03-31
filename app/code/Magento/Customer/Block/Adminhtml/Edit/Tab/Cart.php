@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
+
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Directory\Model\Currency;
 
 /**
  * Adminhtml customer orders grid block
  *
- * @category   Magento
- * @package    Magento_Customer
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
-
-/**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -41,7 +37,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,11 +52,16 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_quoteFactory;
 
     /**
+     * @var string
+     */
+    protected $_parentTemplate;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Data\CollectionFactory $dataCollectionFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -68,7 +69,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Data\CollectionFactory $dataCollectionFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
@@ -77,6 +78,9 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -96,14 +100,17 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::_prepareGrid();
     }
 
+    /**
+     * Prepare collection
+     *
+     * @return $this
+     */
     protected function _prepareCollection()
     {
-        $customer = $this->_coreRegistry->registry('current_customer');
+        $customerId = $this->getCustomerId();
         $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
 
-        $quote = $this->_quoteFactory->create()
-            ->setSharedStoreIds($storeIds)
-            ->loadByCustomer($customer);
+        $quote = $this->_quoteFactory->create()->setSharedStoreIds($storeIds)->loadByCustomer($customerId);
 
         if ($quote) {
             $collection = $quote->getItemsCollection(false);
@@ -119,69 +126,71 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('product_id', array(
-            'header'    => __('ID'),
-            'index'     => 'product_id',
-            'width'     => '100px',
-        ));
+        $this->addColumn('product_id', array('header' => __('ID'), 'index' => 'product_id', 'width' => '100px'));
 
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'index'     => 'name',
-            'renderer'  => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
-        ));
+        $this->addColumn(
+            'name',
+            array(
+                'header' => __('Product'),
+                'index' => 'name',
+                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+            )
+        );
 
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'index'     => 'sku',
-            'width'     => '100px',
-        ));
+        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku', 'width' => '100px'));
 
-        $this->addColumn('qty', array(
-            'header'    => __('Quantity'),
-            'index'     => 'qty',
-            'type'      => 'number',
-            'width'     => '60px',
-        ));
+        $this->addColumn(
+            'qty',
+            array('header' => __('Quantity'), 'index' => 'qty', 'type' => 'number', 'width' => '60px')
+        );
 
-        $this->addColumn('price', array(
-            'header'        => __('Price'),
-            'index'         => 'price',
-            'type'          => 'currency',
-            'currency_code' => (string) $this->_storeConfig->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE),
-        ));
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'index' => 'price',
+                'type' => 'currency',
+                'currency_code' => (string)$this->_storeConfig->getConfig(Currency::XML_PATH_CURRENCY_BASE)
+            )
+        );
 
-        $this->addColumn('total', array(
-            'header'        => __('Total'),
-            'index'         => 'row_total',
-            'type'          => 'currency',
-            'currency_code' => (string) $this->_storeConfig->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE),
-        ));
+        $this->addColumn(
+            'total',
+            array(
+                'header' => __('Total'),
+                'index' => 'row_total',
+                'type' => 'currency',
+                'currency_code' => (string)$this->_storeConfig->getConfig(Currency::XML_PATH_CURRENCY_BASE)
+            )
+        );
 
-        $this->addColumn('action', array(
-            'header'    => __('Action'),
-            'index'     => 'quote_item_id',
-            'renderer'  => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
-            'filter'    => false,
-            'sortable'  => false,
-            'actions'   => array(
-                array(
-                    'caption'           => __('Configure'),
-                    'url'               => 'javascript:void(0)',
-                    'process'           => 'configurable',
-                    'control_object'    => $this->getJsObjectName() . 'cartControl'
-                ),
-                array(
-                    'caption'   => __('Delete'),
-                    'url'       => '#',
-                    'onclick'   => 'return ' . $this->getJsObjectName() . 'cartControl.removeItem($item_id);'
+        $this->addColumn(
+            'action',
+            array(
+                'header' => __('Action'),
+                'index' => 'quote_item_id',
+                'renderer' => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
+                'filter' => false,
+                'sortable' => false,
+                'actions' => array(
+                    array(
+                        'caption' => __('Configure'),
+                        'url' => 'javascript:void(0)',
+                        'process' => 'configurable',
+                        'control_object' => $this->getJsObjectName() . 'cartControl'
+                    ),
+                    array(
+                        'caption' => __('Delete'),
+                        'url' => '#',
+                        'onclick' => 'return ' . $this->getJsObjectName() . 'cartControl.removeItem($item_id);'
+                    )
                 )
             )
-        ));
+        );
 
         return parent::_prepareColumns();
     }
@@ -189,22 +198,24 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Gets customer assigned to this block
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return int
      */
-    public function getCustomer()
+    public function getCustomerId()
     {
-        return $this->_coreRegistry->registry('current_customer');
+        return $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getGridUrl()
     {
-        return $this->getUrl('customer/*/cart', array('_current'=>true, 'website_id' => $this->getWebsiteId()));
+        return $this->getUrl('customer/*/cart', array('_current' => true, 'website_id' => $this->getWebsiteId()));
     }
 
     /**
+     * Gets grid parent html
+     *
      * @return string
      */
     public function getGridParentHtml()
@@ -213,6 +224,9 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this->fetchView($templateName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('catalog/product/edit', array('id' => $row->getProductId()));

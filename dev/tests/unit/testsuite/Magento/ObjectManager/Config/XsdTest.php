@@ -60,11 +60,13 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider with invalid xml array according to events.xsd
+     * Get array of invalid xml strings
+     *
+     * @return array
      */
     public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidConfigXmlArray.php');
+        return include __DIR__ . '/_files/invalidConfigXmlArray.php';
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()

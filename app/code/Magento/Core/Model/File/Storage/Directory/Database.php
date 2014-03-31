@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File\Storage\Directory;
 
 /**
@@ -41,7 +40,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Collect errors during sync process
      *
-     * @var array
+     * @var string[]
      */
     protected $_errors = array();
 
@@ -51,23 +50,23 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_directoryFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Core\Model\Date $dateModel
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory
+     * @param \Magento\Stdlib\DateTime\DateTime $dateModel
+     * @param \Magento\App\ConfigInterface $configuration
+     * @param DatabaseFactory $directoryFactory
      * @param \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param string|null $connectionName
+     * @param null $connectionName
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Core\Model\Date $dateModel,
-        \Magento\Core\Model\App $app,
+        \Magento\Stdlib\DateTime\DateTime $dateModel,
+        \Magento\App\ConfigInterface $configuration,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -80,7 +79,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
             $registry,
             $coreFileStorageDb,
             $dateModel,
-            $app,
+            $configuration,
             $resource,
             $resourceCollection,
             $connectionName,
@@ -93,7 +92,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Load object data by path
      *
      * @param  string $path
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function loadByPath($path)
     {
@@ -102,13 +101,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
          * addData() is used because it's needed to clear only db storaged data
          */
         $this->addData(
-            array(
-                'directory_id'  => null,
-                'name'          => null,
-                'path'          => null,
-                'upload_time'   => null,
-                'parent_id'     => null
-            )
+            array('directory_id' => null, 'name' => null, 'path' => null, 'upload_time' => null, 'parent_id' => null)
         );
 
         $this->_getResource()->loadByPath($this, $path);
@@ -148,7 +141,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Create directories recursively
      *
      * @param  string $path
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function createRecursive($path)
     {
@@ -184,8 +177,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
-        $offset = ((int)$offset >= 0) ? (int)$offset : 0;
-        $count  = ((int)$count >= 1) ? (int)$count : 1;
+        $offset = (int)$offset >= 0 ? (int)$offset : 0;
+        $count = (int)$count >= 1 ? (int)$count : 1;
 
         $result = $this->_getResource()->exportDirectories($offset, $count);
 
@@ -200,8 +193,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Import directories to storage
      *
      * @param  array $dirs
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @throws \Magento\Model\Exception
+     * @return $this
      */
     public function importDirectories($dirs)
     {
@@ -226,7 +219,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
                     $directory->setUploadTime($dateSingleton->date());
                     $directory->save();
                 } else {
-                    throw new \Magento\Core\Exception(__('Parent directory does not exist: %1', $dir['path']));
+                    throw new \Magento\Model\Exception(__('Parent directory does not exist: %1', $dir['path']));
                 }
             } catch (\Exception $e) {
                 $this->_logger->logException($e);
@@ -239,7 +232,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Clean directories at storage
      *
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function clearDirectories()
     {
@@ -251,7 +244,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Return subdirectories
      *
      * @param string $directory
-     * @return mixed
+     * @return array
      */
     public function getSubdirectories($directory)
     {
@@ -264,7 +257,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Delete directory from database
      *
      * @param string $dirPath
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function deleteDirectory($dirPath)
     {

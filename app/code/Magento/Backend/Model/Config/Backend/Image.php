@@ -29,12 +29,12 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Image extends \Magento\Backend\Model\Config\Backend\File
+class Image extends File
 {
     /**
      * Getter for allowed extensions of uploaded files
      *
-     * @return array
+     * @return string[]
      */
     protected function _getAllowedExtensions()
     {

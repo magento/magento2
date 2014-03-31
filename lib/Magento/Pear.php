@@ -23,6 +23,11 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
+
+use Magento\Exception;
+use Magento\Pear\Frontend;
+use Magento\Pear\Registry as PearRegistry;
 
 /**
  * Pear package routines
@@ -31,12 +36,6 @@
  * @package    Magento_Pear
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento;
-
-use Magento\Exception;
-use Magento\Pear\Frontend;
-use Magento\Pear\Registry;
-
 // Looks like PEAR is being developed without E_NOTICE (1.7.0RC1)
 error_reporting(E_ALL & ~E_NOTICE);
 
@@ -56,14 +55,6 @@ if (strpos($_includePath, $_pearPhpDir) === false) {
     set_include_path($_includePath);
 }
 
-// include necessary PEAR libs
-//require_once $_pearPhpDir."/PEAR.php";
-//require_once $_pearPhpDir."/PEAR/Frontend.php";
-//require_once $_pearPhpDir."/PEAR/Registry.php";
-//require_once $_pearPhpDir."/PEAR/Config.php";
-//require_once $_pearPhpDir."/PEAR/Command.php";
-//require_once $_pearPhpDir."/PEAR/Exception.php";
-
 require_once __DIR__ . "/Pear/Frontend.php";
 require_once __DIR__ . "/Pear/Package.php";
 
@@ -77,7 +68,7 @@ class Pear
     protected $_config;
 
     /**
-     * @var Registry
+     * @var PearRegistry
      */
     protected $_registry;
 
@@ -94,14 +85,16 @@ class Pear
     /**
      * @var Pear
      */
-    static protected $_instance;
+    protected static $_instance;
 
     /**
      * @var bool
      */
-    static public $reloadOnRegistryUpdate = true;
+    public static $reloadOnRegistryUpdate = true;
 
-    
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->getConfig();
@@ -113,7 +106,7 @@ class Pear
     public function getInstance()
     {
         if (!self::$_instance) {
-            self::$_instance = new self;
+            self::$_instance = new self();
         }
         return self::$_instance;
     }
@@ -169,10 +162,13 @@ class Pear
             $mageDir = $config->get('mage_dir');
 
             foreach ($config->getKeys() as $key) {
-                if (!(substr($key, 0, 5)==='mage_' && substr($key, -4)==='_dir')) {
+                if (!(substr($key, 0, 5) === 'mage_' && substr($key, -4) === '_dir')) {
                     continue;
                 }
-                $config->set($key, preg_replace('#^'.preg_quote($mageDir).'#', $this->getBaseDir(), $config->get($key)));
+                $config->set(
+                    $key,
+                    preg_replace('#^' . preg_quote($mageDir) . '#', $this->getBaseDir(), $config->get($key))
+                );
                 #echo $key.' : '.$config->get($key).'<br>';
             }
 
@@ -200,12 +196,12 @@ class Pear
 
     /**
      * @param bool $redirectOnChange
-     * @return Registry
+     * @return PearRegistry
      */
-    public function getRegistry($redirectOnChange=true)
+    public function getRegistry($redirectOnChange = true)
     {
         if (!$this->_registry) {
-            $this->_registry = new Registry($this->getPearDir() . '/php');
+            $this->_registry = new PearRegistry($this->getPearDir() . '/php');
 
             $changed = false;
             foreach ($this->getMagentoChannels() as $channel) {
@@ -216,15 +212,15 @@ class Pear
             }
 
             if ($changed) {
-                $this->_registry = new \Magento\Pear\Registry($this->getPearDir() . '/php');
+                $this->_registry = new PearRegistry($this->getPearDir() . '/php');
             }
-//            if ($changed && self::$reloadOnRegistryUpdate && empty($_GET['pear_registry'])) {
-//                echo "TEST:";
-//                echo self::$reloadOnRegistryUpdate;
-//                //TODO:refresh registry in memory to reflect discovered channels without redirect
-//                #header("Location: ".$_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'].'&pear_registry=1');
-//                exit;
-//            }
+            //            if ($changed && self::$reloadOnRegistryUpdate && empty($_GET['pear_registry'])) {
+            //                echo "TEST:";
+            //                echo self::$reloadOnRegistryUpdate;
+            //                //TODO:refresh registry in memory to reflect discovered channels without redirect
+            //                #header("Location: ".$_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'].'&pear_registry=1');
+            //                exit;
+            //            }
         }
         return $this->_registry;
     }
@@ -235,7 +231,7 @@ class Pear
     public function getFrontend()
     {
         if (!$this->_frontend) {
-            $this->_frontend = new Frontend;
+            $this->_frontend = new Frontend();
         }
         return $this->_frontend;
     }
@@ -262,7 +258,7 @@ class Pear
      * @param array $params
      * @return mixed
      */
-    public function run($command, $options=array(), $params=array())
+    public function run($command, $options = array(), $params = array())
     {
         @set_time_limit(0);
         @ini_set('memory_limit', '2048M');
@@ -313,23 +309,23 @@ class Pear
         } elseif (is_array($runParams)) {
             $run = new Object($runParams);
         } elseif (is_string($runParams)) {
-            $run = new Object(array('title'=>$runParams));
+            $run = new Object(array('title' => $runParams));
         } else {
             throw Exception("Invalid run parameters");
         }
-?>
-<html><head><style type="text/css">
-body { margin:0px; padding:3px; background:black; color:white; }
-pre { font:normal 11px Courier New, serif; color:#2EC029; }
-</style></head><body>
-<?php
-        echo "<pre>".$run->getComment();
+        ?>
+        <html><head><style type="text/css">
+        body { margin:0px; padding:3px; background:black; color:white; }
+        pre { font:normal 11px Courier New, serif; color:#2EC029; }
+        </style></head><body>
+        <?php
+        echo "<pre>" . $run->getComment();
 
         if ($command = $run->getCommand()) {
             $result = $this->run($command, $run->getOptions(), $run->getParams());
 
             if ($result instanceof PEAR_Error) {
-                echo "\r\n\r\nPEAR ERROR: ".$result->getMessage();
+                echo "\r\n\r\nPEAR ERROR: " . $result->getMessage();
             }
             echo '</pre><script type="text/javascript">';
             if ($result instanceof PEAR_Error) {
@@ -347,14 +343,14 @@ pre { font:normal 11px Courier New, serif; color:#2EC029; }
 
             echo '</pre>';
         }
-?>
-<script type="text/javascript">
-if (!auto_scroll) {
-    var auto_scroll = window.setInterval("document.body.scrollTop+=2", 10);
-}
-</script>
-</body></html>
-<?php
+        ?>
+        <script type="text/javascript">
+        if (!auto_scroll) {
+            var auto_scroll = window.setInterval("document.body.scrollTop+=2", 10);
+        }
+        </script>
+        </body></html>
+        <?php
         $fe->setLogStream($oldLogStream);
 
         return $result;

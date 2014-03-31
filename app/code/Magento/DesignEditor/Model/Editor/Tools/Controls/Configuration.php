@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
 
 /**
  * Configuration of controls
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
-
 class Configuration
 {
     /**
@@ -130,25 +129,23 @@ class Configuration
     /**
      * Initialize view configurations
      *
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _initViewConfigs()
     {
-        $this->_viewConfig = $this->_viewConfigLoader->getViewConfig(array(
-            'area'       => \Magento\View\DesignInterface::DEFAULT_AREA,
-            'themeModel' => $this->_theme
-        ));
-        $this->_viewConfigParent = $this->_viewConfigLoader->getViewConfig(array(
-            'area'       => \Magento\View\DesignInterface::DEFAULT_AREA,
-            'themeModel' => $this->_parentTheme
-        ));
+        $this->_viewConfig = $this->_viewConfigLoader->getViewConfig(
+            array('area' => \Magento\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_theme)
+        );
+        $this->_viewConfigParent = $this->_viewConfigLoader->getViewConfig(
+            array('area' => \Magento\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_parentTheme)
+        );
         return $this;
     }
 
     /**
      * Load all control values
      *
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _loadControlsData()
     {
@@ -164,8 +161,8 @@ class Configuration
     /**
      * Prepare list of control links
      *
-     * @param array $controls
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @param array &$controls
+     * @return $this
      */
     protected function _prepareControlList(array &$controls)
     {
@@ -173,7 +170,7 @@ class Configuration
             if (!empty($control['components'])) {
                 $this->_prepareControlList($control['components']);
             }
-            $this->_controlList[$controlName] = &$control;
+            $this->_controlList[$controlName] =& $control;
         }
         return $this;
     }
@@ -181,10 +178,10 @@ class Configuration
     /**
      * Load data item values and default values from the view configuration
      *
-     * @param array $control
+     * @param array &$control
      * @param string $paramName
      * @param \Magento\Config\View $viewConfiguration
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _loadControlData(array &$control, $paramName, \Magento\Config\View $viewConfiguration)
     {
@@ -210,12 +207,12 @@ class Configuration
      *
      * @param string $controlName
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getControlData($controlName)
     {
         if (!isset($this->_controlList[$controlName])) {
-            throw new \Magento\Core\Exception("Unknown control: \"{$controlName}\"");
+            throw new \Magento\Model\Exception("Unknown control: \"{$controlName}\"");
         }
         return $this->_controlList[$controlName];
     }
@@ -224,7 +221,7 @@ class Configuration
      * Extract module and key name
      *
      * @param string $value
-     * @return array
+     * @return string[]
      */
     protected function _extractModuleKey($value)
     {
@@ -255,7 +252,7 @@ class Configuration
      * Save control values data
      *
      * @param array $controlsData
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     public function saveData(array $controlsData)
     {
@@ -279,9 +276,10 @@ class Configuration
             }
         }
         $this->_saveViewConfiguration($configDom);
-        $this->_eventDispatcher->dispatch('save_view_configuration', array(
-            'configuration' => $this, 'theme' => $this->_theme
-        ));
+        $this->_eventDispatcher->dispatch(
+            'save_view_configuration',
+            array('configuration' => $this, 'theme' => $this->_theme)
+        );
         return $this;
     }
 
@@ -299,7 +297,7 @@ class Configuration
      * Save customized DOM of view configuration
      *
      * @param \DOMDocument $config
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _saveViewConfiguration(\DOMDocument $config)
     {

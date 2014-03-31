@@ -48,35 +48,27 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     /**
      * Constructor
      *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -88,7 +80,8 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     {
         if ($this->getData('groups/options/fields/allow/inherit')) {
             return explode(
-                ',', (string) $this->_config->getValue('currency/options/allow', $this->getScope(), $this->getScopeId())
+                ',',
+                (string)$this->_config->getValue('currency/options/allow', $this->getScope(), $this->getScopeId())
             );
         }
         return $this->getData('groups/options/fields/allow/value');
@@ -97,7 +90,7 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     /**
      * Retrieve Installed Currencies
      *
-     * @return array
+     * @return string[]
      */
     protected function _getInstalledCurrencies()
     {
@@ -111,7 +104,7 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
      */
     protected function _getCurrencyBase()
     {
-        if (!$value = $this->getData('groups/options/fields/base/value')) {
+        if (!($value = $this->getData('groups/options/fields/base/value'))) {
             $value = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 $this->getScope(),
@@ -122,13 +115,13 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     }
 
     /**
-     * Retrieve Default desplay Currency value for current scope
+     * Retrieve Default display Currency value for current scope
      *
      * @return string
      */
     protected function _getCurrencyDefault()
     {
-        if (!$value = $this->getData('groups/options/fields/default/value')) {
+        if (!($value = $this->getData('groups/options/fields/default/value'))) {
             $value = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
                 $this->getScope(),

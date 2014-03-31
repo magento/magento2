@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model\Resource;
 
+use Magento\Model\Resource\Db\AbstractDb;
 
 /**
  * Catalog search query resource model
@@ -32,14 +34,12 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource;
-
-class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Query extends AbstractDb
 {
     /**
      * Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -50,12 +50,12 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Stdlib\DateTime $dateTime
     ) {
         $this->_date = $date;
@@ -65,6 +65,8 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Init resource data
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -74,18 +76,25 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Custom load model by search query string
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param string $value
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this
      */
-    public function loadByQuery(\Magento\Core\Model\AbstractModel $object, $value)
+    public function loadByQuery(\Magento\Model\AbstractModel $object, $value)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('synonym_for=? OR query_text=?', $value)
-            ->where('store_id=?', $object->getStoreId())
-            ->order('synonym_for ASC')
-            ->limit(1);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'synonym_for=? OR query_text=?',
+            $value
+        )->where(
+            'store_id=?',
+            $object->getStoreId()
+        )->order(
+            'synonym_for ASC'
+        )->limit(
+            1
+        );
         $data = $this->_getReadAdapter()->fetchRow($select);
         if ($data) {
             $object->setData($data);
@@ -98,17 +107,23 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Custom load model only by query text (skip synonym for)
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param string $value
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this
      */
-    public function loadByQueryText(\Magento\Core\Model\AbstractModel $object, $value)
+    public function loadByQueryText(\Magento\Model\AbstractModel $object, $value)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('query_text = ?', $value)
-            ->where('store_id = ?', $object->getStoreId())
-            ->limit(1);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'query_text = ?',
+            $value
+        )->where(
+            'store_id = ?',
+            $object->getStoreId()
+        )->limit(
+            1
+        );
         $data = $this->_getReadAdapter()->fetchRow($select);
         if ($data) {
             $object->setData($data);
@@ -120,12 +135,12 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Loading string as a value or regular numeric
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param int|string $value
      * @param null|string $field
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this|AbstractDb
      */
-    public function load(\Magento\Core\Model\AbstractModel $object, $value, $field = null)
+    public function load(\Magento\Model\AbstractModel $object, $value, $field = null)
     {
         if (is_numeric($value)) {
             return parent::load($object, $value);
@@ -136,10 +151,10 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         $object->setUpdatedAt($this->dateTime->formatDate($this->_date->gmtTimestamp()));
         return $this;

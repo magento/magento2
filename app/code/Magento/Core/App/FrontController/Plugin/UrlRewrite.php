@@ -50,17 +50,22 @@ class UrlRewrite
     /**
      * Perform url rewites
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\App\FrontController $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     *
+     * @return \Magento\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
+    public function aroundDispatch(
+        \Magento\App\FrontController $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         if (!$this->_state->isInstalled()) {
-            return $invocationChain->proceed($arguments);
+            return $proceed($request);
         }
-        $request = $arguments[0];
         $this->_rewriteService->applyRewrites($request);
-        return $invocationChain->proceed($arguments);
+        return $proceed($request);
     }
 }

@@ -51,7 +51,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
@@ -63,7 +63,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_customerResource = $customerResource;
         parent::__construct(
@@ -82,7 +82,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Init Select
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -94,16 +94,16 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Join customers
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _joinCustomers()
     {
         /** @var $adapter \Magento\DB\Adapter\AdapterInterface */
-        $adapter            = $this->getConnection();
+        $adapter = $this->getConnection();
         /** @var $firstnameAttr \Magento\Eav\Model\Entity\Attribute */
-        $firstnameAttr      = $this->_customerResource->getAttribute('firstname');
+        $firstnameAttr = $this->_customerResource->getAttribute('firstname');
         /** @var $lastnameAttr \Magento\Eav\Model\Entity\Attribute */
-        $lastnameAttr       = $this->_customerResource->getAttribute('lastname');
+        $lastnameAttr = $this->_customerResource->getAttribute('lastname');
 
         $firstnameCondition = array('table_customer_firstname.entity_id = detail.customer_id');
 
@@ -111,40 +111,50 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
             $firstnameField = 'firstname';
         } else {
             $firstnameField = 'value';
-            $firstnameCondition[] = $adapter->quoteInto('table_customer_firstname.attribute_id = ?',
-                (int)$firstnameAttr->getAttributeId());
+            $firstnameCondition[] = $adapter->quoteInto(
+                'table_customer_firstname.attribute_id = ?',
+                (int)$firstnameAttr->getAttributeId()
+            );
         }
 
         $this->getSelect()->joinInner(
             array('table_customer_firstname' => $firstnameAttr->getBackend()->getTable()),
             implode(' AND ', $firstnameCondition),
-            array());
+            array()
+        );
 
 
-        $lastnameCondition  = array('table_customer_lastname.entity_id = detail.customer_id');
+        $lastnameCondition = array('table_customer_lastname.entity_id = detail.customer_id');
         if ($lastnameAttr->getBackend()->isStatic()) {
             $lastnameField = 'lastname';
         } else {
             $lastnameField = 'value';
-            $lastnameCondition[] = $adapter->quoteInto('table_customer_lastname.attribute_id = ?',
-                (int)$lastnameAttr->getAttributeId());
+            $lastnameCondition[] = $adapter->quoteInto(
+                'table_customer_lastname.attribute_id = ?',
+                (int)$lastnameAttr->getAttributeId()
+            );
         }
 
         //Prepare fullname field result
-        $customerFullname = $adapter->getConcatSql(array(
-            "table_customer_firstname.{$firstnameField}",
-            "table_customer_lastname.{$lastnameField}"
-        ), ' ');
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS)
-            ->joinInner(
-                array('table_customer_lastname' => $lastnameAttr->getBackend()->getTable()),
-                implode(' AND ', $lastnameCondition),
-                array())
-            ->columns(array(
+        $customerFullname = $adapter->getConcatSql(
+            array("table_customer_firstname.{$firstnameField}", "table_customer_lastname.{$lastnameField}"),
+            ' '
+        );
+        $this->getSelect()->reset(
+            \Zend_Db_Select::COLUMNS
+        )->joinInner(
+            array('table_customer_lastname' => $lastnameAttr->getBackend()->getTable()),
+            implode(' AND ', $lastnameCondition),
+            array()
+        )->columns(
+            array(
                 'customer_id' => 'detail.customer_id',
                 'customer_name' => $customerFullname,
-                'review_cnt'    => 'COUNT(main_table.review_id)'))
-            ->group('detail.customer_id');
+                'review_cnt' => 'COUNT(main_table.review_id)'
+            )
+        )->group(
+            'detail.customer_id'
+        );
 
         return $this;
     }
@@ -166,6 +176,6 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
 
         $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
 
-        return  $countSelect;
+        return $countSelect;
     }
 }

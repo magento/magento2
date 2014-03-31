@@ -45,6 +45,8 @@ interface SessionManagerInterface
 
     /**
      * Session write close
+     *
+     * @return void
      */
     public function writeClose();
 
@@ -81,6 +83,7 @@ interface SessionManagerInterface
      * Destroy/end a session
      *
      * @param  array $options
+     * @return void
      */
     public function destroy(array $options = null);
 
@@ -132,6 +135,8 @@ interface SessionManagerInterface
      * Expire the session cookie
      *
      * Sends a session cookie with no value, and with an expiry in the past.
+     *
+     * @return void
      */
     public function expireSessionCookie();
 

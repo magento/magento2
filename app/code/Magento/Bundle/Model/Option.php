@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model;
 
 /**
  * Bundle Option Model
@@ -42,20 +43,19 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model;
-
-class Option extends \Magento\Core\Model\AbstractModel
+class Option extends \Magento\Model\AbstractModel
 {
     /**
      * Default selection object
      *
-     * @var \Magento\Bundle\Model\Selection
+     * @var Selection
      */
     protected $_defaultSelection = null;
 
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -66,8 +66,8 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Add selection to option
      *
-     * @param \Magento\Bundle\Model\Selection $selection
-     * @return \Magento\Bundle\Model\Option
+     * @param Selection $selection
+     * @return $this|false
      */
     public function addSelection($selection)
     {
@@ -103,7 +103,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve default Selection object
      *
-     * @return \Magento\Bundle\Model\Selection
+     * @return Selection
      */
     public function getDefaultSelection()
     {
@@ -141,22 +141,22 @@ class Option extends \Magento\Core\Model\AbstractModel
      */
     public function getSearchableData($productId, $storeId)
     {
-        return $this->_getResource()
-            ->getSearchableData($productId, $storeId);
+        return $this->_getResource()->getSearchableData($productId, $storeId);
     }
 
     /**
      * Return selection by it's id
      *
      * @param int $selectionId
-     * @return \Magento\Bundle\Model\Selection
+     * @return Selection|false
      */
     public function getSelectionById($selectionId)
     {
         $selections = $this->getSelections();
         $i = count($selections);
 
-        while ($i-- && $selections[$i]->getSelectionId() != $selectionId);
+        while ($i-- && $selections[$i]->getSelectionId() != $selectionId) {
+        }
 
         return $i == -1 ? false : $selections[$i];
     }

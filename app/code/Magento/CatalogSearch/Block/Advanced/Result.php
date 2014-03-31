@@ -23,75 +23,91 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Block\Advanced;
+
+use Magento\Catalog\Model\Layer\Search as Layer;
+use Magento\CatalogSearch\Model\Advanced;
+use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
+use Magento\UrlFactory;
+use Magento\View\Element\AbstractBlock;
+use Magento\View\Element\Template;
+use Magento\View\Element\Template\Context;
 
 /**
  * Advanced search result
  */
-class Result extends \Magento\View\Element\Template
+class Result extends Template
 {
     /**
      * Url factory
      *
-     * @var \Magento\UrlFactory
+     * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     protected $_catalogLayer;
 
     /**
      * Catalog search advanced
      *
-     * @var \Magento\CatalogSearch\Model\Advanced
+     * @var Advanced
      */
     protected $_catalogSearchAdvanced;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\UrlFactory $urlFactory
+     * @param Context $context
+     * @param Advanced $catalogSearchAdvanced
+     * @param Layer $layer
+     * @param UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
-        \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\UrlFactory $urlFactory,
+        Context $context,
+        Advanced $catalogSearchAdvanced,
+        Layer $layer,
+        UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
-        $this->_catalogLayer = $catalogLayer;
+        $this->_catalogLayer = $layer;
         $this->_urlFactory = $urlFactory;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
-            $breadcrumbs->addCrumb('home', array(
-                'label' => __('Home'),
-                'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl(),
-            ))->addCrumb('search', array(
-                'label' => __('Catalog Advanced Search'),
-                'link'  => $this->getUrl('*/*/')
-            ))->addCrumb('search_result', array(
-                'label' => __('Results')
-            ));
+            $breadcrumbs->addCrumb(
+                'home',
+                array(
+                    'label' => __('Home'),
+                    'title' => __('Go to Home Page'),
+                    'link' => $this->_storeManager->getStore()->getBaseUrl()
+                )
+            )->addCrumb(
+                'search',
+                array('label' => __('Catalog Advanced Search'), 'link' => $this->getUrl('*/*/'))
+            )->addCrumb(
+                'search_result',
+                array('label' => __('Results'))
+            );
         }
         return parent::_prepareLayout();
     }
 
     /**
      * Set order options
+     *
+     * @return void
      */
     public function setListOrders()
     {
@@ -106,28 +122,41 @@ class Result extends \Magento\View\Element\Template
 
     /**
      * Set view mode options
+     *
+     * @return void
      */
     public function setListModes()
     {
         $this->getChildBlock('search_result_list')->setModes(array('grid' => __('Grid'), 'list' => __('List')));
     }
 
+    /**
+     * @return void
+     */
     public function setListCollection()
     {
-        $this->getChildBlock('search_result_list')
-           ->setCollection($this->_getProductCollection());
+        $this->getChildBlock('search_result_list')->setCollection($this->_getProductCollection());
     }
 
+    /**
+     * @return Collection
+     */
     protected function _getProductCollection()
     {
         return $this->getSearchModel()->getProductCollection();
     }
 
+    /**
+     * @return Advanced
+     */
     public function getSearchModel()
     {
         return $this->_catalogSearchAdvanced;
     }
 
+    /**
+     * @return mixed
+     */
     public function getResultCount()
     {
         if (!$this->getData('result_count')) {
@@ -137,18 +166,30 @@ class Result extends \Magento\View\Element\Template
         return $this->getData('result_count');
     }
 
+    /**
+     * @return string
+     */
     public function getProductListHtml()
     {
         return $this->getChildHtml('search_result_list');
     }
 
+    /**
+     * @return string
+     */
     public function getFormUrl()
     {
-        return $this->_urlFactory->create()
-            ->setQueryParams($this->getRequest()->getQuery())
-            ->getUrl('*/*/', array('_escape' => true));
+        return $this->_urlFactory->create()->addQueryParams(
+            $this->getRequest()->getQuery()
+        )->getUrl(
+            '*/*/',
+            array('_escape' => true)
+        );
     }
 
+    /**
+     * @return array
+     */
     public function getSearchCriterias()
     {
         $searchCriterias = $this->getSearchModel()->getSearchCriterias();
@@ -156,6 +197,6 @@ class Result extends \Magento\View\Element\Template
         $left = array_slice($searchCriterias, 0, $middle);
         $right = array_slice($searchCriterias, $middle);
 
-        return array('left'=>$left, 'right'=>$right);
+        return array('left' => $left, 'right' => $right);
     }
 }

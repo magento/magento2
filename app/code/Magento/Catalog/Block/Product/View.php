@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
  * Product View block
  */
-class View extends \Magento\Catalog\Block\Product\AbstractProduct
+class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Default MAP renderer type
@@ -80,17 +79,12 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $productTypeConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var \Magento\Locale\FormatInterface
+     */
+    protected $_localeFormat;
+
+    /**
+     * @param Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -98,23 +92,12 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param array $data
      * @param array $priceBlockTypes
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -122,6 +105,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        \Magento\Locale\FormatInterface $localeFormat,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
@@ -132,18 +116,9 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_taxCalculation = $taxCalculation;
         $this->productTypeConfig = $productTypeConfig;
         $this->string = $string;
+        $this->_localeFormat = $localeFormat;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $data,
             $priceBlockTypes
         );
@@ -157,9 +132,12 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected function _prepareLayout()
     {
         $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
+        $product = $this->getProduct();
+        if (!$product) {
+            return parent::_prepareLayout();
+        }
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
-            $product = $this->getProduct();
             $title = $product->getMetaTitle();
             if ($title) {
                 $headBlock->setTitle($title);
@@ -173,15 +151,16 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             }
             $description = $product->getMetaDescription();
             if ($description) {
-                $headBlock->setDescription( ($description) );
+                $headBlock->setDescription($description);
             } else {
                 $headBlock->setDescription($this->string->substr($product->getDescription(), 0, 255));
             }
             //@todo: move canonical link to separate block
-            if ($this->_productHelper->canUseCanonicalTag()
-                && !$headBlock->getChildBlock('magento-page-head-product-canonical-link')
+            if ($this->_productHelper->canUseCanonicalTag() && !$headBlock->getChildBlock(
+                'magento-page-head-product-canonical-link'
+            )
             ) {
-                $params = array('_ignore_category'=>true);
+                $params = array('_ignore_category' => true);
                 $headBlock->addChild(
                     'magento-page-head-product-canonical-link',
                     'Magento\Theme\Block\Html\Head\Link',
@@ -194,9 +173,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         }
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($this->getProduct()->getName());
+            $pageMainTitle->setPageTitle($product->getName());
         }
-
         return parent::_prepareLayout();
     }
 
@@ -238,7 +216,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             return $this->getCustomAddToCartUrl();
         }
 
-        if ($this->getRequest()->getParam('wishlist_next')){
+        if ($this->getRequest()->getParam('wishlist_next')) {
             $additional['wishlist_next'] = 1;
         }
 
@@ -282,34 +260,36 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $_tierPrices[] = $this->_coreData->currency($tierPrice['website_price'], false, false);
             $_tierPricesInclTax[] = $this->_coreData->currency(
                 $this->_taxData->getPrice($product, (int)$tierPrice['website_price'], true),
-                false, false);
+                false,
+                false
+            );
         }
         $config = array(
-            'productId'           => $product->getId(),
-            'priceFormat'         => $this->_locale->getJsPriceFormat(),
-            'includeTax'          => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
-            'showIncludeTax'      => $this->_taxData->displayPriceIncludingTax(),
-            'showBothPrices'      => $this->_taxData->displayBothPrices(),
-            'productPrice'        => $this->_coreData->currency($_finalPrice, false, false),
-            'productOldPrice'     => $this->_coreData->currency($_regularPrice, false, false),
-            'priceInclTax'        => $this->_coreData->currency($_priceInclTax, false, false),
-            'priceExclTax'        => $this->_coreData->currency($_priceExclTax, false, false),
-            'defaultTax'          => $defaultTax,
-            'currentTax'          => $currentTax,
-            'idSuffix'            => '_clone',
-            'oldPlusDisposition'  => 0,
-            'plusDisposition'     => 0,
-            'plusDispositionTax'  => 0,
+            'productId' => $product->getId(),
+            'priceFormat' => $this->_localeFormat->getPriceFormat(),
+            'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
+            'showIncludeTax' => $this->_taxData->displayPriceIncludingTax(),
+            'showBothPrices' => $this->_taxData->displayBothPrices(),
+            'productPrice' => $this->_coreData->currency($_finalPrice, false, false),
+            'productOldPrice' => $this->_coreData->currency($_regularPrice, false, false),
+            'priceInclTax' => $this->_coreData->currency($_priceInclTax, false, false),
+            'priceExclTax' => $this->_coreData->currency($_priceExclTax, false, false),
+            'defaultTax' => $defaultTax,
+            'currentTax' => $currentTax,
+            'idSuffix' => '_clone',
+            'oldPlusDisposition' => 0,
+            'plusDisposition' => 0,
+            'plusDispositionTax' => 0,
             'oldMinusDisposition' => 0,
-            'minusDisposition'    => 0,
-            'tierPrices'          => $_tierPrices,
-            'tierPricesInclTax'   => $_tierPricesInclTax,
+            'minusDisposition' => 0,
+            'tierPrices' => $_tierPrices,
+            'tierPricesInclTax' => $_tierPricesInclTax
         );
 
         $responseObject = new \Magento\Object();
-        $this->_eventManager->dispatch('catalog_product_view_config', array('response_object'=>$responseObject));
+        $this->_eventManager->dispatch('catalog_product_view_config', array('response_object' => $responseObject));
         if (is_array($responseObject->getAdditionalOptions())) {
-            foreach ($responseObject->getAdditionalOptions() as $option=>$value) {
+            foreach ($responseObject->getAdditionalOptions() as $option => $value) {
                 $config[$option] = $value;
             }
         }
@@ -394,5 +374,15 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function shouldRenderQuantity()
     {
         return !$this->productTypeConfig->isProductSet($this->getProduct()->getTypeId());
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getProduct()->getIdentities();
     }
 }

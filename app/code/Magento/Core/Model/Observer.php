@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 /**
@@ -39,7 +38,7 @@ class Observer
     private $_cacheFrontendPool;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var Theme
      */
     private $_currentTheme;
 
@@ -61,7 +60,7 @@ class Observer
     /**
      * @var \Magento\Core\Model\Theme\Registration
      */
-    protected  $_registration;
+    protected $_registration;
 
     /**
      * @var \Magento\Logger
@@ -99,6 +98,7 @@ class Observer
      * Cron job method to clean old cache resources
      *
      * @param \Magento\Cron\Model\Schedule $schedule
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cleanCache(\Magento\Cron\Model\Schedule $schedule)
@@ -114,14 +114,14 @@ class Observer
      * Theme registration
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Core\Model\Observer
+     * @return $this
      */
     public function themeRegistration(\Magento\Event\Observer $observer)
     {
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
             $this->_registration->register($pathPattern);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_logger->logException($e);
         }
         return $this;
@@ -131,6 +131,7 @@ class Observer
      * Apply customized static files to frontend
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function applyThemeCustomization(\Magento\Event\Observer $observer)
@@ -140,10 +141,9 @@ class Observer
             try {
                 $service = $themeFile->getCustomizationService();
                 if ($service instanceof \Magento\View\Design\Theme\Customization\FileAssetInterface) {
-                    $asset = $this->_assetFileFactory->create(array(
-                        'file'        => $themeFile->getFullPath(),
-                        'contentType' => $service->getContentType()
-                    ));
+                    $asset = $this->_assetFileFactory->create(
+                        array('file' => $themeFile->getFullPath(), 'contentType' => $service->getContentType())
+                    );
                     $this->_pageAssets->add($themeFile->getData('file_path'), $asset);
                 }
             } catch (\InvalidArgumentException $e) {
@@ -156,7 +156,7 @@ class Observer
      * Rebuild whole config and save to fast storage
      *
      * @param  \Magento\Event\Observer $observer
-     * @return \Magento\Core\Model\Observer
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processReinitConfig(\Magento\Event\Observer $observer)

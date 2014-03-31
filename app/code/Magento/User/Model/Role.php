@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model;
 
 /**
@@ -44,24 +43,29 @@ namespace Magento\User\Model;
  * @method string getRoleName()
  * @method \Magento\User\Model\Role setRoleName(string $value)
  */
-class Role extends \Magento\Core\Model\AbstractModel
+class Role extends \Magento\Model\AbstractModel
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'admin_roles';
+
     /**
      * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
      */
     protected $_userRolesFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
-     * @param \Magento\User\Model\Resource\Role $resource
-     * @param \Magento\User\Model\Resource\Role\Collection $resourceCollection
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param Resource\Role\User\CollectionFactory $userRolesFactory
+     * @param Resource\Role $resource
+     * @param Resource\Role\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
         \Magento\User\Model\Resource\Role $resource,
         \Magento\User\Model\Resource\Role\Collection $resourceCollection,
@@ -72,7 +76,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __sleep()
     {
@@ -81,7 +85,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __wakeup()
     {
@@ -93,10 +97,10 @@ class Role extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @var string
+     * Class constructor
+     *
+     * @return void
      */
-    protected $_eventPrefix = 'admin_roles';
-
     protected function _construct()
     {
         $this->_init('Magento\User\Model\Resource\Role');
@@ -105,7 +109,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     /**
      * Update object into database
      *
-     * @return \Magento\User\Model\Role
+     * @return $this
      */
     public function update()
     {

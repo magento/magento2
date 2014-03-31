@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model;
 
 /**
@@ -42,8 +41,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\UrlInterface');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\UrlInterface'
+        );
     }
 
     /**
@@ -68,15 +68,22 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetSecretKey($routeName, $controller, $action, $expectedHash)
     {
         /** @var $request \Magento\App\RequestInterface */
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\RequestInterface');
-        $request->setControllerName('default_controller')
-            ->setActionName('default_action')
-            ->setRouteName('default_router');
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\RequestInterface');
+        $request->setControllerName(
+            'default_controller'
+        )->setActionName(
+            'default_action'
+        )->setRouteName(
+            'default_router'
+        );
 
         $this->_model->setRequest($request);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Session\SessionManagerInterface')
-            ->setData('_form_key', 'salt');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Session\SessionManagerInterface'
+        )->setData(
+            '_form_key',
+            'salt'
+        );
         $this->assertEquals($expectedHash, $this->_model->getSecretKey($routeName, $controller, $action));
     }
 
@@ -91,22 +98,49 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
 
         return array(
-            array('', '', '',
-                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt')),
-            array('', '', 'action',
-                $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')),
-            array('', 'controller', '',
-                $encryptor->getHash('default_router' . 'controller' . 'default_action' . 'salt')),
-            array('', 'controller', 'action',
-                $encryptor->getHash('default_router' . 'controller' . 'action' . 'salt')),
-            array('adminhtml', '', '',
-                $encryptor->getHash('adminhtml' . 'default_controller' . 'default_action' . 'salt')),
-            array('adminhtml', '', 'action',
-                $encryptor->getHash('adminhtml' . 'default_controller' . 'action' . 'salt')),
-            array('adminhtml', 'controller', '',
-                $encryptor->getHash('adminhtml' . 'controller' . 'default_action' . 'salt')),
-            array('adminhtml', 'controller', 'action',
-                $encryptor->getHash('adminhtml' . 'controller' . 'action' . 'salt')),
+            array(
+                '',
+                '',
+                '',
+                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt')
+            ),
+            array('', '', 'action', $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')),
+            array(
+                '',
+                'controller',
+                '',
+                $encryptor->getHash('default_router' . 'controller' . 'default_action' . 'salt')
+            ),
+            array(
+                '',
+                'controller',
+                'action',
+                $encryptor->getHash('default_router' . 'controller' . 'action' . 'salt')
+            ),
+            array(
+                'adminhtml',
+                '',
+                '',
+                $encryptor->getHash('adminhtml' . 'default_controller' . 'default_action' . 'salt')
+            ),
+            array(
+                'adminhtml',
+                '',
+                'action',
+                $encryptor->getHash('adminhtml' . 'default_controller' . 'action' . 'salt')
+            ),
+            array(
+                'adminhtml',
+                'controller',
+                '',
+                $encryptor->getHash('adminhtml' . 'controller' . 'default_action' . 'salt')
+            ),
+            array(
+                'adminhtml',
+                'controller',
+                'action',
+                $encryptor->getHash('adminhtml' . 'controller' . 'action' . 'salt')
+            )
         );
     }
 
@@ -121,17 +155,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
 
         /** @var $request \Magento\App\Request\Http */
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\RequestInterface');
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\RequestInterface');
         $request->setControllerName('controller')->setActionName('action');
         $request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
         $this->_model->setRequest($request);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Session\SessionManagerInterface')
-            ->setData('_form_key', 'salt');
-        $this->assertEquals(
-            $encryptor->getHash('controller' . 'action' . 'salt'),
-            $this->_model->getSecretKey()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Session\SessionManagerInterface'
+        )->setData(
+            '_form_key',
+            'salt'
         );
+        $this->assertEquals($encryptor->getHash('controller' . 'action' . 'salt'), $this->_model->getSecretKey());
     }
 
     public function testUseSecretKey()

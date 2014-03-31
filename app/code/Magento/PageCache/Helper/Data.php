@@ -29,13 +29,11 @@
  *
  * @category    Magento
  * @package     Magento_PageCache
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\PageCache\Helper;
 
 /**
- * Class Data
- * @package Magento\PageCache\Helper
+ * Helper for Page Cache module
  */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
@@ -45,30 +43,43 @@ class Data extends \Magento\App\Helper\AbstractHelper
     const PRIVATE_MAX_AGE_CACHE = 31536000;
 
     /**
-     * XML path to value for public max-age parameter
+     * @var \Magento\App\View
      */
-    const PUBLIC_MAX_AGE_PATH = 'system/headers/public-max-age';
+    protected $view;
 
     /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $config;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\View $view
      */
-    public function __construct(\Magento\App\Helper\Context $context, \Magento\App\ConfigInterface $config)
-    {
+    public function __construct(
+        \Magento\App\Helper\Context $context,
+        \Magento\App\View $view
+    ) {
         parent::__construct($context);
-        $this->config = $config;
+        $this->view = $view;
     }
 
     /**
-     * @return mixed
+     * Retrieve url
+     *
+     * @param string $route
+     * @param array $params
+     * @return string
      */
-    public function getPublicMaxAgeCache()
+    public function getUrl($route, array $params = array())
     {
-        return $this->config->getValue(self::PUBLIC_MAX_AGE_PATH);
+        return $this->_getUrl($route, $params);
+    }
+
+    /**
+     * Get handles applied for current page
+     *
+     * @return array
+     */
+    public function getActualHandles()
+    {
+        return $this->view->getLayout()->getUpdate()->getHandles();
     }
 }

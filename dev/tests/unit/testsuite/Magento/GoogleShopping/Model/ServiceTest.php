@@ -23,7 +23,6 @@
  */
 namespace Magento\GoogleShopping\Model;
 
-
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,29 +44,24 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_contentMock = $this->getMockBuilder('Magento\Gdata\Gshopping\Content')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contentFactoryMock = $this->getMockBuilder('Magento\Gdata\Gshopping\ContentFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create'))
-            ->getMock();
-        $contentFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_contentMock));
+        $this->_contentMock = $this->getMockBuilder(
+            'Magento\Gdata\Gshopping\Content'
+        )->disableOriginalConstructor()->getMock();
+        $contentFactoryMock = $this->getMockBuilder(
+            'Magento\Gdata\Gshopping\ContentFactory'
+        )->disableOriginalConstructor()->setMethods(
+            array('create')
+        )->getMock();
+        $contentFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_contentMock));
 
-        $coreRegistryMock = $this->getMockBuilder('Magento\Core\Model\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(array('registry'))
-            ->getMock();
-        $coreRegistryMock->expects($this->any())
-            ->method('registry')
-            ->will($this->returnValue(1));
+        $coreRegistryMock = $this->getMockBuilder(
+            'Magento\Registry'
+        )->disableOriginalConstructor()->setMethods(
+            array('registry')
+        )->getMock();
+        $coreRegistryMock->expects($this->any())->method('registry')->will($this->returnValue(1));
 
-        $arguments = array(
-            'contentFactory' => $contentFactoryMock,
-            'coreRegistry' => $coreRegistryMock
-        );
+        $arguments = array('contentFactory' => $contentFactoryMock, 'coreRegistry' => $coreRegistryMock);
         $this->_model = $this->_helper->getObject('\Magento\GoogleShopping\Model\Service', $arguments);
     }
 

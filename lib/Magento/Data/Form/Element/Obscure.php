@@ -62,6 +62,18 @@ class Obscure extends \Magento\Data\Form\Element\Password
      */
     public function getHtmlAttributes()
     {
-        return array('type', 'title', 'class', 'style', 'onclick', 'onchange', 'onkeyup', 'disabled', 'readonly', 'maxlength', 'tabindex');
+        return array(
+            'type',
+            'title',
+            'class',
+            'style',
+            'onclick',
+            'onchange',
+            'onkeyup',
+            'disabled',
+            'readonly',
+            'maxlength',
+            'tabindex'
+        );
     }
 }

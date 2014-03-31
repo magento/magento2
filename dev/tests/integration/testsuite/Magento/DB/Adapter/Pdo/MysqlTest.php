@@ -46,7 +46,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testWaitTimeout()
     {
-        if (!($this->_getDbAdapter() instanceof \Magento\DB\Adapter\Pdo\Mysql)) {
+        if (!$this->_getDbAdapter() instanceof \Magento\DB\Adapter\Pdo\Mysql) {
             $this->markTestSkipped('This test is for \Magento\DB\Adapter\Pdo\Mysql');
         }
         try {
@@ -61,7 +61,11 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('Magento\DB\Statement\Pdo\Mysql', $result);
             // Restore wait_timeout
             $this->_setWaitTimeout($defaultWaitTimeout);
-            $this->assertEquals($defaultWaitTimeout, $this->_getWaitTimeout(), 'Default wait timeout was not restored');
+            $this->assertEquals(
+                $defaultWaitTimeout,
+                $this->_getWaitTimeout(),
+                'Default wait timeout was not restored'
+            );
         } catch (\Exception $e) {
             // Reset connection on failure to restore global variables
             $this->_getDbAdapter()->closeConnection();
@@ -129,8 +133,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         if (is_null($this->_dbAdapter)) {
             /** @var $coreResource \Magento\App\Resource */
-            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\App\Resource');
+            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
             $this->_dbAdapter = $coreResource->getConnection('default_setup');
         }
         return $this->_dbAdapter;

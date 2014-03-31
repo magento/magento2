@@ -20,75 +20,58 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * EAV Entity Attribute Text Data Model
- *
- * @category    Magento
- * @package     Magento_Eav
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
 class Text extends AbstractData
 {
     /**
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
     protected $_string;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
-     * @param null $value
-     * @param $entityTypeCode
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param string $value
+     * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Stdlib\String $stringHelper
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
-        $value = null,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        $value,
         $entityTypeCode,
-        $isAjax = false,
+        $isAjax,
         \Magento\Stdlib\String $stringHelper
     ) {
-        parent::__construct($locale, $logger, $attribute, $value, $entityTypeCode, $isAjax);
+        parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->_string = $stringHelper;
     }
 
     /**
-     * Extract data from request and return value
-     *
-     * @param \Magento\App\RequestInterface $request
-     * @return array|string
+     * {@inheritdoc}
      */
     public function extractValue(\Magento\App\RequestInterface $request)
     {
-        $value = $this->_getRequestValue($request);
-        return $this->_applyInputFilter($value);
+        return $this->_applyInputFilter($this->_getRequestValue($request));
     }
 
     /**
-     * Validate data
-     * Return true or array of errors
-     *
-     * @param array|string $value
-     * @return boolean|array
+     * {@inheritdoc}
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
-        $label      = __($attribute->getStoreLabel());
+        $errors = array();
+        $attribute = $this->getAttribute();
+        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -107,12 +90,12 @@ class Text extends AbstractData
         $length = $this->_string->strlen(trim($value));
 
         $validateRules = $attribute->getValidationRules();
-        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
-            $v = $validateRules['min_text_length'];
+        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']->getValue()) {
+            $v = $validateRules['min_text_length']->getValue();
             $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
         }
-        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
-            $v = $validateRules['max_text_length'];
+        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']->getValue()) {
+            $v = $validateRules['max_text_length']->getValue();
             $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
         }
 
@@ -128,24 +111,15 @@ class Text extends AbstractData
     }
 
     /**
-     * Export attribute value to entity model
-     *
-     * @param array|string $value
-     * @return string|value
+     * {@inheritdoc}
      */
     public function compactValue($value)
     {
-        if ($value !== false) {
-            $value;
-        }
-        return false;
+        return $value;
     }
 
     /**
-     * Restore attribute value from SESSION to entity model
-     *
-     * @param array|string $value
-     * @return string|value
+     * {@inheritdoc}
      */
     public function restoreValue($value)
     {
@@ -153,16 +127,10 @@ class Text extends AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
-     *
-     * @param string $format
-     * @return string|array
+     * {@inheritdoc}
      */
-    public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
-        $value = $this->_value;
-        $value = $this->_applyOutputFilter($value);
-
-        return $value;
+        return $this->_applyOutputFilter($this->_value);
     }
 }

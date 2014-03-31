@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 class Combine extends \Magento\Rule\Model\Condition\Combine
@@ -60,31 +58,40 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Get new child select options
+     *
      * @return array
      */
     public function getNewChildSelectOptions()
     {
         $addressAttributes = $this->_conditionAddress->loadAttributeOptions()->getAttributeOption();
         $attributes = array();
-        foreach ($addressAttributes as $code=>$label) {
+        foreach ($addressAttributes as $code => $label) {
             $attributes[] = array(
-                'value' => 'Magento\SalesRule\Model\Rule\Condition\Address|' . $code, 'label' => $label
+                'value' => 'Magento\SalesRule\Model\Rule\Condition\Address|' . $code,
+                'label' => $label
             );
         }
 
         $conditions = parent::getNewChildSelectOptions();
-        $conditions = array_merge_recursive($conditions, array(
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
-                'label' => __('Product attribute combination')
-            ),
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
-                'label' => __('Products subselection')
-            ),
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
-                'label' => __('Conditions combination')
-            ),
-            array('label' => __('Cart Attribute'), 'value' => $attributes),
-        ));
+        $conditions = array_merge_recursive(
+            $conditions,
+            array(
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+                    'label' => __('Product attribute combination')
+                ),
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
+                    'label' => __('Products subselection')
+                ),
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+                    'label' => __('Conditions combination')
+                ),
+                array('label' => __('Cart Attribute'), 'value' => $attributes)
+            )
+        );
 
         $additional = new \Magento\Object();
         $this->_eventManager->dispatch('salesrule_rule_condition_combine', array('additional' => $additional));

@@ -23,25 +23,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
 /**
  * Files controller
  */
-
-namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
-
-class Files
-    extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Tree json action
+     *
+     * @return void
      */
     public function treeJsonAction()
     {
         try {
             $this->getResponse()->setBody(
-                $this->_view->getLayout()->createBlock('Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree')
-                    ->getTreeJson($this->_getStorage()->getTreeArray())
+                $this->_view->getLayout()->createBlock(
+                    'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree'
+                )->getTreeJson(
+                    $this->_getStorage()->getTreeArray()
+                )
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -51,6 +53,8 @@ class Files
 
     /**
      * Contents action
+     *
+     * @return void
      */
     public function contentsAction()
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Url;
 
 interface QueryParamsResolverInterface
@@ -59,19 +58,20 @@ interface QueryParamsResolverInterface
     public function getQueryParams();
 
     /**
-     * Purge Query params array
-     *
-     * @return \Magento\Url\QueryParamsResolverInterface
-     */
-    public function purgeQueryParams();
-
-    /**
-     * Set query Params as array
+     * Set query parameters
      *
      * @param array $data
      * @return \Magento\Url\QueryParamsResolverInterface
      */
     public function setQueryParams(array $data);
+
+    /**
+     * Add query parameters
+     *
+     * @param array $data
+     * @return \Magento\Url\QueryParamsResolverInterface
+     */
+    public function addQueryParams(array $data);
 
     /**
      * Unset data from the object.

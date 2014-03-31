@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report\Rule;
 
 /**
  * Rule report resource model with aggregation by created at
@@ -32,13 +32,12 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report\Rule;
-
 class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 {
     /**
      * Resource Report Rule constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,9 +47,9 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
     /**
      * Aggregate Coupons data by order created at
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
+     * @param mixed|null $from
+     * @param mixed|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {
@@ -64,12 +63,12 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param string $aggregationField
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
+     * @return $this
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
         $from = $this->_dateToUtc($from);
-        $to   = $this->_dateToUtc($to);
+        $to = $this->_dateToUtc($to);
 
         $this->_checkDates($from, $to);
 
@@ -93,59 +92,72 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             );
 
             $columns = array(
-                'period'                  => $periodExpr,
-                'store_id'                => 'store_id',
-                'order_status'            => 'status',
-                'coupon_code'             => 'coupon_code',
-                'rule_name'               => 'coupon_rule_name',
-                'coupon_uses'             => 'COUNT(entity_id)',
-
-                'subtotal_amount'         =>
-                    $adapter->getIfNullSql('SUM((base_subtotal - ' .
-                        $adapter->getIfNullSql('base_subtotal_canceled', 0).') * base_to_global_rate)', 0),
-
-                'discount_amount'         =>
-                    $adapter->getIfNullSql('SUM((ABS(base_discount_amount) - ' .
-                        $adapter->getIfNullSql('base_discount_canceled', 0).') * base_to_global_rate)', 0),
-
-                'total_amount'            =>
-                    $adapter->getIfNullSql('SUM((base_subtotal - ' .
-                        $adapter->getIfNullSql('base_subtotal_canceled', 0) . ' - '.
-                        $adapter->getIfNullSql('ABS(base_discount_amount) - ' .
-                        $adapter->getIfNullSql('base_discount_canceled', 0), 0). ')
-                        * base_to_global_rate)', 0),
-
-                'subtotal_amount_actual'  =>
-                    $adapter->getIfNullSql('SUM((base_subtotal_invoiced - ' .
-                        $adapter->getIfNullSql('base_subtotal_refunded', 0). ') * base_to_global_rate)', 0),
-
-                'discount_amount_actual'  =>
-                    $adapter->getIfNullSql('SUM((base_discount_invoiced - ' .
-                        $adapter->getIfNullSql('base_discount_refunded', 0) . ')
-                        * base_to_global_rate)', 0),
-
-                'total_amount_actual'     =>
-                    $adapter->getIfNullSql('SUM((base_subtotal_invoiced - ' .
-                        $adapter->getIfNullSql('base_subtotal_refunded', 0) . ' - ' .
-                        $adapter->getIfNullSql('base_discount_invoiced - ' .
-                        $adapter->getIfNullSql('base_discount_refunded', 0), 0) .
-                        ') * base_to_global_rate)', 0),
+                'period' => $periodExpr,
+                'store_id' => 'store_id',
+                'order_status' => 'status',
+                'coupon_code' => 'coupon_code',
+                'rule_name' => 'coupon_rule_name',
+                'coupon_uses' => 'COUNT(entity_id)',
+                'subtotal_amount' => $adapter->getIfNullSql(
+                    'SUM((base_subtotal - ' . $adapter->getIfNullSql(
+                        'base_subtotal_canceled',
+                        0
+                    ) . ') * base_to_global_rate)',
+                    0
+                ),
+                'discount_amount' => $adapter->getIfNullSql(
+                    'SUM((ABS(base_discount_amount) - ' . $adapter->getIfNullSql(
+                        'base_discount_canceled',
+                        0
+                    ) . ') * base_to_global_rate)',
+                    0
+                ),
+                'total_amount' => $adapter->getIfNullSql(
+                    'SUM((base_subtotal - ' . $adapter->getIfNullSql(
+                        'base_subtotal_canceled',
+                        0
+                    ) . ' - ' . $adapter->getIfNullSql(
+                        'ABS(base_discount_amount) - ' . $adapter->getIfNullSql('base_discount_canceled', 0),
+                        0
+                    ) . ')
+                        * base_to_global_rate)',
+                    0
+                ),
+                'subtotal_amount_actual' => $adapter->getIfNullSql(
+                    'SUM((base_subtotal_invoiced - ' . $adapter->getIfNullSql(
+                        'base_subtotal_refunded',
+                        0
+                    ) . ') * base_to_global_rate)',
+                    0
+                ),
+                'discount_amount_actual' => $adapter->getIfNullSql(
+                    'SUM((base_discount_invoiced - ' . $adapter->getIfNullSql(
+                        'base_discount_refunded',
+                        0
+                    ) . ')
+                        * base_to_global_rate)',
+                    0
+                ),
+                'total_amount_actual' => $adapter->getIfNullSql(
+                    'SUM((base_subtotal_invoiced - ' . $adapter->getIfNullSql(
+                        'base_subtotal_refunded',
+                        0
+                    ) . ' - ' . $adapter->getIfNullSql(
+                        'base_discount_invoiced - ' . $adapter->getIfNullSql('base_discount_refunded', 0),
+                        0
+                    ) . ') * base_to_global_rate)',
+                    0
+                )
             );
 
             $select = $adapter->select();
-            $select->from(array('source_table' => $sourceTable), $columns)
-                 ->where('coupon_code IS NOT NULL');
+            $select->from(array('source_table' => $sourceTable), $columns)->where('coupon_code IS NOT NULL');
 
             if ($subSelect !== null) {
                 $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
             }
 
-            $select->group(array(
-                $periodExpr,
-                'store_id',
-                'status',
-                'coupon_code'
-            ));
+            $select->group(array($periodExpr, 'store_id', 'status', 'coupon_code'));
 
             $select->having('COUNT(entity_id) > 0');
             $select->insertFromSelect($table, array_keys($columns));
@@ -155,33 +167,27 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $select->reset();
 
             $columns = array(
-                'period'                  => 'period',
-                'store_id'                => new \Zend_Db_Expr('0'),
-                'order_status'            => 'order_status',
-                'coupon_code'             => 'coupon_code',
-                'rule_name'               => 'rule_name',
-                'coupon_uses'             => 'SUM(coupon_uses)',
-                'subtotal_amount'         => 'SUM(subtotal_amount)',
-                'discount_amount'         => 'SUM(discount_amount)',
-                'total_amount'            => 'SUM(total_amount)',
-                'subtotal_amount_actual'  => 'SUM(subtotal_amount_actual)',
-                'discount_amount_actual'  => 'SUM(discount_amount_actual)',
-                'total_amount_actual'     => 'SUM(total_amount_actual)',
+                'period' => 'period',
+                'store_id' => new \Zend_Db_Expr('0'),
+                'order_status' => 'order_status',
+                'coupon_code' => 'coupon_code',
+                'rule_name' => 'rule_name',
+                'coupon_uses' => 'SUM(coupon_uses)',
+                'subtotal_amount' => 'SUM(subtotal_amount)',
+                'discount_amount' => 'SUM(discount_amount)',
+                'total_amount' => 'SUM(total_amount)',
+                'subtotal_amount_actual' => 'SUM(subtotal_amount_actual)',
+                'discount_amount_actual' => 'SUM(discount_amount_actual)',
+                'total_amount_actual' => 'SUM(total_amount_actual)'
             );
 
-            $select
-                ->from($table, $columns)
-                ->where('store_id <> 0');
+            $select->from($table, $columns)->where('store_id <> 0');
 
             if ($subSelect !== null) {
                 $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
             }
 
-            $select->group(array(
-                'period',
-                'order_status',
-                'coupon_code'
-            ));
+            $select->group(array('period', 'order_status', 'coupon_code'));
 
             $adapter->query($select->insertFromSelect($table, array_keys($columns)));
             $adapter->commit();

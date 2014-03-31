@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
@@ -43,7 +42,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         'type_id_1' => array('label' => 'label_1'),
         'type_id_2' => array('label' => 'label_2'),
         'type_id_3' => array('label' => 'label_3', 'model' => 'some_model', 'composite' => 'some_type'),
-        'type_id_4' => array('label' => 'label_4', 'composite' => false),
+        'type_id_4' => array('label' => 'label_4', 'composite' => false)
     );
 
     /**
@@ -56,13 +55,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $config = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
 
-        $config->expects($this->any())
-            ->method('getAll')
-            ->will($this->returnValue($this->_productTypes));
+        $config->expects($this->any())->method('getAll')->will($this->returnValue($this->_productTypes));
 
-        $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Product\Type', array(
-            'config' => $config,
-        ));
+        $this->_model = $this->_objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Type',
+            array('config' => $config)
+        );
     }
 
     public function testGetTypes()
@@ -94,14 +92,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $res[] = array('value' => '', 'label' => '');
         foreach ($this->_getOptions() as $index => $value) {
-            $res[] = array(
-                'value' => $index,
-                'label' => $value
-            );
+            $res[] = array('value' => $index, 'label' => $value);
         }
         $this->assertEquals($res, $this->_model->getAllOptions());
     }
-
 
     public function testGetOptionText()
     {
@@ -137,4 +131,3 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getTypesByPriority());
     }
 }
-

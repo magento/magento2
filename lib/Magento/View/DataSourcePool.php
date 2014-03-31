@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 use Magento\View\Element\BlockFactory;
@@ -32,22 +31,30 @@ use Magento\View\Element\BlockFactory;
 class DataSourcePool
 {
     /**
+     * Block factory
+     *
      * @var \Magento\View\Element\BlockFactory
      */
     protected $blockFactory;
 
     /**
+     * Data sources
+     *
      * @var array
      */
     protected $dataSources = array();
 
     /**
+     * Assignments
+     *
      * @var array
      */
     protected $assignments = array();
 
     /**
-     * @param \Magento\View\Element\BlockFactory $blockFactory
+     * Constructors
+     *
+     * @param BlockFactory $blockFactory
      */
     public function __construct(BlockFactory $blockFactory)
     {
@@ -55,6 +62,8 @@ class DataSourcePool
     }
 
     /**
+     * Add data source
+     *
      * @param string $name
      * @param string $class
      * @return object
@@ -77,7 +86,9 @@ class DataSourcePool
     }
 
     /**
-     * @param null $name
+     * Get data source
+     *
+     * @param string|null $name
      * @return array|object|null
      */
     public function get($name = null)
@@ -90,9 +101,12 @@ class DataSourcePool
     }
 
     /**
-     * @param $dataName
-     * @param $namespace
-     * @param $alias
+     * Assign
+     *
+     * @param string $dataName
+     * @param string $namespace
+     * @param string $alias
+     * @return void
      */
     public function assign($dataName, $namespace, $alias)
     {
@@ -103,7 +117,9 @@ class DataSourcePool
     }
 
     /**
-     * @param $namespace
+     * Retrieve namespace data
+     *
+     * @param string $namespace
      * @return array
      */
     public function getNamespaceData($namespace)

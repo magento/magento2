@@ -28,16 +28,16 @@ namespace Magento\App\Helper;
 class Context implements \Magento\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\TranslateInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $translateInline;
 
     /**
      * @var \Magento\Module\Manager
      */
     protected $_moduleManager;
 
-    /** 
+    /**
      * @var  \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
@@ -58,11 +58,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_cacheConfig;
 
     /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_app;
-
-    /**
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
@@ -79,12 +74,11 @@ class Context implements \Magento\ObjectManager\ContextInterface
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\TranslateInterface $translator
+     * @param \Magento\Translate\InlineInterface $translateInline
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\App\RequestInterface $httpRequest
      * @param \Magento\Cache\ConfigInterface $cacheConfig
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\App $app
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\HTTP\Header $httpHeader
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
@@ -93,34 +87,32 @@ class Context implements \Magento\ObjectManager\ContextInterface
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\TranslateInterface $translator,
+        \Magento\Translate\InlineInterface $translateInline,
         \Magento\Module\Manager $moduleManager,
         \Magento\App\RequestInterface $httpRequest,
         \Magento\Cache\ConfigInterface $cacheConfig,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\App $app,
         \Magento\UrlInterface $urlBuilder,
         \Magento\HTTP\Header $httpHeader,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
-        $this->_translator = $translator;
+        $this->translateInline = $translateInline;
         $this->_moduleManager = $moduleManager;
         $this->_httpRequest = $httpRequest;
         $this->_cacheConfig = $cacheConfig;
         $this->_eventManager = $eventManager;
         $this->_logger = $logger;
-        $this->_app = $app;
         $this->_urlBuilder = $urlBuilder;
         $this->_httpHeader = $httpHeader;
         $this->_remoteAddress = $remoteAddress;
     }
 
     /**
-     * @return \Magento\TranslateInterface
+     * @return \Magento\Translate\InlineInterface
      */
-    public function getTranslator()
+    public function getTranslateInline()
     {
-        return $this->_translator;
+        return $this->translateInline;
     }
 
     /**
@@ -129,14 +121,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     public function getModuleManager()
     {
         return $this->_moduleManager;
-    }
-
-    /**
-     * @return \Magento\Core\Model\App
-     */
-    public function getApp()
-    {
-        return $this->_app;
     }
 
     /**

@@ -41,10 +41,8 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
      * @param \Magento\View\TemplateEngineInterface $subject
      * @param bool $showBlockHints Whether to include block into the debugging information or not
      */
-    public function __construct(
-        \Magento\View\TemplateEngineInterface $subject,
-        $showBlockHints
-    ) {
+    public function __construct(\Magento\View\TemplateEngineInterface $subject, $showBlockHints)
+    {
         $this->_subject = $subject;
         $this->_showBlockHints = $showBlockHints;
     }

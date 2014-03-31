@@ -46,4 +46,5 @@ return array(
     'ttf',
     'eot',
     'woff',
+    'less'
 );

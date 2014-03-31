@@ -26,6 +26,35 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:redefine schemaLocation="../../Data/etc/argument/types.xsd">
+        <xs:complexType name="argumentType" abstract="true" mixed="false">
+            <xs:complexContent>
+                <xs:extension base="argumentType" />
+            </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="object">
+            <xs:complexContent>
+                <xs:extension base="object">
+                    <xs:attribute name="shared" use="optional" type="xs:boolean"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <xs:complexType name="init_parameter">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="const">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:element name="config">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
@@ -101,7 +130,12 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice maxOccurs="unbounded">
-            <xs:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                <xs:key name="argumentName">
+                    <xs:selector xpath="argument"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
             <xs:element name="plugin" type="pluginType" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required" />
@@ -119,66 +153,6 @@
                 <xs:attribute name="type" type="xs:string" use="optional" />
             </xs:extension>
         </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="paramTypeBase">
-        <xs:annotation>
-            <xs:documentation>
-                Base type to be used for both param and array's item nodes
-            </xs:documentation>
-        </xs:annotation>
-        <xs:choice>
-            <xs:element name="instance" type="instanceType" />
-            <xs:element name="value" type="valueType" />
-            <xs:element name="array" type="arrayType">
-                <xs:unique name="uniqueArrayIndex">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Array index should be unique for single array
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:selector xpath="item" />
-                    <xs:field xpath="@key" />
-                </xs:unique>
-            </xs:element>
-        </xs:choice>
-    </xs:complexType>
-
-    <xs:complexType name="paramType">
-        <xs:complexContent>
-            <xs:extension base="paramTypeBase">
-                <xs:attribute name="name" type="xs:string" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="arrayType">
-        <xs:choice maxOccurs="unbounded">
-            <xs:element name="item" type="arrayItemType" />
-        </xs:choice>
-    </xs:complexType>
-
-    <xs:complexType name="arrayItemType">
-        <xs:complexContent>
-            <xs:extension base="paramTypeBase">
-                <xs:attribute name="key" type="xs:string" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="instanceType">
-        <xs:attribute name="type" type="xs:string" use="required" />
-        <xs:attribute name="shared" type="xs:boolean" use="optional" />
-    </xs:complexType>
-
-    <xs:complexType name="valueType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="translate" type="xs:string" use="optional" />
-                <xs:attribute name="module" type="xs:string" use="optional" />
-                <xs:attribute name="type" type="xs:string" use="optional" />
-            </xs:extension>
-        </xs:simpleContent>
     </xs:complexType>
 
     <xs:complexType name="pluginType">

@@ -60,4 +60,4 @@ class UrlCoder
     {
         return $this->_url->sessionUrlVar(base64_decode(strtr($url, '-_,', '+/=')));
     }
-} 
+}

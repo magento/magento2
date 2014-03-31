@@ -25,6 +25,9 @@ namespace Magento\Tools\Di\Definition\Serializer;
 
 class Igbinary implements SerializerInterface
 {
+    /**
+     * Igbinary constructor
+     */
     public function __construct()
     {
         if (!function_exists('igbinary_serialize')) {

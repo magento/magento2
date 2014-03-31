@@ -23,17 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 
 /**
  * Column renderer to Quick Styles panel in VDE
  *
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column setClass($class)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
-
-class Column
-    extends \Magento\Data\Form\Element\Fieldset
-    implements \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
+class Column extends \Magento\Data\Form\Element\Fieldset implements
+    \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
 {
     /**
      * Control type
@@ -52,6 +50,8 @@ class Column
 
     /**
      * Constructor helper
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -64,7 +64,7 @@ class Column
     /**
      * Add element types that can be added to 'column' element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column
+     * @return $this
      */
     protected function _addElementTypes()
     {
@@ -80,7 +80,8 @@ class Column
         $this->addType('color-picker', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker');
         $this->addType('font-picker', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker');
         $this->addType('logo-uploader', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\LogoUploader');
-        $this->addType('background-uploader',
+        $this->addType(
+            'background-uploader',
             'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader'
         );
 
@@ -89,7 +90,7 @@ class Column
 
     /**
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory $factory
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column
+     * @return $this
      */
     public function setRendererFactory($factory)
     {
@@ -99,19 +100,19 @@ class Column
 
     /**
      * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getRendererFactory()
     {
         if (!$this->_rendererFactory) {
-            throw new \Magento\Core\Exception('Renderer factory was not set');
+            throw new \Magento\Model\Exception('Renderer factory was not set');
         }
         return $this->_rendererFactory;
     }
 
     /**
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory $factory
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column
+     * @return $this
      */
     public function setElementsFactory($factory)
     {
@@ -121,12 +122,12 @@ class Column
 
     /**
      * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getElementsFactory()
     {
         if (!$this->_elementsFactory) {
-            throw new \Magento\Core\Exception('Form elements factory was not set');
+            throw new \Magento\Model\Exception('Form elements factory was not set');
         }
         return $this->_elementsFactory;
     }

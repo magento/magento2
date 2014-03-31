@@ -23,23 +23,31 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Xml;
 
 class Parser
 {
-    /** @var \DOMDocument|null */
+    /**
+     * @var \DOMDocument|null
+     */
     protected $_dom = null;
 
-    /** @var \DOMDocument */
+    /**
+     * @var \DOMDocument
+     */
     protected $_currentDom;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_content = array();
 
+    /**
+     *
+     */
     public function __construct()
     {
-        $this->_dom = new \DOMDocument;
+        $this->_dom = new \DOMDocument();
         $this->_currentDom = $this->_dom;
         return $this;
     }
@@ -83,7 +91,7 @@ class Parser
      * @param bool $currentNode
      * @return array
      */
-    protected function _xmlToArray($currentNode=false)
+    protected function _xmlToArray($currentNode = false)
     {
         if (!$currentNode) {
             $currentNode = $this->getDom();
@@ -99,10 +107,10 @@ class Parser
                     }
                     $attributes = array();
                     if ($node->hasAttributes()) {
-                        foreach($node->attributes as $attribute) {
-                            $attributes += array($attribute->name=>$attribute->value);
+                        foreach ($node->attributes as $attribute) {
+                            $attributes += array($attribute->name => $attribute->value);
                         }
-                        $value = array('_value'=>$value, '_attribute'=>$attributes);
+                        $value = array('_value' => $value, '_attribute' => $attributes);
                     }
                     if (isset($content[$node->nodeName])) {
                         if (!isset($content[$node->nodeName][0]) || !is_array($content[$node->nodeName][0])) {
@@ -144,5 +152,4 @@ class Parser
         $this->getDom()->loadXML($string);
         return $this;
     }
-
 }

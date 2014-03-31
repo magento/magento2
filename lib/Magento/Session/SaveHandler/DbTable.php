@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session\SaveHandler;
 
 /**
@@ -51,12 +50,15 @@ class DbTable extends \SessionHandler
     public function __construct(\Magento\App\Resource $resource)
     {
         $this->_sessionTable = $resource->getTableName('core_session');
-        $this->_write        = $resource->getConnection('core_write');
+        $this->_write = $resource->getConnection('core_write');
         $this->checkConnection();
     }
 
     /**
      * Check DB connection
+     *
+     * @return void
+     * @throws \Magento\Session\SaveHandlerException
      */
     protected function checkConnection()
     {
@@ -73,7 +75,7 @@ class DbTable extends \SessionHandler
      *
      * @param string $savePath ignored
      * @param string $sessionName ignored
-     * @return boolean
+     * @return bool
      */
     public function open($savePath, $sessionName)
     {
@@ -83,7 +85,7 @@ class DbTable extends \SessionHandler
     /**
      * Close session
      *
-     * @return boolean
+     * @return bool
      */
     public function close()
     {
@@ -99,9 +101,12 @@ class DbTable extends \SessionHandler
     public function read($sessionId)
     {
         // need to use write connection to get the most fresh DB sessions
-        $select = $this->_write->select()
-            ->from($this->_sessionTable, array('session_data'))
-            ->where('session_id = :session_id');
+        $select = $this->_write->select()->from(
+            $this->_sessionTable,
+            array('session_data')
+        )->where(
+            'session_id = :session_id'
+        );
         $bind = array('session_id' => $sessionId);
         $data = $this->_write->fetchOne($select, $bind);
 
@@ -118,23 +123,18 @@ class DbTable extends \SessionHandler
      *
      * @param string $sessionId
      * @param string $sessionData
-     * @return boolean
+     * @return bool
      */
     public function write($sessionId, $sessionData)
     {
         // need to use write connection to get the most fresh DB sessions
         $bindValues = array('session_id' => $sessionId);
-        $select = $this->_write->select()
-            ->from($this->_sessionTable)
-            ->where('session_id = :session_id');
+        $select = $this->_write->select()->from($this->_sessionTable)->where('session_id = :session_id');
         $exists = $this->_write->fetchOne($select, $bindValues);
 
         // encode session serialized data to prevent insertion of incorrect symbols
         $sessionData = base64_encode($sessionData);
-        $bind = array(
-            'session_expires' => time(),
-            'session_data'    => $sessionData,
-        );
+        $bind = array('session_expires' => time(), 'session_data' => $sessionData);
 
         if ($exists) {
             $this->_write->update($this->_sessionTable, $bind, array('session_id=?' => $sessionId));
@@ -149,7 +149,7 @@ class DbTable extends \SessionHandler
      * Destroy session
      *
      * @param string $sessionId
-     * @return boolean
+     * @return bool
      */
     public function destroy($sessionId)
     {
@@ -162,7 +162,7 @@ class DbTable extends \SessionHandler
      * Garbage collection
      *
      * @param int $maxLifeTime
-     * @return boolean
+     * @return bool
      */
     public function gc($maxLifeTime)
     {

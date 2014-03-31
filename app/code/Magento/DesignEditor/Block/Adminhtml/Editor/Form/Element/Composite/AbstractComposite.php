@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite;
 
 /**
  * Parent composite form element for VDE
@@ -44,11 +45,8 @@
  * @method string getLabel()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite setLegend($legend)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite;
-
-abstract class AbstractComposite
-    extends \Magento\Data\Form\Element\Fieldset
-    implements \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
+abstract class AbstractComposite extends \Magento\Data\Form\Element\Fieldset implements
+    \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
 {
     /**
      * Delimiter for name parts in composite controls
@@ -93,6 +91,8 @@ abstract class AbstractComposite
 
     /**
      * Constructor helper
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -129,7 +129,7 @@ abstract class AbstractComposite
         $layoutName = $element->getId() . '-renderer';
         try {
             $renderer = $this->_rendererFactory->create($className, $layoutName);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $renderer = null;
         }
         if ($renderer) {
@@ -145,16 +145,16 @@ abstract class AbstractComposite
      * @param string $type
      * @param string|null $subtype
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getComponent($type, $subtype = null)
     {
         $components = $this->getComponents();
         $componentId = $this->getComponentId($type);
         if (!isset($components[$componentId])) {
-            throw new \Magento\Core\Exception(__(
-                'Component of the type "%1" is not found between elements of "%2"', $type, $this->getData('name')
-            ));
+            throw new \Magento\Model\Exception(
+                __('Component of the type "%1" is not found between elements of "%2"', $type, $this->getData('name'))
+            );
         }
         $component = $components[$componentId];
 
@@ -181,14 +181,14 @@ abstract class AbstractComposite
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+     * @return $this
      */
     abstract protected function _addFields();
 
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+     * @return $this
      */
     abstract protected function _addElementTypes();
 }

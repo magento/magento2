@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Controller\Directpost;
 
 class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -36,7 +35,7 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
         // @codingStandardsIgnoreStart
         $this->assertContains(
             'authorizenet/directpost_payment/redirect/success/0/error_msg/The transaction was declined because the response hash validation failed.',
-        // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             $this->getResponse()->getBody()
         );
     }
@@ -46,10 +45,6 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('success', '0');
         $this->getRequest()->setParam('error_msg', 'Error message');
         $this->dispatch('authorizenet/directpost_payment/redirect');
-        $this->assertContains(
-            'alert("Error message");',
-            $this->getResponse()->getBody()
-        );
+        $this->assertContains('alert("Error message");', $this->getResponse()->getBody());
     }
-
 }

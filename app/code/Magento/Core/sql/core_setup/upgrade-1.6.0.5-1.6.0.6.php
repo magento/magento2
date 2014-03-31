@@ -40,28 +40,41 @@ $connection->dropForeignKey(
     $installer->getFkName('core_layout_link', 'store_id', 'core_store', 'store_id')
 );
 
-$connection->dropIndex($tableCoreLayoutLink, $installer->getIdxName(
-    'core_layout_link',
-    array('store_id', 'package', 'theme', 'layout_update_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-));
+$connection->dropIndex(
+    $tableCoreLayoutLink,
+    $installer->getIdxName(
+        'core_layout_link',
+        array('store_id', 'package', 'theme', 'layout_update_id'),
+        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    )
+);
 
 $connection->dropColumn($tableCoreLayoutLink, 'area');
 
 $connection->dropColumn($tableCoreLayoutLink, 'package');
 
-$connection->changeColumn($tableCoreLayoutLink, 'theme', 'theme_id', array(
-    'type'     => \Magento\DB\Ddl\Table::TYPE_INTEGER,
-    'unsigned' => true,
-    'nullable' => false,
-    'comment'  => 'Theme id'
-));
+$connection->changeColumn(
+    $tableCoreLayoutLink,
+    'theme',
+    'theme_id',
+    array(
+        'type' => \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        'unsigned' => true,
+        'nullable' => false,
+        'comment' => 'Theme id'
+    )
+);
 
-$connection->addIndex($tableCoreLayoutLink, $installer->getIdxName(
-    'core_layout_link',
+$connection->addIndex(
+    $tableCoreLayoutLink,
+    $installer->getIdxName(
+        'core_layout_link',
+        array('store_id', 'theme_id', 'layout_update_id'),
+        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    ),
     array('store_id', 'theme_id', 'layout_update_id'),
     \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-), array('store_id', 'theme_id', 'layout_update_id'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE);
+);
 
 $connection->addForeignKey(
     $installer->getFkName('core_layout_link', 'store_id', 'core_store', 'store_id'),
@@ -86,11 +99,15 @@ $connection->addForeignKey(
 /**
  * Add column 'area' to 'core_theme'
  */
-$connection->addColumn($installer->getTable('core_theme'), 'area', array(
-    'type'     => \Magento\DB\Ddl\Table::TYPE_TEXT,
-    'length'   => '255',
-    'nullable' => false,
-    'comment'  => 'Theme Area'
-));
+$connection->addColumn(
+    $installer->getTable('core_theme'),
+    'area',
+    array(
+        'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+        'length' => '255',
+        'nullable' => false,
+        'comment' => 'Theme Area'
+    )
+);
 
 $installer->endSetup();

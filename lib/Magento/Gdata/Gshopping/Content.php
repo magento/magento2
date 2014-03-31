@@ -75,7 +75,7 @@ class Content extends \Zend_Gdata
     public static $namespaces = array(
         array('sc', 'http://schemas.google.com/structuredcontent/2009', 1, 0),
         array('scp', 'http://schemas.google.com/structuredcontent/2009/products', 1, 0),
-        array('app', 'http://www.w3.org/2007/app', 1, 0),
+        array('app', 'http://www.w3.org/2007/app', 1, 0)
     );
 
     /**
@@ -106,13 +106,11 @@ class Content extends \Zend_Gdata
             throw new \Zend_Gdata_App_InvalidArgumentException('Location must not be null');
         }
 
-        $uri = ($location instanceof \Zend_Gdata_Query) ? $location->getQueryUrl() : $location;
+        $uri = $location instanceof \Zend_Gdata_Query ? $location->getQueryUrl() : $location;
 
-        $entry = $this->getEntry($uri, 'Magento\Gdata\Gshopping\Entry')
-            ->setService($this);
+        $entry = $this->getEntry($uri, 'Magento\Gdata\Gshopping\Entry')->setService($this);
         return $entry;
     }
-
 
     /**
      * Insert an entry
@@ -200,7 +198,7 @@ class Content extends \Zend_Gdata
      */
     protected function _getItemsUri()
     {
-        return "https://content.googleapis.com/content/v1/$this->_accountId/items/products/generic";
+        return "https://content.googleapis.com/content/v1/{$this->_accountId}/items/products/generic";
     }
 
     /**
@@ -219,17 +217,23 @@ class Content extends \Zend_Gdata
      * @return \Zend_Http_Response The response object
      * @throws HttpException
      */
-    public function performHttpRequest($method, $url, $headers = null, $body = null, $contentType = null, $remainingRedirects = null)
-    {
+    public function performHttpRequest(
+        $method,
+        $url,
+        $headers = null,
+        $body = null,
+        $contentType = null,
+        $remainingRedirects = null
+    ) {
         try {
             $url .= '?warnings';
             $debugData = array(
-                'method'                => $method,
-                'url'                   => $url,
-                'headers'               => $headers,
-                'body'                  => $body,
-                'content_type'          => $contentType,
-                'remaining_redirects'   => $remainingRedirects
+                'method' => $method,
+                'url' => $url,
+                'headers' => $headers,
+                'body' => $body,
+                'content_type' => $contentType,
+                'remaining_redirects' => $remainingRedirects
             );
             $result = parent::performHttpRequest($method, $url, $headers, $body, $contentType, $remainingRedirects);
             $debugData['response'] = $result;
@@ -252,7 +256,7 @@ class Content extends \Zend_Gdata
     {
         if ($this->_debug && !is_null($this->_logAdapter)) {
             $method = $this->_logAdapterLogAction;
-            $this->_logAdapter->$method($debugData);
+            $this->_logAdapter->{$method}($debugData);
         }
         return $this;
     }

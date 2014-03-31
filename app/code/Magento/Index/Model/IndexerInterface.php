@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Model;
 
 /**
@@ -49,7 +48,7 @@ interface IndexerInterface
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\IndexerInterface
+     * @return $this
      */
     public function register(\Magento\Index\Model\Event $event);
 
@@ -57,7 +56,7 @@ interface IndexerInterface
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\IndexerInterface
+     * @return $this
      */
     public function processEvent(\Magento\Index\Model\Event $event);
 
@@ -80,6 +79,8 @@ interface IndexerInterface
 
     /**
      * Rebuild all index data
+     *
+     * @return void
      */
     public function reindexAll();
 

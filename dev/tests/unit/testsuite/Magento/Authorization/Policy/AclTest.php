@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorization\Policy;
 
 class AclTest extends \PHPUnit_Framework_TestCase
@@ -47,45 +46,63 @@ class AclTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAllowedReturnsTrueIfResourceIsAllowedToRole()
     {
-        $this->_aclMock->expects($this->once())
-            ->method('isAllowed')
-            ->with('some_role', 'some_resource')
-            ->will($this->returnValue(true));
+        $this->_aclMock->expects(
+            $this->once()
+        )->method(
+            'isAllowed'
+        )->with(
+            'some_role',
+            'some_resource'
+        )->will(
+            $this->returnValue(true)
+        );
 
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
     }
 
     public function testIsAllowedReturnsFalseIfRoleDoesntExist()
     {
-        $this->_aclMock->expects($this->once())
-            ->method('isAllowed')
-            ->with('some_role', 'some_resource')
-            ->will($this->throwException(new \Zend_Acl_Role_Registry_Exception));
+        $this->_aclMock->expects(
+            $this->once()
+        )->method(
+            'isAllowed'
+        )->with(
+            'some_role',
+            'some_resource'
+        )->will(
+            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        );
 
-        $this->_aclMock->expects($this->once())
-            ->method('has')
-            ->with('some_resource')
-            ->will($this->returnValue(true));
+        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->will($this->returnValue(true));
 
         $this->assertFalse($this->_model->isAllowed('some_role', 'some_resource'));
     }
 
     public function testIsAllowedReturnsTrueIfResourceDoesntExistAndAllResourcesAreNotPermitted()
     {
-        $this->_aclMock->expects($this->at(0))
-            ->method('isAllowed')
-            ->with('some_role', 'some_resource')
-            ->will($this->throwException(new \Zend_Acl_Role_Registry_Exception));
+        $this->_aclMock->expects(
+            $this->at(0)
+        )->method(
+            'isAllowed'
+        )->with(
+            'some_role',
+            'some_resource'
+        )->will(
+            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        );
 
-        $this->_aclMock->expects($this->once())
-            ->method('has')
-            ->with('some_resource')
-            ->will($this->returnValue(false));
+        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->will($this->returnValue(false));
 
-        $this->_aclMock->expects($this->at(2))
-            ->method('isAllowed')
-            ->with('some_role', null)
-            ->will($this->returnValue(true));
+        $this->_aclMock->expects(
+            $this->at(2)
+        )->method(
+            'isAllowed'
+        )->with(
+            'some_role',
+            null
+        )->will(
+            $this->returnValue(true)
+        );
 
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
     }

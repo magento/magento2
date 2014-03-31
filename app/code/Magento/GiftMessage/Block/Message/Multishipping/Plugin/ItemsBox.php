@@ -21,10 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GiftMessage\Block\Message\Multishipping\Plugin;
-
-use Magento\Code\Plugin\InvocationChain;
 
 /**
  * Multishipping items box plugin
@@ -51,13 +48,19 @@ class ItemsBox
     /**
      * Get items box message text for multishipping
      *
-     * @param array $arguments
-     * @param InvocationChain $invocationChain
+     * @param \Magento\Multishipping\Block\Checkout\Shipping $subject
+     * @param callable $proceed
+     * @param \Magento\Object $addressEntity
+     *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetItemsBoxTextAfter(array $arguments, InvocationChain $invocationChain)
-    {
-        $itemsBoxText = $invocationChain->proceed($arguments);
-        return $itemsBoxText . $this->helper->getInline('multishipping_address', $arguments[0]);
+    public function aroundGetItemsBoxTextAfter(
+        \Magento\Multishipping\Block\Checkout\Shipping $subject,
+        \Closure $proceed,
+        \Magento\Object $addressEntity
+    ) {
+        $itemsBoxText = $proceed($addressEntity);
+        return $itemsBoxText . $this->helper->getInline('multishipping_address', $addressEntity);
     }
 }

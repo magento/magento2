@@ -23,9 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Quote;
+
+use Magento\Sales\Model\Quote\Address;
+use Magento\Sales\Model\Quote\Item\AbstractItem;
 
 class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
@@ -67,10 +68,10 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect address discount amount
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
-     * @return  \Magento\SalesRule\Model\Quote\Discount
+     * @param Address $address
+     * @return $this
      */
-    public function collect(\Magento\Sales\Model\Quote\Address $address)
+    public function collect(Address $address)
     {
         parent::collect($address);
         $quote = $address->getQuote();
@@ -83,9 +84,9 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         }
 
         $eventArgs = array(
-            'website_id'        => $store->getWebsiteId(),
+            'website_id' => $store->getWebsiteId(),
             'customer_group_id' => $quote->getCustomerGroupId(),
-            'coupon_code'       => $quote->getCouponCode(),
+            'coupon_code' => $quote->getCouponCode()
         );
 
         $this->_calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
@@ -93,12 +94,12 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
         $address->setDiscountDescription(array());
 
+        $items = $this->_calculator->sortItemsByPriority($items);
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
                 $item->setDiscountAmount(0);
                 $item->setBaseDiscountAmount(0);
-            }
-            else {
+            } else {
                 /**
                  * Child item discount we calculate for parent
                  */
@@ -149,8 +150,8 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Aggregate item discount information to address data and related properties
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @return  \Magento\SalesRule\Model\Quote\Discount
+     * @param AbstractItem $item
+     * @return $this
      */
     protected function _aggregateItemDiscount($item)
     {
@@ -162,8 +163,8 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Recalculate child discount. Separate discount between children
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $child
-     * @return  \Magento\SalesRule\Model\Quote\Discount
+     * @param AbstractItem $child
+     * @return $this
      */
     protected function _recalculateChildDiscount($child)
     {
@@ -180,25 +181,21 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Add discount total information to address
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
-     * @return  \Magento\SalesRule\Model\Quote\Discount
+     * @param Address $address
+     * @return $this
      */
-    public function fetch(\Magento\Sales\Model\Quote\Address $address)
+    public function fetch(Address $address)
     {
         $amount = $address->getDiscountAmount();
 
-        if ($amount!=0) {
+        if ($amount != 0) {
             $description = $address->getDiscountDescription();
             if (strlen($description)) {
                 $title = __('Discount (%1)', $description);
             } else {
                 $title = __('Discount');
             }
-            $address->addTotal(array(
-                'code'  => $this->getCode(),
-                'title' => $title,
-                'value' => $amount
-            ));
+            $address->addTotal(array('code' => $this->getCode(), 'title' => $title, 'value' => $amount));
         }
         return $this;
     }

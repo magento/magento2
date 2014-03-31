@@ -23,8 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Di;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -65,30 +65,38 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_validator;
 
+    /**
+     * Class arguments reader
+     *
+     * @var \Magento\Interception\Code\InterfaceValidator
+     */
+    protected $pluginValidator;
+
     protected function setUp()
     {
-        $this->_shell = new \Magento\Shell();
+        $this->_shell = new \Magento\Shell(new \Magento\OSInfo());
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
-        $this->_generationDir =  $this->_tmpDir . '/generation';
+        $this->_generationDir = $this->_tmpDir . '/generation';
         $this->_compilationDir = $this->_tmpDir . '/di';
 
-        \Magento\Autoload\IncludePath::addIncludePath(array(
-            $basePath . '/app/code',
-            $basePath . '/lib',
-            $this->_generationDir,
-        ));
+        \Magento\Autoload\IncludePath::addIncludePath(
+            array($basePath . '/app/code', $basePath . '/lib', $this->_generationDir)
+        );
 
-        $this->_command = 'php ' . $basePath
-            . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
-        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
+        $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
+        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom(
+            new \Magento\Stdlib\BooleanUtils(),
+            new \Magento\ObjectManager\Config\Mapper\ArgumentParser()
+        );
         $this->_validator = new \Magento\Code\Validator();
         $this->_validator->add(new \Magento\Code\Validator\ConstructorIntegrity());
         $this->_validator->add(new \Magento\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Code\Validator\ArgumentSequence());
+        $this->pluginValidator = new \Magento\Interception\Code\InterfaceValidator();
     }
 
     protected function tearDown()
@@ -138,15 +146,17 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     unset($parameters[$parameterName]);
                 }
             }
-            $message = 'Configuration of ' . $instanceName
-                . ' contains data for non-existed parameters: ' . implode(', ', array_keys($parameters));
+            $message = 'Configuration of ' . $instanceName . ' contains data for non-existed parameters: ' . implode(
+                ', ',
+                array_keys($parameters)
+            );
             $this->assertEmpty($parameters, $message);
         }
     }
 
     /**
      * Checks if class is a real one or generated Factory
-     * @param $instanceName class name
+     * @param string $instanceName class name
      * @throws \PHPUnit_Framework_AssertionFailedError
      * @return bool
      */
@@ -177,15 +187,21 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generationPathPath = str_replace('/', '\\', $this->_generationDir);
 
         $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(
-            true, false, false, false, false, true, false
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
         );
 
-        $patterns  = array(
+        $patterns = array(
             '/' . preg_quote($libPath) . '/',
             '/' . preg_quote($appPath) . '/',
             '/' . preg_quote($generationPathPath) . '/'
         );
-        $replacements  = array('', '', '');
+        $replacements = array('', '', '');
 
         /** Convert file names into class name format */
         $classes = array();
@@ -275,6 +291,20 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test consistency of plugin interfaces
+     */
+    public function testPluginInterfaces()
+    {
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($plugin, $type) {
+                $this->validatePlugins($plugin, $type);
+            },
+            $this->pluginDataProvider()
+        );
+    }
+
+    /**
      * Validate constructor integrity
      */
     public function testConstructorIntegrity()
@@ -285,7 +315,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $autoloader,
             $this->_generationDir
         );
-        $generator = new \Magento\Code\Generator(null, $autoloader, $generatorIo);
+        $generator = new \Magento\Code\Generator(
+            $autoloader,
+            $generatorIo,
+            array(
+                \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
+                => 'Magento\ObjectManager\Code\Generator\Factory'
+            )
+        );
         $autoloader = new \Magento\Code\Generator\Autoloader($generator);
         spl_autoload_register(array($autoloader, 'load'));
 
@@ -300,18 +337,63 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Validate plugin interface
+     *
+     * @param string $plugin
+     * @param string $type
+     */
+    protected function validatePlugins($plugin, $type)
+    {
+        try {
+            $module = \Magento\TestFramework\Utility\Classes::getClassModuleName($type);
+            if (\Magento\TestFramework\Utility\Files::init()->isModuleExists($module)) {
+                $this->pluginValidator->validate($plugin, $type);
+            }
+        } catch (\Magento\Interception\Code\ValidatorException $exception) {
+            $this->fail($exception->getMessage());
+        }
+    }
+
+    /**
+     * Get application plugins
+     *
+     * @return array
+     */
+    protected function pluginDataProvider()
+    {
+        $files = \Magento\TestFramework\Utility\Files::init()->getDiConfigs();
+        $plugins = array();
+        foreach ($files as $file) {
+            $dom = new \DOMDocument();
+            $dom->load($file);
+            $xpath = new \DOMXPath($dom);
+            $pluginList = $xpath->query('//config/type/plugin');
+            foreach ($pluginList as $node) {
+                /** @var $node \DOMNode */
+                $type = $node->parentNode->attributes->getNamedItem('name')->nodeValue;
+                $type = \Magento\TestFramework\Utility\Classes::resolveVirtualType($type);
+                if ($node->attributes->getNamedItem('type')) {
+                    $plugin = $node->attributes->getNamedItem('type')->nodeValue;
+                    $plugin = \Magento\TestFramework\Utility\Classes::resolveVirtualType($plugin);
+                    $plugins[] = array('plugin' => $plugin, 'intercepted type' => $type);
+                }
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
      * Test DI compiler
      *
      * @depends testConfigurationOfInstanceParameters
      * @depends testConstructorIntegrity
+     * @depends testPluginInterfaces
      */
     public function testCompiler()
     {
         try {
-            $this->_shell->execute(
-                $this->_command,
-                array($this->_generationDir, $this->_compilationDir)
-            );
+            $this->_shell->execute($this->_command, array($this->_generationDir, $this->_compilationDir));
         } catch (\Magento\Exception $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }

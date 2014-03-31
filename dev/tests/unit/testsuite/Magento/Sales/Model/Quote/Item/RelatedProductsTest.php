@@ -53,21 +53,26 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     {
         $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', array(), array(), '', false);
         $itemOptionMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item\Option', array('getValue', 'getProductId', '__wakeup'), array(), '', false
+            '\Magento\Sales\Model\Quote\Item\Option',
+            array('getValue', 'getProductId', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
-        $quoteItemMock->expects($this->once())
-            ->method('getOptionByCode')
-            ->with('product_type')
-            ->will($this->returnValue($itemOptionMock));
+        $quoteItemMock->expects(
+            $this->once()
+        )->method(
+            'getOptionByCode'
+        )->with(
+            'product_type'
+        )->will(
+            $this->returnValue($itemOptionMock)
+        );
 
-        $itemOptionMock->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue($optionValue));
+        $itemOptionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
 
-        $itemOptionMock->expects($this->any())
-            ->method('getProductId')
-            ->will($this->returnValue($productId));
+        $itemOptionMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
 
         $this->assertEquals($expectedResult, $this->model->getRelatedProductIds(array($quoteItemMock)));
     }
@@ -80,26 +85,10 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     public function getRelatedProductIdsDataProvider()
     {
         return array(
-            array(
-                'optionValue' => 'type1',
-                'productId' => 123,
-                'expectedResult' => array(123)
-            ),
-            array(
-                'optionValue' => 'other_type',
-                'productId' => 123,
-                'expectedResult' => array()
-            ),
-            array(
-                'optionValue' => 'type1',
-                'productId' => null,
-                'expectedResult' => array()
-            ),
-            array(
-                'optionValue' => 'other_type',
-                'productId' => false,
-                'expectedResult' => array()
-            )
+            array('optionValue' => 'type1', 'productId' => 123, 'expectedResult' => array(123)),
+            array('optionValue' => 'other_type', 'productId' => 123, 'expectedResult' => array()),
+            array('optionValue' => 'type1', 'productId' => null, 'expectedResult' => array()),
+            array('optionValue' => 'other_type', 'productId' => false, 'expectedResult' => array())
         );
     }
 
@@ -110,10 +99,15 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     {
         $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', array(), array(), '', false);
 
-        $quoteItemMock->expects($this->once())
-            ->method('getOptionByCode')
-            ->with('product_type')
-            ->will($this->returnValue(new \stdClass()));
+        $quoteItemMock->expects(
+            $this->once()
+        )->method(
+            'getOptionByCode'
+        )->with(
+            'product_type'
+        )->will(
+            $this->returnValue(new \stdClass())
+        );
 
         $this->assertEquals(array(), $this->model->getRelatedProductIds(array($quoteItemMock)));
     }

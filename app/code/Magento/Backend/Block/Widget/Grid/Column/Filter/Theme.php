@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
-class Theme
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @var \Magento\View\Design\Theme\LabelFactory
@@ -39,13 +38,13 @@ class Theme
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\View\Design\Theme\LabelFactory $labelFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\View\Design\Theme\LabelFactory $labelFactory,
         array $data = array()
     ) {
@@ -62,10 +61,7 @@ class Theme
     {
         $options = $this->getOptions();
         if ($this->getColumn()->getWithEmpty()) {
-            array_unshift($options, array(
-                'value' => '',
-                'label' => ''
-            ));
+            array_unshift($options, array('value' => '', 'label' => ''));
         }
         $html = sprintf(
             '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
@@ -107,19 +103,19 @@ class Theme
         }
 
         $value = $this->getValue();
-        $html  = '';
+        $html = '';
 
         foreach ($options as $option) {
             if (!isset($option['value']) || !isset($option['label'])) {
                 continue;
             }
             if (is_array($option['value'])) {
-                $html .= '<optgroup label="'.$option['label'].'">'
-                    . $this->_drawOptions($option['value'])
-                    . '</optgroup>';
+                $html .= '<optgroup label="' . $option['label'] . '">' . $this->_drawOptions(
+                    $option['value']
+                ) . '</optgroup>';
             } else {
-                $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '');
-                $html .= '<option value="'.$option['value'].'"'.$selected.'>'.$option['label'].'</option>';
+                $selected = $option['value'] == $value && !is_null($value) ? ' selected="selected"' : '';
+                $html .= '<option value="' . $option['value'] . '"' . $selected . '>' . $option['label'] . '</option>';
             }
         }
 

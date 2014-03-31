@@ -26,12 +26,16 @@ namespace Magento\Test\Di\Aggregate;
 class AggregateParent implements \Magento\Test\Di\Aggregate\AggregateInterface
 {
     public $interface;
+
     public $parent;
+
     public $child;
+
     public $scalar;
+
     public $optionalScalar;
 
-    public function __construct (
+    public function __construct(
         \Magento\Test\Di\DiInterface $interface,
         \Magento\Test\Di\DiParent $parent,
         \Magento\Test\Di\Child $child,

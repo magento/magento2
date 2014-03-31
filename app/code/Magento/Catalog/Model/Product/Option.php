@@ -23,6 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
+use Magento\Model\Exception;
+use Magento\Model\AbstractModel;
 
 /**
  * Catalog product option model
@@ -51,36 +57,55 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product;
-
-class Option extends \Magento\Core\Model\AbstractModel
+class Option extends AbstractModel
 {
-    const OPTION_GROUP_TEXT   = 'text';
-    const OPTION_GROUP_FILE   = 'file';
+    const OPTION_GROUP_TEXT = 'text';
+
+    const OPTION_GROUP_FILE = 'file';
+
     const OPTION_GROUP_SELECT = 'select';
-    const OPTION_GROUP_DATE   = 'date';
 
-    const OPTION_TYPE_FIELD     = 'field';
-    const OPTION_TYPE_AREA      = 'area';
-    const OPTION_TYPE_FILE      = 'file';
+    const OPTION_GROUP_DATE = 'date';
+
+    const OPTION_TYPE_FIELD = 'field';
+
+    const OPTION_TYPE_AREA = 'area';
+
+    const OPTION_TYPE_FILE = 'file';
+
     const OPTION_TYPE_DROP_DOWN = 'drop_down';
-    const OPTION_TYPE_RADIO     = 'radio';
-    const OPTION_TYPE_CHECKBOX  = 'checkbox';
-    const OPTION_TYPE_MULTIPLE  = 'multiple';
-    const OPTION_TYPE_DATE      = 'date';
-    const OPTION_TYPE_DATE_TIME = 'date_time';
-    const OPTION_TYPE_TIME      = 'time';
 
+    const OPTION_TYPE_RADIO = 'radio';
+
+    const OPTION_TYPE_CHECKBOX = 'checkbox';
+
+    const OPTION_TYPE_MULTIPLE = 'multiple';
+
+    const OPTION_TYPE_DATE = 'date';
+
+    const OPTION_TYPE_DATE_TIME = 'date_time';
+
+    const OPTION_TYPE_TIME = 'time';
+
+    /**
+     * @var Product
+     */
     protected $_product;
 
+    /**
+     * @var array
+     */
     protected $_options = array();
 
+    /**
+     * @var array
+     */
     protected $_values = array();
 
     /**
      * Catalog product option value
      *
-     * @var \Magento\Catalog\Model\Product\Option\Value
+     * @var Option\Value
      */
     protected $_productOptionValue;
 
@@ -97,22 +122,22 @@ class Option extends \Magento\Core\Model\AbstractModel
     protected $string;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Catalog\Model\Product\Option\Value $productOptionValue
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param Option\Value $productOptionValue
      * @param \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Catalog\Model\Product\Option\Value $productOptionValue,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -125,13 +150,16 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Get resource instance
      *
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return \Magento\Model\Resource\Db\AbstractDb
      */
     protected function _getResource()
     {
         return $this->_resource ?: parent::_getResource();
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Product\Option');
@@ -141,10 +169,10 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Add value of option to values array
      *
-     * @param \Magento\Catalog\Model\Product\Option\Value $value
-     * @return \Magento\Catalog\Model\Product\Option
+     * @param Option\Value $value
+     * @return $this
      */
-    public function addValue(\Magento\Catalog\Model\Product\Option\Value $value)
+    public function addValue(Option\Value $value)
     {
         $this->_values[$value->getId()] = $value;
         return $this;
@@ -154,7 +182,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Get value by given id
      *
      * @param int $valueId
-     * @return \Magento\Catalog\Model\Product\Option\Value
+     * @return Option\Value|null
      */
     public function getValueById($valueId)
     {
@@ -165,6 +193,9 @@ class Option extends \Magento\Core\Model\AbstractModel
         return null;
     }
 
+    /**
+     * @return Option\Value[]
+     */
     public function getValues()
     {
         return $this->_values;
@@ -173,7 +204,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve value instance
      *
-     * @return \Magento\Catalog\Model\Product\Option\Value
+     * @return Option\Value
      */
     public function getValueInstance()
     {
@@ -184,7 +215,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Add option for save it
      *
      * @param array $option
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function addOption($option)
     {
@@ -206,7 +237,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Set options for array
      *
      * @param array $options
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -217,7 +248,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Set options to empty array
      *
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function unsetOptions()
     {
@@ -228,7 +259,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve product instance
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
@@ -238,10 +269,10 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Set product instance
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Option
+     * @param Product $product
+     * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product = null)
+    public function setProduct(Product $product = null)
     {
         $this->_product = $product;
         return $this;
@@ -268,10 +299,10 @@ class Option extends \Magento\Core\Model\AbstractModel
             self::OPTION_TYPE_MULTIPLE => self::OPTION_GROUP_SELECT,
             self::OPTION_TYPE_DATE => self::OPTION_GROUP_DATE,
             self::OPTION_TYPE_DATE_TIME => self::OPTION_GROUP_DATE,
-            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
+            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE
         );
 
-        return isset($optionGroupsToTypes[$type])?$optionGroupsToTypes[$type]:'';
+        return isset($optionGroupsToTypes[$type]) ? $optionGroupsToTypes[$type] : '';
     }
 
     /**
@@ -279,7 +310,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      *
      * @param string $type Option type
      * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
-     * @throws \Magento\Core\Exception
+     * @throws Exception
      */
     public function groupFactory($type)
     {
@@ -289,27 +320,33 @@ class Option extends \Magento\Core\Model\AbstractModel
                 'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
             );
         }
-        throw new \Magento\Core\Exception(__('The option type to get group instance is incorrect.'));
+        throw new Exception(__('The option type to get group instance is incorrect.'));
     }
 
     /**
      * Save options.
      *
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function saveOptions()
     {
         foreach ($this->getOptions() as $option) {
-            $this->setData($option)
-                ->setData('product_id', $this->getProduct()->getId())
-                ->setData('store_id', $this->getProduct()->getStoreId());
+            $this->setData(
+                $option
+            )->setData(
+                'product_id',
+                $this->getProduct()->getId()
+            )->setData(
+                'store_id',
+                $this->getProduct()->getStoreId()
+            );
 
             if ($this->getData('option_id') == '0') {
                 $this->unsetData('option_id');
             } else {
                 $this->setId($this->getData('option_id'));
             }
-            $isEdit = (bool)$this->getId()? true:false;
+            $isEdit = (bool)$this->getId() ? true : false;
 
             if ($this->getData('is_delete') == '1') {
                 if ($isEdit) {
@@ -356,11 +393,17 @@ class Option extends \Magento\Core\Model\AbstractModel
                         }
                     }
                 }
-                $this->save();            }
-        }//eof foreach()
+                $this->save();
+            }
+        }
+        //eof foreach()
         return $this;
     }
 
+    /**
+     * @return AbstractModel
+     * @throws Exception
+     */
     protected function _afterSave()
     {
         $this->getValueInstance()->unsetValues();
@@ -369,10 +412,9 @@ class Option extends \Magento\Core\Model\AbstractModel
                 $this->getValueInstance()->addValue($value);
             }
 
-            $this->getValueInstance()->setOption($this)
-                ->saveValues();
+            $this->getValueInstance()->setOption($this)->saveValues();
         } elseif ($this->getGroupByType($this->getType()) == self::OPTION_GROUP_SELECT) {
-            throw new \Magento\Core\Exception(__('Select type options required values rows.'));
+            throw new Exception(__('Select type options required values rows.'));
         }
 
         return parent::_afterSave();
@@ -383,13 +425,13 @@ class Option extends \Magento\Core\Model\AbstractModel
      *  return converted percent to price
      *
      * @param bool $flag
-     * @return decimal
+     * @return float
      */
-    public function getPrice($flag=false)
+    public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
             $basePrice = $this->getProduct()->getFinalPrice();
-            $price = $basePrice*($this->_getData('price')/100);
+            $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }
         return $this->_getData('price');
@@ -399,7 +441,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Delete prices of option
      *
      * @param int $option_id
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function deletePrices($option_id)
     {
@@ -411,7 +453,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Delete titles of option
      *
      * @param int $option_id
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function deleteTitles($option_id)
     {
@@ -420,19 +462,27 @@ class Option extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * get Product Option Collection
+     * Get Product Option Collection
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return \Magento\Catalog\Model\Resource\Product\Option\Collection
      */
-    public function getProductOptionCollection(\Magento\Catalog\Model\Product $product)
+    public function getProductOptionCollection(Product $product)
     {
-        $collection = $this->getCollection()
-            ->addFieldToFilter('product_id', $product->getId())
-            ->addTitleToResult($product->getStoreId())
-            ->addPriceToResult($product->getStoreId())
-            ->setOrder('sort_order', 'asc')
-            ->setOrder('title', 'asc');
+        $collection = $this->getCollection()->addFieldToFilter(
+            'product_id',
+            $product->getId()
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
 
         if ($this->getAddRequiredFilter()) {
             $collection->addRequiredFilter($this->getAddRequiredFilterValue());
@@ -445,12 +495,11 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Get collection of values for current option
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return Collection
      */
     public function getValuesCollection()
     {
-        $collection = $this->getValueInstance()
-            ->getValuesCollection($this);
+        $collection = $this->getValueInstance()->getValuesCollection($this);
 
         return $collection;
     }
@@ -460,7 +509,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      *
      * @param array $optionIds
      * @param int $store_id
-     * @return unknown
+     * @return Collection
      */
     public function getOptionValuesByOptionId($optionIds, $store_id)
     {
@@ -495,7 +544,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      *
      * @param int $oldProductId
      * @param int $newProductId
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     public function duplicate($oldProductId, $newProductId)
     {
@@ -519,7 +568,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Clearing object's data
      *
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     protected function _clearData()
     {
@@ -531,7 +580,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Clearing cyclic references
      *
-     * @return \Magento\Catalog\Model\Product\Option
+     * @return $this
      */
     protected function _clearReferences()
     {

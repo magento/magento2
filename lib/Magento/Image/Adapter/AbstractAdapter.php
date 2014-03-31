@@ -23,14 +23,12 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Image\Adapter;
 
 /**
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Image\Adapter;
-
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
@@ -43,11 +41,17 @@ abstract class AbstractAdapter implements AdapterInterface
      * Position constants
      */
     const POSITION_TOP_LEFT = 'top-left';
+
     const POSITION_TOP_RIGHT = 'top-right';
+
     const POSITION_BOTTOM_LEFT = 'bottom-left';
+
     const POSITION_BOTTOM_RIGHT = 'bottom-right';
+
     const POSITION_STRETCH = 'stretch';
+
     const POSITION_TILE = 'tile';
+
     const POSITION_CENTER = 'center';
 
     /**
@@ -55,62 +59,104 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     const DEFAULT_FONT_SIZE = 15;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_fileType;
 
-    /** @var  string */
-    protected $_fileName ;
+    /**
+     * @var  string
+     */
+    protected $_fileName;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileMimeType;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileSrcName;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileSrcPath;
 
+    /**
+     * @var resource
+     */
     protected $_imageHandler;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_imageSrcWidth;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_imageSrcHeight;
 
+    /**
+     * @var array
+     */
     protected $_requiredExtensions;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_watermarkPosition;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkWidth;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkHeight;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkImageOpacity;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_quality;
 
-    /** @var int int */
+    /**
+     * @var int
+     */
     protected $_fontSize = self::DEFAULT_FONT_SIZE;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepAspectRatio;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepFrame;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepTransparency;
 
-    /** @var  array */
+    /**
+     * @var  array
+     */
     protected $_backgroundColor;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_constrainOnly;
 
     /**
@@ -145,7 +191,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param null|string $destination
      * @param null|string $newName
      * @return void
-     * @throws \Exception  if destination path is not writable
+     * @throws \Exception  If destination path is not writable
      */
     abstract public function save($destination = null, $newName = null);
 
@@ -163,7 +209,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param null|int $height
      * @return void
      */
-    abstract public function resize($width=null, $height=null);
+    abstract public function resize($width = null, $height = null);
 
     /**
      * Rotate image on specific angle
@@ -200,7 +246,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception if some of dependencies are missing
+     * @throws \Exception If some of dependencies are missing
      */
     abstract public function checkDependencies();
 
@@ -232,12 +278,13 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\App\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, array $data = array()) {
-        $this->_filesystem      = $filesystem;
-        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+    public function __construct(\Magento\App\Filesystem $filesystem, array $data = array())
+    {
+        $this->_filesystem = $filesystem;
+        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**
@@ -248,7 +295,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getMimeType()
     {
-        if( $this->_fileType ) {
+        if ($this->_fileType) {
             return $this->_fileType;
         } else {
             list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType, ) = getimagesize($this->_fileName);
@@ -441,16 +488,16 @@ abstract class AbstractAdapter implements AdapterInterface
      * Get/set keepBackgroundColor
      *
      * @param null|array $value
-     * @return array|null
+     * @return array|void
      */
     public function backgroundColor($value = null)
     {
         if (null !== $value) {
-            if ((!is_array($value)) || (3 !== count($value))) {
+            if (!is_array($value) || 3 !== count($value)) {
                 return;
             }
             foreach ($value as $color) {
-                if ((!is_integer($color)) || ($color < 0) || ($color > 255)) {
+                if (!is_integer($color) || $color < 0 || $color > 255) {
                     return;
                 }
             }
@@ -511,27 +558,17 @@ abstract class AbstractAdapter implements AdapterInterface
 
         // get rid of frame (fallback to zero position coordinates)
         if (!$this->_keepFrame) {
-            $frameWidth  = $dstWidth;
+            $frameWidth = $dstWidth;
             $frameHeight = $dstHeight;
             $dstY = 0;
             $dstX = 0;
         }
 
         return array(
-            'src' => array(
-                'x' => $srcX,
-                'y' => $srcY
-            ),
-            'dst' => array(
-                'x' => $dstX,
-                'y' => $dstY,
-                'width'  => $dstWidth,
-                'height' => $dstHeight
-            ),
-            'frame' => array( // size for new image
-                'width'  => $frameWidth,
-                'height' => $frameHeight
-            )
+            'src' => array('x' => $srcX, 'y' => $srcY),
+            'dst' => array('x' => $dstX, 'y' => $dstY, 'width' => $dstWidth, 'height' => $dstHeight),
+            // size for new image
+            'frame' => array('width' => $frameWidth, 'height' => $frameHeight)
         );
     }
 
@@ -544,21 +581,21 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _checkAspectRatio($frameWidth, $frameHeight)
     {
-        $dstWidth  = $frameWidth;
+        $dstWidth = $frameWidth;
         $dstHeight = $frameHeight;
         if ($this->_keepAspectRatio && $this->_checkSrcDimensions()) {
             // do not make picture bigger, than it is, if required
             if ($this->_constrainOnly) {
-                if (($frameWidth >= $this->_imageSrcWidth) && ($frameHeight >= $this->_imageSrcHeight)) {
-                    $dstWidth  = $this->_imageSrcWidth;
+                if ($frameWidth >= $this->_imageSrcWidth && $frameHeight >= $this->_imageSrcHeight) {
+                    $dstWidth = $this->_imageSrcWidth;
                     $dstHeight = $this->_imageSrcHeight;
                 }
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = round(($dstWidth / $this->_imageSrcWidth) * $this->_imageSrcHeight);
+                $dstHeight = round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
             } else {
-                $dstWidth = round(($dstHeight / $this->_imageSrcHeight) * $this->_imageSrcWidth);
+                $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
         }
         return array($dstWidth, $dstHeight);
@@ -574,9 +611,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _checkDimensions($frameWidth, $frameHeight)
     {
-        if ($frameWidth !== null && $frameWidth <= 0
-            || $frameHeight !== null && $frameHeight <= 0
-            || empty($frameWidth) && empty($frameHeight)
+        if ($frameWidth !== null && $frameWidth <= 0 ||
+            $frameHeight !== null && $frameHeight <= 0 ||
+            empty($frameWidth) && empty($frameHeight)
         ) {
             throw new \Exception('Invalid image dimensions.');
         }
@@ -616,10 +653,10 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Create destination folder if not exists and return full file path
      *
-     * @throws \Exception
      * @param string $destination
      * @param string $newName
      * @return string
+     * @throws \Exception
      */
     protected function _prepareDestination($destination = null, $newName = null)
     {
@@ -673,10 +710,10 @@ abstract class AbstractAdapter implements AdapterInterface
     public function validateUploadFile($filePath)
     {
         if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException ("File '{$filePath}' does not exists.");
+            throw new \InvalidArgumentException("File '{$filePath}' does not exists.");
         }
         if (!getimagesize($filePath)) {
-            throw new \InvalidArgumentException ('Disallowed file type.');
+            throw new \InvalidArgumentException('Disallowed file type.');
         }
         $this->checkDependencies();
         $this->open($filePath);

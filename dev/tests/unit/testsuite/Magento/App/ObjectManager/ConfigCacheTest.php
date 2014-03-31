@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\ObjectManager;
+
 class ConfigCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,11 +49,15 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $key = 'key';
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('load')
-            ->with('diConfig' . $key)
-            ->will($this->returnValue(false));
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'diConfig' . $key
+        )->will(
+            $this->returnValue(false)
+        );
         $this->assertEquals(false, $this->_configCache->get($key));
     }
 

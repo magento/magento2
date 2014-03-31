@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml;
 
 /**
@@ -35,6 +34,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
     /**
      * @magentoDataFixture Magento/Core/_files/store.php
      * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @dataProvider saveActionDataProvider
      * @param array $inputData
      * @param array $defaultAttributes
@@ -43,8 +43,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
     public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = array())
     {
         /** @var $store \Magento\Core\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
@@ -54,12 +53,14 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/category/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(array('You saved the category.')), \Magento\Message\MessageInterface::TYPE_SUCCESS
+            $this->equalTo(array('You saved the category.')),
+            \Magento\Message\MessageInterface::TYPE_SUCCESS
         );
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
         $category->setStoreId($storeId);
         $category->load(2);
 
@@ -67,16 +68,17 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         foreach ($attributesSaved as $attribute => $value) {
             $actualValue = $category->getData($attribute);
             if ($value !== $actualValue) {
-                $errors[] = "value for '$attribute' attribute must be '$value', but '$actualValue' is found instead";
+                $errors[] =
+                    "value for '{$attribute}' attribute must be '{$value}', but '{$actualValue}' is found instead";
             }
         }
 
         foreach ($defaultAttributes as $attribute => $exists) {
             if ($exists !== $category->getExistsStoreValueFlag($attribute)) {
                 if ($exists) {
-                    $errors[] = "custom value for '$attribute' attribute is not found";
+                    $errors[] = "custom value for '{$attribute}' attribute is not found";
                 } else {
-                    $errors[] = "custom value for '$attribute' attribute is found, but default one must be used";
+                    $errors[] = "custom value for '{$attribute}' attribute is found, but default one must be used";
                 }
             }
         }
@@ -98,13 +100,16 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
 
         if (empty($postData['return_session_messages_only'])) {
             $this->assertRegExp(
-                '~<script type="text/javascript">parent\.updateContent\("[^"]+/backend/catalog/category/edit/'
-                    . 'id/\d+/key/[0-9a-f]+/", {}, true\);</script>~',
+                '~<script type="text/javascript">parent\.updateContent\("[^"]+/backend/catalog/category/edit/' .
+                'id/\d+/key/[0-9a-f]+/", {}, true\);</script>~',
                 $body
             );
         } else {
-            $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Data')
-                ->jsonDecode($body);
+            $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Helper\Data'
+            )->jsonDecode(
+                $body
+            );
             $this->assertArrayHasKey('messages', $result);
             $this->assertFalse($result['error']);
             $category = $result['category'];
@@ -125,19 +130,16 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
     {
         /* Keep in sync with new-category-dialog.js */
         $postData = array(
-            'general' => array (
+            'general' => array(
                 'name' => 'Category Created From Product Creation Page',
                 'is_active' => 1,
-                'include_in_menu' => 0,
+                'include_in_menu' => 0
             ),
             'parent' => 2,
-            'use_config' => array('available_sort_by', 'default_sort_by'),
+            'use_config' => array('available_sort_by', 'default_sort_by')
         );
 
-        return array(
-            array($postData),
-            array($postData + array('return_session_messages_only' => 1)),
-        );
+        return array(array($postData), array($postData + array('return_session_messages_only' => 1)));
     }
 
     public function testSuggestCategoriesActionDefaultCategoryFound()
@@ -166,23 +168,23 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         return array(
             'default values' => array(
                 array(
-                    'general'  => array(
-                        'id'        => '2',
-                        'path'      => '1/2',
-                        'url_key'   => 'default-category',
-                        'is_anchor' => '0',
+                    'general' => array(
+                        'id' => '2',
+                        'path' => '1/2',
+                        'url_key' => 'default-category',
+                        'is_anchor' => '0'
                     ),
                     'use_default' => array(
-                        0  => 'name',
-                        1  => 'is_active',
-                        2  => 'thumbnail',
-                        3  => 'description',
-                        4  => 'image',
-                        5  => 'meta_title',
-                        6  => 'meta_keywords',
-                        7  => 'meta_description',
-                        8  => 'include_in_menu',
-                        9  => 'display_mode',
+                        0 => 'name',
+                        1 => 'is_active',
+                        2 => 'thumbnail',
+                        3 => 'description',
+                        4 => 'image',
+                        5 => 'meta_title',
+                        6 => 'meta_keywords',
+                        7 => 'meta_description',
+                        8 => 'include_in_menu',
+                        9 => 'display_mode',
                         10 => 'landing_page',
                         11 => 'available_sort_by',
                         12 => 'default_sort_by',
@@ -192,120 +194,119 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
                         16 => 'custom_design_from',
                         17 => 'custom_design_to',
                         18 => 'page_layout',
-                        19 => 'custom_layout_update',
-                    ),
+                        19 => 'custom_layout_update'
+                    )
                 ),
                 array(
-                    'name'                     => false,
-                    'default_sort_by'          => false,
-                    'display_mode'             => false,
-                    'meta_title'               => false,
-                    'custom_design'            => false,
-                    'page_layout'              => false,
-                    'is_active'                => false,
-                    'include_in_menu'          => false,
-                    'landing_page'             => false,
-                    'is_anchor'                => false,
+                    'name' => false,
+                    'default_sort_by' => false,
+                    'display_mode' => false,
+                    'meta_title' => false,
+                    'custom_design' => false,
+                    'page_layout' => false,
+                    'is_active' => false,
+                    'include_in_menu' => false,
+                    'landing_page' => false,
+                    'is_anchor' => false,
                     'custom_apply_to_products' => false,
-                    'available_sort_by'        => false,
-                    'description'              => false,
-                    'meta_keywords'            => false,
-                    'meta_description'         => false,
-                    'custom_layout_update'     => false,
-                    'custom_design_from'       => false,
-                    'custom_design_to'         => false,
-                    'filter_price_range'       => false,
-                ),
+                    'available_sort_by' => false,
+                    'description' => false,
+                    'meta_keywords' => false,
+                    'meta_description' => false,
+                    'custom_layout_update' => false,
+                    'custom_design_from' => false,
+                    'custom_design_to' => false,
+                    'filter_price_range' => false
+                )
             ),
-            'custom values'  => array(
+            'custom values' => array(
                 array(
                     'general' => array(
-                        'id'                       => '2',
-                        'path'                     => '1/2',
-                        'name'                     => 'Custom Name',
-                        'is_active'                => '0',
-                        'description'              => 'Custom Description',
-                        'meta_title'               => 'Custom Title',
-                        'meta_keywords'            => 'Custom keywords',
-                        'meta_description'         => 'Custom meta description',
-                        'include_in_menu'          => '0',
-                        'url_key'                  => 'default-category',
-                        'display_mode'             => 'PRODUCTS',
-                        'landing_page'             => '1',
-                        'is_anchor'                => '1',
+                        'id' => '2',
+                        'path' => '1/2',
+                        'name' => 'Custom Name',
+                        'is_active' => '0',
+                        'description' => 'Custom Description',
+                        'meta_title' => 'Custom Title',
+                        'meta_keywords' => 'Custom keywords',
+                        'meta_description' => 'Custom meta description',
+                        'include_in_menu' => '0',
+                        'url_key' => 'default-category',
+                        'display_mode' => 'PRODUCTS',
+                        'landing_page' => '1',
+                        'is_anchor' => '1',
                         'custom_apply_to_products' => '0',
-                        'custom_design'            => 'magento_blank',
-                        'custom_design_from'       => '',
-                        'custom_design_to'         => '',
-                        'page_layout'              => '',
-                        'custom_layout_update'     => '',
+                        'custom_design' => 'magento_blank',
+                        'custom_design_from' => '',
+                        'custom_design_to' => '',
+                        'page_layout' => '',
+                        'custom_layout_update' => ''
                     ),
-                    'use_config' => array(
-                        0 => 'available_sort_by',
-                        1 => 'default_sort_by',
-                        2 => 'filter_price_range',
-                    ),
+                    'use_config' => array(0 => 'available_sort_by', 1 => 'default_sort_by', 2 => 'filter_price_range')
                 ),
                 array(
-                    'name'                     => true,
-                    'default_sort_by'          => true,
-                    'display_mode'             => true,
-                    'meta_title'               => true,
-                    'custom_design'            => true,
-                    'page_layout'              => true,
-                    'is_active'                => true,
-                    'include_in_menu'          => true,
-                    'landing_page'             => true,
+                    'name' => true,
+                    'default_sort_by' => true,
+                    'display_mode' => true,
+                    'meta_title' => true,
+                    'custom_design' => true,
+                    'page_layout' => true,
+                    'is_active' => true,
+                    'include_in_menu' => true,
+                    'landing_page' => true,
                     'custom_apply_to_products' => true,
-                    'available_sort_by'        => true,
-                    'description'              => true,
-                    'meta_keywords'            => true,
-                    'meta_description'         => true,
-                    'custom_layout_update'     => true,
-                    'custom_design_from'       => true,
-                    'custom_design_to'         => true,
-                    'filter_price_range'       => true,
+                    'available_sort_by' => true,
+                    'description' => true,
+                    'meta_keywords' => true,
+                    'meta_description' => true,
+                    'custom_layout_update' => true,
+                    'custom_design_from' => true,
+                    'custom_design_to' => true,
+                    'filter_price_range' => true
                 ),
                 array(
-                    'name'                     => 'Custom Name',
-                    'default_sort_by'          => NULL,
-                    'display_mode'             => 'PRODUCTS',
-                    'meta_title'               => 'Custom Title',
-                    'custom_design'            => 'magento_blank',
-                    'page_layout'              => NULL,
-                    'is_active'                => '0',
-                    'include_in_menu'          => '0',
-                    'landing_page'             => '1',
+                    'name' => 'Custom Name',
+                    'default_sort_by' => null,
+                    'display_mode' => 'PRODUCTS',
+                    'meta_title' => 'Custom Title',
+                    'custom_design' => 'magento_blank',
+                    'page_layout' => null,
+                    'is_active' => '0',
+                    'include_in_menu' => '0',
+                    'landing_page' => '1',
                     'custom_apply_to_products' => '0',
-                    'available_sort_by'        => NULL,
-                    'description'              => 'Custom Description',
-                    'meta_keywords'            => 'Custom keywords',
-                    'meta_description'         => 'Custom meta description',
-                    'custom_layout_update'     => NULL,
-                    'custom_design_from'       => NULL,
-                    'custom_design_to'         => NULL,
-                    'filter_price_range'       => NULL,
-                ),
-            ),
+                    'available_sort_by' => null,
+                    'description' => 'Custom Description',
+                    'meta_keywords' => 'Custom keywords',
+                    'meta_description' => 'Custom meta description',
+                    'custom_layout_update' => null,
+                    'custom_design_from' => null,
+                    'custom_design_to' => null,
+                    'filter_price_range' => null
+                )
+            )
         );
     }
 
     public function testSaveActionCategoryWithDangerRequest()
     {
-        $this->getRequest()->setPost(array(
-            'general' => array(
-                'path' => '1',
-                'name' => 'test',
-                'is_active' => '1',
-                'entity_id' => 1500,
-                'include_in_menu' => '1',
-                'available_sort_by' => 'name',
-                'default_sort_by' => 'name',
-            ),
-        ));
+        $this->getRequest()->setPost(
+            array(
+                'general' => array(
+                    'path' => '1',
+                    'name' => 'test',
+                    'is_active' => '1',
+                    'entity_id' => 1500,
+                    'include_in_menu' => '1',
+                    'available_sort_by' => 'name',
+                    'default_sort_by' => 'name'
+                )
+            )
+        );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(array('Unable to save the category')), \Magento\Message\MessageInterface::TYPE_ERROR
+            $this->equalTo(array('Unable to save the category')),
+            \Magento\Message\MessageInterface::TYPE_ERROR
         );
     }
 }

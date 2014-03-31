@@ -25,6 +25,8 @@
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Sales\Model\Order;
+
 class Totals extends \Magento\View\Element\Template
 {
     /**
@@ -36,23 +38,27 @@ class Totals extends \Magento\View\Element\Template
      * @var array
      */
     protected $_totals;
+
+    /**
+     * @var Order|null
+     */
     protected $_order = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -62,7 +68,7 @@ class Totals extends \Magento\View\Element\Template
     /**
      * Initialize self totals and children blocks totals before html building
      *
-     * @return \Magento\Sales\Block\Order\Totals
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -78,7 +84,7 @@ class Totals extends \Magento\View\Element\Template
     /**
      * Get order object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -94,6 +100,10 @@ class Totals extends \Magento\View\Element\Template
         return $this->_order;
     }
 
+    /**
+     * @param Order $order
+     * @return $this
+     */
     public function setOrder($order)
     {
         $this->_order = $order;
@@ -103,7 +113,7 @@ class Totals extends \Magento\View\Element\Template
     /**
      * Get totals source object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getSource()
     {
@@ -113,68 +123,73 @@ class Totals extends \Magento\View\Element\Template
     /**
      * Initialize order totals array
      *
-     * @return \Magento\Sales\Block\Order\Totals
+     * @return $this
      */
     protected function _initTotals()
     {
         $source = $this->getSource();
 
         $this->_totals = array();
-        $this->_totals['subtotal'] = new \Magento\Object(array(
-            'code'  => 'subtotal',
-            'value' => $source->getSubtotal(),
-            'label' => __('Subtotal')
-        ));
+        $this->_totals['subtotal'] = new \Magento\Object(
+            array('code' => 'subtotal', 'value' => $source->getSubtotal(), 'label' => __('Subtotal'))
+        );
 
 
         /**
          * Add shipping
          */
-        if (!$source->getIsVirtual() && ((float) $source->getShippingAmount() || $source->getShippingDescription()))
-        {
-            $this->_totals['shipping'] = new \Magento\Object(array(
-                'code'  => 'shipping',
-                'field' => 'shipping_amount',
-                'value' => $this->getSource()->getShippingAmount(),
-                'label' => __('Shipping & Handling')
-            ));
+        if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
+            $this->_totals['shipping'] = new \Magento\Object(
+                array(
+                    'code' => 'shipping',
+                    'field' => 'shipping_amount',
+                    'value' => $this->getSource()->getShippingAmount(),
+                    'label' => __('Shipping & Handling')
+                )
+            );
         }
 
         /**
          * Add discount
          */
-        if (((float)$this->getSource()->getDiscountAmount()) != 0) {
+        if ((double)$this->getSource()->getDiscountAmount() != 0) {
             if ($this->getSource()->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $source->getDiscountDescription());
             } else {
                 $discountLabel = __('Discount');
             }
-            $this->_totals['discount'] = new \Magento\Object(array(
-                'code'  => 'discount',
-                'field' => 'discount_amount',
-                'value' => $source->getDiscountAmount(),
-                'label' => $discountLabel
-            ));
+            $this->_totals['discount'] = new \Magento\Object(
+                array(
+                    'code' => 'discount',
+                    'field' => 'discount_amount',
+                    'value' => $source->getDiscountAmount(),
+                    'label' => $discountLabel
+                )
+            );
         }
 
-        $this->_totals['grand_total'] = new \Magento\Object(array(
-            'code'  => 'grand_total',
-            'field'  => 'grand_total',
-            'strong'=> true,
-            'value' => $source->getGrandTotal(),
-            'label' => __('Grand Total')
-        ));
+        $this->_totals['grand_total'] = new \Magento\Object(
+            array(
+                'code' => 'grand_total',
+                'field' => 'grand_total',
+                'strong' => true,
+                'value' => $source->getGrandTotal(),
+                'label' => __('Grand Total')
+            )
+        );
 
         /**
          * Base grandtotal
          */
         if ($this->getOrder()->isCurrencyDifferent()) {
-            $this->_totals['base_grandtotal'] = new \Magento\Object(array(
-                'code'  => 'base_grandtotal',
-                'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
-                'label' => __('Grand Total to be Charged'),
-                'is_formated' => true,
-            ));
+            $this->_totals['base_grandtotal'] = new \Magento\Object(
+                array(
+                    'code' => 'base_grandtotal',
+                    'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
+                    'label' => __('Grand Total to be Charged'),
+                    'is_formated' => true
+                )
+            );
         }
         return $this;
     }
@@ -183,10 +198,10 @@ class Totals extends \Magento\View\Element\Template
      * Add new total to totals array after specific total or before last total by default
      *
      * @param   \Magento\Object $total
-     * @param   null|string|last|first $after
-     * @return  \Magento\Sales\Block\Order\Totals
+     * @param   null|string $after
+     * @return  $this
      */
-    public function addTotal(\Magento\Object $total, $after=null)
+    public function addTotal(\Magento\Object $total, $after = null)
     {
         if ($after !== null && $after != 'last' && $after != 'first') {
             $totals = array();
@@ -204,10 +219,10 @@ class Totals extends \Magento\View\Element\Template
                 $totals[$last->getCode()] = $last;
             }
             $this->_totals = $totals;
-        } elseif ($after=='last')  {
+        } elseif ($after == 'last') {
             $this->_totals[$total->getCode()] = $total;
-        } elseif ($after=='first')  {
-            $totals = array($total->getCode()=>$total);
+        } elseif ($after == 'first') {
+            $totals = array($total->getCode() => $total);
             $this->_totals = array_merge($totals, $this->_totals);
         } else {
             $last = array_pop($this->_totals);
@@ -221,10 +236,10 @@ class Totals extends \Magento\View\Element\Template
      * Add new total to totals array before specific total or after first total by default
      *
      * @param   \Magento\Object $total
-     * @param   null|string $after
-     * @return  \Magento\Sales\Block\Order\Totals
+     * @param   null|string $before
+     * @return  $this
      */
-    public function addTotalBefore(\Magento\Object $total, $before=null)
+    public function addTotalBefore(\Magento\Object $total, $before = null)
     {
         if ($before !== null) {
             if (!is_array($before)) {
@@ -258,7 +273,8 @@ class Totals extends \Magento\View\Element\Template
     /**
      * Get Total object by code
      *
-     * @@return \Magento\Object
+     * @param string $code
+     * @return mixed
      */
     public function getTotal($code)
     {
@@ -272,7 +288,7 @@ class Totals extends \Magento\View\Element\Template
      * Delete total by specific
      *
      * @param   string $code
-     * @return  \Magento\Sales\Block\Order\Totals
+     * @return  $this
      */
     public function removeTotal($code)
     {
@@ -289,7 +305,7 @@ class Totals extends \Magento\View\Element\Template
      *
      *
      * @param   array $order
-     * @return  \Magento\Sales\Block\Order\Totals
+     * @return  $this
      */
     public function applySortOrder($order)
     {
@@ -299,9 +315,10 @@ class Totals extends \Magento\View\Element\Template
     /**
      * get totals array for visualization
      *
+     * @param array|null $area
      * @return array
      */
-    public function getTotals($area=null)
+    public function getTotals($area = null)
     {
         $totals = array();
         if ($area === null) {
@@ -309,7 +326,7 @@ class Totals extends \Magento\View\Element\Template
         } else {
             $area = (string)$area;
             foreach ($this->_totals as $total) {
-                $totalArea = (string) $total->getArea();
+                $totalArea = (string)$total->getArea();
                 if ($totalArea == $area) {
                     $totals[] = $total;
                 }

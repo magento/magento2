@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Core Resource Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
-class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Config extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -52,24 +51,26 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $value
      * @param string $scope
      * @param int $scopeId
-     * @return \Magento\Core\Model\Resource\Config
+     * @return $this
      */
     public function saveConfig($path, $value, $scope, $scopeId)
     {
         $writeAdapter = $this->_getWriteAdapter();
-        $select = $writeAdapter->select()
-            ->from($this->getMainTable())
-            ->where('path = ?', $path)
-            ->where('scope = ?', $scope)
-            ->where('scope_id = ?', $scopeId);
+        $select = $writeAdapter->select()->from(
+            $this->getMainTable()
+        )->where(
+            'path = ?',
+            $path
+        )->where(
+            'scope = ?',
+            $scope
+        )->where(
+            'scope_id = ?',
+            $scopeId
+        );
         $row = $writeAdapter->fetchRow($select);
 
-        $newData = array(
-            'scope'     => $scope,
-            'scope_id'  => $scopeId,
-            'path'      => $path,
-            'value'     => $value
-        );
+        $newData = array('scope' => $scope, 'scope_id' => $scopeId, 'path' => $path, 'value' => $value);
 
         if ($row) {
             $whereCondition = array($this->getIdFieldName() . '=?' => $row[$this->getIdFieldName()]);
@@ -86,16 +87,19 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $path
      * @param string $scope
      * @param int $scopeId
-     * @return \Magento\Core\Model\Resource\Config
+     * @return $this
      */
     public function deleteConfig($path, $scope, $scopeId)
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->delete($this->getMainTable(), array(
-            $adapter->quoteInto('path = ?', $path),
-            $adapter->quoteInto('scope = ?', $scope),
-            $adapter->quoteInto('scope_id = ?', $scopeId)
-        ));
+        $adapter->delete(
+            $this->getMainTable(),
+            array(
+                $adapter->quoteInto('path = ?', $path),
+                $adapter->quoteInto('scope = ?', $scope),
+                $adapter->quoteInto('scope_id = ?', $scopeId)
+            )
+        );
         return $this;
     }
 }

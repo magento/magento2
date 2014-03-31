@@ -40,7 +40,6 @@ return array(
             'class' => 'Magento\PersistentHistory\Model\Observer',
             'method' => 'emulateComparedProductsBlock',
             'block_type' => 'Magento\Reports\Block\Product\Compared'
-        ),
+        )
     )
 );
-

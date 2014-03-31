@@ -39,11 +39,12 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-class Website extends \Magento\Core\Model\AbstractModel
+class Website extends \Magento\Model\AbstractModel
 {
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,17 +66,15 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     public function removeProducts($websiteIds, $productIds)
     {
         try {
             $this->_getResource()->removeProducts($websiteIds, $productIds);
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(
-                __('Something went wrong removing products from the websites.')
-            );
+            throw new \Magento\Model\Exception(__('Something went wrong removing products from the websites.'));
         }
         return $this;
     }
@@ -85,17 +84,15 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Model\Exception
      */
     public function addProducts($websiteIds, $productIds)
     {
         try {
             $this->_getResource()->addProducts($websiteIds, $productIds);
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(
-                __('Something went wrong adding products to websites.')
-            );
+            throw new \Magento\Model\Exception(__('Something went wrong adding products to websites.'));
         }
         return $this;
     }

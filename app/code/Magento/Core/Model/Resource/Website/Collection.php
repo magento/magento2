@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Website;
 
 /**
  * Websites collection
@@ -32,9 +32,7 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Website;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Map field to alias
@@ -46,6 +44,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -55,6 +54,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Apply custom filtering
+     *
+     * @return void
      */
     protected function _renderFiltersBefore()
     {
@@ -67,8 +68,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set flag for load default (admin) website
      *
-     * @param boolean $loadDefault
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @param bool $loadDefault
+     * @return $this
      */
     public function setLoadDefault($loadDefault)
     {
@@ -79,7 +80,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Is load default (admin) website
      *
-     * @return boolean
+     * @return bool
      */
     public function getLoadDefault()
     {
@@ -89,7 +90,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Convert items array to array for select options
      *
-     * @return Array
+     * @return array
      */
     public function toOptionArray()
     {
@@ -99,19 +100,18 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Convert items array to hash for select options
      *
-     * @return Array
+     * @return array
      */
     public function toOptionHash()
     {
         return $this->_toOptionHash('website_id', 'name');
     }
 
-
     /**
      * Add website filter to collection
      *
      * @param int $ids|array
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function addIdFilter($ids)
     {
@@ -132,12 +132,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param boolean $printQuery
      * @param boolean $logQuery
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
         $this->unshiftOrder('main_table.name', \Magento\DB\Select::SQL_ASC)       // website name SECOND
-             ->unshiftOrder('main_table.sort_order', \Magento\DB\Select::SQL_ASC); // website sort order FIRST
+            ->unshiftOrder('main_table.sort_order', \Magento\DB\Select::SQL_ASC); // website sort order FIRST
 
         return parent::load($printQuery, $logQuery);
     }
@@ -149,7 +149,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets extra combined ordering by group's name, defined
      * sort ordering and store's name.
      *
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function joinGroupAndStore()
     {
@@ -165,11 +165,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 array('store_id' => 'store_id', 'store_title' => 'name')
             );
             $this->addOrder('group_table.name', \Magento\DB\Select::SQL_ASC)       // store name
-                ->addOrder('CASE WHEN store_table.store_id = 0 THEN 0 ELSE 1 END', \Magento\DB\Select::SQL_ASC) // view is admin
+                ->addOrder(
+                    'CASE WHEN store_table.store_id = 0 THEN 0 ELSE 1 END',
+                    \Magento\DB\Select::SQL_ASC
+                ) // view is admin
                 ->addOrder('store_table.sort_order', \Magento\DB\Select::SQL_ASC) // view sort order
                 ->addOrder('store_table.name', \Magento\DB\Select::SQL_ASC)       // view name
             ;
-            $this->setFlag('groups_and_stores_joined', true);
         }
         return $this;
     }
@@ -179,7 +181,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * tables with appropriate information were joined before.
      *
      * @param int|array $groupIds
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function addFilterByGroupIds($groupIds)
     {

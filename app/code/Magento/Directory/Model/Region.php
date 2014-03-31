@@ -43,8 +43,11 @@
  */
 namespace Magento\Directory\Model;
 
-class Region extends \Magento\Core\Model\AbstractModel
+class Region extends \Magento\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Directory\Model\Resource\Region');
@@ -66,6 +69,11 @@ class Region extends \Magento\Core\Model\AbstractModel
         return $name;
     }
 
+    /**
+     * @param string $code
+     * @param string $countryId
+     * @return $this
+     */
     public function loadByCode($code, $countryId)
     {
         if ($code) {
@@ -74,10 +82,14 @@ class Region extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string $countryId
+     * @return $this
+     */
     public function loadByName($name, $countryId)
     {
         $this->_getResource()->loadByName($this, $name, $countryId);
         return $this;
     }
-
 }

@@ -26,9 +26,9 @@
 namespace Magento\Index\App;
 
 use Magento\App\Console\Response;
-use Magento\LauncherInterface;
+use Magento\AppInterface;
 
-class Shell implements LauncherInterface
+class Shell implements AppInterface
 {
     /**
      * Filename of the entry point script
@@ -52,11 +52,8 @@ class Shell implements LauncherInterface
      * @param \Magento\Index\Model\ShellFactory $shellFactory
      * @param Response $response
      */
-    public function __construct(
-        $entryFileName,
-        \Magento\Index\Model\ShellFactory $shellFactory,
-        Response $response
-    ) {
+    public function __construct($entryFileName, \Magento\Index\Model\ShellFactory $shellFactory, Response $response)
+    {
         $this->_entryFileName = $entryFileName;
         $this->_shellFactory = $shellFactory;
         $this->_response = $response;

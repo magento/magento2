@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -34,31 +33,43 @@ use Magento\View\Layout\File\FileList\Factory;
 class Aggregated implements SourceInterface
 {
     /**
+     * File list factory
+     *
      * @var Factory
      */
     protected $fileListFactory;
 
     /**
+     * Base files
+     *
      * @var SourceInterface
      */
     protected $baseFiles;
 
     /**
+     * Theme files
+     *
      * @var SourceInterface
      */
     protected $themeFiles;
 
     /**
+     * Overridden base files
+     *
      * @var SourceInterface
      */
     protected $overrideBaseFiles;
 
     /**
+     * Overridden theme files
+     *
      * @var SourceInterface
      */
     protected $overrideThemeFiles;
 
     /**
+     * Constructor
+     *
      * @param Factory $fileListFactory
      * @param SourceInterface $baseFiles
      * @param SourceInterface $themeFiles

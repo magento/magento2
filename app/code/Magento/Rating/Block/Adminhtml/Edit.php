@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Block\Adminhtml;
 
 /**
  * Rating edit form
  */
-namespace Magento\Rating\Block\Adminhtml;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -44,18 +43,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
+
+    /**
+     * @var string
+     */
     protected $_blockGroup = 'Magento_Rating';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_ratingFactory = $ratingFactory;
@@ -63,6 +66,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -74,13 +80,15 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('delete', 'label', __('Delete Rating'));
 
         if ($this->getRequest()->getParam($this->_objectId)) {
-            $ratingData = $this->_ratingFactory->create()
-                ->load($this->getRequest()->getParam($this->_objectId));
+            $ratingData = $this->_ratingFactory->create()->load($this->getRequest()->getParam($this->_objectId));
 
             $this->_coreRegistry->register('rating_data', $ratingData);
         }
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         $ratingData = $this->_coreRegistry->registry('rating_data');

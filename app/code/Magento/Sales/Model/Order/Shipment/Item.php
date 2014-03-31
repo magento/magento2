@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Shipment;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
@@ -49,14 +50,26 @@
  * @method string getSku()
  * @method \Magento\Sales\Model\Order\Shipment\Item setSku(string $value)
  */
-namespace Magento\Sales\Model\Order\Shipment;
-
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Model\AbstractModel
 {
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_shipment_item';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'shipment_item';
 
+    /**
+     * @var \Magento\Sales\Model\Order\Shipment|null
+     */
     protected $_shipment = null;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Item|null
+     */
     protected $_orderItem = null;
 
     /**
@@ -65,33 +78,29 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_orderItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_orderItemFactory = $orderItemFactory;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -101,8 +110,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare Shipment instance
      *
-     * @param   \Magento\Sales\Model\Order\Shipment $shipment
-     * @return  \Magento\Sales\Model\Order\Shipment\Item
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @return $this
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -123,8 +132,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare order item instance
      *
-     * @param   \Magento\Sales\Model\Order\Item $item
-     * @return  \Magento\Sales\Model\Order\Shipment\Item
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @return $this
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -155,12 +164,12 @@ class Item extends \Magento\Core\Model\AbstractModel
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Invoice\Item
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setQty($qty)
     {
         if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (float)$qty;
+            $qty = (double)$qty;
         } else {
             $qty = (int)$qty;
         }
@@ -171,9 +180,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Core\Exception(
-                __('We found an invalid qty to ship for item "%1".', $this->getName())
-            );
+            throw new \Magento\Model\Exception(__('We found an invalid qty to ship for item "%1".', $this->getName()));
         }
         return $this;
     }
@@ -181,20 +188,18 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Applying qty to order item
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Item
+     * @return $this
      */
     public function register()
     {
-        $this->getOrderItem()->setQtyShipped(
-            $this->getOrderItem()->getQtyShipped() + $this->getQty()
-        );
+        $this->getOrderItem()->setQtyShipped($this->getOrderItem()->getQtyShipped() + $this->getQty());
         return $this;
     }
 
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Item
+     * @return $this
      */
     protected function _beforeSave()
     {

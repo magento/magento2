@@ -25,8 +25,7 @@
  */
 namespace Magento\GoogleAdwords\Model\Config\Backend;
 
-class ConversionId
-    extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversion
+class ConversionId extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversion
 {
     /**
      * Validation rule conversion id
@@ -35,8 +34,10 @@ class ConversionId
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $this->_validatorComposite->addRule($this->_validatorFactory->createConversionIdValidator($this->getValue()),
-            'conversion_id');
+        $this->_validatorComposite->addRule(
+            $this->_validatorFactory->createConversionIdValidator($this->getValue()),
+            'conversion_id'
+        );
         return $this->_validatorComposite;
     }
 

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer\Filter\Price;
 
 /**
  * Algorithm for layer price filter
@@ -31,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Layer\Filter\Price;
-
 class Algorithm
 {
     /**
@@ -55,6 +54,7 @@ class Algorithm
      * Min and Max number of intervals
      */
     const MIN_INTERVALS_NUMBER = 2;
+
     const MAX_INTERVALS_NUMBER = 10;
 
     /**
@@ -143,8 +143,8 @@ class Algorithm
      */
     public function setLimits($lowerLimit = null, $upperLimit = null)
     {
-        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
-        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
+        $this->_lowerLimit = empty($lowerLimit) ? null : (double)$lowerLimit;
+        $this->_upperLimit = empty($upperLimit) ? null : (double)$upperLimit;
         return $this;
     }
 
@@ -153,7 +153,7 @@ class Algorithm
      * Returns -1 if index was not found
      *
      * @param float $value
-     * @param null|array $limits search [from, to]
+     * @param null|float[] $limits search [from, to]
      * @return int
      */
     protected function _binarySearch($value, $limits = null)
@@ -177,7 +177,7 @@ class Algorithm
         }
 
         if ($limits[1] - $limits[0] <= 1) {
-            return ($this->_prices[$limits[0]] < $value) ? $limits[1] : $limits[0];
+            return $this->_prices[$limits[0]] < $value ? $limits[1] : $limits[0];
         }
 
         $separator = floor(($limits[0] + $limits[1]) / 2);
@@ -197,7 +197,7 @@ class Algorithm
      * @param float $max
      * @param float $standardDeviation
      * @param int $count
-     * @return \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
+     * @return $this
      */
     public function setStatistics($min, $max, $standardDeviation, $count)
     {
@@ -205,7 +205,7 @@ class Algorithm
         $this->_minPrice = $min;
         $this->_maxPrice = $max;
         $priceRange = $max - $min;
-        if ($count < 2 || ($priceRange <= 0)) {
+        if ($count < 2 || $priceRange <= 0) {
             //Same price couldn't be separated with several intervals
             $this->_intervalsNumber = 1;
             return $this;
@@ -226,7 +226,7 @@ class Algorithm
      * Set prices model
      *
      * @param \Magento\Catalog\Model\Layer\Filter\Price $pricesModel
-     * @return \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
+     * @return $this
      */
     public function setPricesModel($pricesModel)
     {
@@ -277,7 +277,7 @@ class Algorithm
      * Get quantile interval
      *
      * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
-     * @return null|array [floatMin,floatMax]
+     * @return null|float[] [floatMin,floatMax]
      */
     protected function _getQuantileInterval($quantileNumber)
     {
@@ -288,15 +288,17 @@ class Algorithm
         $deflectionLimit = floor($this->_count / 2 / $this->getIntervalsNumber());
         $limits = array(
             min(floor($quantile - $deflectionLimit), floor($quantile)),
-            max(ceil($quantile + $deflectionLimit - 1), ceil($quantile)),
+            max(ceil($quantile + $deflectionLimit - 1), ceil($quantile))
         );
 
-        $deflection = self::STANDARD_NORMAL_DISTRIBUTION
-            * sqrt($this->_count * $quantileNumber * ($this->getIntervalsNumber() - $quantileNumber))
-            / $this->getIntervalsNumber();
+        $deflection = self::STANDARD_NORMAL_DISTRIBUTION * sqrt(
+            $this->_count * $quantileNumber * ($this->getIntervalsNumber() - $quantileNumber)
+        ) / $this->getIntervalsNumber();
         $left = max(floor($quantile - $deflection - 1), $limits[0], 0);
-        if (array_key_exists($quantileNumber - 1, $this->_skippedQuantilesUpperLimits)
-            && $left > $this->_skippedQuantilesUpperLimits[$quantileNumber - 1]
+        if (array_key_exists(
+            $quantileNumber - 1,
+            $this->_skippedQuantilesUpperLimits
+        ) && $left > $this->_skippedQuantilesUpperLimits[$quantileNumber - 1]
         ) {
             $left = $this->_skippedQuantilesUpperLimits[$quantileNumber - 1];
         }
@@ -307,18 +309,17 @@ class Algorithm
     /**
      * Merge new round prices with old ones
      *
-     * @param array $oldRoundPrices
-     * @param array $newRoundPrices
+     * @param array &$oldRoundPrices
+     * @param array &$newRoundPrices
      * @return void
      */
     protected function _mergeRoundPrices(&$oldRoundPrices, &$newRoundPrices)
     {
         foreach ($newRoundPrices as $roundingFactor => $roundPriceValues) {
             if (array_key_exists($roundingFactor, $oldRoundPrices)) {
-                $oldRoundPrices[$roundingFactor] = array_unique(array_merge(
-                    $oldRoundPrices[$roundingFactor],
-                    $roundPriceValues
-                ));
+                $oldRoundPrices[$roundingFactor] = array_unique(
+                    array_merge($oldRoundPrices[$roundingFactor], $roundPriceValues)
+                );
             } else {
                 $oldRoundPrices[$roundingFactor] = $roundPriceValues;
             }
@@ -358,19 +359,20 @@ class Algorithm
             $lowerPrice = max($lowerPrice, $this->_lowerLimit);
         }
         if ($intervalPricesCount >= 0) {
-            $prices = array_merge($prices, $this->_pricesModel->loadPrices(
-                $intervalPricesCount + 1,
-                $offset,
-                $lowerPrice,
-                $this->_upperLimit
-            ));
+            $prices = array_merge(
+                $prices,
+                $this->_pricesModel->loadPrices($intervalPricesCount + 1, $offset, $lowerPrice, $this->_upperLimit)
+            );
         }
         $lastPrice = $prices[$intervalPricesCount - 1];
         $bestRoundPrice = array();
         if ($lastPrice == $prices[0]) {
             if ($quantileNumber == 1 && $offset) {
-                $additionalPrices = $this->_pricesModel
-                    ->loadPreviousPrices($lastPrice, $quantileInterval[0], $this->_lowerLimit);
+                $additionalPrices = $this->_pricesModel->loadPreviousPrices(
+                    $lastPrice,
+                    $quantileInterval[0],
+                    $this->_lowerLimit
+                );
                 if ($additionalPrices) {
                     $quantileInterval[0] -= count($additionalPrices);
                     $prices = array_merge($additionalPrices, $prices);
@@ -484,11 +486,16 @@ class Algorithm
             foreach ($roundingFactorCoefficients as $roundingFactorCoefficient) {
                 $roundingFactorCoefficient *= $tenPower;
                 $roundPrices = $this->_findRoundPrice(
-                    $lowerPrice, $upperPrice, $returnEmpty, $roundingFactorCoefficient
+                    $lowerPrice,
+                    $upperPrice,
+                    $returnEmpty,
+                    $roundingFactorCoefficient
                 );
                 if ($roundPrices) {
-                    $index = round($roundingFactorCoefficient
-                        / \Magento\Catalog\Model\Resource\Layer\Filter\Price::MIN_POSSIBLE_PRICE);
+                    $index = round(
+                        $roundingFactorCoefficient /
+                        \Magento\Catalog\Model\Resource\Layer\Filter\Price::MIN_POSSIBLE_PRICE
+                    );
                     $result[$index] = $roundPrices;
                 }
             }
@@ -503,7 +510,7 @@ class Algorithm
      *
      * @param int $quantileNumber
      * @param array $separators
-     * @return bool|array [deflection, separatorPrice, $priceIndex]
+     * @return array|false [deflection, separatorPrice, $priceIndex]
      */
     protected function _findBestSeparator($quantileNumber, $separators)
     {
@@ -519,8 +526,11 @@ class Algorithm
 
             $separator = array_shift($separators);
 
-            $deflection = abs($quantileNumber * $this->_count
-                - ($this->_quantileInterval[0] + $i) * $this->_getCalculatedIntervalsNumber());
+            $deflection = abs(
+                $quantileNumber * $this->_count -
+                ($this->_quantileInterval[0] +
+                $i) * $this->_getCalculatedIntervalsNumber()
+            );
             if (!$result || $deflection < $result[0]) {
                 $result = array($deflection, $separator, $i);
             }
@@ -558,14 +568,13 @@ class Algorithm
                 $separatorsPortion = array_shift($separator);
                 $bestSeparator = $this->_findBestSeparator($i, $separatorsPortion);
                 if ($bestSeparator && $bestSeparator[2] > 0) {
-                    $isEqualPrice = ($intervalFirstPrice == $this->_prices[$bestSeparator[2] - 1])
-                        ? $this->_prices[0]
-                        : false;
+                    $isEqualPrice = $intervalFirstPrice ==
+                        $this->_prices[$bestSeparator[2] - 1] ? $this->_prices[0] : false;
                     $count = $bestSeparator[2] + $this->_quantileInterval[0] - $lastCount;
                     $separatorData = array(
-                        'from'  => ($isEqualPrice !== false) ? $isEqualPrice : $lastSeparator,
-                        'to'    => ($isEqualPrice !== false) ? $isEqualPrice : $bestSeparator[1],
-                        'count' => $count,
+                        'from' => $isEqualPrice !== false ? $isEqualPrice : $lastSeparator,
+                        'to' => $isEqualPrice !== false ? $isEqualPrice : $bestSeparator[1],
+                        'count' => $count
                     );
                     if (abs(1 - $count / $pricesPerInterval) <= self::INTERVAL_DEFLECTION_LIMIT) {
                         $newLastSeparator = $bestSeparator[1];
@@ -599,11 +608,11 @@ class Algorithm
             }
         }
         if ($this->_lastPriceLimiter[0] < $this->_count) {
-            $isEqualPrice = ($intervalFirstPrice == $this->_maxPrice) ? $intervalFirstPrice : false;
+            $isEqualPrice = $intervalFirstPrice == $this->_maxPrice ? $intervalFirstPrice : false;
             $result[$this->getIntervalsNumber()] = array(
-                'from'  => $isEqualPrice ? $isEqualPrice : $lastSeparator,
-                'to'    => $isEqualPrice ? $isEqualPrice : (is_null($this->_upperLimit) ? '' : $this->_upperLimit),
-                'count' => $this->_count - $lastCount,
+                'from' => $isEqualPrice ? $isEqualPrice : $lastSeparator,
+                'to' => $isEqualPrice ? $isEqualPrice : (is_null($this->_upperLimit) ? '' : $this->_upperLimit),
+                'count' => $this->_count - $lastCount
             );
         }
 

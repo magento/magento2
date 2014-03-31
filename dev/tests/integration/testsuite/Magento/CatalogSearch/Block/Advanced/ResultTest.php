@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Block\Advanced;
 
 class ResultTest extends \PHPUnit_Framework_TestCase
@@ -41,8 +40,9 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\LayoutInterface');
+        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        );
         $this->_block = $this->_layout->createBlock('Magento\CatalogSearch\Block\Advanced\Result', 'block');
     }
 
@@ -57,21 +57,22 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             'option3' => 'Label Option 2'
         );
         $category = $this->getMock(
-            'Magento\Catalog\Model\Category', array('getAvailableSortByOptions'), array(), '', false
+            'Magento\Catalog\Model\Category',
+            array('getAvailableSortByOptions'),
+            array(),
+            '',
+            false
         );
         $category->expects($this->atLeastOnce())
             ->method('getAvailableSortByOptions')
             ->will($this->returnValue($sortOptions));
         $category->setId(100500); // Any id - just for layer navigation
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Layer')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Layer\Search')
             ->setCurrentCategory($category);
 
         $childBlock = $this->_layout->addBlock('Magento\View\Element\Text', 'search_result_list', 'block');
 
-        $expectedOptions = array(
-            'option1' => 'Label Option 1',
-            'option3' => 'Label Option 2'
-        );
+        $expectedOptions = array('option1' => 'Label Option 1', 'option3' => 'Label Option 2');
         $this->assertNotEquals($expectedOptions, $childBlock->getAvailableOrders());
         $this->_block->setListOrders();
         $this->assertEquals($expectedOptions, $childBlock->getAvailableOrders());

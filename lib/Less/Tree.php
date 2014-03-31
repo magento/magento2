@@ -1,51 +1,78 @@
 <?php
 
+/**
+ * Tree
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree{
 
-	public function toCSS($env = null){
-		$strs = array();
-		$this->genCSS($env, $strs );
-		return implode('',$strs);
+	public $cache_string;
+
+	public function toCSS(){
+		$output = new Less_Output();
+		$this->genCSS($output);
+		return $output->toString();
 	}
 
-	public static function OutputAdd( &$strs, $chunk, $fileInfo = null, $index = null ){
-		$strs[] = $chunk;
-	}
+
+    /**
+     * Generate CSS by adding it to the output object
+     *
+     * @param Less_Output $output The output
+     * @return void
+     */
+    public function genCSS($output){}
 
 
-	public static function outputRuleset($env, &$strs, $rules ){
+	/**
+	 * @param Less_Tree_Ruleset[] $rules
+	 */
+	public static function outputRuleset( $output, $rules ){
 
 		$ruleCnt = count($rules);
-		$env->tabLevel++;
+		Less_Environment::$tabLevel++;
 
 
 		// Compressed
-		if( Less_Environment::$compress ){
-			self::OutputAdd( $strs, '{' );
+		if( Less_Parser::$options['compress'] ){
+			$output->add('{');
 			for( $i = 0; $i < $ruleCnt; $i++ ){
-				$rules[$i]->genCSS( $env, $strs );
+				$rules[$i]->genCSS( $output );
 			}
-			self::OutputAdd( $strs, '}' );
-			$env->tabLevel--;
+
+			$output->add( '}' );
+			Less_Environment::$tabLevel--;
 			return;
 		}
 
 
 		// Non-compressed
-		$tabSetStr = "\n".str_repeat( '  ' , $env->tabLevel-1 );
+		$tabSetStr = "\n".str_repeat( '  ' , Less_Environment::$tabLevel-1 );
 		$tabRuleStr = $tabSetStr.'  ';
 
-		self::OutputAdd( $strs, " {" );
+		$output->add( " {" );
 		for($i = 0; $i < $ruleCnt; $i++ ){
-			self::OutputAdd( $strs, $tabRuleStr );
-			$rules[$i]->genCSS( $env, $strs );
+			$output->add( $tabRuleStr );
+			$rules[$i]->genCSS( $output );
 		}
-		$env->tabLevel--;
-		self::OutputAdd( $strs, $tabSetStr.'}' );
+		Less_Environment::$tabLevel--;
+		$output->add( $tabSetStr.'}' );
 
 	}
 
 	public function accept($visitor){}
+
+
+	public static function ReferencedArray($rules){
+		foreach($rules as $rule){
+			if( method_exists($rule, 'markReferenced') ){
+				$rule->markReferenced();
+			}
+		}
+	}
+
 
 	/**
 	 * Requires php 5.3+

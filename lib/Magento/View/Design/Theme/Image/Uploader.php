@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Theme\Image;
 
 /**
@@ -34,24 +33,32 @@ class Uploader
      *
      * @var array
      */
-    protected  $_allowedExtensions = array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp');
+    protected $_allowedExtensions = array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp');
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * Transfer adapter
+     *
      * @var \Zend_File_Transfer_Adapter_Http
      */
     protected $_transferAdapter;
 
     /**
+     * Uploader factory
+     *
      * @var \Magento\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\HTTP\Adapter\FileTransferFactory $adapterFactory
      * @param \Magento\File\UploaderFactory $uploaderFactory

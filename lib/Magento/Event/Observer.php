@@ -23,10 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Event;
 
-use \Magento\Event;
+use Magento\Event;
 
 class Observer extends \Magento\Object
 {
@@ -56,7 +55,11 @@ class Observer extends \Magento\Object
         $callback = $this->getCallback();
         $this->setEvent($event);
 
-        $_profilerKey = 'OBSERVER: '.(is_object($callback[0]) ? get_class($callback[0]) : (string)$callback[0]).' -> '.$callback[1];
+        $_profilerKey = 'OBSERVER: ' . (is_object(
+            $callback[0]
+        ) ? get_class(
+            $callback[0]
+        ) : (string)$callback[0]) . ' -> ' . $callback[1];
         \Magento\Profiler::start($_profilerKey);
         call_user_func($callback, $this);
         \Magento\Profiler::stop($_profilerKey);

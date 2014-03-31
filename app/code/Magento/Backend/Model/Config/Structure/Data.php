@@ -26,13 +26,13 @@ namespace Magento\Backend\Model\Config\Structure;
 class Data extends \Magento\Config\Data\Scoped
 {
     /**
-     * @param \Magento\Backend\Model\Config\Structure\Reader $reader
+     * @param Reader $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache
-     * @param $cacheId
+     * @param string $cacheId
      */
     public function __construct(
-        \Magento\Backend\Model\Config\Structure\Reader $reader,
+        Reader $reader,
         \Magento\Config\ScopeInterface $configScope,
         \Magento\Config\CacheInterface $cache,
         $cacheId
@@ -44,6 +44,7 @@ class Data extends \Magento\Config\Data\Scoped
      * Merge additional config
      *
      * @param array $config
+     * @return void
      */
     public function merge(array $config)
     {

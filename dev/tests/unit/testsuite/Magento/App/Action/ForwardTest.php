@@ -42,12 +42,10 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false );
-        $this->_response = $this->getMock('\Magento\App\Response\Http');
+        $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->_response = $this->getMock('\Magento\App\Response\Http', array(), array(), '', false);
 
-        $this->_actionAbstract = new \Magento\App\Action\Forward(
-            $this->_request,
-            $this->_response);
+        $this->_actionAbstract = new \Magento\App\Action\Forward($this->_request, $this->_response);
     }
 
     public function testDispatch()
@@ -88,8 +86,10 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     {
         $infoProcessorMock = $this->getMock('Magento\App\Request\PathInfoProcessorInterface');
         $routerListMock = $this->getMock('Magento\App\Route\ConfigInterface');
+        $cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
         $request = new \Magento\App\Request\Http($routerListMock, $infoProcessorMock);
-        $response = new \Magento\App\Response\Http();
+        $response = new \Magento\App\Response\Http($cookieMock, $contextMock);
         $response->headersSentThrowsException = false;
         $action = new \Magento\App\Action\Forward($request, $response);
 

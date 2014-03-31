@@ -90,7 +90,8 @@ class Memory
             $command = 'ps -p %s -o rss=';
         }
         $output = $this->_shell->execute($command, array($pid));
-        $result = $output . 'k'; // kilobytes
+        $result = $output . 'k';
+        // kilobytes
         return self::convertToBytes($result);
     }
 
@@ -103,7 +104,7 @@ class Memory
      */
     protected function _getWinProcessMemoryUsage($pid)
     {
-        $output = $this->_shell->execute('tasklist.exe /fi %s /fo CSV /nh', array("PID eq $pid"));
+        $output = $this->_shell->execute('tasklist.exe /fi %s /fo CSV /nh', array("PID eq {$pid}"));
 
         /** @link http://www.php.net/manual/en/wrappers.data.php */
         $csvStream = 'data://text/plain;base64,' . base64_encode($output);
@@ -127,11 +128,11 @@ class Memory
     public static function convertToBytes($number)
     {
         if (!preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
-            throw new \InvalidArgumentException("Number format '$number' is not recognized.");
+            throw new \InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
         $unitSymbol = strtoupper($matches[2]);
         if (false === strpos(self::MEMORY_UNITS, $unitSymbol)) {
-            throw new \InvalidArgumentException("The number '$number' has an unrecognized unit: '$unitSymbol'.");
+            throw new \InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
         $result = self::_convertToNumber($matches[1]);
         $pow = $unitSymbol ? strpos(self::MEMORY_UNITS, $unitSymbol) : 0;
@@ -164,7 +165,7 @@ class Memory
         preg_match_all('/(\D+)/', $number, $matches);
         if (count(array_unique($matches[0])) > 1) {
             throw new \InvalidArgumentException(
-                "The number '$number' seems to have decimal part. Only integer numbers are supported."
+                "The number '{$number}' seems to have decimal part. Only integer numbers are supported."
             );
         }
         return preg_replace('/\D+/', '', $number);
@@ -178,6 +179,6 @@ class Memory
      */
     public static function isMacOs()
     {
-        return (strtoupper(PHP_OS) === 'DARWIN');
+        return strtoupper(PHP_OS) === 'DARWIN';
     }
 }

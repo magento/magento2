@@ -30,6 +30,7 @@
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="form-validate" >
         <?php echo $this->getBlockHtml('formkey'); ?>
         <table id="shopping-cart-table" class="cart items data">
+            <caption><?php echo __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
                     <th class="col item" rowspan="<?php echo $mergedCells; ?>"><span><?php echo __('Item') ?></span></th>
@@ -85,7 +86,7 @@
     <script type="text/javascript">
         (function($) {
             head.js(
-                "<?php echo $this->getViewFileUrl('js/sticky.js') ?>",
+                "<?php echo $this->getViewFileUrl('mage/sticky.js') ?>",
                 "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
                 "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
                 "<?php echo $this->getViewFileUrl('mage/validation.js')?>",

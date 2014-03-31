@@ -58,15 +58,17 @@ class Log
     }
 
     /**
-     * Clean events by old visitors
-     * after plugin for clean method
+     * Clean events by old visitors after plugin for clean method
+     *
+     * @param \Magento\Log\Model\Resource\Log $subject
+     * @param \Magento\Log\Model\Resource\Log $logResourceModel
+     *
+     * @return \Magento\Log\Model\Resource\Log
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @see Global Log Clean Settings
-     *
-     * @param \Magento\Log\Model\Resource\Log $logResourceModel
-     * @return \Magento\Log\Model\Resource\Log
      */
-    public function afterClean($logResourceModel)
+    public function afterClean(\Magento\Log\Model\Resource\Log $subject, $logResourceModel)
     {
         $this->_reportEvent->clean();
         $this->_comparedProductIdx->clean();

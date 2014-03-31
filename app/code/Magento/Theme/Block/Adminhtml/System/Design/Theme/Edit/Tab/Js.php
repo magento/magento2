@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
 /**
@@ -31,13 +30,12 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Js
-    extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -52,14 +50,12 @@ class Js
     /**
      * Set theme js fieldset
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+     * @return $this
      */
     protected function _addThemeJsFieldset()
     {
         $form = $this->getForm();
-        $themeFieldset = $form->addFieldset('theme_js', array(
-            'legend' => __('Theme Java Script'),
-        ));
+        $themeFieldset = $form->addFieldset('theme_js', array('legend' => __('Theme Java Script')));
         $customization = $this->_getCurrentTheme()->getCustomization();
         $customJsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
 
@@ -71,20 +67,24 @@ class Js
 
         $this->_addElementTypes($themeFieldset);
 
-        $themeFieldset->addField('js_files_uploader', 'js_files', array(
-            'name'     => 'js_files_uploader',
-            'label'    => __('Select JS Files to Upload'),
-            'title'    => __('Select JS Files to Upload'),
-            'accept'   => 'application/x-javascript',
-            'multiple' => '',
-            'note'     => $this->_getUploadJsFileNote()
-        ));
+        $themeFieldset->addField(
+            'js_files_uploader',
+            'js_files',
+            array(
+                'name' => 'js_files_uploader',
+                'label' => __('Select JS Files to Upload'),
+                'title' => __('Select JS Files to Upload'),
+                'accept' => 'application/x-javascript',
+                'multiple' => '',
+                'note' => $this->_getUploadJsFileNote()
+            )
+        );
 
-        $themeFieldset->addField('js_uploader_button', 'button', array(
-            'name'     => 'js_uploader_button',
-            'value'    => __('Upload JS Files'),
-            'disabled' => 'disabled',
-        ));
+        $themeFieldset->addField(
+            'js_uploader_button',
+            'button',
+            array('name' => 'js_uploader_button', 'value' => __('Upload JS Files'), 'disabled' => 'disabled')
+        );
 
         $jsFieldset->setRenderer($jsFieldsetRenderer);
         return $this;
@@ -119,7 +119,8 @@ class Js
     public function getJsUploadUrl()
     {
         return $this->getUrl(
-            'adminhtml/system_design_theme/uploadjs', array('id' => $this->_getCurrentTheme()->getId())
+            'adminhtml/system_design_theme/uploadjs',
+            array('id' => $this->_getCurrentTheme()->getId())
         );
     }
 

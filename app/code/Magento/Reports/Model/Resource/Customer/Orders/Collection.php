@@ -41,14 +41,14 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
-        $this->joinCustomerName()
-            ->groupByCustomer()
-            ->addOrdersCount()
-            ->addAttributeToFilter('created_at', array('from' => $fromDate, 'to' => $toDate, 'datetime' => true));
+        $this->joinCustomerName()->groupByCustomer()->addOrdersCount()->addAttributeToFilter(
+            'created_at',
+            array('from' => $fromDate, 'to' => $toDate, 'datetime' => true)
+        );
         return $this;
     }
 
@@ -57,12 +57,11 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
-        $this->_reset()
-            ->_joinFields($fromDate, $toDate);
+        $this->_reset()->_joinFields($fromDate, $toDate);
         return $this;
     }
 
@@ -70,17 +69,15 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      * Set store filter to collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
             $this->addAttributeToFilter('store_id', array('in' => (array)$storeIds));
-            $this->addSumAvgTotals(1)
-                ->orderByOrdersCount();
+            $this->addSumAvgTotals(1)->orderByOrdersCount();
         } else {
-            $this->addSumAvgTotals()
-                ->orderByOrdersCount();
+            $this->addSumAvgTotals()->orderByOrdersCount();
         }
 
         return $this;

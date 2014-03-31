@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block;
+
+use Magento\Catalog\Model\Product;
+use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
 
 /**
  * Review form block
@@ -31,11 +35,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block;
-
-use Magento\Catalog\Model\Product;
-use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
-
 class Form extends \Magento\View\Element\Template
 {
     /**
@@ -46,34 +45,51 @@ class Form extends \Magento\View\Element\Template
     protected $_reviewData = null;
 
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
+     * Catalog product model
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Review session model
+     *
      * @var \Magento\Review\Model\Session
      */
     protected $_reviewSession;
 
     /**
+     * Core helper data
+     *
      * @var \Magento\Core\Helper\Data
      */
     protected $_coreData;
 
     /**
+     * Message manager interface
+     *
      * @var \Magento\Message\ManagerInterface
      */
     protected $messageManager;
+
+    /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
@@ -84,6 +100,7 @@ class Form extends \Magento\View\Element\Template
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -95,6 +112,7 @@ class Form extends \Magento\View\Element\Template
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Message\ManagerInterface $messageManager,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
@@ -104,10 +122,16 @@ class Form extends \Magento\View\Element\Template
         $this->_productFactory = $productFactory;
         $this->_ratingFactory = $ratingFactory;
         $this->messageManager = $messageManager;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * Initialize review form
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -117,32 +141,42 @@ class Form extends \Magento\View\Element\Template
 
         // add logged in customer name as nickname
         if (!$data->getNickname()) {
-            $customer = $this->_customerSession->getCustomer();
+            $customer = $this->_customerSession->getCustomerDataObject();
             if ($customer && $customer->getId()) {
                 $data->setNickname($customer->getFirstname());
             }
         }
 
         $this->setAllowWriteReviewFlag(
-            $this->_customerSession->isLoggedIn() || $this->_reviewData->getIsGuestAllowToWrite()
+            $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)
+            || $this->_reviewData->getIsGuestAllowToWrite()
         );
         if (!$this->getAllowWriteReviewFlag()) {
             $queryParam = $this->_coreData->urlEncode(
                 $this->getUrl('*/*/*', array('_current' => true)) . '#review-form'
             );
-            $this->setLoginLink($this->getUrl(
+            $this->setLoginLink(
+                $this->getUrl(
                     'customer/account/login/',
                     array(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME => $queryParam)
                 )
             );
         }
 
-        $this->setTemplate('form.phtml')
-            ->assign('data', $data)
-            ->assign('messages', $this->messageManager->getMessages(true));
+        $this->setTemplate(
+            'form.phtml'
+        )->assign(
+            'data',
+            $data
+        )->assign(
+            'messages',
+            $this->messageManager->getMessages(true)
+        );
     }
 
     /**
+     * Get product info
+     *
      * @return Product
      */
     public function getProductInfo()
@@ -152,6 +186,8 @@ class Form extends \Magento\View\Element\Template
     }
 
     /**
+     * Get review product post action
+     *
      * @return string
      */
     public function getAction()
@@ -161,18 +197,20 @@ class Form extends \Magento\View\Element\Template
     }
 
     /**
+     * Get collection of ratings
+     *
      * @return RatingCollection
      */
     public function getRatings()
     {
-        return $this->_ratingFactory->create()
-            ->getResourceCollection()
-            ->addEntityFilter('product')
-            ->setPositionOrder()
-            ->addRatingPerStoreName($this->_storeManager->getStore()->getId())
-            ->setStoreFilter($this->_storeManager->getStore()->getId())
-            ->setActiveFilter(true)
-            ->load()
-            ->addOptionToItems();
+        return $this->_ratingFactory->create()->getResourceCollection()->addEntityFilter(
+            'product'
+        )->setPositionOrder()->addRatingPerStoreName(
+            $this->_storeManager->getStore()->getId()
+        )->setStoreFilter(
+            $this->_storeManager->getStore()->getId()
+        )->setActiveFilter(
+            true
+        )->load()->addOptionToItems();
     }
 }

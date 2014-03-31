@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Render;
 
 use Magento\ObjectManager;
@@ -33,11 +32,15 @@ use Magento\View\RenderInterface;
 class RenderFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      */
     public function __construct(ObjectManager $objectManager)
@@ -46,8 +49,10 @@ class RenderFactory
     }
 
     /**
+     * Get method
+     *
      * @param string $type
-     * @return mixed
+     * @return RenderInterface
      * @throws \InvalidArgumentException
      */
     public function get($type)
@@ -55,7 +60,7 @@ class RenderFactory
         $className = 'Magento\\View\\Render\\' . ucfirst($type);
         $model = $this->objectManager->get($className);
 
-        if (($model instanceof RenderInterface) === false) {
+        if ($model instanceof RenderInterface === false) {
             throw new \InvalidArgumentException(
                 sprintf('Type "%s" is not instance on Magento\View\RenderInterface', $type)
             );

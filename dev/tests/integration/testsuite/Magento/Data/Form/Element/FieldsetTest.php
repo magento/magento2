@@ -51,13 +51,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     protected function _fillFieldset(array $fields)
     {
         foreach ($fields as $field) {
-            $this->_fieldset->addField(
-                $field[0],
-                $field[1],
-                $field[2],
-                $field[3],
-                $field[4]
-            );
+            $this->_fieldset->addField($field[0], $field[1], $field[2], $field[3], $field[4]);
         }
     }
 
@@ -69,10 +63,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testHasAdvanced(array $fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertEquals(
-            $expect,
-            $this->_fieldset->hasAdvanced()
-        );
+        $this->assertEquals($expect, $this->_fieldset->hasAdvanced());
     }
 
     /**
@@ -97,12 +88,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                     array(
                         'code',
                         'text',
-                        array(
-                            'name' => 'code',
-                            'label' => 'Name',
-                            'class' => 'required-entry',
-                            'required' => true,
-                        ),
+                        array('name' => 'code', 'label' => 'Name', 'class' => 'required-entry', 'required' => true),
                         false,
                         false
                     ),
@@ -115,7 +101,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                             'class' => 'required-entry',
                             'values' => array('A', 'B', 'C'),
                             'value' => 1,
-                            'required' => true,
+                            'required' => true
                         ),
                         false,
                         false
@@ -129,7 +115,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                             'class' => 'validate-not-negative-number',
                             'value' => 1,
                             'required' => true,
-                            'note' => 'Tax rates at the same priority are added, others are compounded.',
+                            'note' => 'Tax rates at the same priority are added, others are compounded.'
                         ),
                         false,
                         true
@@ -143,7 +129,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                             'class' => 'validate-not-negative-number',
                             'value' => 1,
                             'required' => true,
-                            'note' => 'Tax rates at the same priority are added, others are compounded.',
+                            'note' => 'Tax rates at the same priority are added, others are compounded.'
                         ),
                         false,
                         true
@@ -156,12 +142,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                     array(
                         'code',
                         'text',
-                        array(
-                            'name'  => 'code',
-                            'label' => 'Name',
-                            'class' => 'required-entry',
-                            'required' => true,
-                        ),
+                        array('name' => 'code', 'label' => 'Name', 'class' => 'required-entry', 'required' => true),
                         false,
                         false
                     ),
@@ -169,12 +150,12 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                         'tax_rate',
                         'multiselect',
                         array(
-                            'name'  => 'tax_rate',
+                            'name' => 'tax_rate',
                             'label' => 'Tax Rate',
                             'class' => 'required-entry',
                             'values' => array('A', 'B', 'C'),
                             'value' => 1,
-                            'required' => true,
+                            'required' => true
                         ),
                         false,
                         false
@@ -191,10 +172,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertCount(
-            $expect,
-            $this->_fieldset->getChildren()
-        );
+        $this->assertCount($expect, $this->_fieldset->getChildren());
     }
 
     /**
@@ -218,10 +196,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testGetBasicChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertCount(
-            $expect,
-            $this->_fieldset->getBasicChildren()
-        );
+        $this->assertCount($expect, $this->_fieldset->getBasicChildren());
     }
 
     /**
@@ -232,10 +207,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testGetCountBasicChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertEquals(
-            $expect,
-            $this->_fieldset->getCountBasicChildren()
-        );
+        $this->assertEquals($expect, $this->_fieldset->getCountBasicChildren());
     }
 
     /**
@@ -257,10 +229,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testGetAdvancedChildren($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertCount(
-            $expect,
-            $this->_fieldset->getAdvancedChildren()
-        );
+        $this->assertCount($expect, $this->_fieldset->getAdvancedChildren());
     }
 
     /**
@@ -285,10 +254,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     public function testGetSubFieldset($fields, $expect)
     {
         $this->_fillFieldset($fields);
-        $this->assertCount(
-            $expect,
-            $this->_fieldset->getAdvancedChildren()
-        );
+        $this->assertCount($expect, $this->_fieldset->getAdvancedChildren());
     }
 
     /**

@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration\Mapper;
 
 abstract class AbstractMapper
@@ -38,7 +37,7 @@ abstract class AbstractMapper
         'show_in_default' => 'showInDefault',
         'show_in_store' => 'showInStore',
         'show_in_website' => 'showInWebsite',
-        'frontend_type' => 'type',
+        'frontend_type' => 'type'
     );
 
     /**
@@ -54,7 +53,7 @@ abstract class AbstractMapper
      * @param array $config
      * @return array
      */
-    public abstract function transform(array $config);
+    abstract public function transform(array $config);
 
     /**
      * Transform sub configuration
@@ -64,7 +63,7 @@ abstract class AbstractMapper
      * @param array $element
      * @return mixed
      */
-    protected abstract function _transformSubConfig(array $config, $parentNode, $element);
+    abstract protected function _transformSubConfig(array $config, $parentNode, $element);
 
     /**
      * Transform element configuration
@@ -82,7 +81,7 @@ abstract class AbstractMapper
         if (false === empty($nodeId)) {
             $element['@attributes']['id'] = $nodeId;
         }
-        $attributes =  $this->_getValue($config, '@attributes', array());
+        $attributes = $this->_getValue($config, '@attributes', array());
         $element = $this->_transformAttributes($attributes, $element);
 
         if (false === empty($attributes)) {
@@ -192,8 +191,17 @@ abstract class AbstractMapper
      */
     protected function _isSubConfigValue($nodeValue)
     {
-        return is_array($nodeValue) &&
-            !($this->_getValue($nodeValue, '#text', false) || $this->_getValue($nodeValue, '#cdata-section', false));
+        return is_array(
+            $nodeValue
+        ) && !($this->_getValue(
+            $nodeValue,
+            '#text',
+            false
+        ) || $this->_getValue(
+            $nodeValue,
+            '#cdata-section',
+            false
+        ));
     }
 
     /**

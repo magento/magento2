@@ -34,10 +34,8 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
-abstract class AbstractFrontend
-    implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
+abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
-
     /**
      * Reference to the attribute instance
      *
@@ -50,7 +48,10 @@ abstract class AbstractFrontend
      */
     protected $_attrBooleanFactory;
 
-    function __construct(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory)
+    /**
+     * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
+     */
+    public function __construct(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory)
     {
         $this->_attrBooleanFactory = $attrBooleanFactory;
     }
@@ -59,7 +60,7 @@ abstract class AbstractFrontend
      * Set attribute instance
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -95,7 +96,7 @@ abstract class AbstractFrontend
     public function getLabel()
     {
         $label = $this->getAttribute()->getFrontendLabel();
-        if (($label === null) || $label == '') {
+        if ($label === null || $label == '') {
             $label = $this->getAttribute()->getAttributeCode();
         }
 
@@ -105,16 +106,16 @@ abstract class AbstractFrontend
     /**
      * Retrieve attribute value
      *
-     * @param $object
+     * @param \Magento\Object $object
      * @return mixed
      */
     public function getValue(\Magento\Object $object)
     {
         $value = $object->getData($this->getAttribute()->getAttributeCode());
-        if (in_array($this->getConfigField('input'), array('select','boolean'))) {
+        if (in_array($this->getConfigField('input'), array('select', 'boolean'))) {
             $valueOption = $this->getOption($value);
             if (!$valueOption) {
-                $opt     = $this->_attrBooleanFactory->create();
+                $opt = $this->_attrBooleanFactory->create();
                 $options = $opt->getAllOptions();
                 if ($options) {
                     foreach ($options as $option) {
@@ -138,7 +139,7 @@ abstract class AbstractFrontend
     /**
      * Checks if attribute is visible on frontend
      *
-     * @return boolean
+     * @return bool
      */
     public function isVisible()
     {
@@ -152,15 +153,15 @@ abstract class AbstractFrontend
      */
     public function getClass()
     {
-        $out    = array();
-        $out[]  = $this->getAttribute()->getFrontendClass();
+        $out = array();
+        $out[] = $this->getAttribute()->getFrontendClass();
         if ($this->getAttribute()->getIsRequired()) {
-            $out[]  = 'required-entry';
+            $out[] = 'required-entry';
         }
 
         $inputRuleClass = $this->_getInputValidateClass();
         if ($inputRuleClass) {
-             $out[] = $inputRuleClass;
+            $out[] = $inputRuleClass;
         }
         if (!empty($out)) {
             $out = implode(' ', $out);
@@ -170,15 +171,15 @@ abstract class AbstractFrontend
         return $out;
     }
 
-     /**
+    /**
      * Return validate class by attribute input validation rule
      *
      * @return string|false
      */
     protected function _getInputValidateClass()
     {
-        $class          = false;
-        $validateRules  = $this->getAttribute()->getValidateRules();
+        $class = false;
+        $validateRules = $this->getAttribute()->getValidateRules();
         if (!empty($validateRules['input_validation'])) {
             switch ($validateRules['input_validation']) {
                 case 'alphanumeric':
@@ -229,7 +230,7 @@ abstract class AbstractFrontend
      * Retrieve option by option id
      *
      * @param int $optionId
-     * @return mixed|boolean
+     * @return mixed|bool
      */
     public function getOption($optionId)
     {

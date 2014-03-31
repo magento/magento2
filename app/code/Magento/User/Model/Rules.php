@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model;
 
 /**
@@ -40,11 +39,20 @@ namespace Magento\User\Model;
  * @method string getPermission()
  * @method \Magento\User\Model\Rules setPermission(string $value)
  */
-class Rules extends \Magento\Core\Model\AbstractModel
+class Rules extends \Magento\Model\AbstractModel
 {
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param Resource\Rules $resource
+     * @param Resource\Permissions\Collection $resourceCollection
+     * @param array $data
+     */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\User\Model\Resource\Rules $resource,
         \Magento\User\Model\Resource\Permissions\Collection $resourceCollection,
         array $data = array()
@@ -52,17 +60,28 @@ class Rules extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\User\Model\Resource\Rules');
     }
 
+    /**
+     * @return $this
+     */
     public function update()
     {
         $this->getResource()->update($this);
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function saveRel()
     {
         $this->getResource()->saveRel($this);

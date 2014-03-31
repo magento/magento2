@@ -33,7 +33,7 @@
  */
 namespace Magento\Rule\Model\Resource;
 
-abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\AbstractDb
+abstract class AbstractResource extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Store associated with rule entities information map
@@ -60,11 +60,10 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     /**
      * Prepare rule's active "from" and "to" dates
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         $fromDate = $object->getFromDate();
         if ($fromDate instanceof \Zend_Date) {
@@ -87,28 +86,28 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     /**
      * Bind specified rules to entities
      *
-     * @param array|int|string $ruleIds
-     * @param array|int|string $entityIds
+     * @param int[]|int|string $ruleIds
+     * @param int[]|int|string $entityIds
      * @param string $entityType
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @return $this
+     * @throws \Exception
      */
     public function bindRuleToEntity($ruleIds, $entityIds, $entityType)
     {
         if (empty($ruleIds) || empty($entityIds)) {
             return $this;
         }
-        $adapter    = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
         if (!is_array($ruleIds)) {
-            $ruleIds = array((int) $ruleIds);
+            $ruleIds = array((int)$ruleIds);
         }
         if (!is_array($entityIds)) {
-            $entityIds = array((int) $entityIds);
+            $entityIds = array((int)$entityIds);
         }
 
-        $data  = array();
+        $data = array();
         $count = 0;
 
         $adapter->beginTransaction();
@@ -121,7 +120,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
                         $entityInfo['rule_id_field'] => $ruleId
                     );
                     $count++;
-                    if (($count % 1000) == 0) {
+                    if ($count % 1000 == 0) {
                         $adapter->insertOnDuplicate(
                             $this->getTable($entityInfo['associations_table']),
                             $data,
@@ -139,14 +138,19 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
                 );
             }
 
-            $adapter->delete($this->getTable($entityInfo['associations_table']),
-                $adapter->quoteInto($entityInfo['rule_id_field']   . ' IN (?) AND ', $ruleIds) .
-                $adapter->quoteInto($entityInfo['entity_id_field'] . ' NOT IN (?)',  $entityIds)
+            $adapter->delete(
+                $this->getTable($entityInfo['associations_table']),
+                $adapter->quoteInto(
+                    $entityInfo['rule_id_field'] . ' IN (?) AND ',
+                    $ruleIds
+                ) . $adapter->quoteInto(
+                    $entityInfo['entity_id_field'] . ' NOT IN (?)',
+                    $entityIds
+                )
             );
         } catch (\Exception $e) {
             $adapter->rollback();
             throw $e;
-
         }
 
         $adapter->commit();
@@ -157,22 +161,21 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     /**
      * Unbind specified rules from entities
      *
-     * @param array|int|string $ruleIds
-     * @param array|int|string $entityIds
+     * @param int[]|int|string $ruleIds
+     * @param int[]|int|string $entityIds
      * @param string $entityType
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @return $this
      */
     public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
         $writeAdapter = $this->_getWriteAdapter();
-        $entityInfo   = $this->_getAssociatedEntityInfo($entityType);
+        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
         if (!is_array($entityIds)) {
-            $entityIds = array((int) $entityIds);
+            $entityIds = array((int)$entityIds);
         }
         if (!is_array($ruleIds)) {
-            $ruleIds = array((int) $ruleIds);
+            $ruleIds = array((int)$ruleIds);
         }
 
         $where = array();
@@ -193,16 +196,19 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      *
      * @param int $ruleId
      * @param string $entityType
-     *
      * @return array
      */
     public function getAssociatedEntityIds($ruleId, $entityType)
     {
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
 
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getTable($entityInfo['associations_table']), array($entityInfo['entity_id_field']))
-            ->where($entityInfo['rule_id_field'] . ' = ?', $ruleId);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getTable($entityInfo['associations_table']),
+            array($entityInfo['entity_id_field'])
+        )->where(
+            $entityInfo['rule_id_field'] . ' = ?',
+            $ruleId
+        );
 
         return $this->_getReadAdapter()->fetchCol($select);
     }
@@ -234,9 +240,8 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * of rule's associated entity by specified entity type
      *
      * @param string $entityType
-     *
-     * @throws \Magento\Core\Exception
      * @return array
+     * @throws \Magento\Model\Exception
      */
     protected function _getAssociatedEntityInfo($entityType)
     {
@@ -244,8 +249,9 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
             return $this->_associatedEntitiesMap[$entityType];
         }
 
-        throw new \Magento\Core\Exception(
-            __('There is no information about associated entity type "%1".', $entityType), 0
+        throw new \Magento\Model\Exception(
+            __('There is no information about associated entity type "%1".', $entityType),
+            0
         );
     }
 }

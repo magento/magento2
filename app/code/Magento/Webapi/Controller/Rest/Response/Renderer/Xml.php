@@ -25,8 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 
-class Xml implements
-    \Magento\Webapi\Controller\Rest\Response\RendererInterface
+class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
 {
     /**
      * Renderer mime type.

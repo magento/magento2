@@ -23,23 +23,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
 /**
  * Sitemap grid action column renderer
- *
- * @category   Magento
- * @package    Magento_Sitemap
  */
-namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
+    /**
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
-        $this->getColumn()->setActions(array(array(
-            'url'     => $this->getUrl('adminhtml/sitemap/generate', array('sitemap_id' => $row->getSitemapId())),
-            'caption' => __('Generate'),
-        )));
+        $this->getColumn()->setActions(
+            array(
+                array(
+                    'url' => $this->getUrl('adminhtml/sitemap/generate', array('sitemap_id' => $row->getSitemapId())),
+                    'caption' => __('Generate')
+                )
+            )
+        );
         return parent::render($row);
     }
 }

@@ -23,17 +23,25 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Source;
 
-class Backorders implements \Magento\Core\Model\Option\ArrayInterface
+class Backorders implements \Magento\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO, 'label'=>__('No Backorders')),
-            array('value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NONOTIFY, 'label'=>__('Allow Qty Below 0')),
-            array('value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NOTIFY , 'label'=>__('Allow Qty Below 0 and Notify Customer')),
+            array('value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO, 'label' => __('No Backorders')),
+            array(
+                'value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NONOTIFY,
+                'label' => __('Allow Qty Below 0')
+            ),
+            array(
+                'value' => \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NOTIFY,
+                'label' => __('Allow Qty Below 0 and Notify Customer')
+            )
         );
     }
 }

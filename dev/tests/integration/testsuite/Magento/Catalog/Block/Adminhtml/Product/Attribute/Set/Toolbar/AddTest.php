@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 /**
@@ -37,8 +36,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
 
-        $block = $layout->addBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add',
-            'block');
+        $block = $layout->addBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add', 'block');
         $block->setArea('adminhtml')->unsetChild('setForm');
 
         $childBlock = $layout->addBlock('Magento\View\Element\Template', 'setForm', 'block');

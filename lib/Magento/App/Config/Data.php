@@ -25,7 +25,7 @@
  */
 namespace Magento\App\Config;
 
-class Data implements \Magento\App\Config\DataInterface
+class Data implements DataInterface
 {
     /**
      * Config data
@@ -35,12 +35,28 @@ class Data implements \Magento\App\Config\DataInterface
     protected $_data = array();
 
     /**
-     * @param \Magento\App\Config\MetadataProcessor $processor
+     * Config source data
+     *
+     * @var array
+     */
+    protected $_source = array();
+
+    /**
+     * @param MetadataProcessor $processor
      * @param array $data
      */
-    public function __construct(\Magento\App\Config\MetadataProcessor $processor, array $data)
+    public function __construct(MetadataProcessor $processor, array $data)
     {
         $this->_data = $processor->process($data);
+        $this->_source = $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSource()
+    {
+        return $this->_source;
     }
 
     /**
@@ -71,17 +87,18 @@ class Data implements \Magento\App\Config\DataInterface
      *
      * @param string $path
      * @param mixed $value
+     * @return void
      */
     public function setValue($path, $value)
     {
         $keys = explode('/', $path);
         $lastKey = array_pop($keys);
-        $currentElement = &$this->_data;
+        $currentElement =& $this->_data;
         foreach ($keys as $key) {
             if (!isset($currentElement[$key])) {
                 $currentElement[$key] = array();
             }
-            $currentElement = &$currentElement[$key];
+            $currentElement =& $currentElement[$key];
         }
         $currentElement[$lastKey] = $value;
     }

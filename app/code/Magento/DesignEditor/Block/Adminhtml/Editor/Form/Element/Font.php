@@ -29,8 +29,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 
-class Font
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+class Font extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
 {
     /**
      * Control type
@@ -40,7 +39,7 @@ class Font
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font
+     * @return $this
      */
     protected function _addFields()
     {
@@ -48,31 +47,30 @@ class Font
         $colorData = $this->getComponent('color-picker');
 
         $fontHtmlId = $this->getComponentId('font-picker');
-        $fontTitle = $this->_escape(sprintf("%s {%s: %s}",
-            $fontData['selector'],
-            $fontData['attribute'],
-            $fontData['value']
-        ));
-        $this->addField($fontHtmlId, 'font-picker', array(
-            'name'    => $fontHtmlId,
-            'value'   => $fontData['value'],
-            'title'   => $fontTitle,
-            'options' => array_combine($fontData['options'], $fontData['options']),
-            'label'   => null,
-        ));
+        $fontTitle = $this->_escape(
+            sprintf("%s {%s: %s}", $fontData['selector'], $fontData['attribute'], $fontData['value'])
+        );
+        $this->addField(
+            $fontHtmlId,
+            'font-picker',
+            array(
+                'name' => $fontHtmlId,
+                'value' => $fontData['value'],
+                'title' => $fontTitle,
+                'options' => array_combine($fontData['options'], $fontData['options']),
+                'label' => null
+            )
+        );
 
-        $colorTitle = $this->_escape(sprintf("%s {%s: %s}",
-            $colorData['selector'],
-            $colorData['attribute'],
-            $colorData['value']
-        ));
+        $colorTitle = $this->_escape(
+            sprintf("%s {%s: %s}", $colorData['selector'], $colorData['attribute'], $colorData['value'])
+        );
         $colorHtmlId = $this->getComponentId('color-picker');
-        $this->addField($colorHtmlId, 'color-picker', array(
-            'name'  => $colorHtmlId,
-            'value' => $colorData['value'],
-            'title' => $colorTitle,
-            'label' => null,
-        ));
+        $this->addField(
+            $colorHtmlId,
+            'color-picker',
+            array('name' => $colorHtmlId, 'value' => $colorData['value'], 'title' => $colorTitle, 'label' => null)
+        );
 
         return $this;
     }
@@ -80,7 +78,7 @@ class Font
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font
+     * @return $this
      */
     protected function _addElementTypes()
     {

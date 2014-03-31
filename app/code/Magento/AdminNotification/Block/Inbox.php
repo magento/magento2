@@ -29,6 +29,9 @@ namespace Magento\AdminNotification\Block;
 
 class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_controller = 'adminhtml';
@@ -37,6 +40,9 @@ class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();

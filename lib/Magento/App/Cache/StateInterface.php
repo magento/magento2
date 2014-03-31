@@ -38,11 +38,14 @@ interface StateInterface
      *
      * @param string $cacheType
      * @param bool $isEnabled
+     * @return void
      */
     public function setEnabled($cacheType, $isEnabled);
 
     /**
      * Save the current statuses (enabled/disabled) of cache types to the persistent storage
+     *
+     * @return void
      */
     public function persist();
 }

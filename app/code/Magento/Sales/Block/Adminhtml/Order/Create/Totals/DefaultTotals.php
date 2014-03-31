@@ -23,17 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
 /**
  * Default Total Row Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
-
 class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
 {
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'Magento_Sales::order/create/totals/default.phtml';
 
     /**
@@ -56,6 +59,12 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
         return $this->_getSession()->getStore();
     }
 
+    /**
+     * Format price
+     *
+     * @param float $value
+     * @return string
+     */
     public function formatPrice($value)
     {
         return $this->getStore()->formatPrice($value);

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +27,7 @@
  */
 namespace Magento\App\Cache\Type;
 
-class Config extends \Magento\Cache\Frontend\Decorator\TagScope
-    implements \Magento\Config\CacheInterface
+class Config extends \Magento\Cache\Frontend\Decorator\TagScope implements \Magento\Config\CacheInterface
 {
     /**
      * Cache type code unique among all cache types
@@ -43,9 +40,9 @@ class Config extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'CONFIG';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

@@ -46,8 +46,8 @@ class Bootstrap
      */
     public function __construct($testsBaseDir, $appBaseDir)
     {
-        $configFile = "$testsBaseDir/config.php";
-        $configFile = file_exists($configFile) ? $configFile : "$configFile.dist";
+        $configFile = "{$testsBaseDir}/config.php";
+        $configFile = file_exists($configFile) ? $configFile : "{$configFile}.dist";
         $configData = require $configFile;
         $this->_config = new \Magento\TestFramework\Performance\Config($configData, $testsBaseDir, $appBaseDir);
     }
@@ -67,7 +67,7 @@ class Bootstrap
             }
         } catch (\Magento\Filesystem\FilesystemException $e) {
             if (file_exists($reportDir)) {
-                throw new \Magento\Exception("Cannot cleanup reports directory '$reportDir'.");
+                throw new \Magento\Exception("Cannot cleanup reports directory '{$reportDir}'.");
             }
         }
         mkdir($reportDir, 0777, true);

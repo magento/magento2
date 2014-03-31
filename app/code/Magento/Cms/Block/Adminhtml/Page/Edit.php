@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page;
 
 /**
  * Admin CMS page
@@ -31,25 +32,23 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -63,7 +62,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'page_id';
+        $this->_objectId = 'page_id';
         $this->_blockGroup = 'Magento_Cms';
         $this->_controller = 'adminhtml_page';
 
@@ -71,15 +70,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Cms::save')) {
             $this->_updateButton('save', 'label', __('Save Page'));
-            $this->_addButton('saveandcontinue', array(
-                'label'     => __('Save and Continue Edit'),
-                'class'     => 'save',
-                'data_attribute'  => array(
-                    'mage-init' => array(
-                        'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
-                    ),
+            $this->_addButton(
+                'saveandcontinue',
+                array(
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
+                        )
+                    )
                 ),
-            ), -100);
+                -100
+            );
         } else {
             $this->_removeButton('save');
         }
@@ -100,8 +103,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($this->_coreRegistry->registry('cms_page')->getId()) {
             return __("Edit Page '%1'", $this->escapeHtml($this->_coreRegistry->registry('cms_page')->getTitle()));
-        }
-        else {
+        } else {
             return __('New Page');
         }
     }
@@ -125,11 +127,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('cms/*/save', array(
-            '_current'   => true,
-            'back'       => 'edit',
-            'active_tab' => '{{tab_id}}'
-        ));
+        return $this->getUrl('cms/*/save', array('_current' => true, 'back' => 'edit', 'active_tab' => '{{tab_id}}'));
     }
 
     /**

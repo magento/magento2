@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Controller\Adminhtml;
 
 /**
  * RSS Controller with HTTP Basic authentication
  */
-namespace Magento\Rss\Controller\Adminhtml;
-
 use Magento\Backend\App\Action;
 
 class Authenticate extends \Magento\Backend\App\Action

@@ -24,10 +24,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<theme>
+<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../lib/Magento/Config/etc/theme.xsd">
     <title>Magento Blank</title>
     <version>2.0.0.0</version>
     <media>
-        <preview_image>media/preview_image.jpg</preview_image>
+        <preview_image>media/preview.jpg</preview_image>
     </media>
 </theme>

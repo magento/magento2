@@ -44,7 +44,7 @@ final class Install extends \Magento\Connect\Command
         $installFileMode = $command === 'install-file';
 
         /** @var $ftpObj \Magento\Connect\Ftp */
-        $ftpObj=null;
+        $ftpObj = null;
         $ftp = empty($options['ftp']) ? false : $options['ftp'];
         /** @var $packager \Magento\Connect\Packager */
         $packager = $this->getPackager();
@@ -66,41 +66,50 @@ final class Install extends \Magento\Connect\Command
             $ignoreModifiedMode = true || !isset($options['ignorelocalmodification']);
             $clearInstallMode = $command == 'install' && !$forceMode;
             $installAll = isset($options['install_all']);
-            $channelAuth = isset($options['auth'])?$options['auth']:array();
+            $channelAuth = isset($options['auth']) ? $options['auth'] : array();
 
             $rest = $this->rest();
             if (empty($config->magento_root)) {
-                $config->magento_root=dirname(dirname($_SERVER['SCRIPT_FILENAME']));
+                $config->magento_root = dirname(dirname($_SERVER['SCRIPT_FILENAME']));
             }
             chdir($config->magento_root);
-            $dirCache = '/' . $config->downloader_path . '/'
-                . \Magento\Connect\Config::DEFAULT_CACHE_PATH;
+            $dirCache = '/' . $config->downloader_path . '/' . \Magento\Connect\Config::DEFAULT_CACHE_PATH;
             $dirTmp = '/' . \Magento\Connect\Package\Reader::PATH_TO_TEMPORARY_DIRECTORY;
             $dirMedia = '/media';
             $isWritable = true;
             if ($ftp) {
-                $cwd=$ftpObj->getcwd();
-                $ftpObj->mkdirRecursive($cwd . $dirCache,0777);
+                $cwd = $ftpObj->getcwd();
+                $ftpObj->mkdirRecursive($cwd . $dirCache, 0777);
                 $ftpObj->chdir($cwd);
-                $ftpObj->mkdirRecursive($cwd . $dirTmp,0777);
+                $ftpObj->mkdirRecursive($cwd . $dirTmp, 0777);
                 $ftpObj->chdir($cwd);
-                $ftpObj->mkdirRecursive($cwd . $dirMedia,0777);
+                $ftpObj->mkdirRecursive($cwd . $dirMedia, 0777);
                 $ftpObj->chdir($cwd);
                 $err = "Please check for sufficient ftp write file permissions.";
             } else {
-                @mkdir($config->magento_root . $dirCache,0777,true);
-                @mkdir($config->magento_root . $dirTmp,0777,true);
-                @mkdir($config->magento_root . $dirMedia,0777,true);
-                $isWritable = is_writable($config->magento_root)
-                              && is_writable($config->magento_root . '/' . $config->downloader_path)
-                              && is_writable($config->magento_root . $dirCache)
-                              && is_writable($config->magento_root . $dirTmp)
-                              && is_writable($config->magento_root . $dirMedia);
+                @mkdir($config->magento_root . $dirCache, 0777, true);
+                @mkdir($config->magento_root . $dirTmp, 0777, true);
+                @mkdir($config->magento_root . $dirMedia, 0777, true);
+                $isWritable = is_writable(
+                    $config->magento_root
+                ) && is_writable(
+                    $config->magento_root . '/' . $config->downloader_path
+                ) && is_writable(
+                    $config->magento_root . $dirCache
+                ) && is_writable(
+                    $config->magento_root . $dirTmp
+                ) && is_writable(
+                    $config->magento_root . $dirMedia
+                );
                 $err = "Please check for sufficient write file permissions.";
             }
-            $isWritable = $isWritable && is_writable($config->magento_root . $dirMedia)
-                          && is_writable($config->magento_root . $dirCache)
-                          && is_writable($config->magento_root . $dirTmp);
+            $isWritable = $isWritable && is_writable(
+                $config->magento_root . $dirMedia
+            ) && is_writable(
+                $config->magento_root . $dirCache
+            ) && is_writable(
+                $config->magento_root . $dirTmp
+            );
             if (!$isWritable) {
                 $this->doError($command, $err);
                 throw new \Exception(
@@ -136,14 +145,16 @@ final class Install extends \Magento\Connect\Command
                 $pVer = $package->getVersion();
 
                 if (!($cache->isChannelName($pChan) || $cache->isChannelAlias($pChan))) {
-                    throw new \Exception("The '{$pChan}' channel is not installed. Please use the MAGE shell "
-                        . "script to install the '{$pChan}' channel.");
+                    throw new \Exception(
+                        "The '{$pChan}' channel is not installed. Please use the MAGE shell " .
+                        "script to install the '{$pChan}' channel."
+                    );
                 }
 
                 $conflicts = $cache->hasConflicts($pChan, $pName, $pVer);
 
                 if (false !== $conflicts) {
-                    $conflicts = implode(", ",$conflicts);
+                    $conflicts = implode(", ", $conflicts);
                     if ($forceMode) {
                         $this->doError($command, "Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
                     } else {
@@ -153,7 +164,7 @@ final class Install extends \Magento\Connect\Command
 
                 $conflicts = $package->checkPhpDependencies();
                 if (true !== $conflicts) {
-                    $conflicts = implode(",",$conflicts);
+                    $conflicts = implode(",", $conflicts);
                     $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: " . $conflicts;
                     if ($forceMode) {
                         $this->doError($command, $err);
@@ -182,11 +193,13 @@ final class Install extends \Magento\Connect\Command
                 $cache->addPackage($package);
                 $installedDeps = array();
                 $installedDepsAssoc = array();
-                $installedDepsAssoc[] = array('channel'=>$pChan, 'name'=>$pName, 'version'=>$pVer);
+                $installedDepsAssoc[] = array('channel' => $pChan, 'name' => $pName, 'version' => $pVer);
                 $installedDeps[] = array($pChan, $pName, $pVer);
 
                 $title = isset($options['title']) ? $options['title'] : "Package installed: ";
-                $out = array($command => array('data'=>$installedDeps, 'assoc'=>$installedDepsAssoc,  'title'=>$title));
+                $out = array(
+                    $command => array('data' => $installedDeps, 'assoc' => $installedDepsAssoc, 'title' => $title)
+                );
 
                 if ($ftp) {
                     $packager->writeToRemoteCache($cache, $ftpObj);
@@ -203,22 +216,30 @@ final class Install extends \Magento\Connect\Command
                 }
                 $channel = $params[0];
                 $package = $params[1];
-                $argVersionMax = isset($params[2]) ? $params[2]: false;
-                $argVersionMin = isset($params[3]) ? $params[3]: false;
+                $argVersionMax = isset($params[2]) ? $params[2] : false;
+                $argVersionMin = isset($params[3]) ? $params[3] : false;
 
                 $cache->checkChannel($channel, $config, $rest);
                 $channelName = $cache->chanName($channel);
                 $this->ui()->output("Checking dependencies of packages");
-                $packagesToInstall = $packager->getDependenciesList($channelName, $package, $cache, $config,
-                    $argVersionMax, $argVersionMin, $withDepsMode, false, $rest
+                $packagesToInstall = $packager->getDependenciesList(
+                    $channelName,
+                    $package,
+                    $cache,
+                    $config,
+                    $argVersionMax,
+                    $argVersionMin,
+                    $withDepsMode,
+                    false,
+                    $rest
                 );
                 /*
                  * process 'failed' results
                  */
                 if (count($packagesToInstall['failed'])) {
-                    $showError=!count($packagesToInstall['result']);
+                    $showError = !count($packagesToInstall['result']);
                     foreach ($packagesToInstall['failed'] as $failed) {
-                        $msg="Package {$failed['channel']}/{$failed['name']} failed: " . $failed['reason'];
+                        $msg = "Package {$failed['channel']}/{$failed['name']} failed: " . $failed['reason'];
                         if ($showError) {
                             $this->doError($command, $msg);
                         } else {
@@ -239,11 +260,19 @@ final class Install extends \Magento\Connect\Command
                 }
                 $packagesToInstall = array();
                 $neededToUpgrade = $packager->getUpgradesList($channels, $cache, $config, $rest);
-                foreach ($neededToUpgrade as $chan=>$packages) {
-                    foreach ($packages as $name=>$data) {
+                foreach ($neededToUpgrade as $chan => $packages) {
+                    foreach ($packages as $name => $data) {
                         $versionTo = $data['to'];
-                        $tmp = $packager->getDependenciesList($chan, $name, $cache, $config, $versionTo, $versionTo,
-                            $withDepsMode, false, $rest
+                        $tmp = $packager->getDependenciesList(
+                            $chan,
+                            $name,
+                            $cache,
+                            $config,
+                            $versionTo,
+                            $versionTo,
+                            $withDepsMode,
+                            false,
+                            $rest
                         );
                         if (count($tmp['result'])) {
                             $packagesToInstall = array_merge($packagesToInstall, $tmp['result']);
@@ -269,8 +298,12 @@ final class Install extends \Magento\Connect\Command
                     /**
                      * Skip existing packages
                      */
-                    if ($upgradeMode && $cache->hasPackage($pChan, $pName, $pVer, $pVer)
-                        || ('already_installed' == $pInstallState && !$forceMode)
+                    if ($upgradeMode && $cache->hasPackage(
+                        $pChan,
+                        $pName,
+                        $pVer,
+                        $pVer
+                    ) || 'already_installed' == $pInstallState && !$forceMode
                     ) {
                         $this->ui()->output("Already installed: {$pChan}/{$pName} {$pVer}, skipping");
                         continue;
@@ -286,9 +319,12 @@ final class Install extends \Magento\Connect\Command
                     $conflicts = $cache->hasConflicts($pChan, $pName, $pVer);
 
                     if (false !== $conflicts) {
-                        $conflicts = implode(", ",$conflicts);
+                        $conflicts = implode(", ", $conflicts);
                         if ($forceMode) {
-                            $this->doError($command, "Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
+                            $this->doError(
+                                $command,
+                                "Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts
+                            );
                         } else {
                             throw new \Exception("Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
                         }
@@ -297,7 +333,7 @@ final class Install extends \Magento\Connect\Command
                     /**
                      * Modifications
                      */
-                    if (($upgradeMode || ($pInstallState == 'upgrade')) && !$ignoreModifiedMode) {
+                    if (($upgradeMode || $pInstallState == 'upgrade') && !$ignoreModifiedMode) {
                         if ($ftp) {
                             $modifications = $packager->getRemoteModifiedFiles($pChan, $pName, $cache, $config, $ftp);
                         } else {
@@ -316,10 +352,18 @@ final class Install extends \Magento\Connect\Command
                     }
 
                     if ($ftp) {
-                        $cwd=$ftpObj->getcwd();
-                        $dir=$cwd . '/' .$config->downloader_path . '/'
-                             . \Magento\Connect\Config::DEFAULT_CACHE_PATH . '/' . trim( $pChan, "\\/");
-                        $ftpObj->mkdirRecursive($dir,0777);
+                        $cwd = $ftpObj->getcwd();
+                        $dir = $cwd .
+                            '/' .
+                            $config->downloader_path .
+                            '/' .
+                            \Magento\Connect\Config::DEFAULT_CACHE_PATH .
+                            '/' .
+                            trim(
+                                $pChan,
+                                "\\/"
+                            );
+                        $ftpObj->mkdirRecursive($dir, 0777);
                         $ftpObj->chdir($cwd);
                     } else {
                         $dir = $config->getChannelCacheDir($pChan);
@@ -329,7 +373,7 @@ final class Install extends \Magento\Connect\Command
                     $packageFileName = $pName . "-" . $pVer . ".tgz";
                     $file = $dir . '/' . $packageFileName;
                     if (!@file_exists($file)) {
-                        $this->ui()->output("Starting to download $packageFileName ...");
+                        $this->ui()->output("Starting to download {$packageFileName} ...");
                         $rest->downloadPackageFileOfRelease($pName, $pVer, $file);
                         $this->ui()->output(sprintf("...done: %s bytes", number_format(filesize($file))));
                     }
@@ -357,7 +401,7 @@ final class Install extends \Magento\Connect\Command
 
                     $conflicts = $package->checkPhpDependencies();
                     if (true !== $conflicts) {
-                        $conflicts = implode(",",$conflicts);
+                        $conflicts = implode(",", $conflicts);
                         $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: " . $conflicts;
                         if ($forceMode) {
                             $this->doError($command, $err);
@@ -387,16 +431,17 @@ final class Install extends \Magento\Connect\Command
                     }
                     $cache->addPackage($package);
 
-                    $installedDepsAssoc[] = array('channel'=>$pChan, 'name'=>$pName, 'version'=>$pVer);
+                    $installedDepsAssoc[] = array('channel' => $pChan, 'name' => $pName, 'version' => $pVer);
                     $installedDeps[] = array($pChan, $pName, $pVer);
-
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     $this->doError($command, $e->getMessage());
                 }
             }
 
             $title = isset($options['title']) ? $options['title'] : "Package installed: ";
-            $out = array($command => array('data'=>$installedDeps, 'assoc'=>$installedDepsAssoc,  'title'=>$title));
+            $out = array(
+                $command => array('data' => $installedDeps, 'assoc' => $installedDepsAssoc, 'title' => $title)
+            );
 
             if ($ftp) {
                 $packager->writeToRemoteCache($cache, $ftpObj);
@@ -463,7 +508,7 @@ final class Install extends \Magento\Connect\Command
             $package = $params[1];
             /** @var $packager \Magento\Connect\Packager */
             $packager = $this->getPackager();
-            $withDepsMode = !isset($options['nodeps'])? false : (boolean)$options['nodeps'];
+            $withDepsMode = !isset($options['nodeps']) ? false : (bool)$options['nodeps'];
             $forceMode = isset($options['force']);
 
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
@@ -492,8 +537,8 @@ final class Install extends \Magento\Connect\Command
                         $list['list']
                     );
                     if (count($reqd)) {
-                        $errMessage = "{$packageData['channel']}/{$packageData['name']} "
-                            . "{$packageData['version']} is required by: ";
+                        $errMessage = "{$packageData['channel']}/{$packageData['name']} " .
+                            "{$packageData['version']} is required by: ";
                         $t = array();
                         foreach ($reqd as $r) {
                             $t[] = $r['channel'] . "/" . $r['name'] . " " . $r['version'];
@@ -505,7 +550,7 @@ final class Install extends \Magento\Connect\Command
                             throw new \Exception($errMessage);
                         }
                     }
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     if ($forceMode) {
                         $this->doError($command, $e->getMessage());
                     } else {
@@ -517,7 +562,7 @@ final class Install extends \Magento\Connect\Command
                 try {
                     list($chan, $pack) = array($packageData['channel'], $packageData['name']);
                     $packageName = $packageData['channel'] . "/" . $packageData['name'];
-                    $this->ui()->output("Starting to uninstall $packageName ");
+                    $this->ui()->output("Starting to uninstall {$packageName} ");
                     if ($ftp) {
                         $packager->processUninstallPackageFtp($chan, $pack, $cache, $ftpObj);
                     } else {
@@ -526,7 +571,7 @@ final class Install extends \Magento\Connect\Command
                     $cache->deletePackage($chan, $pack);
                     $deletedPackages[] = array($chan, $pack);
                     $this->ui()->output("Package {$packageName} uninstalled");
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     if ($forceMode) {
                         $this->doError($command, $e->getMessage());
                     } else {
@@ -538,7 +583,7 @@ final class Install extends \Magento\Connect\Command
                 $packager->writeToRemoteCache($cache, $ftpObj);
                 @unlink($config->getFilename());
             }
-            $out = array($command=>array('data'=>$deletedPackages, 'title'=>'Package deleted: '));
+            $out = array($command => array('data' => $deletedPackages, 'title' => 'Package deleted: '));
             $this->ui()->output($out);
             return $out[$command]['data'];
         } catch (\Exception $e) {

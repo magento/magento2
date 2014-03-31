@@ -38,15 +38,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
     public function testGetMessage()
     {
         $expectedMessage = 'error1' . PHP_EOL . 'error2' . PHP_EOL . 'error3';
-        $messages = array(
-            'field1' => array(
-                'error1',
-                'error2'
-            ),
-            'field2' => array(
-                'error3'
-            )
-        );
+        $messages = array('field1' => array('error1', 'error2'), 'field2' => array('error3'));
         $exception = new \Magento\Validator\ValidatorException($messages);
         $this->assertEquals($expectedMessage, $exception->getMessage());
     }

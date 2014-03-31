@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
  * Composite form element renderer
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
-
-class Composite
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
+class Composite extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
 {
     /**
      * Set of templates to render
@@ -38,12 +36,12 @@ class Composite
      * Upper is rendered first and is inserted into next using <?php echo $this->getHtml() ?>
      * This templates are made of fieldset.phtml but split into several templates
      *
-     * @var array
+     * @var string[]
      */
     protected $_templates = array(
         'Magento_DesignEditor::editor/form/renderer/composite/children.phtml',
         'Magento_DesignEditor::editor/form/renderer/composite.phtml',
-        'Magento_DesignEditor::editor/form/renderer/composite/wrapper.phtml',
+        'Magento_DesignEditor::editor/form/renderer/composite/wrapper.phtml'
     );
 
     /**
@@ -51,7 +49,7 @@ class Composite
      *
      * Used in composite.phtml
      *
-     * @return array
+     * @return string[]
      */
     public function getCssClasses()
     {
@@ -60,7 +58,7 @@ class Composite
         $isField = $element->getFieldsetType() == 'field';
 
         $cssClasses = array();
-        $cssClasses[] = ($isField) ? 'field' : 'fieldset';
+        $cssClasses[] = $isField ? 'field' : 'fieldset';
         if ($element->getClass()) {
             $cssClasses[] = $element->getClass();
         }

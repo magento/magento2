@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Session;
 
 /**
@@ -38,28 +37,28 @@ class Quote extends \Magento\Session\SessionManager
      *
      * @var \Magento\Sales\Model\Quote
      */
-    protected $_quote   = null;
+    protected $_quote = null;
 
     /**
      * Customer mofrl object
      *
      * @var \Magento\Customer\Model\Customer
      */
-    protected $_customer= null;
+    protected $_customer = null;
 
     /**
      * Store model object
      *
      * @var \Magento\Core\Model\Store
      */
-    protected $_store   = null;
+    protected $_store = null;
 
     /**
      * Order model object
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_order   = null;
+    protected $_order = null;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -134,14 +133,17 @@ class Quote extends \Magento\Session\SessionManager
         if (is_null($this->_quote)) {
             $this->_quote = $this->_quoteFactory->create();
             if ($this->getStoreId() && $this->getQuoteId()) {
-                $this->_quote->setStoreId($this->getStoreId())
-                    ->load($this->getQuoteId());
+                $this->_quote->setStoreId($this->getStoreId())->load($this->getQuoteId());
             } elseif ($this->getStoreId() && $this->hasCustomerId()) {
-                $this->_quote->setStoreId($this->getStoreId())
-                    ->setCustomerGroupId($this->_coreStoreConfig->getConfig(self::XML_PATH_DEFAULT_CREATEACCOUNT_GROUP))
-                    ->assignCustomer($this->getCustomer())
-                    ->setIsActive(false)
-                    ->save();
+                $this->_quote->setStoreId(
+                    $this->getStoreId()
+                )->setCustomerGroupId(
+                    $this->_coreStoreConfig->getConfig(self::XML_PATH_DEFAULT_CREATEACCOUNT_GROUP)
+                )->assignCustomer(
+                    $this->getCustomer()
+                )->setIsActive(
+                    false
+                )->save();
                 $this->setQuoteId($this->_quote->getId());
             }
             $this->_quote->setIgnoreOldQty(true);
@@ -153,8 +155,9 @@ class Quote extends \Magento\Session\SessionManager
     /**
      * Set customer model object
      * To enable quick switch of preconfigured customer
+     *
      * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Backend\Model\Session\Quote
+     * @return $this
      */
     public function setCustomer(\Magento\Customer\Model\Customer $customer)
     {
@@ -164,11 +167,12 @@ class Quote extends \Magento\Session\SessionManager
 
     /**
      * Retrieve customer model object
+     *
      * @param bool $forceReload
      * @param bool $useSetStore
      * @return \Magento\Customer\Model\Customer
      */
-    public function getCustomer($forceReload=false, $useSetStore=false)
+    public function getCustomer($forceReload = false, $useSetStore = false)
     {
         if (is_null($this->_customer) || $forceReload) {
             $this->_customer = $this->_customerFactory->create();

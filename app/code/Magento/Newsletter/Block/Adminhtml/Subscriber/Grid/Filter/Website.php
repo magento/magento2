@@ -31,8 +31,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
 use Magento\Core\Model\Resource\Website\Collection;
 
-class Website
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * Website collection
@@ -44,7 +43,7 @@ class Website
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -60,18 +59,18 @@ class Website
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -88,7 +87,7 @@ class Website
     protected function _getOptions()
     {
         $result = $this->getCollection()->toOptionArray();
-        array_unshift($result, array('label'=>null, 'value'=>null));
+        array_unshift($result, array('label' => null, 'value' => null));
         return $result;
     }
 

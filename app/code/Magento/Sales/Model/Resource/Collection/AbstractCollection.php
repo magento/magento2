@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Collection;
 
 /**
  * Flat sales abstract collection
@@ -32,17 +32,14 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Collection;
-
-abstract class AbstractCollection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Check if $attribute is \Magento\Eav\Model\Entity\Attribute and convert to string field name
      *
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _attributeToField($attribute)
     {
@@ -53,7 +50,7 @@ abstract class AbstractCollection
             $field = $attribute->getAttributeCode();
         }
         if (!$field) {
-            throw new \Magento\Core\Exception(__('We cannot determine the field name.'));
+            throw new \Magento\Model\Exception(__('We cannot determine the field name.'));
         }
         return $field;
     }
@@ -63,7 +60,7 @@ abstract class AbstractCollection
      * Backward compatibility with EAV collection
      *
      * @param string $attribute
-     * @return \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @return $this
      */
     public function addAttributeToSelect($attribute)
     {
@@ -76,8 +73,8 @@ abstract class AbstractCollection
      * Backward compatibility with EAV collection
      *
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
-     * @param array|integer|string|null $condition
-     * @return \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @param array|int|string|null $condition
+     * @return $this
      */
     public function addAttributeToFilter($attribute, $condition = null)
     {
@@ -91,7 +88,7 @@ abstract class AbstractCollection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @return $this
      */
     public function addAttributeToSort($attribute, $dir = 'asc')
     {
@@ -103,14 +100,13 @@ abstract class AbstractCollection
      * Set collection page start and records to show
      * Backward compatibility with EAV collection
      *
-     * @param integer $pageNum
-     * @param integer $pageSize
-     * @return \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @param int $pageNum
+     * @param int $pageSize
+     * @return $this
      */
     public function setPage($pageNum, $pageSize)
     {
-        $this->setCurPage($pageNum)
-            ->setPageSize($pageSize);
+        $this->setCurPage($pageNum)->setPageSize($pageSize);
         return $this;
     }
 
@@ -144,16 +140,11 @@ abstract class AbstractCollection
      */
     public function getAllIds($limit = null, $offset = null)
     {
-        return $this->getConnection()->fetchCol(
-            $this->_getAllIdsSelect($limit, $offset),
-            $this->_bindParams
-        );
+        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
 
     /**
      * Backward compatibility with EAV collection
-     *
-     * @todo implement join functionality if necessary
      *
      * @param string $alias
      * @param string $attribute
@@ -161,7 +152,9 @@ abstract class AbstractCollection
      * @param string $filter
      * @param string $joinType
      * @param int $storeId
-     * @return \Magento\Sales\Model\Resource\Collection\AbstractCollection
+     * @return $this
+     *
+     * @todo implement join functionality if necessary
      */
     public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
     {

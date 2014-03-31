@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Captcha\Model;
 
 /**
  * Captcha Observer
  *
- * @category    Magento
- * @package     Magento_Captcha
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Captcha\Model;
-
 class Observer
 {
     /**
@@ -114,7 +111,7 @@ class Observer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        Resource\LogFactory $resLogFactory,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Checkout\Model\Type\Onepage $typeOnepage,
         \Magento\Core\Helper\Data $coreData,
@@ -143,7 +140,7 @@ class Observer
      * Check Captcha On Forgot Password Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkForgotpassword($observer)
     {
@@ -165,6 +162,7 @@ class Observer
      * Check CAPTCHA on Contact Us page
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function checkContactUsForm($observer)
     {
@@ -185,7 +183,7 @@ class Observer
      * Check Captcha On User Login Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserLogin($observer)
     {
@@ -201,7 +199,7 @@ class Observer
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setUsername($login);
                 $beforeUrl = $this->_session->getBeforeAuthUrl();
-                $url =  $beforeUrl ? $beforeUrl : $this->_customerData->getLoginUrl();
+                $url = $beforeUrl ? $beforeUrl : $this->_customerData->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }
         }
@@ -213,7 +211,7 @@ class Observer
      * Check Captcha On Register User Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserCreate($observer)
     {
@@ -237,7 +235,7 @@ class Observer
      * Check Captcha On Checkout as Guest Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkGuestCheckout($observer)
     {
@@ -261,7 +259,7 @@ class Observer
      * Check Captcha On Checkout Register Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkRegisterCheckout($observer)
     {
@@ -286,7 +284,7 @@ class Observer
      *
      * @param \Magento\Event\Observer $observer
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserLoginBackend($observer)
     {
@@ -296,9 +294,7 @@ class Observer
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->_request, $formId))) {
                 $captchaModel->logAttempt($login);
-                throw new \Magento\Backend\Model\Auth\Plugin\Exception(
-                    __('Incorrect CAPTCHA.')
-                );
+                throw new \Magento\Backend\Model\Auth\Plugin\Exception(__('Incorrect CAPTCHA.'));
             }
         }
         $captchaModel->logAttempt($login);
@@ -309,24 +305,25 @@ class Observer
      * Check Captcha On User Login Backend Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserForgotPasswordBackend($observer)
     {
         $formId = 'backend_forgotpassword';
         $captchaModel = $this->_helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
-        $email = (string) $observer->getControllerAction()->getRequest()->getParam('email');
+        $email = (string)$observer->getControllerAction()->getRequest()->getParam('email');
         $params = $observer->getControllerAction()->getRequest()->getParams();
 
         if (!empty($email) && !empty($params)) {
             if ($captchaModel->isRequired()) {
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
-                    $this->_session->setEmail((string) $controller->getRequest()->getPost('email'));
+                    $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
                     $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $this->messageManager->addError(__('Incorrect CAPTCHA'));
-                    $controller->getResponse()
-                        ->setRedirect($controller->getUrl('*/*/forgotpassword', array('_nosecret' => true)));
+                    $controller->getResponse()->setRedirect(
+                        $controller->getUrl('*/*/forgotpassword', array('_nosecret' => true))
+                    );
                 }
             }
         }
@@ -341,9 +338,7 @@ class Observer
      */
     public function resetAttemptForFrontend($observer)
     {
-        return $this->_getResourceModel()->deleteUserAttempts(
-            $observer->getModel()->getEmail()
-        );
+        return $this->_getResourceModel()->deleteUserAttempts($observer->getModel()->getEmail());
     }
 
     /**
@@ -354,9 +349,7 @@ class Observer
      */
     public function resetAttemptForBackend($observer)
     {
-        return $this->_getResourceModel()->deleteUserAttempts(
-            $observer->getUser()->getUsername()
-        );
+        return $this->_getResourceModel()->deleteUserAttempts($observer->getUser()->getUsername());
     }
 
     /**

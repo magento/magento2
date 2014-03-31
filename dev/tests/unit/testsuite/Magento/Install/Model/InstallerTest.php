@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model;
 
 class InstallerTest extends \PHPUnit_Framework_TestCase
@@ -81,8 +80,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->_cacheState = $this->getMock('\Magento\App\Cache\StateInterface', array(), array(), '', false);
         $this->_cacheTypeList = $this->getMock('\Magento\App\Cache\TypeListInterface', array(), array(), '', false);
         $this->_appState = $this->getMock('\Magento\App\State', array(), array(), '', false);
-        $this->_installerConfig =
-            $this->getMock('\Magento\Install\Model\Installer\Config', array(), array(), '', false);
+        $this->_installerConfig = $this->getMock(
+            '\Magento\Install\Model\Installer\Config',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $this->_model = $this->_objectManager->getObject(
             'Magento\Install\Model\Installer',
@@ -92,7 +96,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 'cacheState' => $this->_cacheState,
                 'cacheTypeList' => $this->_cacheTypeList,
                 'appState' => $this->_appState,
-                'installerConfig' => $this->_installerConfig,
+                'installerConfig' => $this->_installerConfig
             )
         );
     }
@@ -108,13 +112,23 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->_cacheState->expects($this->once())->method('persist');
         $this->_cacheState->expects($this->exactly(count($cacheTypeListArray)))->method('setEnabled');
 
-        $this->_cacheTypeList->expects($this->once())->method('getTypes')
-            ->will($this->returnValue($cacheTypeListArray));
+        $this->_cacheTypeList->expects(
+            $this->once()
+        )->method(
+            'getTypes'
+        )->will(
+            $this->returnValue($cacheTypeListArray)
+        );
 
         $this->_appState->expects($this->once())->method('setInstallDate')->with($this->greaterThanOrEqual(date('r')));
 
-        $this->_installerConfig->expects($this->once())->method('replaceTmpInstallDate')
-            ->with($this->greaterThanOrEqual(date('r')));
+        $this->_installerConfig->expects(
+            $this->once()
+        )->method(
+            'replaceTmpInstallDate'
+        )->with(
+            $this->greaterThanOrEqual(date('r'))
+        );
 
         $this->assertSame($this->_model, $this->_model->finish());
     }

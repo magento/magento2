@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
@@ -53,7 +52,10 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->duplicate = $this->getMock(
             'Magento\Catalog\Model\Product',
             array('setBundleOptionsData', 'setBundleSelectionsData', '__wakeup'),
-            array(), '', false);
+            array(),
+            '',
+            false
+        );
         $this->model = new \Magento\Bundle\Model\Product\CopyConstructor\Bundle();
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
@@ -65,14 +67,20 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->model->build($this->product, $this->duplicate);
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testBuildPositive()
     {
         //prepare mocks and data samples
-        $instance = $this->getMock('Magento\Bundle\Model\Product\Type',
-            array('setStoreFilter',  'getOptionsCollection', 'getSelectionsCollection', 'getOptionsIds'),
+        $instance = $this->getMock(
+            'Magento\Bundle\Model\Product\Type',
+            array('setStoreFilter', 'getOptionsCollection', 'getSelectionsCollection', 'getOptionsIds'),
             array(),
             '',
-            false);
+            false
+        );
         $option = $this->getMock(
             'Magento\Bundle\Model\Option',
             array('getSelections', '__wakeup', 'getData'),
@@ -81,16 +89,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $options = array($option);
-        $optionCollection = $this->objectManager
-            ->getCollectionMock('Magento\Bundle\Model\Resource\Option\Collection', $options);
+        $optionCollection = $this->objectManager->getCollectionMock(
+            'Magento\Bundle\Model\Resource\Option\Collection',
+            $options
+        );
         $optionRawData = array(
-            array(
-                'required' => true,
-                'position' => 100,
-                'type' => 'someType',
-                'title' => 'title',
-                'delete' => ''
-            )
+            array('required' => true, 'position' => 100, 'type' => 'someType', 'title' => 'title', 'delete' => '')
         );
         $selectionRawData = array(
             array(
@@ -124,17 +128,37 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $selections = array($selection);
-        $selectionCollection = $this->getMock('Magento\Bundle\Model\Resource\Selection\Collection',
-            array(), array(), '', false);
+        $selectionCollection = $this->getMock(
+            'Magento\Bundle\Model\Resource\Selection\Collection',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         // method flow
         $this->product->expects($this->once())->method('getTypeId')->will($this->returnValue('bundle'));
         $this->product->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instance));
         $instance->expects($this->once())->method('setStoreFilter')->with(null, $this->product);
-        $instance->expects($this->once())->method('getOptionsCollection')->with($this->product)
-            ->will($this->returnValue($optionCollection));
-        $instance->expects($this->once())->method('getSelectionsCollection')->with(null, $this->product)
-            ->will($this->returnValue($selectionCollection));
+        $instance->expects(
+            $this->once()
+        )->method(
+            'getOptionsCollection'
+        )->with(
+            $this->product
+        )->will(
+            $this->returnValue($optionCollection)
+        );
+        $instance->expects(
+            $this->once()
+        )->method(
+            'getSelectionsCollection'
+        )->with(
+            null,
+            $this->product
+        )->will(
+            $this->returnValue($selectionCollection)
+        );
         $optionCollection->expects($this->once())->method('appendSelections')->with($selectionCollection);
         $option->expects($this->any())->method('getSelections')->will($this->returnValue($selections));
 

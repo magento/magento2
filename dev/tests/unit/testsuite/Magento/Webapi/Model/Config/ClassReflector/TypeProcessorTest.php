@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Config\ClassReflector;
 
 /**
@@ -40,7 +39,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', [], [], '', false);
+        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', array(), array(), '', false);
         $this->_typeProcessor = new \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor($this->_helperMock);
     }
 
@@ -49,9 +48,12 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTypesData()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA']);
-        $this->_typeProcessor->setTypeData('typeB', ['dataB']);
-        $this->assertEquals(['typeA' => ['dataA'], 'typeB' => ['dataB']], $this->_typeProcessor->getTypesData());
+        $this->_typeProcessor->setTypeData('typeA', array('dataA'));
+        $this->_typeProcessor->setTypeData('typeB', array('dataB'));
+        $this->assertEquals(
+            array('typeA' => array('dataA'), 'typeB' => array('dataB')),
+            $this->_typeProcessor->getTypesData()
+        );
     }
 
     /**
@@ -68,8 +70,8 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTypeData()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA']);
-        $this->assertEquals(['dataA'], $this->_typeProcessor->getTypeData('typeA'));
+        $this->_typeProcessor->setTypeData('typeA', array('dataA'));
+        $this->assertEquals(array('dataA'), $this->_typeProcessor->getTypeData('typeA'));
     }
 
     /**
@@ -77,10 +79,10 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTypeDataArrayMerge()
     {
-        $this->_typeProcessor->setTypeData('typeA', ['dataA1']);
-        $this->_typeProcessor->setTypeData('typeA', ['dataA2']);
-        $this->_typeProcessor->setTypeData('typeA', ['dataA3']);
-        $this->assertEquals(['dataA1', 'dataA2', 'dataA3'], $this->_typeProcessor->getTypeData('typeA'));
+        $this->_typeProcessor->setTypeData('typeA', array('dataA1'));
+        $this->_typeProcessor->setTypeData('typeA', array('dataA2'));
+        $this->_typeProcessor->setTypeData('typeA', array('dataA3'));
+        $this->assertEquals(array('dataA1', 'dataA2', 'dataA3'), $this->_typeProcessor->getTypeData('typeA'));
     }
 
     public function testNormalizeType()

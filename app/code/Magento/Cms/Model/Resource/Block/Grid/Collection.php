@@ -27,7 +27,6 @@ namespace Magento\Cms\Model\Resource\Block\Grid;
 
 class Collection extends \Magento\Cms\Model\Resource\Block\Collection
 {
-
     /**
      * @return \Magento\Cms\Model\Resource\Block\Grid\Collection
      */
@@ -44,7 +43,7 @@ class Collection extends \Magento\Cms\Model\Resource\Block\Collection
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($field == 'store_id'){
+        if ($field == 'store_id') {
             return $this->addStoreFilter($field);
         }
     }

@@ -53,9 +53,7 @@ class BareTest extends \PHPUnit_Framework_TestCase
             array('remove', array('record_id'), true),
             array('clean', array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true),
             array('getBackend', array(), \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend')),
-            array('getLowLevelFrontend', array(),
-                \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core')
-            ),
+            array('getLowLevelFrontend', array(), \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core'))
         );
     }
 }
