@@ -26,7 +26,7 @@ namespace Magento\Backend\Model;
 class View extends \Magento\App\View
 {
     /**
-     * @var \Magento\Core\Model\Layout\Filter\Acl
+     * @var Layout\Filter\Acl
      */
     protected $_aclFilter;
 
@@ -38,7 +38,7 @@ class View extends \Magento\App\View
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Translate\InlineInterface $translateInline
      * @param \Magento\App\ActionFlag $actionFlag
-     * @param \Magento\Core\Model\Layout\Filter\Acl $aclFilter
+     * @param Layout\Filter\Acl $aclFilter
      */
     public function __construct(
         \Magento\View\LayoutInterface $layout,
@@ -48,7 +48,7 @@ class View extends \Magento\App\View
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Translate\InlineInterface $translateInline,
         \Magento\App\ActionFlag $actionFlag,
-        \Magento\Core\Model\Layout\Filter\Acl $aclFilter
+        Layout\Filter\Acl $aclFilter
     ) {
         $this->_aclFilter = $aclFilter;
         parent::__construct($layout, $request, $response, $configScope, $eventManager, $translateInline, $actionFlag);

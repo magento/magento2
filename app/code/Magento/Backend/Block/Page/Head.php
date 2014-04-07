@@ -53,6 +53,7 @@ class Head extends \Magento\Theme\Block\Html\Head
      * @param \Magento\View\Asset\MergeService $assetMergeService
      * @param \Magento\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Translation\Block\Js $jsTranslation
      * @param \Magento\App\Action\Title $titles
      * @param \Magento\Data\Form\FormKey $formKey
      * @param array $data
@@ -65,6 +66,7 @@ class Head extends \Magento\Theme\Block\Html\Head
         \Magento\View\Asset\MergeService $assetMergeService,
         \Magento\View\Asset\MinifyService $assetMinifyService,
         \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Translation\Block\Js $jsTranslation,
         \Magento\App\Action\Title $titles,
         \Magento\Data\Form\FormKey $formKey,
         array $data = array()
@@ -79,6 +81,7 @@ class Head extends \Magento\Theme\Block\Html\Head
             $assetMergeService,
             $assetMinifyService,
             $localeResolver,
+            $jsTranslation,
             $data
         );
         $this->formKey = $formKey;

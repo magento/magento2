@@ -87,8 +87,30 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
+
+        $booleanUtils = new \Magento\Stdlib\BooleanUtils();
+        $constInterpreter = new \Magento\Data\Argument\Interpreter\Constant();
+        $argumentInterpreter = new \Magento\Data\Argument\Interpreter\Composite(
+            [
+                'boolean' => new \Magento\Data\Argument\Interpreter\Boolean($booleanUtils),
+                'string' => new \Magento\Data\Argument\Interpreter\String($booleanUtils),
+                'number' => new \Magento\Data\Argument\Interpreter\Number(),
+                'null' => new \Magento\Data\Argument\Interpreter\NullType(),
+                'object' => new \Magento\Data\Argument\Interpreter\Object($booleanUtils),
+                'const' => $constInterpreter,
+                'init_parameter' => new \Magento\App\Arguments\ArgumentInterpreter($constInterpreter)
+            ],
+            \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
+        );
+        // Add interpreters that reference the composite
+        $argumentInterpreter->addInterpreter(
+            'array',
+            new \Magento\Data\Argument\Interpreter\ArrayType($argumentInterpreter)
+        );
+
         $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom(
-            new \Magento\Stdlib\BooleanUtils(),
+            $argumentInterpreter,
+            $booleanUtils,
             new \Magento\ObjectManager\Config\Mapper\ArgumentParser()
         );
         $this->_validator = new \Magento\Code\Validator();

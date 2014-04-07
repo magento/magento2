@@ -82,7 +82,7 @@
                     startReplacing = true;
                 }
                 if (startReplacing) {
-                    element.remove();
+                    $(element).remove();
                 } else if (element.nodeType != 8) {
                     //due to comment tag doesn't have siblings we try to find it manually
                     prevSibling = element;

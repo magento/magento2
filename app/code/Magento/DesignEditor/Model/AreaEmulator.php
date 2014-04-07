@@ -47,10 +47,7 @@ class AreaEmulator
         $configuration = array(
             'Magento\Core\Model\Layout' => array(
                 'arguments' => array(
-                    'area' => array(
-                        \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'string',
-                        'value' => $areaCode
-                    )
+                    'area' => $areaCode
                 )
             )
         );

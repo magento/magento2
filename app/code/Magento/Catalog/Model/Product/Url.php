@@ -48,7 +48,7 @@ class Url extends \Magento\Object
     /**
      * Static URL Rewrite Instance
      *
-     * @var \Magento\Core\Model\Url\Rewrite
+     * @var \Magento\UrlRewrite\Model\UrlRewrite
      */
     protected $_urlRewrite;
 
@@ -79,7 +79,7 @@ class Url extends \Magento\Object
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
@@ -88,7 +88,7 @@ class Url extends \Magento\Object
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory,
+        \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory,
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
@@ -118,7 +118,7 @@ class Url extends \Magento\Object
     /**
      * Retrieve URL Rewrite Instance
      *
-     * @return \Magento\Core\Model\Url\Rewrite
+     * @return \Magento\UrlRewrite\Model\UrlRewrite
      */
     public function getUrlRewrite()
     {

@@ -59,7 +59,6 @@ class EntryPoint implements EntryPointInterface
         $this->_rootDir = $rootDir;
         $this->_parameters = $parameters;
         $this->_locator = $objectManager;
-        $this->_parameters[State::PARAM_MODE] = State::MODE_DEVELOPER;
     }
 
     /**

@@ -70,7 +70,7 @@ use Magento\Filter\Template as FilterTemplate;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Template extends \Magento\Core\Model\Template implements \Magento\Mail\TemplateInterface
+class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento\Mail\TemplateInterface
 {
     /**
      * Configuration path for default email templates

@@ -38,14 +38,14 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Helper\Js $jsHelper
+     * @param \Magento\View\Helper\Js $jsHelper
      * @param \Magento\Backend\Model\Config $backendConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Helper\Js $jsHelper,
+        \Magento\View\Helper\Js $jsHelper,
         \Magento\Backend\Model\Config $backendConfig,
         array $data = array()
     ) {

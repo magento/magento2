@@ -48,13 +48,13 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /*reset versions*/
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Resource'
+            'Magento\Module\ResourceInterface'
         )->setDbVersion(
             'adminnotification_setup',
             false
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Resource'
+            'Magento\Module\ResourceInterface'
         )->setDataVersion(
             'adminnotification_setup',
             false

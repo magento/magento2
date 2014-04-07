@@ -57,9 +57,14 @@ class Manager implements ManagerInterface
     protected $logger;
 
     /**
-     * @var $string
+     * @var string
      */
     protected $defaultGroup;
+
+    /**
+     * @var bool
+     */
+    protected $hasMessages = false;
 
     /**
      * @param Session $session
@@ -138,6 +143,7 @@ class Manager implements ManagerInterface
      */
     public function addMessage(MessageInterface $message, $group = null)
     {
+        $this->hasMessages = true;
         $this->getMessages(false, $group)->addMessage($message);
         $this->eventManager->dispatch('core_session_abstract_add_message');
         return $this;
@@ -274,5 +280,15 @@ class Manager implements ManagerInterface
         $this->logger->logFile($message, \Zend_Log::DEBUG, Logger::LOGGER_EXCEPTION);
         $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
         return $this;
+    }
+
+    /**
+     * Returns false if there are any messages for customer, true - in other case
+     *
+     * @return bool
+     */
+    public function hasMessages()
+    {
+        return $this->hasMessages;
     }
 }

@@ -192,8 +192,11 @@ class Shell extends \Magento\App\AbstractShell
         foreach ($processes as $process) {
             /* @var $process \Magento\Index\Model\Process */
             try {
+                $startTime = microtime(true);
                 $process->reindexEverything();
-                echo $process->getIndexer()->getName() . " index was rebuilt successfully\n";
+                $resultTime = microtime(true) - $startTime;
+                echo $process->getIndexer()->getName()
+                    . " index was rebuilt successfully in " . gmdate('H:i:s', $resultTime) . "\n";
             } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;

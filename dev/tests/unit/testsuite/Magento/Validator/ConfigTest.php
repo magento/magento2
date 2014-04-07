@@ -65,36 +65,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         foreach ($files as $path) {
             $configFiles[$path] = file_get_contents($path);
         }
-        $argInterpreter = $this->getMock('\Magento\Data\Argument\InterpreterInterface', array(), array(), '', false);
-
-        $argObjectFactory = $this->getMock(
-            '\Magento\ObjectManager\Config\Argument\ObjectFactory',
-            array(),
-            array(),
-            '',
-            false
-        );
-
         $config = new \Magento\ObjectManager\Config\Config(new \Magento\ObjectManager\Relations\Runtime());
-        $factory = new \Magento\ObjectManager\Factory\Factory($config, $argInterpreter, $argObjectFactory, null);
+        $factory = new \Magento\ObjectManager\Factory\Factory($config);
         $realObjectManager = new \Magento\ObjectManager\ObjectManager($factory, $config);
-
-        $constraintFactory = new \Magento\Validator\ConstraintFactory($realObjectManager);
-        $validatorFactory = new \Magento\ValidatorFactory($realObjectManager);
-        $universalFactory = new \Magento\Validator\UniversalFactory($realObjectManager);
-        $argObjectFactory->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array('Magento\Validator\ConstraintFactory', null, $constraintFactory),
-                    array('Magento\ValidatorFactory', null, $validatorFactory),
-                    array('Magento\Validator\UniversalFactory', null, $universalFactory)
-                )
-            )
-        );
+        $factory->setObjectManager($realObjectManager);
+        $universalFactory = $realObjectManager->get('\Magento\Validator\UniversalFactory');
         $this->_config = $this->_objectManager->getObject(
             'Magento\Validator\Config',
             array('configFiles' => $configFiles, 'builderFactory' => $universalFactory)

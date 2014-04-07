@@ -362,9 +362,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function prepareLayoutDataProvider()
     {
-        /** @var $urlRewrite \Magento\Core\Model\Url\Rewrite */
+        /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Url\Rewrite'
+            'Magento\UrlRewrite\Model\UrlRewrite'
         );
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -376,9 +376,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Category',
             array('data' => array('entity_id' => 1, 'name' => 'Test category'))
         );
-        /** @var $existingUrlRewrite \Magento\Core\Model\Url\Rewrite */
+        /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Url\Rewrite',
+            'Magento\UrlRewrite\Model\UrlRewrite',
             array('data' => array('url_rewrite_id' => 1))
         );
         return array(

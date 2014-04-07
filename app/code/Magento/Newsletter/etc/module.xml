@@ -40,6 +40,7 @@
             <module name="Magento_Email"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Cron"/>
+            <module name="Magento_Eav"/>
         </depends>
     </module>
 </config>

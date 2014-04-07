@@ -33,7 +33,4 @@
     <event name="theme_registration_from_filesystem">
         <observer name="theme_registration_observer" instance="Magento\Core\Model\Observer" method="themeRegistration" />
     </event>
-    <event name="application_process_reinit_config">
-        <observer name="reinit_config_observer" instance="Magento\Core\Model\Observer" method="processReinitConfig" />
-    </event>
 </config>

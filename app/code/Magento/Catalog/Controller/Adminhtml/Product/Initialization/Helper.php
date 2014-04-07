@@ -31,11 +31,6 @@ class Helper
     protected $request;
 
     /**
-     * @var \Magento\Backend\Helper\Js
-     */
-    protected $jsHelper;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -52,20 +47,17 @@ class Helper
 
     /**
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param Helper\ProductLinks $productLinks
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
-        \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
         Helper\ProductLinks $productLinks
     ) {
         $this->request = $request;
-        $this->jsHelper = $jsHelper;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
         $this->productLinks = $productLinks;

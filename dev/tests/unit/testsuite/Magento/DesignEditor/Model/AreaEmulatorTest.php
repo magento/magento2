@@ -46,10 +46,7 @@ class AreaEmulatorTest extends \PHPUnit_Framework_TestCase
         $configuration = array(
             'Magento\Core\Model\Layout' => array(
                 'arguments' => array(
-                    'area' => array(
-                        \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'string',
-                        'value' => 'test_area'
-                    )
+                    'area' => 'test_area'
                 )
             )
         );

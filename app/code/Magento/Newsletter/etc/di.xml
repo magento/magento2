@@ -41,4 +41,8 @@
             <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Service\V1\CustomerAccountServiceInterface">
+        <plugin name="update_newsletter_subscription_on_customer_update"
+                type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
+    </type>
 </config>

@@ -285,4 +285,15 @@ class Application
         }
         return $this->_objectManager;
     }
+
+    /**
+     * Reset object manager
+     *
+     * @return \Magento\ObjectManager
+     */
+    public function resetObjectManager()
+    {
+        $this->_objectManager = null;
+        return $this;
+    }
 }

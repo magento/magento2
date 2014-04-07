@@ -599,6 +599,7 @@ class Files
             '/downloader/app/',
             '/downloader/lib/',
             '/dev/tools/',
+            '/dev/tools/performance_toolkit/framework/',
             '/dev/tests/api-functional/framework/',
             '/dev/tests/integration/framework/',
             '/dev/tests/integration/framework/tests/unit/testsuite/',

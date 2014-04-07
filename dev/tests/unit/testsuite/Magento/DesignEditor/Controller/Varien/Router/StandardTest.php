@@ -190,7 +190,9 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->_getHelperMock($isVde);
         $backendSessionMock = $this->_getBackendSessionMock($isVde, $isLoggedIn);
         $stateMock = $this->_getStateModelMock($routers);
-        $rewriteServiceMock = $this->getMock('Magento\Core\App\Request\RewriteService', array(), array(), '', false);
+        $rewriteServiceMock = $this->getMock(
+            'Magento\UrlRewrite\App\Request\RewriteService', array(), array(), '', false
+        );
         $routerListMock = $this->getMock('Magento\App\RouterList',
             array(
                 'current',

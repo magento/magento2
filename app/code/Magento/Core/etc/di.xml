@@ -266,7 +266,7 @@
         <arguments>
             <argument name="handlerClassesList" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Core\App\Router\NoRouteHandler</item>
+                    <item name="class" xsi:type="string">Magento\Core\App\Router\NoRouteHandler</item>
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>
             </argument>
@@ -444,7 +444,6 @@
         <plugin name="messageBox" type="Magento\Core\App\FrontController\Plugin\MessageBox" sortOrder="0"/>
     </type>
     <type name="Magento\App\Action\Action">
-        <plugin name="installInitializer" type="Magento\Core\App\Action\Plugin\Install" sortOrder="5"/>
         <plugin name="storeCheck" type="Magento\Core\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
     </type>

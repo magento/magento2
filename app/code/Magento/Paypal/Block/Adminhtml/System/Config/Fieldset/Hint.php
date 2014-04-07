@@ -37,18 +37,18 @@ class Hint extends \Magento\Backend\Block\Template implements \Magento\Data\Form
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 
     /**
-     * @var \Magento\Backend\Helper\Js
+     * @var \Magento\View\Helper\Js
      */
     protected $_jsHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Js $jsHelper
+     * @param \Magento\View\Helper\Js $jsHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Js $jsHelper,
+        \Magento\View\Helper\Js $jsHelper,
         array $data = array()
     ) {
         $this->_jsHelper = $jsHelper;

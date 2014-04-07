@@ -38,7 +38,7 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
      * @param \Magento\App\Resource $resource
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\Resource\Resource $resourceResource
+     * @param \Magento\Module\ResourceInterface $resourceResource
      * @param \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
@@ -52,7 +52,7 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
         \Magento\App\Resource $resource,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\Resource\Resource $resourceResource,
+        \Magento\Module\ResourceInterface $resourceResource,
         \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Core\Model\Theme\CollectionFactory $themeFactory,

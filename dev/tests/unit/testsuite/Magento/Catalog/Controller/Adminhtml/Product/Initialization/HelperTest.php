@@ -33,11 +33,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $jsHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $storeManagerMock;
 
     /**
@@ -78,7 +73,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', array(), array(), '', false);
         $this->storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $this->websiteMock = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
@@ -135,7 +129,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->helper = new Helper(
             $this->requestMock,
-            $this->jsHelperMock,
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock

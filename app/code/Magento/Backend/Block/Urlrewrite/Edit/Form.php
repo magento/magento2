@@ -28,8 +28,8 @@ namespace Magento\Backend\Block\Urlrewrite\Edit;
 /**
  * URL rewrites edit form
  *
- * @method \Magento\Core\Model\Url\Rewrite getUrlRewrite()
- * @method \Magento\Backend\Block\Urlrewrite\Edit\Form setUrlRewrite(\Magento\Core\Model\Url\Rewrite $model)
+ * @method \Magento\UrlRewrite\Model\UrlRewrite getUrlRewrite()
+ * @method \Magento\Backend\Block\Urlrewrite\Edit\Form setUrlRewrite(\Magento\UrlRewrite\Model\UrlRewrite $model)
  *
  * @category   Magento
  * @package    Magento_Adminhtml
@@ -73,17 +73,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
 
     /**
-     * @var \Magento\Core\Model\Url\RewriteFactory
+     * @var \Magento\UrlRewrite\Model\UrlRewriteFactory
      */
     protected $_rewriteFactory;
 
     /**
-     * @var \Magento\Core\Model\Source\Urlrewrite\OptionsFactory
+     * @var \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory
      */
     protected $_optionFactory;
 
     /**
-     * @var \Magento\Core\Model\Source\Urlrewrite\TypesFactory
+     * @var \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory
      */
     protected $_typesFactory;
 
@@ -91,9 +91,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory
-     * @param \Magento\Core\Model\Source\Urlrewrite\OptionsFactory $optionFactory
-     * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param array $data
@@ -104,9 +104,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory,
-        \Magento\Core\Model\Source\Urlrewrite\OptionsFactory $optionFactory,
-        \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
+        \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory,
+        \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory,
+        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Backend\Helper\Data $adminhtmlData,
         array $data = array()
@@ -179,7 +179,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('URL Rewrite Information')));
 
-        /** @var $typesModel \Magento\Core\Model\Source\Urlrewrite\Types */
+        /** @var $typesModel \Magento\UrlRewrite\Model\UrlRewrite\TypeProvider */
         $typesModel = $this->_typesFactory->create();
         $fieldset->addField(
             'is_system',
@@ -233,7 +233,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             )
         );
 
-        /** @var $optionsModel \Magento\Core\Model\Source\Urlrewrite\Options */
+        /** @var $optionsModel \Magento\UrlRewrite\Model\UrlRewrite\OptionProvider */
         $optionsModel = $this->_optionFactory->create();
         $fieldset->addField(
             'options',
@@ -339,7 +339,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get URL rewrite model instance
      *
-     * @return \Magento\Core\Model\Url\Rewrite
+     * @return \Magento\UrlRewrite\Model\UrlRewrite
      */
     protected function _getModel()
     {

@@ -45,9 +45,9 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_routerList = array(
-            'adminRouter' => array('instance' => 'AdminClass', 'disable' => true, 'sortOrder' => 10),
-            'frontendRouter' => array('instance' => 'FrontClass', 'disable' => false, 'sortOrder' => 10),
-            'default' => array('instance' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5)
+            'adminRouter' => array('class' => 'AdminClass', 'disable' => true, 'sortOrder' => 10),
+            'frontendRouter' => array('class' => 'FrontClass', 'disable' => false, 'sortOrder' => 10),
+            'default' => array('class' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5)
         );
 
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');

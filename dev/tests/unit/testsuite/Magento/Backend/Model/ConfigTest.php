@@ -97,7 +97,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\DB\TransactionFactory',
             array('create'), array(), '', false
         );
-        $this->_appConfigMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
+        $this->_appConfigMock = $this->getMock('Magento\App\ReinitableConfigInterface', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMock(
             'Magento\Backend\Model\Config\Loader',
             array('getConfigByPath'),
@@ -155,7 +155,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue(array()));
 
         $this->_eventManagerMock->expects(
-            $this->at(1)
+            $this->at(0)
         )->method(
             'dispatch'
         )->with(
@@ -164,7 +164,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_eventManagerMock->expects(
-            $this->at(1)
+            $this->at(0)
         )->method(
             'dispatch'
         )->with(

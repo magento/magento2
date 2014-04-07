@@ -1224,7 +1224,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             'core_url_rewrite',
             'entity_id=entity_id',
             array('request_path'),
-            '{{table}}.type = ' . \Magento\Core\Model\Url\Rewrite::TYPE_PRODUCT,
+            '{{table}}.type = ' . \Magento\UrlRewrite\Model\UrlRewrite::TYPE_PRODUCT,
             'left'
         );
 

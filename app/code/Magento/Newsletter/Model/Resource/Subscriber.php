@@ -138,10 +138,10 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load subscriber by customer
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Customer\Service\V1\Data\Customer $customer
      * @return array
      */
-    public function loadByCustomer(\Magento\Customer\Model\Customer $customer)
+    public function loadByCustomerData(\Magento\Customer\Service\V1\Data\Customer $customer)
     {
         $select = $this->_read->select()->from($this->getMainTable())->where('customer_id=:customer_id');
 

@@ -23,6 +23,7 @@
  */
 namespace Magento\ObjectManager\Config\Mapper;
 
+use Magento\Data\Argument\InterpreterInterface;
 use Magento\Stdlib\BooleanUtils;
 
 class Dom implements \Magento\Config\ConverterInterface
@@ -38,13 +39,23 @@ class Dom implements \Magento\Config\ConverterInterface
     private $argumentParser;
 
     /**
+     * @var InterpreterInterface
+     */
+    private $argumentInterpreter;
+
+    /**
      * @param BooleanUtils $booleanUtils
      * @param ArgumentParser $argumentParser
+     * @param InterpreterInterface $argumentInterpreter
      */
-    public function __construct(BooleanUtils $booleanUtils, ArgumentParser $argumentParser)
-    {
-        $this->booleanUtils = $booleanUtils;
-        $this->argumentParser = $argumentParser;
+    public function __construct(
+        InterpreterInterface $argumentInterpreter,
+        BooleanUtils $booleanUtils = null,
+        ArgumentParser $argumentParser = null
+    ) {
+        $this->argumentInterpreter = $argumentInterpreter;
+        $this->booleanUtils = $booleanUtils ?: new BooleanUtils();
+        $this->argumentParser = $argumentParser ?: new ArgumentParser();
     }
 
     /**
@@ -105,7 +116,9 @@ class Dom implements \Magento\Config\ConverterInterface
                                     }
                                     $argumentName = $argumentNode->attributes->getNamedItem('name')->nodeValue;
                                     $argumentData = $this->argumentParser->parse($argumentNode);
-                                    $typeArguments[$argumentName] = $argumentData;
+                                    $typeArguments[$argumentName] = $this->argumentInterpreter->evaluate(
+                                        $argumentData
+                                    );
                                 }
                                 break;
                             case 'plugin':

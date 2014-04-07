@@ -80,4 +80,16 @@ class Request extends \Magento\App\Request\Http
 
         return isset($this->_server[$key]) ? $this->_server[$key] : $default;
     }
+
+    /**
+     * Set the HTTP Method type.
+     *
+     * Examples are POST, PUT, GET, DELETE
+     *
+     * @param string $type
+     */
+    public function setMethod($type)
+    {
+        $this->_server['REQUEST_METHOD'] = $type;
+    }
 }

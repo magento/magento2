@@ -31,7 +31,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Resource\Cache|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Cache\State\Options|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resource;
 
@@ -135,7 +135,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_cacheFrontend)
         );
 
-        $this->_resource = $this->getMock('Magento\Core\Model\Resource\Cache', array(), array(), '', false);
+        $this->_resource = $this->getMock('Magento\App\Cache\State\Options', array(), array(), '', false);
         $this->_resource->expects(
             $this->any()
         )->method(

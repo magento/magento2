@@ -132,11 +132,9 @@ class Config implements \Magento\ObjectManager\Config
      */
     public function getArguments($type)
     {
-        return isset(
-            $this->_mergedArguments[$type]
-        ) ? $this->_mergedArguments[$type] : $this->_collectConfiguration(
-            $type
-        );
+        return isset($this->_mergedArguments[$type])
+            ? $this->_mergedArguments[$type]
+            : $this->_collectConfiguration($type);
     }
 
     /**

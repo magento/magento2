@@ -184,13 +184,16 @@ class Shell extends \Magento\App\AbstractShell
 
         foreach ($indexers as $indexer) {
             try {
+                $startTime = microtime(true);
                 $indexer->reindexAll();
-                echo $indexer->getTitle() . " index has been rebuilt successfully" . PHP_EOL;
+                $resultTime = microtime(true) - $startTime;
+                echo $indexer->getTitle() . ' index has been rebuilt successfully in '
+                    . gmdate('H:i:s', $resultTime) . PHP_EOL;
             } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {
-                echo $indexer->getTitle() . " indexer process unknown error:" . PHP_EOL;
+                echo $indexer->getTitle() . ' indexer process unknown error:' . PHP_EOL;
                 echo $e . PHP_EOL;
                 $this->hasErrors = true;
             }

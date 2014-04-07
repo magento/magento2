@@ -40,30 +40,15 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_argInterpreterMock;
-
     protected function setUp()
     {
-        $this->_argInterpreterMock = $this->getMock(
-            '\Magento\Data\Argument\InterpreterInterface',
-            array(),
-            array(),
-            '',
-            false
-        );
         $config = new \Magento\ObjectManager\Config\Config(new \Magento\ObjectManager\Relations\Runtime());
-        $argObjectFactory = new \Magento\ObjectManager\Config\Argument\ObjectFactory($config);
-        $factory = new \Magento\ObjectManager\Factory\Factory(
-            $config,
-            $this->_argInterpreterMock,
-            $argObjectFactory,
-            null
-        );
+        $factory = new \Magento\ObjectManager\Factory\Factory($config, null, null, array(
+            'first_param' => 'first_param_value',
+            'second_param' => 'second_param_value'
+        ));
         $this->_object = new \Magento\ObjectManager\ObjectManager($factory, $config);
-        $argObjectFactory->setObjectManager($this->_object);
+        $factory->setObjectManager($this->_object);
     }
 
     public function testCreateCreatesNewInstanceEveryTime()
@@ -143,20 +128,6 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateResolvesScalarParametersAutomatically()
     {
-        $childAMock = $this->getMock('Magento\Test\Di\Child\A', array(), array(), '', false);
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array(array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\Child\A'), $childAMock),
-                    array(array('xsi:type' => 'string', 'value' => 'scalarValue'), 'scalarValue')
-                )
-            )
-        );
-
         $this->_object->configure(
             array(
                 'preferences' => array(
@@ -165,8 +136,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 ),
                 'Magento\Test\Di\Aggregate\AggregateParent' => array(
                     'arguments' => array(
-                        'child' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\Child\A'),
-                        'scalar' => array('xsi:type' => 'string', 'value' => 'scalarValue')
+                        'child' => array('instance' => 'Magento\Test\Di\Child\A'),
+                        'scalar' => 'scalarValue'
                     )
                 )
             )
@@ -191,7 +162,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 ),
                 'Magento\Test\Di\DiInterface' => array('shared' => 0),
                 'Magento\Test\Di\Aggregate\AggregateParent' => array(
-                    'arguments' => array('scalar' => array('xsi:type' => 'string', 'value' => 'scalarValue'))
+                    'arguments' => array('scalar' => 'scalarValue')
                 )
             )
         );
@@ -233,26 +204,6 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCreatesPreconfiguredInstance()
     {
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array(array('xsi:type' => 'string', 'value' => 'configuredScalar'), 'configuredScalar'),
-                    array(
-                        array('xsi:type' => 'string', 'value' => 'configuredSecondScalar'),
-                        'configuredSecondScalar'
-                    ),
-                    array(
-                        array('xsi:type' => 'string', 'value' => 'configuredOptionalScalar'),
-                        'configuredOptionalScalar'
-                    )
-                )
-            )
-        );
-
         $this->_object->configure(
             array(
                 'preferences' => array(
@@ -262,9 +213,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 'customChildType' => array(
                     'type' => 'Magento\Test\Di\Aggregate\Child',
                     'arguments' => array(
-                        'scalar' => array('xsi:type' => 'string', 'value' => 'configuredScalar'),
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'configuredSecondScalar'),
-                        'secondOptionalScalar' => array('xsi:type' => 'string', 'value' => 'configuredOptionalScalar')
+                        'scalar' => 'configuredScalar',
+                        'secondScalar' => 'configuredSecondScalar',
+                        'secondOptionalScalar' => 'configuredOptionalScalar'
                     )
                 )
             )
@@ -280,32 +231,14 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testParameterShareabilityConfigurationIsApplied()
     {
-        $diParentMock = $this->getMock('Magento\Test\Di\DiParent', array(), array(), '', false);
-        $this->_argInterpreterMock->expects($this->any())->method('evaluate')->will(
-            $this->returnCallback(
-                function (array $array) use ($diParentMock) {
-                    if ($array === array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent')) {
-                        return $diParentMock;
-                    } elseif ($array === array(
-                        'xsi:type' => 'object',
-                        'value' => 'Magento\Test\Di\DiParent',
-                        'shared' => false
-                    )
-                    ) {
-                        return $this->getMock('Magento\Test\Di\DiParent', array(), array(), '', false);
-                    }
-                }
-            )
-        );
-
         $this->_object->configure(
             array(
                 'customChildType' => array(
                     'type' => 'Magento\Test\Di\Aggregate\Child',
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'),
-                        'scalar' => array('xsi:type' => 'string', 'value' => 'configuredScalar'),
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'configuredSecondScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\DiParent'),
+                        'scalar' => 'configuredScalar',
+                        'secondScalar' => 'configuredSecondScalar'
                     )
                 )
             )
@@ -320,8 +253,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 'customChildType' => array(
                     'arguments' => array(
                         'interface' => array(
-                            'xsi:type' => 'object',
-                            'value' => 'Magento\Test\Di\DiParent',
+                            'instance' => 'Magento\Test\Di\DiParent',
                             'shared' => false
                         )
                     )
@@ -336,25 +268,14 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testTypeShareabilityConfigurationIsApplied()
     {
-        $diParentMock = $this->getMock('Magento\Test\Di\DiParent', array(), array(), '', false);
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(array(array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'), $diParentMock))
-            )
-        );
-
         $this->_object->configure(
             array(
                 'customChildType' => array(
                     'type' => 'Magento\Test\Di\Aggregate\Child',
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'),
-                        'scalar' => array('xsi:type' => 'string', 'value' => 'configuredScalar'),
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'configuredSecondScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\DiParent'),
+                        'scalar' => 'configuredScalar',
+                        'secondScalar' => 'configuredSecondScalar'
                     )
                 )
             )
@@ -377,33 +298,15 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testParameterShareabilityConfigurationOverridesTypeShareability()
     {
-        $diParentMock = $this->getMock('Magento\Test\Di\DiParent', array(), array(), '', false);
-        $this->_argInterpreterMock->expects($this->any())->method('evaluate')->will(
-            $this->returnCallback(
-                function (array $array) use ($diParentMock) {
-                    if ($array === array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent')) {
-                        return $this->_object->create('Magento\Test\Di\DiParent');
-                    } elseif ($array === array(
-                        'xsi:type' => 'object',
-                        'value' => 'Magento\Test\Di\DiParent',
-                        'shared' => true
-                    )
-                    ) {
-                        return $diParentMock;
-                    }
-                }
-            )
-        );
-
         $this->_object->configure(
             array(
                 'Magento\Test\Di\DiParent' => array('shared' => false),
                 'customChildType' => array(
                     'type' => 'Magento\Test\Di\Aggregate\Child',
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'),
-                        'scalar' => array('xsi:type' => 'string', 'value' => 'configuredScalar'),
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'configuredSecondScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\DiParent'),
+                        'scalar' => 'configuredScalar',
+                        'secondScalar' => 'configuredSecondScalar'
                     )
                 )
             )
@@ -418,8 +321,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 'customChildType' => array(
                     'arguments' => array(
                         'interface' => array(
-                            'xsi:type' => 'object',
-                            'value' => 'Magento\Test\Di\DiParent',
+                            'instance' => 'Magento\Test\Di\DiParent',
                             'shared' => true
                         )
                     )
@@ -434,66 +336,37 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGlobalArgumentsCanBeConfigured()
     {
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array(array('xsi:type' => 'init_parameter', 'value' => 'one'), 'first_val'),
-                    array(array('xsi:type' => 'init_parameter', 'value' => 'two'), 'second_val')
-                )
-            )
-        );
-
         $this->_object->configure(
             array(
                 'preferences' => array('Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent'),
                 'Magento\Test\Di\Aggregate\AggregateParent' => array(
                     'arguments' => array(
-                        'scalar' => array('xsi:type' => 'init_parameter', 'value' => 'one'),
-                        'optionalScalar' => array('xsi:type' => 'init_parameter', 'value' => 'two')
+                        'scalar' => array('argument' => 'first_param'),
+                        'optionalScalar' => array('argument' => 'second_param')
                     )
                 )
             )
         );
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
         $result = $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
-        $this->assertEquals('first_val', $result->scalar);
-        $this->assertEquals('second_val', $result->optionalScalar);
+        $this->assertEquals('first_param_value', $result->scalar);
+        $this->assertEquals('second_param_value', $result->optionalScalar);
     }
 
     public function testConfiguredArgumentsAreInherited()
     {
-        $diParentMock = $this->getMock('Magento\Test\Di\DiParent', array(), array(), '', false);
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array(array('xsi:type' => 'init_parameter', 'value' => 'one'), 'first_val'),
-                    array(array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'), $diParentMock),
-                    array(array('xsi:type' => 'string', 'value' => 'parentOptionalScalar'), 'parentOptionalScalar'),
-                    array(array('xsi:type' => 'string', 'value' => 'childSecondScalar'), 'childSecondScalar')
-                )
-            )
-        );
-
         $this->_object->configure(
             array(
                 'Magento\Test\Di\Aggregate\AggregateParent' => array(
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'),
-                        'scalar' => array('xsi:type' => 'init_parameter', 'value' => 'one'),
-                        'optionalScalar' => array('xsi:type' => 'string', 'value' => 'parentOptionalScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\DiParent'),
+                        'scalar' => array('argument' => 'first_param'),
+                        'optionalScalar' => 'parentOptionalScalar'
                     )
                 ),
                 'Magento\Test\Di\Aggregate\Child' => array(
                     'arguments' => array(
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'childSecondScalar')
+                        'secondScalar' => 'childSecondScalar'
                     )
                 )
             )
@@ -502,44 +375,28 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
         $result = $this->_object->create('Magento\Test\Di\Aggregate\Child');
         $this->assertInstanceOf('Magento\Test\Di\DiParent', $result->interface);
-        $this->assertEquals('first_val', $result->scalar);
+        $this->assertEquals('first_param_value', $result->scalar);
         $this->assertEquals('childSecondScalar', $result->secondScalar);
         $this->assertEquals('parentOptionalScalar', $result->optionalScalar);
     }
 
     public function testConfiguredArgumentsOverrideInheritedArguments()
     {
-        $diChildMock = $this->getMock('Magento\Test\Di\Child', array(), array(), '', false);
-        $this->_argInterpreterMock->expects(
-            $this->any()
-        )->method(
-            'evaluate'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    array(array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\Child'), $diChildMock),
-                    array(array('xsi:type' => 'init_parameter', 'value' => 'two'), 'second_val'),
-                    array(array('xsi:type' => 'string', 'value' => 'childSecondScalar'), 'childSecondScalar'),
-                    array(array('xsi:type' => 'string', 'value' => 'childOptionalScalar'), 'childOptionalScalar')
-                )
-            )
-        );
-
         $this->_object->configure(
             array(
                 'Magento\Test\Di\Aggregate\AggregateParent' => array(
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\DiParent'),
-                        'scalar' => array('xsi:type' => 'init_parameter', 'value' => 'one'),
-                        'optionalScalar' => array('xsi:type' => 'string', 'value' => 'parentOptionalScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\DiParent'),
+                        'scalar' => array('argument' => 'first_param'),
+                        'optionalScalar' => 'parentOptionalScalar'
                     )
                 ),
                 'Magento\Test\Di\Aggregate\Child' => array(
                     'arguments' => array(
-                        'interface' => array('xsi:type' => 'object', 'value' => 'Magento\Test\Di\Child'),
-                        'scalar' => array('xsi:type' => 'init_parameter', 'value' => 'two'),
-                        'secondScalar' => array('xsi:type' => 'string', 'value' => 'childSecondScalar'),
-                        'optionalScalar' => array('xsi:type' => 'string', 'value' => 'childOptionalScalar')
+                        'interface' => array('instance' => 'Magento\Test\Di\Child'),
+                        'scalar' => array('argument' => 'second_param'),
+                        'secondScalar' => 'childSecondScalar',
+                        'optionalScalar' => 'childOptionalScalar'
                     )
                 )
             )
@@ -548,7 +405,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
         $result = $this->_object->create('Magento\Test\Di\Aggregate\Child');
         $this->assertInstanceOf('Magento\Test\Di\Child', $result->interface);
-        $this->assertEquals('second_val', $result->scalar);
+        $this->assertEquals('second_param_value', $result->scalar);
         $this->assertEquals('childSecondScalar', $result->secondScalar);
         $this->assertEquals('childOptionalScalar', $result->optionalScalar);
     }

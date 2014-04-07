@@ -101,12 +101,12 @@ class ObjectManager
     /**
      * Retrieve specific mock of core resource model
      *
-     * @return \Magento\Core\Model\Resource\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getResourceModelMock()
     {
         $resourceMock = $this->_testObject->getMock(
-            'Magento\Core\Model\Resource\Resource',
+            'Magento\Install\Model\Resource\Resource',
             array('getIdFieldName', '__sleep', '__wakeup'),
             array(),
             '',

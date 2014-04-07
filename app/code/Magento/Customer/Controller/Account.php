@@ -448,7 +448,7 @@ class Account extends \Magento\App\Action\Action
             $customer = $this->_customerAccountService->createAccount($customerDetails, $password, $redirectUrl);
 
             if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $this->_subscriberFactory->create()->updateSubscription($customer->getId(), true);
+                $this->_subscriberFactory->create()->subscribeCustomerById($customer->getId());
             }
 
             $this->_eventManager->dispatch(

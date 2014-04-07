@@ -51,7 +51,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_moduleList;
 
     /**
-     * @var \Magento\Core\Model\Resource\Resource
+     * @var \Magento\Module\ResourceInterface
      */
     protected $_resourceResource;
 
@@ -88,7 +88,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @param \Magento\App\Resource $resource
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\Resource\Resource $resourceResource
+     * @param \Magento\Module\ResourceInterface $resourceResource
      * @param MigrationFactory $migrationFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
@@ -101,7 +101,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
         \Magento\App\Resource $resource,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\Resource\Resource $resourceResource,
+        \Magento\Module\ResourceInterface $resourceResource,
         \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Core\Model\Theme\CollectionFactory $themeFactory,
@@ -170,7 +170,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\Resource\Resource
+     * @return \Magento\Module\ResourceInterface
      */
     public function getResourceResource()
     {

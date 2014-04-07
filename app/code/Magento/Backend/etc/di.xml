@@ -74,7 +74,7 @@
         <arguments>
             <argument name="handlerClassesList" xsi:type="array">
                 <item name="backend" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Backend\App\Router\NoRouteHandler</item>
+                    <item name="class" xsi:type="string">Magento\Backend\App\Router\NoRouteHandler</item>
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
             </argument>

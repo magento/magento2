@@ -57,9 +57,9 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory
-     * @param \Magento\Core\Model\Source\Urlrewrite\OptionsFactory $optionFactory
-     * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Cms\Model\Page\UrlrewriteFactory $urlRewriteFactory
@@ -72,9 +72,9 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory,
-        \Magento\Core\Model\Source\Urlrewrite\OptionsFactory $optionFactory,
-        \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
+        \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory,
+        \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory,
+        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Cms\Model\Page\UrlrewriteFactory $urlRewriteFactory,

@@ -72,6 +72,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSaveActionWithEmptyPostData()
     {
         $this->getRequest()->setPost(array());
@@ -79,6 +82,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSaveActionWithInvalidFormData()
     {
         $post = array('account' => array('middlename' => 'test middlename', 'group_id' => 1));
@@ -175,6 +181,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
          * Check that errors was generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
+
         /**
          * Check that customer data were set to session
          */
@@ -203,6 +210,12 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect(
             $this->stringStartsWith($this->_baseControllerUrl . 'edit/id/' . $customerId . '/back/1')
         );
+
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->get("Magento\Newsletter\Model\SubscriberFactory")->create();
+        $this->assertEmpty($subscriber->getId());
+        $subscriber->loadByCustomerId($customerId);
+        $this->assertEmpty($subscriber->getId());
     }
 
     /**
@@ -252,7 +265,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                     'postcode' => '',
                     'telephone' => ''
                 )
-            )
+            ),
+            'subscription' => ''
         );
         $this->getRequest()->setPost($post);
         $this->getRequest()->setParam('customer_id', 1);
@@ -289,6 +303,56 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals('update firstname', $updatedAddress->getFirstname());
         $newAddress = $this->customerAddressService->getDefaultShippingAddress($customerId);
         $this->assertEquals('new firstname', $newAddress->getFirstname());
+
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->get("Magento\Newsletter\Model\SubscriberFactory")->create();
+        $this->assertEmpty($subscriber->getId());
+        $subscriber->loadByCustomerId($customerId);
+        $this->assertNotEmpty($subscriber->getId());
+        $this->assertEquals(1, $subscriber->getStatus());
+
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     */
+    public function testSaveActionExistingCustomerUnsubscribeNewsletter()
+    {
+        $customerId = 1;
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->get("Magento\Newsletter\Model\SubscriberFactory")->create();
+        $this->assertEmpty($subscriber->getId());
+        $subscriber->loadByCustomerId($customerId);
+        $this->assertNotEmpty($subscriber->getId());
+        $this->assertEquals(1, $subscriber->getStatus());
+
+        $post = array(
+            'customer_id' => $customerId,
+        );
+        $this->getRequest()->setPost($post);
+        $this->getRequest()->setParam('customer_id', 1);
+        $this->dispatch('backend/customer/index/save');
+
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+        $subscriber = $objectManager->get("Magento\Newsletter\Model\SubscriberFactory")->create();
+        $this->assertEmpty($subscriber->getId());
+        $subscriber->loadByCustomerId($customerId);
+        $this->assertNotEmpty($subscriber->getId());
+        $this->assertEquals(3, $subscriber->getStatus());
+
+        /**
+         * Check that success message is set
+         */
+        $this->assertSessionMessages(
+            $this->equalTo(array('You saved the customer.')),
+            \Magento\Message\MessageInterface::TYPE_SUCCESS
+        );
+
+
 
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
     }
@@ -536,8 +600,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         // Pre-condition
         /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
         $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $this->assertNull($subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus());
-        $this->assertNull($subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus());
+        $this->assertNull($subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus());
+        $this->assertNull($subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus());
         // Setup
         $this->getRequest()->setParam('customer', array(1, 2));
 
@@ -552,14 +616,17 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
         );
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testMassSubscriberActionNoSelection()
     {
         $this->dispatch('backend/customer/index/massSubscribe');
@@ -571,6 +638,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testMassSubscriberActionInvalidId()
     {
         $this->getRequest()->setParam('customer', array(4200));
@@ -592,8 +662,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         // Pre-condition
         /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
         $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $this->assertNull($subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus());
-        $this->assertNull($subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus());
+        $this->assertNull($subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus());
+        $this->assertNull($subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus());
         // Setup
         $this->getRequest()->setParam('customer', array(1, 4200, 2));
 
@@ -612,11 +682,11 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
         );
     }
 
@@ -634,6 +704,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringContains('customer/index'));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testInvalidIdMassDeleteAction()
     {
         $this->getRequest()->setPost('customer', array(1));
@@ -646,6 +719,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 
     /**
      * Valid group Id but no customer Ids specified
+     * @magentoDbIsolation enabled
      */
     public function testMassDeleteActionNoCustomerIds()
     {
@@ -695,6 +769,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 
     /**
      * Valid group Id but no data fixture so no customer exists with customer Id = 1
+     * @magentoDbIsolation enabled
      */
     public function testMassAssignGroupActionInvalidCustomerId()
     {
@@ -708,6 +783,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 
     /**
      * Valid group Id but no customer Ids specified
+     * @magentoDbIsolation enabled
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
@@ -750,9 +826,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         // Setup
         /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
         $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $subscriberFactory->create()->updateSubscription(1, true);
-        $subscriberFactory->create()->updateSubscription(2, true);
-        $this->getRequest()->setParam('customer', array(1, 2));
+        $subscriberFactory->create()->subscribeCustomerById(1);
+        $subscriberFactory->create()->subscribeCustomerById(2);
+        $this->getRequest()->setParam('customer', [1, 2]);
 
         // Test
         $this->dispatch('backend/customer/index/massUnsubscribe');
@@ -765,14 +841,17 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
         $this->assertEquals(
             Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
         );
         $this->assertEquals(
             Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
         );
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testMassUnsubscriberActionNoSelection()
     {
         $this->dispatch('backend/customer/index/massUnsubscribe');
@@ -784,6 +863,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testMassUnsubscriberActionInvalidId()
     {
         $this->getRequest()->setParam('customer', array(4200));
@@ -805,9 +887,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         // Setup
         /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
         $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $subscriberFactory->create()->updateSubscription(1, true);
-        $subscriberFactory->create()->updateSubscription(2, true);
-        $this->getRequest()->setParam('customer', array(1, 4200, 2));
+        $subscriberFactory->create()->subscribeCustomerById(1);
+        $subscriberFactory->create()->subscribeCustomerById(2);
+        $this->getRequest()->setParam('customer', [1, 4200, 2]);
 
         // Test
         $this->dispatch('backend/customer/index/massUnsubscribe');
@@ -824,11 +906,11 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         );
         $this->assertEquals(
             Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(1)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
         );
         $this->assertEquals(
             Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomer(2)->getSubscriberStatus()
+            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
         );
     }
 
@@ -945,6 +1027,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertContains('\"Country\" is a required value.', $body);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testResetPasswordActionNoCustomerId()
     {
         // No customer ID in post, will just get redirected to base
@@ -952,6 +1037,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testResetPasswordActionBadCustomerId()
     {
         // Bad customer ID in post, will just get redirected to base

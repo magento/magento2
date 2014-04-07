@@ -39,8 +39,8 @@ if ($cmsPage->isObjectNew()) {
 }
 
 // create URL rewrite
-/** @var $rewrite \Magento\Core\Model\Url\Rewrite */
-$rewrite = $objectManager->create('Magento\Core\Model\Url\Rewrite');
+/** @var $rewrite \Magento\UrlRewrite\Model\UrlRewrite */
+$rewrite = $objectManager->create('Magento\UrlRewrite\Model\UrlRewrite');
 $rewrite->setIdPath(
     'cms_page/' . $cmsPage->getId()
 )->setRequestPath(

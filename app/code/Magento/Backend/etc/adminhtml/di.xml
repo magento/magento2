@@ -94,12 +94,12 @@
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="admin" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Backend\App\Router\DefaultRouter</item>
+                    <item name="class" xsi:type="string">Magento\Backend\App\Router\DefaultRouter</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
                 <item name="default" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\App\Router\DefaultRouter</item>
+                    <item name="class" xsi:type="string">Magento\App\Router\DefaultRouter</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>

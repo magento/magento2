@@ -47,12 +47,9 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
         $relations = new \Magento\ObjectManager\Relations\Runtime($classReader);
         $definitions = new \Magento\ObjectManager\Definition\Runtime($classReader);
         $config = new \Magento\Interception\ObjectManager\Config($relations, $definitions);
-        $argInterpreter = new \Magento\Data\Argument\Interpreter\Composite(array(), 'type');
-        $argObjectFactory = new \Magento\ObjectManager\Config\Argument\ObjectFactory($config);
         $factory = new \Magento\ObjectManager\Factory\Factory(
             $config,
-            $argInterpreter,
-            $argObjectFactory,
+            null,
             $definitions
         );
 
@@ -112,7 +109,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
                 'Magento\Interception\Definition' => $interceptionDefinitions
             )
         );
-        $argObjectFactory->setObjectManager($this->_objectManager);
+        $factory->setObjectManager($this->_objectManager);
         $config->setInterceptionConfig($interceptionConfig);
         $config->extend(
             array(

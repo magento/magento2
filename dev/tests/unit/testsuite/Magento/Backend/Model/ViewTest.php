@@ -38,7 +38,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $aclFilter = $this->getMock('Magento\Core\Model\Layout\Filter\Acl', array(), array(), '', false);
+        $aclFilter = $this->getMock('Magento\Backend\Model\Layout\Filter\Acl', array(), array(), '', false);
         $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
         $layoutProcessor = $this->getMock('Magento\View\Layout\ProcessorInterface');
         $node = new \Magento\Simplexml\Element('<node/>');

@@ -28,7 +28,7 @@
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="vde" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\DesignEditor\Controller\Varien\Router\Standard</item>
+                    <item name="class" xsi:type="string">Magento\DesignEditor\Controller\Varien\Router\Standard</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">40</item>
                 </item>

@@ -93,7 +93,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\Resource\Resource
+     * @var \Magento\Module\ResourceInterface
      */
     protected $_resourceResource;
 

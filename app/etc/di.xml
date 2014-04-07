@@ -61,7 +61,7 @@
     <preference for="Magento\View\Url\ConfigInterface" type="Magento\Core\Model\View\Url\Config" />
     <preference for="Magento\App\Route\ConfigInterface" type="Magento\App\Route\Config" />
     <preference for="Magento\App\Resource\ConfigInterface" type="Magento\App\Resource\Config\Proxy" />
-    <preference for="Magento\App\Cache\State\OptionsInterface" type="Magento\Core\Model\Resource\Cache" />
+    <preference for="Magento\App\Cache\State\OptionsInterface" type="Magento\App\Cache\State\Options" />
     <preference for="Magento\Oauth\OauthInterface" type="Magento\Oauth\Oauth"/>
     <preference for="Magento\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Core\Model\Theme\Domain\Physical" />
     <preference for="Magento\View\Design\Theme\Domain\VirtualInterface" type="Magento\Core\Model\Theme\Domain\Virtual" />
@@ -70,7 +70,7 @@
     <preference for="Magento\Json\DecoderInterface" type="Magento\Json\Decoder" />
     <preference for="Magento\Message\ManagerInterface" type="Magento\Message\Manager" />
     <preference for="Magento\App\Config\ValueInterface" type="Magento\Core\Model\Config\Value" />
-    <preference for="Magento\Module\DependencyManagerInterface" type="Magento\Module\DependencyManager" />    
+    <preference for="Magento\Module\DependencyManagerInterface" type="Magento\Module\DependencyManager" />
     <preference for="Magento\Interception\Chain" type="Magento\Interception\Chain\Chain" />
     <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
     <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />

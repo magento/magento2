@@ -165,9 +165,6 @@
                 <use_store>0</use_store>
                 <redirect_to_base>1</redirect_to_base>
             </url>
-            <seo>
-                <use_rewrites>0</use_rewrites>
-            </seo>
             <unsecure>
                 <base_url>{{base_url}}</base_url>
                 <base_web_url>{{unsecure_base_url}}</base_web_url>

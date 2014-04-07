@@ -55,7 +55,7 @@ namespace Magento\Newsletter\Model;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Core\Model\Template
+class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
      * Template Text Preprocessed flag

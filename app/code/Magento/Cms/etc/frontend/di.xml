@@ -28,7 +28,7 @@
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="cms" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Cms\Controller\Router</item>
+                    <item name="class" xsi:type="string">Magento\Cms\Controller\Router</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">60</item>
                 </item>

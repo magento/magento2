@@ -100,6 +100,7 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
 
         $appArguments = parent::createAppArguments($directoryList, $arguments);
         $this->appArgumentsProxy->setSubject($appArguments);
+        $this->factory->setArguments($appArguments->get());
         $objectManager->addSharedInstance($appArguments, 'Magento\App\Arguments');
 
         $objectManager->get('Magento\Interception\PluginList')->reset();
@@ -109,25 +110,25 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
     }
 
     /**
-     * Load primary config data
+     * Load primary config
      *
-     * @param string $configDirectoryPath
+     * @param \Magento\App\Filesystem\DirectoryList $directoryList
+     * @param mixed $argumentMapper
      * @param string $appMode
      * @return array
-     * @throws \Magento\BootstrapException
      */
-    protected function _loadPrimaryConfig($configDirectoryPath, $appMode)
-    {
+    protected function _loadPrimaryConfig(
+        \Magento\App\Filesystem\DirectoryList $directoryList,
+        $argumentMapper,
+        $appMode
+    ) {
         if (null === $this->_primaryConfigData) {
             $this->_primaryConfigData = array_replace(
-                parent::_loadPrimaryConfig($configDirectoryPath, $appMode),
+                parent::_loadPrimaryConfig($directoryList, $argumentMapper, $appMode),
                 array(
                     'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
                         'arguments' => array(
-                            'canSaveMap' => array(
-                                \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
-                                'value' => false
-                            )
+                            'canSaveMap' => false
                         )
                     ),
                     'default_setup' => array('type' => 'Magento\TestFramework\Db\ConnectionAdapter')
@@ -135,7 +136,7 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             );
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
-                array(
+                [
                     'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                     'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
                     'Magento\App\Request\Http' => 'Magento\TestFramework\Request',
@@ -144,7 +145,7 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
                     'Magento\Interception\PluginList' => 'Magento\TestFramework\Interception\PluginList',
                     'Magento\Interception\ObjectManager\Config' => 'Magento\TestFramework\ObjectManager\Config',
                     'Magento\View\LayoutInterface' => 'Magento\TestFramework\View\Layout'
-                )
+                ]
             );
         }
         return $this->_primaryConfigData;

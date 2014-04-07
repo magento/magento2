@@ -58,18 +58,18 @@ class Link extends \Magento\View\Element\Html\Link implements \Magento\Widget\Bl
     /**
      * Url rewrite
      *
-     * @var \Magento\Core\Model\Resource\Url\Rewrite
+     * @var \Magento\UrlRewrite\Model\Resource\UrlRewrite
      */
     protected $_urlRewrite;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite
+     * @param \Magento\UrlRewrite\Model\Resource\UrlRewrite $urlRewrite
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite,
+        \Magento\UrlRewrite\Model\Resource\UrlRewrite $urlRewrite,
         array $data = array()
     ) {
         $this->_urlRewrite = $urlRewrite;

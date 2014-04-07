@@ -25,6 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
+    <preference for="Magento\Module\ResourceInterface" type="Magento\Install\Model\Resource\Resource" />
     <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">install</argument>
@@ -139,5 +140,8 @@
         <arguments>
             <argument name="areaCode" xsi:type="string">adminhtml</argument>
         </arguments>
+    </type>
+    <type name="Magento\App\Action\Action">
+        <plugin name="installInitializer" type="Magento\Install\App\Action\Plugin\Install" sortOrder="5"/>
     </type>
 </config>

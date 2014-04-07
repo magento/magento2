@@ -102,6 +102,11 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $formKey;
 
     /**
+     * @var \Magento\Core\Model\Store
+     */
+    protected $_scope;
+
+    /**
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
@@ -427,12 +432,15 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     protected function _getScope()
     {
-        return $this->_storeFactory->create(
-            array(
-                'url' => $this,
-                'data' => array('code' => 'admin', 'force_disable_rewrites' => true, 'disable_store_in_url' => true)
-            )
-        );
+        if (!$this->_scope) {
+            $this->_scope = $this->_storeFactory->create(
+                array(
+                    'url' => $this,
+                    'data' => array('code' => 'admin', 'force_disable_rewrites' => true, 'disable_store_in_url' => true)
+                )
+            );
+        }
+        return $this->_scope;
     }
 
     /**

@@ -316,7 +316,10 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _getEventData()
     {
-        return array('data_object' => $this, $this->_eventObject => $this);
+        return array(
+            'data_object'       => $this,
+            $this->_eventObject => $this,
+        );
     }
 
     /**

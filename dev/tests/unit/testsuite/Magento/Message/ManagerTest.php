@@ -258,6 +258,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddMessage($type, $methodName)
     {
+        $this->assertFalse($this->model->hasMessages());
         $message = 'Message';
         $messageCollection = $this->getMock('Magento\Message\Collection', array('addMessage'), array(), '', false);
         $this->session->expects($this->any())
@@ -265,11 +266,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($messageCollection));
         $this->eventManager->expects($this->once())
             ->method('dispatch')->with('core_session_abstract_add_message');
-
         $this->messageFactory->expects($this->once())
             ->method('create')->with($type, $message)
             ->will($this->returnValue($this->messageMock));
         $this->model->$methodName($message, 'group');
+        $this->assertTrue($this->model->hasMessages());
     }
 
     public function addMessageDataProvider()

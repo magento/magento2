@@ -160,12 +160,12 @@ class Converter
      * Update customer model with the data from the data object
      *
      * @param Customer $customerModel
-     * @param \Magento\Customer\Service\V1\Data\Customer $customerData
+     * @param CustomerDataObject $customerData
      * @return void
      */
     public function updateCustomerModel(
         \Magento\Customer\Model\Customer $customerModel,
-        \Magento\Customer\Service\V1\Data\Customer $customerData
+        CustomerDataObject $customerData
     ) {
         $attributes = \Magento\Service\DataObjectConverter::toFlatArray($customerData);
         foreach ($attributes as $attributeCode => $attributeValue) {
@@ -197,7 +197,7 @@ class Converter
                 continue;
             }
             if ($attrCode == 'entity_id') {
-                $attributes[\Magento\Customer\Service\V1\Data\Customer::ID] = $value;
+                $attributes[CustomerDataObject::ID] = $value;
             } else {
                 $attributes[$attrCode] = $value;
             }

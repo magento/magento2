@@ -38,7 +38,6 @@
     </type>
     <type name="Magento\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
-        <plugin name="urlRewrite" type="Magento\Core\App\FrontController\Plugin\UrlRewrite" sortOrder="60"/>
     </type>
     <type name="Magento\App\Action\Action">
         <plugin name="core-app-action-dispatchController-context-plugin" type="Magento\Core\Model\App\Action\ContextPlugin" sortOrder="10"/>
@@ -48,12 +47,12 @@
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="standard" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Core\App\Router\Base</item>
+                    <item name="class" xsi:type="string">Magento\Core\App\Router\Base</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
                 <item name="default" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\App\Router\DefaultRouter</item>
+                    <item name="class" xsi:type="string">Magento\App\Router\DefaultRouter</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>

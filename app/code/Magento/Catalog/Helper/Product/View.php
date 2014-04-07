@@ -247,11 +247,6 @@ class View extends \Magento\App\Helper\AbstractHelper
 
         $this->_eventManager->dispatch('catalog_controller_product_view', array('product' => $product));
 
-        if ($params->getSpecifyOptions()) {
-            $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
-            $this->messageManager->addNotice($notice);
-        }
-
         $this->_catalogSession->setLastViewedProductId($product->getId());
 
         $this->initProductLayout($product, $controller, $params);

@@ -1,3 +1,25 @@
+2.0.0.0-dev72
+=============
+* Framework Improvements:
+  * Fixed performance degradation caused by DI argument processors
+* Modularity improvements:
+  * Introduced the Magento_UrlRewrite module, and moved corresponding classes from Magento_Core to Magento_UrlRewrite
+  * Moved all Install logic to the Magento_Install module
+  * Eliminated the Core\Helper\Js class
+  * Moved the Email related logic from the Magento_Core module to the Magento_Email module
+  * Moved the Cache related logic from the Magento_Core module to library
+* Indexer improvements:
+  * Added execution time hints for console reindex
+* Customer Service usage:
+  * Refactored the Magento_Newsletter module to use Customer service layer
+* Fixed bugs:
+  * Fixed an issue with resetting customer password from the frontend
+  * Fixed an issue where mistakenly the attribute of the Customer Address Edit form was cached
+  * Fixed an issue where admin could not unsubscribe customer on the customer edit page in the backend
+  * Fixed an issue where customers were always subscribed to the newsletter even if not selected during registration
+* GitHub requests:
+  * [#325] (https://github.com/magento/magento2/pull/325) -- ImportExport: Fix notice if _attribute_set column is missing
+
 2.0.0.0-dev71
 =============
 * Fixed bugs:

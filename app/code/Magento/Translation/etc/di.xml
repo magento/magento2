@@ -63,4 +63,11 @@
             <argument name="translator" xsi:type="object">Magento\Translate</argument>
         </arguments>
     </type>
+    <type name="Magento\Translation\Model\Js">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Translation\Model\Js\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

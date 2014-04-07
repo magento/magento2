@@ -136,7 +136,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         if (!$objectManager) {
             $objectManager = new \Magento\ObjectManager\ObjectManager();
         }
-        $rewriteFactory = $this->getMock('Magento\Core\Model\Url\RewriteFactory', array('create'), array(), '', false);
+        $rewriteFactory = $this->getMock(
+            'Magento\UrlRewrite\Model\UrlRewriteFactory', array('create'), array(), '', false
+        );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $varienFront = $helper->getObject('Magento\App\FrontController', array('rewriteFactory' => $rewriteFactory));
 

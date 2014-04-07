@@ -33,63 +33,68 @@
  */
 namespace Magento\Newsletter\Controller;
 
+use Magento\App\Action\Context;
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Customer\Helper\Data as CustomerHelper;
+
 class Subscriber extends \Magento\App\Action\Action
 {
     /**
-     * Session
-     *
-     * @var \Magento\Core\Model\Session
-     */
-    protected $_session;
-
-    /**
      * Customer session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
     /**
-     * Customer factory
+     * Customer Service
      *
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var CustomerAccountServiceInterface
      */
-    protected $_customerFactory;
+    protected $_customerService;
 
     /**
      * Subscriber factory
      *
-     * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @var SubscriberFactory
      */
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @var CustomerHelper
+     */
+    protected $_customerHelper;
+
+    /**
+     * @param Context $context
+     * @param SubscriberFactory $subscriberFactory
+     * @param CustomerAccountServiceInterface $customerService
+     * @param Session $customerSession
+     * @param StoreManagerInterface $storeManager
+     * @param CustomerHelper $customerHelper
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\Session $session,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        Context $context,
+        SubscriberFactory $subscriberFactory,
+        CustomerAccountServiceInterface $customerService,
+        Session $customerSession,
+        StoreManagerInterface $storeManager,
+        CustomerHelper $customerHelper
     ) {
-        $this->_storeManager = $storeManager;
         parent::__construct($context);
+        $this->_storeManager = $storeManager;
         $this->_subscriberFactory = $subscriberFactory;
-        $this->_customerFactory = $customerFactory;
+        $this->_customerService = $customerService;
         $this->_customerSession = $customerSession;
-        $this->_session = $session;
+        $this->_customerHelper = $customerHelper;
     }
 
     /**
@@ -104,33 +109,9 @@ class Subscriber extends \Magento\App\Action\Action
             $email = (string)$this->getRequest()->getPost('email');
 
             try {
-                if (!\Zend_Validate::is($email, 'EmailAddress')) {
-                    throw new \Magento\Model\Exception(__('Please enter a valid email address.'));
-                }
-
-                if ($this->_objectManager->get(
-                    'Magento\Core\Model\Store\Config'
-                )->getConfig(
-                    \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG
-                ) != 1 && !$this->_customerSession->isLoggedIn()
-                ) {
-                    throw new \Magento\Model\Exception(
-                        __(
-                            'Sorry, but the administrator denied subscription for guests. ' .
-                            'Please <a href="%1">register</a>.',
-                            $this->_objectManager->get('Magento\Customer\Helper\Data')->getRegisterUrl()
-                        )
-                    );
-                }
-
-                $ownerId = $this->_customerFactory->create()->setWebsiteId(
-                    $this->_storeManager->getStore()->getWebsiteId()
-                )->loadByEmail(
-                    $email
-                )->getId();
-                if ($ownerId !== null && $ownerId != $this->_customerSession->getId()) {
-                    throw new \Magento\Model\Exception(__('This email address is already assigned to another user.'));
-                }
+                $this->validateEmailFormat($email);
+                $this->validateGuestSubscription();
+                $this->validateEmailAvailable($email);
 
                 $status = $this->_subscriberFactory->create()->subscribe($email);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
@@ -197,5 +178,58 @@ class Subscriber extends \Magento\App\Action\Action
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+    }
+
+    /**
+     * Validates that the email address isn't being used by a different account.
+     *
+     * @param string $email
+     * @throws \Magento\Model\Exception
+     * @return void
+     */
+    protected function validateEmailAvailable($email)
+    {
+        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+        if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+            && !$this->_customerService->isEmailAvailable($email, $websiteId)
+        ) {
+            throw new \Magento\Model\Exception(__('This email address is already assigned to another user.'));
+        }
+    }
+
+    /**
+     * Validates that if the current user is a guest, that they can subscribe to a newsletter.
+     *
+     * @throws \Magento\Model\Exception
+     * @return void
+     */
+    protected function validateGuestSubscription()
+    {
+        if ($this->_objectManager->get('Magento\Core\Model\Store\Config')
+                ->getConfig(\Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG) != 1
+            && !$this->_customerSession->isLoggedIn()
+        ) {
+            throw new \Magento\Model\Exception(
+                __(
+                    'Sorry, but the administrator denied subscription for guests. '
+                    . 'Please <a href="%1">register</a>.',
+                    $this->_customerHelper->getRegisterUrl()
+                )
+            );
+        }
+    }
+
+    /**
+     * Validates the format of the email address
+     *
+     * @param string $email
+     * @throws \Magento\Model\Exception
+     * @return void
+     */
+    protected function validateEmailFormat($email)
+    {
+        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            throw new \Magento\Model\Exception(__('Please enter a valid email address.'));
+        }
     }
 }

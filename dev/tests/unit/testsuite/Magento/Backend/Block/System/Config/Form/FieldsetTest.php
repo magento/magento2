@@ -82,7 +82,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         );
         $groupMock->expects($this->once())->method('getFieldsetCss')->will($this->returnValue('test_fieldset_css'));
 
-        $this->_helperMock = $this->getMock('Magento\Core\Helper\Js', array(), array(), '', false, false);
+        $this->_helperMock = $this->getMock('Magento\View\Helper\Js', array(), array(), '', false, false);
 
         $data = array(
             'request' => $this->_requestMock,

@@ -82,7 +82,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlRewrite()
     {
         $rewrite = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\Core\Model\Url\Rewrite', $rewrite);
+        $this->assertInstanceOf('Magento\UrlRewrite\Model\UrlRewrite', $rewrite);
         $this->assertSame($rewrite, $this->_model->getUrlRewrite());
     }
 
