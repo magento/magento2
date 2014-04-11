@@ -194,9 +194,9 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Core event manager proxy
@@ -217,21 +217,21 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
      *
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         array $data = array()
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
         $this->_paymentData = $paymentData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_logAdapterFactory = $logAdapterFactory;
     }
 
@@ -246,7 +246,7 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
     }
 
     /**
-     * Check authorise availability
+     * Check authorize availability
      *
      * @return bool
      */
@@ -445,7 +445,7 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
     }
 
     /**
-     * Retrieve payment iformation model object
+     * Retrieve payment information model object
      *
      * @return \Magento\Payment\Model\Info
      * @throws \Magento\Model\Exception
@@ -676,7 +676,7 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
      * Retrieve information from payment configuration
      *
      * @param string $field
-     * @param int|string|null|\Magento\Core\Model\Store $storeId
+     * @param int|string|null|\Magento\Store\Model\Store $storeId
      *
      * @return mixed
      */
@@ -686,7 +686,7 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
             $storeId = $this->getStore();
         }
         $path = 'payment/' . $this->getCode() . '/' . $field;
-        return $this->_coreStoreConfig->getConfig($path, $storeId);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**

@@ -28,7 +28,7 @@ class Generic extends SessionManager
     /**
      * Constructor
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param SaveHandlerInterface $saveHandler
@@ -37,7 +37,7 @@ class Generic extends SessionManager
      * @param null $sessionName
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\App\Request\Http $request,
         SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         SaveHandlerInterface $saveHandler,

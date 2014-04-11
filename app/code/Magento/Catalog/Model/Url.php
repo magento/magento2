@@ -212,7 +212,7 @@ class Url
      * Retrieve stores array or store model
      *
      * @param int $storeId
-     * @return \Magento\Core\Model\Store|\Magento\Core\Model\Store[]
+     * @return \Magento\Store\Model\Store|\Magento\Store\Model\Store[]
      */
     public function getStores($storeId = null)
     {

@@ -82,16 +82,16 @@ class State
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_configuration;
 
     /**
-     * Store list manager
+     * Mutable Config
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\App\Config\MutableScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_mutableConfig;
 
     /**
      * @param \Magento\Backend\Model\Session $backendSession
@@ -100,9 +100,9 @@ class State
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\ConfigInterface $configuration
+     * @param \Magento\App\Config\ScopeConfigInterface $configuration
      * @param Theme\Context $themeContext
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\MutableScopeConfigInterface $mutableConfig
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
@@ -111,9 +111,9 @@ class State
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
         \Magento\ObjectManager $objectManager,
-        \Magento\App\ConfigInterface $configuration,
+        \Magento\App\Config\ScopeConfigInterface $configuration,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\App\Config\MutableScopeConfigInterface $mutableConfig
     ) {
         $this->_backendSession = $backendSession;
         $this->_areaEmulator = $areaEmulator;
@@ -123,7 +123,7 @@ class State
         $this->_objectManager = $objectManager;
         $this->_configuration = $configuration;
         $this->_themeContext = $themeContext;
-        $this->_storeManager = $storeManager;
+        $this->_mutableConfig = $mutableConfig;
     }
 
     /**
@@ -202,7 +202,11 @@ class State
     {
         if ($this->_themeContext->getEditableTheme()) {
             $themeId = $this->_themeContext->getVisibleTheme()->getId();
-            $this->_storeManager->getStore()->setConfig(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
+            $this->_mutableConfig->setValue(
+                \Magento\View\DesignInterface::XML_PATH_THEME_ID,
+                $themeId,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             $this->_configuration->setValue(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
         }
     }

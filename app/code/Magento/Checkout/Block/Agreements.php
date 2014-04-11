@@ -52,7 +52,7 @@ class Agreements extends \Magento\View\Element\Template
     public function getAgreements()
     {
         if (!$this->hasAgreements()) {
-            if (!$this->_storeConfig->getConfigFlag('checkout/options/enable_agreements')) {
+            if (!$this->_scopeConfig->isSetFlag('checkout/options/enable_agreements', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
                 $agreements = array();
             } else {
                 /** @var \Magento\Checkout\Model\Resource\Agreement\Collection $agreements */

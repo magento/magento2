@@ -107,6 +107,7 @@ class Converter
      * @param string $customerEmail
      * @param int $websiteId
      * @throws NoSuchEntityException If customer with the specified customer email not found.
+     * @throws \Magento\Model\Exception If website was not specified
      * @return Customer
      */
     public function getCustomerModelByEmail($customerEmail, $websiteId = null)

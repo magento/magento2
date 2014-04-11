@@ -54,14 +54,14 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\DesignInterface');
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getAnyStoreView()->getId();
         // fixture design_change
         $designChange = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Design'
         );
         $designChange->loadChange($storeId)->changeDesign($design);
-        $this->assertEquals('magento_plushe', $design->getDesignTheme()->getThemePath());
+        $this->assertEquals('Magento/plushe', $design->getDesignTheme()->getThemePath());
     }
 
     public function testCRUD()
@@ -69,8 +69,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(
             array(
                 'store_id' => 1,
-                'design' => 'magento_blank',
-                /* Note: in order to load a design change it should be active within the store's time zone */
+                'design' => 'Magento/blank',
                 'date_from' => date('Y-m-d', strtotime('-1 day')),
                 'date_to' => date('Y-m-d', strtotime('+1 day'))
             )
@@ -89,7 +88,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
                 $model->save();
                 $this->fail('A validation failure is expected.');
             } catch (\Magento\Model\Exception $e) {
-                // intentionally swallow exception
             }
 
             $this->_model->delete();
@@ -122,7 +120,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Stdlib\DateTime');
         $date = $dateTime->now(true);
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getAnyStoreView()->getId();
         // fixture design_change
 
@@ -132,21 +130,27 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Design');
         $design->loadChange($storeId, $date);
 
-        $cachedDesign = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\CacheInterface')
-            ->load($cacheId);
+        $cachedDesign = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\CacheInterface'
+        )->load(
+            $cacheId
+        );
         $cachedDesign = unserialize($cachedDesign);
 
         $this->assertInternalType('array', $cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
 
-        $design->setDesign('magento_blank')->save();
+        $design->setDesign('Magento/blank')->save();
 
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Design');
         $design->loadChange($storeId, $date);
 
-        $cachedDesign = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\CacheInterface')
-            ->load($cacheId);
+        $cachedDesign = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\CacheInterface'
+        )->load(
+            $cacheId
+        );
         $cachedDesign = unserialize($cachedDesign);
 
         $this->assertTrue(is_array($cachedDesign));
@@ -170,14 +174,16 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
         if ($storeDate == $utcDate) {
             $expectedDesign = "{$storeCode}_today_design";
-        } else if ($storeDatetime > $utcDatetime) {
-            $expectedDesign = "{$storeCode}_tomorrow_design";
         } else {
-            $expectedDesign = "{$storeCode}_yesterday_design";
+            if ($storeDatetime > $utcDatetime) {
+                $expectedDesign = "{$storeCode}_tomorrow_design";
+            } else {
+                $expectedDesign = "{$storeCode}_yesterday_design";
+            }
         }
 
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             $storeCode
         );
@@ -219,26 +225,10 @@ class DesignTest extends \PHPUnit_Framework_TestCase
          * that the proper design change is chosen for the timezone with the date different from the UTC.
          */
         return array(
-            'default store - UTC+12:00' => array(
-                'default',
-                'Etc/GMT-12',  // "GMT-12", not "GMT+12", see http://www.php.net/manual/en/timezones.others.php#64310
-                '+12 hours',
-            ),
-            'default store - UTC-12:00' => array(
-                'default',
-                'Etc/GMT+12',
-                '-12 hours',
-            ),
-            'admin store - UTC+12:00' => array(
-                'admin',
-                'Etc/GMT-12',
-                '+12 hours',
-            ),
-            'admin store - UTC-12:00' => array(
-                'admin',
-                'Etc/GMT+12',
-                '-12 hours',
-            ),
+            'default store - UTC+12:00' => array('default', 'Etc/GMT-12', '+12 hours'),
+            'default store - UTC-12:00' => array('default', 'Etc/GMT+12', '-12 hours'),
+            'admin store - UTC+12:00' => array('admin', 'Etc/GMT-12', '+12 hours'),
+            'admin store - UTC-12:00' => array('admin', 'Etc/GMT+12', '-12 hours')
         );
     }
 }

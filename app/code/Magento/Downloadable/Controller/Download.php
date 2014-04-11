@@ -38,11 +38,11 @@ class Download extends \Magento\App\Action\Action
     /**
      * Return core session object
      *
-     * @return \Magento\Core\Model\Session
+     * @return \Magento\Session\Generic
      */
     protected function _getSession()
     {
-        return $this->_objectManager->get('Magento\Core\Model\Session');
+        return $this->_objectManager->get('Magento\Session\Generic');
     }
 
     /**

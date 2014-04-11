@@ -288,6 +288,22 @@ class DobTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * This tests the Dob::setDateInput() method. The Dob::getSortedDateInputs() uses the value of
+     * Dob::getDateFormat() to derive the return value, which is equivalent to self::DATE_FORMAT.
+     */
+    public function testGetSortedDateInputsWithoutStrippingNonInputChars()
+    {
+        $this->_block->setDateInput('d', self::DAY_HTML);
+        $this->_block->setDateInput('m', self::MONTH_HTML);
+        $this->_block->setDateInput('y', self::YEAR_HTML);
+
+        $this->assertEquals(
+            self::MONTH_HTML . '/' . self::DAY_HTML . '/' . self::YEAR_HTML,
+            $this->_block->getSortedDateInputs(false)
+        );
+    }
+
+    /**
      * @param array $validationRules The date Min/Max validation rules
      * @param int $expectedValue The value we expect from Dob::getMinDateRange()
      *

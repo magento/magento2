@@ -53,7 +53,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDesignTheme(
-            'magento_backend'
+            'Magento/backend'
         );
 
         $config = new \Magento\Object();

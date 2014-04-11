@@ -107,7 +107,7 @@ class Theme extends \Magento\Backend\Block\Template
     public function getStoresTitles()
     {
         $storesTitles = array();
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($this->getTheme()->getAssignedStores() as $store) {
             $storesTitles[] = $store->getName();
         }

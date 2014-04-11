@@ -36,7 +36,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Layout">
+    <type name="Magento\View\Layout">
         <plugin name="customer-session-depersonalize"
                 type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>

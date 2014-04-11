@@ -35,9 +35,6 @@ $numColumns = sizeof($this->getColumns());
     <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
 <?php endif; ?>
 <?php if ($this->getStoreSwitcherVisibility() || $this->getDateFilterVisibility()): ?>
-    <?php if ($this->getStoreSwitcherVisibility()): ?>
-        <?php echo $this->getStoreSwitcherHtml() ?>
-    <?php endif ?>
     <div class="grid-actions">
         <?php if ($this->getChildBlock('grid.export')): ?>
         <div class="export">

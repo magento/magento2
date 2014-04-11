@@ -48,7 +48,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 array_unshift($localeParents, $localeConfig[$localeParent]);
                 $localeParent = $localeConfig[$localeParent];
             }
-            // store hierarchy for current locale
+            // scope hierarchy for current locale
             $localeHierarchy[$locale] = $localeParents;
         }
         return $localeHierarchy;

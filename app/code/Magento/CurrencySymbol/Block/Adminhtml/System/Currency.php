@@ -48,19 +48,19 @@ class Currency extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Save Currency Rates'),
-                'class' => 'save',
+                'class' => 'save primary save-currency-rates',
                 'data_attribute' => array(
                     'mage-init' => array('button' => array('event' => 'save', 'target' => '#rate-form'))
                 )
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
             array('label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset')

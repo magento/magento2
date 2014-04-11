@@ -137,8 +137,8 @@ class Product extends \Magento\App\Action\Action
         /** @var \Magento\Stdlib\Cookie $cookie */
         $cookie = $this->_objectManager->get('Magento\Stdlib\Cookie');
 
-        /** @var \Magento\Core\Model\StoreManagerInterface $store */
-        $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        /** @var \Magento\Store\Model\StoreManagerInterface $store */
+        $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
 
         /** @var \Magento\Sendfriend\Model\Sendfriend $model */
         $model = $this->_objectManager->create('Magento\Sendfriend\Model\Sendfriend');

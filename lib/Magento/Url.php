@@ -107,6 +107,11 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     );
 
     /**
+     * @var string
+     */
+    protected $_scopeType;
+
+    /**
      * Request instance
      *
      * @var \Magento\App\RequestInterface
@@ -128,7 +133,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     protected $_urlSecurityInfo;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Session\Generic
      */
     protected $_session;
 
@@ -160,6 +165,11 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     protected $_queryParamsResolver;
 
     /**
+     * @var \Magento\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
@@ -168,6 +178,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string $scopeType
      * @param array $data
      */
     public function __construct(
@@ -179,6 +191,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        $scopeType,
         array $data = array()
     ) {
         $this->_request = $request;
@@ -189,6 +203,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         $this->_sidResolver = $sidResolver;
         $this->_routeParamsResolver = $routeParamsResolver->create();
         $this->_queryParamsResolver = $queryParamsResolver;
+        $this->_scopeConfig = $scopeConfig;
+        $this->_scopeType = $scopeType;
         parent::__construct($data);
     }
 
@@ -287,7 +303,11 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
      */
     protected function _getConfig($path)
     {
-        return $this->_getScope()->getConfig($path);
+        return $this->_scopeConfig->getValue(
+            $path,
+            $this->_scopeType,
+            $this->_getScope()
+        );
     }
 
     /**
@@ -400,15 +420,15 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         /**
          * Add availability support urls without scope code
          */
-        if ($this->_getType() == \Magento\UrlInterface::URL_TYPE_LINK &&
-            $this->_getRequest()->isDirectAccessFrontendName(
+        if ($this->_getType() == \Magento\UrlInterface::URL_TYPE_LINK
+            && $this->_getRequest()->isDirectAccessFrontendName(
                 $this->_getRouteFrontName()
             )
         ) {
             $this->_routeParamsResolver->setType(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK);
         }
 
-        $result =  $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
+        $result = $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
         $this->_routeParamsResolver->setType(self::DEFAULT_URL_TYPE);
         return $result;
     }
@@ -843,7 +863,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         }
         $sessionId = $this->_session->getSessionIdForHost($url);
         if ($this->_sidResolver->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->_isSecure() ? 'S' : 'U'); // Secure/Unsecure
+            $this->setQueryParam('___SID', $this->_isSecure() ? 'S' : 'U');
         } elseif ($sessionId) {
             $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), $sessionId);
         }
@@ -930,10 +950,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
             // @codingStandardsIgnoreEnd
             function ($match) {
                 if ($this->useSessionIdForUrl($match[2] == 'S' ? true : false)) {
-                    return $match[1]
-                        . $this->_sidResolver->getSessionIdQueryParam($this->_session)
-                        . '=' . $this->_session->getSessionId()
-                        . (isset($match[3]) ? $match[3] : '');
+                    return $match[1] . $this->_sidResolver->getSessionIdQueryParam($this->_session) . '='
+                    . $this->_session->getSessionId() . (isset($match[3]) ? $match[3] : '');
                 } else {
                     if ($match[1] == '?') {
                         return isset($match[3]) ? '?' : '';

@@ -47,8 +47,8 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Convert\Xml $xmlConverter
@@ -56,8 +56,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
         \Magento\App\Filesystem $filesystem,
         \Magento\Convert\Xml $xmlConverter,
@@ -66,7 +66,7 @@ class Data extends \Magento\Core\Helper\Data
         $this->filesystem = $filesystem;
         $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::VAR_DIR);
         $this->_xmlConverter = $xmlConverter;
-        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
+        parent::__construct($context, $scopeConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**

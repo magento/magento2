@@ -38,7 +38,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Store cache context
      */
-    const CONTEXT_STORE = 'core_store';
+    const CONTEXT_STORE = 'store';
 
     const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
 
@@ -73,12 +73,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -94,20 +94,20 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
         $dbCompatibleMode = true
     ) {
         parent::__construct($context);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
         $this->_dbCompatibleMode = $dbCompatibleMode;
@@ -130,7 +130,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Convert and format price value for specified store
      *
      * @param   float $value
-     * @param   int|\Magento\Core\Model\Store $store
+     * @param   int|\Magento\Store\Model\Store $store
      * @param   bool $format
      * @param   bool $includeContainer
      * @return  float|string
@@ -138,7 +138,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function currencyByStore($value, $store = null, $format = true, $includeContainer = true)
     {
         try {
-            if (!$store instanceof \Magento\Core\Model\Store) {
+            if (!$store instanceof \Magento\Store\Model\Store) {
                 $store = $this->_storeManager->getStore($store);
             }
 
@@ -182,7 +182,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         $allow = true;
 
-        $allowedIps = $this->_coreStoreConfig->getConfig(self::XML_PATH_DEV_ALLOW_IPS, $storeId);
+        $allowedIps = $this->_scopeConfig->getValue(
+            self::XML_PATH_DEV_ALLOW_IPS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $remoteAddr = $this->_remoteAddress->getRemoteAddress();
         if (!empty($allowedIps) && !empty($remoteAddr)) {
             $allowedIps = preg_split('#\s*,\s*#', $allowedIps, null, PREG_SPLIT_NO_EMPTY);
@@ -246,12 +250,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Return default country code
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return string
      */
     public function getDefaultCountry($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_DEFAULT_COUNTRY, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_COUNTRY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -274,6 +282,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isSingleStoreModeEnabled()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_SINGLE_STORE_MODE_ENABLED);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

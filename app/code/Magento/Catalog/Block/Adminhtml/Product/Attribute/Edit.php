@@ -113,6 +113,17 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function _addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
+    {
+        if ($this->getRequest()->getParam('popup')) {
+            $region = 'header';
+        }
+        parent::_addButton($buttonId, $data, $level, $sortOrder, $region);
+    }
+
+    /**
      * Retrieve header text
      *
      * @return string

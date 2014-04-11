@@ -112,7 +112,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         parent::_construct();
         $this->_init('Magento\Newsletter\Model\Subscriber', 'Magento\Newsletter\Model\Resource\Subscriber');
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
-        $this->_storeTable = $this->getTable('core_store');
+        $this->_storeTable = $this->getTable('store');
 
 
         // defining mapping for fields represented in several tables

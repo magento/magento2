@@ -135,7 +135,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'type_id',
             array('in' => $this->getAllowedSelectionTypes())
         )->addFilterByRequiredOptions()->addStoreFilter(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
 
         if ($this->getFirstShow()) {
@@ -230,10 +230,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         if ($products = $this->getRequest()->getPost('products', null)) {
             return $products;
-        } else if ($productss = $this->getRequest()->getParam('productss', null)) {
-            return explode(',', $productss);
         } else {
-            return array();
+            if ($productss = $this->getRequest()->getParam('productss', null)) {
+                return explode(',', $productss);
+            } else {
+                return array();
+            }
         }
     }
 

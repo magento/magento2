@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Xml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -87,6 +85,7 @@ class Generator
     /**
      * @param array $content
      * @return $this
+     * @throws \DOMException
      */
     public function arrayToXml($content)
     {
@@ -95,18 +94,12 @@ class Generator
             return $this;
         }
         foreach ($content as $_key => $_item) {
-            try {
-                $node = $this->getDom()->createElement($_key);
-            } catch (\DOMException $e) {
-                //  echo $e->getMessage();
-                var_dump($_item);
-                exit;
-            }
+            $node = $this->getDom()->createElement(preg_replace('/[^\w-]/i', '', $_key));
             $parentNode->appendChild($node);
             if (is_array($_item) && isset($_item['_attribute'])) {
                 if (is_array($_item['_value'])) {
                     if (isset($_item['_value'][0])) {
-                        foreach ($_item['_value'] as $_k => $_v) {
+                        foreach ($_item['_value'] as $_v) {
                             $this->_setCurrentDom($node)->arrayToXml($_v);
                         }
                     } else {
@@ -125,7 +118,7 @@ class Generator
             } elseif (is_array($_item) && !isset($_item[0])) {
                 $this->_setCurrentDom($node)->arrayToXml($_item);
             } elseif (is_array($_item) && isset($_item[0])) {
-                foreach ($_item as $k => $v) {
+                foreach ($_item as $v) {
                     $this->_setCurrentDom($node)->arrayToXml(array($this->_getIndexedArrayItemName() => $v));
                 }
             }
@@ -170,8 +163,8 @@ class Generator
      */
     protected function _getIndexedArrayItemName()
     {
-        return isset(
-            $this->_defaultIndexedArrayItemName
-        ) ? $this->_defaultIndexedArrayItemName : self::DEFAULT_ENTITY_ITEM_NAME;
+        return isset($this->_defaultIndexedArrayItemName)
+            ? $this->_defaultIndexedArrayItemName
+            : self::DEFAULT_ENTITY_ITEM_NAME;
     }
 }

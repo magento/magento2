@@ -42,7 +42,7 @@
     <event name="website_delete_commit_after">
         <observer name="index" instance="Magento\Index\Model\Observer" method="processWebsiteDelete" />
     </event>
-    <event name="core_config_data_save_commit_after">
+    <event name="config_data_save_commit_after">
         <observer name="index" instance="Magento\Index\Model\Observer" method="processConfigDataSave" />
     </event>
 </config>

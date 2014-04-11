@@ -32,10 +32,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\Resource');
-        $resource = $this->getMockForAbstractClass('Magento\Model\Resource\Db\AbstractDb',
-            array($resourceModel), '', true, true, true, array('getMainTable', 'getIdFieldName')
+        $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
+        $resource = $this->getMockForAbstractClass(
+            'Magento\Model\Resource\Db\AbstractDb',
+            array($resourceModel),
+            '',
+            true,
+            true,
+            true,
+            array('getMainTable', 'getIdFieldName')
         );
 
         $resource->expects(
@@ -43,7 +48,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getMainTable'
         )->will(
-            $this->returnValue($resource->getTable('core_website'))
+            $this->returnValue($resource->getTable('store_website'))
         );
         $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('website_id'));
 
@@ -53,10 +58,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Event\ManagerInterface'
         );
 
-        $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\EntityFactory');
-        $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Logger');
+        $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\EntityFactory'
+        );
+        $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Logger');
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Model\Resource\Db\Collection\AbstractCollection',

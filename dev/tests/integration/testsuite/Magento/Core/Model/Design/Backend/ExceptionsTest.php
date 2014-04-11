@@ -50,8 +50,8 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     public function testSaveValueIsFormedNicely()
     {
         $value = array(
-            '1' => array('search' => '/Opera/', 'value' => 'magento_blank'),
-            '2' => array('search' => '/Firefox/', 'value' => 'magento_blank')
+            '1' => array('search' => '/Opera/', 'value' => 'Magento/blank'),
+            '2' => array('search' => '/Firefox/', 'value' => 'Magento/blank')
         );
 
         $this->_model->setValue($value);
@@ -72,9 +72,9 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     public function testSaveEmptyValueIsSkipped()
     {
         $value = array(
-            '1' => array('search' => '/Opera/', 'value' => 'magento_blank'),
-            '2' => array('search' => '', 'value' => 'magento_blank'),
-            '3' => array('search' => '/Firefox/', 'value' => 'magento_blank')
+            '1' => array('search' => '/Opera/', 'value' => 'Magento/blank'),
+            '2' => array('search' => '', 'value' => 'Magento/blank'),
+            '3' => array('search' => '/Firefox/', 'value' => 'Magento/blank')
         );
 
         $this->_model->setValue($value);
@@ -106,11 +106,11 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     public function saveExceptionDataProvider()
     {
         $result = array(
-            array(array('search' => 'Opera', 'value' => 'magento_blank'), '/Opera/i'),
-            array(array('search' => '/Opera/', 'value' => 'magento_blank'), '/Opera/'),
-            array(array('search' => '#iPad|iPhone#i', 'value' => 'magento_blank'), '#iPad|iPhone#i'),
+            array(array('search' => 'Opera', 'value' => 'Magento/blank'), '/Opera/i'),
+            array(array('search' => '/Opera/', 'value' => 'Magento/blank'), '/Opera/'),
+            array(array('search' => '#iPad|iPhone#i', 'value' => 'Magento/blank'), '#iPad|iPhone#i'),
             array(
-                array('search' => 'Mozilla (3.6+)/Firefox', 'value' => 'magento_blank'),
+                array('search' => 'Mozilla (3.6+)/Firefox', 'value' => 'Magento/blank'),
                 '/Mozilla \\(3\\.6\\+\\)\\/Firefox/i'
             )
         );
@@ -138,38 +138,38 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         $result = array(
             array(
                 array(
-                    '1' => array('search' => '/Opera/', 'value' => 'magento_blank'),
-                    '2' => array('search' => '/invalid_regexp(/', 'value' => 'magento_blank')
+                    '1' => array('search' => '/Opera/', 'value' => 'Magento/blank'),
+                    '2' => array('search' => '/invalid_regexp(/', 'value' => 'Magento/blank')
                 )
             ),
             array(
                 array(
-                    '1' => array('search' => '/invalid_regexp', 'value' => 'magento_blank'),
-                    '2' => array('search' => '/Opera/', 'value' => 'magento_blank')
+                    '1' => array('search' => '/invalid_regexp', 'value' => 'Magento/blank'),
+                    '2' => array('search' => '/Opera/', 'value' => 'Magento/blank')
                 )
             ),
             array(
                 array(
-                    '1' => array('search' => 'invalid_regexp/iU', 'value' => 'magento_blank'),
-                    '2' => array('search' => '/Opera/', 'value' => 'magento_blank')
+                    '1' => array('search' => 'invalid_regexp/iU', 'value' => 'Magento/blank'),
+                    '2' => array('search' => '/Opera/', 'value' => 'Magento/blank')
                 )
             ),
             array(
                 array(
-                    '1' => array('search' => 'invalid_regexp#', 'value' => 'magento_blank'),
-                    '2' => array('search' => '/Opera/', 'value' => 'magento_blank')
+                    '1' => array('search' => 'invalid_regexp#', 'value' => 'Magento/blank'),
+                    '2' => array('search' => '/Opera/', 'value' => 'Magento/blank')
                 )
             ),
             array(
                 array(
                     '1' => array('search' => '/Firefox/'),
-                    '2' => array('search' => '/Opera/', 'value' => 'magento_blank')
+                    '2' => array('search' => '/Opera/', 'value' => 'Magento/blank')
                 )
             ),
             array(
                 array(
-                    '1' => array('value' => 'magento_blank'),
-                    '2' => array('search' => '/Opera/', 'value' => 'magento_blank')
+                    '1' => array('value' => 'Magento/blank'),
+                    '2' => array('search' => '/Opera/', 'value' => 'Magento/blank')
                 )
             )
         );

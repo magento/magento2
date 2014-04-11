@@ -17,7 +17,7 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -73,10 +73,10 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->subjectMock = $this->getMock('Magento\Core\Model\Resource\Store\Group', array(), array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Group', array(), array(), '', false);
 
         $this->groupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group',
+            'Magento\Store\Model\Group',
             array('dataHasChangedFor', 'isObjectNew', '__wakeup'),
             array(),
             '',
@@ -110,7 +110,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->stateMock->expects($this->never())->method('isFlatEnabled');
         $this->groupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group',
+            'Magento\Store\Model\Group',
             array('dataHasChangedFor', 'isObjectNew', '__wakeup'),
             array(),
             '',

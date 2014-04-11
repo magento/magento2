@@ -45,8 +45,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * This test expects next themes for areas:
-     * current_store design/theme/full_name magento_blank
-     * fixturestore_store design/theme/full_name magento_plushe
+     * current_store design/theme/full_name Magento/blank
+     * fixturestore_store design/theme/full_name Magento/plushe
      *
      * @magentoAppIsolation  enabled
      * @magentoAppArea adminhtml
@@ -57,7 +57,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\ConfigInterface'
+                'Magento\App\Config\MutableScopeConfigInterface'
             )->setValue(
                 \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
                 $design,
@@ -83,15 +83,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function getProcessedTemplateFrontendDataProvider()
     {
         return array(
-            'frontend' => array('default', 'magento_blank'),
-            'frontend store' => array('fixturestore', 'magento_plushe')
+            'frontend' => array('default', 'Magento/blank'),
+            'frontend store' => array('fixturestore', 'Magento/plushe')
         );
     }
 
     /**
      * This test expects next themes for areas:
-     * install/design/theme/full_name   magento_basic
-     * adminhtml/design/theme/full_name magento_backend
+     * install/design/theme/full_name   Magento/basic
+     * adminhtml/design/theme/full_name Magento/backend
      *
      * @magentoAppIsolation  enabled
      * @dataProvider getProcessedTemplateAreaDataProvider
@@ -120,7 +120,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         );
         return array(
             'install' => array('install', $design->getConfigurationDesignTheme('install')),
-            'backend' => array('adminhtml', 'magento_backend')
+            'backend' => array('adminhtml', 'Magento/backend')
         );
     }
 

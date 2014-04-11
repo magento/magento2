@@ -76,7 +76,7 @@
     );
     .add-padding(@_button-padding);
     .add-width(@_button-width);
-    color: @_button-color;
+    .css(color, @_button-color);
     .add-border(@_button-border);
     cursor: @_button-cursor;
     display: @_button-display;
@@ -113,7 +113,7 @@
         );
         .add-border(@_button-border-active);
         .tab-focus();
-        color: @_button-color-active;
+        .css(color, @_button-color-active);
     }
     &:hover {
         .add-background(@_button-background-hover);
@@ -124,7 +124,7 @@
             @_button-gradient
         );
         .add-border(@_button-border-hover);
-        color: @_button-color-hover;
+        .css(color, @_button-color-hover);
     }
     &.disabled,
     &[disabled],

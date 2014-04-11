@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -49,7 +49,7 @@ $connection->addColumn(
 // we must drop next 2 foreign keys to have an ability to drop index
 $connection->dropForeignKey(
     $tableCoreLayoutLink,
-    $installer->getFkName($tableCoreLayoutLink, 'store_id', 'core_store', 'store_id')
+    $installer->getFkName($tableCoreLayoutLink, 'store_id', 'store', 'store_id')
 );
 $connection->dropForeignKey(
     $tableCoreLayoutLink,
@@ -78,10 +78,10 @@ $connection->addIndex(
 
 // recreate 2 dropped foreign keys to have an ability to drop index
 $connection->addForeignKey(
-    $installer->getFkName($tableCoreLayoutLink, 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName($tableCoreLayoutLink, 'store_id', 'store', 'store_id'),
     $tableCoreLayoutLink,
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

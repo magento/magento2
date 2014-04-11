@@ -41,7 +41,7 @@
     border-bottom: 1px solid #000;
 }
 
-.vde-dialog .action-close {
+/*.vde-dialog .action-close {
     background: none;
     border: none;
     color: #6d665e;
@@ -57,7 +57,7 @@
 .vde-dialog .action-close:hover {
     color: #000;
     border-bottom: 1px solid #000;
-}
+}*/
 
 .vde-dialog .ui-dialog-buttonset {
     text-align: right;

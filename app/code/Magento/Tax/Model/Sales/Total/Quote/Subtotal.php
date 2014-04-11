@@ -91,7 +91,7 @@ class Subtotal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      *  Quote store
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 

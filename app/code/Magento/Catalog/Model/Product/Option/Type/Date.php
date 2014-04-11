@@ -46,18 +46,18 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         array $data = array()
     ) {
         $this->_localeDate = $localeDate;
-        parent::__construct($checkoutSession, $coreStoreConfig, $data);
+        parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
     /**

@@ -79,6 +79,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->sendVary();
     }
 
+    public function testSendVaryEmptyData()
+    {
+        $this->_cookieMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(Http::COOKIE_VARY_STRING, null, -1, '/');
+        $this->_model->sendVary();
+    }
+
     /**
      * Test setting public cache headers
      */

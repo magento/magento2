@@ -53,7 +53,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeConfigMock;
+    protected $_scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -90,6 +90,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_encryptor;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->_menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false);
@@ -130,11 +134,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_areaFrontName)
         );
-        $this->_storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\Backend\Model\Url::XML_PATH_STARTUP_MENU_ITEM
         )->will(
@@ -173,7 +177,29 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_model = $helper->getObject(
             'Magento\Backend\Model\Url',
             array(
-                'coreStoreConfig' => $this->_storeConfigMock,
+                'scopeConfig' => $this->_scopeConfigMock,
+                'backendHelper' => $helperMock,
+                'formKey' => $this->_formKey,
+                'menuConfig' => $this->_menuConfigMock,
+                'coreData' => $this->_coreDataMock,
+                'authSession' => $this->_authSessionMock,
+                'encryptor' => $this->_encryptor,
+                'routeParamsResolver' => $this->_paramsResolverMock
+            )
+        );
+        $this->_paramsResolverMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue(
+                $this->getMock('Magento\Core\Model\Url\RouteParamsResolver', array(), array(), '', false)
+            )
+        );
+        $this->_model = $helper->getObject(
+            'Magento\Backend\Model\Url',
+            array(
+                'scopeConfig' => $this->_scopeConfigMock,
                 'backendHelper' => $helperMock,
                 'formKey' => $this->_formKey,
                 'menuConfig' => $this->_menuConfigMock,

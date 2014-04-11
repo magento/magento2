@@ -98,9 +98,9 @@ class Subscriber extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Customer session
@@ -112,7 +112,7 @@ class Subscriber extends \Magento\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -134,30 +134,26 @@ class Subscriber extends \Magento\Model\AbstractModel
     protected $inlineTranslation;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Model\Context                    $context
-     * @param \Magento\Registry                         $registry
-     * @param \Magento\Newsletter\Helper\Data           $newsletterData
-     * @param \Magento\Core\Model\Store\Config          $coreStoreConfig
-     * @param \Magento\Mail\Template\TransportBuilder   $transportBuilder
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Session           $customerSession
-     * @param CustomerAccountServiceInterface           $customerAccountService
-     * @param \Magento\Translate\Inline\StateInterface  $inlineTranslation
-     * @param \Magento\Model\Resource\AbstractResource  $resource
-     * @param \Magento\Data\Collection\Db               $resourceCollection
-     * @param array                                     $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Newsletter\Helper\Data $newsletterData
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param array $data
      */
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Newsletter\Helper\Data $newsletterData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
@@ -166,7 +162,7 @@ class Subscriber extends \Magento\Model\AbstractModel
         array $data = []
     ) {
         $this->_newsletterData = $newsletterData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
@@ -411,7 +407,10 @@ class Subscriber extends \Magento\Model\AbstractModel
             $this->setSubscriberConfirmCode($this->randomSequence());
         }
 
-        $isConfirmNeed = ($this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1) ? true : false;
+        $isConfirmNeed = $this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRMATION_FLAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1 ? true : false;
         $isOwnSubscribes = false;
 
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn()
@@ -632,32 +631,44 @@ class Subscriber extends \Magento\Model\AbstractModel
      */
     public function sendConfirmationRequestEmail()
     {
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY)
+        if ($this->getImportMode()) {
+            return $this;
+        }
+
+        if (!$this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) || !$this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
         ) {
             return $this;
         }
 
         $this->inlineTranslation->suspend();
 
-        $this->_transportBuilder
-            ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE)
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->setTemplateOptions(
-                array(
-                    'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $this->_storeManager->getStore()->getId(),
-                )
+        )->setTemplateOptions(
+            array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => $this->_storeManager->getStore()->getId()
             )
-            ->setTemplateVars(
-                array(
-                    'subscriber' => $this,
-                    'store'      => $this->_storeManager->getStore(),
-                )
+        )->setTemplateVars(
+            array('subscriber' => $this, 'store' => $this->_storeManager->getStore())
+        )->setFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName());
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 
@@ -673,27 +684,44 @@ class Subscriber extends \Magento\Model\AbstractModel
      */
     public function sendConfirmationSuccessEmail()
     {
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
+        if ($this->getImportMode()) {
+            return $this;
+        }
+
+        if (!$this->_scopeConfig->getValue(
+            self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) || !$this->_scopeConfig->getValue(
+            self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
         ) {
             return $this;
         }
 
         $this->inlineTranslation->suspend();
 
-        $this->_transportBuilder
-            ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE)
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->setTemplateOptions(
-                array(
-                    'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $this->_storeManager->getStore()->getId(),
-                )
+        )->setTemplateOptions(
+            array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => $this->_storeManager->getStore()->getId()
             )
-            ->setTemplateVars(array('subscriber' => $this))
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName());
+        )->setTemplateVars(
+            array('subscriber' => $this)
+        )->setFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 
@@ -709,29 +737,43 @@ class Subscriber extends \Magento\Model\AbstractModel
      */
     public function sendUnsubscriptionEmail()
     {
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
+        if ($this->getImportMode()) {
+            return $this;
+        }
+        if (!$this->_scopeConfig->getValue(
+            self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) || !$this->_scopeConfig->getValue(
+            self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
         ) {
             return $this;
         }
 
         $this->inlineTranslation->suspend();
 
-        $this->_transportBuilder
-            ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE)
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->setTemplateOptions(
-                array(
-                    'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $this->_storeManager->getStore()->getId(),
-                )
+        )->setTemplateOptions(
+            array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => $this->_storeManager->getStore()->getId()
             )
-            ->setTemplateVars(array('subscriber' => $this))
-            ->setFrom(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
+        )->setTemplateVars(
+            array('subscriber' => $this)
+        )->setFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->addTo($this->getEmail(), $this->getName());
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 

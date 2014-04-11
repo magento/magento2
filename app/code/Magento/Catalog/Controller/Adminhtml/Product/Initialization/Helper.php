@@ -31,7 +31,7 @@ class Helper
     protected $request;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -47,13 +47,13 @@ class Helper
 
     /**
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param Helper\ProductLinks $productLinks
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
         Helper\ProductLinks $productLinks
     ) {

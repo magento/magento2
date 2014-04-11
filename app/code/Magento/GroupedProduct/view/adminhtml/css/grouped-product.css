@@ -37,6 +37,10 @@
     display: none;
 }
 
+.ui-dialog.grouped .data {
+    table-layout: auto;
+}
+
 .ui-dialog.grouped .col-entity_id {
     width: 2%;
 }

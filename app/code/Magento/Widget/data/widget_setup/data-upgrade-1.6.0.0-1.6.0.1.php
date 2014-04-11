@@ -24,15 +24,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup\Migration */
-$installer = $this->_migrationFactory->create(array('resourceName' => 'core_setup'));
+/** @var $installer \Magento\Module\Setup\Migration */
+$installer = $this->createMigrationSetup();
 $installer->startSetup();
 
 $installer->appendClassAliasReplace(
     'widget_instance',
     'instance_type',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_BLOCK,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+    \Magento\Module\Setup\Migration::ENTITY_TYPE_BLOCK,
+    \Magento\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('instance_id')
 );
 $installer->doUpdateClassAliases();

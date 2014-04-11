@@ -31,7 +31,7 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Resource\Setup
+     * @var \Magento\Module\Setup
      */
     protected $_model;
 
@@ -39,7 +39,7 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Setup',
+            'Magento\Module\Setup',
             array('resourceName' => 'default_setup', 'moduleName' => 'Magento_Core')
         );
     }

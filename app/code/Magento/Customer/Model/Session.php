@@ -76,7 +76,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_configShare;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Session\Generic
      */
     protected $_session;
 
@@ -99,11 +99,6 @@ class Session extends \Magento\Session\SessionManager
     protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Store\StorageInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\App\Http\Context
      */
     protected $_httpContext;
@@ -114,7 +109,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_converter;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\Request\Http $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Session\SaveHandlerInterface $saveHandler
@@ -126,16 +121,15 @@ class Session extends \Magento\Session\SessionManager
      * @param ResourceCustomer $customerResource
      * @param CustomerFactory $customerFactory
      * @param \Magento\UrlFactory $urlFactory
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\Generic $session
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\Http\Context $httpContext
      * @param Converter $converter
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param null $sessionName
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\App\Request\Http $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Session\SaveHandlerInterface $saveHandler,
@@ -147,9 +141,8 @@ class Session extends \Magento\Session\SessionManager
         Resource\Customer $customerResource,
         CustomerFactory $customerFactory,
         \Magento\UrlFactory $urlFactory,
-        \Magento\Core\Model\Session $session,
+        \Magento\Session\Generic $session,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
         CustomerAccountServiceInterface $customerAccountService,
@@ -164,7 +157,6 @@ class Session extends \Magento\Session\SessionManager
         $this->_session = $session;
         $this->_customerAccountService = $customerAccountService;
         $this->_eventManager = $eventManager;
-        $this->_storeManager = $storeManager;
         $this->_httpContext = $httpContext;
         parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
         $this->start($sessionName);
@@ -416,6 +408,7 @@ class Session extends \Magento\Session\SessionManager
     {
         $this->setCustomer($customer);
         $this->_eventManager->dispatch('customer_login', array('customer' => $customer));
+        $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $this->getCustomerDataObject()]);
         $this->regenerateId();
         return $this;
     }
@@ -433,6 +426,7 @@ class Session extends \Magento\Session\SessionManager
         $this->setCustomer($customerModel);
 
         $this->_eventManager->dispatch('customer_login', array('customer' => $customerModel));
+        $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
         return $this;
     }
 

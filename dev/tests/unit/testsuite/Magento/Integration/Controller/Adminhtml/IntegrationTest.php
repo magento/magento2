@@ -47,7 +47,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\Layout\Filter\Acl|\PHPUnit_Framework_MockObject_MockObject */
     protected $_layoutFilterMock;
 
-    /** @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_configMock;
 
     /** @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -115,7 +115,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(
-            'Magento\App\ConfigInterface'
+            'Magento\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_eventManagerMock = $this->getMockBuilder(
             'Magento\Event\ManagerInterface'
@@ -883,8 +883,8 @@ HANDLE;
     protected function _verifyLoadAndRenderLayout()
     {
         $map = array(
-            array('Magento\App\ConfigInterface', $this->_configMock),
-            array('Magento\Backend\Model\Layout\Filter\Acl', $this->_layoutFilterMock),
+            array('Magento\App\Config\ScopeConfigInterface', $this->_configMock),
+            array('Magento\Core\Model\Layout\Filter\Acl', $this->_layoutFilterMock),
             array('Magento\Backend\Model\Session', $this->_backendSessionMock),
             array('Magento\TranslateInterface', $this->_translateModelMock),
             array('Magento\Config\ScopeInterface', $this->_configScopeMock)
@@ -903,7 +903,7 @@ HANDLE;
             array(
                 Info::DATA_NAME => 'nameTest',
                 Info::DATA_ID => self::INTEGRATION_ID,
-                'id' => self::INTEGRATION_ID, // This will allow usage of both getIntegrationId() and getId()
+                'id' => self::INTEGRATION_ID,
                 Info::DATA_EMAIL => 'test@magento.com',
                 Info::DATA_ENDPOINT => 'http://magento.ll/endpoint',
                 Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL

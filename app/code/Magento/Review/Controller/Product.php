@@ -88,16 +88,9 @@ class Product extends \Magento\App\Action\Action
     /**
      * Rating model
      *
-     * @var \Magento\Rating\Model\RatingFactory
+     * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
-
-    /**
-     * Core session model
-     *
-     * @var \Magento\Core\Model\Session
-     */
-    protected $_session;
 
     /**
      * Catalog design model
@@ -109,7 +102,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -128,11 +121,10 @@ class Product extends \Magento\App\Action\Action
      * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Rating\Model\RatingFactory $ratingFactory
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Session\Generic $reviewSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -143,11 +135,10 @@ class Product extends \Magento\App\Action\Action
         \Magento\Logger $logger,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Rating\Model\RatingFactory $ratingFactory,
-        \Magento\Core\Model\Session $session,
+        \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Session\Generic $reviewSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
@@ -159,7 +150,6 @@ class Product extends \Magento\App\Action\Action
         $this->_productFactory = $productFactory;
         $this->_reviewFactory = $reviewFactory;
         $this->_ratingFactory = $ratingFactory;
-        $this->_session = $session;
         $this->_catalogDesign = $catalogDesign;
         $this->_formKeyValidator = $formKeyValidator;
 
@@ -312,8 +302,6 @@ class Product extends \Magento\App\Action\Action
         }
 
         if (($product = $this->_initProduct()) && !empty($data)) {
-            $session = $this->_session;
-            /* @var $session \Magento\Core\Model\Session */
             $review = $this->_reviewFactory->create()->setData($data);
             /* @var $review Review */
 
@@ -350,11 +338,11 @@ class Product extends \Magento\App\Action\Action
                     $review->aggregate();
                     $this->messageManager->addSuccess(__('Your review has been accepted for moderation.'));
                 } catch (\Exception $e) {
-                    $session->setFormData($data);
+                    $this->_reviewSession->setFormData($data);
                     $this->messageManager->addError(__('We cannot post the review.'));
                 }
             } else {
-                $session->setFormData($data);
+                $this->_reviewSession->setFormData($data);
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
                         $this->messageManager->addError($errorMessage);

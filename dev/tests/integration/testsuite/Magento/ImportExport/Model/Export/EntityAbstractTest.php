@@ -46,8 +46,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Export\AbstractEntity',
             array(
-                $objectManager->get('Magento\Core\Model\Store\Config'),
-                $objectManager->get('Magento\Core\Model\StoreManager'),
+                $objectManager->get('Magento\App\Config\ScopeConfigInterface'),
+                $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
             )
@@ -123,17 +123,17 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 /**
  * Stub abstract class which provide to change protected property "$_disabledAttrs" and test methods depended on it
  */
-abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity extends
-\Magento\ImportExport\Model\Export\AbstractEntity
+abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
+    extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
-        parent::__construct($coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
+        parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
         $this->_disabledAttrs = array('default_billing', 'default_shipping');
     }
 }

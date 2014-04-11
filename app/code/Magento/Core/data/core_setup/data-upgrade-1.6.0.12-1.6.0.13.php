@@ -25,10 +25,10 @@
  */
 
 /** @var $themeDbCollection \Magento\Core\Model\Resource\Theme\Collection */
-$themeDbCollection = $this->_themeResourceFactory->create();
+$themeDbCollection = $this->createThemeResourceFactory();
 
 /** @var $theme \Magento\View\Design\ThemeInterface */
-foreach ($this->_themeFactory->create()->addDefaultPattern('*') as $theme) {
+foreach ($this->createThemeFactory()->addDefaultPattern('*') as $theme) {
     $dbTheme = $themeDbCollection->getThemeByFullPath($theme->getFullPath());
     $dbTheme->setCode($theme->getCode());
     $dbTheme->save();

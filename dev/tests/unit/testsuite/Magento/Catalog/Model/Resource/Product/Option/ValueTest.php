@@ -40,7 +40,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public static $valueTitleData = array(
         'id' => 2,
-        'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
+        'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
         'scope' => array('title' => 1)
     );
 

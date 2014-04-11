@@ -133,7 +133,7 @@ class View extends \Magento\View\Element\Template implements \Magento\View\Block
      */
     public function isRssCatalogEnable()
     {
-        return $this->_storeConfig->getConfig('rss/catalog/category');
+        return $this->_scopeConfig->getValue('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

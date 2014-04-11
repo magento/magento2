@@ -36,7 +36,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_wysiwygConfig;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
@@ -45,7 +45,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;

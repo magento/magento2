@@ -116,7 +116,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Escaper $escaper
@@ -127,7 +127,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Escaper $escaper,
@@ -145,7 +145,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->_mediaDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_fileSize = $fileSize;
         $this->_data = $data;
-        parent::__construct($checkoutSession, $coreStoreConfig, $data);
+        parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
     /**

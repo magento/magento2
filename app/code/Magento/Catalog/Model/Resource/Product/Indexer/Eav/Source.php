@@ -138,7 +138,7 @@ class Source extends AbstractEav
 
         /**@var $subSelect \Magento\DB\Select*/
         $subSelect = $adapter->select()->from(
-            array('s' => $this->getTable('core_store')),
+            array('s' => $this->getTable('store')),
             array('store_id', 'website_id')
         )->joinLeft(
             array('d' => $this->getTable('catalog_product_entity_int')),
@@ -235,7 +235,7 @@ class Source extends AbstractEav
             array('pvd' => $this->getTable('catalog_product_entity_varchar')),
             array('entity_id', 'attribute_id')
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             '',
             array('store_id')
         )->joinLeft(
@@ -244,10 +244,10 @@ class Source extends AbstractEav
             array('value' => $productValueExpression)
         )->where(
             'pvd.store_id=?',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->where(
             'cs.store_id!=?',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->where(
             'pvd.attribute_id IN(?)',
             $attrIds

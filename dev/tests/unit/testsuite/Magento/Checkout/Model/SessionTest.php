@@ -27,7 +27,6 @@
  */
 namespace Magento\Checkout\Model;
 
-include __DIR__ . '/../_files/session.php';
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -71,7 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $constructArguments = $this->_helper->getConstructArguments(
             'Magento\Checkout\Model\Session',
             array(
-                'request' => $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
+                'request' => $request,
                 'orderFactory' => $orderFactory,
                 'messageCollectionFactory' => $messageCollectionFactory,
                 'quoteFactory' => $quoteFactory,
@@ -174,8 +173,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
         $quoteFactory = $this->getMock('Magento\Sales\Model\QuoteFactory', array('create'), array(), '', false);
         $storage = $this->getMock('Magento\Session\Storage', null);
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $storeManager = $this->getMockForAbstractClass('Magento\Core\Model\StoreManagerInterface');
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $eventManager = $this->getMockForAbstractClass('Magento\Event\ManagerInterface');
 

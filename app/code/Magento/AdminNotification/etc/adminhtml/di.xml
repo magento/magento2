@@ -36,4 +36,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="adminnotification" xsi:type="string">Magento_AdminNotification</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

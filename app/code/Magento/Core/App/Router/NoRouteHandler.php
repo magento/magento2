@@ -28,14 +28,14 @@ namespace Magento\Core\App\Router;
 class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
 {
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\App\ConfigInterface $config)
+    public function __construct(\Magento\App\Config\ScopeConfigInterface $config)
     {
         $this->_config = $config;
     }

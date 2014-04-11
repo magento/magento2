@@ -139,7 +139,7 @@ class Variable extends \Magento\Model\Resource\Db\AbstractDb
      */
     protected function _addValueToSelect(
         \Zend_Db_Select $select,
-        $storeId = \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ) {
         $adapter = $this->_getReadAdapter();
         $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');

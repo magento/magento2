@@ -31,7 +31,7 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 class Shipping extends AbstractTotal
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -41,12 +41,12 @@ class Shipping extends AbstractTotal
     protected $_taxConfig;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {

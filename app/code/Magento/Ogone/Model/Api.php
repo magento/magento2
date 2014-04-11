@@ -464,7 +464,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -476,9 +476,9 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Stdlib\String $string
@@ -488,9 +488,9 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\UrlInterface $urlBuilder,
         \Magento\Stdlib\String $string,
@@ -502,7 +502,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_urlBuilder = $urlBuilder;
         $this->string = $string;
         $this->_config = $config;
-        parent::__construct($eventManager, $paymentData, $coreStoreConfig, $logAdapterFactory, $data);
+        parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
     }
 
     /**

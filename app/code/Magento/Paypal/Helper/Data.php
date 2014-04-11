@@ -85,7 +85,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve available billing agreement methods
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param \Magento\Sales\Model\Quote|null $quote
      * @return MethodInterface[]
      */

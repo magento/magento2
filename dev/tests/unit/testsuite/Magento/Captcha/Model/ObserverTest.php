@@ -191,7 +191,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $formId = 'contact_us';
         $captchaValue = 'some-value';
         $warningMessage = 'Incorrect CAPTCHA.';
-        $redirectRoutePath = 'contacts/index/index';
+        $redirectRoutePath = 'contact/index/index';
         $redirectUrl = 'http://magento.com/contacts/';
 
         $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);

@@ -22,52 +22,49 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')->getStore()
-    ->setConfig('carriers/flatrate/active', 1);
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')->getStore()
-    ->setConfig('payment/paypal_express/active', 1);
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\App\Config\MutableScopeConfigInterface'
+)->setValue(
+    'carriers/flatrate/active',
+    1,
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+);
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\App\Config\MutableScopeConfigInterface'
+)->setValue(
+    'payment/paypal_express/active',
+    1,
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+);
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->setTypeId(
-    'simple'
-)->setId(
-    1
-)->setAttributeSetId(
-    4
-)->setName(
-    'Simple Product'
-)->setSku(
-    'simple'
-)->setPrice(
-    10
-)->setStockData(
-    array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 100)
-)->setVisibility(
-    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-)->setStatus(
-    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->save();
+$product->setTypeId('simple')
+    ->setId(1)
+    ->setAttributeSetId(4)
+    ->setName('Simple Product')
+    ->setSku('simple')
+    ->setPrice(10)
+    ->setStockData(array(
+    'use_config_manage_stock' => 1,
+    'qty' => 100,
+    'is_qty_decimal' => 0,
+    'is_in_stock' => 100,
+))
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
 $product->load(1);
 
-$addressData = array(
-    'region' => 'CA',
-    'postcode' => '11111',
-    'lastname' => 'lastname',
-    'firstname' => 'firstname',
-    'street' => 'street',
-    'city' => 'Los Angeles',
-    'email' => 'admin@example.com',
-    'telephone' => '11111111',
-    'country_id' => 'US'
-);
-
 $billingData = array(
-    'address_id' => '',
     'firstname' => 'testname',
     'lastname' => 'lastname',
     'company' => '',
     'email' => 'test@com.com',
-    'street' => array(0 => 'test1', 1 => ''),
+    'street' =>
+    array(
+        0 => 'test1',
+        1 => '',
+    ),
     'city' => 'Test',
     'region_id' => '1',
     'region' => '',
@@ -77,13 +74,11 @@ $billingData = array(
     'fax' => '',
     'confirm_password' => '',
     'save_in_address_book' => '1',
-    'use_for_shipping' => '1'
+    'use_for_shipping' => '1',
 );
 
-$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Quote\Address',
-    array('data' => $billingData)
-);
+$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Sales\Model\Quote\Address', array('data' => $billingData));
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -97,7 +92,7 @@ $quote->setCustomerIsGuest(
     true
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Core\Model\StoreManagerInterface'
+        'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setReservedOrderId(
     'test02'
@@ -115,12 +110,10 @@ $quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS);
 $quote->collectTotals()->save();
 
 /** @var $service \Magento\Sales\Model\Service\Quote */
-$service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Service\Quote',
-    array('quote' => $quote)
-);
+$service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Sales\Model\Service\Quote', array('quote' => $quote));
 $service->setOrderData(array('increment_id' => '100000002'));
-$service->submitAll();
+$service->submitAllWithDataObject();
 
 $order = $service->getOrder();
 $order->save();

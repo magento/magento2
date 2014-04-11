@@ -149,14 +149,14 @@ class Product extends \Magento\Backend\App\Action
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', array());
                     $votes = $this->_objectManager->create(
-                        'Magento\Rating\Model\Rating\Option\Vote'
+                        'Magento\Review\Model\Rating\Option\Vote'
                     )->getResourceCollection()->setReviewFilter(
                         $reviewId
                     )->addOptionInfo()->load()->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
                             $this->_objectManager->create(
-                                'Magento\Rating\Model\Rating'
+                                'Magento\Review\Model\Rating'
                             )->setVoteId(
                                 $vote->getId()
                             )->setReviewId(
@@ -166,7 +166,7 @@ class Product extends \Magento\Backend\App\Action
                             );
                         } else {
                             $this->_objectManager->create(
-                                'Magento\Rating\Model\Rating'
+                                'Magento\Review\Model\Rating'
                             )->setRatingId(
                                 $ratingId
                             )->setReviewId(
@@ -363,9 +363,9 @@ class Product extends \Magento\Backend\App\Action
         $productId = $this->getRequest()->getParam('product_id', false);
 
         if ($data = $this->getRequest()->getPost()) {
-            if ($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->hasSingleStore()) {
+            if ($this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->hasSingleStore()) {
                 $data['stores'] = array(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore(true)->getId()
+                    $this->_objectManager->get('Magento\Store\Model\StoreManager')->getStore(true)->getId()
                 );
             } elseif (isset($data['select_stores'])) {
                 $data['stores'] = $data['select_stores'];
@@ -386,7 +386,7 @@ class Product extends \Magento\Backend\App\Action
                 $arrRatingId = $this->getRequest()->getParam('ratings', array());
                 foreach ($arrRatingId as $ratingId => $optionId) {
                     $this->_objectManager->create(
-                        'Magento\Rating\Model\Rating'
+                        'Magento\Review\Model\Rating'
                     )->setRatingId(
                         $ratingId
                     )->setReviewId(

@@ -85,8 +85,12 @@ class Salesrule extends \Magento\Rss\Block\AbstractBlock
         $now = date('Y-m-d');
         $url = $this->_urlBuilder->getUrl('');
         $newUrl = $this->_urlBuilder->getUrl('rss/catalog/salesrule');
-        $lang = $storeModel->getConfig('general/locale/code');
         $title = __('%1 - Discounts and Coupons', $storeModel->getName());
+        $lang = $this->_scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeModel
+        );
 
         /** @var $rssObject \Magento\Rss\Model\Rss */
         $rssObject = $this->_rssFactory->create();
@@ -117,11 +121,8 @@ class Salesrule extends \Magento\Rss\Block\AbstractBlock
 
         /** @var $ruleModel \Magento\SalesRule\Model\Rule */
         foreach ($collection as $ruleModel) {
-            $description = '<table><tr>' .
-                '<td style="text-decoration:none;">' .
-                $ruleModel->getDescription() .
-                '<br/>Discount Start Date: ' .
-                $this->formatDate(
+            $description = '<table><tr>' . '<td style="text-decoration:none;">' . $ruleModel->getDescription()
+                . '<br/>Discount Start Date: ' . $this->formatDate(
                     $ruleModel->getFromDate(),
                     'medium'
                 );

@@ -30,7 +30,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Usecustom extends \Magento\Core\Model\Config\Value
+class Usecustom extends \Magento\App\Config\Value
 {
     /**
      * Writer of configuration storage
@@ -42,8 +42,7 @@ class Usecustom extends \Magento\Core\Model\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -52,15 +51,14 @@ class Usecustom extends \Magento\Core\Model\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_configWriter = $configWriter;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

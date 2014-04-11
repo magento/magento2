@@ -36,7 +36,7 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
     $showWishlist = true;
     $showCompare = true;
     $showCart = true;
-    $rating = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
     $description = true;
 }
 ?>
@@ -67,8 +67,8 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                                 </strong>
                                 <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
 
-                                <?php if ($_item->getRatingSummary() && $rating): ?>
-                                    <?php echo $this->getReviewsSummaryHtml($_item,$rating) ?>
+                                <?php if ($templateType): ?>
+                                    <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>
                                 <?php endif; ?>
 
                                 <?php if($showWishlist || $showCompare || $showCart): ?>

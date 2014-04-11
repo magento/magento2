@@ -109,7 +109,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
         );
 
         $this->_service = new \Magento\Integration\Service\OauthV1(
-            $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false),
+            $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->getMock('Magento\Integration\Helper\Oauth\Data', array(), array(), '', false),

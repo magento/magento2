@@ -60,7 +60,12 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo = $value['to'];
 
             //calculate end date considering timezone specification
-            $datetimeTo->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+            $datetimeTo->setTimezone(
+                $this->_scopeConfig->getValue(
+                    $this->_localeDate->getDefaultTimezonePath(),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
             $datetimeTo->addDay(1)->subSecond(1);
             $datetimeTo->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
         }
@@ -81,7 +86,12 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $dateObj = $this->getLocaleDate()->date(null, null, $locale, false);
 
                 //set default timezone for store (admin)
-                $dateObj->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+                $dateObj->setTimezone(
+                    $this->_scopeConfig->getValue(
+                        $this->_localeDate->getDefaultTimezonePath(),
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                );
 
                 //set date with applying timezone of store
                 $dateObj->set(
@@ -120,32 +130,18 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             );
         }
 
-        $html = '<div class="range" id="' .
-            $htmlId .
-            '_range"><div class="range-line date">' .
-            '<input type="text" name="' .
-            $this->_getHtmlName() .
-            '[from]" id="' .
-            $htmlId .
-            '_from"' .
-            ' value="' .
-            $this->getEscapedValue(
-                'from'
-            ) . '" class="input-text no-changes" placeholder="' . __(
+        $html =
+            '<div class="range" id="' . $htmlId . '_range"><div class="range-line date">' . '<input type="text" name="'
+            . $this->_getHtmlName() . '[from]" id="' . $htmlId . '_from"' . ' value="' . $this->getEscapedValue('from')
+            . '" class="input-text no-changes" placeholder="' . __(
                 'From'
             ) . '" ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'from'
             ) . '/>' . '</div>';
-        $html .= '<div class="range-line date">' .
-            '<input type="text" name="' .
-            $this->_getHtmlName() .
-            '[to]" id="' .
-            $htmlId .
-            '_to"' .
-            ' value="' .
-            $this->getEscapedValue(
+        $html .= '<div class="range-line date">' . '<input type="text" name="' . $this->_getHtmlName() . '[to]" id="'
+            . $htmlId . '_to"' . ' value="' . $this->getEscapedValue(
                 'to'
             ) . '" class="input-text no-changes" placeholder="' . __(
                 'To'
@@ -154,41 +150,21 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $this->_getHtmlName(),
                 'to'
             ) . '/>' . '</div></div>';
-        $html .= '<input type="hidden" name="' .
-            $this->_getHtmlName() .
-            '[locale]"' .
-            ' value="' .
-            $this->_localeResolver->getLocaleCode() .
-            '"/>';
+        $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
+            . $this->_localeResolver->getLocaleCode() . '"/>';
         $html .= '<script type="text/javascript">
             (function( $ ) {
-                    $("#' .
-            $htmlId .
-            '_range").dateRange({
-                        dateFormat: "' .
-            $format .
-            '",
-                        timeFormat: "' .
-            $timeFormat .
-            '",
-                        showsTime: ' .
-            ($this->getColumn()->getFilterTime() ? 'true' : 'false') .
-            ',
-                        buttonImage: "' .
-            $this->getViewFileUrl(
-                'images/grid-cal.gif'
-            ) . '",
-                            buttonText: "' . $this->escapeHtml(__('Date selector')) .
-            '",
+                    $("#' . $htmlId . '_range").dateRange({
+                        dateFormat: "' . $format . '",
+                        timeFormat: "' . $timeFormat . '",
+                        showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
+                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.gif') . '",
+                        buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
                         from: {
-                            id: "' .
-            $htmlId .
-            '_from"
+                            id: "' . $htmlId . '_from"
                         },
                         to: {
-                            id: "' .
-            $htmlId .
-            '_to"
+                            id: "' . $htmlId . '_to"
                         }
                     })
             })(jQuery)

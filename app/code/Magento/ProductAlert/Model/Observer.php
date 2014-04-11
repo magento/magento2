@@ -85,12 +85,12 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -136,8 +136,8 @@ class Observer
 
     /**
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -149,8 +149,8 @@ class Observer
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -161,7 +161,7 @@ class Observer
         \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_taxData = $taxData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_priceColFactory = $priceColFactory;
         $this->_customerFactory = $customerFactory;
@@ -200,13 +200,14 @@ class Observer
     {
         $email->setType('price');
         foreach ($this->_getWebsites() as $website) {
-            /* @var $website \Magento\Core\Model\Website */
+            /* @var $website \Magento\Store\Model\Website */
 
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
                 continue;
             }
-            if (!$this->_coreStoreConfig->getConfig(
+            if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_PRICE_ALLOW,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -287,13 +288,14 @@ class Observer
         $email->setType('stock');
 
         foreach ($this->_getWebsites() as $website) {
-            /* @var $website \Magento\Core\Model\Website */
+            /* @var $website \Magento\Store\Model\Website */
 
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
                 continue;
             }
-            if (!$this->_coreStoreConfig->getConfig(
+            if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_ALLOW,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -374,14 +376,21 @@ class Observer
     protected function _sendErrorEmail()
     {
         if (count($this->_errors)) {
-            if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)) {
+            if (!$this->_scopeConfig->getValue(
+                self::XML_PATH_ERROR_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            ) {
                 return $this;
             }
 
             $this->inlineTranslation->suspend();
 
             $transport = $this->_transportBuilder->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_TEMPLATE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             )->setTemplateOptions(
                 array(
                     'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
@@ -390,9 +399,15 @@ class Observer
             )->setTemplateVars(
                 array('warnings' => join("\n", $this->_errors))
             )->setFrom(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             )->addTo(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_RECIPIENT,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             )->getTransport();
 
             $transport->sendMessage();

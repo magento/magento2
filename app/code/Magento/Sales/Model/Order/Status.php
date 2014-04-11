@@ -28,14 +28,14 @@ namespace Magento\Sales\Model\Order;
 class Status extends \Magento\Model\AbstractModel
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -43,7 +43,7 @@ class Status extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -121,7 +121,7 @@ class Status extends \Magento\Model\AbstractModel
     /**
      * Get status label by store
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string
      */
     public function getStoreLabel($store = null)

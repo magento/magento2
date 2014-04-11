@@ -43,7 +43,7 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -60,7 +60,7 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
      * @param \Magento\View\Element\Context $context
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param array $data
      */
@@ -68,7 +68,7 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
         \Magento\View\Element\Context $context,
         \Magento\Cms\Model\Page $page,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Cms\Model\PageFactory $pageFactory,
         array $data = array()
     ) {
@@ -110,14 +110,17 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
         $page = $this->getPage();
 
         // show breadcrumbs
-        if ($this->_storeConfig->getConfig(
-            'web/default/show_cms_breadcrumbs'
+        if ($this->_scopeConfig->getValue(
+            'web/default/show_cms_breadcrumbs',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && ($breadcrumbs = $this->getLayout()->getBlock(
             'breadcrumbs'
-        )) && $page->getIdentifier() !== $this->_storeConfig->getConfig(
-            'web/default/cms_home_page'
-        ) && $page->getIdentifier() !== $this->_storeConfig->getConfig(
-            'web/default/cms_no_route'
+        )) && $page->getIdentifier() !== $this->_scopeConfig->getValue(
+            'web/default/cms_home_page',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) && $page->getIdentifier() !== $this->_scopeConfig->getValue(
+            'web/default/cms_no_route',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             $breadcrumbs->addCrumb(

@@ -61,6 +61,8 @@ class NavigationMode extends \Magento\Url
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\DesignEditor\Helper\Data $helper
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string $scopeType
      * @param array $data
      */
     public function __construct(
@@ -73,6 +75,8 @@ class NavigationMode extends \Magento\Url
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\DesignEditor\Helper\Data $helper,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        $scopeType,
         array $data = array()
     ) {
         $this->_helper = $helper;
@@ -92,6 +96,8 @@ class NavigationMode extends \Magento\Url
             $sidResolver,
             $routeParamsResolver,
             $queryParamsResolver,
+            $scopeConfig,
+            $scopeType,
             $data
         );
     }

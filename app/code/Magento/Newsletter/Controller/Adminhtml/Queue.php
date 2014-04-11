@@ -102,7 +102,7 @@ class Queue extends \Magento\Backend\App\Action
 
         // set default value for selected store
         $data['preview_store_id'] = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->getDefaultStoreView()->getId();
 
         $this->_view->getLayout()->getBlock('preview_form')->setFormData($data);
@@ -336,8 +336,8 @@ class Queue extends \Magento\Backend\App\Action
                 $this->getRequest()->getParam('styles')
             );
 
-            if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_PAUSE &&
-                $this->getRequest()->getParam(
+            if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_PAUSE
+                && $this->getRequest()->getParam(
                     '_resume',
                     false
                 )

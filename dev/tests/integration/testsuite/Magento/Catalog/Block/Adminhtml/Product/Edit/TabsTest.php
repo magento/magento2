@@ -47,7 +47,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\Registry')->register('product', $product);
 
         $objectManager->get('Magento\App\State')->setAreaCode('nonexisting');
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = $objectManager->get('Magento\View\LayoutInterface');
         $layout->addBlock('Magento\View\Element\Text', 'head');
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs */

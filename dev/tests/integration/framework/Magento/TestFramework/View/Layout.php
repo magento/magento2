@@ -24,7 +24,7 @@
 
 namespace Magento\TestFramework\View;
 
-class Layout extends \Magento\Core\Model\Layout
+class Layout extends \Magento\View\Layout
 {
     /**
      * @var bool

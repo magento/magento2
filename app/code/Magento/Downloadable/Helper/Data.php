@@ -39,19 +39,19 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -70,8 +70,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
                 $shareable = (bool)$link->getIsShareable();
                 break;
             case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG:
-                $shareable = (bool)$this->_coreStoreConfig->getConfigFlag(
-                    \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE
+                $shareable = (bool)$this->_scopeConfig->isSetFlag(
+                    \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
         }
         return $shareable;

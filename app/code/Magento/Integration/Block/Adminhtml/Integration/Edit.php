@@ -88,7 +88,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'id' => 'save-split-button',
                     'label' => __('Save'),
                     'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
-                    'button_class' => 'PrimarySplitButton',
+                    'button_class' => '',
                     'data_attribute' => array(
                         'mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form'))
                     ),

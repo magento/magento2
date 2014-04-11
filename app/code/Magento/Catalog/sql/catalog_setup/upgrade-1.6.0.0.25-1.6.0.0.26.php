@@ -34,7 +34,7 @@ $connection->dropForeignKey(
     $this->getFkName('catalog_category_product_index', 'product_id', 'catalog_product_entity', 'entity_id')
 )->dropForeignKey(
     $this->getTable('catalog_category_product_index'),
-    $this->getFkName('catalog_category_product_index', 'store_id', 'core_store', 'store_id')
+    $this->getFkName('catalog_category_product_index', 'store_id', 'store', 'store_id')
 );
 
 $connection->dropTable($this->getTable('catalog_product_enabled_index'));

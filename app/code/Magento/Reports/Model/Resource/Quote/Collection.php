@@ -172,7 +172,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
         )->joinInner(
             array('product_name' => $productAttrNameTable),
             "product_name.entity_id = e.entity_id\n                AND product_name.attribute_id = {$productAttrNameId}\n                AND product_name.store_id = " .
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID,
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             array('name' => 'product_name.value')
         )->joinInner(
             array('product_price' => $productAttrPriceTable),

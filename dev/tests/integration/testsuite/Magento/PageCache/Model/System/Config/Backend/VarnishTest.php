@@ -34,14 +34,14 @@ class VarnishTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\MutableScopeConfigInterface
      */
     protected $_config;
 
     protected function setUp()
     {
         $this->_config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\ConfigInterface'
+            'Magento\App\Config\MutableScopeConfigInterface'
         );
         $data = array(
             'access_list' => 'localhost',

@@ -95,7 +95,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      */
     public function getDefaultConfigValue($field)
     {
-        return $this->_storeConfig->getConfig(Item::XML_PATH_ITEM . $field, $this->getStoreId());
+        return $this->_scopeConfig->getValue(Item::XML_PATH_ITEM . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->getStoreId());
     }
 
     /**

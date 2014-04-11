@@ -96,7 +96,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($requestParams));
 
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
         $configFactoryMock = $this->getMock(
@@ -131,7 +131,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->_coreConfigMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false, false);
+        $this->_coreConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
 
         $this->_backendConfigMock = $this->getMock('Magento\Backend\Model\Config', array(), array(), '', false, false);
 
@@ -161,19 +161,29 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
+
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $context = $helper->getObject(
+            'Magento\Backend\Block\Template\Context',
+            array(
+                'scopeConfig' => $this->_coreConfigMock,
+                'request' => $requestMock,
+                'urlBuilder' => $this->_urlModelMock
+            )
+        );
+
         $data = array(
             'request' => $requestMock,
             'layout' => $layoutMock,
-            'urlBuilder' => $this->_urlModelMock,
             'configStructure' => $this->_systemConfigMock,
             'configFactory' => $configFactoryMock,
             'formFactory' => $this->_formFactoryMock,
             'fieldsetFactory' => $this->_fieldsetFactoryMock,
             'fieldFactory' => $this->_fieldFactoryMock,
-            'coreConfig' => $this->_coreConfigMock
+            'context' => $context
         );
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Backend\Block\System\Config\Form', $data);
         $this->_object->setData('scope_id', 1);
     }

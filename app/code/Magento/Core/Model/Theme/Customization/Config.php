@@ -37,14 +37,14 @@ class Config implements \Magento\View\Design\Theme\Customization\ConfigInterface
     const XML_PATH_CUSTOM_FILES = 'theme/customization';
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $config;
 
     /**
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\App\ConfigInterface $config)
+    public function __construct(\Magento\App\Config\ScopeConfigInterface $config)
     {
         $this->config = $config;
     }

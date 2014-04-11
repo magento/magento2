@@ -39,17 +39,19 @@ class Item extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Core\Model\Store\Config $coreStoreConfig)
-    {
-        $this->_coreStoreConfig = $coreStoreConfig;
+    public function __construct(
+        \Magento\App\Resource $resource,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($resource);
     }
 
@@ -114,8 +116,9 @@ class Item extends \Magento\Model\Resource\Db\AbstractDb
     {
         if ($columns === null) {
             $adapter = $this->_getReadAdapter();
-            $isManageStock = (int)$this->_coreStoreConfig->getConfig(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
+            $isManageStock = (int)$this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $stockExpr = $adapter->getCheckSql(
                 'cisi.use_config_manage_stock = 1',

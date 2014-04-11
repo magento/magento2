@@ -76,29 +76,39 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
     protected $inlineTranslation;
 
     /**
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerHelperView;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\App\Response\Http\FileFactory $fileResponseFactory
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Customer\Helper\View $customerHelperView
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Registry $coreRegistry,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\App\Response\Http\FileFactory $fileResponseFactory,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Customer\Helper\View $customerHelperView
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_wishlistConfig = $wishlistConfig;
         $this->_fileResponseFactory = $fileResponseFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
-        parent::__construct($context, $formKeyValidator);
+        $this->_customerHelperView = $customerHelperView;
+        parent::__construct($context, $formKeyValidator, $customerSession);
     }
 
     /**
@@ -115,13 +125,18 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
         )
         ) {
             $this->_actionFlag->set('', 'no-dispatch', true);
-            $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+            $customerSession = $this->_customerSession;
             if (!$customerSession->getBeforeWishlistUrl()) {
                 $customerSession->setBeforeWishlistUrl($this->_redirect->getRefererUrl());
             }
             $customerSession->setBeforeWishlistRequest($request->getParams());
         }
-        if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfigFlag('wishlist/general/active')) {
+        if (!$this->_objectManager->get(
+            'Magento\App\Config\ScopeConfigInterface'
+        )->isSetFlag(
+            'wishlist/general/active'
+        )
+        ) {
             throw new NotFoundException();
         }
         return parent::dispatch($request);
@@ -155,7 +170,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             if (!$wishlistId) {
                 $wishlistId = $this->getRequest()->getParam('wishlist_id');
             }
-            $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
+            $customerId = $this->_customerSession->getCustomerId();
             /* @var \Magento\Wishlist\Model\Wishlist $wishlist */
             $wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist');
             if ($wishlistId) {
@@ -194,7 +209,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
         }
         $this->_view->loadLayout();
 
-        $session = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $session = $this->_customerSession;
         $block = $this->_view->getLayout()->getBlock('customer.wishlist');
         $referer = $session->getAddActionReferer(true);
         if ($block) {
@@ -222,7 +237,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             throw new NotFoundException();
         }
 
-        $session = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $session = $this->_customerSession;
 
         $requestParams = $this->getRequest()->getParams();
 
@@ -352,7 +367,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
      */
     public function updateItemOptionsAction()
     {
-        $session = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $session = $this->_customerSession;
         $productId = (int)$this->getRequest()->getParam('product');
         if (!$productId) {
             $this->_redirect('*/');
@@ -710,16 +725,18 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $message = nl2br(htmlspecialchars($message));
             if (empty($emails)) {
                 $error = __('Email address can\'t be empty.');
-            } else if (count($emails) > $emailsLeft) {
-                $error = __('This wishlist can be shared %1 more times.', $emailsLeft);
             } else {
-                foreach ($emails as $index => $email) {
-                    $email = trim($email);
-                    if (!\Zend_Validate::is($email, 'EmailAddress')) {
-                        $error = __('Please input a valid email address.');
-                        break;
+                if (count($emails) > $emailsLeft) {
+                    $error = __('This wishlist can be shared %1 more times.', $emailsLeft);
+                } else {
+                    foreach ($emails as $index => $email) {
+                        $email = trim($email);
+                        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+                            $error = __('Please input a valid email address.');
+                            break;
+                        }
+                        $emails[$index] = $email;
                     }
-                    $emails[$index] = $email;
                 }
             }
         }
@@ -740,8 +757,8 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
         $sent = 0;
 
         try {
-            $customer = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomer();
-
+            $customer = $this->_customerSession->getCustomerDataObject();
+            $customerName = $this->_customerHelperView->getCustomerName($customer);
             /*if share rss added rss feed to email template*/
             if ($this->getRequest()->getParam('rss_url')) {
                 $rss_url = $this->_view->getLayout()->createBlock(
@@ -759,11 +776,14 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $sharingCode = $wishlist->getSharingCode();
 
             try {
-                $storeConfig = $this->_objectManager->get('Magento\Core\Model\Store\Config');
-                $storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+                $scopeConfig = $this->_objectManager->get('Magento\App\Config\ScopeConfigInterface');
+                $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
-                        $storeConfig->getConfig('wishlist/email/email_template')
+                        $scopeConfig->getValue(
+                            'wishlist/email/email_template',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        )
                     )->setTemplateOptions(
                         array(
                             'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
@@ -772,6 +792,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
                     )->setTemplateVars(
                         array(
                             'customer' => $customer,
+                            'customerName' => $customerName,
                             'salable' => $wishlist->isSalable() ? 'yes' : '',
                             'items' => $wishlistBlock,
                             'addAllLink' => $this->_url->getUrl('*/shared/allcart', array('code' => $sharingCode)),
@@ -780,7 +801,10 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
                             'store' => $storeManager->getStore()
                         )
                     )->setFrom(
-                        $storeConfig->getConfig('wishlist/email/email_identity')
+                        $scopeConfig->getValue(
+                            'wishlist/email/email_identity',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        )
                     )->addTo(
                         $email
                     )->getTransport();

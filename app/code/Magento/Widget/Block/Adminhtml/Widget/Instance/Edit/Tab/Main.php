@@ -36,7 +36,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_store;
 
@@ -49,7 +49,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\System\Store $store
+     * @param \Magento\Store\Model\System\Store $store
      * @param \Magento\View\Design\Theme\LabelFactory $themeLabelFactory
      * @param array $data
      */
@@ -57,7 +57,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\System\Store $store,
+        \Magento\Store\Model\System\Store $store,
         \Magento\View\Design\Theme\LabelFactory $themeLabelFactory,
         array $data = array()
     ) {

@@ -25,7 +25,7 @@
  */
 namespace Magento\App;
 
-class Config implements ConfigInterface
+class Config implements \Magento\App\Config\ScopeConfigInterface
 {
     /**
      * Config cache tag
@@ -50,26 +50,12 @@ class Config implements ConfigInterface
      *
      * @param string $path
      * @param string $scope
-     * @param string $scopeCode
+     * @param null|string $scopeCode
      * @return mixed
      */
-    public function getValue($path = null, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
+    public function getValue($path = null, $scope = \Magento\App\ScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
         return $this->_scopePool->getScope($scope, $scopeCode)->getValue($path);
-    }
-
-    /**
-     * Set config value in the corresponding config scope
-     *
-     * @param string $path
-     * @param mixed $value
-     * @param string $scope
-     * @param null|string $scopeCode
-     * @return void
-     */
-    public function setValue($path, $value, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
-    {
-        $this->_scopePool->getScope($scope, $scopeCode)->setValue($path, $value);
     }
 
     /**
@@ -80,7 +66,7 @@ class Config implements ConfigInterface
      * @param null|string $scopeCode
      * @return bool
      */
-    public function isSetFlag($path, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
+    public function isSetFlag($path, $scope = \Magento\App\ScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
         return (bool)$this->getValue($path, $scope, $scopeCode);
     }

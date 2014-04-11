@@ -33,7 +33,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_labelFactory;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
@@ -42,7 +42,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\View\Design\Theme\LabelFactory $labelFactory
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
@@ -50,7 +50,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\View\Design\Theme\LabelFactory $labelFactory,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_labelFactory = $labelFactory;

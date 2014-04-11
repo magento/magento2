@@ -74,7 +74,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     public function joinStore()
     {
-        return $this->join(array('cs' => 'core_store'), 'cs.store_id = main_table.store_id', array('cs.name'));
+        return $this->join(array('cs' => 'store'), 'cs.store_id = main_table.store_id', array('cs.name'));
     }
 
     /**

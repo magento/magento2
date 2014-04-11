@@ -31,14 +31,14 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Store model manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Website model factory
      *
-     * @var \Magento\Core\Model\WebsiteFactory
+     * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
@@ -49,14 +49,14 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($resource);
@@ -202,7 +202,7 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
      */
     public function getWebsiteStores()
     {
-        /** @var \Magento\Core\Model\Website $website */
+        /** @var \Magento\Store\Model\Website $website */
         $website = $this->_websiteFactory->create();
         return $this->_getReadAdapter()->fetchPairs($website->getDefaultStoresSelect(false));
     }
@@ -256,10 +256,10 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
      * Add stock status to prepare index select
      *
      * @param \Magento\DB\Select $select
-     * @param \Magento\Core\Model\Website $website
+     * @param \Magento\Store\Model\Website $website
      * @return Status
      */
-    public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Core\Model\Website $website)
+    public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Store\Model\Website $website)
     {
         $websiteId = $website->getId();
         $select->joinLeft(
@@ -340,7 +340,7 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
 
         $adapter = $this->_getReadAdapter();
 
-        if ($storeId === null || $storeId == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
+        if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             $select = $adapter->select()->from(
                 $attributeTable,
                 array('entity_id', 'value')
@@ -352,7 +352,7 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
                 $attribute->getAttributeId()
             )->where(
                 'store_id = ?',
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             );
 
             $rows = $adapter->fetchPairs($select);
@@ -366,7 +366,7 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
                 array('t1.entity_id')
             )->where(
                 't1.store_id = ?',
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             )->where(
                 't1.attribute_id = ?',
                 $attribute->getAttributeId()

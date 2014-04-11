@@ -92,6 +92,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'send_notification',
                 array(
                     'label' => __('Send Email'),
+                    'class' => 'send-email',
                     'onclick' => 'confirmSetLocation(\'' . __(
                         'Are you sure you want to send a Credit memo email to customer?'
                     ) . '\', \'' . $this->getEmailUrl() . '\')'
@@ -104,7 +105,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'refund',
                 array(
                     'label' => __('Refund'),
-                    'class' => 'save',
+                    'class' => 'refund',
                     'onclick' => 'setLocation(\'' . $this->getRefundUrl() . '\')'
                 )
             );
@@ -115,7 +116,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'void',
                 array(
                     'label' => __('Void'),
-                    'class' => 'save',
+                    'class' => 'void',
                     'onclick' => 'setLocation(\'' . $this->getVoidUrl() . '\')'
                 )
             );
@@ -126,7 +127,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'print',
                 array(
                     'label' => __('Print'),
-                    'class' => 'save',
+                    'class' => 'print',
                     'onclick' => 'setLocation(\'' . $this->getPrintUrl() . '\')'
                 )
             );

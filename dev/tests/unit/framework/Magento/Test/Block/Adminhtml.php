@@ -79,9 +79,9 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     protected $_cacheMock;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    protected $_storeConfigMock;
+    protected $_scopeConfigMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\StoreManager */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
     protected $_storeManagerMock;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Math\Random */
@@ -94,10 +94,10 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     {
         // These mocks are accessed via context
         $this->_designMock          = $this->_makeMock('Magento\View\DesignInterface');
-        $this->_sessionMock         = $this->_makeMock('Magento\Core\Model\Session');
-        $this->_sidResolver         = $this->_makeMock('Magento\Core\Model\Session\SidResolver');
+        $this->_sessionMock         = $this->_makeMock('Magento\Session\Generic');
+        $this->_sidResolver         = $this->_makeMock('Magento\Session\SidResolver');
         $this->_translatorMock      = $this->_makeMock('Magento\TranslateInterface');
-        $this->_layoutMock          = $this->_makeMock('Magento\Core\Model\Layout');
+        $this->_layoutMock          = $this->_makeMock('Magento\View\Layout');
         $this->_requestMock         = $this->_makeMock('Magento\App\RequestInterface');
         $this->_messagesMock        = $this->_makeMock('Magento\View\Element\Messages');
         $this->_urlMock             = $this->_makeMock('Magento\UrlInterface');
@@ -106,8 +106,8 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
         $this->_loggerMock          = $this->_makeMock('Magento\Logger');
         $this->_filesystemMock      = $this->_makeMock('Magento\App\Filesystem');
         $this->_cacheMock           = $this->_makeMock('Magento\App\CacheInterface');
-        $this->_storeConfigMock     = $this->_makeMock('Magento\Core\Model\Store\Config');
-        $this->_storeManagerMock    = $this->_makeMock('Magento\Core\Model\StoreManager');
+        $this->_scopeConfigMock     = $this->_makeMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_storeManagerMock    = $this->_makeMock('Magento\Store\Model\StoreManager');
         $viewUrlMock                = $this->_makeMock('Magento\View\Url');
         $viewConfigMock             = $this->_makeMock('Magento\View\ConfigInterface');
         $viewFileSystemMock         = $this->_makeMock('Magento\View\FileSystem');
@@ -141,7 +141,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
             $this->_designMock,
             $this->_sessionMock,
             $this->_sidResolver,
-            $this->_storeConfigMock,
+            $this->_scopeConfigMock,
             $this->_controllerMock,
             $viewUrlMock,
             $viewConfigMock,

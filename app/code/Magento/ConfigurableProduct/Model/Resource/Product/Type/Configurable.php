@@ -209,7 +209,7 @@ class Configurable extends \Magento\Model\Resource\Db\AbstractDb
                     ' AND ',
                     array(
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                        'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     )
                 ),
                 array()

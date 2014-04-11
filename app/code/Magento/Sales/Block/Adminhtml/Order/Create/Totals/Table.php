@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
-use Magento\Core\Model\Resource\Website\Collection;
+use Magento\Store\Model\Resource\Website\Collection;
 
 /**
  * Adminhtml sales order create totals table block

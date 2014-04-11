@@ -145,7 +145,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
      * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -161,7 +161,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\App\Filesystem $filesystem,
         \Magento\Logger\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,

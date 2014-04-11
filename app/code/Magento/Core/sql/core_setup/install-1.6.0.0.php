@@ -25,7 +25,7 @@
  */
 
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -55,194 +55,6 @@ $table = $installer->getConnection()->newTable(
     'Data Version'
 )->setComment(
     'Resources'
-);
-$installer->getConnection()->createTable($table);
-
-/**
- * Create table 'core_website'
- */
-$table = $installer->getConnection()->newTable(
-    $installer->getTable('core_website')
-)->addColumn(
-    'website_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
-    'Website Id'
-)->addColumn(
-    'code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
-    32,
-    array(),
-    'Code'
-)->addColumn(
-    'name',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
-    64,
-    array(),
-    'Website Name'
-)->addColumn(
-    'sort_order',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Sort Order'
-)->addColumn(
-    'default_group_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Default Group Id'
-)->addColumn(
-    'is_default',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'default' => '0'),
-    'Defines Is Website Default'
-)->addIndex(
-    $installer->getIdxName('core_website', array('code'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
-    array('code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('core_website', array('sort_order')),
-    array('sort_order')
-)->addIndex(
-    $installer->getIdxName('core_website', array('default_group_id')),
-    array('default_group_id')
-)->setComment(
-    'Websites'
-);
-$installer->getConnection()->createTable($table);
-
-/**
- * Create table 'core_store_group'
- */
-$table = $installer->getConnection()->newTable(
-    $installer->getTable('core_store_group')
-)->addColumn(
-    'group_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
-    'Group Id'
-)->addColumn(
-    'website_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Website Id'
-)->addColumn(
-    'name',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
-    255,
-    array('nullable' => false),
-    'Store Group Name'
-)->addColumn(
-    'root_category_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Root Category Id'
-)->addColumn(
-    'default_store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Default Store Id'
-)->addIndex(
-    $installer->getIdxName('core_store_group', array('website_id')),
-    array('website_id')
-)->addIndex(
-    $installer->getIdxName('core_store_group', array('default_store_id')),
-    array('default_store_id')
-)->addForeignKey(
-    $installer->getFkName('core_store_group', 'website_id', 'core_website', 'website_id'),
-    'website_id',
-    $installer->getTable('core_website'),
-    'website_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
-)->setComment(
-    'Store Groups'
-);
-$installer->getConnection()->createTable($table);
-
-/**
- * Create table 'core_store'
- */
-$table = $installer->getConnection()->newTable(
-    $installer->getTable('core_store')
-)->addColumn(
-    'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
-    'Store Id'
-)->addColumn(
-    'code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
-    32,
-    array(),
-    'Code'
-)->addColumn(
-    'website_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Website Id'
-)->addColumn(
-    'group_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Group Id'
-)->addColumn(
-    'name',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
-    255,
-    array('nullable' => false),
-    'Store Name'
-)->addColumn(
-    'sort_order',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Store Sort Order'
-)->addColumn(
-    'is_active',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'default' => '0'),
-    'Store Activity'
-)->addIndex(
-    $installer->getIdxName('core_store', array('code'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
-    array('code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('core_store', array('website_id')),
-    array('website_id')
-)->addIndex(
-    $installer->getIdxName('core_store', array('is_active', 'sort_order')),
-    array('is_active', 'sort_order')
-)->addIndex(
-    $installer->getIdxName('core_store', array('group_id')),
-    array('group_id')
-)->addForeignKey(
-    $installer->getFkName('core_store', 'group_id', 'core_store_group', 'group_id'),
-    'group_id',
-    $installer->getTable('core_store_group'),
-    'group_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
-)->addForeignKey(
-    $installer->getFkName('core_store', 'website_id', 'core_website', 'website_id'),
-    'website_id',
-    $installer->getTable('core_website'),
-    'website_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
-)->setComment(
-    'Stores'
 );
 $installer->getConnection()->createTable($table);
 
@@ -384,9 +196,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('core_layout_link', array('layout_update_id')),
     array('layout_update_id')
 )->addForeignKey(
-    $installer->getFkName('core_layout_link', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('core_layout_link', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -477,9 +289,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('core_translate', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('core_translate', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('core_translate', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -527,9 +339,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('design_change', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('design_change', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('design_change', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -620,9 +432,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('core_variable_value', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('core_variable_value', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('core_variable_value', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -770,78 +582,5 @@ $table = $installer->getConnection()->newTable(
     'Flag'
 );
 $installer->getConnection()->createTable($table);
-
-
-/**
- * Insert core websites
- */
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_website'),
-    array(
-        'website_id' => 0,
-        'code' => 'admin',
-        'name' => 'Admin',
-        'sort_order' => 0,
-        'default_group_id' => 0,
-        'is_default' => 0
-    )
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_website'),
-    array(
-        'website_id' => 1,
-        'code' => 'base',
-        'name' => 'Main Website',
-        'sort_order' => 0,
-        'default_group_id' => 1,
-        'is_default' => 1
-    )
-);
-
-/**
- * Insert core store groups
- */
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_store_group'),
-    array('group_id' => 0, 'website_id' => 0, 'name' => 'Default', 'root_category_id' => 0, 'default_store_id' => 0)
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_store_group'),
-    array(
-        'group_id' => 1,
-        'website_id' => 1,
-        'name' => 'Main Website Store',
-        'root_category_id' => 2,
-        'default_store_id' => 1
-    )
-);
-
-/**
- * Insert core stores
- */
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_store'),
-    array(
-        'store_id' => 0,
-        'code' => 'admin',
-        'website_id' => 0,
-        'group_id' => 0,
-        'name' => 'Admin',
-        'sort_order' => 0,
-        'is_active' => 1
-    )
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('core_store'),
-    array(
-        'store_id' => 1,
-        'code' => 'default',
-        'website_id' => 1,
-        'group_id' => 1,
-        'name' => 'Default Store View',
-        'sort_order' => 0,
-        'is_active' => 1
-    )
-);
 
 $installer->endSetup();

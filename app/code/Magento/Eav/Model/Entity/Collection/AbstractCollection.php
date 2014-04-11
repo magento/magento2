@@ -245,7 +245,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     {
         if ($entity instanceof \Magento\Eav\Model\Entity\AbstractEntity) {
             $this->_entity = $entity;
-        } elseif (is_string($entity) || $entity instanceof \Magento\Core\Model\Config\Element) {
+        } elseif (is_string($entity) || $entity instanceof \Magento\App\Config\Element) {
             $this->_entity = $this->_eavEntityFactory->create()->setType($entity);
         } else {
             throw new \Magento\Eav\Exception(__('Invalid entity supplied: %1', print_r($entity, 1)));
@@ -460,7 +460,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      *
      * If $attribute == '*' select all attributes
      *
-     * @param array|string|integer|\Magento\Core\Model\Config\Element $attribute
+     * @param array|string|integer|\Magento\App\Config\Element $attribute
      * @param bool|string $joinType flag for joining attribute
      * @return $this
      * @throws \Magento\Eav\Exception

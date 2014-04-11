@@ -41,13 +41,13 @@ class Website
     /**
      * Invalidate price indexer
      *
-     * @param \Magento\Core\Model\Resource\Website $subject
-     * @param \Magento\Core\Model\Resource\Website $result
-     * @return \Magento\Core\Model\Resource\Website
+     * @param \Magento\Store\Model\Resource\Website $subject
+     * @param \Magento\Store\Model\Resource\Website $result
+     * @return \Magento\Store\Model\Resource\Website
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(\Magento\Core\Model\Resource\Website $subject, $result)
+    public function afterDelete(\Magento\Store\Model\Resource\Website $subject, $result)
     {
         $this->_processor->markIndexerAsInvalid();
         return $result;

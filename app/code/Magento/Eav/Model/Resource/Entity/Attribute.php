@@ -47,7 +47,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     protected static $_entityAttributes = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -60,12 +60,12 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Type $eavEntityType
     ) {
         $this->_storeManager = $storeManager;
@@ -557,7 +557,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
             't1',
             't1',
             't1',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         if ($attribute->getFlatAddChildData()) {
             $joinCondition .= ' AND e.child_id = t1.entity_id';

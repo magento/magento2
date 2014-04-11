@@ -68,7 +68,7 @@ interface CustomerAddressServiceInterface
      * Removes an address by id.
      *
      * @param int $addressId
-     * @return void
+     * @return bool True if the address was deleted
      * @throws \Magento\Exception\NoSuchEntityException If no address can be found for the provided id.
      */
     public function deleteAddress($addressId);

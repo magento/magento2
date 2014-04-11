@@ -38,6 +38,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $_messages;
 
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
+
     protected function setUp()
     {
         parent::setUp();
@@ -51,6 +56,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         $customer = $service->authenticate('customer@example.com', 'password');
         $this->_customerSession->setCustomerDataAsLoggedIn($customer);
+
+        $this->_customerViewHelper = $this->_objectManager->create('Magento\Customer\Helper\View');
 
         $this->_messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Message\ManagerInterface'
@@ -123,5 +130,94 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->contains('You can buy this product only in increments of 5 for "Simple Product".'),
             \Magento\Message\MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     */
+    public function testSendAction()
+    {
+        $this->_objectManager->configure(
+            [
+                'Magento\Wishlist\Controller\Index' => [
+                    'arguments' => [
+                        'transportBuilder' => [
+                            'instance' => 'Magento\Wishlist\Controller\MockedTransportBuilder'
+                        ]
+                    ]
+                ],
+                'preferences' => [
+                    'Magento\Mail\TransportInterface' => 'Magento\Wishlist\Controller\MockedMailTransport'
+                ]
+            ]
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+
+        $request = [
+            'form_key' => $this->_objectManager->get('Magento\Data\Form\FormKey')->getFormKey(),
+            'emails' => 'test@tosend.com',
+            'message' => 'message',
+            'rss_url' => null // no rss
+        ];
+
+        $this->getRequest()->setPost($request);
+
+        $this->_objectManager->get('Magento\Registry')->register(
+            'wishlist',
+            $this->_objectManager->get('Magento\Wishlist\Model\Wishlist')->loadByCustomerId(1)
+        );
+        $this->dispatch('wishlist/index/send');
+
+        /** @var \Magento\Wishlist\Controller\MockedTransportBuilder $transportBuilder */
+        $transportBuilder = $this->_objectManager->get('Magento\Wishlist\Controller\MockedTransportBuilder');
+
+        $this->assertStringMatchesFormat(
+            '%AThank you, %A'
+            . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject()) . '%A',
+            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
+        );
+    }
+}
+
+class MockedTransportBuilder extends \Magento\Mail\Template\TransportBuilder
+{
+    /**
+     * @var \Magento\Mail\Message
+     */
+    protected $_sentMessage;
+
+    /**
+     * Reset object state
+     *
+     * @return $this
+     */
+    protected function reset()
+    {
+        $this->_sentMessage = $this->message;
+        parent::reset();
+    }
+
+    /**
+     * Returns message object with prepared data
+     *
+     * @return \Magento\Mail\Message|null
+     */
+    public function getSentMessage()
+    {
+        return $this->_sentMessage;
+    }
+}
+
+class MockedMailTransport implements \Magento\Mail\TransportInterface
+{
+    /**
+     * Mock of send a mail using transport
+     *
+     * @return void
+     */
+    public function sendMessage()
+    {
+        return;
     }
 }

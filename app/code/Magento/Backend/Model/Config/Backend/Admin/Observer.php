@@ -52,7 +52,7 @@ class Observer
     protected $_response;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -61,14 +61,14 @@ class Observer
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterfac $storeManager
      */
     public function __construct(
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Registry $coreRegistry,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\App\ResponseInterface $response,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendData = $backendData;
         $this->_coreRegistry = $coreRegistry;
@@ -93,9 +93,7 @@ class Observer
 
         $route = $this->_backendData->getAreaFrontName();
 
-        $this->_response
-            ->setRedirect($this->_storeManager->getStore()->getBaseUrl() . $route)
-            ->sendResponse();
+        $this->_response->setRedirect($this->_storeManager->getStore()->getBaseUrl() . $route)->sendResponse();
         exit(0);
     }
 }

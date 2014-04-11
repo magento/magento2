@@ -23,7 +23,7 @@
  */
 namespace Magento\Theme\Block\Html;
 
-use \Magento\Customer\Helper\Data;
+use Magento\Customer\Helper\Data;
 
 /**
  * Html page header block
@@ -51,7 +51,6 @@ class Header extends \Magento\View\Element\Template
      * @var \Magento\App\Http\Context
      */
     protected $httpContext;
-
 
     /**
      * @param \Magento\View\Element\Template\Context $context
@@ -107,7 +106,10 @@ class Header extends \Magento\View\Element\Template
     public function getLogoAlt()
     {
         if (empty($this->_data['logo_alt'])) {
-            $this->_data['logo_alt'] = $this->_storeConfig->getConfig('design/header/logo_alt');
+            $this->_data['logo_alt'] = $this->_scopeConfig->getValue(
+                'design/header/logo_alt',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $this->_data['logo_alt'];
     }
@@ -126,7 +128,10 @@ class Header extends \Magento\View\Element\Template
                     $this->escapeHtml($this->_customerSession->getCustomer()->getName())
                 );
             } else {
-                $this->_data['welcome'] = $this->_storeConfig->getConfig('design/header/welcome');
+                $this->_data['welcome'] = $this->_scopeConfig->getValue(
+                    'design/header/welcome',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
             }
         }
         return $this->_data['welcome'];
@@ -140,7 +145,10 @@ class Header extends \Magento\View\Element\Template
     protected function _getLogoUrl()
     {
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
-        $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
+        $storeLogoPath = $this->_scopeConfig->getValue(
+            'design/header/logo_src',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $path = $folderName . '/' . $storeLogoPath;
         $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\UrlInterface::URL_TYPE_MEDIA)) . $path;
 

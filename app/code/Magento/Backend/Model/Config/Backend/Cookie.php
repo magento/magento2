@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Cookie extends \Magento\Core\Model\Config\Value
+class Cookie extends \Magento\App\Config\Value
 {
     /**
      * @var string

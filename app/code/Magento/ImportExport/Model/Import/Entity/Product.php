@@ -406,7 +406,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -478,7 +478,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
      * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupColFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Import\Entity\Product\Type\Factory $productTypeFactory
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
      * @param \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory
@@ -509,7 +509,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
         \Magento\Customer\Model\Resource\Group\CollectionFactory $groupColFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Import\Entity\Product\Type\Factory $productTypeFactory,
         \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
         \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,
@@ -770,7 +770,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _initWebsites()
     {
-        /** @var $website \Magento\Core\Model\Website */
+        /** @var $website \Magento\Store\Model\Website */
         foreach ($this->_storeManager->getWebsites() as $website) {
             $this->_websiteCodeToId[$website->getCode()] = $website->getId();
             $this->_websiteCodeToStoreIds[$website->getCode()] = array_flip($website->getStoreCodes());
@@ -1659,7 +1659,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $valueArr = array(
                     'value_id' => $insertValue['value_id'],
-                    'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
+                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     'label' => $insertValue['label'],
                     'position' => $insertValue['position'],
                     'disabled' => $insertValue['disabled']

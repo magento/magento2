@@ -31,42 +31,38 @@ namespace Magento\Sales\Model\Order\Pdf;
 class Creditmemo extends AbstractPdf
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
-     */
-    protected $_localeResolver;
-
-    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\TranslateInterface $translate
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\App\Filesystem $filesystem
      * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @internal param \Magento\TranslateInterface $translate
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\App\Filesystem $filesystem,
         Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
@@ -75,7 +71,7 @@ class Creditmemo extends AbstractPdf
         parent::__construct(
             $paymentData,
             $string,
-            $coreStoreConfig,
+            $scopeConfig,
             $filesystem,
             $pdfConfig,
             $pdfTotalFactory,
@@ -115,28 +111,24 @@ class Creditmemo extends AbstractPdf
             'text' => $this->string->split(__('Total (ex)'), 12, true, true),
             'feed' => 330,
             'align' => 'right'
-            //'width' => 50,
         );
 
         $lines[0][] = array(
             'text' => $this->string->split(__('Discount'), 12, true, true),
             'feed' => 380,
             'align' => 'right'
-            //'width' => 50,
         );
 
         $lines[0][] = array(
             'text' => $this->string->split(__('Qty'), 12, true, true),
             'feed' => 445,
             'align' => 'right'
-            //'width' => 30,
         );
 
         $lines[0][] = array(
             'text' => $this->string->split(__('Tax'), 12, true, true),
             'feed' => 495,
             'align' => 'right'
-            //'width' => 45,
         );
 
         $lines[0][] = array(
@@ -183,8 +175,9 @@ class Creditmemo extends AbstractPdf
             $this->insertOrder(
                 $page,
                 $order,
-                $this->_coreStoreConfig->getConfigFlag(
+                $this->_scopeConfig->isSetFlag(
                     self::XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $order->getStoreId()
                 )
             );

@@ -70,7 +70,7 @@ class CustomerPlugin
      * @param CustomerAccountServiceInterface $subject
      * @param callable $updateCustomer
      * @param CustomerDetails $customerDetails
-     * @return void
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -79,9 +79,11 @@ class CustomerPlugin
         callable $updateCustomer,
         CustomerDetails $customerDetails
     ) {
-        $updateCustomer($customerDetails);
+        $result = $updateCustomer($customerDetails);
 
         $this->subscriberFactory->create()->updateSubscription($customerDetails->getCustomer()->getId());
+
+        return $result;
     }
 
     /**
@@ -90,9 +92,7 @@ class CustomerPlugin
      * @param CustomerAccountServiceInterface $subject
      * @param callable $deleteCustomer Function we are wrapping around
      * @param int $customerId Input to the function
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return bool
      */
     public function aroundDeleteCustomer(
         CustomerAccountServiceInterface $subject,
@@ -101,7 +101,7 @@ class CustomerPlugin
     ) {
         $customer = $subject->getCustomer($customerId);
 
-        $deleteCustomer($customerId);
+        $result = $deleteCustomer($customerId);
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
@@ -109,5 +109,7 @@ class CustomerPlugin
         if ($subscriber->getId()) {
             $subscriber->delete();
         }
+
+        return $result;
     }
 }

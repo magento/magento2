@@ -1,0 +1,185 @@
+///**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+// ==============================================
+// Grid mixins
+// ==============================================
+
+// You shouldn't need to touch this! Internal use only.
+@column-width: 1;
+@total-columns: 1;
+@gutter-width: 1;
+@grid-width: (@column-width*@total-columns) + (@gutter-width*(@total-columns - 1));
+
+.column-wrapper() {
+    width: 100%;
+}
+
+.inline-column-wrapper() when not (@using-ieclasses) {
+    letter-spacing: -0.31em;
+    *letter-spacing: normal;
+    word-spacing: -0.43em;
+}
+
+.inline-column-wrapper() when (@using-ieclasses) {
+    letter-spacing: -0.31em;
+    word-spacing: -0.43em;
+    .ie7 & {
+        letter-spacing: normal;
+    }
+}
+
+.column() {
+    float: left;
+    .column-gutter();
+}
+
+.column( @span ) when (@span = false) {
+    float: left;
+}
+
+.column( @span, @total-columns:@total-columns, @end-column:false ) when (isnumber(@span)) and (isnumber(@total-columns)) and not (isnumber(@end-column)) {
+    @showgutter: false;
+    .column(@showgutter);
+    .span( @span, @total-columns );
+}
+
+.column( @span, @total-columns:@total-columns, @end-column:false ) when (isnumber(@span)) and (isnumber(@total-columns)) and (@end-column = true) {
+    @showgutter: false;
+    .column(@showgutter);
+    .span( @span, @total-columns );
+    .end-column();
+}
+
+.column( @span, @end-column ) when (isnumber(@span)) and not (isnumber(@end-column)) {
+    @showgutter: false;
+    .column(@showgutter);
+    .span( @span );
+}
+
+.column( @span, @end-column ) when (isnumber(@span)) and ( @end-column = true ) {
+    @showgutter: false;
+    .column(@showgutter);
+    .span( @span );
+    .end-column();
+}
+
+.inline-column() {
+    .inline-block();
+    vertical-align: top;
+    letter-spacing: normal;
+    word-spacing: normal;
+    .column-gutter();
+}
+
+.inline-column( @span ) when (@span = false) {
+    .inline-block();
+    vertical-align: top;
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+.inline-column( @span, @total-columns:@total-columns, @end-column:false ) when (isnumber(@span)) and (isnumber(@total-columns)) {
+    @showgutter: false;
+    .inline-column(@showgutter);
+    .span( @span, @total-columns );
+}
+
+.inline-column( @span, @total-columns:@total-columns, @end-column:false ) when (isnumber(@span)) and (@end-column = true) {
+    @showgutter: false;
+    .inline-column(@showgutter);
+    .span( @span, @total-columns );
+    .inline-end-column();
+}
+
+.inline-column( @span, @end-column ) when not (isnumber(@end-column)) {
+    @showgutter: false;
+    .inline-column(@showgutter);
+    .span( @span );
+}
+
+.inline-column( @span, @end-column ) when (@end-column = true) {
+    @showgutter: false;
+    .inline-column(@showgutter);
+    .span( @span );
+    .inline-end-column();
+}
+
+.end-column() {
+    margin-right: 0;
+    float: right;
+}
+
+.inline-end-column() {
+    margin-right: 0;
+}
+
+.span( @span ) {
+    .column-width(@span, @total-columns);
+}
+
+.span( @span, @total-columns ) when (isnumber(@total-columns)) {
+    .column-width(@span, @total-columns);
+    .column-gutter(@total-columns);
+}
+
+.pre-pad( @span, @total-columns:@total-columns ) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+    padding-left: @calc-column-width;
+}
+
+.post-pad( @span, @total-columns:@total-columns ) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+    padding-right: @calc-column-width;
+}
+
+.pre-push( @span, @total-columns:@total-columns ) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+    margin-left: @calc-column-width;
+}
+
+.post-push( @span, @total-columns:@total-columns ) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)+@gutter-width) / @grid-width);
+    margin-right: @calc-column-width;
+}
+
+.post-push-end( @span, @total-columns:@total-columns ) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
+    margin-right: @calc-column-width;
+}
+
+.column-width(@span, @total-columns:@total-columns) {
+    @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)-@gutter-width) / @grid-width);
+    width: @calc-column-width;
+}
+
+.column-gutter(@total-columns:@total-columns, @end-column:false) when (@end-column) {
+    margin-right: 0;
+}
+
+.column-gutter(@total-columns:@total-columns, @end-column:false) when not (@end-column) {
+    @calc-gutter-width: 100%*(@gutter-width/@grid-width);
+    margin-right: @calc-gutter-width;
+}
+
+

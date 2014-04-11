@@ -97,7 +97,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_coreHelper;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -107,7 +107,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -117,9 +117,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -127,9 +127,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\App\ConfigInterface $config
+        \Magento\App\Config\ScopeConfigInterface $config
     ) {
         parent::__construct($context);
         $this->_configCacheType = $configCacheType;
@@ -243,7 +243,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getCountriesWithOptionalZip($asJson = false)
     {
         if (null === $this->_optZipCountries) {
-            $value = trim($this->_storeManager->getStore()->getConfig(self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH));
+            $value = trim(
+                $this->_config->getValue(
+                    self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
             $this->_optZipCountries = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         }
         if ($asJson) {
@@ -272,7 +277,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getCountriesWithStatesRequired($asJson = false)
     {
-        $value = trim($this->_storeManager->getStore()->getConfig(self::XML_PATH_STATES_REQUIRED));
+        $value = trim(
+            $this->_config->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {
             return $this->_coreHelper->jsonEncode($countryList);
@@ -287,7 +294,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isShowNonRequiredState()
     {
-        return (bool)$this->_storeManager->getStore()->getConfig(self::XML_PATH_DISPLAY_ALL_STATES);
+        return (bool)$this->_config->getValue(
+            self::XML_PATH_DISPLAY_ALL_STATES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

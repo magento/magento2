@@ -73,7 +73,7 @@ class Initial
     {
         list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
 
-        if (\Magento\BaseScopeInterface::SCOPE_DEFAULT == $scopeType) {
+        if (\Magento\App\ScopeInterface::SCOPE_DEFAULT == $scopeType) {
             return isset($this->_data[$scopeType]) ? $this->_data[$scopeType] : array();
         } elseif ($scopeCode) {
             return isset($this->_data[$scopeType][$scopeCode]) ? $this->_data[$scopeType][$scopeCode] : array();

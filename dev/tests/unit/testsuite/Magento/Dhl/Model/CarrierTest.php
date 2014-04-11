@@ -49,18 +49,18 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $coreStoreConfig = $this->getMockBuilder(
-            '\Magento\Core\Model\Store\Config'
+        $scopeConfig = $this->getMockBuilder(
+            '\Magento\App\Config\ScopeConfigInterface'
         )->setMethods(
-            array('getConfigFlag', 'getConfig')
+            array('isSetFlag', 'getValue')
         )->disableOriginalConstructor()->getMock();
-        $coreStoreConfig->expects($this->any())->method('getConfigFlag')->will($this->returnValue(true));
-        $coreStoreConfig->expects(
+        $scopeConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
+        $scopeConfig->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->will(
-            $this->returnCallback(array($this, 'coreStoreConfigGetConfig'))
+            $this->returnCallback(array($this, 'scopeConfiggetValue'))
         );
 
         // xml element factory
@@ -149,12 +149,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirectory));
         $storeManager = $this->getMockBuilder(
-            '\Magento\Core\Model\StoreManager'
+            '\Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->setMethods(
             array('getWebsite')
         )->getMock();
         $website = $this->getMockBuilder(
-            '\Magento\Core\Model\Website'
+            '\Magento\Store\Model\Website'
         )->disableOriginalConstructor()->setMethods(
             array('getBaseCurrencyCode', '__wakeup')
         )->getMock();
@@ -164,7 +164,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->_helper->getObject(
             'Magento\Dhl\Model\Carrier',
             array(
-                'coreStoreConfig' => $coreStoreConfig,
+                'scopeConfig' => $scopeConfig,
                 'xmlElFactory' => $xmlElFactory,
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
@@ -177,11 +177,11 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Callback function, emulates getConfig function
+     * Callback function, emulates getValue function
      * @param $path
      * @return null|string
      */
-    public function coreStoreConfigGetConfig($path)
+    public function scopeConfiggetValue($path)
     {
         $pathMap = array(
             'carriers/dhl/shipment_days' => 'Mon,Tue,Wed,Thu,Fri,Sat',

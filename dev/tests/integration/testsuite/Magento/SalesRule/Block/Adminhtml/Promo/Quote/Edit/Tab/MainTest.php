@@ -51,7 +51,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             $objectManager->create('Magento\SalesRule\Model\Rule')
         );
 
-        $layout = $objectManager->create('Magento\Core\Model\Layout');
+        $layout = $objectManager->create('Magento\View\Layout');
         $block = $layout->addBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main');
         $prepareFormMethod = new \ReflectionMethod(
             'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main',
@@ -66,5 +66,13 @@ class MainTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($element);
             $this->assertNotEmpty($element->getDateFormat());
         }
+
+        // assert Customer Groups field
+        $customerGroupsField = $form->getElement('customer_group_ids');
+        $customerGroupService = $objectManager->create('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
+        $objectConverter = $objectManager->get('Magento\Convert\Object');
+        $groups = $customerGroupService->getGroups();
+        $expected = $objectConverter->toOptionArray($groups, 'id', 'code');
+        $this->assertEquals($expected, $customerGroupsField->getValues());
     }
 }

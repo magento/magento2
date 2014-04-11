@@ -7,7 +7,6 @@ app/code/Magento/Backend/Model/Config/Structure/Converter.php
 app/code/Magento/Backend/Model/Menu/Config.php
 app/code/Magento/Backend/Block/Widget/Grid
 app/code/Magento/Backend/view
-app/code/Magento/Core/Model/Config/Element.php
 app/code/Magento/ConfigurableProduct/view
 app/code/Magento/DesignEditor/view
 app/code/Magento/Email/view
@@ -34,9 +33,10 @@ dev/tests/static/testsuite/Magento/Test/Legacy/_files
 dev/tests/unit/testsuite/Magento/Catalog/Model/Resource/Product/Option/MysqlStub.php
 dev/tests/unit/testsuite/Magento/Catalog/Model/Resource/Product/Option/ValueTest.php
 dev/tests/unit/testsuite/Magento/Core/Model/Resource/Db/AbstractTest.php
-dev/tests/unit/testsuite/Magento/Core/Model/Session/ConfigTest.php
+dev/tests/unit/testsuite/Magento/Session/ConfigTest.php
 dev/tests/unit/testsuite/Magento/View/TemplateEngine/_files
 dev/tools/Magento/Tools/I18n/Zend
+lib/Magento/App/Config/Element.php
 lib/Magento/Archive
 lib/Magento/Autoload/Simple.php
 lib/Magento/Backup

@@ -95,9 +95,9 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory
@@ -110,19 +110,19 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
     protected $_logAdapterFactory;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         array $data = array()
     ) {
         parent::__construct($data);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_rateErrorFactory = $rateErrorFactory;
         $this->_logAdapterFactory = $logAdapterFactory;
     }
@@ -139,7 +139,11 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
             return false;
         }
         $path = 'carriers/' . $this->_code . '/' . $field;
-        return $this->_coreStoreConfig->getConfig($path, $this->getStore());
+        return $this->_scopeConfig->getValue(
+            $path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStore()
+        );
     }
 
     /**
@@ -154,7 +158,11 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
             return false;
         }
         $path = 'carriers/' . $this->_code . '/' . $field;
-        return $this->_coreStoreConfig->getConfigFlag($path, $this->getStore());
+        return $this->_scopeConfig->isSetFlag(
+            $path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStore()
+        );
     }
 
     /**
@@ -231,10 +239,12 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
 
         if ($countryShipper == self::USA_COUNTRY_ID && $countryRecipient == self::USA_COUNTRY_ID) {
             $direction = 'within_us';
-        } else if ($countryShipper == self::USA_COUNTRY_ID && $countryRecipient != self::USA_COUNTRY_ID) {
-            $direction = 'from_us';
         } else {
-            return $containersAll;
+            if ($countryShipper == self::USA_COUNTRY_ID && $countryRecipient != self::USA_COUNTRY_ID) {
+                $direction = 'from_us';
+            } else {
+                return $containersAll;
+            }
         }
 
         foreach ($containersFilter as $dataItem) {

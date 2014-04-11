@@ -45,11 +45,6 @@ class Observer
     protected $_catalogCategory;
 
     /**
-     * @var \Magento\App\ReinitableConfigInterface
-     */
-    protected $_coreConfig;
-
-    /**
      * Index indexer
      *
      * @var \Magento\Index\Model\Indexer
@@ -66,7 +61,7 @@ class Observer
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -102,26 +97,24 @@ class Observer
      * @param \Magento\Catalog\Model\UrlFactory $urlFactory
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
      * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Indexer\Category\Flat\State $categoryFlatState
-     * @param \Magento\App\ReinitableConfigInterface $coreConfig
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
      */
     public function __construct(
         \Magento\Catalog\Model\UrlFactory $urlFactory,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Category $catalogLayer,
         \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
-        \Magento\App\ReinitableConfigInterface $coreConfig,
         \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
     ) {
         $this->_urlFactory = $urlFactory;
@@ -130,7 +123,6 @@ class Observer
         $this->_storeManager = $storeManager;
         $this->_catalogLayer = $catalogLayer;
         $this->_indexIndexer = $indexIndexer;
-        $this->_coreConfig = $coreConfig;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogData = $catalogData;
         $this->categoryFlatConfig = $categoryFlatState;

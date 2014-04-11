@@ -39,7 +39,7 @@ class CollectionFilter implements CollectionFilterInterface
     protected $helper;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -51,13 +51,13 @@ class CollectionFilter implements CollectionFilterInterface
     /**
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\CatalogSearch\Helper\Data $helper
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      */
     public function __construct(
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\CatalogSearch\Helper\Data $helper,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility
     ) {
         $this->catalogConfig = $catalogConfig;

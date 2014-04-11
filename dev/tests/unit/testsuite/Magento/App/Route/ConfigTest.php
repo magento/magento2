@@ -84,4 +84,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
+
+    public function testGetRouteByFrontName()
+    {
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'areaCode::RoutesConfig'
+        )->will(
+            $this->returnValue(serialize(array('routerCode' => ['frontName' => 'routerName'])))
+        );
+        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
+    }
+
+    public function testGetModulesByFrontName()
+    {
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'areaCode::RoutesConfig'
+        )->will(
+            $this->returnValue(
+                serialize(array('routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]))
+            )
+        );
+        $this->assertEquals(['Module1'], $this->_config->getModulesByFrontName('routerName'));
+    }
 }

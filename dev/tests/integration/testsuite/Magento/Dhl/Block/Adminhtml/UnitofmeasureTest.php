@@ -33,7 +33,7 @@ class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Dhl\Block\Adminhtml\Unitofmeasure */
         $block = $layout->createBlock('Magento\Dhl\Block\Adminhtml\Unitofmeasure');

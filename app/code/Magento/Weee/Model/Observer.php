@@ -94,13 +94,13 @@ class Observer extends \Magento\Model\AbstractModel
      */
     public function setWeeeRendererInForm(\Magento\Event\Observer $observer)
     {
-        //adminhtml_catalog_product_edit_prepare_form
-
+        /** @var \Magento\Data\Form $form */
         $form = $observer->getEvent()->getForm();
 
         $attributes = $this->_weeeTax->getWeeeAttributeCodes(true);
         foreach ($attributes as $code) {
-            if ($weeeTax = $form->getElement($code)) {
+            $weeeTax = $form->getElement($code);
+            if ($weeeTax) {
                 $weeeTax->setRenderer($this->_layout->createBlock('Magento\Weee\Block\Renderer\Weee\Tax'));
             }
         }
@@ -242,9 +242,7 @@ class Observer extends \Magento\Model\AbstractModel
      */
     public function updateProductOptions(\Magento\Event\Observer $observer)
     {
-        /* @var $helper \Magento\Weee\Helper\Data */
-        $helper = $this->_weeeData;
-        if (!$helper->isEnabled()) {
+        if (!$this->_weeeData->isEnabled()) {
             return $this;
         }
 
@@ -256,11 +254,11 @@ class Observer extends \Magento\Model\AbstractModel
             return $this;
         }
 
-        $options['oldPlusDisposition'] = $helper->getOriginalAmount($_product);
-        $options['plusDisposition'] = $helper->getAmount($_product);
+        $options['oldPlusDisposition'] = $this->_weeeData->getOriginalAmount($_product);
+        $options['plusDisposition'] = $this->_weeeData->getAmount($_product);
 
         // Exclude Weee amount from excluding tax amount
-        if (!$helper->typeOfDisplay($_product, array(Tax::DISPLAY_INCL, Tax::DISPLAY_INCL_DESCR))) {
+        if (!$this->_weeeData->typeOfDisplay($_product, array(Tax::DISPLAY_INCL, Tax::DISPLAY_INCL_DESCR))) {
             $options['exclDisposition'] = true;
         }
 
@@ -277,9 +275,7 @@ class Observer extends \Magento\Model\AbstractModel
      */
     public function updateBundleProductOptions(\Magento\Event\Observer $observer)
     {
-        /* @var $weeeHelper \Magento\Weee\Helper\Data */
-        $weeeHelper = $this->_weeeData;
-        if (!$weeeHelper->isEnabled()) {
+        if (!$this->_weeeData->isEnabled()) {
             return $this;
         }
 
@@ -294,14 +290,14 @@ class Observer extends \Magento\Model\AbstractModel
             return $this;
         }
 
-        $amount = $weeeHelper->getAmount($selection);
-        $attributes = $weeeHelper->getProductWeeeAttributes($_product, null, null, null, $weeeHelper->isTaxable());
-        $amountInclTaxes = $weeeHelper->getAmountInclTaxes($attributes);
+        $amount = $this->_weeeData->getAmount($selection);
+        $attributes = $this->_weeeData->getProductWeeeAttributes($_product, null, null, null, $this->_weeeData->isTaxable());
+        $amountInclTaxes = $this->_weeeData->getAmountInclTaxes($attributes);
         $taxes = $amountInclTaxes - $amount;
         $options['plusDisposition'] = $amount;
         $options['plusDispositionTax'] = $taxes < 0 ? 0 : $taxes;
         // Exclude Weee amount from excluding tax amount
-        if (!$weeeHelper->typeOfDisplay($_product, array(0, 1, 4))) {
+        if (!$this->_weeeData->typeOfDisplay($_product, array(0, 1, 4))) {
             $options['exclDisposition'] = true;
         }
 

@@ -276,4 +276,99 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->setRouteName('test')->setControllerName('controller')->setActionName('action');
         $this->assertEquals('test/controller/action', $this->_model->getFullActionName('/'));
     }
+
+    public function testInitForward()
+    {
+        $expected = $this->_initForward();
+        $this->assertEquals($expected, $this->_model->getBeforeForwardInfo());
+    }
+
+    public function testGetBeforeForwardInfo()
+    {
+        $beforeForwardInfo = $this->_initForward();
+        $this->assertNull($this->_model->getBeforeForwardInfo('not_existing_forward_info_key'));
+        foreach (array_keys($beforeForwardInfo) as $key) {
+            $this->assertEquals($beforeForwardInfo[$key], $this->_model->getBeforeForwardInfo($key));
+        }
+        $this->assertEquals($beforeForwardInfo, $this->_model->getBeforeForwardInfo());
+    }
+
+    /**
+     * Initialize $_beforeForwardInfo
+     *
+     * @return array Contents of $_beforeForwardInfo
+     */
+    protected function _initForward()
+    {
+        $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
+        $beforeForwardInfo = [
+            'params' => ['one' => '111', 'two' => '222'],
+            'action_name' => 'ActionName',
+            'controller_name' => 'ControllerName',
+            'module_name' => 'ModuleName',
+            'route_name' => 'RouteName'
+        ];
+        $this->_model->setParams($beforeForwardInfo['params']);
+        $this->_model->setActionName($beforeForwardInfo['action_name']);
+        $this->_model->setControllerName($beforeForwardInfo['controller_name']);
+        $this->_model->setModuleName($beforeForwardInfo['module_name']);
+        $this->_model->setRouteName($beforeForwardInfo['route_name']);
+        $this->_model->initForward();
+        return $beforeForwardInfo;
+    }
+
+    public function testIsAjax()
+    {
+        $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
+
+        $this->assertFalse($this->_model->isAjax());
+
+        $this->_model->clearParams();
+        $this->_model->setParam('ajax', 1);
+        $this->assertTrue($this->_model->isAjax());
+
+        $this->_model->clearParams();
+        $this->_model->setParam('isAjax', 1);
+        $this->assertTrue($this->_model->isAjax());
+
+        $this->_model->clearParams();
+        $server = $_SERVER;
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $this->assertTrue($this->_model->isAjax());
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'NotXMLHttpRequest';
+        $this->assertFalse($this->_model->isAjax());
+        $_SERVER = $server;
+    }
+
+    public function testSetPost()
+    {
+        $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
+
+        $post = ['one' => '111', 'two' => '222'];
+        $this->_model->setPost($post);
+        $this->assertEquals($post, $_POST);
+
+        $this->_model->setPost([]);
+        $this->assertEmpty($_POST);
+
+        $_POST = ['post_var' => 'post_value'];
+        $this->_model->setPost('post_var 2', 'post_value 2');
+        $this->assertEquals(['post_var' => 'post_value', 'post_var 2' => 'post_value 2'], $_POST);
+    }
+
+    public function testGetFiles()
+    {
+        $this->_model = new Request($this->_routerListMock, $this->_infoProcessorMock);
+
+        $_FILES = ['one' => '111', 'two' => '222'];
+        $this->assertEquals($_FILES, $this->_model->getFiles());
+
+        foreach ($_FILES as $key => $value) {
+            $this->assertEquals($value, $this->_model->getFiles($key));
+        }
+
+        $this->assertNull($this->_model->getFiles('no_such_file'));
+
+        $this->assertEquals('default', $this->_model->getFiles('no_such_file', 'default'));
+    }
 }

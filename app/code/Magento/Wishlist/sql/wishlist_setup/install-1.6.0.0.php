@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 
 $installer->startSetup();
 
@@ -154,9 +154,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('wishlist_item', 'store_id'),
     'store_id'
 )->addForeignKey(
-    $installer->getFkName('wishlist_item', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('wishlist_item', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

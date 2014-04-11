@@ -894,7 +894,7 @@ abstract class AbstractType
      * Retrieve store filter for associated products
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return int|\Magento\Core\Model\Store
+     * @return int|\Magento\Store\Model\Store
      */
     public function getStoreFilter($product)
     {
@@ -905,7 +905,7 @@ abstract class AbstractType
     /**
      * Set store filter for associated products
      *
-     * @param $store int|\Magento\Core\Model\Store
+     * @param $store int|\Magento\Store\Model\Store
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */

@@ -29,7 +29,7 @@ use Magento\App\Helper\Context;
 use Magento\App\ViewInterface;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Converter;
 use Magento\Registry;
@@ -78,7 +78,7 @@ class Composite extends \Magento\App\Helper\AbstractHelper
     protected $_converter;
 
     /**
-     * @param Context $context
+     * @param \Magento\App\Helper\Context $context
      * @param ProductFactory $productFactory
      * @param StoreManagerInterface $storeManager
      * @param Product $catalogProduct

@@ -40,7 +40,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFormInstance($args = array())
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Backend\Block\Urlrewrite\Cms\Page\Edit\Form */
         $block = $layout->createBlock(
@@ -115,7 +115,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Core\Model\Store\Exception
+     * @expectedException \Magento\Store\Model\Exception
      * @expectedExceptionMessage Chosen cms page does not associated with any website.
      */
     public function testGetEntityStoresProductStoresException()

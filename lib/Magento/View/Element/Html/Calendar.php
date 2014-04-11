@@ -109,10 +109,21 @@ class Calendar extends \Magento\View\Element\Template
         $this->assign('pm', $this->encoder->encode(\Zend_Locale_Data::getContent($localeCode, 'pm')));
 
         // get first day of week and weekend days
-        $this->assign('firstDay', (int)$this->_storeConfig->getConfig('general/locale/firstday'));
+        $this->assign(
+            'firstDay',
+            (int)$this->_scopeConfig->getValue(
+                'general/locale/firstday',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         $this->assign(
             'weekendDays',
-            $this->encoder->encode((string)$this->_storeConfig->getConfig('general/locale/weekend'))
+            $this->encoder->encode(
+                (string)$this->_scopeConfig->getValue(
+                    'general/locale/weekend',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )
         );
 
         // define default format and tooltip format
@@ -154,7 +165,7 @@ class Calendar extends \Magento\View\Element\Template
     /**
      * Getter for store timestamp based on store timezone settings
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return int
      */
     public function getStoreTimestamp($store = null)

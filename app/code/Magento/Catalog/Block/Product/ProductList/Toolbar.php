@@ -174,7 +174,7 @@ class Toolbar extends \Magento\View\Element\Template
     protected function _construct()
     {
         parent::_construct();
-        $this->_orderField  = $this->_productListHelper->getDefaultSortField();
+        $this->_orderField = $this->_productListHelper->getDefaultSortField();
         $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
         $this->_availableMode = $this->_productListHelper->getAvailableViewMode();
     }
@@ -547,9 +547,9 @@ class Toolbar extends \Magento\View\Element\Template
      */
     public function getDefaultPerPageValue()
     {
-        if ($this->getCurrentMode() == 'list' && $default = $this->getDefaultListPerPage()) {
+        if ($this->getCurrentMode() == 'list' && ($default = $this->getDefaultListPerPage())) {
             return $default;
-        } elseif ($this->getCurrentMode() == 'grid' && $default = $this->getDefaultGridPerPage()) {
+        } elseif ($this->getCurrentMode() == 'grid' && ($default = $this->getDefaultGridPerPage())) {
             return $default;
         }
         return $this->_productListHelper->getDefaultLimitPerPageValue($this->getCurrentMode());
@@ -662,12 +662,25 @@ class Toolbar extends \Magento\View\Element\Template
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
-            $pagerBlock->setUseContainer(false)
-                ->setShowPerPage(false)
-                ->setShowAmounts(false)
-                ->setFrameLength($this->_storeConfig->getConfig('design/pagination/pagination_frame'))
-                ->setJump($this->_storeConfig->getConfig('design/pagination/pagination_frame_skip'))
-                ->setCollection($this->getCollection());
+            $pagerBlock->setUseContainer(
+                false
+            )->setShowPerPage(
+                false
+            )->setShowAmounts(
+                false
+            )->setFrameLength(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setJump(
+                $this->_scopeConfig->getValue(
+                    'design/pagination/pagination_frame_skip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->setCollection(
+                $this->getCollection()
+            );
 
             return $pagerBlock->toHtml();
         }

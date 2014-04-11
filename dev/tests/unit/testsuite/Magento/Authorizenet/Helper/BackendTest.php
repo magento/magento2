@@ -48,7 +48,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->_orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', array('create'), array(), '', false);
         $this->_model = new Backend(
             $contextMock,
-            $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
+            $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false),
             $this->_orderFactory,
             $this->_urlBuilder
         );

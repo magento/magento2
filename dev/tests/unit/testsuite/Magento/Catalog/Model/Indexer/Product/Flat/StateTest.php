@@ -50,11 +50,11 @@ class StateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $configMock = $this->getMock('Magento\Core\Model\Store\ConfigInterface', array(), array(), '', false);
+        $configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Model\Indexer\Product\Flat\State',
             array(
-                'storeConfig' => $configMock,
+                'scopeConfig' => $configMock,
                 'flatIndexer' => $indexerMock,
                 'flatIndexerHelper' => $flatIndexerHelperMock,
                 false

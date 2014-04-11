@@ -36,8 +36,8 @@ class ReviewRenderer extends \Magento\View\Element\Template implements ReviewRen
      * @var array
      */
     protected $_availableTemplates = array(
-        self::DEFAULT_REVIEW => 'helper/summary.phtml',
-        self::SHORT_REVIEW => 'helper/summary_short.phtml'
+        self::FULL_VIEW => 'helper/summary.phtml',
+        self::SHORT_VIEW => 'helper/summary_short.phtml'
     );
 
     /**
@@ -72,12 +72,16 @@ class ReviewRenderer extends \Magento\View\Element\Template implements ReviewRen
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
-        $templateType = self::DEFAULT_REVIEW,
+        $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
+
+        if (!$product->getRatingSummary() && !$displayIfNoReviews) {
+            return '';
+        }
         // pick template among available
         if (empty($this->_availableTemplates[$templateType])) {
-            $templateType = self::DEFAULT_REVIEW;
+            $templateType = self::DEFAULT_VIEW;
         }
         $this->setTemplate($this->_availableTemplates[$templateType]);
 

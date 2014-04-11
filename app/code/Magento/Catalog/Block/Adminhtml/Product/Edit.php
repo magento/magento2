@@ -113,19 +113,21 @@ class Edit extends \Magento\Backend\Block\Widget
     protected function _prepareLayout()
     {
         if (!$this->getRequest()->getParam('popup')) {
-            $this->addChild(
-                'back_button',
-                'Magento\Backend\Block\Widget\Button',
-                array(
-                    'label' => __('Back'),
-                    'title' => __('Back'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl(
-                        'catalog/*/',
-                        array('store' => $this->getRequest()->getParam('store', 0))
-                    ) . '\')',
-                    'class' => 'action-back'
-                )
-            );
+            if ($this->getToolbar()) {
+                $this->getToolbar()->addChild(
+                    'back_button',
+                    'Magento\Backend\Block\Widget\Button',
+                    array(
+                        'label' => __('Back'),
+                        'title' => __('Back'),
+                        'onclick' => 'setLocation(\'' . $this->getUrl(
+                            'catalog/*/',
+                            array('store' => $this->getRequest()->getParam('store', 0))
+                        ) . '\')',
+                        'class' => 'action-back'
+                    )
+                );
+            }
         } else {
             $this->addChild(
                 'back_button',
@@ -145,8 +147,8 @@ class Edit extends \Magento\Backend\Block\Widget
             );
         }
 
-        if (!$this->getProduct()->isReadonly()) {
-            $this->addChild(
+        if (!$this->getProduct()->isReadonly() && $this->getToolbar()) {
+            $this->getToolbar()->addChild(
                 'save-split-button',
                 'Magento\Backend\Block\Widget\Button\SplitButton',
                 array(

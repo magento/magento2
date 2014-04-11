@@ -39,7 +39,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         /* Mock Config model */
         $config = $this->getMockBuilder(
-            'Magento\App\ConfigInterface'
+            'Magento\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->setMethods(
             array('getValue', 'setValue', 'isSetFlag')
         )->getMock();

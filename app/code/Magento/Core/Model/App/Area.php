@@ -75,7 +75,7 @@ class Area implements \Magento\App\AreaInterface
     /**
      * Application config
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -94,9 +94,9 @@ class Area implements \Magento\App\AreaInterface
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Logger
@@ -111,7 +111,7 @@ class Area implements \Magento\App\AreaInterface
     protected $_design;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -124,12 +124,12 @@ class Area implements \Magento\App\AreaInterface
      * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\TranslateInterface $translator
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\ObjectManager\ConfigLoader $diConfigLoader
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\Design $design
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Area\DesignExceptions $designExceptions
      * @param string $areaCode
      */
@@ -137,16 +137,16 @@ class Area implements \Magento\App\AreaInterface
         \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\TranslateInterface $translator,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\ObjectManager $objectManager,
         \Magento\App\ObjectManager\ConfigLoader $diConfigLoader,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\Design $design,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Area\DesignExceptions $designExceptions,
         $areaCode
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_code = $areaCode;
         $this->_config = $config;
         $this->_objectManager = $objectManager;

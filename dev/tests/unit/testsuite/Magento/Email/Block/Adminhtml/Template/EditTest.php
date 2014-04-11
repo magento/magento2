@@ -71,7 +71,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_registryMock = $this->getMock('Magento\Registry', array(), array(), '', false, false);
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
         $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false, false);
         $menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false, false);

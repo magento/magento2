@@ -74,7 +74,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_shell = new \Magento\Shell(new \Magento\OSInfo());
+        $this->_shell = new \Magento\Shell(new \Magento\Shell\CommandRenderer());
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 

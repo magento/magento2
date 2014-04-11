@@ -164,30 +164,38 @@ class Settlement extends \Magento\Model\AbstractModel
     protected $_tmpDirectory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $data
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
+    protected $_scopeConfig;
+
+    /**
+    * @param \Magento\Model\Context $context
+    * @param \Magento\Registry $registry
+    * @param \Magento\App\Filesystem $filesystem
+    * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+    * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+    * @param \Magento\Model\Resource\AbstractResource $resource
+    * @param \Magento\Data\Collection\Db $resourceCollection
+    * @param array $data
+    */
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::SYS_TMP_DIR);
         $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -460,17 +468,41 @@ class Settlement extends \Magento\Model\AbstractModel
         $configs = array();
         $uniques = array();
         foreach ($this->_storeManager->getStores() as $store) {
-            /*@var $store \Magento\Core\Model\Store */
-            $active = (bool)$store->getConfig('paypal/fetch_reports/active');
+            /*@var $store \Magento\Store\Model\Store */
+            $active = $this->_scopeConfig->isSetFlag(
+                'paypal/fetch_reports/active',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
             if (!$active && $automaticMode) {
                 continue;
             }
             $cfg = array(
-                'hostname' => $store->getConfig('paypal/fetch_reports/ftp_ip'),
-                'path' => $store->getConfig('paypal/fetch_reports/ftp_path'),
-                'username' => $store->getConfig('paypal/fetch_reports/ftp_login'),
-                'password' => $store->getConfig('paypal/fetch_reports/ftp_password'),
-                'sandbox' => $store->getConfig('paypal/fetch_reports/ftp_sandbox')
+                'hostname' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_ip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'path' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_path',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'username' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_login',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'password' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_password',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'sandbox' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_sandbox',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                )
             );
             if (empty($cfg['username']) || empty($cfg['password'])) {
                 continue;

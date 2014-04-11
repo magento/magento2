@@ -43,7 +43,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->setArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
-        $layout = $objectManager->create('Magento\Core\Model\Layout');
+        $layout = $objectManager->create('Magento\View\Layout');
         $formBlock = $layout->addBlock('Magento\Backend\Block\Widget\Form');
         $fieldSet = $objectManager->create('Magento\Data\Form\Element\Fieldset');
         $arguments = array(

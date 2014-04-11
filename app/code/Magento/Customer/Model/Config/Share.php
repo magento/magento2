@@ -32,7 +32,7 @@ namespace Magento\Customer\Model\Config;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Share extends \Magento\Core\Model\Config\Value implements \Magento\Option\ArrayInterface
+class Share extends \Magento\App\Config\Value implements \Magento\Option\ArrayInterface
 {
     /**
      * Xml config path to customers sharing scope value
@@ -49,25 +49,20 @@ class Share extends \Magento\Core\Model\Config\Value implements \Magento\Option\
     const SHARE_WEBSITE = 1;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
-
-    /**
      * @var \Magento\Customer\Model\Resource\Customer
      */
     protected $_customerResource;
+
+    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
 
     /**
      * Constructor
      *
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -76,17 +71,16 @@ class Share extends \Magento\Core\Model\Config\Value implements \Magento\Option\
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_storeManager = $storeManager;
         $this->_customerResource = $customerResource;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -106,7 +100,10 @@ class Share extends \Magento\Core\Model\Config\Value implements \Magento\Option\
      */
     public function isWebsiteScope()
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_CUSTOMER_ACCOUNT_SHARE) == self::SHARE_WEBSITE;
+        return $this->_config->getValue(
+            self::XML_PATH_CUSTOMER_ACCOUNT_SHARE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == self::SHARE_WEBSITE;
     }
 
     /**

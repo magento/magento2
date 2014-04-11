@@ -297,7 +297,10 @@ class Option extends Widget
         if (!$this->_values || $this->getIgnoreCaching()) {
             $showPrice = $this->getCanReadPrice();
             $values = array();
-            $scope = (int)$this->_storeManager->getStore()->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE);
+            $scope = (int)$this->_scopeConfig->getValue(
+                \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             foreach ($optionsArr as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
 
@@ -352,7 +355,7 @@ class Option extends Widget
                             $value['optionValues'][$i]['scopeTitleDisabled'] = is_null(
                                 $_value->getStoreTitle()
                             ) ? 'disabled' : null;
-                            if ($scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE) {
+                            if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
                                 $value['optionValues'][$i]['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
                                     $_value->getOptionId(),
                                     'price',
@@ -377,8 +380,8 @@ class Option extends Widget
                     $value['file_extension'] = $option->getFileExtension();
                     $value['image_size_x'] = $option->getImageSizeX();
                     $value['image_size_y'] = $option->getImageSizeY();
-                    if ($this->getProduct()->getStoreId() != '0' &&
-                        $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE
+                    if ($this->getProduct()->getStoreId() != '0'
+                        && $scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
                     ) {
                         $value['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
                             $option->getOptionId(),
@@ -417,36 +420,14 @@ class Option extends Widget
             $selectNameHtml = '[values][' . $select_id . ']';
             $selectIdHtml = 'select_' . $select_id . '_';
         }
-        $useDefault = '<div class="field-service">' .
-            '<label for="' .
-            $this->getFieldId() .
-            '_' .
-            $id .
-            '_' .
-            $selectIdHtml .
-            $name .
-            '" class="use-default">' .
-            '<input value="1" type="checkbox" class="use-default-control"' .
-            'name="' .
-            $this->getFieldName() .
-            '[' .
-            $id .
-            ']' .
-            $selectNameHtml .
-            '[scope][' .
-            $name .
-            ']"' .
-            'id="' .
-            $this->getFieldId() .
-            '_' .
-            $id .
-            '_' .
-            $selectIdHtml .
-            $name .
-            '_use_default"' .
-            $checkedHtml .
-            ' /><span class="use-default-label">' .
-            __('Use Default') . '</span></label></div>';
+        $useDefault =
+            '<div class="field-service">' . '<label for="' . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml
+            . $name . '" class="use-default">' . '<input value="1" type="checkbox" class="use-default-control"'
+            . 'name="' . $this->getFieldName() . '[' . $id . ']' . $selectNameHtml . '[scope][' . $name . ']"' . 'id="'
+            . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '_use_default"' . $checkedHtml
+            . ' /><span class="use-default-label">' . __(
+                'Use Default'
+            ) . '</span></label></div>';
 
         return $useDefault;
     }

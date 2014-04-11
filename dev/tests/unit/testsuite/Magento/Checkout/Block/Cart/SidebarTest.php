@@ -38,7 +38,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $childBlock = $this->getMock('Magento\View\Element\AbstractBlock', array(), array(), '', false);
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = $this->getMock(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('createBlock', 'getChildName', 'setChild'),
             array(),
             '',

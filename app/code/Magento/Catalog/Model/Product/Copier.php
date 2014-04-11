@@ -68,7 +68,7 @@ class Copier
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
         $duplicate->setId(null);
-        $duplicate->setStoreId(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
+        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
         $this->copyConstructor->build($product, $duplicate);
         $duplicate->save();

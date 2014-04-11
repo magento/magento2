@@ -33,9 +33,9 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Message\ManagerInterface
@@ -74,7 +74,7 @@ class Observer
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\GoogleShopping\Model\Flag $flag
      */
@@ -82,14 +82,14 @@ class Observer
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Message\ManagerInterface $messageManager,
         \Magento\GoogleShopping\Model\Flag $flag
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_operationsFactory = $operationsFactory;
         $this->_inboxFactory = $inboxFactory;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->messageManager = $messageManager;
         $this->_flag = $flag;
     }
@@ -148,7 +148,7 @@ class Observer
         }
 
         foreach ($items as $item) {
-            if (!$this->_coreStoreConfig->getConfigFlag('google/googleshopping/observed', $item->getStoreId())) {
+            if (!$this->_scopeConfig->isSetFlag('google/googleshopping/observed', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $item->getStoreId())) {
                 $items->removeItemByKey($item->getId());
             }
         }

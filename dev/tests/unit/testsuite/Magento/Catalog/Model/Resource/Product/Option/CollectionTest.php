@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $optionsFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -92,7 +92,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->resourceMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Option',
             array('getReadConnection', '__wakeup', 'getMainTable', 'getTable'),

@@ -58,7 +58,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Core\Model\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMock;
 
@@ -68,7 +68,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->layoutMock = $this->getMockBuilder(
-            'Magento\Core\Model\Layout'
+            'Magento\View\Layout'
         )->disableOriginalConstructor()->getMock();
 
         $contextMock = $this->getMockBuilder('Magento\App\Action\Context')->disableOriginalConstructor()->getMock();

@@ -106,9 +106,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('core_url_rewrite', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('core_url_rewrite', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('core_url_rewrite', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

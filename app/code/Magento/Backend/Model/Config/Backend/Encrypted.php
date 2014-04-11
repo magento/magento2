@@ -27,7 +27,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Encrypted extends \Magento\Core\Model\Config\Value implements \Magento\App\Config\Data\ProcessorInterface
+class Encrypted extends \Magento\App\Config\Value implements \Magento\App\Config\Data\ProcessorInterface
 {
     /**
      * @var \Magento\Encryption\EncryptorInterface
@@ -37,8 +37,7 @@ class Encrypted extends \Magento\Core\Model\Config\Value implements \Magento\App
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -47,15 +46,14 @@ class Encrypted extends \Magento\Core\Model\Config\Value implements \Magento\App
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_encryptor = $encryptor;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

@@ -37,7 +37,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
         $block = $layout->createBlock(

@@ -74,7 +74,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Store manager to emulate design
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -95,9 +95,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Template factory
@@ -116,10 +116,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Filter\FilterManager $filterManager
      * @param array $data
@@ -129,10 +129,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\View\DesignInterface $design,
         \Magento\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Filter\FilterManager $filterManager,
         array $data = array()
@@ -141,7 +141,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->_filter = $filter;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_templateFactory = $templateFactory;
         $this->_filterManager = $filterManager;
     }
@@ -352,8 +352,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function isValidForSend()
     {
-        return !$this->_coreStoreConfig->getConfigFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE
+        return !$this->_scopeConfig->isSetFlag(
+            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

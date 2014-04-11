@@ -67,7 +67,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      * @param \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory
      * @param \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
@@ -83,7 +83,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
         \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory,
         \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory,
         \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
@@ -173,7 +173,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      * Get catalog entity associated stores
      *
      * @return array
-     * @throws \Magento\Core\Model\Store\Exception
+     * @throws \Magento\Store\Model\Exception
      */
     protected function _getEntityStores()
     {
@@ -192,7 +192,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
             }
             // @codingStandardsIgnoreStart
             if (!$entityStores) {
-                throw new \Magento\Core\Model\Store\Exception(
+                throw new \Magento\Store\Model\Exception(
                     __(
                         'We can\'t set up a URL rewrite because the product you chose is not associated with a website.'
                     )
@@ -202,7 +202,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
         } elseif ($category->getId()) {
             $entityStores = (array)$category->getStoreIds();
             if (!$entityStores) {
-                throw new \Magento\Core\Model\Store\Exception(
+                throw new \Magento\Store\Model\Exception(
                     __(
                         'We can\'t set up a URL rewrite because the category your chose is not associated with a website.'
                     )

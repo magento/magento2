@@ -24,6 +24,7 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
+use Magento\Service\Data\AbstractObject;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
 use Magento\Webapi\Controller\Rest\Router;
@@ -71,13 +72,13 @@ class Rest implements \Magento\App\FrontControllerInterface
     protected $_errorProcessor;
 
     /**
-     * Initialize dependencies
-     *
      * @var \Magento\App\AreaList
      */
     protected $areaList;
 
     /**
+     * Initialize dependencies
+     *
      * @param RestRequest $request
      * @param RestResponse $response
      * @param Router $router
@@ -133,7 +134,7 @@ class Rest implements \Magento\App\FrontControllerInterface
         $pathParts = explode('/', trim($request->getPathInfo(), '/'));
         array_shift($pathParts);
         $request->setPathInfo('/' . implode('/', $pathParts));
-        $this->areaList->getArea($this->_layout->getArea())
+        $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);
         try {
             if (!$this->_appState->isInstalled()) {
@@ -150,7 +151,7 @@ class Rest implements \Magento\App\FrontControllerInterface
 
             if (!$this->_authorizationService->isAllowed($route->getAclResources())) {
                 // TODO: Consider passing Integration ID instead of Consumer ID
-                throw new \Magento\Service\AuthorizationException(
+                throw new \Magento\Webapi\ServiceAuthorizationException(
                     "Not Authorized.",
                     0,
                     null,
@@ -171,7 +172,7 @@ class Rest implements \Magento\App\FrontControllerInterface
             $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Service\Data\AbstractObject $outputData */
-            $outputData = call_user_func_array(array($service, $serviceMethodName), $inputParams);
+            $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
             $outputArray = $this->_processServiceOutput($outputData);
             $this->_response->prepareResponse($outputArray);
         } catch (\Exception $e) {
@@ -196,37 +197,22 @@ class Rest implements \Magento\App\FrontControllerInterface
     protected function _processServiceOutput($data)
     {
         if (is_array($data)) {
-            $result = array();
+            $result = [];
             foreach ($data as $datum) {
-                if (is_object($datum)) {
-                    $result[] = $this->_convertDataObjectToArray($datum);
+                if ($datum instanceof AbstractObject) {
+                    $result[] = $datum->__toArray();
                 } else {
                     $result[] = $datum;
                 }
             }
-        } else if (is_object($data)) {
-            $result = $this->_convertDataObjectToArray($data);
-        } elseif (is_null($data)) {
-            $result = array();
+        } else if ($data instanceof AbstractObject) {
+            $result = $data->__toArray();
+        } else if (is_null($data)) {
+            $result = [];
         } else {
             /** No processing is required for scalar types */
             $result = $data;
         }
         return $result;
-    }
-
-    /**
-     * Convert Data Object to array.
-     *
-     * @param object $dataObject
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    protected function _convertDataObjectToArray($dataObject)
-    {
-        if (!is_object($dataObject) || !method_exists($dataObject, '__toArray')) {
-            throw new \InvalidArgumentException("All objects returned by service must implement __toArray().");
-        }
-        return $dataObject->__toArray();
     }
 }

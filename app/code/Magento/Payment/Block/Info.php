@@ -152,7 +152,7 @@ class Info extends \Magento\View\Element\Template
         }
 
         $methodStore = $this->_storeManager->getStore($store);
-        return $methodStore->getCode() != \Magento\Core\Model\Store::ADMIN_CODE;
+        return $methodStore->getCode() != \Magento\Store\Model\Store::ADMIN_CODE;
     }
 
     /**

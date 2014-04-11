@@ -28,7 +28,7 @@
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
     </type>
-    <type name="Magento\Core\Model\Layout">
+    <type name="Magento\View\Layout">
         <plugin name="layout-model-caching-unique-name" type="Magento\PageCache\Model\Layout\LayoutPlugin"/>
     </type>
 </config>

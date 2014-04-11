@@ -41,7 +41,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getHelper($store, $config, $factory)
     {
         $storeManager = $this->getMockBuilder(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->getMock();
         $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($this->_getWebsiteStub()));
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -57,10 +57,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetCaptcha()
     {
         $store = $this->_getStoreStub();
-        $store->expects(
+        $config = $this->_getConfigStub();
+        $config->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             'customer/captcha/type'
         )->will(
@@ -85,7 +86,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $config = $this->_getConfigStub();
         $helper = $this->_getHelper($store, $config, $factoryMock);
         $this->assertInstanceOf('Magento\Captcha\Model\DefaultModel', $helper->getCaptcha('user_create'));
     }
@@ -96,18 +96,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigNode()
     {
         $store = $this->_getStoreStub();
-        $store->expects(
+        $config = $this->_getConfigStub();
+        $config->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
-            'customer/captcha/enable'
+            'customer/captcha/enable',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue('1')
         );
 
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
-        $object = $this->_getHelper($store, $this->_getConfigStub(), $factoryMock);
+        $object = $this->_getHelper($store, $config, $factoryMock);
         $object->getConfig('enable');
     }
 
@@ -124,7 +126,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
-        $object = $this->_getHelper($this->_getStoreStub(), $this->_getConfigStub(), $factoryMock);
+
+        $config = $this->_getConfigStub();
+        $configData = array('font_code' => array('label' => 'Label', 'path' => 'path/to/fixture.ttf'));
+
+        $config->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            'captcha/fonts',
+            'default'
+        )->will(
+            $this->returnValue($configData)
+        );
+
+        $object = $this->_getHelper($this->_getStoreStub(), $config, $factoryMock);
         $fonts = $object->getFonts();
         $this->assertArrayHasKey('font_code', $fonts);
         // fixture
@@ -192,35 +209,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Create Config Stub
      *
-     * @return \Magento\App\ConfigInterface
+     * @return \Magento\App\Config\ScopeConfigInterface
      */
     protected function _getConfigStub()
     {
-        $config = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
-
-        $configData = array('font_code' => array('label' => 'Label', 'path' => 'path/to/fixture.ttf'));
-
-        $config->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->with(
-            'captcha/fonts',
-            'default'
-        )->will(
-            $this->returnValue($configData)
-        );
+        $config = $this->getMock('Magento\App\Config\ScopeConfigInterface');
         return $config;
     }
 
     /**
      * Create Website Stub
      *
-     * @return \Magento\Core\Model\Website
+     * @return \Magento\Store\Model\Website
      */
     protected function _getWebsiteStub()
     {
-        $website = $this->getMock('Magento\Core\Model\Website', array('getCode', '__wakeup'), array(), '', false);
+        $website = $this->getMock('Magento\Store\Model\Website', array('getCode', '__wakeup'), array(), '', false);
 
         $website->expects($this->any())->method('getCode')->will($this->returnValue('base'));
 
@@ -230,11 +234,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Create store stub
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getStoreStub()
     {
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
 
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
 

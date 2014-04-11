@@ -39,7 +39,7 @@
                         <argument name="label" translate="true" xsi:type="string">Skip to content</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Core\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
+                <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
             </container>
             <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content">
                 <block class="Magento\Theme\Block\Html\Header" name="logo">
@@ -96,7 +96,7 @@
         </container>
         <container name="footer-container" as="footer" label="Page Footer Container" htmlTag="footer" htmlClass="page footer">
             <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
-                <block class="Magento\Core\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
+                <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
                 <block class="Magento\View\Element\Html\Links" name="footer_links">
                     <arguments>
                         <argument name="css_class" xsi:type="string">footer links</argument>
@@ -109,4 +109,14 @@
         <container name="before_body_end" as="before_body_end" label="Page Bottom"/>
     </block>
     <update handle="default_head_blocks"/>
+    <referenceBlock name="head">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-msg-box-js" after="jquery-jquery-ui-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_Theme::js/msg-box.js</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
+    <referenceContainer name="content">
+        <block class="Magento\View\Element\FormKey" name="formkey"/>
+    </referenceContainer>
 </layout>

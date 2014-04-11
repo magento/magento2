@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Helper;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 
 /**
@@ -112,12 +112,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -145,10 +145,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Model\Calculation $calculation
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory
@@ -158,17 +158,17 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Registry $coreRegistry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Locale\ResolverInterface $localeResolver
     ) {
         parent::__construct($context);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_config = $taxConfig;
         $this->_coreData = $coreData;
         $this->_coreRegistry = $coreRegistry;
@@ -871,7 +871,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getTaxBasedOn($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(\Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON, $store);
+        return $this->_scopeConfig->getValue(
+            \Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -882,8 +886,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function applyTaxOnCustomPrice($store = null)
     {
-        return (int)$this->_coreStoreConfig->getConfig(
+        return (int)$this->_scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_APPLY_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 0;
     }
@@ -896,8 +901,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function applyTaxOnOriginalPrice($store = null)
     {
-        return (int)$this->_coreStoreConfig->getConfig(
+        return (int)$this->_scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_APPLY_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -1047,7 +1053,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getDefaultCustomerTaxClass()
     {
-        return $this->_coreStoreConfig->getConfig(self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS);
+        return $this->_scopeConfig->getValue(
+            self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -1057,6 +1066,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getDefaultProductTaxClass()
     {
-        return $this->_coreStoreConfig->getConfig(self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS);
+        return $this->_scopeConfig->getValue(
+            self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

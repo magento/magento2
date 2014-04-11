@@ -55,6 +55,11 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $senderResolverMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_mailTransportFactoryMock;
+
     public function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -62,14 +67,17 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $this->messageMock = $this->getMock('Magento\Mail\Message');
         $this->objectManagerMock = $this->getMock('Magento\ObjectManager');
         $this->senderResolverMock = $this->getMock('Magento\Mail\Template\SenderResolverInterface');
-
+        $this->_mailTransportFactoryMock = $this->getMockBuilder(
+            'Magento\Mail\TransportInterfaceFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->builder = $helper->getObject(
             $this->builderClassName,
             array(
                 'templateFactory' => $this->templateFactoryMock,
                 'message' => $this->messageMock,
                 'objectManager' => $this->objectManagerMock,
-                'senderResolver' => $this->senderResolverMock
+                'senderResolver' => $this->senderResolverMock,
+                'mailTransportFactory' => $this->_mailTransportFactoryMock
             )
         );
     }
@@ -139,19 +147,18 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 
         $transport = $this->getMock('\Magento\Mail\TransportInterface');
 
-        $this->objectManagerMock->expects(
+        $this->_mailTransportFactoryMock->expects(
             $this->at(0)
         )->method(
             'create'
         )->with(
-            $this->equalTo('Magento\Mail\TransportInterface'),
             $this->equalTo(array('message' => $this->messageMock))
         )->will(
             $this->returnValue($transport)
         );
 
         $this->objectManagerMock->expects(
-            $this->at(1)
+            $this->at(0)
         )->method(
             'create'
         )->with(

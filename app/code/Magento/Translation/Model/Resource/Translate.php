@@ -31,7 +31,7 @@ class Translate extends \Magento\Model\Resource\Db\AbstractDb implements \Magent
     protected $_appState;
 
     /**
-     * @var \Magento\BaseScopeResolverInterface
+     * @var \Magento\App\ScopeResolverInterface
      */
     protected $scopeResolver;
 
@@ -43,13 +43,13 @@ class Translate extends \Magento\Model\Resource\Db\AbstractDb implements \Magent
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\App\State $appState
-     * @param \Magento\BaseScopeResolverInterface $scopeResolver
+     * @param \Magento\App\ScopeResolverInterface $scopeResolver
      * @param null|string $scope
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\App\State $appState,
-        \Magento\BaseScopeResolverInterface $scopeResolver,
+        \Magento\App\ScopeResolverInterface $scopeResolver,
         $scope = null
     ) {
         $this->_appState = $appState;
@@ -159,7 +159,7 @@ class Translate extends \Magento\Model\Resource\Db\AbstractDb implements \Magent
     /**
      * Retrieve current store identifier
      *
-     * @return \Magento\BaseScopeInterface
+     * @return int
      */
     protected function getStoreId()
     {

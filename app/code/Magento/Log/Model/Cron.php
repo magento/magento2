@@ -54,12 +54,12 @@ class Cron extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -82,9 +82,9 @@ class Cron extends \Magento\Model\AbstractModel
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param Log $log
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Log\Model\Log $log
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -95,8 +95,8 @@ class Cron extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Log\Model\Log $log,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -105,7 +105,7 @@ class Cron extends \Magento\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_log = $log;
         $this->_storeManager = $storeManager;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->inlineTranslation = $inlineTranslation;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -120,14 +120,20 @@ class Cron extends \Magento\Model\AbstractModel
         if (!$this->_errors) {
             return $this;
         }
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT)) {
+        if (!$this->_scopeConfig->getValue(
+            self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
+        ) {
             return $this;
         }
 
         $this->inlineTranslation->suspend();
-
         $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE)
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         )->setTemplateOptions(
             array(
                 'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
@@ -136,9 +142,15 @@ class Cron extends \Magento\Model\AbstractModel
         )->setTemplateVars(
             array('warnings' => join("\n", $this->_errors))
         )->setFrom(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY)
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         )->addTo(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT)
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         )->getTransport();
 
         $transport->sendMessage();
@@ -155,7 +167,11 @@ class Cron extends \Magento\Model\AbstractModel
      */
     public function logClean()
     {
-        if (!$this->_coreStoreConfig->getConfigFlag(self::XML_PATH_LOG_CLEAN_ENABLED)) {
+        if (!$this->_scopeConfig->isSetFlag(
+            self::XML_PATH_LOG_CLEAN_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
+        ) {
             return $this;
         }
 

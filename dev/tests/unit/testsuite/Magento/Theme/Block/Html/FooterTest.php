@@ -44,7 +44,7 @@ class FooterTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $this->assertEquals(
-            array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG),
+            array(\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG),
             $this->block->getIdentities()
         );
     }

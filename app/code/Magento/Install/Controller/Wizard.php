@@ -75,7 +75,7 @@ class Wizard extends \Magento\Install\Controller\Action
      * @param \Magento\Install\Model\Wizard $wizard
      * @param \Magento\Session\Generic $session
      * @param \Magento\Module\UpdaterInterface $dbUpdater
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      */
     public function __construct(
@@ -85,7 +85,7 @@ class Wizard extends \Magento\Install\Controller\Action
         \Magento\Install\Model\Wizard $wizard,
         \Magento\Session\Generic $session,
         \Magento\Module\UpdaterInterface $dbUpdater,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState
     ) {
         $this->_storeManager = $storeManager;

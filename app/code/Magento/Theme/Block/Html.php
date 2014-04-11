@@ -120,14 +120,20 @@ class Html extends \Magento\View\Element\Template
     public function getPrintLogoUrl()
     {
         // load html logo
-        $logo = $this->_storeConfig->getConfig('sales/identity/logo_html');
+        $logo = $this->_scopeConfig->getValue(
+            'sales/identity/logo_html',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (!empty($logo)) {
             $logo = 'sales/store/logo_html/' . $logo;
         }
 
         // load default logo
         if (empty($logo)) {
-            $logo = $this->_storeConfig->getConfig('sales/identity/logo');
+            $logo = $this->_scopeConfig->getValue(
+                'sales/identity/logo',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             if (!empty($logo)) {
                 // prevent tiff format displaying in html
                 if (strtolower(substr($logo, -5)) === '.tiff' || strtolower(substr($logo, -4)) === '.tif') {
@@ -155,7 +161,10 @@ class Html extends \Magento\View\Element\Template
      */
     public function getPrintLogoText()
     {
-        return $this->_storeConfig->getConfig('sales/identity/address');
+        return $this->_scopeConfig->getValue(
+            'sales/identity/address',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -223,7 +232,10 @@ class Html extends \Magento\View\Element\Template
      */
     public function getAbsoluteFooter()
     {
-        return $this->_storeConfig->getConfig('design/footer/absolute_footer');
+        return $this->_scopeConfig->getValue(
+            'design/footer/absolute_footer',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

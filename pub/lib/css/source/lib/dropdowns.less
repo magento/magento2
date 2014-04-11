@@ -104,8 +104,11 @@
 .dropdown-split(
     @_toggle-selector : ~".action.toggle",
     @_options-selector : ~"ul.dropdown",
+    @_button-selector : ~".action.split",
 
     @_dropdown-split-actions-padding: @dropdown-split-actions-padding,
+    @_dropdown-split-button-actions-padding: @dropdown-split-button-actions-padding,
+    @_dropdown-split-toggle-actions-padding: @dropdown-split-toggle-actions-padding,
     @_dropdown-split-toggle-position: @dropdown-split-toggle-position,
     @_dropdown-split-list-position-top: @dropdown-split-list-position-top,
     @_dropdown-split-list-position-bottom: @dropdown-split-list-position-bottom,
@@ -142,14 +145,16 @@
     position: relative;
     //overflow: hidden;
     ._dropdown-split-toggle-position(
+        @_button-selector,
+        @_toggle-selector,
         @_dropdown-split-toggle-position,
         @_dropdown-split-button-border-radius-fix
     );
-    .action.split {
-        .add-padding(@_dropdown-split-actions-padding);
+    @{_button-selector} {
+        .add-padding(@_dropdown-split-button-actions-padding);
     }
-    .action.toggle {
-        .add-padding(@_dropdown-split-actions-padding);
+    @{_toggle-selector} {
+        .add-padding(@_dropdown-split-toggle-actions-padding);
         ._dropdown-split-icon(
             @_dropdown-split-toggle-icon-content,
             @_dropdown-split-toggle-active-icon-content,
@@ -184,7 +189,7 @@
         @_dropdown-split-list-position-right
     );
     @{_options-selector} {
-        ._dropdown-split-list-position-default(
+        ._dropdown-split-list-position-default (
             @_dropdown-split-list-position-top,
             @_dropdown-split-list-position-bottom,
             @_dropdown-split-list-position-left,
@@ -407,14 +412,16 @@
 
 // Split dropdown toggle position = left
 ._dropdown-split-toggle-position(
+    @_button-selector,
+    @_toggle-selector,
     @_dropdown-split-toggle-position,
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = left) {
-    .action.split {
+    @{_button-selector} {
         float: right;
         margin: 0;
     }
-    .action.toggle {
+    @{_toggle-selector} {
         float: left;
         margin: 0;
     }
@@ -422,14 +429,16 @@
 
 // Split dropdown toggle position = right
 ._dropdown-split-toggle-position(
+    @_button-selector,
+    @_toggle-selector,
     @_dropdown-split-toggle-position,
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = right) {
-    .action.split {
+    @{_button-selector} {
         float: left;
         margin: 0;
     }
-    .action.toggle {
+    @{_toggle-selector} {
         float: right;
         margin: 0;
     }
@@ -439,16 +448,18 @@
 // and
 // Dropdown-split-button-border-radius-fix = true
 ._dropdown-split-toggle-position(
+    @_button-selector,
+    @_toggle-selector,
     @_dropdown-split-toggle-position,
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = right) and (@_dropdown-split-button-border-radius-fix = true) {
-    button.action.split {
+    button@{_button-selector} {
         -webkit-border-top-right-radius: 0;
         -webkit-border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
-    button + .action.toggle {
+    button + @{_toggle-selector} {
         border-left: 0;
         -webkit-border-top-left-radius: 0;
         -webkit-border-bottom-left-radius: 0;
@@ -461,16 +472,18 @@
 // and
 // Dropdown-split-button-border-radius-fix = true
 ._dropdown-split-toggle-position(
+    @_button-selector,
+    @_toggle-selector,
     @_dropdown-split-toggle-position,
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = left) and (@_dropdown-split-button-border-radius-fix = true) {
-    button.action.split {
+    button@{_button-selector} {
         -webkit-border-top-left-radius: 0;
         -webkit-border-bottom-left-radius: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
-    button + .action.toggle {
+    button + @{_toggle-selector} {
         border-right: 0;
         -webkit-border-top-right-radius: 0;
         -webkit-border-bottom-right-radius: 0;
@@ -524,7 +537,7 @@
 // Dropdown list item border != 0
 ._dropdown-list-item-border(
     @_dropdown-list-item-border
-) when not (@_dropdown-list-item-border = 0) {
+) when not (@_dropdown-list-item-border = 0) and not (@_dropdown-list-item-border = false) and not (@_dropdown-list-item-border = '') {
     border-top: @_dropdown-list-item-border;
     &:first-child {
         border: none;

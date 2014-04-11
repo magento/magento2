@@ -34,7 +34,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetValueElement()
     {
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $context = $objectManager->create('Magento\Rule\Model\Condition\Context', array('layout' => $layoutMock));

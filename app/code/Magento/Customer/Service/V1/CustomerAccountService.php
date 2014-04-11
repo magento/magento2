@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Converter;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\CustomerFactory;
@@ -38,11 +38,15 @@ use Magento\Mail\Exception as MailException;
 use Magento\Math\Random;
 use Magento\UrlInterface;
 use Magento\Logger;
+use Magento\Encryption\EncryptorInterface as Encryptor;
+use Magento\Customer\Model\Config\Share as ConfigShare;
+use Magento\Service\V1\Data\Filter;
 
 /**
  * Handle various customer account actions
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerAccountService implements CustomerAccountServiceInterface
 {
@@ -59,6 +63,9 @@ class CustomerAccountService implements CustomerAccountServiceInterface
 
     /** @var Data\SearchResultsBuilder */
     private $_searchResultsBuilder;
+
+    /** @var Data\CustomerValidationResultsBuilder */
+    private $_customerValidationResultsBuilder;
 
     /**
      * Core event manager proxy
@@ -108,6 +115,16 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     protected $_logger;
 
     /**
+     * @var Encryptor
+     */
+    private $_encryptor;
+
+    /**
+     * @var ConfigShare
+     */
+    private $_configShare;
+
+    /**
      * Constructor
      *
      * @param CustomerFactory $customerFactory
@@ -118,12 +135,14 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * @param Validator $validator
      * @param Data\CustomerBuilder $customerBuilder
      * @param Data\CustomerDetailsBuilder $customerDetailsBuilder
-     * @param Data\SearchResultsBuilder $searchResultsBuilder,
+     * @param Data\SearchResultsBuilder $searchResultsBuilder
+     * @param Data\CustomerValidationResultsBuilder $customerValidationResultsBuilder
      * @param CustomerAddressServiceInterface $customerAddressService
      * @param CustomerMetadataServiceInterface $customerMetadataService
      * @param UrlInterface $url
      * @param Logger $logger
-     *
+     * @param Encryptor $encryptor
+     * @param ConfigShare $configShare
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,10 +155,13 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         Data\CustomerBuilder $customerBuilder,
         Data\CustomerDetailsBuilder $customerDetailsBuilder,
         Data\SearchResultsBuilder $searchResultsBuilder,
+        Data\CustomerValidationResultsBuilder $customerValidationResultsBuilder,
         CustomerAddressServiceInterface $customerAddressService,
         CustomerMetadataServiceInterface $customerMetadataService,
         UrlInterface $url,
-        Logger $logger
+        Logger $logger,
+        Encryptor $encryptor,
+        ConfigShare $configShare
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_eventManager = $eventManager;
@@ -150,10 +172,13 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $this->_customerBuilder = $customerBuilder;
         $this->_customerDetailsBuilder = $customerDetailsBuilder;
         $this->_searchResultsBuilder = $searchResultsBuilder;
+        $this->_customerValidationResultsBuilder = $customerValidationResultsBuilder;
         $this->_customerAddressService = $customerAddressService;
         $this->_customerMetadataService = $customerMetadataService;
         $this->_url = $url;
         $this->_logger = $logger;
+        $this->_encryptor = $encryptor;
+        $this->_configShare = $configShare;
     }
 
     /**
@@ -231,7 +256,10 @@ class CustomerAccountService implements CustomerAccountServiceInterface
 
         $this->_eventManager->dispatch('customer_login', array('customer' => $customerModel));
 
-        return $this->_converter->createCustomerFromModel($customerModel);
+        $customerDto = $this->_converter->createCustomerFromModel($customerModel);
+        $this->_eventManager->dispatch('customer_data_object_login', array('customer' => $customerDto));
+
+        return $customerDto;
     }
 
     /**
@@ -288,7 +316,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $customerModel = $this->_validateResetPasswordToken($customerId, $resetToken);
         $customerModel->setRpToken(null);
         $customerModel->setRpTokenCreatedAt(null);
-        $customerModel->setPassword($newPassword);
+        $customerModel->setPasswordHash($this->getPasswordHash($newPassword));
         $customerModel->save();
     }
 
@@ -310,16 +338,26 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createAccount(Data\CustomerDetails $customerDetails, $password = null, $redirectUrl = '')
-    {
+    public function createAccount(
+        Data\CustomerDetails $customerDetails,
+        $password = null,
+        $hash = null,
+        $redirectUrl = ''
+    ) {
         $customer = $customerDetails->getCustomer();
 
         // This logic allows an existing customer to be added to a different store.  No new account is created.
         // The plan is to move this logic into a new method called something like 'registerAccountWithStore'
         if ($customer->getId()) {
-            $customerModel = $this->_converter->getCustomerModel($customer->getId());
-            if ($customerModel->isInStore($customer->getStoreId())) {
+            $websiteId = $this->_converter->getCustomerModel($customer->getId())->getWebsiteId();
+
+            if ($this->isCustomerInStore($websiteId, $customer->getStoreId())) {
                 throw new InputException(__('Customer already exists in this store.'));
+            }
+
+            if (empty($password) && empty($hash)) {
+                // Reuse existing password
+                $hash = $this->_converter->getCustomerModel($customer->getId())->getPasswordHash();
             }
         }
         // Make sure we have a storeId to associate this customer with.
@@ -333,7 +371,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         }
 
         try {
-            $customerId = $this->saveCustomer($customer, $password);
+            $customerId = $this->saveCustomer($customer, $password, $hash);
         } catch (\Magento\Customer\Exception $e) {
             if ($e->getCode() === CustomerModel::EXCEPTION_EMAIL_EXISTS) {
                 throw new StateException(
@@ -345,12 +383,24 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         }
 
         $this->_customerAddressService->saveAddresses($customerId, $customerDetails->getAddresses());
-
         $customerModel = $this->_converter->getCustomerModel($customerId);
-
         $newLinkToken = $this->_mathRandom->getUniqueHash();
         $customerModel->changeResetPasswordLinkToken($newLinkToken);
+        $this->_sendEmailConfirmation($customerModel, $customer, $redirectUrl);
 
+        return $this->_converter->createCustomerFromModel($customerModel);
+    }
+
+    /**
+     * Send either confirmation or welcome email after an account creation
+     *
+     * @param CustomerModel $customerModel
+     * @param Data\Customer $customer
+     * @param string        $redirectUrl
+     * @return void
+     */
+    protected function _sendEmailConfirmation(CustomerModel $customerModel, Data\Customer $customer, $redirectUrl)
+    {
         try {
             if ($customerModel->isConfirmationRequired()) {
                 $customerModel->sendNewAccountEmail(
@@ -369,7 +419,6 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             // If we are not able to send a new account email, this should be ignored
             $this->_logger->logException($e);
         }
-        return $this->_converter->createCustomerFromModel($customerModel);
     }
 
     /**
@@ -380,7 +429,12 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $customer = $customerDetails->getCustomer();
         // Making this call first will ensure the customer already exists.
         $this->getCustomer($customer->getId());
-        $this->saveCustomer($customer);
+
+        $this->saveCustomer(
+            $customer,
+            null,
+            $this->_converter->getCustomerModel($customer->getId())->getPasswordHash()
+        );
 
         $addresses = $customerDetails->getAddresses();
         // If $address is null, no changes must made to the list of addresses
@@ -403,6 +457,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             }
             $this->_customerAddressService->saveAddresses($customer->getId(), $addresses);
         }
+
+        return true;
     }
 
     /**
@@ -421,38 +477,12 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         // Needed to enable filtering on name as a whole
         $collection->addNameToSelect();
         // Needed to enable filtering based on billing address attributes
-        $collection->joinAttribute(
-            'billing_postcode',
-            'customer_address/postcode',
-            'default_billing',
-            null,
-            'left'
-        )->joinAttribute(
-            'billing_city',
-            'customer_address/city',
-            'default_billing',
-            null,
-            'left'
-        )->joinAttribute(
-            'billing_telephone',
-            'customer_address/telephone',
-            'default_billing',
-            null,
-            'left'
-        )->joinAttribute(
-            'billing_region',
-            'customer_address/region',
-            'default_billing',
-            null,
-            'left'
-        )->joinAttribute(
-            'billing_country_id',
-            'customer_address/country_id',
-            'default_billing',
-            null,
-            'left'
-        );
-        $this->addFiltersToCollection($searchCriteria->getFilters(), $collection);
+        $collection->joinAttribute('billing_postcode', 'customer_address/postcode', 'default_billing', null, 'left')
+            ->joinAttribute('billing_city', 'customer_address/city', 'default_billing', null, 'left')
+            ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
+            ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
+            ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left');
+        $this->addFiltersFromRootToCollection($searchCriteria->getAndGroup(), $collection);
         $this->_searchResultsBuilder->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
@@ -481,25 +511,25 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     }
 
     /**
-     * Adds some filters from a filter group to a collection.
+     * Adds some filters from the root filter group to a collection.
      *
-     * @param Data\Search\FilterGroupInterface $filterGroup
+     * @param Data\Search\AndGroup $rootAndGroup
      * @param Collection $collection
      * @return void
      * @throws \Magento\Exception\InputException
      */
-    protected function addFiltersToCollection(Data\Search\FilterGroupInterface $filterGroup, Collection $collection)
+    protected function addFiltersFromRootToCollection(Data\Search\AndGroup $rootAndGroup, Collection $collection)
     {
-        if (strcasecmp($filterGroup->getGroupType(), 'AND')) {
-            throw new InputException('Only AND grouping is currently supported for filters.');
+        if (count($rootAndGroup->getAndGroups())) {
+            throw new InputException('Only OR groups are supported as nested groups.');
         }
 
-        foreach ($filterGroup->getFilters() as $filter) {
+        foreach ($rootAndGroup->getFilters() as $filter) {
             $this->addFilterToCollection($collection, $filter);
         }
 
-        foreach ($filterGroup->getGroups() as $group) {
-            $this->addFilterGroupToCollection($collection, $group);
+        foreach ($rootAndGroup->getOrGroups() as $group) {
+            $this->addFilterOrGroupToCollection($collection, $group);
         }
     }
 
@@ -507,10 +537,10 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * Helper function that adds a filter to the collection
      *
      * @param Collection $collection
-     * @param Data\Filter $filter
+     * @param Filter $filter
      * @return void
      */
-    protected function addFilterToCollection(Collection $collection, Data\Filter $filter)
+    protected function addFilterToCollection(Collection $collection, Filter $filter)
     {
         $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
         $collection->addFieldToFilter($filter->getField(), array($condition => $filter->getValue()));
@@ -520,18 +550,15 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @param Collection $collection
-     * @param Data\Search\FilterGroupInterface $group
+     * @param Data\Search\OrGroup $orGroup
      * @return void
      * @throws \Magento\Exception\InputException
      */
-    protected function addFilterGroupToCollection(Collection $collection, Data\Search\FilterGroupInterface $group)
+    protected function addFilterOrGroupToCollection(Collection $collection, Data\Search\OrGroup $orGroup)
     {
-        if (strcasecmp($group->getGroupType(), 'OR')) {
-            throw new InputException('The only nested groups currently supported for filters are of type OR.');
-        }
-        $fields = array();
-        $conditions = array();
-        foreach ($group->getFilters() as $filter) {
+        $fields = [];
+        $conditions = [];
+        foreach ($orGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $fields[] = array('attribute' => $filter->getField(), $condition => $filter->getValue());
         }
@@ -543,19 +570,23 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function saveCustomer(Data\Customer $customer, $password = null)
+    public function saveCustomer(Data\Customer $customer, $password = null, $hash = null)
     {
         $customerModel = $this->_converter->createCustomerModel($customer);
 
-        if ($password) {
-            $customerModel->setPassword($password);
+        // Priority: hash, password, auto generated password
+        if ($hash) {
+            $customerModel->setPasswordHash($hash);
+        } elseif ($password) {
+            $passwordHash = $this->getPasswordHash($password);
+            $customerModel->setPasswordHash($passwordHash);
         } elseif (!$customerModel->getId()) {
-            $customerModel->setPassword($customerModel->generatePassword());
+            $passwordHash = $this->getPasswordHash($customerModel->generatePassword());
+            $customerModel->setPasswordHash($passwordHash);
         }
 
         // Shouldn't we be calling validateCustomerData/Details here?
         $this->_validate($customerModel);
-
         $customerModel->save();
 
         return $customerModel->getId();
@@ -584,10 +615,18 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         }
         $customerModel->setRpToken(null);
         $customerModel->setRpTokenCreatedAt(null);
-        $customerModel->setPassword($newPassword);
+        $customerModel->setPasswordHash($this->getPasswordHash($newPassword));
         $customerModel->save();
         // FIXME: Are we using the proper template here?
         $customerModel->sendPasswordResetNotificationEmail();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPasswordHash($password)
+    {
+        return $this->_encryptor->getHash($password, true);
     }
 
     /**
@@ -602,16 +641,25 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         );
 
         if ($customerErrors !== true) {
-            return array('error' => -1, 'message' => implode(', ', $this->_validator->getMessages()));
+            return $this->_customerValidationResultsBuilder
+                ->setIsValid(false)
+                ->setMessages($this->_validator->getMessages())
+                ->create();
         }
 
         $customerModel = $this->_converter->createCustomerModel($customer);
 
         $result = $customerModel->validate();
         if (true !== $result && is_array($result)) {
-            return array('error' => -1, 'message' => implode(', ', $result));
+            return $this->_customerValidationResultsBuilder
+                ->setIsValid(false)
+                ->setMessages($result)
+                ->create();
         }
-        return true;
+        return $this->_customerValidationResultsBuilder
+            ->setIsValid(true)
+            ->setMessages([])
+            ->create();
     }
 
     /**
@@ -744,6 +792,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     {
         $customerModel = $this->_converter->getCustomerModel($customerId);
         $customerModel->delete();
+
+        return true;
     }
 
     /**
@@ -757,5 +807,22 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         } catch (NoSuchEntityException $e) {
             return true;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isCustomerInStore($customerWebsiteId, $storeId)
+    {
+        $ids = [];
+        if ((bool)$this->_configShare->isWebsiteScope()) {
+            $ids = $this->_storeManager->getWebsite($customerWebsiteId)->getStoreIds();
+        } else {
+            foreach ($this->_storeManager->getStores() as $store) {
+                $ids[] = $store->getId();
+            }
+        }
+
+        return in_array($storeId, $ids);
     }
 }

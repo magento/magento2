@@ -63,9 +63,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param mixed $expectedValue
      * @param string $default
-     * @dataProvider getValueByPathDataProvider
+     * @dataProvider getConfigByPathDataProvider
      */
-    public function testGetValueByPath($path, $expectedValue, $default)
+    public function testgetConfigByPath($path, $expectedValue, $default)
     {
         $testData = array(
             'key_1' => array(
@@ -78,7 +78,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
 
-    public function getValueByPathDataProvider()
+    public function getConfigByPathDataProvider()
     {
         return array(
             array('key_1/key_1.1/key_1.1.1', 'value_1.1.1', 'error'),

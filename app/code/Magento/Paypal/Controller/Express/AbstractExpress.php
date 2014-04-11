@@ -18,18 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Paypal\Controller\Express;
 
+use Magento\Checkout\Model\Type\Onepage;
+use Magento\App\Action\Action as AppAction;
+use Magento\Checkout\Controller\Express\RedirectLoginInterface;
+
 /**
  * Abstract Express Checkout Controller
  */
-abstract class AbstractExpress extends \Magento\App\Action\Action implements
-    \Magento\Checkout\Controller\Express\RedirectLoginInterface
+abstract class AbstractExpress extends AppAction implements RedirectLoginInterface
 {
     /**
      * @var \Magento\Paypal\Model\Express\Checkout
@@ -148,19 +149,16 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
                 $this->_getQuote()->removeAllAddresses();
             }
 
-            $customer = $this->_customerSession->getCustomer();
+            $customerData = $this->_customerSession->getCustomerDataObject();
             $quoteCheckoutMethod = $this->_getQuote()->getCheckoutMethod();
-            if ($customer && $customer->getId()) {
+            if ($customerData->getId()) {
                 $this->_checkout->setCustomerWithAddressChange(
-                    $customer,
+                    $customerData,
                     $this->_getQuote()->getBillingAddress(),
                     $this->_getQuote()->getShippingAddress()
                 );
-            } elseif ((!$quoteCheckoutMethod ||
-                $quoteCheckoutMethod != \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER) &&
-                !$this->_objectManager->get(
-                    'Magento\Checkout\Helper\Data'
-                )->isAllowedGuestCheckout(
+            } elseif ((!$quoteCheckoutMethod || $quoteCheckoutMethod != Onepage::METHOD_REGISTER)
+                && !$this->_objectManager->get('Magento\Checkout\Helper\Data')->isAllowedGuestCheckout(
                     $this->_getQuote(),
                     $this->_getQuote()->getStoreId()
                 )
@@ -177,11 +175,10 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
             }
 
             // billing agreement
-            $isBARequested = (bool)$this->getRequest()->getParam(
-                \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT
-            );
-            if ($customer && $customer->getId()) {
-                $this->_checkout->setIsBillingAgreementRequested($isBARequested);
+            $isBaRequested = (bool)$this->getRequest()
+                ->getParam(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
+            if ($customerData->getId()) {
+                $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
             }
 
             // giropay
@@ -191,8 +188,12 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
                 $this->_url->getUrl('checkout/onepage/success')
             );
 
-            $token = $this->_checkout->start($this->_url->getUrl('*/*/return'), $this->_url->getUrl('*/*/cancel'));
-            if ($token && ($url = $this->_checkout->getRedirectUrl())) {
+            $token = $this->_checkout->start(
+                $this->_url->getUrl('*/*/return'),
+                $this->_url->getUrl('*/*/cancel')
+            );
+            $url = $this->_checkout->getRedirectUrl();
+            if ($token && $url) {
                 $this->_initToken($token);
                 $this->getResponse()->setRedirect($url);
                 return;
@@ -303,7 +304,9 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
         } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t initialize Express Checkout review.'));
+            $this->messageManager->addError(
+                __('We can\'t initialize Express Checkout review.')
+            );
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('checkout/cart');
@@ -350,9 +353,9 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
         }
         if ($isAjax) {
             $this->getResponse()->setBody(
-                '<script type="text/javascript">window.location.href = ' . $this->_url->getUrl(
-                    '*/*/review'
-                ) . ';</script>'
+                '<script type="text/javascript">window.location.href = '
+                . $this->_url->getUrl('*/*/review')
+                . ';</script>'
             );
         } else {
             $this->_redirect('*/*/review');
@@ -372,11 +375,11 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
             $this->_view->loadLayout('paypal_express_review');
 
             $this->getResponse()->setBody(
-                $this->_view->getLayout()->getBlock(
-                    'express.review.shipping.method'
-                )->setQuote(
-                    $this->_getQuote()
-                )->toHtml()
+                $this->_view
+                    ->getLayout()
+                    ->getBlock('express.review.shipping.method')
+                    ->setQuote($this->_getQuote())
+                    ->toHtml()
             );
             return;
         } catch (\Magento\Model\Exception $e) {
@@ -416,9 +419,9 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
         }
         if ($isAjax) {
             $this->getResponse()->setBody(
-                '<script type="text/javascript">window.location.href = ' . $this->_url->getUrl(
-                    '*/*/review'
-                ) . ';</script>'
+                '<script type="text/javascript">window.location.href = '
+                . $this->_url->getUrl('*/*/review')
+                . ';</script>'
             );
         } else {
             $this->_redirect('*/*/review');
@@ -434,9 +437,7 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
     public function placeOrderAction()
     {
         try {
-            $requiredAgreements = $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->getRequiredAgreementIds();
+            $requiredAgreements = $this->_objectManager->get('Magento\Checkout\Helper\Data')->getRequiredAgreementIds();
             if ($requiredAgreements) {
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 if (array_diff($requiredAgreements, $postedAgreements)) {
@@ -459,16 +460,16 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
             // an order may be created
             $order = $this->_checkout->getOrder();
             if ($order) {
-                $this->_getCheckoutSession()->setLastOrderId(
-                    $order->getId()
-                )->setLastRealOrderId(
-                    $order->getIncrementId()
-                );
+                $this->_getCheckoutSession()->setLastOrderId($order->getId())
+                    ->setLastRealOrderId($order->getIncrementId());
             }
 
             $this->_eventManager->dispatch(
                 'paypal_express_place_order_success',
-                array('order' => $order, 'quote' => $this->_getQuote())
+                [
+                    'order' => $order,
+                    'quote' => $this->_getQuote()
+                ]
             );
 
             // redirect if PayPal specified some URL (for example, to Giropay bank)
@@ -477,8 +478,7 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
                 $this->getResponse()->setRedirect($url);
                 return;
             }
-            $this->_initToken(false);
-            // no need in token anymore
+            $this->_initToken(false); // no need in token anymore
             $this->_redirect('checkout/onepage/success');
             return;
         } catch (\Magento\Model\Exception $e) {
@@ -504,11 +504,14 @@ abstract class AbstractExpress extends \Magento\App\Action\Action implements
             throw new \Magento\Model\Exception(__('We can\'t initialize Express Checkout.'));
         }
         if (!isset($this->_checkoutTypes[$this->_checkoutType])) {
-            $parameters = array('params' => array('quote' => $quote, 'config' => $this->_config));
-            $this->_checkoutTypes[$this->_checkoutType] = $this->_checkoutFactory->create(
-                $this->_checkoutType,
-                $parameters
+            $parameters = array(
+                'params' => array(
+                    'quote' => $quote,
+                    'config' => $this->_config,
+                ),
             );
+            $this->_checkoutTypes[$this->_checkoutType] = $this->_checkoutFactory
+                ->create($this->_checkoutType, $parameters);
         }
         $this->_checkout = $this->_checkoutTypes[$this->_checkoutType];
     }

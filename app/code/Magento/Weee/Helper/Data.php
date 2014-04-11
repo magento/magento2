@@ -25,8 +25,8 @@
  */
 namespace Magento\Weee\Helper;
 
-use Magento\Core\Model\Store;
-use Magento\Core\Model\Website;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
 
 /**
  * WEEE data helper
@@ -61,9 +61,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Weee\Model\Tax
@@ -71,31 +71,31 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_weeeTax;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Registry $coreRegistry,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_storeManager = $storeManager;
         $this->_weeeTax = $weeeTax;
         $this->_coreRegistry = $coreRegistry;
         $this->_taxData = $taxData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -107,7 +107,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getPriceDisplayType($store = null)
     {
-        return $this->_coreStoreConfig->getConfig('tax/weee/display', $store);
+        return $this->_scopeConfig->getValue(
+            'tax/weee/display',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -118,7 +122,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getListPriceDisplayType($store = null)
     {
-        return $this->_coreStoreConfig->getConfig('tax/weee/display_list', $store);
+        return $this->_scopeConfig->getValue(
+            'tax/weee/display_list',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -129,7 +137,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getSalesPriceDisplayType($store = null)
     {
-        return $this->_coreStoreConfig->getConfig('tax/weee/display_sales', $store);
+        return $this->_scopeConfig->getValue(
+            'tax/weee/display_sales',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -140,7 +152,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getEmailPriceDisplayType($store = null)
     {
-        return $this->_coreStoreConfig->getConfig('tax/weee/display_email', $store);
+        return $this->_scopeConfig->getValue(
+            'tax/weee/display_email',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -151,7 +167,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isDiscounted($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag('tax/weee/discount', $store);
+        return $this->_scopeConfig->isSetFlag(
+            'tax/weee/discount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -162,7 +182,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isTaxable($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag('tax/weee/apply_vat', $store);
+        return $this->_scopeConfig->isSetFlag(
+            'tax/weee/apply_vat',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -173,23 +197,24 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function includeInSubtotal($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag('tax/weee/include_in_subtotal', $store);
+        return $this->_scopeConfig->isSetFlag(
+            'tax/weee/include_in_subtotal',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
-     * Get weee tax amount for product based on shipping and billing addresses, website and tax settings
+     * Get weee tax amount for product based on website
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @param   null|\Magento\Customer\Model\Address\AbstractAddress $shipping
-     * @param   null|\Magento\Customer\Model\Address\AbstractAddress $billing
-     * @param   null|bool|int|string|Website $website
-     * @param   bool $calculateTaxes
+     * @param   mixed $website
      * @return  float
      */
-    public function getAmount($product, $shipping = null, $billing = null, $website = null, $calculateTaxes = false)
+    public function getAmount($product, $website = null)
     {
         if ($this->isEnabled()) {
-            return $this->_weeeTax->getWeeeAmount($product, $shipping, $billing, $website, $calculateTaxes);
+            return $this->_weeeTax->getWeeeAmount($product, null, null, $website, false);
         }
         return 0;
     }
@@ -416,7 +441,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isEnabled($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_FPT_ENABLED, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_FPT_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**

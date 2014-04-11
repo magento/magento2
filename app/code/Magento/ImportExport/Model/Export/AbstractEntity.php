@@ -53,7 +53,7 @@ abstract class AbstractEntity
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -172,25 +172,25 @@ abstract class AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_attributeCollection = isset(
             $data['attribute_collection']
@@ -199,8 +199,9 @@ abstract class AbstractEntity
         );
         $this->_pageSize = isset(
             $data['page_size']
-        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(
-            static::XML_PATH_PAGE_SIZE
+        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
+            static::XML_PATH_PAGE_SIZE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : 0);
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
@@ -214,7 +215,7 @@ abstract class AbstractEntity
      */
     protected function _initStores()
     {
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($this->_storeManager->getStores(true) as $store) {
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
@@ -232,7 +233,7 @@ abstract class AbstractEntity
      */
     protected function _initWebsites($withDefault = false)
     {
-        /** @var $website \Magento\Core\Model\Website */
+        /** @var $website \Magento\Store\Model\Website */
         foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }

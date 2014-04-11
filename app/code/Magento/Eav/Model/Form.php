@@ -53,7 +53,7 @@ abstract class Form
     /**
      * Current store instance
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 
@@ -126,7 +126,7 @@ abstract class Form
     protected $_validator = null;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -161,7 +161,7 @@ abstract class Form
     protected $_validatorConfigFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
@@ -172,7 +172,7 @@ abstract class Form
      * @throws \Magento\Model\Exception
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Eav\Model\AttributeDataFactory $attrDataFactory,
@@ -226,7 +226,7 @@ abstract class Form
     /**
      * Set current store
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
      */
     public function setStore($store)
@@ -277,7 +277,7 @@ abstract class Form
     /**
      * Return current store instance
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

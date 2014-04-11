@@ -96,7 +96,11 @@ class Template extends \Magento\View\Element\Template
         if ($moduleName === null) {
             $moduleName = $this->getModuleName();
         }
-        return !$this->_storeConfig->getConfigFlag('advanced/modules_disable_output/' . $moduleName);
+
+        return !$this->_scopeConfig->isSetFlag(
+            'advanced/modules_disable_output/' . $moduleName,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -118,5 +122,15 @@ class Template extends \Magento\View\Element\Template
     {
         $this->_eventManager->dispatch('adminhtml_block_html_before', array('block' => $this));
         return parent::_toHtml();
+    }
+
+    /**
+     * Return toolbar block instance
+     *
+     * @return bool|\Magento\View\Element\BlockInterface
+     */
+    public function getToolbar()
+    {
+        return $this->getLayout()->getBlock('page.actions.toolbar');
     }
 }

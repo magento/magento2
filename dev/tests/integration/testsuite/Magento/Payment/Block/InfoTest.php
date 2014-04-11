@@ -35,7 +35,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChildPdfAsArray()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Payment\Block\Info', 'block');
 

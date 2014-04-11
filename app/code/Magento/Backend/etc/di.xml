@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Db" />
+    <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\App\Config\Storage\Writer" />
     <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
@@ -99,6 +99,7 @@
         <arguments>
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
             <argument name="formKey" xsi:type="object">Magento\Data\Form\FormKey\Proxy</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">

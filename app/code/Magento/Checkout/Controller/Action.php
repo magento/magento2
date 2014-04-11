@@ -88,9 +88,9 @@ abstract class Action extends \Magento\App\Action\Action
                 $customer,
                 $this->_customerMetadataService->getAllCustomerAttributeMetadata()
             );
-            if (true !== $validationResult && is_array($validationResult)) {
+            if (!$validationResult->isValid()) {
                 if ($addErrors) {
-                    foreach ($validationResult as $error) {
+                    foreach ($validationResult->getMessages() as $error) {
                         $this->messageManager->addError($error);
                     }
                 }

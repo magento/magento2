@@ -273,7 +273,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
     }
 
     /**
-     * @param array|string|integer|\Magento\Core\Model\Config\Element $code
+     * @param array|string|integer|\Magento\App\Config\Element $code
      * @return $this
      */
     public function addAttribute($code)

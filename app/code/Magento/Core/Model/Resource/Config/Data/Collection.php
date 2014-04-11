@@ -41,7 +41,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Config\Value', 'Magento\Core\Model\Resource\Config\Data');
+        $this->_init('Magento\App\Config\Value', 'Magento\Core\Model\Resource\Config\Data');
     }
 
     /**

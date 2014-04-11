@@ -89,9 +89,9 @@ class Stock extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Stock model factory
@@ -110,20 +110,20 @@ class Stock extends \Magento\Model\Resource\Db\AbstractDb
      * 
      * @param \Magento\App\Resource $resource
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\CatalogInventory\Model\StockFactory $stockFactory,
         \Magento\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_catalogInventoryData = $catalogInventoryData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_stockFactory = $stockFactory;
         $this->dateTime = $dateTime;
     }
@@ -240,8 +240,9 @@ class Stock extends \Magento\Model\Resource\Db\AbstractDb
      */
     public function setInStockFilterToCollection($collection)
     {
-        $manageStock = $this->_coreStoreConfig->getConfig(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
+        $manageStock = $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $cond = array(
             '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=1',
@@ -280,7 +281,10 @@ class Stock extends \Magento\Model\Resource\Db\AbstractDb
             );
 
             foreach ($configMap as $field => $const) {
-                $this->{$field} = (int)$this->_coreStoreConfig->getConfig($const);
+                $this->{$field} = (int)$this->_scopeConfig->getValue(
+                    $const,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
             }
 
             $this->_isConfig = true;

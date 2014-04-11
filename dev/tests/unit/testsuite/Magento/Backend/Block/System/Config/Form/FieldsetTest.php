@@ -72,7 +72,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     {
         $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
         $groupMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
             array(),

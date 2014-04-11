@@ -195,7 +195,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_couponCollection;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -209,7 +209,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
      * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
      * @param \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -224,7 +224,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
         \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -387,7 +387,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Get Rule label by specified store
      *
-     * @param \Magento\Core\Model\Store|int|bool|null $store
+     * @param \Magento\Store\Model\Store|int|bool|null $store
      * @return string|bool
      */
     public function getStoreLabel($store = null)
@@ -493,21 +493,26 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $ok = false;
         if (!$saveNewlyCreated) {
             $ok = true;
-        } else if ($this->getId()) {
-            for ($attemptNum = 0; $attemptNum < $saveAttemptCount; $attemptNum++) {
-                try {
-                    $coupon->save();
-                } catch (\Exception $e) {
-                    if ($e instanceof \Magento\Model\Exception || $coupon->getId()) {
-                        throw $e;
+        } else {
+            if ($this->getId()) {
+                for ($attemptNum = 0; $attemptNum < $saveAttemptCount; $attemptNum++) {
+                    try {
+                        $coupon->save();
+                    } catch (\Exception $e) {
+                        if ($e instanceof \Magento\Model\Exception || $coupon->getId()) {
+                            throw $e;
+                        }
+                        $coupon->setCode(
+                            $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
+                                '%04u',
+                                rand(0, 9999)
+                            )
+                        );
+                        continue;
                     }
-                    $coupon->setCode(
-                        $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf('%04u', rand(0, 9999))
-                    );
-                    continue;
+                    $ok = true;
+                    break;
                 }
-                $ok = true;
-                break;
             }
         }
         if (!$ok) {

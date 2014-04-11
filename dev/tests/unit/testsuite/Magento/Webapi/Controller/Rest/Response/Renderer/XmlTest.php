@@ -96,7 +96,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array('.key' => 'value'),
-                '<?xml version="1.0"?><response><item_.key>value</item_.key></response>',
+                '<?xml version="1.0"?><response><item_key>value</item_key></response>',
                 'Invalid XML render with "." symbol in data index.'
             ),
             array(

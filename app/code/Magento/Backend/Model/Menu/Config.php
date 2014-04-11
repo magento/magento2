@@ -64,9 +64,9 @@ class Config
     protected $_configReader;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Backend\Model\Menu\AbstractDirector
@@ -86,7 +86,7 @@ class Config
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\App\State $appState
      */
     public function __construct(
@@ -97,7 +97,7 @@ class Config
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Logger $logger,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\App\State $appState
     ) {
         $this->_menuBuilder = $menuBuilder;
@@ -107,7 +107,7 @@ class Config
         $this->_logger = $logger;
         $this->_menuFactory = $menuFactory;
         $this->_configReader = $configReader;
-        $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
     }
 
@@ -122,7 +122,7 @@ class Config
      */
     public function getMenu()
     {
-        if ($this->_storeManager->getStore()->getConfig('dev/log/active')) {
+        if ($this->_scopeConfig->getValue('dev/log/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->_logger->addStreamLog(\Magento\Backend\Model\Menu::LOGGER_KEY);
         }
 

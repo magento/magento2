@@ -45,7 +45,7 @@ class ContextPlugin
     protected $httpRequest;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,13 +53,13 @@ class ContextPlugin
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\App\Request\Http $httpRequest
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Session\SessionManagerInterface $session,
         \Magento\App\Http\Context $httpContext,
         \Magento\App\Request\Http $httpRequest,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
@@ -88,7 +88,7 @@ class ContextPlugin
             \Magento\Core\Helper\Data::CONTEXT_STORE,
             $this->httpRequest->getParam(
                 '___store',
-                $this->httpRequest->getCookie(\Magento\Core\Model\Store::COOKIE_NAME)
+                $this->httpRequest->getCookie(\Magento\Store\Model\Store::COOKIE_NAME)
             ),
             $this->storeManager->getWebsite()->getDefaultStore()->getCode()
         );

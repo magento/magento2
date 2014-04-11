@@ -91,7 +91,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             false
         );
         /** @var $layoutMock \Magento\View\LayoutInterface */
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array('createBlock'), array(), '', false);
+        $layoutMock = $this->getMock('Magento\View\Layout', array('createBlock'), array(), '', false);
         /** @var $buttonMock \Magento\Backend\Block\Widget\Button */
         $buttonMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false);
 

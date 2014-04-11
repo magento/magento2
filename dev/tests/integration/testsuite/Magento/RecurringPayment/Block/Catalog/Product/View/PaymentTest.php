@@ -44,7 +44,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $product->setRecurringPayment(array('start_date_is_editable' => true));
         $objectManager->get('Magento\Registry')->register('current_product', $product);
         $block = $objectManager->create('Magento\RecurringPayment\Block\Catalog\Product\View\Payment');
-        $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));
+        $block->setLayout($objectManager->create('Magento\View\Layout'));
 
         $html = $block->getDateHtml();
         $this->assertNotEmpty($html);

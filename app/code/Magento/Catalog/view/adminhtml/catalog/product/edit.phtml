@@ -30,9 +30,9 @@
  */
 ?>
 
-<div class="page-actions">
+<div class="product-actions">
     <div id="product-template-suggest-container" class="suggest-expandable">
-        <div class="actions-split">
+        <div class="action-dropdown">
             <button class="action-toggle" data-toggle="dropdown">
                 <span><?php echo $this->getAttributeSetName()?></span>
             </button>
@@ -336,12 +336,12 @@ jQuery(function($) {
                     });
                 });
             });
+            $('#product_info_tabs').tabs('refresh');
             if (!$('#' + activeTabId).closest('li').hasClass(removedElementClass)) {
                 $('#' + activeTabId).trigger('click');
             } else {
                 $('#product_info_tabs').tabs("option", "active", 0);
             }
-            $('#product_info_tabs').tabs('refresh');
         });
 
     });

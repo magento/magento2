@@ -74,7 +74,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array(
                 $objectManager->get('Magento\App\Helper\Context'),
                 $objectManager->get('Magento\Stdlib\String'),
-                $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
+                $objectManager->get('Magento\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
                 $objectManager->get('Magento\Escaper'),
                 $objectManager->get('Magento\Filter\FilterManager')

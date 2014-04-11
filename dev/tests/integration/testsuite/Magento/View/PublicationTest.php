@@ -391,13 +391,13 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
                 'product/product.css',
                 array(
                     'area' => 'adminhtml',
-                    'theme' => 'magento_backend',
+                    'theme' => 'Magento/backend',
                     'locale' => 'en_US',
                     'module' => 'Magento_ModuleA'
                 ),
-                'adminhtml/magento_backend/en_US/Magento_ModuleA/product/product.css',
+                'adminhtml/Magento/backend/en_US/Magento_ModuleA/product/product.css',
                 array('url(../../Magento_ModuleB/images/gallery-image-base-label.png)'),
-                array('adminhtml/magento_backend/en_US/Magento_ModuleB/images/gallery-image-base-label.png')
+                array('adminhtml/Magento/backend/en_US/Magento_ModuleB/images/gallery-image-base-label.png')
             ),
             'adminhtml' => array(
                 'Magento_ModuleC::styles.css',

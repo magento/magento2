@@ -31,7 +31,7 @@ $configData = $this->getObjectManager()->create('Magento\App\Config\ValueInterfa
 $configData->setPath(
     'carriers/flatrate/active'
 )->setScope(
-    \Magento\BaseScopeInterface::SCOPE_DEFAULT
+    \Magento\App\ScopeInterface::SCOPE_DEFAULT
 )->setScopeId(
     0
 )->setValue(

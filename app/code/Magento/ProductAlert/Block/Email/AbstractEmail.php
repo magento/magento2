@@ -44,22 +44,22 @@ abstract class AbstractEmail extends \Magento\View\Element\Template
     /**
      * Current Store scope object
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 
     /**
      * Set Store scope
      *
-     * @param int|string|\Magento\Core\Model\Website|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Website|\Magento\Store\Model\Store $store
      * @return $this
      */
     public function setStore($store)
     {
-        if ($store instanceof \Magento\Core\Model\Website) {
+        if ($store instanceof \Magento\Store\Model\Website) {
             $store = $store->getDefaultStore();
         }
-        if (!$store instanceof \Magento\Core\Model\Store) {
+        if (!$store instanceof \Magento\Store\Model\Store) {
             $store = $this->_storeManager->getStore($store);
         }
 
@@ -71,7 +71,7 @@ abstract class AbstractEmail extends \Magento\View\Element\Template
     /**
      * Retrieve current store object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

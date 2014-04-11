@@ -30,7 +30,6 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
 use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
 use Magento\Customer\Service\V1\Data\Eav\OptionBuilder;
 use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
@@ -59,7 +58,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
             $arguments
         );
-        $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));
+        $block->setLayout($objectManager->create('Magento\View\Layout'));
 
         $method = new \ReflectionMethod(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',

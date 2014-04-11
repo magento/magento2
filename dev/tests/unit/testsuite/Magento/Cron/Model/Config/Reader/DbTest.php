@@ -28,7 +28,7 @@ namespace Magento\Cron\Model\Config\Reader;
 class DbTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Config\Scope\Reader\DefaultReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Config\Reader\DefaultReader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_defaultReader;
 
@@ -48,7 +48,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_defaultReader = $this->getMockBuilder(
-            'Magento\Core\Model\Config\Scope\Reader\DefaultReader'
+            'Magento\Store\Model\Config\Reader\DefaultReader'
         )->disableOriginalConstructor()->getMock();
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Db();
         $this->_reader = new \Magento\Cron\Model\Config\Reader\Db($this->_defaultReader, $this->_converter);

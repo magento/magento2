@@ -76,14 +76,14 @@ class Session extends \Magento\Model\AbstractModel
     protected $_coreData;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -109,11 +109,11 @@ class Session extends \Magento\Model\AbstractModel
      *
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -123,11 +123,11 @@ class Session extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Math\Random $mathRandom,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
@@ -179,7 +179,7 @@ class Session extends \Magento\Model\AbstractModel
     /**
      * Get date-time before which persistent session is expired
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return string
      */
     public function getExpiredBefore($store = null)

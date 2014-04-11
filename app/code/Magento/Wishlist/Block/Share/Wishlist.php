@@ -39,20 +39,20 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Customer instance
      *
-     * @var \Magento\Customer\Model\Customer
+     * @var \Magento\Customer\Service\V1\Data\Customer
      */
     protected $_customer = null;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
      */
-    protected $_customerFactory;
+    protected $_customerAccountService;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      * @param array $priceBlockTypes
      */
@@ -60,11 +60,11 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
-        $this->_customerFactory = $customerFactory;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct(
             $context,
             $httpContext,
@@ -94,12 +94,12 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Shared Wishlist Customer instance
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
     public function getWishlistCustomer()
     {
         if (is_null($this->_customer)) {
-            $this->_customer = $this->_customerFactory->create()->load($this->_getWishlist()->getCustomerId());
+            $this->_customer = $this->_customerAccountService->getCustomer($this->_getWishlist()->getCustomerId());
         }
 
         return $this->_customer;

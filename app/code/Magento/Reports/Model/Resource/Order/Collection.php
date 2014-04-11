@@ -51,12 +51,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -81,8 +81,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\DB\Helper $coreResourceHelper
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
@@ -97,8 +97,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\DB\Helper $coreResourceHelper,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
@@ -114,7 +114,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $connection,
             $resource
         );
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_localeDate = $localeDate;
         $this->_orderConfig = $orderConfig;
@@ -129,7 +129,10 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     public function checkIsLive($range)
     {
-        $this->_isLive = (bool)(!$this->_coreStoreConfig->getConfig('sales/dashboard/use_aggregated_data'));
+        $this->_isLive = (bool)(!$this->_scopeConfig->getValue(
+            'sales/dashboard/use_aggregated_data',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ));
         return $this;
     }
 
@@ -431,7 +434,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 break;
 
             case '1m':
-                $dateStart->setDay($this->_coreStoreConfig->getConfig('reports/dashboard/mtd_start'));
+                $dateStart->setDay(
+                    $this->_scopeConfig->getValue(
+                        'reports/dashboard/mtd_start',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                );
                 break;
 
             case 'custom':
@@ -441,7 +449,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
             case '1y':
             case '2y':
-                $startMonthDay = explode(',', $this->_coreStoreConfig->getConfig('reports/dashboard/ytd_start'));
+                $startMonthDay = explode(
+                    ',',
+                    $this->_scopeConfig->getValue(
+                        'reports/dashboard/ytd_start',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                );
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
                 $dateStart->setMonth($startMonth);
@@ -587,7 +601,11 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         }
         $adapter = $this->getConnection();
 
-        if ($this->_coreStoreConfig->getConfig('sales/dashboard/use_aggregated_data')) {
+        if ($this->_scopeConfig->getValue(
+            'sales/dashboard/use_aggregated_data',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
+        ) {
             $this->setMainTable('sales_order_aggregated_created');
             $this->removeAllFieldsFromSelect();
             $averageExpr = $adapter->getCheckSql(
@@ -602,7 +620,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             if (!$isFilter) {
                 $this->addFieldToFilter(
                     'store_id',
-                    array('eq' => $this->_storeManager->getStore(\Magento\Core\Model\Store::ADMIN_CODE)->getId())
+                    array('eq' => $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId())
                 );
             }
             $this->getSelect()->where('main_table.order_status NOT IN(?)', $statuses);

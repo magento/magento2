@@ -25,7 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\App\RequestInterface" type="Magento\App\Request\Http" />
-    <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Core\App\Request\PathInfoProcessor" />
+    <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\App\ResponseInterface" type="Magento\App\Response\Http" />
     <preference for="Magento\App\RouterListInterface" type="Magento\App\RouterList" />
     <preference for="Magento\App\FrontControllerInterface" type="Magento\App\FrontController" />
@@ -33,10 +33,10 @@
     <preference for="Magento\App\CacheInterface" type="Magento\App\Cache\Proxy" />
     <preference for="Magento\App\Cache\StateInterface" type="Magento\App\Cache\State" />
     <preference for="Magento\App\Cache\TypeListInterface" type="Magento\App\Cache\TypeList" />
-    <preference for="Magento\Core\Model\Store\ConfigInterface" type="Magento\Core\Model\Store\Config" />
-    <preference for="Magento\Core\Model\StoreManagerInterface" type="Magento\Core\Model\StoreManager" />
+    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\View\DesignInterface" type="Magento\Core\Model\View\Design\Proxy" />
     <preference for="Magento\View\Design\ThemeInterface" type="Magento\Core\Model\Theme" />
+    <preference for="Magento\View\Design\Theme\ResolverInterface" type="Magento\Core\Model\Theme\Resolver" />
     <preference for="Magento\View\ConfigInterface" type="Magento\View\Config" />
     <preference for="Magento\Locale\ListsInterface" type="Magento\Locale\Lists" />
     <type name="Magento\Locale\Lists">
@@ -48,7 +48,7 @@
     <preference for="Magento\UrlInterface" type="Magento\Url" />
     <preference for="Magento\Data\Collection\Db\FetchStrategyInterface" type="Magento\Data\Collection\Db\FetchStrategy\Query" />
     <preference for="Magento\Config\ScopeInterface" type="Magento\Config\Scope" />
-    <preference for="Magento\Config\FileResolverInterface" type="Magento\Core\Model\Config\FileResolver" />
+    <preference for="Magento\Config\FileResolverInterface" type="Magento\App\Config\FileResolver" />
     <preference for="Magento\Config\CacheInterface" type="Magento\App\Cache\Type\Config" />
     <preference for="Magento\Config\ValidationStateInterface" type="Magento\App\Arguments\ValidationState" />
     <preference for="Magento\Module\ModuleListInterface" type="Magento\Module\ModuleList" />
@@ -56,7 +56,7 @@
     <preference for="Magento\Event\InvokerInterface" type="Magento\Event\Invoker\InvokerDefault" />
     <preference for="Magento\Interception\PluginList" type="Magento\Interception\PluginList\PluginList" />
     <preference for="Magento\Event\ManagerInterface" type="Magento\Event\Manager\Proxy" />
-    <preference for="Magento\View\LayoutInterface" type="Magento\Core\Model\Layout" />
+    <preference for="Magento\View\LayoutInterface" type="Magento\View\Layout" />
     <preference for="Magento\View\Layout\ProcessorInterface" type="Magento\Core\Model\Layout\Merge" />
     <preference for="Magento\View\Url\ConfigInterface" type="Magento\Core\Model\View\Url\Config" />
     <preference for="Magento\App\Route\ConfigInterface" type="Magento\App\Route\Config" />
@@ -69,15 +69,15 @@
     <preference for="Magento\Json\EncoderInterface" type="Magento\Json\Encoder" />
     <preference for="Magento\Json\DecoderInterface" type="Magento\Json\Decoder" />
     <preference for="Magento\Message\ManagerInterface" type="Magento\Message\Manager" />
-    <preference for="Magento\App\Config\ValueInterface" type="Magento\Core\Model\Config\Value" />
+    <preference for="Magento\App\Config\ValueInterface" type="Magento\App\Config\Value" />
     <preference for="Magento\Module\DependencyManagerInterface" type="Magento\Module\DependencyManager" />
     <preference for="Magento\Interception\Chain" type="Magento\Interception\Chain\Chain" />
-    <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
+    <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Module\Output\Config" />
     <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
     <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Image\Adapter\Config" />
     <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
-    <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
-    <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
+    <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Session\Config" />
+    <preference for="Magento\Session\SidResolverInterface" type="Magento\Session\SidResolver\Proxy" />
     <preference for="Magento\TranslateInterface" type="Magento\Translate" />
     <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
     <preference for="Magento\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
@@ -92,6 +92,7 @@
             <argument name="actionValidator" xsi:type="object">Magento\Model\ActionValidator\RemoveAction\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Service\V1\Data\FilterBuilder" shared="false" />
     <type name="Magento\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Message\Session\Proxy</argument>
@@ -100,14 +101,14 @@
     <type name="Magento\View\BlockPool" shared="false" />
     <type name="Magento\App\Request\Http">
         <arguments>
-            <argument name="pathInfoProcessor" xsi:type="object">Magento\Core\App\Request\PathInfoProcessor\Proxy</argument>
+            <argument name="pathInfoProcessor" xsi:type="object">Magento\Store\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Error\HandlerInterface" type="Magento\App\Error\Handler" />
     <preference for="Magento\Session\SaveHandlerInterface" type="Magento\Session\SaveHandler" />
     <type name="Magento\Session\SaveHandler">
         <arguments>
-            <argument name="saveMethod" xsi:type="init_parameter">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD</argument>
+            <argument name="saveMethod" xsi:type="init_parameter">Magento\Session\Config::PARAM_SESSION_SAVE_METHOD</argument>
         </arguments>
     </type>
     <type name="Magento\Session\SaveHandlerFactory">
@@ -167,10 +168,10 @@
             <argument name="banAll" xsi:type="init_parameter">Magento\App\Cache\State::PARAM_BAN_CACHE</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\StoreManager">
+    <type name="Magento\Store\Model\StoreManager">
         <arguments>
-            <argument name="scopeCode" xsi:type="init_parameter">Magento\Core\Model\StoreManager::PARAM_RUN_CODE</argument>
-            <argument name="scopeType" xsi:type="init_parameter">Magento\Core\Model\StoreManager::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+            <argument name="scopeType" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
         </arguments>
     </type>
     <type name="Magento\Translate">
@@ -189,7 +190,7 @@
     <type name="Magento\Data\Structure" shared="false" />
     <type name="Magento\Core\Model\View\Design">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Core\Model\StoreManager\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Acl" shared="false" />
@@ -243,7 +244,7 @@
     </type>
     <type name="Magento\App\Resource\Config\Reader">
         <arguments>
-            <argument name="fileResolver" xsi:type="object">Magento\Core\Model\Config\FileResolver\Proxy</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\App\Config\FileResolver\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Config\Scope">
@@ -254,7 +255,7 @@
     </type>
     <type name="Magento\Url">
         <arguments>
-            <argument name="session" xsi:type="object">Magento\Core\Model\Session\Proxy</argument>
+            <argument name="session" xsi:type="object">Magento\Session\Generic\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\View\Url">
@@ -330,9 +331,10 @@
             <argument name="paramInterpreter" xsi:type="object">Magento\Data\Argument\Interpreter\String</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Layout">
+    <type name="Magento\View\Layout">
         <arguments>
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Mview\View">

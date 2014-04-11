@@ -44,7 +44,7 @@ class AreaEmulatorTest extends \PHPUnit_Framework_TestCase
     public function testEmulateLayoutArea()
     {
         $configuration = array(
-            'Magento\Core\Model\Layout' => array(
+            'Magento\View\Layout' => array(
                 'arguments' => array(
                     'area' => 'test_area'
                 )

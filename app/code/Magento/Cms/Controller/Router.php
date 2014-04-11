@@ -44,7 +44,7 @@ class Router extends \Magento\App\Router\AbstractRouter
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -84,7 +84,7 @@ class Router extends \Magento\App\Router\AbstractRouter
      * @param \Magento\UrlInterface $url
      * @param \Magento\App\State $appState
      * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ResponseInterface $response
      */
     public function __construct(
@@ -93,7 +93,7 @@ class Router extends \Magento\App\Router\AbstractRouter
         \Magento\UrlInterface $url,
         \Magento\App\State $appState,
         \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\ResponseInterface $response
     ) {
         parent::__construct($actionFactory);

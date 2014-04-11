@@ -55,7 +55,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Backend\Helper\Data', array(), array(), '', false),
             $this->getMock('\Magento\Backend\Model\Auth\StorageInterface'),
             $this->_credentialStorage,
-            $this->getMock('\Magento\App\ConfigInterface', array(), array(), '', false),
+            $this->getMock('\Magento\App\Config\ScopeConfigInterface'),
             $this->_modelFactoryMock
         );
     }

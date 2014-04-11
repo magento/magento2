@@ -76,13 +76,13 @@ class Minifier
         }
         $originalFileRelative = $this->rootDirectory->getRelativePath($originalFile);
         $minifiedFile = $this->_findOriginalMinifiedFile($originalFileRelative);
-        if (!$minifiedFile) {
-            $minifiedFile = $this->directoryName . '/' . $this->_generateMinifiedFileName($originalFile);
-            $this->_strategy->minifyFile($originalFileRelative, $minifiedFile);
+        if ($minifiedFile) {
+            return $this->rootDirectory->getAbsolutePath($minifiedFile);
         }
+        $minifiedFile = $this->directoryName . '/' . $this->_generateMinifiedFileName($originalFile);
+        $this->_strategy->minifyFile($originalFileRelative, $minifiedFile);
 
-        $minifiedFile = $this->pubViewCacheDir->getRelativePath($minifiedFile);
-        return $this->pubViewCacheDir->getAbsolutePath($minifiedFile);
+        return $minifiedFile;
     }
 
     /**

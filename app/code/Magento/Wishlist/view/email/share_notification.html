@@ -1,4 +1,4 @@
-<!--@subject Take a look at {{var customer.name}}'s wishlist @-->
+<!--@subject Take a look at {{var customerName}}'s wishlist @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "var logo_url":"Email Logo Image Url",
@@ -33,8 +33,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     </td>
                 </tr>
                 <tr>
-                    <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you, <strong>{{escapehtml var=$customer.name}}</p></center></td>
-                </td>
+                    <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you, <strong>{{escapehtml var=$customerName}}</strong></p></center></td>
+                </tr>
             </table>
         </td>
     </tr>

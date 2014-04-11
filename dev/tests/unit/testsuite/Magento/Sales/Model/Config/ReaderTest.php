@@ -39,7 +39,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $fileResolver = $this->getMockBuilder(
-            'Magento\Core\Model\Config\FileResolver'
+            'Magento\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
         $converter = $this->getMockBuilder(
             'Magento\Sales\Model\Config\Converter'

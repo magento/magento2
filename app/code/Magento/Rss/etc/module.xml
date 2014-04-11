@@ -35,6 +35,7 @@
             <module name="Magento_Wishlist"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Sales"/>

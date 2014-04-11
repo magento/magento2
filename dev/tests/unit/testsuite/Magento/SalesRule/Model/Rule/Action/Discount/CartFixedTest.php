@@ -100,7 +100,7 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
         $this->rule->setData(array('id' => 1, 'discount_amount' => 10.0));
 
         $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue(array()));
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $store->expects($this->atLeastOnce())->method('convertPrice')->will($this->returnArgument(0));
         $store->expects($this->atLeastOnce())->method('roundPrice')->will($this->returnArgument(0));
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));

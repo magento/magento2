@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 
 $installer->startSetup();
 /**
@@ -118,9 +118,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('product_alert_price', 'website_id', 'core_website', 'website_id'),
+    $installer->getFkName('product_alert_price', 'website_id', 'store_website', 'website_id'),
     'website_id',
-    $installer->getTable('core_website'),
+    $installer->getTable('store_website'),
     'website_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -192,9 +192,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('product_alert_stock', array('website_id')),
     array('website_id')
 )->addForeignKey(
-    $installer->getFkName('product_alert_stock', 'website_id', 'core_website', 'website_id'),
+    $installer->getFkName('product_alert_stock', 'website_id', 'store_website', 'website_id'),
     'website_id',
-    $installer->getTable('core_website'),
+    $installer->getTable('store_website'),
     'website_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

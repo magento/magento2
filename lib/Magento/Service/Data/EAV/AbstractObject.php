@@ -57,7 +57,7 @@ abstract class AbstractObject extends \Magento\Service\Data\AbstractObject
     /**
      * Retrieve custom attributes values as an associative array.
      *
-     * @return string[]
+     * @return string[]|null
      */
     public function getCustomAttributes()
     {

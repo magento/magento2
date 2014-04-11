@@ -67,7 +67,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $directoryFactoryMock;
 
     /**
-     * @var \Magento\App\ConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -115,7 +115,6 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $this->resourceDirectoryDatabaseMock = $this->getMock(
             'Magento\Core\Model\Resource\File\Storage\Directory\Database',
             array(),
@@ -133,10 +132,17 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->configMock->expects($this->any())
-            ->method('getValue')
-            ->with(\Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE, 'default')
-            ->will($this->returnValue($this->customConnectionName));
+        $this->configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->configMock->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
+            'default'
+        )->will(
+            $this->returnValue($this->customConnectionName)
+        );
 
         $this->contextMock->expects($this->once())->method('getLogger')->will($this->returnValue($this->loggerMock));
 

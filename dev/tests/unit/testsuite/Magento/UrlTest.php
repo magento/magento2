@@ -26,6 +26,7 @@ namespace Magento;
 
 /**
  * Test class for Magento\Url
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,6 +60,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $sessionMock;
 
+    /**
+     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfig;
+
     protected function setUp()
     {
         $this->routeParamsResolverMock = $this->getMock('Magento\Core\Model\Url\RouteParamsResolver',
@@ -68,6 +74,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->queryParamsResolverMock = $this->getMock('Magento\Url\QueryParamsResolverInterface', [], [], '', false);
         $this->sidResolverMock = $this->getMock('Magento\Session\SidResolverInterface');
         $this->sessionMock = $this->getMock('Magento\Session\Generic', [], [], '', false);
+        $this->scopeConfig = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
     }
 
     /**
@@ -97,6 +104,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function getUrlModel($arguments = [])
     {
+        $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         return $objectManager->getObject('Magento\Url', $arguments);
     }
@@ -462,8 +470,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'urlSecurityInfo' => $urlSecurityInfoMock,
             'routeParamsResolver' => $this->getRouteParamsResolver(),
             'scopeResolver' => $this->scopeResolverMock,
+            'scopeConfig' => $this->scopeConfig
         ]);
 
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with($this->equalTo($configPath), \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock)
+            ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->at(0))->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(false));
         $this->scopeResolverMock->expects($this->any())->method('getScope')->will($this->returnValue($this->scopeMock));
@@ -473,8 +486,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->routeParamsResolverMock->expects($this->any())->method('getType')
             ->will($this->returnValue($urlType));
         $this->routeParamsResolverMock->expects($this->once())->method('getData')->will($this->returnValue($isSecure));
-        $this->scopeMock->expects($this->once())->method('getConfig')->with($configPath)
-            ->will($this->returnValue('http://localhost/'));
         $urlSecurityInfoMock->expects($this->exactly($isSecureCallCount))->method('isSecure')
             ->will($this->returnValue(false));
 
@@ -496,17 +507,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $model = $this->getUrlModel([
             'routeParamsResolver' => $this->getRouteParamsResolver(),
             'scopeResolver' => $this->scopeResolverMock,
+            'scopeConfig' => $this->scopeConfig
         ]);
 
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with(
+                'web/secure/base_url_secure_forced', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
+            )
+            ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(true));
         $this->routeParamsResolverMock->expects($this->once())->method('getData')->with('secure')
             ->will($this->returnValue(true));
 
         $this->scopeResolverMock->expects($this->any())->method('getScope')->will($this->returnValue($this->scopeMock));
-        $this->scopeMock->expects($this->once())->method('getConfig')->with('web/secure/base_url_secure_forced')
-            ->will($this->returnValue('http://localhost/'));
-
         $this->assertEquals('http://localhost/', $model->getConfigData('base_url_secure_forced'));
     }
 

@@ -113,7 +113,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -140,8 +140,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Initialize base inline translation model
      *
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Translation\Model\Resource\StringFactory $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\App\State $appState
      * @param \Magento\App\Cache\TypeListInterface $appCache,
@@ -149,7 +149,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
      */
     public function __construct(
         \Magento\Translation\Model\Resource\StringFactory $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\App\State $appState,
         \Magento\App\Cache\TypeListInterface $appCache,
@@ -187,11 +187,13 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
         foreach ($translateParams as $param) {
             if ($this->_appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
                 $storeId = 0;
-            } else if (empty($param['perstore'])) {
-                $resource->deleteTranslate($param['original'], null, false);
-                $storeId = 0;
             } else {
-                $storeId = $validStoreId;
+                if (empty($param['perstore'])) {
+                    $resource->deleteTranslate($param['original'], null, false);
+                    $storeId = 0;
+                } else {
+                    $storeId = $validStoreId;
+                }
             }
             $resource->saveTranslate($param['original'], $param['custom'], null, $storeId);
         }
@@ -411,8 +413,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     private function _prepareTagAttributesForContent(&$content)
     {
         $quoteHtml = $this->_getHtmlQuote();
-        $tagMatch   = array();
-        $nextTag    = 0;
+        $tagMatch = array();
+        $nextTag = 0;
         $tagRegExp = '#<([a-z]+)\s*?[^>]+?((' . self::REGEXP_TOKEN . ')[^>]*?)+\\\\?/?>#iS';
         while (preg_match($tagRegExp, $content, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
             $tagHtml = $tagMatch[0][0];
@@ -600,7 +602,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
                     'translated' => $matches[2][0],
                     'original' => $matches[3][0],
                     'location' => 'Text',
-                    'scope' => $matches[4][0],
+                    'scope' => $matches[4][0]
                 )
             );
 

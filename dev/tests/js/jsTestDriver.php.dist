@@ -47,7 +47,7 @@ return array(
         '/app/code/Magento/DesignEditor/view/frontend/css/styles.css',
         '/pub/lib/mage/cookies.js',
         '/pub/lib/mage/calendar.js',
-        '/pub/lib/mage/loader.js',
+        '/pub/lib/mage/loader_old.js',
         '/pub/lib/mage/edit-trigger.js',
         '/pub/lib/mage/translate-inline.js',
         '/pub/lib/mage/translate-inline-vde.js',

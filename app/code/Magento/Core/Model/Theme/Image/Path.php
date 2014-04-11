@@ -47,7 +47,7 @@ class Path implements \Magento\View\Design\Theme\Image\PathInterface
     protected $viewUrl;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -56,12 +56,12 @@ class Path implements \Magento\View\Design\Theme\Image\PathInterface
      * 
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Filesystem $filesystem,
         \Magento\View\Url $viewUrl,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->filesystem = $filesystem;
         $this->viewUrl = $viewUrl;

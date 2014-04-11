@@ -70,7 +70,7 @@ class Product extends \Magento\Model\Resource\Db\AbstractDb
     protected $_productResource;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -103,7 +103,7 @@ class Product extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
@@ -114,7 +114,7 @@ class Product extends \Magento\Model\Resource\Db\AbstractDb
         \Magento\App\Resource $resource,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,
@@ -202,7 +202,7 @@ class Product extends \Magento\Model\Resource\Db\AbstractDb
             array('t1_' . $attributeCode => $attribute['table']),
             'e.entity_id = t1_' . $attributeCode . '.entity_id AND ' . $adapter->quoteInto(
                 ' t1_' . $attributeCode . '.store_id = ?',
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ) . $adapter->quoteInto(
                 ' AND t1_' . $attributeCode . '.attribute_id = ?',
                 $attribute['attribute_id']
@@ -258,14 +258,14 @@ class Product extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Get category collection array
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return array|bool
      */
     public function getCollection($storeId)
     {
         $products = array();
 
-        /* @var $store \Magento\Core\Model\Store */
+        /* @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore($storeId);
         if (!$store) {
             return false;

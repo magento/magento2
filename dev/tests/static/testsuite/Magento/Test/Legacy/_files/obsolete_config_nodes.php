@@ -60,7 +60,7 @@ return array(
     '/config/global/index' => 'This configuration moved to indexers.xml file',
     '/config/global/catalogrule' => 'This configuration moved to Di configuration of \Magento\CatalogRule\Model\Rule',
     '/config/global/salesrule' => 'This configuration moved to Di configuration of \Magento\SalesRule\Helper\Coupon',
-    '/config/global/session' => 'This configuration moved to Di configuration of \Magento\Core\Model\Session\Validator',
+    '/config/global/session' => 'This configuration moved to Di configuration of \Magento\Session\Validator',
     '/config/global/ignore_user_agents' => 'This configuration moved to Di configuration of \Magento\Log\Model\Visitor',
     '/config/global/request' => 'This configuration moved to Di configuration of \Magento\App\RequestInterface',
     '/config/global/secure_url' => 'This configuration moved to Di configuration of \Magento\Core\Model\Url\SecurityInfo',

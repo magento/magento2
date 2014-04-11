@@ -50,7 +50,7 @@ class Config extends \Magento\Config\Data
     /**
      * Current store instance
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store = null;
 
@@ -63,7 +63,7 @@ class Config extends \Magento\Config\Data
     protected $_defaultTypes = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -73,28 +73,36 @@ class Config extends \Magento\Config\Data
     protected $_addressHelper;
 
     /**
+     * @var \Magento\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\Customer\Model\Address\Config\Reader $reader
      * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
         \Magento\Config\CacheInterface $cache,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         $cacheId = 'address_format'
     ) {
         parent::__construct($reader, $cache, $cacheId);
         $this->_storeManager = $storeManager;
         $this->_addressHelper = $addressHelper;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
      * Set store
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return $this
      */
     public function setStore($store)
@@ -106,7 +114,7 @@ class Config extends \Magento\Config\Data
     /**
      * Retrieve store
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -144,7 +152,7 @@ class Config extends \Magento\Config\Data
                 )->setTitle(
                     (string)$typeConfig['title']
                 )->setDefaultFormat(
-                    $store->getConfig($path)
+                    $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
                 )->setEscapeHtml(
                     $escapeHtml
                 );

@@ -31,7 +31,7 @@ namespace Magento\Theme\Model\Config;
 class Customization
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -62,12 +62,12 @@ class Customization
     protected $_unassignedTheme;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\ThemeProviderInterface $themeProvider
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\DesignInterface $design,
         \Magento\View\Design\Theme\ThemeProviderInterface $themeProvider
     ) {
@@ -113,7 +113,7 @@ class Customization
     {
         $storesByThemes = array();
         $stores = $this->_storeManager->getStores();
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($stores as $store) {
             $themeId = $this->_getConfigurationThemeId($store);
             if (!isset($storesByThemes[$themeId])) {
@@ -128,7 +128,7 @@ class Customization
      * Check if current theme has assigned to any store
      *
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @param null|\Magento\Core\Model\Store $store
+     * @param null|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isThemeAssignedToStore($theme, $store = null)
@@ -154,7 +154,7 @@ class Customization
      * Is theme assigned to specific store
      *
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return bool
      */
     protected function _isThemeAssignedToSpecificStore($theme, $store)
@@ -165,7 +165,7 @@ class Customization
     /**
      * Get configuration theme id
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return int
      */
     protected function _getConfigurationThemeId($store)

@@ -39,7 +39,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_url;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -58,11 +58,11 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\State $appState
      * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\Code\NameBuilder $nameBuilder
      *
@@ -75,12 +75,12 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         \Magento\App\Route\ConfigInterface $routeConfig,
         \Magento\App\State $appState,
         \Magento\UrlInterface $url,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
         \Magento\Code\NameBuilder $nameBuilder,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
@@ -91,7 +91,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
             $appState,
             $url,
             $storeManager,
-            $storeConfig,
+            $scopeConfig,
             $urlSecurityInfo,
             $routerId,
             $nameBuilder

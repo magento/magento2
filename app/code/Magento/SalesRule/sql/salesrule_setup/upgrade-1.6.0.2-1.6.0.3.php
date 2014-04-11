@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 $installer = $this;
 $connection = $installer->getConnection();
 
 $rulesTable = $installer->getTable('salesrule');
-$websitesTable = $installer->getTable('core_website');
+$websitesTable = $installer->getTable('store_website');
 $customerGroupsTable = $installer->getTable('customer_group');
 $rulesWebsitesTable = $installer->getTable('salesrule_website');
 $rulesCustomerGroupsTable = $installer->getTable('salesrule_customer_group');

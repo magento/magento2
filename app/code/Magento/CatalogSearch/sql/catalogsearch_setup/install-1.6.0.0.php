@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 
 $installer->startSetup();
 
@@ -107,9 +107,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('catalogsearch_query', 'store_id'),
     'store_id'
 )->addForeignKey(
-    $installer->getFkName('catalogsearch_query', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('catalogsearch_query', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

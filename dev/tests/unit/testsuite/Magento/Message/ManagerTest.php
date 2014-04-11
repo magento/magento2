@@ -192,7 +192,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($messageCollection)
         );
 
-        $this->eventManager->expects($this->once())->method('dispatch')->with('core_session_abstract_clear_messages');
+        $this->eventManager->expects($this->once())->method('dispatch')->with('session_abstract_clear_messages');
 
         $this->assertEquals($messageCollection, $this->model->getMessages(true));
     }
@@ -265,7 +265,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($messageCollection));
         $this->eventManager->expects($this->once())
-            ->method('dispatch')->with('core_session_abstract_add_message');
+            ->method('dispatch')->with('session_abstract_add_message');
         $this->messageFactory->expects($this->once())
             ->method('create')->with($type, $message)
             ->will($this->returnValue($this->messageMock));
@@ -351,7 +351,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($messageCollection));
         $this->eventManager->expects($this->once())
-            ->method('dispatch')->with('core_session_abstract_add_message');
+            ->method('dispatch')->with('session_abstract_add_message');
 
         $messageCollection->expects($this->once())->method('addMessage')->with($this->messageMock);
         $this->model->addMessages(array($this->messageMock));

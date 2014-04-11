@@ -60,7 +60,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helperMock = $this->getMock('Magento\GoogleOptimizer\Helper\Data', array(), array(), '', false);
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false);
         $this->_tabsMock = $this->getMock(
             'Magento\Catalog\Block\Adminhtml\Category\Tabs',
             array(),

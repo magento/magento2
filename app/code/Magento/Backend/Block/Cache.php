@@ -43,7 +43,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
             array(
                 'label' => __('Flush Magento Cache'),
                 'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
-                'class' => 'delete'
+                'class' => 'primary flush-cache-magento'
             )
         );
 
@@ -53,7 +53,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
             array(
                 'label' => __('Flush Cache Storage'),
                 'onclick' => 'confirmSetLocation(\'' . $message . '\', \'' . $this->getFlushStorageUrl() . '\')',
-                'class' => 'delete'
+                'class' => 'flush-cache-storage'
             )
         );
     }

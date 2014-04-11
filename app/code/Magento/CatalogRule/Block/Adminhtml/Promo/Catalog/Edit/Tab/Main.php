@@ -40,33 +40,41 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 class Main extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
     protected $_customerGroup;
+
+    /**
+     * @var \Magento\Convert\Object
+     */
+    protected $_objectConverter;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $customerGroup
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroup
+     * @param \Magento\Convert\Object $objectConverter
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $customerGroup,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroup,
+        \Magento\Convert\Object $objectConverter,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
         $this->_customerGroup = $customerGroup;
+        $this->_objectConverter = $objectConverter;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -186,7 +194,7 @@ class Main extends Generic implements TabInterface
                 'label' => __('Customer Groups'),
                 'title' => __('Customer Groups'),
                 'required' => true,
-                'values' => $this->_customerGroup->create()->toOptionArray()
+                'values' => $this->_objectConverter->toOptionArray($this->_customerGroup->getGroups(), 'id', 'code')
             )
         );
 

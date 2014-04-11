@@ -31,7 +31,7 @@ namespace Magento\Backend\Model\Config\Backend\Locale;
 
 use Magento\Model\Exception;
 
-class Timezone extends \Magento\Core\Model\Config\Value
+class Timezone extends \Magento\App\Config\Value
 {
     /**
      * @return $this

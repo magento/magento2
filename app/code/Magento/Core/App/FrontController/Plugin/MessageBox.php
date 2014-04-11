@@ -52,7 +52,7 @@ class MessageBox
     protected $request;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $config;
 

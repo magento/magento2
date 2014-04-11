@@ -52,7 +52,7 @@ abstract class AbstractDatabase extends \Magento\Model\AbstractModel
     protected $_date;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_configuration;
 
@@ -61,7 +61,7 @@ abstract class AbstractDatabase extends \Magento\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Stdlib\DateTime\DateTime $dateModel
-     * @param \Magento\App\ConfigInterface $configuration
+     * @param \Magento\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param string|null $connectionName
@@ -72,7 +72,7 @@ abstract class AbstractDatabase extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\App\ConfigInterface $configuration,
+        \Magento\App\Config\ScopeConfigInterface $configuration,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $connectionName = null,

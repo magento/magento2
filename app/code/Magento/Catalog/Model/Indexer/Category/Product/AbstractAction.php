@@ -79,7 +79,7 @@ abstract class AbstractAction
     protected $resource;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -97,12 +97,12 @@ abstract class AbstractAction
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config
     ) {
         $this->resource = $resource;
@@ -216,10 +216,10 @@ abstract class AbstractAction
     /**
      * Retrieve select for reindex products of non anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return \Magento\DB\Select
      */
-    protected function getNonAnchorCategoriesSelect(\Magento\Core\Model\Store $store)
+    protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         if (!isset($this->nonAnchorSelects[$store->getId()])) {
             $statusAttributeId = $this->config->getAttribute(
@@ -334,10 +334,10 @@ abstract class AbstractAction
     /**
      * Reindex products of non anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return void
      */
-    protected function reindexNonAnchorCategories(\Magento\Core\Model\Store $store)
+    protected function reindexNonAnchorCategories(\Magento\Store\Model\Store $store)
     {
         $selects = $this->prepareSelectsByRange($this->getNonAnchorCategoriesSelect($store), 'entity_id');
         foreach ($selects as $select) {
@@ -355,10 +355,10 @@ abstract class AbstractAction
     /**
      * Check if anchor select isset
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return bool
      */
-    protected function hasAnchorSelect(\Magento\Core\Model\Store $store)
+    protected function hasAnchorSelect(\Magento\Store\Model\Store $store)
     {
         return isset($this->anchorSelects[$store->getId()]);
     }
@@ -366,10 +366,10 @@ abstract class AbstractAction
     /**
      * Create anchor select
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return \Magento\DB\Select
      */
-    protected function createAnchorSelect(\Magento\Core\Model\Store $store)
+    protected function createAnchorSelect(\Magento\Store\Model\Store $store)
     {
         $isAnchorAttributeId = $this->config->getAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
@@ -465,10 +465,10 @@ abstract class AbstractAction
     /**
      * Retrieve select for reindex products of non anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return \Magento\DB\Select
      */
-    protected function getAnchorCategoriesSelect(\Magento\Core\Model\Store $store)
+    protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         if (!$this->hasAnchorSelect($store)) {
             $this->anchorSelects[$store->getId()] = $this->createAnchorSelect($store);
@@ -479,10 +479,10 @@ abstract class AbstractAction
     /**
      * Reindex products of anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return void
      */
-    protected function reindexAnchorCategories(\Magento\Core\Model\Store $store)
+    protected function reindexAnchorCategories(\Magento\Store\Model\Store $store)
     {
         $selects = $this->prepareSelectsByRange($this->getAnchorCategoriesSelect($store), 'entity_id');
 
@@ -501,10 +501,10 @@ abstract class AbstractAction
     /**
      * Get select for all products
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return \Magento\DB\Select
      */
-    protected function getAllProducts(\Magento\Core\Model\Store $store)
+    protected function getAllProducts(\Magento\Store\Model\Store $store)
     {
         if (!isset($this->productsSelects[$store->getId()])) {
             $statusAttributeId = $this->config->getAttribute(
@@ -602,10 +602,10 @@ abstract class AbstractAction
     /**
      * Reindex all products to root category
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return void
      */
-    protected function reindexRootCategory(\Magento\Core\Model\Store $store)
+    protected function reindexRootCategory(\Magento\Store\Model\Store $store)
     {
         if ($this->isIndexRootCategoryNeeded()) {
             $selects = $this->prepareSelectsByRange(

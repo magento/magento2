@@ -49,15 +49,23 @@ class Observer
     protected $_resourceReview;
 
     /**
-     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Review\Model\Resource\Review $resourceReview
+     * @var \Magento\Review\Model\Resource\Rating
+     */
+    protected $_resourceRating;
+
+    /**
+     * @param ReviewFactory $reviewFactory
+     * @param Resource\Review $resourceReview
+     * @param Resource\Rating $resourceRating
      */
     public function __construct(
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Model\Resource\Review $resourceReview
+        \Magento\Review\Model\Resource\Review $resourceReview,
+        \Magento\Review\Model\Resource\Rating $resourceRating
     ) {
         $this->_reviewFactory = $reviewFactory;
         $this->_resourceReview = $resourceReview;
+        $this->_resourceRating = $resourceRating;
     }
 
     /**
@@ -85,6 +93,7 @@ class Observer
         $eventProduct = $observer->getEvent()->getProduct();
         if ($eventProduct && $eventProduct->getId()) {
             $this->_resourceReview->deleteReviewsByProductId($eventProduct->getId());
+            $this->_resourceRating->deleteAggregatedRatingsByProductId($eventProduct->getId());
         }
 
         return $this;

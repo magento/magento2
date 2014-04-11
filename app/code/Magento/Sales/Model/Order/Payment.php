@@ -202,7 +202,7 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_transactionCollectionFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -214,7 +214,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -227,7 +227,7 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -393,10 +393,8 @@ class Payment extends \Magento\Payment\Model\Info
             if ($message) {
                 $order->addStatusToHistory($order->getStatus(), $message, $isCustomerNotified);
             }
-            // add message to history if order state already declared
         } elseif ($order->getState() && ($orderStatus !== $order->getStatus() || $message)) {
             $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
-            // set order state
         } elseif ($order->getState() != $orderState || $order->getStatus() != $orderStatus || $message) {
             $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
         }
@@ -423,7 +421,7 @@ class Payment extends \Magento\Payment\Model\Info
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
-            return $this; // @see Invoice::capture()
+            return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
         $order = $this->getOrder();
@@ -1041,7 +1039,6 @@ class Payment extends \Magento\Payment\Model\Info
                         $transactionId
                     );
                 } else {
-                    // notification mechanism is responsible to update the payment object first
                 }
                 if ($this->getIsTransactionApproved()) {
                     $result = true;
@@ -1315,7 +1312,6 @@ class Payment extends \Magento\Payment\Model\Info
             $this->getOrder()->addRelatedObject($transaction);
             if ($salesDocument && $salesDocument instanceof \Magento\Sales\Model\AbstractModel) {
                 $salesDocument->setTransactionId($transactionId);
-                // TODO: linking transaction with the sales document
             }
 
             // link with parent transaction

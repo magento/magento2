@@ -36,12 +36,10 @@ app/code/Magento/Cms/Controller/Router.php
 app/code/Magento/Cms/Model/Template/FilterProvider.php
 app/code/Magento/ConfigurableProduct
 app/code/Magento/Core/data
-app/code/Magento/Core/Model/Config
 app/code/Magento/Core/Model/Design.php
 app/code/Magento/Core/Model/Layout/Update.php
 app/code/Magento/Core/Model/Resource/Theme
 app/code/Magento/Core/Model/Resource/Theme.php
-app/code/Magento/Core/Model/Session/Validator.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
@@ -139,3 +137,4 @@ lib/Magento/Url/SecurityInfoInterface.php
 lib/Magento/View
 lib/Magento/App/AbstractShell.php
 lib/Magento/Locale/Validator.php
+lib/Magento/App/Config

@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 $installer = $this;
 $connection = $installer->getConnection();
 
 $rulesTable = $installer->getTable('catalogrule');
-$websitesTable = $installer->getTable('core_website');
+$websitesTable = $installer->getTable('store_website');
 $customerGroupsTable = $installer->getTable('customer_group');
 $rulesWebsitesTable = $installer->getTable('catalogrule_website');
 $rulesCustomerGroupsTable = $installer->getTable('catalogrule_customer_group');
@@ -68,7 +68,7 @@ if (!$connection->isTableExists($rulesWebsitesTable)) {
         \Magento\DB\Ddl\Table::ACTION_CASCADE,
         \Magento\DB\Ddl\Table::ACTION_CASCADE
     )->addForeignKey(
-        $installer->getFkName('catalogrule_website', 'website_id', 'core_website', 'website_id'),
+        $installer->getFkName('catalogrule_website', 'website_id', 'store_website', 'website_id'),
         'website_id',
         $websitesTable,
         'website_id',

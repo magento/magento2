@@ -85,7 +85,7 @@ class Unsubscribe extends \Magento\App\Action\Action
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             )->loadByParam();
             if ($model->getId()) {
                 $model->delete();
@@ -111,7 +111,7 @@ class Unsubscribe extends \Magento\App\Action\Action
                 'Magento\ProductAlert\Model\Price'
             )->deleteCustomer(
                 $session->getCustomerId(),
-                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $this->messageManager->addSuccess(__('You will no longer receive price alerts for this product.'));
         } catch (\Exception $e) {
@@ -148,7 +148,7 @@ class Unsubscribe extends \Magento\App\Action\Action
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             )->loadByParam();
             if ($model->getId()) {
                 $model->delete();
@@ -173,7 +173,7 @@ class Unsubscribe extends \Magento\App\Action\Action
                 'Magento\ProductAlert\Model\Stock'
             )->deleteCustomer(
                 $session->getCustomerId(),
-                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
         } catch (\Exception $e) {

@@ -50,8 +50,8 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_matchedEntities = array(
         \Magento\Catalog\Model\Product::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
         \Magento\Catalog\Model\Category::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
-        \Magento\Core\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
-        \Magento\Core\Model\Store\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Store\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Store\Model\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
         \Magento\App\Config\ValueInterface::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
     );
 
@@ -140,34 +140,39 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
         }
 
         $entity = $event->getEntity();
-        if ($entity == \Magento\Core\Model\Store::ENTITY) {
+        if ($entity == \Magento\Store\Model\Store::ENTITY) {
             $store = $event->getDataObject();
             if ($store && ($store->isObjectNew() || $store->dataHasChangedFor('group_id'))) {
                 $result = true;
             } else {
                 $result = false;
             }
-        } else if ($entity == \Magento\Core\Model\Store\Group::ENTITY) {
-            $storeGroup = $event->getDataObject();
-            $hasDataChanges = $storeGroup && ($storeGroup->dataHasChangedFor(
-                'root_category_id'
-            ) || $storeGroup->dataHasChangedFor(
-                'website_id'
-            ));
-            if ($storeGroup && !$storeGroup->isObjectNew() && $hasDataChanges) {
-                $result = true;
-            } else {
-                $result = false;
-            }
-        } else if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
-            $configData = $event->getDataObject();
-            if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
-                $result = $configData->isValueChanged();
-            } else {
-                $result = false;
-            }
         } else {
-            $result = parent::matchEvent($event);
+            if ($entity == \Magento\Store\Model\Group::ENTITY) {
+                /** @var \Magento\Store\Model\Group $storeGroup */
+                $storeGroup = $event->getDataObject();
+                $hasDataChanges = $storeGroup && ($storeGroup->dataHasChangedFor(
+                    'root_category_id'
+                ) || $storeGroup->dataHasChangedFor(
+                    'website_id'
+                ));
+                if ($storeGroup && !$storeGroup->isObjectNew() && $hasDataChanges) {
+                    $result = true;
+                } else {
+                    $result = false;
+                }
+            } else {
+                if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
+                    $configData = $event->getDataObject();
+                    if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
+                        $result = $configData->isValueChanged();
+                    } else {
+                        $result = false;
+                    }
+                } else {
+                    $result = parent::matchEvent($event);
+                }
+            }
         }
 
         $event->addNewData(self::EVENT_MATCH_RESULT_KEY, $result);
@@ -194,8 +199,8 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
                 $this->_registerCategoryEvent($event);
                 break;
 
-            case \Magento\Core\Model\Store::ENTITY:
-            case \Magento\Core\Model\Store\Group::ENTITY:
+            case \Magento\Store\Model\Store::ENTITY:
+            case \Magento\Store\Model\Store::ENTITY:
             case \Magento\App\Config\ValueInterface::ENTITY:
                 $process = $event->getProcess();
                 $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);

@@ -181,7 +181,7 @@ class Media implements AppInterface
                 $this->_response->setHttpResponseCode(404);
             }
             return $this->_response;
-        } catch (\Magento\Core\Model\Store\Exception $e) {
+        } catch (\Exception $e) {
             $this->_response->setHttpResponseCode(404);
             return $this->_response;
         }

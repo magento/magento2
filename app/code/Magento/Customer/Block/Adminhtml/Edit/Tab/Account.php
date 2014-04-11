@@ -44,7 +44,7 @@ class Account extends GenericMetadata
     protected $_customerFormFactory;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
@@ -79,7 +79,7 @@ class Account extends GenericMetadata
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
@@ -94,7 +94,7 @@ class Account extends GenericMetadata
         \Magento\Data\FormFactory $formFactory,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Customer\Helper\Data $customerHelper,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,

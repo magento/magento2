@@ -79,9 +79,14 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      */
     protected function _isMemoryLimitReached()
     {
-        $limit = $this->_convertToByte(ini_get('memory_limit'));
-        $requiredMemory = $this->_getImageNeedMemorySize($this->_fileName);
-        return memory_get_usage(true) + $requiredMemory > $limit;
+        $memory_limit = ini_get('memory_limit');
+        if ($memory_limit == -1) {
+            return false;
+        } else {
+            $limit = $this->_convertToByte($memory_limit);
+            $requiredMemory = $this->_getImageNeedMemorySize($this->_fileName);
+            return (memory_get_usage(true) + $requiredMemory) > $limit;
+        }
     }
 
     /**
@@ -111,7 +116,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Converts memory value (e.g. 64M, 129KB) to bytes.
+     * Converts memory value (e.g. 64M, 129K) to bytes.
      * Case insensitive value might be used.
      *
      * @param string $memoryValue
@@ -123,7 +128,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
             return (int)$memoryValue * pow(1024, 3);
         } elseif (stripos($memoryValue, 'M') !== false) {
             return (int)$memoryValue * 1024 * 1024;
-        } elseif (stripos($memoryValue, 'KB') !== false) {
+        } elseif (stripos($memoryValue, 'K') !== false) {
             return (int)$memoryValue * 1024;
         }
 

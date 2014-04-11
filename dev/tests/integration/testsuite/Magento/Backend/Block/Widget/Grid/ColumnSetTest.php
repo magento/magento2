@@ -57,7 +57,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false);
         $this->_layoutMock->expects(
             $this->any()
         )->method(

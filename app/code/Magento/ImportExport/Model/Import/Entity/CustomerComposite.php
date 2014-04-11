@@ -146,7 +146,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\App\Resource $resource
@@ -160,7 +160,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\App\Resource $resource,
@@ -169,7 +169,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\ImportExport\Model\Import\Entity\Eav\Customer\AddressFactory $addressFactory,
         array $data = array()
     ) {
-        parent::__construct($coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($coreData, $string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,

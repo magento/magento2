@@ -25,7 +25,7 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
@@ -43,9 +43,9 @@ class Config
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Config\DataInterface
@@ -69,20 +69,20 @@ class Config
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Locale\ListsInterface $localeLists
      * @param \Magento\Config\DataInterface $dataStorage
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Locale\ListsInterface $localeLists,
         \Magento\Config\DataInterface $dataStorage
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_dataStorage = $dataStorage;
         $this->_coreConfig = $coreConfig;
         $this->_methodFactory = $paymentMethodFactory;
@@ -98,9 +98,14 @@ class Config
     public function getActiveMethods($store = null)
     {
         $methods = array();
-        $config = $this->_coreStoreConfig->getConfig('payment', $store);
+        $config = $this->_scopeConfig->getValue('payment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         foreach ($config as $code => $methodConfig) {
-            if ($this->_coreStoreConfig->getConfigFlag('payment/' . $code . '/active', $store)) {
+            if ($this->_scopeConfig->isSetFlag(
+                'payment/' . $code . '/active',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )
+            ) {
                 if (array_key_exists('model', $methodConfig)) {
                     $methodModel = $this->_methodFactory->create($methodConfig['model']);
                     if ($methodModel && $methodModel->getConfigData('active', $store)) {
@@ -121,7 +126,7 @@ class Config
     public function getAllMethods($store = null)
     {
         $methods = array();
-        $config = $this->_coreStoreConfig->getConfig('payment', $store);
+        $config = $this->_scopeConfig->getValue('payment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         foreach ($config as $code => $methodConfig) {
             $data = $this->_getMethod($code, $methodConfig);
             if (false !== $data) {

@@ -94,7 +94,7 @@ class Category extends AbstractResource
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory
@@ -110,7 +110,7 @@ class Category extends AbstractResource
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
@@ -836,7 +836,7 @@ class Category extends AbstractResource
     public function isForbiddenToDelete($categoryId)
     {
         $select = $this->_getReadAdapter()->select()->from(
-            $this->getTable('core_store_group'),
+            $this->getTable('store_group'),
             array('group_id')
         )->where(
             'root_category_id = :root_category_id'

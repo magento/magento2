@@ -83,7 +83,7 @@ interface ResolverInterface
     public function setLocaleCode($code);
 
     /**
-     * Push current locale to stack and replace with locale from specified store
+     * Push current locale to stack and replace with locale from specified scope
      *
      * @param int $scopeId
      * @return string|null

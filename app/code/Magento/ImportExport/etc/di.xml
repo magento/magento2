@@ -27,4 +27,11 @@
     <preference for="Magento\ImportExport\Model\Import\ConfigInterface" type="Magento\ImportExport\Model\Import\Config" />
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
     <preference for="Magento\ImportExport\Model\Export\RowCustomizerInterface" type="Magento\ImportExport\Model\Export\RowCustomizer\Composite" />
+    <type name="Magento\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="importexport" xsi:type="string">Magento_ImportExport</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -54,7 +54,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     protected $_backendConfig;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -66,13 +66,13 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     /**
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
         \Magento\App\CacheInterface $cache,
         \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;
@@ -108,7 +108,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
      */
     private function _isFileAccessible()
     {
-        $unsecureBaseURL = $this->_config->getValue(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
+        $unsecureBaseURL = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
         /** @var $http \Magento\HTTP\Adapter\Curl */
         $http = $this->_curlFactory->create();

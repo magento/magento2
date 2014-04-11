@@ -37,17 +37,17 @@
             <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="catalogrule_setup" xsi:type="string">Magento\Core\Model\Resource\Setup\Generic</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="catalog_rule" xsi:type="string">Magento\CatalogRule\Model\Product\PriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="catalogrule" xsi:type="string">Magento_CatalogRule</item>
             </argument>
         </arguments>
     </type>

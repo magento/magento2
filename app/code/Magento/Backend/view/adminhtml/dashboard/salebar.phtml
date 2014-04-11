@@ -25,12 +25,15 @@
  */
 ?>
 <?php if( sizeof($this->getTotals()) > 0 ): ?>
-            <?php foreach( $this->getTotals() as $_total ): ?>
-            <div class="entry-edit">
-                <div class="entry-edit-head"><h4><?php echo $_total['label'] ?></h4></div>
-                <fieldset class="a-center bold">
-                    <span class="nowrap" style="font-size:18px;"><?php echo $_total['value'] ?><span style="font-size:14px; color:#686868;"><?php echo $_total['decimals'] ?></span></span>
-                </fieldset>
-            </div>
-            <?php endforeach; ?>
+    <?php foreach( $this->getTotals() as $_total ): ?>
+    <div class="dashboard-item dashboard-item-primary">
+        <header class="dashboard-item-header">
+            <h3 class="title"><?php echo $_total['label'] ?></h3>
+        </header>
+        <strong class="dashboard-sales-value">
+            <?php echo $_total['value'] ?>
+            <span class="dashboard-sales-decimals"><?php echo $_total['decimals'] ?></span>
+        </strong>
+    </div>
+    <?php endforeach; ?>
 <?php endif; ?>

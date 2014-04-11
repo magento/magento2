@@ -72,7 +72,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('area' => 'adminhtml')
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -263,7 +263,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Core\Model\Config\FileResolver'
+            'Magento\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
         /** @var $directory  \Magento\Filesystem\Directory\Read */

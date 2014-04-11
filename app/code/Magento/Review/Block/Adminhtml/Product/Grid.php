@@ -35,36 +35,36 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Website collection
      *
-     * @var \Magento\Core\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
      */
     protected $_websitesFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
         array $data = array()
     ) {
         $this->_websitesFactory = $websitesFactory;

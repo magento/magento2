@@ -30,7 +30,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Cache extends \Magento\Core\Model\Config\Value
+class Cache extends \Magento\App\Config\Value
 {
     /**
      * Cache tags to clean

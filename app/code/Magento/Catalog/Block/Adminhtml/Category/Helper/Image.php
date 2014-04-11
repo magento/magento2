@@ -36,7 +36,7 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 class Image extends \Magento\Data\Form\Element\Image
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -45,7 +45,7 @@ class Image extends \Magento\Data\Form\Element\Image
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
      * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Image extends \Magento\Data\Form\Element\Image
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
         \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = array()
     ) {
         $this->_storeManager = $storeManager;

@@ -39,16 +39,16 @@ class DesignExceptions
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $coreStoreConfig;
+    protected $scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Core\Model\Store\Config $coreStoreConfig)
+    public function __construct(\Magento\App\Config\ScopeConfigInterface $scopeConfig)
     {
-        $this->coreStoreConfig = $coreStoreConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -63,7 +63,7 @@ class DesignExceptions
         if (empty($userAgent)) {
             return false;
         }
-        $expressions = $this->coreStoreConfig->getConfig(self::XML_PATH_DESIGN_EXCEPTION);
+        $expressions = $this->scopeConfig->getValue(self::XML_PATH_DESIGN_EXCEPTION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         if (!$expressions) {
             return false;
         }

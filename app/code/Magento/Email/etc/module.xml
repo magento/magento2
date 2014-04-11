@@ -27,13 +27,15 @@
     <module name="Magento_Email" version="1.0.0.0" active="true">
         <sequence>
             <module name="Magento_Core"/>
+            <module name="Magento_Store"/>
             <module name="Magento_Cms"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Core"/>
-            <module name="Magento_Cms" />
-            <module name="Magento_Backend" />
-            <module name="Magento_Theme" />
+            <module name="Magento_Cms"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

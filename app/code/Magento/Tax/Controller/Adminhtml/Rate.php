@@ -447,7 +447,7 @@ class Rate extends \Magento\Backend\App\Action
         $taxCalculationRateTitleDict = array();
 
         foreach ($this->_objectManager->create(
-            'Magento\Core\Model\Store'
+            'Magento\Store\Model\Store'
         )->getCollection()->setLoadDefault(
             false
         ) as $store) {

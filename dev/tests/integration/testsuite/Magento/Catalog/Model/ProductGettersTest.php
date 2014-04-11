@@ -136,7 +136,6 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Catalog\Model\Product::getSpecialToDate
      * @covers \Magento\Catalog\Model\Product::getRequestPath
      * @covers \Magento\Catalog\Model\Product::getGiftMessageAvailable
-     * @covers \Magento\Catalog\Model\Product::getRatingSummary
      * @dataProvider getObsoleteGettersDataProvider
      * @param string $key
      * @param string $method
@@ -159,7 +158,6 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
             array('special_to_date', 'getSpecialToDate'),
             array('request_path', 'getRequestPath'),
             array('gift_message_available', 'getGiftMessageAvailable'),
-            array('rating_summary', 'getRatingSummary')
         );
     }
 
@@ -258,21 +256,6 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $setId = $this->_model->getDefaultAttributeSetId();
         $this->assertNotEmpty($setId);
         $this->assertRegExp('/^[0-9]+$/', $setId);
-    }
-
-    public function testGetReservedAttributes()
-    {
-        $result = $this->_model->getReservedAttributes();
-        $this->assertInternalType('array', $result);
-        $this->assertContains('position', $result);
-        $this->assertContains('reserved_attributes', $result);
-        $this->assertContains('is_virtual', $result);
-        // and 84 more...
-
-        $this->assertNotContains('type_id', $result);
-        $this->assertNotContains('calculated_final_price', $result);
-        $this->assertNotContains('request_path', $result);
-        $this->assertNotContains('rating_summary', $result);
     }
 
     public function testGetPreconfiguredValues()

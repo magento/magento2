@@ -23,10 +23,25 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php
+/**
+ * @var \Magento\Paypal\Block\Express\Review\Shipping|\Magento\Paypal\Block\Express\Review\Billing $this
+ */
+?>
 <?php $prefix = $this->getFieldNamePrefix(); ?>
 <input type="hidden" name="<?php echo $prefix ?>[address_id]" value="<?php echo $this->getAddress()->getId() ?>"
        id="<?php echo $prefix ?>:address_id"/>
-<?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomer())->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())->setFieldIdFormat($prefix . ':%s')->setFieldNameFormat($prefix . '[%s]')->toHtml() ?>
+<?php
+/** @var \Magento\Customer\Block\Widget\Name $nameWidget */
+$nameWidget = $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Name');
+$widgetObject = $this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomerData();
+echo $nameWidget
+    ->setObject($widgetObject)
+    ->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())
+    ->setFieldIdFormat($prefix . ':%s')
+    ->setFieldNameFormat($prefix . '[%s]')
+    ->toHtml()
+?>
 
 <div class="field company">
     <label for="<?php echo $prefix ?>:company" class="label"><span><?php echo __('Company') ?></span></label>

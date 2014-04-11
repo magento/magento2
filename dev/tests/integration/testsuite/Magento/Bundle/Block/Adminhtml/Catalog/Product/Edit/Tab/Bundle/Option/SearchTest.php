@@ -35,7 +35,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlHasIndex()
     {
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Layout');
         $block = $layout->createBlock(
             'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search',
             'block2'

@@ -54,13 +54,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Add filter by store
      *
-     * @param int|\Magento\Core\Model\Store $store
+     * @param int|\Magento\Store\Model\Store $store
      * @param bool $withAdmin
      * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
-        if ($store instanceof \Magento\Core\Model\Store) {
+        if ($store instanceof \Magento\Store\Model\Store) {
             $store = array($store->getId());
         }
 
@@ -69,7 +69,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         }
 
         if ($withAdmin) {
-            $store[] = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+            $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         }
 
         $this->addFilter('store', array('in' => $store), 'public');

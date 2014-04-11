@@ -27,10 +27,6 @@ namespace Magento\GoogleAnalytics\Block;
 
 /**
  * GoogleAnalitics Page Block
- *
- * @category   Magento
- * @package    Magento_GoogleAnalytics
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Ga extends \Magento\View\Element\Template
 {
@@ -71,7 +67,7 @@ class Ga extends \Magento\View\Element\Template
      */
     public function getConfig($path)
     {
-        return $this->_storeConfig->getConfig($path);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

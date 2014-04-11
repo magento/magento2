@@ -39,27 +39,27 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
     }
 
@@ -172,7 +172,10 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
             }
         } else {
             // get all stores, required by configuration in current store scope
-            switch ($this->_coreStoreConfig->getConfig('catalog/recently_products/scope')) {
+            switch ($this->_scopeConfig->getValue(
+                'catalog/recently_products/scope',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )) {
                 case 'website':
                     $resourceStore = $this->_storeManager->getStore()->getWebsite()->getStores();
                     break;

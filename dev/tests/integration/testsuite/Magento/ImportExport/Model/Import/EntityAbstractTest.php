@@ -53,7 +53,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             array(
                 $objectManager->get('Magento\Core\Helper\Data'),
                 $objectManager->get('Magento\Stdlib\String'),
-                $objectManager->get('Magento\Core\Model\Store\Config'),
+                $objectManager->get('Magento\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
                 $objectManager->get('Magento\App\Resource')

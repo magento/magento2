@@ -156,7 +156,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
      */
     public function getConfig($path)
     {
-        return $this->_storeConfig->getConfig($path);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -274,8 +274,9 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
                     } else {
                         $address = $this->_customerAddressService->getDefaultShippingAddress($customerId);
                     }
-
-                    $addressId = $address->getId();
+                    if ($address) {
+                        $addressId = $address->getId();
+                    }
                 } catch (NoSuchEntityException $e) {
                     // Do nothing
                 }

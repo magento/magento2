@@ -39,7 +39,7 @@ class DefaultProvider implements ReviewRendererInterface
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
-        $templateType = self::DEFAULT_REVIEW,
+        $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
         return '';

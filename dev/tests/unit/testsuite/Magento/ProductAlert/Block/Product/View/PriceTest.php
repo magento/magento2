@@ -32,27 +32,27 @@ namespace Magento\ProductAlert\Block\Product\View;
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
      */
     protected $_product;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Registry
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Registry
      */
     protected $_registry;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Price
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Price
      */
     protected $_block;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Layout
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\View\Layout
      */
     protected $_layout;
 
@@ -83,7 +83,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'Magento\ProductAlert\Block\Product\View\Price',
             array('helper' => $this->_helper, 'registry' => $this->_registry)
         );
-        $this->_layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layout = $this->getMock('Magento\View\Layout', array(), array(), '', false);
     }
 
     public function testSetTemplatePriceAlertAllowed()

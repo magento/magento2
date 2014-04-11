@@ -126,7 +126,7 @@ class Tax extends \Magento\View\Element\Template
     /**
      * Get order store object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

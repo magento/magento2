@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -49,7 +47,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManager->create(
             'Magento\Session\SessionManager',
             array(
-                $objectManager->get('Magento\App\RequestInterface'),
+                $objectManager->get('Magento\App\Request\Http'),
                 $this->_sidResolver,
                 $objectManager->get('Magento\Session\Config\ConfigInterface'),
                 $objectManager->get('Magento\Session\SaveHandlerInterface'),

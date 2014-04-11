@@ -45,14 +45,14 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $registryData = array(
             'store_type' => 'website',
-            'store_data' => $objectManager->create('Magento\Core\Model\Website'),
+            'store_data' => $objectManager->create('Magento\Store\Model\Website'),
             'store_action' => 'add'
         );
         foreach ($registryData as $key => $value) {
             $objectManager->get('Magento\Registry')->register($key, $value);
         }
 
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = $objectManager->get('Magento\View\LayoutInterface');
 
         $this->_block = $layout->createBlock('Magento\Backend\Block\System\Store\Edit\Form\Website');

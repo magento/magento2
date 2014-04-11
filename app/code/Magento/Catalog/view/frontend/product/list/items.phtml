@@ -42,7 +42,7 @@ switch($type = $this->getType()) {
             $showWishlist = true;
             $showCompare = true;
             $showCart = false;
-            $rating = false;
+            $templateType = null;
             $description = false;
         }
     break;
@@ -63,7 +63,7 @@ switch($type = $this->getType()) {
             $showWishlist = true;
             $showCompare = true;
             $showCart = false;
-            $rating = false;
+            $templateType = null;
             $description = false;
         }
     break;
@@ -83,7 +83,7 @@ switch($type = $this->getType()) {
             $showWishlist = false;
             $showCompare = false;
             $showCart = false;
-            $rating = false;
+            $templateType = null;
             $description = false;
         }
     break;
@@ -104,7 +104,7 @@ switch($type = $this->getType()) {
             $showWishlist = false;
             $showCompare = false;
             $showCart = false;
-            $rating = false;
+            $templateType = null;
             $description = false;
         }
     break;
@@ -123,7 +123,7 @@ switch($type = $this->getType()) {
             $showWishlist = true;
             $showCompare = true;
             $showCart = true;
-            $rating = 'short';
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
         }
     break;
@@ -142,7 +142,7 @@ switch($type = $this->getType()) {
             $showWishlist = true;
             $showCompare = true;
             $showCart = true;
-            $rating = 'short';
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
         }
     break;
@@ -163,7 +163,7 @@ switch($type = $this->getType()) {
             $showWishlist = true;
             $showCompare = true;
             $showCart = true;
-            $rating = 'short';
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = ($mode == 'list') ? true : false;
         }
     break;
@@ -211,8 +211,8 @@ switch($type = $this->getType()) {
 
                             <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
 
-                            <?php if ($_item->getRatingSummary() && $rating): ?>
-                                <?php echo $this->getReviewsSummaryHtml($_item,$rating) ?>
+                            <?php if ($templateType): ?>
+                                <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>
                             <?php endif; ?>
 
                             <?php if(!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>

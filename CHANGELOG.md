@@ -1,3 +1,80 @@
+2.0.0.0-dev73
+=============
+* Framework Improvements:
+  * Eliminated the StoreConfig class, and ability to work with Configuration through the Store object. Scope Config was introduced instead.
+  * Fixed performance degradation caused by DI argument processors
+  * Covered Magento library components with unit tests:
+     * Magento/App/Request
+     * Magento/App/Resource directory and Magento/App/Resource.php
+     * Magento/App/Response
+     * Magento/App/Route
+     * Magento/App/Router
+     * Magento/App/Http.php
+     * Magento/Translate.php
+  * Improved the Web API framework based on Customer Service
+  * Updated the API Service Exception Handling
+  * Changed the conventional notation of Vendor name in theme path: from `app/design/<area>/<vendor>_<theme>` to `app/design/<area>/<vendor>/<theme>`
+  * Renamed the 3DSecure library to CardinalCommerce, and removed the unused flex library
+* Themes update:
+  * Updated the look&feel of the Admin theme
+* Modularity improvements:
+  * Introduced a new Store module. Moved all Store related logic from Magento_Core to Magento_Store
+  * Moved the library part of the Config component from the Magento_Core module to the library
+  * Moved the Session related logic from the Magento_Core module to the library
+  * Moved the abstract logic related to Magento "Module" from Magento_Core to the library
+  * Moved the form key related functionality to the library
+  * Introduced a new Magento_UrlRewrite module and moved related classes from Magento_Core to the new module
+  * Moved the resource model to Magento_Install module
+  * Eliminated the Core\Helper\Js class
+  * Moved the Email related logic from Magento_Core module to Magento_Email module
+  * Moved the Cache related logic from the Magento_Core module to the library
+  * Resolved issues which appeared when an order had been placed before the Magento_Payment module was disabled
+  * Eliminated Magento_Catalog dependency on Magento_Rating
+  * Removed the Magento_Rating module, its logic moved to Magento_Review
+  * Moved the View related components from Magento_Core to the Magento/View library
+* Refactored the following modules to use Customer Service
+  * Magento_Multishipping
+  * Magento_Paypal
+  * Magento_Log
+  * Magento_RSS
+  * Magento_Review
+  * Magento_Wishlist
+  * Magento_Weee
+  * Magento_CatalogInventory
+  * Magento_CatalogRule
+  * Magento_SalesRule
+* GitHub requests:
+  * [#520] (https://github.com/magento/magento2/issues/520) -- Fixed spelling in Magento\Payment\Model\Method\AbstractMethod
+  * [#481] (https://github.com/magento/magento2/issues/481) -- GD2 Adapter PHP memory_limit
+  * [#516] (https://github.com/magento/magento2/issues/516) -- Make Sure That save_before Event Is Dispatched
+  * [#465] (https://github.com/magento/magento2/issues/465) -- Absolute path is assembled incorrectly when merging js/css files
+  * [#504] (https://github.com/magento/magento2/issues/504) -- Renamed "contacts" module to "contact"
+  * [#529] (https://github.com/magento/magento2/issues/529) -- Fixed exception at admin dashboard
+  * [#535] (https://github.com/magento/magento2/issues/535) -- Fixed an issue during creating or editing product template
+  * [#535] (https://github.com/magento/magento2/issues/535) -- Fixed Typo in the module name
+  * [#538] (https://github.com/magento/magento2/issues/538) -- Fixed missing tax amount in the invoice
+  * [#518] (https://github.com/magento/magento2/issues/518) -- Change to Magento\Customer\Block\Widget\Dob new version
+* Fixed bugs:
+  * Fixed implementation issues with Cron task group threading
+  * Fixed inability to place order during customer registration flow
+  * Fixed an issue where after JS minification errors appeared when loading pages which contained minified JS
+  * Fixed an issue where it was impossible for users with restricted permission to export certain entities
+  * Fixed an issue where checkout was blocked by the "Please enter the State/Province" pop-up for customers that had saved addresses
+  * Fixed an issue where a fatal error appeared when trying to check out the second time with OnePageCheckout
+  * Fixed an issue where a fatal error appeared when trying to create an online invoice for an order placed with PayPal Express Checkout (Payment Action = Order)
+  * Fixed an issue where the special price for a bundle product was calculated wrongly
+  * Fixed an issue where a fatal error appeared when trying to create a shipment for an order if Magento was installed without the USPS module
+  * Fixed an issue where the Lifetime Sales and Average Orders sections of the Admin Dashboard were missing
+  * Fixed an issue where the active tab changed after changing the attribute set
+  * Fixed an issue with incorrect order of product types in the Add Product menu in the backend
+  * Fixed an issue with saving the tier price attribute
+* JavaScript improvements:
+  * Upgraded the frontend jQuery library to version 1.11
+  * Upgraded the frontend jQuery UI library to version 1.10.4
+  * Modified the loader widget to render content using handlebars
+  * Added the 'use strict' mode to the accordion widget
+  * Added the 'use strict' mode to the tab widget
+
 2.0.0.0-dev72
 =============
 * Framework Improvements:
@@ -55,7 +132,7 @@
   * Updated the whitelist filter with library code for integration tests code coverage calculation
 * GitHub requests:
   * [#512] (https://github.com/magento/magento2/issues/512) -- Theme Thumbnails not showing
-  * [#520] (https://github.com/magento/magento2/pull/502) -- Corrected Search Engine Optimization i18n
+  * [#520] (https://github.com/magento/magento2/pull/520) -- Corrected Search Engine Optimization i18n
   * [#519] (https://github.com/magento/magento2/issues/519) -- New Theme Activation
 * Customer Service usage:
   * Refactored the Log module to use Customer Service
@@ -567,7 +644,7 @@
   * Design loader moved to library
   * Theme label moved to library
 * Themes update:
-  * Reduced amount of templates and layouts in magento_plushe theme
+  * Reduced amount of templates and layouts in Magento/plushe theme
   * Responsive design improvements
 * Integrity improvements:
   * Covered all Magento classes with argument sequence validator

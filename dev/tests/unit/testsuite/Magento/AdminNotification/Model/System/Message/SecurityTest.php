@@ -33,7 +33,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeConfigMock;
+    protected $_scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -54,13 +54,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
     {
         //Prepare objects for constructor
         $this->_cacheMock = $this->getMock('Magento\App\CacheInterface');
-        $this->_storeConfigMock = $this->getMock(
-            'Magento\Core\Model\Store\Config',
-            array('getConfig'),
-            array(),
-            '',
-            false
-        );
+        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
         $this->_curlFactoryMock = $this->getMock(
             'Magento\HTTP\Adapter\CurlFactory',
             array('create'),
@@ -72,7 +66,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
             'cache' => $this->_cacheMock,
-            'storeConfig' => $this->_storeConfigMock,
+            'scopeConfig' => $this->_scopeConfigMock,
             'curlFactory' => $this->_curlFactoryMock
         );
         $this->_messageModel = $objectManagerHelper->getObject(
@@ -98,7 +92,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
         $this->_curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
 
-        $this->_storeConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(null));
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
 
         $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
     }

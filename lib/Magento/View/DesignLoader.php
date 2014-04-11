@@ -42,23 +42,23 @@ class DesignLoader
     /**
      * Layout
      *
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\App\State
      */
-    protected $_layout;
+    protected $appState;
 
     /**
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\AreaList $areaList
-     * @param LayoutInterface $layout
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
         \Magento\App\AreaList $areaList,
-        \Magento\View\LayoutInterface $layout
+        \Magento\App\State $appState
     ) {
         $this->_request = $request;
         $this->_areaList = $areaList;
-        $this->_layout = $layout;
+        $this->appState = $appState;
     }
 
     /**
@@ -68,7 +68,7 @@ class DesignLoader
      */
     public function load()
     {
-        $area = $this->_areaList->getArea($this->_layout->getArea());
+        $area = $this->_areaList->getArea($this->appState->getAreaCode());
         $area->load(\Magento\Core\Model\App\Area::PART_DESIGN);
         $area->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);
         $area->detectDesign($this->_request);

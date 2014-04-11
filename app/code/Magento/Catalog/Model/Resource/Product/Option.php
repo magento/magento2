@@ -37,7 +37,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -51,7 +51,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core config model
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -60,14 +60,14 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\App\Resource $resource
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $config
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
@@ -133,7 +133,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                     $object->getId()
                 )->where(
                     'store_id = ?',
-                    \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                    \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 );
                 $optionId = $readAdapter->fetchOne($statement);
 
@@ -151,7 +151,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                             $data,
                             array(
                                 'option_id = ?' => $object->getId(),
-                                'store_id  = ?' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                                'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
                             )
                         );
                     }
@@ -160,7 +160,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                         new \Magento\Object(
                             array(
                                 'option_id' => $object->getId(),
-                                'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
+                                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                                 'price' => $object->getPrice(),
                                 'price_type' => $object->getPriceType()
                             )
@@ -171,9 +171,12 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 }
             }
 
-            $scope = (int)$this->_storeManager->getStore()->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE);
+            $scope = (int)$this->_config->getValue(
+                \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
 
-            if ($object->getStoreId() != '0' && $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE) {
+            if ($object->getStoreId() != '0' && $scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
 
                 $baseCurrency = $this->_config->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
@@ -233,7 +236,8 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                         }
                     }
                 }
-            } elseif ($scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE && $object->getData('scope', 'price')) {
+            } elseif ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE && $object->getData('scope', 'price')
+            ) {
                 $writeAdapter->delete(
                     $priceTable,
                     array('option_id = ?' => $object->getId(), 'store_id  = ?' => $object->getStoreId())
@@ -265,7 +269,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 $object->getId()
             )->where(
                 'store_id  = ?',
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             );
 
             if ($readAdapter->fetchOne($statement)) {
@@ -280,7 +284,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                         $data,
                         array(
                             'option_id = ?' => $object->getId(),
-                            'store_id  = ?' => \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                            'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
                         )
                     );
                 }
@@ -289,7 +293,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                     new \Magento\Object(
                         array(
                             'option_id' => $object->getId(),
-                            'store_id' => \Magento\Core\Model\Store::DEFAULT_STORE_ID,
+                            'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                             'title' => $object->getTitle()
                         )
                     ),
@@ -485,7 +489,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
             ' AND ',
             array(
                 'option_title_default.option_id=product_option.option_id',
-                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
+                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             )
         );
 
@@ -523,7 +527,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
             ' AND ',
             array(
                 'option_title_default.option_type_id=option_type.option_type_id',
-                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
+                $adapter->quoteInto('option_title_default.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             )
         );
 

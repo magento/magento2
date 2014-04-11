@@ -88,7 +88,7 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $_design;
 
     /**
-     * @var \Magento\BaseScopeResolverInterface
+     * @var \Magento\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
 
@@ -96,7 +96,7 @@ class Inline implements \Magento\Translate\InlineInterface
      * Initialize inline translation model specific for vde
      *
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\BaseScopeResolverInterface $scopeResolver
+     * @param \Magento\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Translate\Inline\ParserFactory $parserFactory
      * @param \Magento\DesignEditor\Helper\Data $helper
      * @param \Magento\UrlInterface $url
@@ -104,7 +104,7 @@ class Inline implements \Magento\Translate\InlineInterface
      */
     public function __construct(
         \Magento\View\DesignInterface $design,
-        \Magento\BaseScopeResolverInterface $scopeResolver,
+        \Magento\App\ScopeResolverInterface $scopeResolver,
         \Magento\Translate\Inline\ParserFactory $parserFactory,
         \Magento\DesignEditor\Helper\Data $helper,
         \Magento\UrlInterface $url,

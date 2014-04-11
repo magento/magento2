@@ -251,7 +251,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
         );
 
         if (!$this->isScopeGlobal() && $this->getProduct()->getStoreId()) {
-            /** @var $website \Magento\Core\Model\Website */
+            /** @var $website \Magento\Store\Model\Website */
             $website = $this->_storeManager->getStore($this->getProduct()->getStoreId())->getWebsite();
 
             $this->_websites[$website->getId()] = array(
@@ -262,7 +262,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
             $websites = $this->_storeManager->getWebsites(false);
             $productWebsiteIds = $this->getProduct()->getWebsiteIds();
             foreach ($websites as $website) {
-                /** @var $website \Magento\Core\Model\Website */
+                /** @var $website \Magento\Store\Model\Website */
                 if (!in_array($website->getId(), $productWebsiteIds)) {
                     continue;
                 }

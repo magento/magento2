@@ -25,22 +25,6 @@
  */
 /* @var $this \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 ?>
-<div class="page-actions">
-    <?php echo $this->getBackButtonHtml(); ?>
-    <?php echo $this->getResetButtonHtml(); ?>
-    <?php if(!$this->isTextType()): ?>
-    <?php echo $this->getToPlainButtonHtml(); ?>
-    <?php echo $this->getToHtmlButtonHtml(); ?>
-    <?php endif ?>
-    <?php echo $this->getPreviewButtonHtml(); ?>
-    <?php if($this->getEditMode()): ?>
-    <?php echo $this->getDeleteButtonHtml(); ?>
-    <?php endif ?>
-    <?php if($this->getEditMode()): ?>
-    <?php echo $this->getSaveAsButtonHtml(); ?>
-    <?php endif ?>
-    <?php echo $this->getSaveButtonHtml(); ?>
-</div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="no-display">

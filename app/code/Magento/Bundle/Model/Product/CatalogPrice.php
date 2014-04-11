@@ -29,7 +29,7 @@ namespace Magento\Bundle\Model\Product;
 class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterface
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -44,12 +44,12 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     protected $coreRegistry;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
      * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel,
         \Magento\Registry $coreRegistry
     ) {
@@ -62,13 +62,13 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
      * Minimal price for "regular" user
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|\Magento\Core\Model\Store $store Store view
+     * @param null|\Magento\Store\Model\Store $store Store view
      * @param bool $inclTax
      * @return null|float
      */
     public function getCatalogPrice(\Magento\Catalog\Model\Product $product, $store = null, $inclTax = false)
     {
-        if ($store instanceof \Magento\Core\Model\Store) {
+        if ($store instanceof \Magento\Store\Model\Store) {
             $oldStore = $this->storeManager->getStore();
             $this->storeManager->setCurrentStore($store);
         }
@@ -87,7 +87,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
 
         $minPrice = $product->getPriceModel()->getTotalPrices($product, 'min', $inclTax);
 
-        if ($store instanceof \Magento\Core\Model\Store) {
+        if ($store instanceof \Magento\Store\Model\Store) {
             $this->storeManager->setCurrentStore($oldStore);
         }
         return $minPrice;

@@ -93,11 +93,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_scopeConfig;
 
     /**
      * Catalog product type configurable
@@ -178,7 +176,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -202,7 +200,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory $productCollectionFactory,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = array()
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
@@ -213,7 +211,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
-        $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct(
             $productFactory,
             $catalogProductOption,
@@ -780,17 +778,21 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         }
                     }
 
-                    $_result[0]->setParentProductId($product->getId())
-                        // add custom option to simple product for protection of process
-                        //when we add simple product separately
-                        ->addCustomOption('parent_product_id', $product->getId());
+                    $_result[0]->setParentProductId(
+                        $product->getId()
+                    )->addCustomOption(
+                        'parent_product_id',
+                        $product->getId()
+                    );
                     if ($this->_isStrictProcessMode($processMode)) {
                         $_result[0]->setCartQty(1);
                     }
                     $result[] = $_result[0];
                     return $result;
-                } else if (!$this->_isStrictProcessMode($processMode)) {
-                    return $result;
+                } else {
+                    if (!$this->_isStrictProcessMode($processMode)) {
+                        return $result;
+                    }
                 }
             }
         }
@@ -1135,7 +1137,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $postData
     ) {
         $product->setStoreId(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
             $postData['weight'] ? \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE : \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
         )->setAttributeSetId(
@@ -1157,8 +1159,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $postData['stock_data'] = $parentProduct->getStockData();
         $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
-        $configDefaultValue = $this->_storeManager->getStore()->getConfig(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
+        $configDefaultValue = $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
             $configDefaultValue ? 1 : 0;

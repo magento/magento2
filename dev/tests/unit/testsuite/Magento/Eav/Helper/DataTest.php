@@ -43,9 +43,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $context = $this->getMock('\Magento\App\Helper\Context', [], [], '', false);
         $attributeConfig = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Config', [], [], '', false);
-        $coreStoreConfig = $this->getMock('\Magento\Core\Model\Store\Config', [], [], '', false);
+        $scopeConfig = $this->getMock('\Magento\App\Config\ScopeConfigInterface', [], [], '', false);
         $eavConfig = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
-        $this->_helper = new Data($context, $attributeConfig, $coreStoreConfig, $eavConfig);
+        $this->_helper = new Data($context, $attributeConfig, $scopeConfig, $eavConfig);
         $this->_eavConfig = $eavConfig;
     }
 

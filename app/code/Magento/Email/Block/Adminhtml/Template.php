@@ -49,13 +49,13 @@ class Template extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'add_button',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Add New Template'),
                 'onclick' => "window.location='" . $this->getCreateUrl() . "'",
-                'class' => 'add'
+                'class' => 'add primary add-template'
             )
         );
 

@@ -36,7 +36,7 @@
     <preference for="Magento\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
     <preference for="Magento\App\View" type="Magento\Backend\Model\View" />
     <preference for="Magento\Model\ActionValidator\RemoveAction" type="Magento\Model\ActionValidator\RemoveAction\Allowed" />
-    <type name="Magento\Backend\App\Action\Context">
+     <type name="Magento\Backend\App\Action\Context">
         <arguments>
             <argument name="helper" xsi:type="object">Magento\Backend\Helper\Data</argument>
         </arguments>
@@ -46,7 +46,7 @@
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Session">
+    <type name="Magento\Session\Generic">
         <arguments>
             <argument name="sessionName" xsi:type="string">adminhtml</argument>
         </arguments>
@@ -85,7 +85,7 @@
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" shared="false" />
-    <type name="Magento\Core\Model\Layout">
+    <type name="Magento\View\Layout">
         <arguments>
             <argument name="area" xsi:type="string">adminhtml</argument>
         </arguments>
@@ -110,7 +110,7 @@
         <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
         <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
     </type>
-    <type name="Magento\Core\App\Response\Redirect">
+    <type name="Magento\Store\App\Response\Redirect">
         <arguments>
             <argument name="canUseSessionIdInParam" xsi:type="boolean">false</argument>
         </arguments>

@@ -31,7 +31,7 @@ namespace Magento\Authorizenet\Model\Directpost;
 class Session extends \Magento\Session\SessionManager
 {
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\App\Request\Http $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Session\SaveHandlerInterface $saveHandler
@@ -41,7 +41,7 @@ class Session extends \Magento\Session\SessionManager
      * @internal param array $data
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\App\Request\Http $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Session\SaveHandlerInterface $saveHandler,

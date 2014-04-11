@@ -47,17 +47,6 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     }
 
     /**
-     * Filter collection by customer
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return $this
-     */
-    public function filterByCustomer(\Magento\Customer\Model\Customer $customer)
-    {
-        return $this->filterByCustomerId($customer->getId());
-    }
-
-    /**
      * Filter collection by customer id
      *
      * @param int $customerId

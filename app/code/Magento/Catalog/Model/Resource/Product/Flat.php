@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Product;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Catalog Product Flat resource model
@@ -53,18 +53,18 @@ class Flat extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig
     ) {
         $this->_storeManager = $storeManager;

@@ -58,12 +58,12 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -75,7 +75,7 @@ class Visitor extends \Magento\Model\AbstractModel
     protected $_ignores;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -112,11 +112,11 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Session\SessionManagerInterface $session
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\HTTP\Header $httpHeader
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
@@ -131,11 +131,11 @@ class Visitor extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Session\SessionManagerInterface $session,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\HTTP\Header $httpHeader,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
@@ -147,7 +147,7 @@ class Visitor extends \Magento\Model\AbstractModel
         array $ignores = array(),
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_quoteFactory = $quoteFactory;
         $this->_session = $session;
         $this->_storeManager = $storeManager;
@@ -232,7 +232,10 @@ class Visitor extends \Magento\Model\AbstractModel
      */
     public function getOnlineMinutesInterval()
     {
-        $configValue = $this->_coreStoreConfig->getConfig('customer/online_customers/online_minutes_interval');
+        $configValue = $this->_scopeConfig->getValue(
+            'customer/online_customers/online_minutes_interval',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
@@ -334,11 +337,12 @@ class Visitor extends \Magento\Model\AbstractModel
      */
     public function bindCustomerLogin($observer)
     {
-        if (!$this->getCustomerId() && ($customer = $observer->getEvent()->getCustomer())) {
+        /** @var \Magento\Customer\Service\V1\Data\Customer $customer */
+        $customer = $observer->getEvent()->getCustomer();
+        if (!$this->getCustomerId()) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
         }
-        return $this;
     }
 
     /**
@@ -351,11 +355,9 @@ class Visitor extends \Magento\Model\AbstractModel
      */
     public function bindCustomerLogout($observer)
     {
-        $customer = $observer->getEvent()->getCustomer();
-        if ($this->getCustomerId() && $customer) {
+        if ($this->getCustomerId()) {
             $this->setDoCustomerLogout(true);
         }
-        return $this;
     }
 
     /**

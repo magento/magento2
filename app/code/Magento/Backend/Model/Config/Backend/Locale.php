@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Locale extends \Magento\Core\Model\Config\Value
+class Locale extends \Magento\App\Config\Value
 {
     /**
      * @var \Magento\Core\Model\Resource\Config\Data\CollectionFactory
@@ -37,12 +37,12 @@ class Locale extends \Magento\Core\Model\Config\Value
     protected $_configsFactory;
 
     /**
-     * @var \Magento\Core\Model\Website\Factory
+     * @var \Magento\Store\Model\Website\Factory
      */
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreFactory
+     * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
 
@@ -54,11 +54,10 @@ class Locale extends \Magento\Core\Model\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory
-     * @param \Magento\Core\Model\Website\Factory $websiteFactory
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
+     * @param \Magento\Store\Model\Website\Factory $websiteFactory
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -69,11 +68,10 @@ class Locale extends \Magento\Core\Model\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory,
-        \Magento\Core\Model\Website\Factory $websiteFactory,
-        \Magento\Core\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\Website\Factory $websiteFactory,
+        \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Locale\CurrencyInterface $localeCurrency,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -83,7 +81,7 @@ class Locale extends \Magento\Core\Model\Config\Value
         $this->_websiteFactory = $websiteFactory;
         $this->_storeFactory = $storeFactory;
         $this->_localeCurrency = $localeCurrency;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -113,19 +111,19 @@ class Locale extends \Magento\Core\Model\Config\Value
                     }
 
                     switch ($data->getScope()) {
-                        case 'default':
+                        case \Magento\App\ScopeInterface::SCOPE_DEFAULT:
                             $scopeName = __('Default scope');
                             break;
 
-                        case 'website':
-                            /** @var $website \Magento\Core\Model\Website */
+                        case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
+                            /** @var $website \Magento\Store\Model\Website */
                             $website = $this->_websiteFactory->create();
                             $websiteName = $website->load($data->getScopeId())->getName();
                             $scopeName = __('website(%1) scope', $websiteName);
                             break;
 
-                        case 'store':
-                            /** @var $store \Magento\Core\Model\Store */
+                        case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
+                            /** @var $store \Magento\Store\Model\Store */
                             $store = $this->_storeFactory->create();
                             $storeName = $store->load($data->getScopeId())->getName();
                             $scopeName = __('store(%1) scope', $storeName);

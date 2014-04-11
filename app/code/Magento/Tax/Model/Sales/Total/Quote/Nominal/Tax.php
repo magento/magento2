@@ -73,7 +73,7 @@ class Tax extends \Magento\Tax\Model\Sales\Total\Quote\Tax
      * This method can be used for changing totals collect sort order
      *
      * @param array $config
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return array
      */
     public function processConfigArray($config, $store)

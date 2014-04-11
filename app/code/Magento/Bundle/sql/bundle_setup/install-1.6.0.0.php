@@ -261,9 +261,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('catalog_product_bundle_selection_price', array('website_id')),
     array('website_id')
 )->addForeignKey(
-    $installer->getFkName('catalog_product_bundle_selection_price', 'website_id', 'core_website', 'website_id'),
+    $installer->getFkName('catalog_product_bundle_selection_price', 'website_id', 'store_website', 'website_id'),
     'website_id',
-    $installer->getTable('core_website'),
+    $installer->getTable('store_website'),
     'website_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -345,9 +345,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('catalog_product_bundle_price_index', 'website_id', 'core_website', 'website_id'),
+    $installer->getFkName('catalog_product_bundle_price_index', 'website_id', 'store_website', 'website_id'),
     'website_id',
-    $installer->getTable('core_website'),
+    $installer->getTable('store_website'),
     'website_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

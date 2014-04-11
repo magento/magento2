@@ -134,9 +134,9 @@ class Item
     protected $_urlModel;
 
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Backend\Model\Menu\Item\Validator
@@ -165,7 +165,7 @@ class Item
     /**
      * @param Item\Validator $validator
      * @param \Magento\AuthorizationInterface $authorization
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\UrlInterface $urlModel
      * @param \Magento\Module\ModuleListInterface $moduleList
@@ -175,7 +175,7 @@ class Item
     public function __construct(
         \Magento\Backend\Model\Menu\Item\Validator $validator,
         \Magento\AuthorizationInterface $authorization,
-        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Module\ModuleListInterface $moduleList,
@@ -187,7 +187,7 @@ class Item
 
         $this->_moduleManager = $moduleManager;
         $this->_acl = $authorization;
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_menuFactory = $menuFactory;
         $this->_urlModel = $urlModel;
         $this->_moduleName = isset($data['module']) ? $data['module'] : 'Magento_Backend';
@@ -442,7 +442,7 @@ class Item
     protected function _isConfigDependenciesAvailable()
     {
         if ($this->_dependsOnConfig) {
-            return $this->_storeConfig->getConfigFlag((string)$this->_dependsOnConfig);
+            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         }
         return true;
     }
@@ -494,7 +494,7 @@ class Item
         $this->_moduleManager = $objectManager->get('Magento\Module\Manager');
         $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
         $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
-        $this->_storeConfig = $objectManager->get('Magento\Core\Model\Store\Config');
+        $this->_scopeConfig = $objectManager->get('Magento\App\Config\ScopeConfigInterface');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
         $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
         $this->_moduleList = $objectManager->get('Magento\Module\ModuleListInterface');

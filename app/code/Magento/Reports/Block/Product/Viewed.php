@@ -51,7 +51,7 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \
         if ($this->hasData('page_size')) {
             return $this->getData('page_size');
         }
-        return $this->_storeConfig->getConfig(self::XML_PATH_RECENTLY_VIEWED_COUNT);
+        return $this->_scopeConfig->getValue(self::XML_PATH_RECENTLY_VIEWED_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

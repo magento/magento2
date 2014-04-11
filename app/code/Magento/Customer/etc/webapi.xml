@@ -54,7 +54,6 @@
         <rest-route httpMethod="PUT" method="activateCustomer" resources="Magento_Customer::manage">/:customerId/activateCustomer</rest-route>
         <rest-route httpMethod="PUT" method="searchCustomers" resources="Magento_Customer::customer">/search</rest-route>
         <rest-route httpMethod="PUT" method="authenticate" resources="Magento_Customer::customer">/authenticate</rest-route>
-        <rest-route httpMethod="PUT" method="changePassword" resources="Magento_Customer::manage">/:customerId/changePassword</rest-route>
         <rest-route httpMethod="GET" method="validateResetPasswordLinkToken" resources="Magento_Customer::customer">/:customerId/validateResetPasswordLinkToken/:resetPasswordLinkToken</rest-route>
         <rest-route httpMethod="PUT" method="initiatePasswordReset" resources="Magento_Customer::customer">/initiatePasswordReset</rest-route>
         <rest-route httpMethod="PUT" method="resetPassword" resources="Magento_Customer::customer">/:customerId/resetPassword</rest-route>

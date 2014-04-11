@@ -163,8 +163,10 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
 
         return array(
             'positive_M' => array($smallFile, false, '2M'),
-            'positive_KB' => array($smallFile, false, '2048KB'),
-            'negative_bytes' => array($bigFile, 'OverflowException', '2048000')
+            'positive_KB' => array($smallFile, false, '2048K'),
+            'negative_KB' => array($bigFile, 'OverflowException', '2048K'),
+            'negative_bytes' => array($bigFile, 'OverflowException', '2048000'),
+            'positive_no_limit' => array($smallFile, false, -1),
         );
     }
 }

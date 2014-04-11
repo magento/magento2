@@ -156,15 +156,15 @@
             <argument name="flatIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Resource\Website">
+    <type name="Magento\Store\Model\Resource\Website">
         <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
     </type>
-    <type name="Magento\Core\Model\Resource\Store">
+    <type name="Magento\Store\Model\Resource\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
     </type>
-    <type name="Magento\Core\Model\Resource\Store\Group">
+    <type name="Magento\Store\Model\Resource\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
@@ -316,6 +316,19 @@
             <argument name="protectedModels" xsi:type="array">
                 <item name="catalogCategory" xsi:type="string">Magento\Catalog\Model\Category</item>
                 <item name="catalogProduct" xsi:type="string">Magento\Catalog\Model\Product</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
+        <arguments>
+            <argument name="productModel" xsi:type="string">\Magento\Catalog\Model\Product</argument>
+            <argument name="reservedAttributes" xsi:type="array">
+                <item name="position" xsi:type="string">position</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="type_id" xsi:type="string">type_id</item>
+                <item name="calculated_final_price" xsi:type="string">calculated_final_price</item>
+                <item name="request_path" xsi:type="string">request_path</item>
             </argument>
         </arguments>
     </type>

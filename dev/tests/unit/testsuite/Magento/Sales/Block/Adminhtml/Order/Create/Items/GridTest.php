@@ -60,7 +60,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $storeMock = $this->getMockBuilder(
-            'Magento\Core\Model\Store'
+            'Magento\Store\Model\Store'
         )->disableOriginalConstructor()->setMethods(
             array('__wakeup', 'convertPrice')
         )->getMock();

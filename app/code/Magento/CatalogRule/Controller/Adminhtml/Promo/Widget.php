@@ -151,7 +151,7 @@ class Widget extends Action
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    'Magento\Core\Model\StoreManager'
+                    'Magento\Store\Model\StoreManager'
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();

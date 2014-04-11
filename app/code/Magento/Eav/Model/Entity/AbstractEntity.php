@@ -28,7 +28,7 @@ namespace Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Model\Exception;
-use Magento\Core\Model\Config\Element;
+use Magento\App\Config\Element;
 use Magento\Model\AbstractModel;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;

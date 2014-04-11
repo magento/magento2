@@ -30,7 +30,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetListOrders()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $layout->addBlock('Magento\View\Element\Text', 'head');
         // The tested block is using head block

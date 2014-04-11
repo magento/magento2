@@ -25,13 +25,12 @@
  */
 ?>
 <div class="categories-side-col">
-<div class="sidebar-actions">
-    <?php if ($this->getRoot()): ?>
-        <?php echo $this->getAddRootButtonHtml() ?><br/>
-        <?php echo $this->getAddSubButtonHtml() ?>
-    <?php endif; ?>
-</div>
-<?php echo $this->getStoreSwitcherHtml(); ?>
+    <div class="sidebar-actions">
+        <?php if ($this->getRoot()): ?>
+            <?php echo $this->getAddRootButtonHtml() ?><br/>
+            <?php echo $this->getAddSubButtonHtml() ?>
+        <?php endif; ?>
+    </div>
     <div class="tree-actions">
         <?php if ($this->getRoot()): ?>
         <?php //echo $this->getCollapseButtonHtml() ?>
@@ -187,40 +186,33 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     }
 });
 
-function reRenderTree(event, switcher) {
+function reRenderTree(switcherParams) {
     // re-render tree by store switcher
-    if (tree && event) {
-        var obj = event.target;
-        var newStoreId = obj.value * 1;
-        var storeParam = newStoreId ? 'store/' + newStoreId + '/' : '';
-
-        if (obj.switchParams) {
-            storeParam += obj.switchParams;
-        }
-        if (switcher.useConfirm) {
+    if (tree && switcherParams) {
+        if (switcherParams.useConfirm) {
             if (!confirm("<?php echo __('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
-                obj.value = '<?php echo (int)$this->getStoreId() ?>';
                 return false;
             }
         }
 
         if ($('add_root_category_button')) {
-            if (newStoreId == 0) {
+            if (!switcherParams.scopeId) {
                 $('add_root_category_button').show();
             }
             else {
                 $('add_root_category_button').hide();
             }
         }
+        // add form key
+        switcherParams.scopeParams.form_key = FORM_KEY;
 
         // retain current selected category id
-        storeParam = storeParam + 'id/' + tree.currentNodeId + '/';
-        var url = tree.switchTreeUrl + storeParam;
+        var url = tree.switchTreeUrl + switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
 
         // load from cache
         // load from ajax
         new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ), {
-            parameters:{store:newStoreId, form_key:FORM_KEY},
+            parameters:switcherParams.scopeParams,
             method:'post',
             onComplete:function (transport) {
                 var response = eval('(' + transport.responseText + ')');
@@ -228,7 +220,7 @@ function reRenderTree(event, switcher) {
                     return false;
                 }
 
-                _renderNewTree(response, storeParam);
+                _renderNewTree(response, switcherParams.scopeParams);
             }
         });
     }
@@ -238,7 +230,7 @@ function reRenderTree(event, switcher) {
     }
 }
 
-function _renderNewTree(config, storeParam) {
+function _renderNewTree(config, scopeParams) {
     if (!config) {
         var config = defaultLoadTreeParams;
     }
@@ -258,8 +250,8 @@ function _renderNewTree(config, storeParam) {
 
     // update content area
     var url = tree.editUrl;
-    if (storeParam) {
-        url = url + storeParam;
+    if (scopeParams) {
+        url = url + scopeParams;
     }
     <?php if ($this->isClearEdit()): ?>
         if (selectedNode) {
@@ -348,9 +340,7 @@ Ext.onReady(function () {
         varienWindowOnload();
     });
 
-    if ((typeof varienStoreSwitcher) != 'undefined') {
-        varienStoreSwitcher.storeSelectorClickCallback = reRenderTree;
-    }
+    scopeSwitcherHandler = reRenderTree;
 
     newTreeParams = {
         animate:false,

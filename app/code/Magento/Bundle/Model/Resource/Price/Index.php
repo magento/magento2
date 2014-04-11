@@ -25,7 +25,7 @@
  */
 namespace Magento\Bundle\Model\Resource\Price;
 
-use Magento\Core\Model\Website;
+use Magento\Store\Model\Website;
 
 /**
  * Bundle Product Price Index Resource model
@@ -85,13 +85,13 @@ class Index extends \Magento\Model\Resource\Db\AbstractDb
     protected $_localeDate;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory
      * @param \Magento\Customer\Model\GroupFactory $customerGroup
@@ -100,7 +100,7 @@ class Index extends \Magento\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory,
         \Magento\Customer\Model\GroupFactory $customerGroup,

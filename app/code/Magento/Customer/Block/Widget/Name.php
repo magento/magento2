@@ -34,8 +34,8 @@ use Magento\Customer\Helper\Data as CustomerHelper;
 /**
  * Widget for showing customer name.
  *
- * @method \Magento\Customer\Service\V1\Data\Customer getObject()
- * @method Name setObject(\Magento\Customer\Service\V1\Data\Customer $customer)
+ * @method Customer|\Magento\Customer\Model\Customer|\Magento\Sales\Model\Quote\Address getObject()
+ * @method Name setObject($object)
  */
 class Name extends AbstractWidget
 {
@@ -213,9 +213,9 @@ class Name extends AbstractWidget
      */
     protected function _getAttribute($attributeCode)
     {
-        if ($this->getForceUseCustomerAttributes() ||
-            $this->getObject() instanceof \Magento\Customer\Model\Customer ||
-            $this->getObject() instanceof Customer
+        if ($this->getForceUseCustomerAttributes()
+            || $this->getObject() instanceof \Magento\Customer\Model\Customer
+            || $this->getObject() instanceof Customer
         ) {
             return parent::_getAttribute($attributeCode);
         }

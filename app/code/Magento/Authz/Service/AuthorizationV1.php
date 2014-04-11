@@ -27,8 +27,8 @@ use Magento\Acl\Builder as AclBuilder;
 use Magento\Acl;
 use Magento\Authz\Model\UserIdentifier;
 use Magento\Logger;
-use Magento\Service\Exception as ServiceException;
-use Magento\Service\ResourceNotFoundException;
+use Magento\Webapi\ServiceException as ServiceException;
+use Magento\Webapi\ServiceResourceNotFoundException;
 use Magento\User\Model\Resource\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\User\Model\Resource\Rules\CollectionFactory as RulesCollectionFactory;
 use Magento\User\Model\Role;
@@ -126,7 +126,7 @@ class AuthorizationV1 implements AuthorizationV1Interface
         try {
             $role = $this->_getUserRole($userIdentifier);
             if (!$role) {
-                throw new ResourceNotFoundException(
+                throw new ServiceResourceNotFoundException(
                     __(
                         'Role for user with ID "%1" and user type "%2" cannot be found.',
                         $userIdentifier->getUserId(),

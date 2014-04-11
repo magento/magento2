@@ -35,6 +35,6 @@ class ReinitableConfigTest extends \PHPUnit_Framework_TestCase
         $scopePool->expects($this->once())->method('clean');
         /** @var \Magento\Core\Model\ReinitableConfig $config */
         $config = $helper->getObject('Magento\App\ReinitableConfig', array('scopePool' => $scopePool));
-        $this->assertInstanceOf('\Magento\App\ReinitableConfigInterface', $config->reinit());
+        $this->assertInstanceOf('\Magento\App\Config\ReinitableConfigInterface', $config->reinit());
     }
 }

@@ -63,7 +63,7 @@
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Tax Class</argument>
                             <argument name="width" xsi:type="string">200px</argument>
-                            <argument name="index" xsi:type="string">code</argument>
+                            <argument name="index" xsi:type="string">tax_class_id</argument>
                         </arguments>
                     </block>
                 </block>

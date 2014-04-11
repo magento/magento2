@@ -29,16 +29,44 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Store extends \Magento\Core\Model\Config\Value
+class Store extends \Magento\App\Config\Value
 {
+    /**
+     * @var \Magento\App\Config\MutableScopeConfigInterface
+     */
+    protected $_mutableConfig;
+
+    /**
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\App\Config\MutableScopeConfigInterface $mutableConfig
+     * @param \Magento\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\App\Config\MutableScopeConfigInterface $mutableConfig,
+        \Magento\Model\Resource\AbstractResource $resource = null,
+        \Magento\Data\Collection\Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->_mutableConfig = $mutableConfig;
+    }
+
     /**
      * @return void
      */
     protected function _afterSave()
     {
-        $this->_storeManager->getStore()->setConfig(
-            \Magento\Core\Model\Store::XML_PATH_STORE_IN_URL,
-            $this->getValue()
+        $this->_mutableConfig->setValue(
+            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+            $this->getValue(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $this->_cacheManager->clean();
     }

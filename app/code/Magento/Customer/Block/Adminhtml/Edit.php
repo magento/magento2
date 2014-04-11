@@ -114,7 +114,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 array(
                     'label' => __('Reset Password'),
                     'onclick' => 'setLocation(\'' . $url . '\')',
-                    'class' => 'save'
+                    'class' => 'reset reset-password'
                 ),
                 0
             );

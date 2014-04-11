@@ -69,7 +69,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
             'left'
         )->joinField(
             'store_name',
-            'core_store',
+            'store',
             'name',
             'store_id=store_id',
             null,

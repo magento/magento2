@@ -28,7 +28,7 @@ use Magento\Customer\Helper\View;
 use Magento\Customer\Model\Resource\AbstractServiceCollection;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\Data\CustomerDetails;
-use Magento\Customer\Service\V1\Data\FilterBuilder;
+use Magento\Service\V1\Data\FilterBuilder;
 use Magento\Customer\Service\V1\Data\SearchCriteriaBuilder;
 
 /**

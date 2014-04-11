@@ -144,4 +144,10 @@
     <type name="Magento\App\Action\Action">
         <plugin name="installInitializer" type="Magento\Install\App\Action\Plugin\Install" sortOrder="5"/>
     </type>
+    <type name="Magento\Install\Model\Setup">
+        <arguments>
+            <argument name="resourceName" xsi:type="string">core_setup</argument>
+            <argument name="moduleName" xsi:type="string">Magento_Core</argument>
+        </arguments>
+    </type>
 </config>

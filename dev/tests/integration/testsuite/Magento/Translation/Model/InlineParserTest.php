@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Translation\Model;
 
 class InlineParserTest extends \PHPUnit_Framework_TestCase
@@ -39,34 +38,33 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDesignTheme(
-            'magento_blank'
+            'Magento/blank'
         );
     }
 
     protected function setUp()
     {
         /** @var $inline \Magento\Translate\Inline */
-        $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Translate\Inline');
+        $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Translate\Inline');
         $this->_inlineParser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Translation\Model\Inline\Parser', 
+            'Magento\Translation\Model\Inline\Parser',
             array('translateInline' => $inline)
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             $this->_storeId
         )->getConfig(
             'dev/translate_inline/active'
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
-        )->getStore(
-            $this->_storeId
-        )->setConfig(
+            'Magento\App\Config\MutableScopeConfigInterface'
+        )->setValue(
             'dev/translate_inline/active',
-            true
+            true,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
         );
     }
 

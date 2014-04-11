@@ -32,6 +32,7 @@
             <module name="Magento_Payment"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Payment"/>
@@ -51,7 +52,6 @@
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Wishlist"/>
             <module name="Magento_Email"/>
-            <module name="Magento_Service"/>
         </depends>
     </module>
 </config>

@@ -67,7 +67,7 @@ class Url extends \Magento\Object
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -81,7 +81,7 @@ class Url extends \Magento\Object
      *
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory
      * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\Session\SidResolverInterface $sidResolver
@@ -90,7 +90,7 @@ class Url extends \Magento\Object
     public function __construct(
         \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory,
         \Magento\UrlInterface $url,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Filter\FilterManager $filter,
         \Magento\Session\SidResolverInterface $sidResolver,

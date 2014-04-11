@@ -69,7 +69,9 @@
             </div>
 
             <?php if($this->getChildBlock('card_validation')): ?>
-                <div id="order-card_validation" class="order-card-validation"><?php echo $this->getChildHtml('card_validation') ?></div>
+                <div class="order-card-validation" id="order-card_validation">
+                    <?php echo $this->getChildHtml('card_validation') ?>
+                </div>
             <?php endif; ?>
 
             <?php echo $this->getChildHtml('gift_options') ?>

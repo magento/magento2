@@ -31,13 +31,13 @@ class Storage extends \Magento\Session\Storage
 {
     /**
      * @param \Magento\Customer\Model\Config\Share $configShare
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $namespace
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Model\Config\Share $configShare,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $namespace = 'customer',
         array $data = array()
     ) {

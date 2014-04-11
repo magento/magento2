@@ -64,7 +64,7 @@ class Footer extends \Magento\View\Element\Template implements \Magento\View\Blo
         $this->addData(
             array(
                 'cache_lifetime' => false,
-                'cache_tags' => array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG)
+                'cache_tags' => array(\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG)
             )
         );
     }
@@ -93,7 +93,10 @@ class Footer extends \Magento\View\Element\Template implements \Magento\View\Blo
     public function getCopyright()
     {
         if (!$this->_copyright) {
-            $this->_copyright = $this->_storeConfig->getConfig('design/footer/copyright');
+            $this->_copyright = $this->_scopeConfig->getValue(
+                'design/footer/copyright',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $this->_copyright;
     }
@@ -105,6 +108,6 @@ class Footer extends \Magento\View\Element\Template implements \Magento\View\Blo
      */
     public function getIdentities()
     {
-        return array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
+        return array(\Magento\Store\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
     }
 }

@@ -301,7 +301,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $storeId = $object->getStoreId();
 
         $storeIds = $object->getStoreIds();
-        $storeIds[] = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        $storeIds[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
 
         // remove current storeId
         $storeIds = array_flip($storeIds);

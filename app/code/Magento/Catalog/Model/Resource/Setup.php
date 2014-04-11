@@ -68,7 +68,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Index\Model\IndexerFactory $indexerFactory,
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeResourceFactory,
         $moduleName = 'Magento_Catalog',
-        $connectionName = ''
+        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_indexerFactory = $indexerFactory;
@@ -92,17 +92,6 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     public function createCategory($data = array())
     {
         return $this->_categoryFactory->create($data);
-    }
-
-    /**
-     * Creates setup migration model
-     *
-     * @param array $data
-     * @return \Magento\Core\Model\Resource\Setup\Migration
-     */
-    public function createSetupMigration($data = array())
-    {
-        return $this->_migrationFactory->create($data);
     }
 
     /**

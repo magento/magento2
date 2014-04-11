@@ -387,7 +387,7 @@ abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
      * @param string $column
      * @param null|mixed $from
      * @param null|mixed $to
-     * @param null|int|string|\Magento\Core\Model\Store $store
+     * @param null|int|string|\Magento\Store\Model\Store $store
      * @return string
      */
     public function getStoreTZOffsetQuery($table, $column, $from = null, $to = null, $store = null)
@@ -461,7 +461,7 @@ abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
                 $tr = $transitions[$i];
                 try {
                     $this->timezoneValidator->validate($tr['ts'], $to);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     continue;
                 }
 

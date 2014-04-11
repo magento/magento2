@@ -131,44 +131,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_customerAddress = null;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeManager;
-
-    /**
-     * @var \Magento\Customer\Model\Config\Share
-     */
-    protected $_configShare;
-
-    /**
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
-
-    /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_coreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
-
-    /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
-     */
-    protected $_accountService;
-
-    /**
-     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
-     */
-    protected $_addressService;
-
-    /**
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
-     */
-    protected $_metadataService;
 
     /**
      * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
@@ -190,21 +160,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected $mathRandom;
 
-    /** @var \Magento\Customer\Service\V1\Data\Customer */
-    protected $customerData;
-
     /**
      * @param \Magento\App\Helper\Context $context
      * @param Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Config\Share $configShare
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService
-     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Escaper $escaper
@@ -216,14 +177,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\App\Helper\Context $context,
         Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Config\Share $configShare,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService,
-        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Escaper $escaper,
@@ -231,14 +186,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_coreData = $coreData;
-        $this->_storeManager = $storeManager;
-        $this->_configShare = $configShare;
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_coreConfig = $coreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_customerSession = $customerSession;
-        $this->_accountService = $accountService;
-        $this->_metadataService = $metadataService;
-        $this->_addressService = $addressService;
         $this->_groupService = $groupService;
         $this->_formFactory = $formFactory;
         $this->_escaper = $escaper;
@@ -249,23 +198,31 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve merchant country code
      *
-     * @param \Magento\Core\Model\Store|string|int|null $store
+     * @param \Magento\Store\Model\Store|string|int|null $store
      * @return string
      */
     public function getMerchantCountryCode($store = null)
     {
-        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
+        return (string)$this->_scopeConfig->getValue(
+            self::XML_PATH_MERCHANT_COUNTRY_CODE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Retrieve merchant VAT number
      *
-     * @param \Magento\Core\Model\Store|string|int|null $store
+     * @param \Magento\Store\Model\Store|string|int|null $store
      * @return string
      */
     public function getMerchantVatNumber($store = null)
     {
-        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
+        return (string)$this->_scopeConfig->getValue(
+            self::XML_PATH_MERCHANT_VAT_NUMBER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -277,7 +234,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isCountryInEU($countryCode, $storeId = null)
     {
-        $euCountries = explode(',', $this->_coreStoreConfig->getConfig(self::XML_PATH_EU_COUNTRIES_LIST, $storeId));
+        $euCountries = explode(
+            ',',
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EU_COUNTRIES_LIST,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+        );
         return in_array($countryCode, $euCountries);
     }
 
@@ -289,46 +253,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function isLoggedIn()
     {
         return $this->_customerSession->isLoggedIn();
-    }
-
-    /**
-     * Retrieve logged in customer
-     *
-     * @return \Magento\Customer\Model\Customer
-     * @deprecated use getCustomerData() instead
-     */
-    public function getCustomer()
-    {
-        if (empty($this->_customer)) {
-            $this->_customer = $this->_customerSession->getCustomer();
-        }
-        return $this->_customer;
-    }
-
-    /**
-     * @return \Magento\Customer\Service\V1\Data\Customer|null
-     * @throws  \Magento\Exception\NoSuchEntityException
-     */
-    public function getCustomerData()
-    {
-        if (empty($this->customerData)) {
-            $customerId = $this->_customerSession->getCustomerId();
-            $this->customerData = $this->_accountService->getCustomer($customerId);
-        }
-        return $this->customerData;
-    }
-
-    /**
-     * Check customer has address
-     *
-     * @return bool
-     *
-     * @throws \Magento\Exception\NoSuchEntityException If the customer Id is invalid
-     */
-    public function customerHasAddresses()
-    {
-        $customerId = $this->_customerSession->getCustomerId();
-        return count($this->_addressService->getAddresses($customerId)) > 0;
     }
 
     /**************************************************************************
@@ -356,8 +280,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         $referer = $this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME);
 
-        if (!$referer && !$this->_coreStoreConfig->getConfigFlag(
-            self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
+        if (!$referer && !$this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && !$this->_customerSession->getNoReferer()
         ) {
             $referer = $this->_getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
@@ -468,20 +393,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Check is confirmation required
-     *
-     * @return bool
-     */
-    public function isConfirmationRequired()
-    {
-        $customerId = $this->_customerSession->getCustomerId();
-        return \Magento\Customer\Service\V1\CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED ==
-            $this->_accountService->getConfirmationStatus(
-                $customerId
-            );
-    }
-
-    /**
      * Retrieve confirmation URL for Email
      *
      * @param string $email
@@ -562,16 +473,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getResetPasswordLinkExpirationPeriod()
     {
-        return (int)$this->_coreConfig->getValue(
+        return (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
-            'default'
+            \Magento\App\ScopeInterface::SCOPE_DEFAULT
         );
     }
 
     /**
      * Get default customer group id
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return int
      */
     public function getDefaultCustomerGroupId($store = null)
@@ -584,7 +495,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $customerCountryCode
      * @param \Magento\Object $vatValidationResult
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
      */
     public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
@@ -601,7 +512,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
         );
 
         if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
-            $groupId = (int)$this->_coreStoreConfig->getConfig($vatClassToGroupXmlPathMap[$vatClass], $store);
+            $groupId = (int)$this->_scopeConfig->getValue(
+                $vatClassToGroupXmlPathMap[$vatClass],
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
         }
 
         return $groupId;
@@ -687,9 +602,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             empty($vatNumber) ||
             empty($requesterCountryCode) && !empty($requesterVatNumber) ||
             !empty($requesterCountryCode) && empty($requesterVatNumber) ||
-            !empty($requesterCountryCode) && !$this->isCountryInEU(
-                $requesterCountryCode
-            )
+            !empty($requesterCountryCode) && !$this->isCountryInEU($requesterCountryCode)
         ) {
             $result = false;
         }
@@ -702,7 +615,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $customerCountryCode
      * @param \Magento\Object $vatValidationResult
-     * @param \Magento\Core\Model\Store|string|int|null $store
+     * @param \Magento\Store\Model\Store|string|int|null $store
      * @return null|string
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
@@ -787,37 +700,5 @@ class Data extends \Magento\App\Helper\AbstractHelper
         }
 
         return $filteredData;
-    }
-
-    /**
-     * Check store availability for customer given the customerId
-     *
-     * @param int $customerWebsiteId
-     * @param int $storeId
-     * @return bool
-     */
-    public function isCustomerInStore($customerWebsiteId, $storeId)
-    {
-        $ids = $this->getSharedStoreIds($customerWebsiteId);
-        return in_array($storeId, $ids);
-    }
-
-    /**
-     * Retrieve shared store ids
-     *
-     * @param int $customerWebsiteId
-     * @return array
-     */
-    public function getSharedStoreIds($customerWebsiteId)
-    {
-        $ids = array();
-        if ((bool)$this->_configShare->isWebsiteScope()) {
-            $ids = $this->_storeManager->getWebsite($customerWebsiteId)->getStoreIds();
-        } else {
-            foreach ($this->_storeManager->getStores() as $store) {
-                $ids[] = $store->getId();
-            }
-        }
-        return $ids;
     }
 }

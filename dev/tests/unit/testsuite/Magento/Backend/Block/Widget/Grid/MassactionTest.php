@@ -68,7 +68,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
         $this->_layoutMock = $this->getMock(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('getParentName', 'getBlock', 'helper'),
             array(),
             '',

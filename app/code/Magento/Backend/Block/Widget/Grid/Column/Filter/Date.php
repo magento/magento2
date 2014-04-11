@@ -228,7 +228,12 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $dateObj = $this->_localeDate->date(null, null, $locale, false);
 
             //set default timezone for store (admin)
-            $dateObj->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+            $dateObj->setTimezone(
+                $this->_scopeConfig->getValue(
+                    $this->_localeDate->getDefaultTimezonePath(),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
 
             //set beginning of day
             $dateObj->setHour(00);

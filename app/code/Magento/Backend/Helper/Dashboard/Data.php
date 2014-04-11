@@ -42,21 +42,21 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      * @param string $installDate
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
         $installDate,
         $dbCompatibleMode = true
     ) {
-        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
+        parent::__construct($context, $scopeConfig, $storeManager, $appState, $dbCompatibleMode);
         $this->_installDate = $installDate;
     }
 

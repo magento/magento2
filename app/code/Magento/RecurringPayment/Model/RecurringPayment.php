@@ -65,7 +65,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     /**
      * Store instance used by locale or method instance
      *
-     * @var \Magento\Core\Model\Store|null
+     * @var \Magento\Store\Model\Store|null
      */
     protected $_store = null;
 
@@ -395,10 +395,10 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     /**
      * Store instance setter
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return $this
      */
-    public function setStore(\Magento\Core\Model\Store $store)
+    public function setStore(\Magento\Store\Model\Store $store)
     {
         $this->_store = $store;
         return $this;

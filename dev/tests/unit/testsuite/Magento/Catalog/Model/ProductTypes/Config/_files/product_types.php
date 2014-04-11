@@ -31,6 +31,7 @@ return array(
             'index_priority' => 40,
             'can_use_qty_decimals' => true,
             'is_qty' => true,
+            'sort_order' => 100,
             'price_model' => 'Instance_Type_One',
             'price_indexer' => 'Instance_Type_Two',
             'stock_indexer' => 'Instance_Type_Three'
@@ -43,6 +44,7 @@ return array(
             'index_priority' => 0,
             'can_use_qty_decimals' => true,
             'is_qty' => false,
+            'sort_order' => 0,
             'allowed_selection_types' => array('type_two' => 'type_two'),
             'custom_attributes' => array('some_name' => 'some_value')
         ),
@@ -54,6 +56,7 @@ return array(
             'index_priority' => 20,
             'can_use_qty_decimals' => false,
             'is_qty' => false,
+            'sort_order' => 5,
             'price_model' => 'Instance_Type_Three',
             'price_indexer' => 'Instance_Type_Three',
             'stock_indexer' => 'Instance_Type_Three'

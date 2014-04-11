@@ -41,7 +41,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
     protected $groupService;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\FilterBuilder
+     * @var \Magento\Service\V1\Data\FilterBuilder
      */
     protected $filterBuilder;
 
@@ -61,7 +61,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
      * @param \Magento\Customer\Model\Group $modelCustomerGroup
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Customer\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Service\V1\Data\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
@@ -69,7 +69,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
         \Magento\Tax\Model\Calculation\Rule $calculationRule,
         \Magento\Customer\Model\Group $modelCustomerGroup,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Customer\Service\V1\Data\FilterBuilder $filterBuilder,
+        \Magento\Service\V1\Data\FilterBuilder $filterBuilder,
         \Magento\Customer\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
         array $data = array()
     ) {

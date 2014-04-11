@@ -58,7 +58,7 @@
             </argument>
             <argument name="testOptions" xsi:type="options" model="Magento\Core\Model\Layout\Argument\Handler\TestOptions"/>
             <argument name="testSimpleObject" xsi:type="object">
-                Magento\Core\Model\Layout\Argument\Handler\TestObject
+                Magento\View\Layout\Argument\Handler\TestObject
             </argument>
             <argument name="testComplexObject" xsi:type="object"><updater>Magento_Test_Updater</updater>Magento\Core\Model\Layout\Argument\Handler\TestObject</argument>
         </arguments>

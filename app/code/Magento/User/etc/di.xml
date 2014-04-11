@@ -25,7 +25,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\User\Model\Role" shared="false" />
-    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <type name="Magento\User\Model\Resource\Rules">
         <arguments>
             <argument name="rootResource" xsi:type="object">Magento\Acl\RootResource\Proxy</argument>

@@ -33,7 +33,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
-use Magento\Core\Model\Resource\Store\Collection;
+use Magento\Store\Model\Resource\Store\Collection;
 
 class Options extends \Magento\Backend\Block\Template
 {
@@ -224,9 +224,7 @@ class Options extends \Magento\Backend\Block\Template
         foreach ($this->getStores() as $store) {
             $storeId = $store->getId();
             $value['store' . $storeId] = $storeId ==
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID ? $valuePrefix . $this->escapeHtml(
-                    $option['label']
-                ) : '';
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID ? $valuePrefix . $this->escapeHtml($option['label']) : '';
         }
 
         return array($value);

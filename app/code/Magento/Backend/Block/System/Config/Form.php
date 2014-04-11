@@ -117,13 +117,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_fieldFactory;
 
     /**
-     * Form field factory
-     *
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_config;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
@@ -131,7 +124,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
      * @param \Magento\Backend\Block\System\Config\Form\Field\Factory $fieldFactory
-     * @param \Magento\App\ConfigInterface $coreConfig
      * @param array $data
      */
     public function __construct(
@@ -142,7 +134,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Backend\Block\System\Config\Form\Field\Factory $fieldFactory,
-        \Magento\App\ConfigInterface $coreConfig,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -150,7 +141,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_configStructure = $configStructure;
         $this->_fieldsetFactory = $fieldsetFactory;
         $this->_fieldFactory = $fieldFactory;
-        $this->_config = $coreConfig;
 
         $this->_scopeLabels = array(
             self::SCOPE_DEFAULT => __('[GLOBAL]'),
@@ -477,7 +467,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getConfigValue($path)
     {
-        return $this->_config->getValue($path, $this->getScope(), $this->getScopeCode());
+        return $this->_scopeConfig->getValue($path, $this->getScope(), $this->getScopeCode());
     }
 
     /**

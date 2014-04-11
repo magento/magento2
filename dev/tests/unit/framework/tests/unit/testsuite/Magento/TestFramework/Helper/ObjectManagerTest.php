@@ -41,7 +41,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         'cache' => 'Magento\App\CacheInterface',
         'design' => 'Magento\View\DesignInterface',
         'session' => 'Magento\Session\SessionManagerInterface',
-        'storeConfig' => 'Magento\Core\Model\Store\Config'
+        'scopeConfig' => 'Magento\App\Config\ScopeConfigInterface'
     );
 
     /**
@@ -50,9 +50,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_modelDependencies = array(
-        'eventManager'       => 'Magento\Event\ManagerInterface',
-        'cacheManager'       => 'Magento\App\CacheInterface',
-        'resource'           => 'Magento\Model\Resource\AbstractResource',
+        'eventManager' => 'Magento\Event\ManagerInterface',
+        'cacheManager' => 'Magento\App\CacheInterface',
+        'resource' => 'Magento\Model\Resource\AbstractResource',
         'resourceCollection' => 'Magento\Data\Collection\Db'
     );
 
@@ -91,8 +91,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\App\Config\ValueInterface */
-        $model = $objectManager->getObject('Magento\Core\Model\Config\Value');
-        $this->assertInstanceOf('Magento\Core\Model\Config\Value', $model);
+        $model = $objectManager->getObject('Magento\App\Config\Value');
+        $this->assertInstanceOf('Magento\App\Config\Value', $model);
         foreach ($this->_modelDependencies as $propertyName => $propertyType) {
             $this->assertAttributeInstanceOf($propertyType, '_' . $propertyName, $model);
         }
@@ -108,7 +108,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $resourceMock->expects($this->once())->method('_getReadAdapter')->will($this->returnValue(false));
         $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
         $arguments = array('resource' => $resourceMock);
-        $model = $objectManager->getObject('Magento\Core\Model\Config\Value', $arguments);
+        $model = $objectManager->getObject('Magento\App\Config\Value', $arguments);
         $this->assertFalse($model->getResource()->getDataVersion('test'));
     }
 }

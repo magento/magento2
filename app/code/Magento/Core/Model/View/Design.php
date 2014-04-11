@@ -56,7 +56,7 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Store list manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -71,14 +71,9 @@ class Design implements \Magento\View\DesignInterface
     protected $_themeFactory;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_config;
-
-    /**
-     * @var \Magento\Core\Model\Store\Config
-     */
-    private $_storeConfig;
+    private $_scopeConfig;
 
     /**
      * @var \Magento\Locale\ResolverInterface
@@ -91,20 +86,18 @@ class Design implements \Magento\View\DesignInterface
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
      * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\App\State $appState
      * @param array $themes
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory,
-        \Magento\App\ConfigInterface $config,
-        \Magento\Core\Model\Store\ConfigInterface $storeConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
         \Magento\Locale\ResolverInterface $locale,
         \Magento\App\State $appState,
@@ -113,8 +106,7 @@ class Design implements \Magento\View\DesignInterface
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
         $this->_themeFactory = $themeFactory;
-        $this->_config = $config;
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
         $this->_themes = $themes;
         $this->_locale = $locale;
@@ -187,11 +179,12 @@ class Design implements \Magento\View\DesignInterface
         $store = isset($params['store']) ? $params['store'] : null;
 
         if ($this->_isThemePerStoveView($area)) {
-            $theme = $this->_storeManager->isSingleStoreMode() ? $this->_config->getValue(
+            $theme = $this->_storeManager->isSingleStoreMode() ? $this->_scopeConfig->getValue(
                 self::XML_PATH_THEME_ID,
-                'default'
-            ) : (string)$this->_storeConfig->getConfig(
+                \Magento\App\ScopeInterface::SCOPE_DEFAULT
+            ) : (string)$this->_scopeConfig->getValue(
                 self::XML_PATH_THEME_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             );
         }

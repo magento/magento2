@@ -105,11 +105,14 @@ class Info extends \Magento\Model\AbstractModel
         if (!$this->hasMethodInstance()) {
             if ($this->getMethod()) {
                 $instance = $this->_paymentData->getMethodInstance($this->getMethod());
-                if ($instance) {
-                    $instance->setInfoInstance($this);
-                    $this->setMethodInstance($instance);
-                    return $instance;
+                if (!$instance) {
+                    $instance = $this->_paymentData->getMethodInstance(
+                        \Magento\Payment\Model\Method\Substitution::CODE
+                    );
                 }
+                $instance->setInfoInstance($this);
+                $this->setMethodInstance($instance);
+                return $instance;
             }
             throw new \Magento\Model\Exception(__('The payment method you requested is not available.'));
         }

@@ -29,40 +29,40 @@
 $numColumns = sizeof($this->getColumns());
 ?>
 <?php if($this->getCollection()): ?>
-<div class="grid">
-<table cellspacing="0" id="<?php echo $this->getId() ?>_table">
-    <?php
-    /* This part is commented to remove all <col> tags from the code. */
-    /* foreach ($this->getColumns() as $_column): ?>
-    <col <?php echo $_column->getHtmlProperty() ?> />
-    <?php endforeach; */ ?>
-    <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
-        <thead>
-            <?php if ($this->getHeadersVisibility()): ?>
-                <tr class="headings">
-                <?php foreach ($this->getColumns() as $_column): ?>
-                    <th <?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
-                <?php endforeach; ?>
-                </tr>
-            <?php endif; ?>
-        </thead>
-    <?php endif; ?>
-    <tbody>
-    <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
-    <?php foreach ($this->getCollection() as $_index=>$_item): ?>
-        <tr title="<?php echo $this->getRowUrl($_item) ?>">
-        <?php $i=0;foreach ($this->getColumns() as $_column): ?>
-            <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>"><?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+<div class="dashboard-data-wrapper">
+    <table class="dashboard-data" id="<?php echo $this->getId() ?>_table">
+        <?php
+        /* This part is commented to remove all <col> tags from the code. */
+        /* foreach ($this->getColumns() as $_column): ?>
+        <col <?php echo $_column->getHtmlProperty() ?> />
+        <?php endforeach; */ ?>
+        <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+            <thead>
+                <?php if ($this->getHeadersVisibility()): ?>
+                    <tr class="headings">
+                    <?php foreach ($this->getColumns() as $_column): ?>
+                        <th <?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getHeaderHtml() ?></th>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endif; ?>
+            </thead>
+        <?php endif; ?>
+        <tbody>
+        <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
+        <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+            <tr title="<?php echo $this->getRowUrl($_item) ?>">
+            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>"><?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+            <?php endforeach; ?>
+            </tr>
         <?php endforeach; ?>
-        </tr>
-    <?php endforeach; ?>
-    <?php elseif ($this->getEmptyText()): ?>
-        <tr>
-            <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="100"><?php echo $this->getEmptyText() ?></td>
-        </tr>
-    <?php endif; ?>
-    </tbody>
-</table>
+        <?php elseif ($this->getEmptyText()): ?>
+            <tr>
+                <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="100"><?php echo $this->getEmptyText() ?></td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 <?php if($this->canDisplayContainer()): ?>
 <script type="text/javascript">

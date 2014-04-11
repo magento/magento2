@@ -30,9 +30,9 @@ use Magento\App\Action\NotFoundException;
 class Index extends \Magento\App\Action\Action
 {
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Rss\Helper\WishlistRss
@@ -46,17 +46,17 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Rss\Helper\WishlistRss $wishlistHelper
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Rss\Helper\WishlistRss $wishlistHelper,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_wishlistHelper = $wishlistHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context);
@@ -70,7 +70,7 @@ class Index extends \Magento\App\Action\Action
      */
     public function indexAction()
     {
-        if ($this->_storeConfig->getConfig('rss/config/active')) {
+        if ($this->_scopeConfig->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } else {
@@ -107,11 +107,11 @@ class Index extends \Magento\App\Action\Action
      */
     public function wishlistAction()
     {
-        if ($this->_storeConfig->getConfig('rss/wishlist/active')) {
+        if ($this->_scopeConfig->getValue('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $wishlist = $this->_wishlistHelper->getWishlist();
             if ($wishlist && ($wishlist->getVisibility()
-                || $this->_customerSession->authenticate($this)
-                    && $wishlist->getCustomerId() == $this->_wishlistHelper->getCustomer()->getId())
+                || $this->_objectManager->get('Magento\Customer\Model\Session')->authenticate($this)
+                && $wishlist->getCustomerId() == $this->_wishlistHelper->getCustomer()->getId())
             ) {
                 $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8');
                 $this->_view->loadLayout(false);

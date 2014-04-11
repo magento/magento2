@@ -39,7 +39,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
@@ -73,7 +73,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Core\Model\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             array(),
             array(),
             '',
@@ -124,19 +124,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($idsToProcess)
         );
-
         $this->_resourceMock->expects(
             $this->once()
-        )->method(
+        )
+        ->method(
             'getConnection'
-        )->with(
+        )
+        ->with(
             'write'
-        )->will(
+        )
+        ->will(
             $this->returnValue($connectionMock)
         );
 
-        $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
+
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+
 
         $this->_storeManagerMock->expects(
             $this->once()

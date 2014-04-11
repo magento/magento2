@@ -341,15 +341,15 @@ class Types extends \Magento\Backend\App\Action
     /**
      * Get store object, basing on request
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function _getStore()
     {
         $storeId = (int)$this->getRequest()->getParam('store', 0);
         if ($storeId == 0) {
-            return $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getDefaultStoreView();
+            return $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getDefaultStoreView();
         }
-        return $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId);
+        return $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
     }
 
     /**

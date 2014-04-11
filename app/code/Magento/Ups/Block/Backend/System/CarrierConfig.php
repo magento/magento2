@@ -26,7 +26,7 @@ namespace Magento\Ups\Block\Backend\System;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Ups\Helper\Config as ConfigHelper;
-use Magento\Core\Model\Website;
+use Magento\Store\Model\Website;
 
 /**
  * Backend shipping UPS content block
@@ -41,14 +41,14 @@ class CarrierConfig extends Template
     protected $carrierConfig;
 
     /**
-     * @var \Magento\Core\Model\Website
+     * @var \Magento\Store\Model\Website
      */
     protected $_websiteModel;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Ups\Helper\Config $carrierConfig
-     * @param \Magento\Core\Model\Website $websiteModel
+     * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class CarrierConfig extends Template
     /**
      * Get website model
      *
-     * @return \Magento\Core\Model\Website
+     * @return \Magento\Store\Model\Website
      */
     public function getWebsiteModel()
     {
@@ -91,6 +91,6 @@ class CarrierConfig extends Template
      */
     public function getConfig($path, $store = null)
     {
-        return $this->_storeConfig->getConfig($path, $store);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }

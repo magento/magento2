@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -37,7 +37,7 @@ $tableCoreLayoutLink = $installer->getTable('core_layout_link');
 
 $connection->dropForeignKey(
     $tableCoreLayoutLink,
-    $installer->getFkName('core_layout_link', 'store_id', 'core_store', 'store_id')
+    $installer->getFkName('core_layout_link', 'store_id', 'store', 'store_id')
 );
 
 $connection->dropIndex(
@@ -77,10 +77,10 @@ $connection->addIndex(
 );
 
 $connection->addForeignKey(
-    $installer->getFkName('core_layout_link', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('core_layout_link', 'store_id', 'store', 'store_id'),
     $tableCoreLayoutLink,
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

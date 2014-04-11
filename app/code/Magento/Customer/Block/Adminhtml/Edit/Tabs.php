@@ -141,7 +141,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 );
             }
 
-            if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
+            $reviewOutput = $this->isOutputEnabled('Magento_Review');
+            if ($this->_authorization->isAllowed('Magento_Review::reviews_all') && $reviewOutput) {
                 $this->addTab(
                     'reviews',
                     array(

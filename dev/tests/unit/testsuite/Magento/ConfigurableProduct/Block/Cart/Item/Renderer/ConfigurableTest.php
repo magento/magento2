@@ -34,12 +34,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     protected $_imageHelper;
 
-    /** @var \Magento\Core\Model\Store\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_storeConfig;
+    /** @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_scopeConfig;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $productConfigMock;
-    
+
     /** @var Renderer */
     protected $_renderer;
 
@@ -55,7 +55,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
+        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
         $this->productConfigMock = $this->getMock(
             'Magento\Catalog\Helper\Product\Configuration',
             array(),
@@ -68,7 +68,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             array(
                 'viewConfig' => $this->_configManager,
                 'imageHelper' => $this->_imageHelper,
-                'storeConfig' => $this->_storeConfig,
+                'scopeConfig' => $this->_scopeConfig,
                 'productConfig' => $this->productConfigMock
             )
         );
@@ -198,13 +198,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function _initProducts($childHasThumbnail = true, $useParentThumbnail = false)
     {
         /** Set option which can force usage of parent product thumbnail when configurable product is displayed */
-        $thumbnailToBeUsed = $useParentThumbnail ?
-            ThumbnailSource::OPTION_USE_PARENT_IMAGE :
-            ThumbnailSource::OPTION_USE_OWN_IMAGE;
-        $this->_storeConfig->expects(
+        $thumbnailToBeUsed = $useParentThumbnail
+            ? ThumbnailSource::OPTION_USE_PARENT_IMAGE
+            : ThumbnailSource::OPTION_USE_OWN_IMAGE;
+        $this->_scopeConfig->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             Renderer::CONFIG_THUMBNAIL_SOURCE
         )->will(

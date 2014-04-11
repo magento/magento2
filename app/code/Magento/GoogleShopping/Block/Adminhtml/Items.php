@@ -69,20 +69,20 @@ class Items extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->addChild('item', 'Magento\GoogleShopping\Block\Adminhtml\Items\Item');
         $this->addChild('product', 'Magento\GoogleShopping\Block\Adminhtml\Items\Product');
-        $this->addChild('store_switcher', 'Magento\GoogleShopping\Block\Adminhtml\Store\Switcher');
+        //$this->addChild('store_switcher', 'Magento\GoogleShopping\Block\Adminhtml\Store\Switcher');
 
         return $this;
     }
 
-    /**
-     * Get HTML code for Store Switcher select
-     *
-     * @return string
-     */
-    public function getStoreSwitcherHtml()
-    {
-        return $this->getChildHtml('store_switcher');
-    }
+    // /**
+    //  * Get HTML code for Store Switcher select
+    //  *
+    //  * @return string
+    //  */
+    // public function getStoreSwitcherHtml()
+    // {
+    //     return $this->getChildHtml('store_switcher');
+    // }
 
     /**
      * Get HTML code for CAPTCHA
@@ -103,7 +103,7 @@ class Items extends \Magento\Backend\Block\Widget\Grid\Container
     /**
      * Get selecetd store
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

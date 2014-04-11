@@ -53,7 +53,7 @@ class Buttons extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'backButton',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -63,36 +63,38 @@ class Buttons extends \Magento\Backend\Block\Template
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'resetButton',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Reset'), 'onclick' => 'window.location.reload()')
+            array('label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset')
         );
 
-        $this->addChild(
+        if (intval($this->getRequest()->getParam('rid'))) {
+            $this->getToolbar()->addChild(
+                'deleteButton',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Delete Role'),
+                    'onclick' => 'deleteConfirm(\'' . __(
+                        'Are you sure you want to do this?'
+                    ) . '\', \'' . $this->getUrl(
+                        '*/*/delete',
+                        array('rid' => $this->getRequest()->getParam('rid'))
+                    ) . '\')',
+                    'class' => 'delete'
+                )
+            );
+        }
+
+        $this->getToolbar()->addChild(
             'saveButton',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Save Role'),
-                'class' => 'save',
+                'class' => 'save primary save-role',
                 'data_attribute' => array(
                     'mage-init' => array('button' => array('event' => 'save', 'target' => '#role-edit-form'))
                 )
-            )
-        );
-
-        $this->addChild(
-            'deleteButton',
-            'Magento\Backend\Block\Widget\Button',
-            array(
-                'label' => __('Delete Role'),
-                'onclick' => 'deleteConfirm(\'' . __(
-                    'Are you sure you want to do this?'
-                ) . '\', \'' . $this->getUrl(
-                    '*/*/delete',
-                    array('rid' => $this->getRequest()->getParam('rid'))
-                ) . '\')',
-                'class' => 'delete'
             )
         );
         return parent::_prepareLayout();

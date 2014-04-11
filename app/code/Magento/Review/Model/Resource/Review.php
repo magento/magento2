@@ -95,37 +95,37 @@ class Review extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Rating model
      *
-     * @var \Magento\Rating\Model\RatingFactory
+     * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
      * Rating resource model
      *
-     * @var \Magento\Rating\Model\Resource\Rating\Option
+     * @var \Magento\Review\Model\Resource\Rating\Option
      */
     protected $_ratingOptions;
 
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Rating\Model\RatingFactory $ratingFactory
-     * @param \Magento\Rating\Model\Resource\Rating\Option $ratingOptions
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
+     * @param \Magento\Review\Model\Resource\Rating\Option $ratingOptions
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Rating\Model\RatingFactory $ratingFactory,
-        \Magento\Rating\Model\Resource\Rating\Option $ratingOptions
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Review\Model\RatingFactory $ratingFactory,
+        Rating\Option $ratingOptions
     ) {
         $this->_date = $date;
         $this->_storeManager = $storeManager;

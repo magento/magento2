@@ -76,7 +76,7 @@ class Data implements DataInterface
             if (is_array($data) && array_key_exists($key, $data)) {
                 $data = $data[$key];
             } else {
-                return false;
+                return null;
             }
         }
         return $data;

@@ -49,7 +49,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
             'design',
             $objectManager->create('Magento\Core\Model\Design')
         );
-        $layout = $objectManager->create('Magento\Core\Model\Layout');
+        $layout = $objectManager->create('Magento\View\Layout');
         $block = $layout->addBlock('Magento\Backend\Block\System\Design\Edit\Tab\General');
         $prepareFormMethod = new \ReflectionMethod(
             'Magento\Backend\Block\System\Design\Edit\Tab\General',

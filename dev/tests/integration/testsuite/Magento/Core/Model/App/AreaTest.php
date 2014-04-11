@@ -80,8 +80,8 @@ class AreaTest extends \PHPUnit_Framework_TestCase
 
     // @codingStandardsIgnoreStart
     /**
-     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
-     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
+     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
+     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
@@ -94,13 +94,13 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $request->setServer(array('HTTP_USER_AGENT' => 'Mozilla Firefox'));
         $this->_model->detectDesign($request);
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface');
-        $this->assertEquals('magento_blank', $design->getDesignTheme()->getThemePath());
+        $this->assertEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart
     /**
-     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
-     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
+     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
+     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
      * @magentoDataFixture Magento/Core/_files/design_change.php
      * @magentoAppIsolation enabled
      */
@@ -109,14 +109,14 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->detectDesign();
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface');
-        $this->assertEquals('magento_plushe', $design->getDesignTheme()->getThemePath());
+        $this->assertEquals('Magento/plushe', $design->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart
     /**
      * Test that non-frontend areas are not affected neither by user-agent reg expressions, nor by the "design change"
      *
-     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
+     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
      * magentoDataFixture Magento/Core/_files/design_change.php
      * @magentoAppIsolation enabled
      */
@@ -130,6 +130,6 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $request->setServer(array('HTTP_USER_AGENT' => 'Mozilla Firefox'));
         $model->detectDesign($request);
         $design = $objectManager->get('Magento\View\DesignInterface');
-        $this->assertNotEquals('magento_blank', $design->getDesignTheme()->getThemePath());
+        $this->assertNotEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
     }
 }

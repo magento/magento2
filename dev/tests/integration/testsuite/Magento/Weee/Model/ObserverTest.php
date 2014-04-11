@@ -60,10 +60,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         foreach (array(\Magento\Weee\Model\Tax::DISPLAY_INCL, \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR) as $mode) {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
-            )->getStore()->setConfig(
+                'Magento\App\Config\MutableScopeConfigInterface'
+            )->setValue(
                 'tax/weee/display',
-                $mode
+                $mode,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $eventObserver = $this->_createEventObserverForUpdateConfigurableProductOptions();
             $this->_model->updateProductOptions($eventObserver);
@@ -78,10 +79,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL
         ) as $mode) {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
-            )->getStore()->setConfig(
+                'Magento\App\Config\MutableScopeConfigInterface'
+            )->setValue(
                 'tax/weee/display',
-                $mode
+                $mode,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $eventObserver = $this->_createEventObserverForUpdateConfigurableProductOptions();
             $this->_model->updateProductOptions($eventObserver);

@@ -52,10 +52,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
 
-        $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
 
-        $storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
 
         $urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
@@ -64,11 +64,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $block = $helper->getObject('Magento\Backend\Block\Widget\Grid', array(
-            'storeManager' => $storeManagerMock,
-            'urlModel' => $urlMock,
-            'urlBuilder' => $urlBuilderMock,
-            )
+        $block = $helper->getObject(
+            'Magento\Backend\Block\Widget\Grid',
+            array('storeManager' => $storeManagerMock, 'urlModel' => $urlMock, 'urlBuilder' => $urlBuilderMock)
         );
 
         $this->assertFalse($block->getRssLists());

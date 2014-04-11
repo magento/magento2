@@ -69,7 +69,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Store Manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -82,14 +82,14 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
         \Magento\App\RequestInterface $request,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Message\ManagerInterface $messageManager
     ) {
         parent::__construct($installer);

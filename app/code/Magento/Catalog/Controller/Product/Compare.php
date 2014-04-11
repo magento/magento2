@@ -91,7 +91,7 @@ class Compare extends \Magento\App\Action\Action
     protected $_compareItemFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -109,7 +109,7 @@ class Compare extends \Magento\App\Action\Action
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -121,7 +121,7 @@ class Compare extends \Magento\App\Action\Action
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
@@ -183,7 +183,7 @@ class Compare extends \Magento\App\Action\Action
             $product = $this->_productFactory->create();
             $product->setStoreId($this->_storeManager->getStore()->getId())->load($productId);
 
-            if ($product->getId()/* && !$product->isSuper()*/) {
+            if ($product->getId()) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
                 $this->messageManager->addSuccess(__('You added product %1 to the comparison list.', $productName));

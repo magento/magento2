@@ -109,7 +109,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $onclickJs = 'deleteConfirm(\'' . __(
                 'Are you sure? This order will be canceled and a new one will be created instead.'
             ) . '\', \'' . $this->getEditUrl() . '\');';
-            $this->_addButton('order_edit', array('label' => __('Edit'), 'onclick' => $onclickJs));
+            $this->_addButton(
+                'order_edit',
+                array('label' => __('Edit'), 'class' => 'edit primary', 'onclick' => $onclickJs)
+            );
             // see if order has non-editable products as items
             $nonEditableTypes = array_keys(
                 $this->getOrder()->getResource()->aggregateProductsByTypes(
@@ -123,7 +126,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'order_edit',
                     'onclick',
                     'if (!confirm(\'' . __(
-                        'This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.',
+                        'This order contains (%1) items and therefore cannot be edited through the admin interface. ' .
+                        'If you wish to continue editing, the (%2) items will be removed, ' .
+                        ' the order will be canceled and a new order will be placed.',
                         implode(', ', $nonEditableTypes),
                         implode(', ', $nonEditableTypes)
                     ) . '\')) return false;' . $onclickJs
@@ -137,6 +142,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'order_cancel',
                 array(
                     'label' => __('Cancel'),
+                    'class' => 'cancel',
                     'onclick' => 'deleteConfirm(\'' . $message . '\', \'' . $this->getCancelUrl() . '\')'
                 )
             );
@@ -148,6 +154,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'send_notification',
                 array(
                     'label' => __('Send Email'),
+                    'class' => 'send-email',
                     'onclick' => "confirmSetLocation('{$message}', '{$this->getEmailUrl()}')"
                 )
             );
@@ -155,7 +162,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Sales::creditmemo') && $order->canCreditmemo()) {
             $message = __(
-                'This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?'
+                'This will create an offline refund. ' .
+                'To create an online refund, open an invoice and create credit memo for it. Do you want to continue?'
             );
             $onClick = "setLocation('{$this->getCreditmemoUrl()}')";
             if ($order->getPayment()->getMethodInstance()->isGateway()) {
@@ -163,7 +171,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             }
             $this->_addButton(
                 'order_creditmemo',
-                array('label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'go')
+                array('label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'credit-memo')
             );
         }
 
@@ -182,14 +190,22 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->_isAllowedAction('Magento_Sales::hold') && $order->canHold()) {
             $this->_addButton(
                 'order_hold',
-                array('label' => __('Hold'), 'onclick' => 'setLocation(\'' . $this->getHoldUrl() . '\')')
+                array(
+                    'label' => __('Hold'),
+                    'class' => __('hold'),
+                    'onclick' => 'setLocation(\'' . $this->getHoldUrl() . '\')'
+                )
             );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::unhold') && $order->canUnhold()) {
             $this->_addButton(
                 'order_unhold',
-                array('label' => __('Unhold'), 'onclick' => 'setLocation(\'' . $this->getUnholdUrl() . '\')')
+                array(
+                    'label' => __('Unhold'),
+                    'class' => __('unhold'),
+                    'onclick' => 'setLocation(\'' . $this->getUnholdUrl() . '\')'
+                )
             );
         }
 
@@ -230,7 +246,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 array(
                     'label' => $_label,
                     'onclick' => 'setLocation(\'' . $this->getInvoiceUrl() . '\')',
-                    'class' => 'go'
+                    'class' => 'invoice'
                 )
             );
         }
@@ -244,7 +260,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 array(
                     'label' => __('Ship'),
                     'onclick' => 'setLocation(\'' . $this->getShipUrl() . '\')',
-                    'class' => 'go'
+                    'class' => 'ship'
                 )
             );
         }
@@ -260,7 +276,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 array(
                     'label' => __('Reorder'),
                     'onclick' => 'setLocation(\'' . $this->getReorderUrl() . '\')',
-                    'class' => 'go'
+                    'class' => 'reorder'
                 )
             );
         }

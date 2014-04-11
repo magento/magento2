@@ -63,7 +63,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionHtml()
     {
         $layout = $this->getMock(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('getChildName', 'getBlock', 'renderElement'),
             array(),
             '',

@@ -53,32 +53,41 @@ class ScopePool
     protected $_scopes = array();
 
     /**
+     * @var \Magento\App\ScopeResolverPool
+     */
+    protected $_scopeResolverPool;
+
+    /**
      * @param \Magento\App\Config\Scope\ReaderPoolInterface $readerPool
      * @param DataFactory $dataFactory
      * @param \Magento\Cache\FrontendInterface $cache
+     * @param \Magento\App\ScopeResolverPool $scopeResolverPool
      * @param string $cacheId
      */
     public function __construct(
         \Magento\App\Config\Scope\ReaderPoolInterface $readerPool,
         DataFactory $dataFactory,
         \Magento\Cache\FrontendInterface $cache,
+        \Magento\App\ScopeResolverPool $scopeResolverPool,
         $cacheId = 'default_config_cache'
     ) {
         $this->_readerPool = $readerPool;
         $this->_dataFactory = $dataFactory;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
+        $this->_scopeResolverPool = $scopeResolverPool;
     }
 
     /**
      * Retrieve config section
      *
      * @param string $scopeType
-     * @param string $scopeCode
-     * @return Data
+     * @param string|\Magento\Object|null $scopeCode
+     * @return \Magento\App\Config\DataInterface
      */
     public function getScope($scopeType, $scopeCode = null)
     {
+        $scopeCode = $this->_getScopeCode($scopeType, $scopeCode);
         $code = $scopeType . '|' . $scopeCode;
         if (!isset($this->_scopes[$code])) {
             $cacheKey = $this->_cacheId . '|' . $code;
@@ -87,7 +96,7 @@ class ScopePool
                 $data = unserialize($data);
             } else {
                 $reader = $this->_readerPool->getReader($scopeType);
-                if ($scopeType === \Magento\BaseScopeInterface::SCOPE_DEFAULT) {
+                if ($scopeType === \Magento\App\ScopeInterface::SCOPE_DEFAULT) {
                     $data = $reader->read();
                 } else {
                     $data = $reader->read($scopeCode);
@@ -108,5 +117,28 @@ class ScopePool
     {
         $this->_scopes = array();
         $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(self::CACHE_TAG));
+    }
+
+    /**
+     * Retrieve scope code value
+     *
+     * @param string $scopeType
+     * @param string|\Magento\Object|null $scopeCode
+     * @return string
+     */
+    protected function _getScopeCode($scopeType, $scopeCode)
+    {
+        if ((is_null($scopeCode) || is_numeric($scopeCode))
+            && $scopeType !== \Magento\App\ScopeInterface::SCOPE_DEFAULT
+        ) {
+            $scopeResolver = $this->_scopeResolverPool->get($scopeType);
+            $scopeCode = $scopeResolver->getScope($scopeCode);
+        }
+
+        if ($scopeCode instanceof \Magento\App\ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+
+        return $scopeCode;
     }
 }

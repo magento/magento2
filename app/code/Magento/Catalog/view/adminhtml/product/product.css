@@ -24,7 +24,7 @@
  */
 
 /* Action "Back" as cross  */
-[class^=" catalog-product-"] .page-actions .action-back,
+/*[class^=" catalog-product-"] .page-actions .action-back,
 [class^=" catalog-product-"] .page-actions .action-back:hover,
 [class^=" catalog-product-"] .page-actions .action-back:active,
 [class^=" newsletter-"] .page-actions .action-back,
@@ -54,7 +54,7 @@
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    content: '\e07d'; /* close icon */
+    content: '\e07d'; 
     font-size: 16px;
 }
 
@@ -63,9 +63,9 @@
     display: inline-block;
     overflow: hidden;
     text-indent: -999em;
-}
+}*/
 
-.page-actions .switcher {
+.product-actions .switcher {
     display: inline-block;
     vertical-align: top;
     margin: 6px 17px 6px 6px;
@@ -501,39 +501,6 @@
 
 .field-tax_class_id .addon select {
     border-radius: 4px;
-}
-
-.actions-select .dropdown-menu {
-    margin-top: 1px;
-    min-width: 38px;
-}
-
-.actions-select .dropdown-menu li {
-    padding: 5px;
-    text-align: center;
-}
-
-.actions-select .action-toggle,
-.actions-select .action-toggle:hover,
-.actions-select .action-toggle:active,
-.actions-select .action-toggle:focus,
-.actions-select .action-toggle[disabled] {
-    background: #fff;
-    padding: 4px 4px 3px 7px;
-    color: #888;
-    filter: none;
-}
-
-.actions-select .action-toggle > span {
-    display: inline-block;
-    font-family: Arial, Verdana, sans-serif;
-    margin-right: 3px;
-}
-
-.actions-select .action-toggle:before {
-    display: inline-block;
-    float: right;
-    color: #888;
 }
 
 /*

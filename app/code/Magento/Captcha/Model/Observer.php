@@ -174,7 +174,7 @@ class Observer
             if (!$captcha->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA.'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->redirect->redirect($controller->getResponse(), 'contacts/index/index');
+                $this->redirect->redirect($controller->getResponse(), 'contact/index/index');
             }
         }
     }

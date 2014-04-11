@@ -33,7 +33,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetHeaderText()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Backend\Block\System\Store\Delete */
         $block = $layout->createBlock('Magento\Backend\Block\System\Store\Delete', 'block');

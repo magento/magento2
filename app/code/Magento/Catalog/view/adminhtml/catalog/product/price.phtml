@@ -56,9 +56,9 @@
 $_exclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax = null);
 $_inclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax = true);
 ?>
-<?php $_weeeTaxAmount = $weeeHelper->getAmount($_product, null, null, $_website); ?>
+<?php $_weeeTaxAmount = $weeeHelper->getAmount($_product, $_website); ?>
 <?php if ($weeeHelper->typeOfDisplay($_product, array(1,2,4))): ?>
-    <?php $_weeeTaxAmount = $weeeHelper->getAmount($_product, null, null, $_website); ?>
+    <?php $_weeeTaxAmount = $weeeHelper->getAmount($_product, $_website); ?>
     <?php $_weeeTaxAttributes = $weeeHelper->getProductWeeeAttributesForRenderer($_product, null, null, $_website); ?>
 <?php endif; ?>
 

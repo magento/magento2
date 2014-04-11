@@ -112,7 +112,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
             't1',
             't1',
             't1',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         if ($attribute->getFlatAddChildData()) {
             $joinCondition .= ' AND e.child_id = t1.entity_id';

@@ -99,7 +99,6 @@ class View implements ViewInterface
      */
     public function getLayout()
     {
-        $this->_layout->setArea($this->_configScope->getCurrentScope());
         return $this->_layout;
     }
 

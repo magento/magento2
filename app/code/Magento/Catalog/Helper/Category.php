@@ -27,7 +27,7 @@ namespace Magento\Catalog\Helper;
 
 use Magento\App\Helper\AbstractHelper;
 use Magento\Catalog\Model\Category as ModelCategory;
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
@@ -57,16 +57,16 @@ class Category extends AbstractHelper
     protected $_categoryUrlSuffix = array();
 
     /**
-     * Core store config
+     * Scope config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -87,21 +87,21 @@ class Category extends AbstractHelper
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Data\CollectionFactory $dataCollectionFactory
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Data\CollectionFactory $dataCollectionFactory
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_storeManager = $storeManager;
         $this->_dataCollectionFactory = $dataCollectionFactory;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -133,7 +133,13 @@ class Category extends AbstractHelper
             return array();
         }
 
-        $recursionLevel = max(0, (int)$this->_storeManager->getStore()->getConfig('catalog/navigation/max_depth'));
+        $recursionLevel = max(
+            0,
+            (int)$this->_scopeConfig->getValue(
+                'catalog/navigation/max_depth',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
 
         $this->_storeCategories[$cacheKey] = $storeCategories;
@@ -193,8 +199,9 @@ class Category extends AbstractHelper
         }
 
         if (!isset($this->_categoryUrlSuffix[$storeId])) {
-            $this->_categoryUrlSuffix[$storeId] = $this->_coreStoreConfig->getConfig(
+            $this->_categoryUrlSuffix[$storeId] = $this->_scopeConfig->getValue(
                 self::XML_PATH_CATEGORY_URL_SUFFIX,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -234,6 +241,10 @@ class Category extends AbstractHelper
      */
     public function canUseCanonicalTag($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_USE_CATEGORY_CANONICAL_TAG, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_USE_CATEGORY_CANONICAL_TAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

@@ -55,7 +55,7 @@ class VatValidator
      * Validate VAT number
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store|int $store
+     * @param \Magento\Store\Model\Store|int $store
      * @return \Magento\Object
      */
     public function validate(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)
@@ -108,7 +108,7 @@ class VatValidator
      * Check whether VAT ID validation is enabled
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store|int $store
+     * @param \Magento\Store\Model\Store|int $store
      * @return bool
      */
     public function isEnabled(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)

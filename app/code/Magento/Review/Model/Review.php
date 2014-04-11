@@ -108,7 +108,7 @@ class Review extends \Magento\Model\AbstractModel
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -127,7 +127,7 @@ class Review extends \Magento\Model\AbstractModel
      * @param \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory
      * @param \Magento\Review\Model\Review\SummaryFactory $summaryModFactory
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\UrlInterface $urlModel
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -141,7 +141,7 @@ class Review extends \Magento\Model\AbstractModel
         \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\UrlInterface $urlModel,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -341,7 +341,7 @@ class Review extends \Magento\Model\AbstractModel
     /**
      * Check if current review available on passed store
      *
-     * @param int|\Magento\Core\Model\Store $store
+     * @param int|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isAvailableOnStore($store = null)

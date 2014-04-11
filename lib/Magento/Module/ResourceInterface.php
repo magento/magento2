@@ -23,6 +23,9 @@
  */
 namespace Magento\Module;
 
+/**
+ * Resource Model Interface
+ */
 interface ResourceInterface
 {
     /**
@@ -55,7 +58,7 @@ interface ResourceInterface
      *
      * @param string $resName
      * @param string $version
-     * @return null
+     * @return $this
      */
     public function setDataVersion($resName, $version);
 }

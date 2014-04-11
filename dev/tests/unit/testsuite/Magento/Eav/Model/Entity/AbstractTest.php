@@ -305,11 +305,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             true,
-            array('_getConfig')
+            array('_getValue')
         );
 
         $configMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
-        $model->expects($this->any())->method('_getConfig')->will($this->returnValue($configMock));
+        $model->expects($this->any())->method('_getValue')->will($this->returnValue($configMock));
 
         $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);

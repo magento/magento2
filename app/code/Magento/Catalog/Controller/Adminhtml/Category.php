@@ -50,7 +50,7 @@ class Category extends \Magento\Backend\App\Action
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    'Magento\Core\Model\StoreManagerInterface'
+                    'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -115,7 +115,7 @@ class Category extends \Magento\Backend\App\Action
         $parentId = (int)$this->getRequest()->getParam('parent');
         $prevStoreId = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getLastViewedStore(true);
 
-        if (!empty($prevStoreId) && !$this->getRequest()->getQuery('isAjax')) {
+        if (!is_null($prevStoreId) && !$this->getRequest()->getQuery('isAjax')) {
             $params['store'] = $prevStoreId;
             $redirect = true;
         }
@@ -137,7 +137,7 @@ class Category extends \Magento\Backend\App\Action
         }
 
         if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId);
+            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
             $_prevCategoryId = (int)$store->getRootCategoryId();
             $this->getRequest()->setParam('id', $_prevCategoryId);
         }
@@ -242,7 +242,7 @@ class Category extends \Magento\Backend\App\Action
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
         $storeMediaUrl = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             $storeId
         )->getBaseUrl(
@@ -314,7 +314,7 @@ class Category extends \Magento\Backend\App\Action
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
-                            'Magento\Core\Model\StoreManagerInterface'
+                            'Magento\Store\Model\StoreManagerInterface'
                         )->getStore(
                             $storeId
                         )->getRootCategoryId();
@@ -539,7 +539,7 @@ class Category extends \Magento\Backend\App\Action
 
         if ($storeId) {
             if (!$categoryId) {
-                $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId);
+                $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
             }

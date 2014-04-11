@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Config;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Ordered extends \Magento\Core\Model\Config\Base
+abstract class Ordered extends \Magento\App\Config\Base
 {
     /**
      * Cache key for collectors
@@ -141,7 +141,7 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
      * Prepare configuration array for total model
      *
      * @param   string $code
-     * @param   \Magento\Core\Model\Config\Element $totalConfig
+     * @param   \Magento\App\Config\Element $totalConfig
      * @return  array
      */
     protected function _prepareConfigArray($code, $totalConfig)

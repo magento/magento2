@@ -34,7 +34,7 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
  */
 class AccordionTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Core\Model\Layout */
+    /** @var \Magento\View\Layout */
     protected $layout;
 
     /** @var \Magento\Registry */
@@ -57,7 +57,7 @@ class AccordionTest extends \PHPUnit_Framework_TestCase
         );
         $this->backendSession = $objectManager->get('Magento\Backend\Model\Session');
         $this->layout = $objectManager->create(
-            'Magento\Core\Model\Layout',
+            'Magento\View\Layout',
             array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
     }

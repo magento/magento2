@@ -94,7 +94,11 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $storeModel = $this->_storeManager->getStore($storeId);
         $newUrl = $this->_urlBuilder->getUrl('rss/catalog/new/store_id/' . $storeId);
         $title = __('New Products from %1', $storeModel->getFrontendName());
-        $lang = $storeModel->getConfig('general/locale/code');
+        $lang = $this->_scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeModel
+        );
 
         /** @var $rssObj \Magento\Rss\Model\Rss */
         $rssObj = $this->_rssFactory->create();

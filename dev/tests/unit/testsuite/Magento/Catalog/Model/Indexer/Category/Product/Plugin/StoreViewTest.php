@@ -17,7 +17,7 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -57,14 +57,14 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             array('getId', 'getState', '__wakeup')
         );
         $this->model = new StoreView($this->indexerMock);
-        $this->subject = $this->getMock('Magento\Core\Model\Resource\Store\Group', array(), array(), '', false);
+        $this->subject = $this->getMock('Magento\Store\Model\Resource\Group', array(), array(), '', false);
     }
 
     public function testAroundSaveNewObject()
     {
         $this->mockIndexerMethods();
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',
@@ -78,7 +78,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveHasChanged()
     {
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',
@@ -100,7 +100,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNoNeed()
     {
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',

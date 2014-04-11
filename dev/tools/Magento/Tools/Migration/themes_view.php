@@ -29,8 +29,8 @@ try {
     $entryPoint = new \Magento\App\EntryPoint\EntryPoint($rootDir, array());
 
     $objectManager = new \Magento\App\ObjectManager();
-    /** @var $configModel \Magento\App\ReinitableConfigInterface */
-    $configModel = $objectManager->get('Magento\App\ReinitableConfigInterface');
+    /** @var $configModel \Magento\App\Config\ReinitableConfigInterface */
+    $configModel = $objectManager->get('Magento\App\Config\ReinitableConfigInterface');
     $configModel->reinit();
     $config = array();
 
@@ -56,8 +56,8 @@ try {
  */
 function updateFieldForTable($objectManager, $table, $col)
 {
-    /** @var $installer \Magento\Core\Model\Resource\Setup */
-    $installer = $objectManager->create('Magento\Core\Model\Resource\Setup', array('resourceName' => 'core_setup'));
+    /** @var $installer \Magento\Module\Setup */
+    $installer = $objectManager->create('Magento\Module\Setup');
     $installer->startSetup();
 
     $table = $installer->getTable($table);

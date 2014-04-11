@@ -83,7 +83,8 @@ class Attribute extends \Magento\Backend\Block\Widget
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Reset'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')',
+                'class' => 'reset'
             )
         );
 

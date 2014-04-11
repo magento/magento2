@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Model\Resource\Db\AbstractDb
+class Config extends \Magento\Model\Resource\Db\AbstractDb implements \Magento\App\Config\Resource\ConfigInterface
 {
     /**
      * Define main table

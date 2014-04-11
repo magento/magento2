@@ -71,7 +71,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_protFactoryMock = $this->getMock(
-            'Magento\Core\Model\Config\BaseFactory',
+            'Magento\App\Config\BaseFactory',
             array(),
             array(),
             '',
@@ -79,7 +79,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_dirsMock = $this->getMock('Magento\Module\Dir', array(), array(), '', false, false);
-        $this->_baseConfigMock = $this->getMock('Magento\Core\Model\Config\Base', array(), array(), '', false, false);
+        $this->_baseConfigMock = $this->getMock('Magento\App\Config\Base', array(), array(), '', false, false);
         $this->_moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
         $this->_filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false, false);
         $this->_fileIteratorFactory = $this->getMock('\Magento\Config\FileIteratorFactory', array(), array(),

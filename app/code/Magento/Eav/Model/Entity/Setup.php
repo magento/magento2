@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity;
 
-class Setup extends \Magento\Core\Model\Resource\Setup
+class Setup extends \Magento\Module\Setup
 {
     /**
      * @var \Magento\App\CacheInterface
@@ -56,7 +56,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         $moduleName = 'Magento_Eav',
-        $connectionName = ''
+        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_cache = $cache;
         $this->_attrGroupCollectionFactory = $attrGroupCollectionFactory;
@@ -91,17 +91,6 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * @var string
      */
     protected $_defaultAttributeSetName = 'Default';
-
-    /**
-     * Create migration setup
-     *
-     * @param array $data
-     * @return \Magento\Core\Model\Resource\Setup\Migration
-     */
-    public function createMigrationSetup(array $data = array())
-    {
-        return $this->_migrationFactory->create($data);
-    }
 
     /**
      * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection

@@ -24,7 +24,7 @@
 namespace Magento\Sales\Model\Resource\Sale;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Event\ManagerInterface;
 use Magento\Logger;
@@ -76,7 +76,7 @@ class Collection extends \Magento\Data\Collection\Db
     protected $_orderResource;
 
     /**
-     * @var \Magento\Core\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
@@ -91,7 +91,7 @@ class Collection extends \Magento\Data\Collection\Db
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param Order $resource
-     * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -100,7 +100,7 @@ class Collection extends \Magento\Data\Collection\Db
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         Order $resource,
-        \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
         $this->_eventManager = $eventManager;

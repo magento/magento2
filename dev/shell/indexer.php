@@ -25,7 +25,7 @@
  */
 
 require_once __DIR__ . '/../../app/bootstrap.php';
-use Magento\Core\Model\StoreManager;
+use Magento\Store\Model\StoreManager;
 
 $params = array(
     StoreManager::PARAM_RUN_CODE => 'admin',

@@ -84,7 +84,7 @@ class Config extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load attribute types
      *
-     * @param ind $typeId
+     * @param int $typeId
      * @return array
      */
     protected function _loadTypeAttributes($typeId)

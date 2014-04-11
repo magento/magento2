@@ -82,7 +82,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
         );
         $this->_addButton(
             'reset',
-            array('label' => __('Reset'), 'onclick' => 'setLocation(window.location.href)'),
+            array('label' => __('Reset'), 'onclick' => 'setLocation(window.location.href)', 'class' => 'reset'),
             -1
         );
 

@@ -124,7 +124,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
     /**
      * Get store object for process configuration settings
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

@@ -227,8 +227,9 @@ class Links extends \Magento\Backend\Block\Template
     {
         return $this->getProduct()->getId() &&
             $this->getProduct()->getTypeId() ==
-            'downloadable' ? $this->getProduct()->getLinksTitle() : $this->_storeConfig->getConfig(
-                \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE
+            'downloadable' ? $this->getProduct()->getLinksTitle() : $this->_scopeConfig->getValue(
+                \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
     }
 
@@ -249,8 +250,11 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getIsPriceWebsiteScope()
     {
-        $scope = (int)$this->_storeManager->getStore()->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE);
-        if ($scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE) {
+        $scope = (int)$this->_scopeConfig->getValue(
+            \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
             return true;
         }
         return false;
@@ -359,7 +363,10 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getConfigMaxDownloads()
     {
-        return $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Link::XML_PATH_DEFAULT_DOWNLOADS_NUMBER);
+        return $this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link::XML_PATH_DEFAULT_DOWNLOADS_NUMBER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -457,7 +464,7 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param null|string|bool|int|\Magento\Core\Model\Store $storeId $storeId
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
      */
     public function getBaseCurrencyCode($storeId)

@@ -30,7 +30,7 @@ use Magento\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tablerate extends \Magento\Core\Model\Config\Value
+class Tablerate extends \Magento\App\Config\Value
 {
     /**
      * @var \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory
@@ -40,8 +40,7 @@ class Tablerate extends \Magento\Core\Model\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -50,15 +49,14 @@ class Tablerate extends \Magento\Core\Model\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_tablerateFactory = $tablerateFactory;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

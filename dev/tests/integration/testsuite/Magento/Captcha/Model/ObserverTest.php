@@ -67,7 +67,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testCaptchaIsRequiredAfterFailedLoginAttempts()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setCurrentStore(
             0
         );

@@ -42,7 +42,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->setArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Layout');
         $block = $layout->addBlock('Magento\Reports\Block\Adminhtml\Filter\Form');
         $prepareFormMethod = new \ReflectionMethod('Magento\Reports\Block\Adminhtml\Filter\Form', '_prepareForm');
         $prepareFormMethod->setAccessible(true);

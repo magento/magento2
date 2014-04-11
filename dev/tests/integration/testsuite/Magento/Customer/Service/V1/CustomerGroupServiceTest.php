@@ -25,6 +25,10 @@
  */
 namespace Magento\Customer\Service\V1;
 
+use Magento\Service\V1\Data\FilterBuilder;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Service\V1\Data\Filter;
+
 class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -73,20 +77,20 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
         $groups = $this->_groupService->getGroups();
         $this->assertEquals(4, count($groups));
         $this->assertEquals(
-            array(0, 'NOT LOGGED IN', 3),
-            array($groups[0]->getId(), $groups[0]->getCode(), $groups[0]->getTaxClassId())
+            [0, 'NOT LOGGED IN', 3],
+            [$groups[0]->getId(), $groups[0]->getCode(), $groups[0]->getTaxClassId()]
         );
         $this->assertEquals(
-            array(1, 'General', 3),
-            array($groups[1]->getId(), $groups[1]->getCode(), $groups[1]->getTaxClassId())
+            [1, 'General', 3],
+            [$groups[1]->getId(), $groups[1]->getCode(), $groups[1]->getTaxClassId()]
         );
         $this->assertEquals(
-            array(2, 'Wholesale', 3),
-            array($groups[2]->getId(), $groups[2]->getCode(), $groups[2]->getTaxClassId())
+            [2, 'Wholesale', 3],
+            [$groups[2]->getId(), $groups[2]->getCode(), $groups[2]->getTaxClassId()]
         );
         $this->assertEquals(
-            array(3, 'Retailer', 3),
-            array($groups[3]->getId(), $groups[3]->getCode(), $groups[3]->getTaxClassId())
+            [3, 'Retailer', 3],
+            [$groups[3]->getId(), $groups[3]->getCode(), $groups[3]->getTaxClassId()]
         );
     }
 
@@ -97,16 +101,16 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
         $groups = $this->_groupService->getGroups(false);
         $this->assertEquals(3, count($groups));
         $this->assertEquals(
-            array(1, 'General', 3),
-            array($groups[0]->getId(), $groups[0]->getCode(), $groups[0]->getTaxClassId())
+            [1, 'General', 3],
+            [$groups[0]->getId(), $groups[0]->getCode(), $groups[0]->getTaxClassId()]
         );
         $this->assertEquals(
-            array(2, 'Wholesale', 3),
-            array($groups[1]->getId(), $groups[1]->getCode(), $groups[1]->getTaxClassId())
+            [2, 'Wholesale', 3],
+            [$groups[1]->getId(), $groups[1]->getCode(), $groups[1]->getTaxClassId()]
         );
         $this->assertEquals(
-            array(3, 'Retailer', 3),
-            array($groups[2]->getId(), $groups[2]->getCode(), $groups[2]->getTaxClassId())
+            [3, 'Retailer', 3],
+            [$groups[2]->getId(), $groups[2]->getCode(), $groups[2]->getTaxClassId()]
         );
     }
 
@@ -127,17 +131,16 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function getGroupsDataProvider()
     {
-        return array(
-            array(array('id' => 0, 'code' => 'NOT LOGGED IN', 'tax_class_id' => 3)),
-            array(array('id' => 1, 'code' => 'General', 'tax_class_id' => 3)),
-            array(array('id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3)),
-            array(array('id' => 3, 'code' => 'Retailer', 'tax_class_id' => 3))
-        );
+        return [ [['id' => 0, 'code' => 'NOT LOGGED IN', 'tax_class_id' => 3]],
+            [['id' => 1, 'code' => 'General', 'tax_class_id' => 3]],
+            [['id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3]],
+            [['id' => 3, 'code' => 'Retailer', 'tax_class_id' => 3]],
+        ];
     }
 
     public function testCreateGroup()
     {
-        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('Test Group')->setTaxClassId(4)->create();
+        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('Test Group')->setTaxClassId(3)->create();
         $groupId = $this->_groupService->saveGroup($group);
         $this->assertNotNull($groupId);
 
@@ -149,7 +152,7 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateGroup()
     {
-        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('New Group')->setTaxClassId(4)->create();
+        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
         $groupId = $this->_groupService->saveGroup($group);
         $this->assertNotNull($groupId);
 
@@ -158,13 +161,8 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
-        $updates = (new Data\CustomerGroupBuilder())->setId(
-            $groupId
-        )->setCode(
-            'Updated Group'
-        )->setTaxClassId(
-            2
-        )->create();
+        $updates = (new Data\CustomerGroupBuilder())->setId($groupId)->setCode('Updated Group')->setTaxClassId(3)
+            ->create();
         $newId = $this->_groupService->saveGroup($updates);
         $this->assertEquals($newId, $groupId);
         $updatedGroup = $this->_groupService->getGroup($groupId);
@@ -173,15 +171,16 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Data\Filter[] $filters
-     * @param Data\Filter[] $orGroup
+     * @param Filter[] $filters
+     * @param Filter[] $orGroup
      * @param array $expectedResult array of expected results indexed by ID
      *
      * @dataProvider searchGroupsDataProvider
      */
     public function testSearchGroups($filters, $orGroup, $expectedResult)
     {
-        $searchBuilder = new Data\SearchCriteriaBuilder();
+        $searchBuilder = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\Data\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter($filter);
         }
@@ -201,42 +200,40 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 
     public function searchGroupsDataProvider()
     {
-        return array(
-            'eq' => array(
-                array((new Data\FilterBuilder())->setField('code')->setValue('General')->create()),
+        return [
+            'eq' => [
+                [(new FilterBuilder())->setField('code')->setValue('General')->create()],
                 null,
-                array(1 => array('code' => 'General', 'tax_class_id' => 3))
-            ),
-            'and' => array(
-                array(
-                    (new Data\FilterBuilder())->setField('code')->setValue('General')->create(),
-                    (new Data\FilterBuilder())->setField('tax_class_id')->setValue('3')->create(),
-                    (new Data\FilterBuilder())->setField('id')->setValue('1')->create()
-                ),
-                array(),
-                array(1 => array('code' => 'General', 'tax_class_id' => 3))
-            ),
-            'or' => array(
-                array(),
-                array(
-                    (new Data\FilterBuilder())->setField('code')->setValue('General')->create(),
-                    (new Data\FilterBuilder())->setField('code')->setValue('Wholesale')->create()
-                ),
-                array(
-                    1 => array('code' => 'General', 'tax_class_id' => 3),
-                    2 => array('code' => 'Wholesale', 'tax_class_id' => 3)
-                )
-            ),
-            'like' => array(
-                array(
-                    (new Data\FilterBuilder())->setField('code')->setValue('er')->setConditionType('like')->create()
-                ),
-                array(),
-                array(
-                    1 => array('code' => 'General', 'tax_class_id' => 3),
-                    3 => array('code' => 'Retailer', 'tax_class_id' => 3)
-                )
-            )
-        );
+                [1 => ['code' => 'General', 'tax_class_id' => 3]]
+            ],
+            'and' => [
+                [
+                    (new FilterBuilder())->setField('code')->setValue('General')->create(),
+                    (new FilterBuilder())->setField('tax_class_id')->setValue('3')->create(),
+                    (new FilterBuilder())->setField('id')->setValue('1')->create(),
+                ],
+                [],
+                [1 => ['code' => 'General', 'tax_class_id' => 3]]
+            ],
+            'or' => [
+                [],
+                [
+                    (new FilterBuilder())->setField('code')->setValue('General')->create(),
+                    (new FilterBuilder())->setField('code')->setValue('Wholesale')->create(),
+                ],
+                [
+                    1 => ['code' => 'General', 'tax_class_id' => 3],
+                    2 => ['code' => 'Wholesale', 'tax_class_id' => 3]
+                ]
+            ],
+            'like' => [
+                [(new FilterBuilder())->setField('code')->setValue('er')->setConditionType('like')->create()],
+                [],
+                [
+                    1 => ['code' => 'General', 'tax_class_id' => 3],
+                    3 => ['code' => 'Retailer', 'tax_class_id' => 3]
+                ]
+            ],
+        ];
     }
 }

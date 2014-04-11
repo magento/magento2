@@ -62,7 +62,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Eav\Model\Entity\Attribute\Config')
             )
         )->setLayout(
-            $objectManager->create('Magento\Core\Model\Layout')
+            $objectManager->create('Magento\View\Layout')
         );
 
         $method = new \ReflectionMethod(

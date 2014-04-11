@@ -23,7 +23,7 @@
 
 
 (function($) {
-
+    'use strict';
     /**
      * Accordion Widget - this widget is a wrapper for the jQuery UI Accordion
      */

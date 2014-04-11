@@ -220,8 +220,8 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
         $currentStoreIds = $this->_storesIds;
         if (isset(
             $currentStoreIds
-        ) && $currentStoreIds != \Magento\Core\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != array(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != array(
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )
         ) {
             if (!is_array($currentStoreIds)) {

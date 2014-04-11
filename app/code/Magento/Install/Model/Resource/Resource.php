@@ -49,7 +49,7 @@ class Resource extends \Magento\Model\Resource\Db\AbstractDb implements \Magento
      */
     protected function _construct()
     {
-        $this->_init('core_resource', 'store_id');
+        $this->_init('core_resource', 'code');
     }
 
     /**

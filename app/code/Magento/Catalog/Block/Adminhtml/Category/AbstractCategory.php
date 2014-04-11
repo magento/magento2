@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 use Magento\Data\Tree\Node;
 
 class AbstractCategory extends \Magento\Backend\Block\Template

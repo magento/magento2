@@ -53,7 +53,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $setMainTableMethod = new \ReflectionMethod($this->_model, '_setMainTable');
         $setMainTableMethod->setAccessible(true);
 
-        $tableName = $this->_model->getTable('core_website');
+        $tableName = $this->_model->getTable('store_website');
         $idFieldName = 'website_id';
 
         $setMainTableMethod->invoke($this->_model, $tableName);
@@ -66,7 +66,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTableName()
     {
-        $tableNameOrig = 'core_website';
+        $tableNameOrig ='store_website';
         $tableSuffix = 'suffix';
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\App\Resource',
@@ -78,6 +78,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
 
         $tableName = $model->getTable(array($tableNameOrig, $tableSuffix));
-        $this->assertEquals('prefix_core_website_suffix', $tableName);
+        $this->assertEquals('prefix_store_website_suffix', $tableName);
     }
 }

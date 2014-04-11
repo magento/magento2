@@ -158,7 +158,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     public function initToken()
     {
-        $this->getPaymentMethodInstance()->initBillingAgreementToken($this);
+        $this->getPaymentMethodInstance()
+            ->initBillingAgreementToken($this);
         return $this->getRedirectUrl();
     }
 
@@ -170,7 +171,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     public function verifyToken()
     {
-        $this->getPaymentMethodInstance()->getBillingAgreementTokenInfo($this);
+        $this->getPaymentMethodInstance()
+            ->getBillingAgreementTokenInfo($this);
         return $this;
     }
 
@@ -183,19 +185,15 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     {
         $this->verifyToken();
 
-        $paymentMethodInstance = $this->getPaymentMethodInstance()->placeBillingAgreement($this);
+        $paymentMethodInstance = $this->getPaymentMethodInstance()
+            ->placeBillingAgreement($this);
 
-        $this->setCustomerId(
-            $this->getCustomer()->getId()
-        )->setMethodCode(
-            $this->getMethodCode()
-        )->setReferenceId(
-            $this->getBillingAgreementId()
-        )->setStatus(
-            self::STATUS_ACTIVE
-        )->setAgreementLabel(
-            $paymentMethodInstance->getTitle()
-        )->save();
+        $this->setCustomerId($this->getCustomerId())
+            ->setMethodCode($this->getMethodCode())
+            ->setReferenceId($this->getBillingAgreementId())
+            ->setStatus(self::STATUS_ACTIVE)
+            ->setAgreementLabel($paymentMethodInstance->getTitle())
+            ->save();
         return $this;
     }
 
@@ -228,7 +226,10 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     public function getStatusesArray()
     {
-        return array(self::STATUS_ACTIVE => __('Active'), self::STATUS_CANCELED => __('Canceled'));
+        return array(
+            self::STATUS_ACTIVE     => __('Active'),
+            self::STATUS_CANCELED   => __('Canceled')
+        );
     }
 
     /**
@@ -262,22 +263,15 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     {
         $baData = $payment->getBillingAgreementData();
 
-        $this->_paymentMethodInstance = isset(
-            $baData['method_code']
-        ) ? $this->_paymentData->getMethodInstance(
-            $baData['method_code']
-        ) : $payment->getMethodInstance();
+        $this->_paymentMethodInstance = (isset($baData['method_code']))
+            ? $this->_paymentData->getMethodInstance($baData['method_code'])
+            : $payment->getMethodInstance();
         if ($this->_paymentMethodInstance) {
             $this->_paymentMethodInstance->setStore($payment->getMethodInstance()->getStore());
-            $this->setCustomerId(
-                $payment->getOrder()->getCustomerId()
-            )->setMethodCode(
-                $this->_paymentMethodInstance->getCode()
-            )->setReferenceId(
-                $baData['billing_agreement_id']
-            )->setStatus(
-                self::STATUS_ACTIVE
-            );
+            $this->setCustomerId($payment->getOrder()->getCustomerId())
+                ->setMethodCode($this->_paymentMethodInstance->getCode())
+                ->setReferenceId($baData['billing_agreement_id'])
+                ->setStatus(self::STATUS_ACTIVE);
         }
         return $this;
     }
@@ -291,15 +285,9 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     public function getAvailableCustomerBillingAgreements($customerId)
     {
         $collection = $this->_billingAgreementFactory->create();
-        $collection->addFieldToFilter(
-            'customer_id',
-            $customerId
-        )->addFieldToFilter(
-            'status',
-            self::STATUS_ACTIVE
-        )->setOrder(
-            'agreement_id'
-        );
+        $collection->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('status', self::STATUS_ACTIVE)
+            ->setOrder('agreement_id');
         return $collection;
     }
 

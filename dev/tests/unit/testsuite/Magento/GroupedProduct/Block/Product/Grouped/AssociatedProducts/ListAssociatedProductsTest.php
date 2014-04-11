@@ -65,8 +65,8 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false);
         $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $this->storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->typeInstanceMock = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
             array(),

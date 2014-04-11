@@ -77,7 +77,7 @@ class Database extends \Magento\App\Helper\AbstractHelper
     protected $_fileStorage;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $config;
 
@@ -86,14 +86,14 @@ class Database extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory
      * @param \Magento\Core\Model\File\Storage\File $fileStorage
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory,
         \Magento\Core\Model\File\Storage\File $fileStorage,
         \Magento\App\Filesystem $filesystem,
-        \Magento\App\ConfigInterface $config
+        \Magento\App\Config\ScopeConfigInterface $config
     ) {
         $this->_filesystem = $filesystem;
         $this->_dbStorageFactory = $dbStorageFactory;

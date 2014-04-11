@@ -135,7 +135,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
             array('so' => $this->getTable('sales_flat_order')),
             'cs.website_id'
         )->joinInner(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             'cs.store_id = so.store_id'
         )->where(
             'so.entity_id = :entity_id'

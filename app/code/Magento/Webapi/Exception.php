@@ -68,6 +68,13 @@ class Exception extends \RuntimeException
     protected $_name;
 
     /**
+     * Wrapped error details.
+     *
+     * @var array
+     */
+    protected $_wrappedErrors;
+
+    /**
      * Initialize exception with HTTP code.
      *
      * @param string $message
@@ -75,6 +82,7 @@ class Exception extends \RuntimeException
      * @param int $httpCode
      * @param array $details Additional exception details
      * @param string $name Exception name
+     * @param array $wrappedErrors Wrapped error details
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -82,7 +90,8 @@ class Exception extends \RuntimeException
         $code = 0,
         $httpCode = self::HTTP_BAD_REQUEST,
         array $details = array(),
-        $name = ''
+        $name = '',
+        array $wrappedErrors = array()
     ) {
         /** Only HTTP error codes are allowed. No success or redirect codes must be used. */
         if ($httpCode < 400 || $httpCode > 599) {
@@ -92,6 +101,7 @@ class Exception extends \RuntimeException
         $this->_httpCode = $httpCode;
         $this->_details = $details;
         $this->_name = $name;
+        $this->_wrappedErrors = $wrappedErrors;
     }
 
     /**
@@ -135,5 +145,15 @@ class Exception extends \RuntimeException
     public function getName()
     {
         return $this->_name;
+    }
+
+    /**
+     * Retrieve wrapped errors.
+     *
+     * @return array
+     */
+    public function getWrappedErrors()
+    {
+        return $this->_wrappedErrors;
     }
 }

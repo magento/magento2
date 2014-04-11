@@ -81,7 +81,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         if ($unsetId) {
             $address->setId(null);
         }
-        $address->setSameAsBilling(0)->setCustomerAddress($this->_customer->getDefaultBillingAddress())->save();
+        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
+        $addressService = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
+        $customerAddressData = $addressService->getDefaultBillingAddress($this->_customer->getId());
+        $address->setSameAsBilling(0)->setCustomerAddressData($customerAddressData)->save();
         $this->assertEquals(0, $this->_quote->getBillingAddress()->getSameAsBilling());
     }
 
@@ -115,7 +119,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         if ($unsetId) {
             $shippingAddress->setId(null);
         }
-        $shippingAddress->setSameAsBilling(0)->setCustomerAddress(null)->save();
+        $shippingAddress->setSameAsBilling(0)
+            ->setCustomerAddressData(null)
+            ->save();
         $this->assertEquals((int)$unsetId, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
@@ -178,11 +184,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         if ($unsetId) {
             $shippingAddress->setId(null);
         }
-        $shippingAddress->setSameAsBilling(
-            0
-        )->setCustomerAddress(
-            $this->_customer->getDefaultBillingAddress()
-        )->save();
+        $shippingAddress->setSameAsBilling(0)
+            ->setCustomerAddressData($this->_customer->getDefaultBillingAddress())
+            ->save();
     }
 
     public function unsetAddressIdDataProvider()
@@ -274,10 +278,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             "Precondition failed: Customer address ID was not set."
         );
 
-        /** @var \Magento\Customer\Model\Address $customerAddress */
-        $customerAddress = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
-        $customerAddress->setId($customerAddressId);
-        $this->_address->setCustomerAddress($customerAddress);
+        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
+        $addressBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Data\AddressBuilder');
+        $customerAddressData = $addressBuilder->setId($customerAddressId)->create();
+        $this->_address->setCustomerAddressData($customerAddressData);
         $this->_address->save();
 
         $this->assertEquals($customerId, $this->_address->getCustomerId());

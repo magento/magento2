@@ -151,7 +151,7 @@ class Shopcart extends \Magento\Backend\App\Action
             'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
         )->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -168,7 +168,7 @@ class Shopcart extends \Magento\Backend\App\Action
             $fileName
         );
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -203,7 +203,7 @@ class Shopcart extends \Magento\Backend\App\Action
             'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
         )->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -220,7 +220,7 @@ class Shopcart extends \Magento\Backend\App\Action
             $fileName
         );
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**

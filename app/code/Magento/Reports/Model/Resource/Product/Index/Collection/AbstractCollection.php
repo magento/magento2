@@ -58,10 +58,10 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\Resource\Produc
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -82,10 +82,10 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\Resource\Produc
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -107,7 +107,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\Resource\Produc
             $storeManager,
             $catalogData,
             $catalogProductFlatState,
-            $coreStoreConfig,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
             $localeDate,

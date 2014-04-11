@@ -31,7 +31,7 @@
  * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -128,9 +128,9 @@ $table = $connection->newTable(
     'entity_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('googleshopping_items', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('googleshopping_items', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('core_store'),
+    $this->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addIndex(

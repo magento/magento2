@@ -153,11 +153,6 @@ class Template extends \Magento\Backend\App\Action
             $model->addData($values);
         }
 
-        $editBlock = $this->_view->getLayout()->getBlock('template_edit');
-        if ($editBlock) {
-            $editBlock->setEditMode($model->getId() > 0);
-        }
-
         $this->_view->renderLayout();
     }
 
@@ -282,7 +277,7 @@ class Template extends \Magento\Backend\App\Action
 
         // set default value for selected store
         $data['preview_store_id'] = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->getDefaultStoreView()->getId();
 
         $this->_view->getLayout()->getBlock('preview_form')->setFormData($data);

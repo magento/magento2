@@ -68,7 +68,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -78,27 +78,32 @@ class Edit extends \Magento\Backend\Block\Widget
             )
         );
 
-        $this->addChild(
+        if ($this->getDesignChangeId()) {
+            $this->getToolbar()->addChild(
+                'delete_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Delete'),
+                    'onclick' => 'confirmSetLocation(\'' . __(
+                        'Are you sure?'
+                    ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                    'class' => 'delete'
+                )
+            );
+        }
+
+        $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Save'),
-                'class' => 'save',
+                'class' => 'save primary',
                 'data_attribute' => array(
                     'mage-init' => array('button' => array('event' => 'save', 'target' => '#design-edit-form'))
                 )
             )
         );
 
-        $this->addChild(
-            'delete_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
-                'label' => __('Delete'),
-                'onclick' => 'confirmSetLocation(\'' . __('Are you sure?') . '\', \'' . $this->getDeleteUrl() . '\')',
-                'class' => 'delete'
-            )
-        );
         return parent::_prepareLayout();
     }
 

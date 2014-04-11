@@ -229,7 +229,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             '',
             array('customer_group_id')
         )->join(
-            array('cw' => $this->getTable('core_website')),
+            array('cw' => $this->getTable('store_website')),
             '',
             array('website_id')
         )->join(
@@ -237,11 +237,11 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             'cw.website_id = cwd.website_id',
             array()
         )->join(
-            array('csg' => $this->getTable('core_store_group')),
+            array('csg' => $this->getTable('store_group')),
             'csg.website_id = cw.website_id AND cw.default_group_id = csg.group_id',
             array()
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             'csg.default_store_id = cs.store_id AND cs.store_id != 0',
             array()
         )->join(
@@ -417,15 +417,15 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             array('i' => $this->_getDefaultFinalPriceTable()),
             array('entity_id', 'customer_group_id', 'website_id')
         )->join(
-            array('cw' => $this->getTable('core_website')),
+            array('cw' => $this->getTable('store_website')),
             'cw.website_id = i.website_id',
             array()
         )->join(
-            array('csg' => $this->getTable('core_store_group')),
+            array('csg' => $this->getTable('store_group')),
             'csg.group_id = cw.default_group_id',
             array()
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             'cs.store_id = csg.default_store_id',
             array()
         )->join(
@@ -491,15 +491,15 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             array('i' => $this->_getDefaultFinalPriceTable()),
             array('entity_id', 'customer_group_id', 'website_id')
         )->join(
-            array('cw' => $this->getTable('core_website')),
+            array('cw' => $this->getTable('store_website')),
             'cw.website_id = i.website_id',
             array()
         )->join(
-            array('csg' => $this->getTable('core_store_group')),
+            array('csg' => $this->getTable('store_group')),
             'csg.group_id = cw.default_group_id',
             array()
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             'cs.store_id = csg.default_store_id',
             array()
         )->join(

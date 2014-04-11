@@ -66,8 +66,8 @@
                     <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
                 </arguments>
             </block>
-            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml" after="product.info.rating"/>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.rating" template="product/view/rating.phtml" after="product.info.sku"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml" after="product.info.review"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" after="product.info.sku"/>
             <container name="alert.urls" as="alert_urls" label="Alert Urls" after="product.price"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" template="product/view/tierprices.phtml" before="product.info"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml">

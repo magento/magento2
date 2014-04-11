@@ -142,27 +142,27 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Core\Model\WebsiteFactory
+     * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\App\RequestInterface $requestHttp
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -170,20 +170,20 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Logger $logger,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Math\Random $mathRandom,
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\App\RequestInterface $requestHttp,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         array $data = array()
     ) {
         $this->_requestFactory = $requestFactory;
@@ -194,7 +194,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         parent::__construct(
             $eventManager,
             $paymentData,
-            $coreStoreConfig,
+            $scopeConfig,
             $logAdapterFactory,
             $logger,
             $moduleList,
@@ -802,16 +802,24 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected function _getCallbackUrl($actionName)
     {
         if ($this->_requestHttp->getParam('website')) {
-            /** @var $website \Magento\Core\Model\Website */
+            /** @var $website \Magento\Store\Model\Website */
             $website = $this->_websiteFactory->create()->load($this->_requestHttp->getParam('website'));
-            $secure = $this->_coreStoreConfig->getConfigFlag(
-                \Magento\Core\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+            $secure = $this->_scopeConfig->isSetFlag(
+                \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultStore()
             );
-            $path = $secure ? \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL : \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
-            $websiteUrl = $this->_coreStoreConfig->getConfig($path, $website->getDefaultStore());
+            $path = $secure ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
+            $websiteUrl = $this->_scopeConfig->getValue(
+                $path,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $website->getDefaultStore()
+            );
         } else {
-            $secure = $this->_coreStoreConfig->getConfigFlag(\Magento\Core\Model\Store::XML_PATH_SECURE_IN_FRONTEND);
+            $secure = $this->_scopeConfig->isSetFlag(
+                \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             $websiteUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, $secure);
         }
 

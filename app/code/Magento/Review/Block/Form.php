@@ -26,7 +26,7 @@
 namespace Magento\Review\Block;
 
 use Magento\Catalog\Model\Product;
-use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
+use Magento\Review\Model\Resource\Rating\Collection as RatingCollection;
 
 /**
  * Review form block
@@ -61,7 +61,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Rating model
      *
-     * @var \Magento\Rating\Model\RatingFactory
+     * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
 
@@ -98,7 +98,7 @@ class Form extends \Magento\View\Element\Template
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Rating\Model\RatingFactory $ratingFactory
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\App\Http\Context $httpContext
      * @param array $data
@@ -110,7 +110,7 @@ class Form extends \Magento\View\Element\Template
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Rating\Model\RatingFactory $ratingFactory,
+        \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Message\ManagerInterface $messageManager,
         \Magento\App\Http\Context $httpContext,
         array $data = array()

@@ -121,7 +121,7 @@ class View extends \Magento\Catalog\Block\Product\View
         $displayIfNoReviews = false
     ) {
         return $this->getLayout()->createBlock(
-            'Magento\Rating\Block\Entity\Detailed'
+            'Magento\Review\Block\Rating\Entity\Detailed'
         )->setEntityId(
             $this->getProduct()->getId()
         )->toHtml() . $this->getLayout()->getBlock(

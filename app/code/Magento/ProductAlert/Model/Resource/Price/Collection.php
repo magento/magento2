@@ -76,7 +76,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         }
         if (is_array($website)) {
             $condition = $this->getConnection()->quoteInto('website_id IN(?)', $website);
-        } elseif ($website instanceof \Magento\Core\Model\Website) {
+        } elseif ($website instanceof \Magento\Store\Model\Website) {
             $condition = $this->getConnection()->quoteInto('website_id=?', $website->getId());
         } else {
             $condition = $this->getConnection()->quoteInto('website_id=?', $website);

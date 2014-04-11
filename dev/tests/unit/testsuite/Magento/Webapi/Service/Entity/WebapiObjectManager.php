@@ -26,6 +26,11 @@ namespace Magento\Webapi\Service\Entity;
 class WebapiObjectManager implements \Magento\ObjectManager
 {
     /**
+     * @var array
+     */
+    private $configuration;
+
+    /**
      * Create new object instance
      *
      * @param string $type
@@ -56,6 +61,6 @@ class WebapiObjectManager implements \Magento\ObjectManager
      */
     public function configure(array $configuration)
     {
-        return $configuration;
+        $this->configuration = $configuration;
     }
 }

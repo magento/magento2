@@ -30,7 +30,7 @@
     <event name="controller_action_postdispatch">
         <observer name="log" instance="Magento\Log\Model\Visitor" method="saveByRequest" />
     </event>
-    <event name="customer_login">
+    <event name="customer_data_object_login">
         <observer name="log" instance="Magento\Log\Model\Visitor" method="bindCustomerLogin" />
     </event>
     <event name="customer_logout">

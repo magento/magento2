@@ -54,19 +54,19 @@ class Calculation extends \Magento\Model\Resource\Db\AbstractDb
     protected $_taxData;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_taxData = $taxData;
         $this->_storeManager = $storeManager;

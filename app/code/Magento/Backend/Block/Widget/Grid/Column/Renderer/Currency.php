@@ -49,7 +49,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Application object
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -70,19 +70,17 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\App\ConfigInterface $config,
         \Magento\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
@@ -90,7 +88,10 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
         $this->_localeCurrency = $localeCurrency;
-        $baseCurrencyCode = $config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+        $baseCurrencyCode = $this->_scopeConfig->getValue(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+            'default'
+        );
         $this->_baseCurrency = $currencyFactory->create()->load($baseCurrencyCode);
     }
 

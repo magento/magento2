@@ -25,7 +25,7 @@
  */
 namespace Magento\Checkout\Helper;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 use Magento\Sales\Model\Quote\Item\AbstractItem;
 
 /**
@@ -47,12 +47,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -83,8 +83,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
@@ -93,15 +93,15 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_localeDate = $localeDate;
@@ -156,7 +156,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getRequiredAgreementIds()
     {
         if (is_null($this->_agreements)) {
-            if (!$this->_coreStoreConfig->getConfigFlag('checkout/options/enable_agreements')) {
+            if (!$this->_scopeConfig->isSetFlag(
+                'checkout/options/enable_agreements',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            ) {
                 $this->_agreements = array();
             } else {
                 $this->_agreements = $this->_agreementCollectionFactory->create()->addStoreFilter(
@@ -177,7 +181,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->_coreStoreConfig->getConfig('checkout/options/onepage_checkout_enabled');
+        return (bool)$this->_scopeConfig->getValue(
+            'checkout/options/onepage_checkout_enabled',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -246,11 +253,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         $this->inlineTranslation->suspend();
 
-        $template = $this->_coreStoreConfig->getConfig('checkout/payment_failed/template', $checkout->getStoreId());
+        $template = $this->_scopeConfig->getValue(
+            'checkout/payment_failed/template',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $checkout->getStoreId()
+        );
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
-        $copyMethod = $this->_coreStoreConfig->getConfig(
+        $copyMethod = $this->_scopeConfig->getValue(
             'checkout/payment_failed/copy_method',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
         $bcc = array();
@@ -258,15 +270,21 @@ class Data extends \Magento\App\Helper\AbstractHelper
             $bcc = $copyTo;
         }
 
-        $_receiver = $this->_coreStoreConfig->getConfig('checkout/payment_failed/receiver', $checkout->getStoreId());
+        $_receiver = $this->_scopeConfig->getValue(
+            'checkout/payment_failed/receiver',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $checkout->getStoreId()
+        );
         $sendTo = array(
             array(
-                'email' => $this->_coreStoreConfig->getConfig(
+                'email' => $this->_scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/email',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 ),
-                'name' => $this->_coreStoreConfig->getConfig(
+                'name' => $this->_scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/name',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 )
             )
@@ -291,13 +309,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $items = '';
         foreach ($checkout->getAllVisibleItems() as $_item) {
             /* @var $_item \Magento\Sales\Model\Quote\Item */
-            $items .= $_item->getProduct()->getName() .
-                '  x ' .
-                $_item->getQty() .
-                '  ' .
-                $checkout->getStoreCurrencyCode() .
-                ' ' .
-                $_item->getProduct()->getFinalPrice($_item->getQty()) . "\n";
+            $items .=
+                $_item->getProduct()->getName() . '  x ' . $_item->getQty() . '  ' . $checkout->getStoreCurrencyCode()
+                . ' ' . $_item->getProduct()->getFinalPrice(
+                    $_item->getQty()
+                ) . "\n";
         }
         $total = $checkout->getStoreCurrencyCode() . ' ' . $checkout->getGrandTotal();
 
@@ -315,13 +331,23 @@ class Data extends \Magento\App\Helper\AbstractHelper
                     'customerEmail' => $checkout->getCustomerEmail(),
                     'billingAddress' => $checkout->getBillingAddress(),
                     'shippingAddress' => $checkout->getShippingAddress(),
-                    'shippingMethod' => $this->_coreStoreConfig->getConfig('carriers/' . $shippingMethod . '/title'),
-                    'paymentMethod' => $this->_coreStoreConfig->getConfig('payment/' . $paymentMethod . '/title'),
+                    'shippingMethod' => $this->_scopeConfig->getValue(
+                        'carriers/' . $shippingMethod . '/title',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ),
+                    'paymentMethod' => $this->_scopeConfig->getValue(
+                        'payment/' . $paymentMethod . '/title',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ),
                     'items' => nl2br($items),
                     'total' => $total
                 )
             )->setFrom(
-                $this->_coreStoreConfig->getConfig('checkout/payment_failed/identity', $checkout->getStoreId())
+                $this->_scopeConfig->getValue(
+                    'checkout/payment_failed/identity',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $checkout->getStoreId()
+                )
             )->addTo(
                 $recipient['email'],
                 $recipient['name']
@@ -344,7 +370,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected function _getEmails($configPath, $storeId)
     {
-        $data = $this->_coreStoreConfig->getConfig($configPath, $storeId);
+        $data = $this->_scopeConfig->getValue($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
         if (!empty($data)) {
             return explode(',', $data);
         }
@@ -364,7 +390,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if ($store === null) {
             $store = $quote->getStoreId();
         }
-        $guestCheckout = $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_GUEST_CHECKOUT, $store);
+        $guestCheckout = $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_GUEST_CHECKOUT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
 
         if ($guestCheckout == true) {
             $result = new \Magento\Object();
@@ -397,6 +427,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isCustomerMustBeLogged()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CUSTOMER_MUST_BE_LOGGED);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

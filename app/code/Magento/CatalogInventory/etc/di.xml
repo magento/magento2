@@ -44,4 +44,11 @@
     <type name="Magento\Catalog\Model\Layer">
         <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer"/>
     </type>
+    <type name="Magento\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="cataloginventory" xsi:type="string">Magento_CatalogInventory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

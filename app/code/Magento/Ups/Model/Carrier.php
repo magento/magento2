@@ -141,7 +141,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
@@ -162,7 +162,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
@@ -184,7 +184,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
         parent::__construct(
-            $coreStoreConfig,
+            $scopeConfig,
             $rateErrorFactory,
             $logAdapterFactory,
             $xmlElFactory,
@@ -265,8 +265,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($request->getOrigCountry()) {
             $origCountry = $request->getOrigCountry();
         } else {
-            $origCountry = $this->_coreStoreConfig->getConfig(
+            $origCountry = $this->_scopeConfig->getValue(
                 \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $request->getStoreId()
             );
         }
@@ -276,8 +277,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($request->getOrigRegionCode()) {
             $origRegionCode = $request->getOrigRegionCode();
         } else {
-            $origRegionCode = $this->_coreStoreConfig->getConfig(
+            $origRegionCode = $this->_scopeConfig->getValue(
                 \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_REGION_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $request->getStoreId()
             );
         }
@@ -290,8 +292,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $rowRequest->setOrigPostal($request->getOrigPostcode());
         } else {
             $rowRequest->setOrigPostal(
-                $this->_coreStoreConfig->getConfig(
+                $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -301,8 +304,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $rowRequest->setOrigCity($request->getOrigCity());
         } else {
             $rowRequest->setOrigCity(
-                $this->_coreStoreConfig->getConfig(
+                $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_CITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -616,7 +620,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         if ($params['10_action'] == '4') {
             $params['10_action'] = 'Shop';
-            $serviceCode = null; // Service code is not relevant when we're asking ALL possible services' rates
+            $serviceCode = null;
         } else {
             $params['10_action'] = 'Rate';
             $serviceCode = $rowRequest->getProduct() ? $rowRequest->getProduct() : '';
@@ -1357,8 +1361,8 @@ XMLAuth;
             'ULE'
         ) &&
             $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
-            ($request->getRecipientAddressCountryCode() == 'CA' || //Canada
-            $request->getRecipientAddressCountryCode() == 'PR') //Puerto Rico
+            ($request->getRecipientAddressCountryCode() == 'CA' ||
+            $request->getRecipientAddressCountryCode() == 'PR')
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
@@ -1541,14 +1545,10 @@ XMLAuth;
 
         if ($countryShipper == self::USA_COUNTRY_ID && $countryRecipient == self::CANADA_COUNTRY_ID ||
             $countryShipper == self::CANADA_COUNTRY_ID && $countryRecipient == self::USA_COUNTRY_ID ||
-            $countryShipper == self::MEXICO_COUNTRY_ID && $countryRecipient == self::USA_COUNTRY_ID &&
-            $method == '11' // UPS Standard
+            $countryShipper == self::MEXICO_COUNTRY_ID && $countryRecipient == self::USA_COUNTRY_ID && $method == '11'
         ) {
             $containerTypes = array();
-            if ($method == '07' // Worldwide Express
-                || $method == '08' // Worldwide Expedited
-                || $method == '65' // Worldwide Saver
-            ) {
+            if ($method == '07' || $method == '08' || $method == '65') {
                 // Worldwide Expedited
                 if ($method != '08') {
                     $containerTypes = array(
@@ -1568,9 +1568,9 @@ XMLAuth;
             return array('00' => __('Customer Packaging')) + $containerTypes;
         } elseif ($countryShipper == self::USA_COUNTRY_ID &&
             $countryRecipient == self::PUERTORICO_COUNTRY_ID &&
-            ($method == '03' || // UPS Ground
-            $method == '02' || // UPS Second Day Air
-            $method == '01') // UPS Next Day Air
+            ($method == '03' ||
+            $method == '02' ||
+            $method == '01')
         ) {
             // Container types should be the same as for domestic
             $params->setCountryRecipient(self::USA_COUNTRY_ID);

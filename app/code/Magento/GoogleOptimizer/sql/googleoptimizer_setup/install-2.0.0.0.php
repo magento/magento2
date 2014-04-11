@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 
 $installer->startSetup();
 
@@ -75,9 +75,9 @@ $table = $installer->getConnection()->newTable(
     array('store_id', 'entity_id', 'entity_type'),
     array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addForeignKey(
-    $installer->getFkName('googleoptimizer_code', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('googleoptimizer_code', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

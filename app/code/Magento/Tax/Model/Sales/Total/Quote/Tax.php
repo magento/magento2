@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 use Magento\Sales\Model\Quote\Address;
 use Magento\Sales\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Sales\Model\Quote\Item\AbstractItem;

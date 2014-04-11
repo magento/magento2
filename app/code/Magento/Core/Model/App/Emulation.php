@@ -33,10 +33,12 @@
  */
 namespace Magento\Core\Model\App;
 
+use Magento\Translate\Inline\ConfigInterface;
+
 class Emulation extends \Magento\Object
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -46,9 +48,11 @@ class Emulation extends \Magento\Object
     protected $_translate;
 
     /**
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * Core store config
+     *
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Locale\ResolverInterface
@@ -61,7 +65,7 @@ class Emulation extends \Magento\Object
     protected $_design;
 
     /**
-     * @var \Magento\Translate\Inline\ConfigInterface
+     * @var ConfigInterface
      */
     protected $inlineConfig;
 
@@ -71,23 +75,23 @@ class Emulation extends \Magento\Object
     protected $inlineTranslation;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Design $design
      * @param \Magento\TranslateInterface $translate
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Translate\Inline\ConfigInterface $inlineConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ConfigInterface $inlineConfig
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\DesignInterface $viewDesign,
         \Magento\Core\Model\Design $design,
         \Magento\TranslateInterface $translate,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Translate\Inline\ConfigInterface $inlineConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        ConfigInterface $inlineConfig,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
@@ -98,7 +102,7 @@ class Emulation extends \Magento\Object
         $this->_viewDesign = $viewDesign;
         $this->_design = $design;
         $this->_translate = $translate;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->inlineConfig = $inlineConfig;
         $this->inlineTranslation = $inlineTranslation;
     }
@@ -220,10 +224,13 @@ class Emulation extends \Magento\Object
     protected function _emulateLocale($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
     {
         $initialLocaleCode = $this->_localeResolver->getLocaleCode();
-        $newLocaleCode = $this->_coreStoreConfig->getConfig($this->_localeResolver->getDefaultLocalePath(), $storeId);
+        $newLocaleCode = $this->_scopeConfig->getValue(
+            $this->_localeResolver->getDefaultLocalePath(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $this->_localeResolver->setLocaleCode($newLocaleCode);
-        $this->_translate->setLocale($newLocaleCode)
-            ->loadData($area, true);
+        $this->_translate->setLocale($newLocaleCode)->loadData($area, true);
 
         return $initialLocaleCode;
     }
@@ -264,8 +271,7 @@ class Emulation extends \Magento\Object
         $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN
     ) {
         $this->_localeResolver->setLocaleCode($initialLocaleCode);
-        $this->_translate->setLocale($initialLocaleCode)
-            ->loadData($initialArea, true);
+        $this->_translate->setLocale($initialLocaleCode)->loadData($initialArea, true);
 
         return $this;
     }

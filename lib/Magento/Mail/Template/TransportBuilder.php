@@ -84,21 +84,29 @@ class TransportBuilder
     protected $_senderResolver;
 
     /**
+     * @var \Magento\Mail\TransportInterfaceFactory
+     */
+    protected $_mailTransportFactory;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param \Magento\Mail\Message $message
      * @param \Magento\Mail\Template\SenderResolverInterface $senderResolver
      * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Mail\TransportInterfaceFactory $mailTransportFactory
      */
     public function __construct(
         \Magento\Mail\Template\FactoryInterface $templateFactory,
         \Magento\Mail\Message $message,
         \Magento\Mail\Template\SenderResolverInterface $senderResolver,
-        \Magento\ObjectManager $objectManager
+        \Magento\ObjectManager $objectManager,
+        \Magento\Mail\TransportInterfaceFactory $mailTransportFactory
     ) {
         $this->templateFactory = $templateFactory;
         $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
+        $this->_mailTransportFactory = $mailTransportFactory;
     }
 
     /**
@@ -209,15 +217,10 @@ class TransportBuilder
     public function getTransport()
     {
         $this->prepareMessage();
-
-        $result = $this->objectManager->create(
-            'Magento\Mail\TransportInterface',
-            array('message' => clone $this->message)
-        );
-
+        $mailTransport = $this->_mailTransportFactory->create(array('message' => clone $this->message));
         $this->reset();
 
-        return $result;
+        return $mailTransport;
     }
 
     /**

@@ -56,7 +56,7 @@
             <argument name="cacheIdPrefix" xsi:type="string"><![CDATA[collection_]]></argument>
             <argument name="cacheLifetime" xsi:type="string">86400</argument>
             <argument name="cacheTags" xsi:type="array">
-                <item name="const" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</item>
+                <item name="const" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
                 <item name="boolFalse" xsi:type="boolean">false</item>
                 <item name="boolTrue" xsi:type="boolean">true</item>
                 <item name="boolOne" xsi:type="boolean">true</item>
@@ -65,7 +65,7 @@
                 <item name="nullValue" xsi:type="null"/>
                 <item name="stringPattern" xsi:type="string">az-value</item>
             </argument>
-            <argument name="constParam" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</argument>
+            <argument name="constParam" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</argument>
             <argument name="boolFalseParam" xsi:type="boolean">false</argument>
             <argument name="boolTrueParam" xsi:type="boolean">true</argument>
             <argument name="boolOneParam" xsi:type="boolean">true</argument>

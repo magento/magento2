@@ -126,7 +126,7 @@ class Observer
     /**
      * Website collection factory
      *
-     * @var \Magento\Core\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
      */
     protected $_websiteCollectionFactory;
 
@@ -151,7 +151,7 @@ class Observer
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websiteCollectionFactory
+     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\UrlInterface $url
@@ -171,7 +171,7 @@ class Observer
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websiteCollectionFactory,
+        \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\UrlInterface $url,

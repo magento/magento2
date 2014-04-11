@@ -25,9 +25,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
+    <preference for="Magento\Shell\CommandRendererInterface" type="Magento\Shell\CommandRenderer" />
     <type name="Magento\Cron\Model\Config\Reader\Db">
         <arguments>
-            <argument name="defaultReader" xsi:type="object">Magento\Core\Model\Config\Scope\Reader\DefaultReader</argument>
+            <argument name="defaultReader" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</argument>
         </arguments>
     </type>
     <type name="Magento\App\Cron">
@@ -38,5 +39,15 @@
     </type>
     <type name="Magento\App\Config\Initial\Converter">
         <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter" />
+    </type>
+    <virtualType name="shellBackground" type="Magento\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Cron\Model\Observer">
+        <arguments>
+            <argument name="shell" xsi:type="object">shellBackground</argument>
+        </arguments>
     </type>
 </config>

@@ -54,12 +54,12 @@ abstract class AbstractAction
     /**
      * Core config model
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -106,8 +106,8 @@ abstract class AbstractAction
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Stdlib\DateTime $dateTime
@@ -117,8 +117,8 @@ abstract class AbstractAction
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\App\ConfigInterface $config,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Stdlib\DateTime $dateTime,
@@ -209,10 +209,10 @@ abstract class AbstractAction
         $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
 
         $select = $write->select()->from(
-            array('cw' => $this->_getTable('core_website')),
+            array('cw' => $this->_getTable('store_website')),
             array('website_id')
         )->join(
-            array('csg' => $this->_getTable('core_store_group')),
+            array('csg' => $this->_getTable('store_group')),
             'cw.default_group_id = csg.group_id',
             array('store_id' => 'default_store_id')
         )->where(
@@ -222,7 +222,7 @@ abstract class AbstractAction
 
         $data = array();
         foreach ($write->fetchAll($select) as $item) {
-            /** @var $website \Magento\Core\Model\Website */
+            /** @var $website \Magento\Store\Model\Website */
             $website = $this->_storeManager->getWebsite($item['website_id']);
 
             if ($website->getBaseCurrencyCode() != $baseCurrency) {
@@ -238,7 +238,7 @@ abstract class AbstractAction
                 $rate = 1;
             }
 
-            /** @var $store \Magento\Core\Model\Store */
+            /** @var $store \Magento\Store\Model\Store */
             $store = $this->_storeManager->getStore($item['store_id']);
             if ($store) {
                 $timestamp = $this->_localeDate->scopeTimeStamp($store);
@@ -280,7 +280,7 @@ abstract class AbstractAction
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
             array('customer_group_id')
         )->join(
-            array('cw' => $this->_getTable('core_website')),
+            array('cw' => $this->_getTable('store_website')),
             'tp.website_id = 0 OR tp.website_id = cw.website_id',
             array('website_id')
         )->join(
@@ -326,7 +326,7 @@ abstract class AbstractAction
             'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
             array('customer_group_id')
         )->join(
-            array('cw' => $this->_getTable('core_website')),
+            array('cw' => $this->_getTable('store_website')),
             'gp.website_id = 0 OR gp.website_id = cw.website_id',
             array('website_id')
         )->join(

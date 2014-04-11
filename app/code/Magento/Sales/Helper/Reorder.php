@@ -39,22 +39,22 @@ class Reorder extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
      * @param \Magento\Customer\Model\Session $customerSession
      * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
         \Magento\Customer\Model\Session $customerSession,
         $dbCompatibleMode = true
     ) {
         $this->_customerSession = $customerSession;
-        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
+        parent::__construct($context, $scopeConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**
@@ -68,12 +68,12 @@ class Reorder extends \Magento\Core\Helper\Data
     /**
      * Check if reorder is allowed for given store
      *
-     * @param \Magento\Core\Model\Store|int|null $store
+     * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
      */
     public function isAllowed($store = null)
     {
-        if ($this->_coreStoreConfig->getConfig(self::XML_PATH_SALES_REORDER_ALLOW, $store)) {
+        if ($this->_scopeConfig->getValue(self::XML_PATH_SALES_REORDER_ALLOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)) {
             return true;
         }
         return false;

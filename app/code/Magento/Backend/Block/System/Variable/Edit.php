@@ -109,8 +109,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $formHtml = parent::getFormHtml();
         if (!$this->_storeManager->isSingleStoreMode() && $this->getVariable()->getId()) {
-            $storeSwitcher = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher')->toHtml();
-            $formHtml = $storeSwitcher . $formHtml;
+            $formHtml = $formHtml;
         }
         return $formHtml;
     }

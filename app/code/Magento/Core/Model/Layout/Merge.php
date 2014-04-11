@@ -60,7 +60,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     private $_theme;
 
     /**
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     private $_store;
 
@@ -138,7 +138,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
      * Init merge model
      *
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Layout\File\SourceInterface $fileSource
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
      * @param \Magento\App\State $appState
@@ -150,7 +150,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
      */
     public function __construct(
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\Layout\File\SourceInterface $fileSource,
         \Magento\Core\Model\Resource\Layout\Update $resource,
         \Magento\App\State $appState,

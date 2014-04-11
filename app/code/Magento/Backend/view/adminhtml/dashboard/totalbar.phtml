@@ -25,18 +25,17 @@
  */
 ?>
 <?php if( sizeof($this->getTotals()) > 0 ): ?>
-<div class="box" id="dashboard_diagram_totals">
-    <div class="entry-edit">
-        <table cellspacing="0" width="100%">
-            <tr>
-            <?php foreach( $this->getTotals() as $_total ): ?>
-                <td class="a-center bold">
-                    <span><?php echo $_total['label'] ?></span><br />
-                    <span class="nowrap" style="font-size:18px; color:#EA7601;"><?php echo $_total['value'] ?><span style="font-size:14px; color:#DE8946;"><?php echo $_total['decimals'] ?></span></span>
-                </td>
-            <?php endforeach; ?>
-            </tr>
-        </table>
-    </div>
+<div class="dashboard-totals" id="dashboard_diagram_totals">
+    <ul class="dashboard-totals-list">
+        <?php foreach( $this->getTotals() as $_total ): ?>
+            <li class="dashboard-totals-item">
+                <span class="dashboard-totals-label"><?php echo $_total['label'] ?></span>
+                <strong class="dashboard-totals-value">
+                    <?php echo $_total['value'] ?>
+                    <span class="dashboard-totals-decimals"><?php echo $_total['decimals'] ?></span>
+                </strong>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </div>
 <?php endif; ?>

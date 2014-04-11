@@ -31,12 +31,12 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -47,21 +47,21 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
 
     /**
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
         array $data = array()
     ) {
         parent::__construct($data);
         $this->_request = $request;
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_queryParamsResolver = $queryParamsResolver;
     }
@@ -125,8 +125,9 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
         }
 
         if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
-            if (!$this->_storeConfig->getConfig(
-                \Magento\Core\Model\Store::XML_PATH_STORE_IN_URL,
+            if (!$this->_scopeConfig->getValue(
+                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getScope()
             ) && !$this->_storeManager->hasSingleStore()
             ) {

@@ -25,7 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
-
+use \Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address as ImportAddress;
+use \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address;
 /**
  * Test for customer address export model
  *
@@ -34,7 +35,7 @@ namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address
+     * @var Address
      */
     protected $_model;
 
@@ -53,11 +54,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
 
         $websites = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getWebsites(
             true
         );
-        /** @var $website \Magento\Core\Model\Website */
+        /** @var $website \Magento\Store\Model\Website */
         foreach ($websites as $website) {
             $this->_websites[$website->getId()] = $website->getCode();
         }
@@ -68,9 +69,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testExport()
     {
-        $websiteCode = \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address::COLUMN_WEBSITE;
-        $emailCode = \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address::COLUMN_EMAIL;
-        $entityIdCode = \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address::COLUMN_ADDRESS_ID;
+        $websiteCode = Address::COLUMN_WEBSITE;
+        $emailCode = Address::COLUMN_EMAIL;
+        $entityIdCode = Address::COLUMN_ADDRESS_ID;
 
         $expectedAttributes = array();
         /** @var $collection \Magento\Customer\Model\Resource\Address\Attribute\Collection */
@@ -83,8 +84,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         }
 
         // Get customer default addresses column name to customer attribute mapping array.
-        $defaultAddressMap =
-            \Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address::getDefaultAddressAttributeMapping();
+        $defaultAddressMap = ImportAddress::getDefaultAddressAttributeMapping();
 
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -163,7 +163,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportWithFilter($genderFilterValue)
     {
-        $entityIdCode = \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address::COLUMN_ADDRESS_ID;
+        $entityIdCode = Address::COLUMN_ADDRESS_ID;
 
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

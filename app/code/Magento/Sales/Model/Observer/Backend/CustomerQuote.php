@@ -33,7 +33,7 @@ class CustomerQuote
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -43,12 +43,12 @@ class CustomerQuote
     protected $_quoteFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Config\Share $config
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Config\Share $config,
         \Magento\Sales\Model\QuoteFactory $quoteFactory
     ) {
@@ -74,7 +74,7 @@ class CustomerQuote
              * It is needed to process customer's quotes for all websites
              * if customer accounts are shared between all of them
              */
-            /** @var $websites \Magento\Core\Model\Website[] */
+            /** @var $websites \Magento\Store\Model\Website[] */
             $websites = $this->_config->isWebsiteScope() ? array(
                 $this->_storeManager->getWebsite($customerDataObject->getWebsiteId())
             ) : $this->_storeManager->getWebsites();

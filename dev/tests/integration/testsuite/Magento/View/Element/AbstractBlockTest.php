@@ -82,7 +82,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
         $cssUrl = $this->_block->getViewFileUrl(
             'css/wrong.css',
-            array('area' => 'frontend', 'theme' => 'magento_plushe', 'locale' => 'en_US')
+            array('area' => 'frontend', 'theme' => 'Magento/plushe', 'locale' => 'en_US')
         );
         $this->assertStringMatchesFormat('%s/css/wrong.css', $cssUrl);
     }
@@ -265,7 +265,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_block->getChildBlock($childAlias));
 
         // With layout
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $child = $layout->createBlock('Magento\View\Element\Text', $childName);
         $layout->addBlock($this->_block, $parentName);
@@ -456,7 +456,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @covers \Magento\View\Element\AbstractBlock::getGroupChildNames
-     * @covers \Magento\Core\Model\Layout::addToParentGroup
+     * @covers \Magento\View\Layout::addToParentGroup
      */
     public function testAddToParentGroup()
     {

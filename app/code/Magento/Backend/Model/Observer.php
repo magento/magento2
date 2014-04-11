@@ -96,9 +96,9 @@ class Observer
      */
     public function setUrlClassName(\Magento\Event\Observer $observer)
     {
-        /** @var $storeCollection \Magento\Core\Model\Resource\Store\Collection */
+        /** @var $storeCollection \Magento\Store\Model\Resource\Store\Collection */
         $storeCollection = $observer->getEvent()->getStoreCollection();
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($storeCollection as $store) {
             if ($store->getId() == 0) {
                 $store->setUrlClassName('Magento\Backend\Model\UrlInterface');

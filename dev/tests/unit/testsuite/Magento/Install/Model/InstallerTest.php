@@ -45,7 +45,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     /**
      * Application config model
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -76,7 +76,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_cache = $this->getMock('\Magento\App\CacheInterface', array(), array(), '', false);
-        $this->_config = $this->getMock('\Magento\App\ReinitableConfigInterface', array(), array(), '', false);
+        $this->_config = $this->getMock('\Magento\App\Config\ReinitableConfigInterface', array(), array(), '', false);
         $this->_cacheState = $this->getMock('\Magento\App\Cache\StateInterface', array(), array(), '', false);
         $this->_cacheTypeList = $this->getMock('\Magento\App\Cache\TypeListInterface', array(), array(), '', false);
         $this->_appState = $this->getMock('\Magento\App\State', array(), array(), '', false);

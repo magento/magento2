@@ -305,9 +305,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('tax_calculation_rate_title', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('tax_calculation_rate_title', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('tax_calculation_rate_title', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
@@ -393,9 +393,9 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('tax_order_aggregated_created', array('store_id')),
     array('store_id')
 )->addForeignKey(
-    $installer->getFkName('tax_order_aggregated_created', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('tax_order_aggregated_created', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

@@ -48,11 +48,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testViewDirective()
     {
         $url = $this->_model->viewDirective(
-            array(
-            '{{view url="Magento_Theme::favicon.ico"}}',
-            'view',
-            ' url="Magento_Theme::favicon.ico"', // note leading space
-            )
+            array('{{view url="Magento_Theme::favicon.ico"}}', 'view', ' url="Magento_Theme::favicon.ico"')
         );
         $this->assertStringEndsWith('favicon.ico', $url);
     }
@@ -67,11 +63,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertStringMatchesFormat('http://example.com/%sarbitrary_url/', $url);
 
-        $url = $this->_model->storeDirective(array(
-            '{{store url="translation/ajax/index"}}',
-            'store',
-            ' url="translation/ajax/index"',
-        ));
+        $url = $this->_model->storeDirective(
+            array('{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"')
+        );
         $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
     }
 
@@ -133,22 +127,16 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
         $objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
-        )->getStore()->setConfig(
+            'Magento\App\Config\MutableScopeConfigInterface'
+        )->setValue(
             \Magento\View\DesignInterface::XML_PATH_THEME_ID,
-            $themeId
+            $themeId,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-
-
 
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = $objectManager->create('Magento\Core\Model\Layout');
-        $objectManager->addSharedInstance($layout, 'Magento\Core\Model\Layout');
-        $this->assertEquals($area, $layout->getArea());
-        $this->assertEquals(
-            $area,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')->getArea()
-        );
+        $layout = $objectManager->create('Magento\View\Layout');
+        $objectManager->addSharedInstance($layout, 'Magento\View\Layout');
         $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('test_default');
 
         $actualOutput = $this->_model->layoutDirective(

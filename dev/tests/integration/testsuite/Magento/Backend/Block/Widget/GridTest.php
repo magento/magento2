@@ -48,7 +48,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false);
         $this->_columnSetMock = $this->_getColumnSetMock();
 
         $returnValueMap = array(
@@ -157,7 +157,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMassactionBlock()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Backend\Block\Widget\Grid */
         $block = $layout->createBlock('Magento\Backend\Block\Widget\Grid\Extended', 'block');

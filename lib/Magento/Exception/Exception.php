@@ -25,7 +25,7 @@
  */
 namespace Magento\Exception;
 
-abstract class Exception extends \Magento\Service\Exception
+abstract class Exception extends \Magento\Webapi\ServiceException
 {
     /**
      * @var array

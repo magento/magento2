@@ -208,7 +208,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
             array('l' => $this->getTable('catalog_product_relation')),
             'parent_id'
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             '',
             array()
         )->join(

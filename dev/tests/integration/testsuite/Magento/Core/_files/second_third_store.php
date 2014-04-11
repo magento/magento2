@@ -22,32 +22,32 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var \Magento\Core\Model\Website $website */
-$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Website');
+/** @var \Magento\Store\Model\Website $website */
+$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Website');
 $website->setName('Second Website')->setCode('secondwebsite')->save();
 
 $websiteId = $website->getId();
 $groupId = $website->getDefaultGroupId();
 
-/** @var \Magento\Core\Model\Store $store */
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
+/** @var \Magento\Store\Model\Store $store */
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
 $store->setCode('secondstore')->setName('Second Store')->setSortOrder(10)->setIsActive(1);
 $store->save();
 
 
-/** @var \Magento\Core\Model\Website $website */
-$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Website');
+/** @var \Magento\Store\Model\Website $website */
+$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Website');
 $website->setName('Third Website')->setCode('thirdwebsite')->save();
 
 $websiteId = $website->getId();
 $groupId = $website->getDefaultGroupId();
 
-/** @var \Magento\Core\Model\Store $store */
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
+/** @var \Magento\Store\Model\Store $store */
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
 $store->setCode('thirdstore')->setName('Third Store')->setSortOrder(10)->setIsActive(1);
 $store->save();
 
 /* Refresh stores memory cache */
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Core\Model\StoreManagerInterface'
+    'Magento\Store\Model\StoreManagerInterface'
 )->reinitStores();

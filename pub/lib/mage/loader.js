@@ -27,17 +27,12 @@
         loaderStarted: 0,
         spinner: $(undefined),
         options: {
-            icon: '',
+            icon: 'icon.gif',
             texts: {
                 loaderText: $.mage.__('Please wait...'),
                 imgAlt: $.mage.__('Loading...')
             },
-            template: '<div class="loading-mask" data-role="loader" {{if texts.loaderText}}data-text="${texts.loaderText}"{{/if}}>' +
-                '<div class="loader">' +
-                '{{if icon}}<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">{{/if}}' +
-                '{{if texts.loaderText}}<p>${texts.loaderText}</p>{{/if}}' +
-                '</div>' +
-                '</div>'
+            template: null
         },
 
         /**
@@ -112,9 +107,18 @@
          */
         _render: function() {
             if (this.spinner.length === 0) {
-                this.spinner = $.tmpl(this.options.template, this.options)/*.css(this._getCssObj())*/;
+                this.spinner = $(this.options.template)/*.css(this._getCssObj())*/;
             }
-            this.element.prepend(this.spinner);
+
+            var source = this.spinner.html();
+            var template = Handlebars.compile(source);
+            var content = {
+                imgAlt: this.options.texts.imgAlt, 
+                icon: this.options.icon, 
+                loaderText: this.options.texts.loaderText
+            };
+            var html = template(content);
+            this.element.prepend(html);
         },
 
         /**

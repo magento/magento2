@@ -26,7 +26,7 @@ namespace Magento\Locale;
 class Format implements \Magento\Locale\FormatInterface
 {
     /**
-     * @var \Magento\BaseScopeResolverInterface
+     * @var \Magento\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
 
@@ -36,11 +36,11 @@ class Format implements \Magento\Locale\FormatInterface
     protected $_localeResolver;
 
     /**
-     * @param \Magento\BaseScopeResolverInterface $scopeResolver
+     * @param \Magento\App\ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
      */
     public function __construct(
-        \Magento\BaseScopeResolverInterface $scopeResolver,
+        \Magento\App\ScopeResolverInterface $scopeResolver,
         \Magento\Locale\ResolverInterface $localeResolver
     ) {
         $this->_scopeResolver = $scopeResolver;

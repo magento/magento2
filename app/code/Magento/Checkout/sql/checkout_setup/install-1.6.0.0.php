@@ -24,8 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$installer = $this;
 /* @var $installer \Magento\Checkout\Model\Resource\Setup */
+$installer = $this;
 
 $installer->startSetup();
 /**
@@ -105,9 +105,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('checkout_agreement_store', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('checkout_agreement_store', 'store_id', 'store', 'store_id'),
     'store_id',
-    $installer->getTable('core_store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

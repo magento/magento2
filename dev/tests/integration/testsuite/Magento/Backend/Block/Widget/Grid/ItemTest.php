@@ -33,7 +33,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetAdditionalActionBlock()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
+        /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Backend\Block\Widget\Grid\Massaction\Item */
         $block = $layout->createBlock('Magento\Backend\Block\Widget\Grid\Massaction\Item', 'block');

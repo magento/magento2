@@ -31,7 +31,7 @@ namespace Magento\Backend\Model\Config\Backend\Email;
 
 use Magento\Model\Exception;
 
-class Address extends \Magento\Core\Model\Config\Value
+class Address extends \Magento\App\Config\Value
 {
     /**
      * @return $this

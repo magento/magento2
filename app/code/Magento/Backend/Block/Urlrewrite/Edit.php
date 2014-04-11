@@ -218,7 +218,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
             'save',
             array(
                 'label' => __('Save'),
-                'class' => 'save',
+                'class' => 'save primary save-url-redirect',
                 'level' => -1,
                 'data_attribute' => array(
                     'mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form'))

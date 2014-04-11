@@ -50,7 +50,7 @@ class CreateOrderTest extends \Magento\Backend\Utility\Controller
         );
         $quote = $order->addProducts(array(1 => array('qty' => 1)))->getQuote();
         $defaultStoreId = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             'default'
         )->getId();

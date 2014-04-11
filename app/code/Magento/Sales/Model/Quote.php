@@ -210,17 +210,17 @@ class Quote extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -304,9 +304,9 @@ class Quote extends \Magento\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param CustomerGroupServiceInterface $customerGroupService
@@ -330,9 +330,9 @@ class Quote extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         CustomerGroupServiceInterface $customerGroupService,
@@ -353,7 +353,7 @@ class Quote extends \Magento\Model\AbstractModel
     ) {
         $this->_salesData = $salesData;
         $this->_catalogProduct = $catalogProduct;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
         $this->_quoteAddressFactory = $quoteAddressFactory;
@@ -399,7 +399,7 @@ class Quote extends \Magento\Model\AbstractModel
     /**
      * Get quote store model object
      *
-     * @return  \Magento\Core\Model\Store
+     * @return  \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -409,10 +409,10 @@ class Quote extends \Magento\Model\AbstractModel
     /**
      * Declare quote store model
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return $this
      */
-    public function setStore(\Magento\Core\Model\Store $store)
+    public function setStore(\Magento\Store\Model\Store $store)
     {
         $this->setStoreId($store->getId());
         return $this;
@@ -596,7 +596,6 @@ class Quote extends \Magento\Model\AbstractModel
                 try {
                     $defaultBillingAddress = $this->_addressService->getDefaultBillingAddress($customer->getId());
                 } catch (\Magento\Exception\NoSuchEntityException $e) {
-                    /** Address does not exist */
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Sales\Model\Quote\Address $billingAddress */
@@ -610,7 +609,6 @@ class Quote extends \Magento\Model\AbstractModel
                 try {
                     $defaultShippingAddress = $this->_addressService->getDefaultShippingAddress($customer->getId());
                 } catch (\Magento\Exception\NoSuchEntityException $e) {
-                    /** Address does not exist */
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Sales\Model\Quote\Address $shippingAddress */
@@ -2016,9 +2014,21 @@ class Quote extends \Magento\Model\AbstractModel
     public function validateMinimumAmount($multishipping = false)
     {
         $storeId = $this->getStoreId();
-        $minOrderActive = $this->_coreStoreConfig->getConfigFlag('sales/minimum_order/active', $storeId);
-        $minOrderMulti = $this->_coreStoreConfig->getConfigFlag('sales/minimum_order/multi_address', $storeId);
-        $minAmount = $this->_coreStoreConfig->getConfig('sales/minimum_order/amount', $storeId);
+        $minOrderActive = $this->_scopeConfig->isSetFlag(
+            'sales/minimum_order/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $minOrderMulti = $this->_scopeConfig->isSetFlag(
+            'sales/minimum_order/multi_address',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $minAmount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
 
         if (!$minOrderActive) {
             return true;

@@ -61,9 +61,9 @@ class Configuration
     /**
      * Store directory configuration
      *
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\App\ConfigInterface $config)
+    public function __construct(\Magento\App\Config\ScopeConfigInterface $config)
     {
         $this->directories = $config->getValue(self::XML_FILESYSTEM_DIRECTORY_PATH) ?: array();
         $this->protocols = $config->getValue(self::XML_FILESYSTEM_WRAPPER_PATH) ?: array();

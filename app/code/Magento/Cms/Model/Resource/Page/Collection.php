@@ -40,7 +40,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -49,7 +49,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
@@ -58,7 +58,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connection = null,
         \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -162,14 +162,14 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Add filter by store
      *
-     * @param int|\Magento\Core\Model\Store $store
+     * @param int|\Magento\Store\Model\Store $store
      * @param bool $withAdmin
      * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
         if (!$this->getFlag('store_filter_added')) {
-            if ($store instanceof \Magento\Core\Model\Store) {
+            if ($store instanceof \Magento\Store\Model\Store) {
                 $store = array($store->getId());
             }
 
@@ -178,7 +178,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
             }
 
             if ($withAdmin) {
-                $store[] = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+                $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
             }
 
             $this->addFilter('store', array('in' => $store), 'public');

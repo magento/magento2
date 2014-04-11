@@ -23,7 +23,7 @@
  */
 namespace Magento\App;
 
-class ReinitableConfig extends Config implements ReinitableConfigInterface
+class ReinitableConfig extends \Magento\App\MutableScopeConfig implements \Magento\App\Config\ReinitableConfigInterface
 {
     /**
      * {@inheritdoc}

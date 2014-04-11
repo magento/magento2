@@ -38,9 +38,9 @@ class Design
     protected $_areaList;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\App\State
      */
-    protected $_layout;
+    protected $appState;
 
     /**
      * @var \Magento\View\Design\Theme\ListInterface
@@ -55,14 +55,14 @@ class Design
     /**
      * @param RequestInterface $request
      * @param \Magento\App\AreaList $areaList
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\App\State $appState
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\View\Design\Theme\ListInterface $themeList
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
         \Magento\App\AreaList $areaList,
-        \Magento\View\LayoutInterface $layout,
+        \Magento\App\State $appState,
         \Magento\View\DesignInterface $viewDesign,
         \Magento\View\Design\Theme\ListInterface $themeList
     ) {
@@ -70,7 +70,7 @@ class Design
         $this->_themeList = $themeList;
         $this->_request = $request;
         $this->_areaList = $areaList;
-        $this->_layout = $layout;
+        $this->appState = $appState;
     }
 
     /**
@@ -84,14 +84,14 @@ class Design
      */
     public function beforeDispatch(\Magento\Install\Controller\Action $subject, RequestInterface $request)
     {
-        $areaCode = $this->_layout->getArea();
+        $areaCode = $this->appState->getAreaCode();
         $area = $this->_areaList->getArea($areaCode);
         $area->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         $themePath = $this->_viewDesign->getConfigurationDesignTheme($areaCode);
         $themeFullPath = $areaCode . \Magento\View\Design\ThemeInterface::PATH_SEPARATOR . $themePath;
         $themeModel = $this->_themeList->getThemeByFullPath($themeFullPath);
-        $this->_viewDesign->setArea($areaCode)->setDesignTheme($themeModel);
+        $this->_viewDesign->setDesignTheme($themeModel);
 
         $area->detectDesign($this->_request);
         $area->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);

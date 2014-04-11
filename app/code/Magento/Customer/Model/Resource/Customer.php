@@ -36,9 +36,9 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Stdlib\DateTime
@@ -52,7 +52,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
@@ -64,7 +64,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\Validator\Factory $validatorFactory,
         \Magento\Stdlib\DateTime $dateTime,
         $data = array()
@@ -78,7 +78,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             $universalFactory,
             $data
         );
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
         $this->setType('customer');
@@ -392,7 +392,10 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function setNewIncrementId(\Magento\Object $object)
     {
-        if ($this->_coreStoreConfig->getConfig(\Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID)
+        if ($this->_scopeConfig->getValue(
+            \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
         ) {
             parent::setNewIncrementId($object);
         }

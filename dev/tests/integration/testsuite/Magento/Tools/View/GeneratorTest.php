@@ -45,7 +45,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->tmpDir = BP . '/var/static';
-        $this->shell = new \Magento\Shell(new \Magento\OSInfo());
+        $this->shell = new \Magento\Shell(new \Magento\Shell\CommandRenderer());
         $this->filesystem = new \Magento\Filesystem\Driver\File();
         if (!$this->filesystem->isExists($this->tmpDir)) {
             $this->filesystem->createDirectory($this->tmpDir, 0777);

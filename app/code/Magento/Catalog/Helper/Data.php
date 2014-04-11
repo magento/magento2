@@ -130,7 +130,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -172,13 +172,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Stdlib\String $string
      * @param Category $catalogCategory
      * @param Product $catalogProduct
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
      * @param \Magento\Escaper $escaper
      * @param string $templateFilterModel
@@ -188,13 +188,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Stdlib\String $string,
         Category $catalogCategory,
         Product $catalogProduct,
         \Magento\Registry $coreRegistry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
         \Magento\Escaper $escaper,
         $templateFilterModel
@@ -208,7 +208,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $this->string = $string;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogProduct = $catalogProduct;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_templateFilterModel = $templateFilterModel;
         $this->_escaper = $escaper;
@@ -363,7 +363,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getPriceScope()
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_PRICE_SCOPE);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_PRICE_SCOPE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -384,7 +387,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function shouldSaveUrlRewritesHistory($storeId = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_SEO_SAVE_HISTORY, $storeId);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_SEO_SAVE_HISTORY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
@@ -394,7 +401,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::CONFIG_USE_STATIC_URLS, $this->_storeId);
+        return $this->_scopeConfig->isSetFlag(
+            self::CONFIG_USE_STATIC_URLS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
     }
 
     /**
@@ -404,7 +415,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isUrlDirectivesParsingAllowed()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::CONFIG_PARSE_URL_DIRECTIVES, $this->_storeId);
+        return $this->_scopeConfig->isSetFlag(
+            self::CONFIG_PARSE_URL_DIRECTIVES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
     }
 
     /**
@@ -424,7 +439,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isMsrpEnabled()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_ENABLED, $this->_storeId);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_MSRP_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
     }
 
     /**
@@ -434,7 +453,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMsrpDisplayActualPriceType()
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE, $this->_storeId);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
     }
 
     /**
@@ -444,7 +467,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isMsrpApplyToAll()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_APPLY_TO_ALL, $this->_storeId);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_MSRP_APPLY_TO_ALL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
     }
 
     /**
@@ -455,7 +482,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getMsrpExplanationMessage()
     {
         return $this->_escaper->escapeHtml(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE, $this->_storeId),
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_MSRP_EXPLANATION_MESSAGE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->_storeId
+            ),
             array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
         );
     }
@@ -468,7 +499,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getMsrpExplanationMessageWhatsThis()
     {
         return $this->_escaper->escapeHtml(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS, $this->_storeId),
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->_storeId
+            ),
             array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
         );
     }
@@ -593,6 +628,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function shouldDisplayProductCountOnLayer($storeId = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_DISPLAY_PRODUCT_COUNT, $storeId);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_DISPLAY_PRODUCT_COUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }

@@ -42,6 +42,7 @@
             </div>
             <div><?php echo $this->getChildHtml('order_payment') ?></div>
             <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+            <div class="order-payment-additional"><?php echo $this->getChildHtml('order_payment_additional'); ?></div>
         </div>
     </div>
 

@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -70,14 +70,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_visibility;
 
     /**
-     * @var \Magento\Core\Model\WebsiteFactory
+     * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
@@ -91,7 +91,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,

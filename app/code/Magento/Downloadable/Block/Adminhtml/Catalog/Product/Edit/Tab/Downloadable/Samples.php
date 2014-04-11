@@ -218,10 +218,11 @@ class Samples extends \Magento\Backend\Block\Widget
      */
     public function getSamplesTitle()
     {
-        return $this->getProduct()->getId() &&
-            $this->getProduct()->getTypeId() ==
-            'downloadable' ? $this->getProduct()->getSamplesTitle() : $this->_storeConfig->getConfig(
-                \Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE
+        return $this->getProduct()->getId()
+        && $this->getProduct()->getTypeId() == 'downloadable' ? $this->getProduct()->getSamplesTitle() :
+            $this->_scopeConfig->getValue(
+                \Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
     }
 

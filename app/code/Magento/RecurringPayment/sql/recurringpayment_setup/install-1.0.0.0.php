@@ -249,9 +249,9 @@ $table = $this->getConnection()->newTable(
     \Magento\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('recurring_payment', 'store_id', 'core_store', 'store_id'),
+    $this->getFkName('recurring_payment', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('core_store'),
+    $this->getTable('store'),
     'store_id',
     \Magento\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\DB\Ddl\Table::ACTION_CASCADE

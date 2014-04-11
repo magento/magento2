@@ -29,7 +29,7 @@ namespace Magento\PageCache\Model\App\FrontController;
 class BuiltinPlugin
 {
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\App\Config\ScopeConfigInterface
      */
     protected $config;
 

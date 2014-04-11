@@ -128,7 +128,7 @@ class Manager implements ManagerInterface
         if ($clear) {
             $messages = clone $this->session->getData($group);
             $this->session->getData($group)->clear();
-            $this->eventManager->dispatch('core_session_abstract_clear_messages');
+            $this->eventManager->dispatch('session_abstract_clear_messages');
             return $messages;
         }
         return $this->session->getData($group);
@@ -145,7 +145,7 @@ class Manager implements ManagerInterface
     {
         $this->hasMessages = true;
         $this->getMessages(false, $group)->addMessage($message);
-        $this->eventManager->dispatch('core_session_abstract_add_message');
+        $this->eventManager->dispatch('session_abstract_add_message');
         return $this;
     }
 

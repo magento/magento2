@@ -102,6 +102,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
+        $this->_configMock = $this->getMock(
+            '\Magento\App\Config\ReinitableConfigInterface',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
         $this->_assetFactory = $this->getMock(
             'Magento\View\Asset\PublicFileFactory',

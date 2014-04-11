@@ -54,7 +54,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Stdlib\DateTime\DateTime $dateModel
-     * @param \Magento\App\ConfigInterface $configuration
+     * @param \Magento\App\Config\ScopeConfigInterface $configuration
      * @param DatabaseFactory $directoryFactory
      * @param \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -66,7 +66,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\App\ConfigInterface $configuration,
+        \Magento\App\Config\ScopeConfigInterface $configuration,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\Core\Model\Resource\File\Storage\Directory\Database $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,

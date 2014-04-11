@@ -27,8 +27,10 @@
     <module name="Magento_Directory" version="1.6.0.2" active="true">
         <sequence>
             <module name="Magento_Core"/>
+            <module name="Magento_Store"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Core"/>
             <module name="Magento_Backend"/>
         </depends>

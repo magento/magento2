@@ -53,9 +53,13 @@
         }, options);
 
         return this.each(function() {
-            var elem = $(this);
+            var elem = $(this),
+                elemParent = elem.parent(),
+                itemsClosable = elemParent.find("li:not(.disabled)");
 
             elem.off('open.dropdown, close.dropdown, click.dropdown');
+            itemsClosable.off('click.dropdownItemsClosable');
+
             elem.on('open.dropdown', function() {
                 elem
                     .addClass(options.activeClass)
@@ -78,6 +82,16 @@
                 elem.trigger(isActive ? 'close.dropdown' : 'open.dropdown');
                 return false;
             });
+
+            if (elemParent.hasClass("closable")) {
+                itemsClosable.on('click.dropdownItemsClosable', function(event) {
+                    $(this)
+                        .parent("ul")
+                        .siblings("[data-toggle=dropdown]")
+                        .first()
+                        .trigger('close.dropdown');
+                });
+            }
         });
     };
 

@@ -29,6 +29,11 @@
     <acl>
         <resources>
             <resource id="Magento_Adminhtml::admin">
+                <resource id="Magento_Adminhtml::stores">
+                    <resource id="Magento_Adminhtml::stores_attributes">
+                        <resource id="Magento_Review::ratings" title="Ratings" sortOrder="60" />
+                    </resource>
+                </resource>
                 <resource id="Magento_Adminhtml::marketing">
                     <resource id="Magento_Adminhtml::marketing_user_content">
                         <resource id="Magento_Review::reviews_all" title="Reviews" sortOrder="10"/>

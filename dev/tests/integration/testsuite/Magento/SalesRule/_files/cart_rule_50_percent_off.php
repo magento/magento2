@@ -43,7 +43,7 @@ $salesRule->setData(
         'stop_rules_processing' => 1,
         'website_ids' => array(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getWebsite()->getId()
         )
     )

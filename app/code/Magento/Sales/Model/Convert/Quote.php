@@ -184,17 +184,19 @@ class Quote extends \Magento\Object
      */
     public function paymentToOrderPayment(\Magento\Sales\Model\Quote\Payment $payment)
     {
-        $orderPayment = $this->_orderPaymentFactory->create()->setStoreId(
-            $payment->getStoreId()
-        )->setCustomerPaymentId(
-            $payment->getCustomerPaymentId()
-        );
+        /** @var \Magento\Sales\Model\Order\Payment $orderPayment */
+        $orderPayment = $this->_orderPaymentFactory->create()->setStoreId($payment->getStoreId());
+        $orderPayment->setCustomerPaymentId($payment->getCustomerPaymentId());
 
         $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_quote_payment',
             'to_order_payment',
             $payment,
             $orderPayment
+        );
+        $orderPayment->setAdditionalInformation(
+            \Magento\Payment\Model\Method\Substitution::INFO_KEY_TITLE,
+            $payment->getMethodInstance()->getTitle()
         );
 
         return $orderPayment;

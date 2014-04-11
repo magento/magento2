@@ -45,9 +45,9 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
      * @param \Magento\App\State $appState
@@ -59,9 +59,9 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Logger $logger,
         \Magento\Escaper $escaper,
         \Magento\View\Url $viewUrl,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\LayoutFactory $layoutFactory,
         \Magento\App\State $appState,
@@ -75,7 +75,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $logger,
             $escaper,
             $viewUrl,
-            $coreStoreConfig,
+            $scopeConfig,
             $coreVariableFactory,
             $storeManager,
             $layout,

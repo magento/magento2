@@ -96,8 +96,9 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock
             array('title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8')
         );
 
-        $globalNotifyStockQty = (double)$this->_storeConfig->getConfig(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY
+        $globalNotifyStockQty = (double)$this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->_productFactory->create();

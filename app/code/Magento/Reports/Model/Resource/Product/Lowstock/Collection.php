@@ -72,10 +72,10 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -100,10 +100,10 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -129,7 +129,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $storeManager,
             $catalogData,
             $catalogProductFlatState,
-            $coreStoreConfig,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
             $localeDate,
@@ -284,8 +284,9 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         $this->joinInventoryItem();
         $manageStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_manage_stock') . ' = 1',
-            (int)$this->_coreStoreConfig->getConfig(
+            (int)$this->_scopeConfig->getValue(
                 \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             ),
             $this->_getInventoryItemField('manage_stock')
@@ -305,8 +306,9 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         $this->joinInventoryItem(array('qty'));
         $notifyStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_notify_stock_qty') . ' = 1',
-            (int)$this->_coreStoreConfig->getConfig(
+            (int)$this->_scopeConfig->getValue(
                 \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             ),
             $this->_getInventoryItemField('notify_stock_qty')

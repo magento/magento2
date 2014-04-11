@@ -30,7 +30,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Server */
     protected $_soapServer;
 
-    /** @var \Magento\Core\Model\Store */
+    /** @var \Magento\Store\Model\Store */
     protected $_storeMock;
 
     /** @var \Magento\Webapi\Controller\Soap\Request */
@@ -39,7 +39,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\DomDocument\Factory */
     protected $_domDocumentFactory;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
 
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
@@ -48,13 +48,18 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $_scopeConfig;
+
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMockBuilder(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->getMock();
 
-        $this->_storeMock = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $this->_storeMock = $this->getMockBuilder(
+            'Magento\Store\Model\Store'
+        )->disableOriginalConstructor()->getMock();
         $this->_storeMock->expects(
             $this->any()
         )->method(
@@ -95,6 +100,8 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+
         /** Init SUT. */
         $this->_soapServer = new \Magento\Webapi\Model\Soap\Server(
             $areaListMock,
@@ -103,7 +110,8 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             $this->_domDocumentFactory,
             $this->_storeManagerMock,
             $this->_soapServerFactory,
-            $this->_typeProcessor
+            $this->_typeProcessor,
+            $this->_scopeConfig
         );
 
         parent::setUp();
@@ -125,7 +133,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetApiCharset()
     {
-        $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue('Windows-1251'));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('Windows-1251'));
         $this->assertEquals(
             'Windows-1251',
             $this->_soapServer->getApiCharset(),
@@ -138,7 +146,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetApiCharsetDefaultEncoding()
     {
-        $this->_storeMock->expects($this->once())->method('getConfig')->will($this->returnValue(null));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(null));
         $this->assertEquals(
             \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),

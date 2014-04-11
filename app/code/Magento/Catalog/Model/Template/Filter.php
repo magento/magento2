@@ -59,19 +59,19 @@ class Filter extends \Magento\Filter\Template
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Url $viewUrl
      * @param array $variables
      */
     public function __construct(
         \Magento\Stdlib\String $string,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\Url $viewUrl,
         $variables = array()
     ) {

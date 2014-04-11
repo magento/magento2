@@ -40,7 +40,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Registry */
     private $_coreRegistry;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
     /** @var Cart */
@@ -53,7 +53,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManager');
+        $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
         $this->_context = $this->_objectManager->get(
             'Magento\Backend\Block\Template\Context',
             array('storeManager' => $this->_storeManager)

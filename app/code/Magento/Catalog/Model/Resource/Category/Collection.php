@@ -172,7 +172,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     public function getProductStoreId()
     {
         if (is_null($this->_productStoreId)) {
-            $this->_productStoreId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+            $this->_productStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         }
         return $this->_productStoreId;
     }

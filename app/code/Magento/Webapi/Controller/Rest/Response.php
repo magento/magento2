@@ -94,17 +94,19 @@ class Response extends \Magento\Webapi\Controller\Response
         $responseHttpCode = null;
         /** @var \Exception $exception */
         foreach ($this->getException() as $exception) {
+            /** @var \Magento\Webapi\Exception $maskedException */
             $maskedException = $this->_errorProcessor->maskException($exception);
             $messageData = array(
                 'message' => $maskedException->getMessage(),
                 'http_code' => $maskedException->getHttpCode()
             );
-            if ($maskedException->getCode()) {
-                $messageData['code'] = $maskedException->getCode();
-            }
             if ($maskedException->getDetails()) {
                 $messageData['parameters'] = $maskedException->getDetails();
             }
+            if ($maskedException->getWrappedErrors()) {
+                $messageData['wrapped_errors'] = $maskedException->getWrappedErrors();
+            }
+
             if ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
                 $messageData['trace'] = $exception->getTraceAsString();
             }

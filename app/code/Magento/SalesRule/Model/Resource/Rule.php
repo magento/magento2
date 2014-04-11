@@ -266,13 +266,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     }
 
     /**
-     * Return codes of all product attributes currently used in promo rules for specified customer group and website
+     * Return codes of all product attributes currently used in promo rules
      *
-     * @param mixed $websiteId
-     * @param int $customerGroupId
-     * @return mixed
+     * @return array
      */
-    public function getActiveAttributes($websiteId, $customerGroupId)
+    public function getActiveAttributes()
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(

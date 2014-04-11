@@ -56,7 +56,7 @@ class Price extends \Magento\Data\Form\Element\Text
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
@@ -65,7 +65,7 @@ class Price extends \Magento\Data\Form\Element\Text
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\CurrencyInterface $localeCurrency,
         \Magento\Tax\Helper\Data $taxData,
         array $data = array()

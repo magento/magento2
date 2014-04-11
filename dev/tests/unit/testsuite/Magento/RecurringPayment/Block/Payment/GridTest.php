@@ -64,7 +64,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($customer)
         );
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $collectionElement = $this->getMockBuilder(
             'Magento\RecurringPayment\Model\Payment'
         )->disableOriginalConstructor()->setMethods(
@@ -107,7 +107,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $payment->expects($this->once())->method('getCollection')->will($this->returnValue($collection));
 
         $storeManager = $this->getMockBuilder(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->setMethods(
             array('getStore')
         )->getMock();

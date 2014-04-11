@@ -58,7 +58,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $storeMock = $this->getMockBuilder(
-            '\Magento\Core\Model\Store'
+            '\Magento\Store\Model\Store'
         )->disableOriginalConstructor()->setMethods(
             array('getCurrentCurrencyCode')
         )->getMock();

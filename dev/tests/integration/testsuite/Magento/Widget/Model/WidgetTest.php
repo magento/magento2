@@ -65,14 +65,14 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete(
             'Functionality is failed because widget' .
-            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "app/design/frontend/Magento/iphone_html5/etc/widget.xml" replaces' .
             ' "new_products" widget in Catalog module'
         );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
-        $expectedFilePath = "/adminhtml/magento_backend/en_US/{$expectedFile}";
+        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('Magento/backend');
+        $expectedFilePath = "/adminhtml/Magento/backend/en_US/{$expectedFile}";
         $expectedPubFile = $objectManager->get(
             'Magento\App\Filesystem'
         )->getPath(
@@ -125,7 +125,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
         $expectedFile = dirname(
             __DIR__
-        ) . '/_files/design/adminhtml/magento_backend/Magento_Catalog/images/product_widget_new.gif';
+        ) . '/_files/design/adminhtml/Magento/backend/Magento_Catalog/images/product_widget_new.gif';
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

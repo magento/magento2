@@ -222,7 +222,7 @@ class Validator
     {
         $this->_errorMessages = array();
         foreach ($this->_dataValidators as $dataKey => $validators) {
-            if (!isset($data[$dataKey]) || !$data->dataHasChangedFor($dataKey)) {
+            if (!isset($data[$dataKey])) {
                 continue;
             }
 

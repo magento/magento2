@@ -25,8 +25,6 @@
  */
 namespace Magento\Translate;
 
-use Magento\BaseScopeInterface;
-
 class Inline implements \Magento\Translate\InlineInterface
 {
     /**
@@ -64,7 +62,7 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $config;
 
     /**
-     * @var \Magento\BaseScopeResolverInterface
+     * @var \Magento\App\ScopeResolverInterface
      */
     protected $scopeResolver;
 
@@ -89,7 +87,9 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $state;
 
     /**
-     * @param \Magento\BaseScopeResolverInterface $scopeResolver
+     * Initialize inline translation model
+     *
+     * @param \Magento\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\UrlInterface $url
      * @param \Magento\View\LayoutInterface $layout
      * @param Inline\ConfigInterface $config
@@ -100,7 +100,7 @@ class Inline implements \Magento\Translate\InlineInterface
      * @param null $scope
      */
     public function __construct(
-        \Magento\BaseScopeResolverInterface $scopeResolver,
+        \Magento\App\ScopeResolverInterface $scopeResolver,
         \Magento\UrlInterface $url,
         \Magento\View\LayoutInterface $layout,
         \Magento\Translate\Inline\ConfigInterface $config,
@@ -129,7 +129,7 @@ class Inline implements \Magento\Translate\InlineInterface
     public function isAllowed()
     {
         if ($this->isAllowed === null) {
-            if (!$this->scope instanceof BaseScopeInterface) {
+            if (!$this->scope instanceof \Magento\App\ScopeInterface) {
                 $scope = $this->scopeResolver->getScope($this->scope);
             }
             $this->isAllowed = $this->config->isActive($scope)
@@ -238,7 +238,7 @@ class Inline implements \Magento\Translate\InlineInterface
     {
         return $this->url->getUrl(
             $this->translatorRoute,
-            ['_secure' => $this->scopeResolver->getScope()->isCurrentlySecure()]
+            array('_secure' => $this->scopeResolver->getScope()->isCurrentlySecure())
         );
     }
 
@@ -254,8 +254,10 @@ class Inline implements \Magento\Translate\InlineInterface
             foreach ($body as &$part) {
                 $this->stripInlineTranslations($part);
             }
-        } else if (is_string($body)) {
-            $body = preg_replace('#' . \Magento\Translate\Inline\ParserInterface::REGEXP_TOKEN . '#', '$1', $body);
+        } else {
+            if (is_string($body)) {
+                $body = preg_replace('#' . \Magento\Translate\Inline\ParserInterface::REGEXP_TOKEN . '#', '$1', $body);
+            }
         }
         return $this;
     }

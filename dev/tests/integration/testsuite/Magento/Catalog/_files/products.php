@@ -59,4 +59,4 @@ $customDesignProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager
     'Magento\Catalog\Model\Product',
     array('data' => $product->getData())
 );
-$customDesignProduct->setId(2)->setCustomDesign('magento_blank')->save();
+$customDesignProduct->setId(2)->setCustomDesign('Magento/blank')->save();

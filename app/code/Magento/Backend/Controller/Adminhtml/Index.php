@@ -107,6 +107,16 @@ class Index extends AbstractAction
     }
 
     /**
+     * Change locale action
+     *
+     * @return void
+     */
+    public function changeLocaleAction()
+    {
+        $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
+    }
+
+    /**
      * Check if user has permissions to access this controller
      *
      * @return bool

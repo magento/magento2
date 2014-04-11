@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Datashare extends \Magento\Core\Model\Config\Value
+class Datashare extends \Magento\App\Config\Value
 {
     /**
      * @return void

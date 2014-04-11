@@ -32,7 +32,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\TestFramework\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Customer\Service\V1\Data\FilterBuilder */
+    /** @var \Magento\Service\V1\Data\FilterBuilder */
     protected $filterBuilder;
 
     /** @var \Magento\Customer\Service\V1\Data\SearchCriteriaBuilder */
@@ -50,47 +50,39 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filterBuilder = new \Magento\Customer\Service\V1\Data\FilterBuilder();
-        $this->searchCriteriaBuilder = new \Magento\Customer\Service\V1\Data\SearchCriteriaBuilder();
-        $this->groupServiceMock = $this->getMockBuilder(
-            '\Magento\Customer\Service\V1\CustomerGroupServiceInterface'
-        )->getMock();
+        $this->filterBuilder = new \Magento\Service\V1\Data\FilterBuilder();
+        $this->searchCriteriaBuilder = $this->objectManager
+            ->getObject('\Magento\Customer\Service\V1\Data\SearchCriteriaBuilder');
+        $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
+            ->getMock();
         $this->searchResults = (new \Magento\Customer\Service\V1\Data\SearchResultsBuilder())->create();
 
-        $this->serviceCollection = $this->objectManager->getObject(
-            'Magento\Customer\Model\Resource\Group\Grid\ServiceCollection',
-            array(
-                'filterBuilder' => $this->filterBuilder,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'groupService' => $this->groupServiceMock
-            )
-        );
+        $this->serviceCollection = $this->objectManager
+            ->getObject(
+                'Magento\Customer\Model\Resource\Group\Grid\ServiceCollection',
+                [
+                    'filterBuilder' => $this->filterBuilder,
+                    'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                    'groupService' => $this->groupServiceMock,
+                ]
+            );
     }
 
     public function testGetSearchCriteriaImplicitEq()
     {
         /** @var SearchCriteria $expectedSearchCriteria */
-        $expectedSearchCriteria = $this->searchCriteriaBuilder->setCurrentPage(
-            1
-        )->setPageSize(
-            0
-        )->addSortOrder(
-            'name',
-            SearchCriteria::SORT_ASC
-        )->addFilter(
-            $this->filterBuilder->setField('name')->setConditionType('eq')->setValue('Magento')->create()
-        )->create();
+        $expectedSearchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage(1)
+            ->setPageSize(0)
+            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addFilter($this->filterBuilder->setField('name')->setConditionType('eq')->setValue('Magento')->create())
+            ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
-        $this->groupServiceMock->expects(
-            $this->once()
-        )->method(
-            'searchGroups'
-        )->with(
-            $this->equalTo($expectedSearchCriteria)
-        )->will(
-            $this->returnValue($this->searchResults)
-        );
+        $this->groupServiceMock->expects($this->once())
+            ->method('searchGroups')
+            ->with($this->equalTo($expectedSearchCriteria))
+            ->will($this->returnValue($this->searchResults));
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter('name', 'Magento');
@@ -105,30 +97,23 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $value = '35';
 
         /** @var SearchCriteria $expectedSearchCriteria */
-        $expectedSearchCriteria = $this->searchCriteriaBuilder->setCurrentPage(
-            1
-        )->setPageSize(
-            0
-        )->addSortOrder(
-            'name',
-            SearchCriteria::SORT_ASC
-        )->addFilter(
-            $this->filterBuilder->setField($field)->setConditionType($conditionType)->setValue($value)->create()
-        )->create();
+        $expectedSearchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage(1)
+            ->setPageSize(0)
+            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addFilter(
+                $this->filterBuilder->setField($field)->setConditionType($conditionType)->setValue($value)->create()
+            )
+            ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
-        $this->groupServiceMock->expects(
-            $this->once()
-        )->method(
-            'searchGroups'
-        )->with(
-            $this->equalTo($expectedSearchCriteria)
-        )->will(
-            $this->returnValue($this->searchResults)
-        );
+        $this->groupServiceMock->expects($this->once())
+            ->method('searchGroups')
+            ->with($this->equalTo($expectedSearchCriteria))
+            ->will($this->returnValue($this->searchResults));
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
-        $this->serviceCollection->addFieldToFilter($field, array($conditionType => $value));
+        $this->serviceCollection->addFieldToFilter($field, [$conditionType => $value]);
         $this->serviceCollection->setOrder('name', ServiceCollection::SORT_ORDER_ASC);
         $this->serviceCollection->loadData();
     }
@@ -141,33 +126,26 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $value = 1;
 
         /** @var SearchCriteria $expectedSearchCriteria */
-        $expectedSearchCriteria = $this->searchCriteriaBuilder->setCurrentPage(
-            1
-        )->setPageSize(
-            0
-        )->addSortOrder(
-            'name',
-            SearchCriteria::SORT_ASC
-        )->addOrGroup(
-            array(
-                $this->filterBuilder->setField($fieldA)->setConditionType('eq')->setValue($value)->create(),
-                $this->filterBuilder->setField($fieldB)->setConditionType('eq')->setValue($value)->create()
+        $expectedSearchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage(1)
+            ->setPageSize(0)
+            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addOrGroup(
+                [
+                    $this->filterBuilder->setField($fieldA)->setConditionType('eq')->setValue($value)->create(),
+                    $this->filterBuilder->setField($fieldB)->setConditionType('eq')->setValue($value)->create(),
+                ]
             )
-        )->create();
+            ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
-        $this->groupServiceMock->expects(
-            $this->once()
-        )->method(
-            'searchGroups'
-        )->with(
-            $this->equalTo($expectedSearchCriteria)
-        )->will(
-            $this->returnValue($this->searchResults)
-        );
+        $this->groupServiceMock->expects($this->once())
+            ->method('searchGroups')
+            ->with($this->equalTo($expectedSearchCriteria))
+            ->will($this->returnValue($this->searchResults));
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
-        $this->serviceCollection->addFieldToFilter(array($fieldA, $fieldB), array($value, $value));
+        $this->serviceCollection->addFieldToFilter([$fieldA, $fieldB], [$value, $value]);
         $this->serviceCollection->setOrder('name', ServiceCollection::SORT_ORDER_ASC);
         $this->serviceCollection->loadData();
     }
@@ -180,33 +158,23 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $value = 1;
 
         /** @var SearchCriteria $expectedSearchCriteria */
-        $expectedSearchCriteria = $this->searchCriteriaBuilder->setCurrentPage(
-            1
-        )->setPageSize(
-            0
-        )->addSortOrder(
-            'name',
-            SearchCriteria::SORT_ASC
-        )->addFilter(
-            $this->filterBuilder->setField($fieldA)->setConditionType('gt')->setValue($value)->create()
-        )->addFilter(
-            $this->filterBuilder->setField($fieldB)->setConditionType('gt')->setValue($value)->create()
-        )->create();
+        $expectedSearchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage(1)
+            ->setPageSize(0)
+            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addFilter($this->filterBuilder->setField($fieldA)->setConditionType('gt')->setValue($value)->create())
+            ->addFilter($this->filterBuilder->setField($fieldB)->setConditionType('gt')->setValue($value)->create())
+            ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected
-        $this->groupServiceMock->expects(
-            $this->once()
-        )->method(
-            'searchGroups'
-        )->with(
-            $this->equalTo($expectedSearchCriteria)
-        )->will(
-            $this->returnValue($this->searchResults)
-        );
+        $this->groupServiceMock->expects($this->once())
+            ->method('searchGroups')
+            ->with($this->equalTo($expectedSearchCriteria))
+            ->will($this->returnValue($this->searchResults));
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
-        $this->serviceCollection->addFieldToFilter($fieldA, array('gt' => $value));
-        $this->serviceCollection->addFieldToFilter($fieldB, array('gt' => $value));
+        $this->serviceCollection->addFieldToFilter($fieldA, ['gt' => $value]);
+        $this->serviceCollection->addFieldToFilter($fieldB, ['gt' => $value]);
         $this->serviceCollection->setOrder('name', ServiceCollection::SORT_ORDER_ASC);
         $this->serviceCollection->loadData();
     }
@@ -226,9 +194,15 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function addFieldToFilterInconsistentArraysDataProvider()
     {
-        return array(
-            'missingCondition' => array(array('fieldA', 'missingCondition'), array(array('eq' => 'A'))),
-            'missingField' => array(array('fieldA'), array(array('eq' => 'A'), array('eq' => 'B')))
-        );
+        return [
+            'missingCondition' => [
+                ['fieldA', 'missingCondition'],
+                [['eq' => 'A']]
+            ],
+            'missingField' => [
+                ['fieldA'],
+                [['eq' => 'A'], ['eq' => 'B']]
+            ],
+        ];
     }
 }

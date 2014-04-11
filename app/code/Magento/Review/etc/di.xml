@@ -32,4 +32,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
+        <arguments>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="rating_summary" xsi:type="string">rating_summary</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -26,8 +26,9 @@ namespace Magento\Catalog\Block\Product;
 
 interface ReviewRendererInterface
 {
-    const SHORT_REVIEW   = 'short';
-    const DEFAULT_REVIEW = 'default';
+    const SHORT_VIEW = 'short';
+    const FULL_VIEW = 'default';
+    const DEFAULT_VIEW = self::FULL_VIEW;
 
     /**
      * Get product review summary html
@@ -39,7 +40,7 @@ interface ReviewRendererInterface
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
-        $templateType = self::DEFAULT_REVIEW,
+        $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     );
 }

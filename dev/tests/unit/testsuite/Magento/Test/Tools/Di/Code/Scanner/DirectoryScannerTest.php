@@ -64,7 +64,7 @@ class DirectoryScannerTest extends \PHPUnit_Framework_TestCase
                 $this->_testDir . '/app/code/Magento/SomeModule/etc/config.xml'
             ),
             'view' => array($this->_testDir . '/app/code/Magento/SomeModule/view/frontend/default.xml'),
-            'design' => array($this->_testDir . '/app/design/adminhtml/magento_backend/layout.xml'),
+            'design' => array($this->_testDir . '/app/design/adminhtml/Magento/backend/layout.xml'),
             'etc' => array($this->_testDir . '/app/etc/additional.xml', $this->_testDir . '/app/etc/config.xml')
         );
         $this->assertEquals(sort($expected['php']), sort($actual['php']), 'Incorrect php files list');

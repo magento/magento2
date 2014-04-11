@@ -28,10 +28,14 @@
 require __DIR__ . '/../../../Magento/Core/_files/store.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
-$currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
-$otherStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')->getStore('fixturestore')->getId();
+$currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Store\Model\StoreManagerInterface'
+)->getStore()->getId();
+$otherStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Store\Model\StoreManagerInterface'
+)->getStore(
+    'fixturestore'
+)->getId();
 
 /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

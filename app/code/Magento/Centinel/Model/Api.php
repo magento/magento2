@@ -29,7 +29,7 @@ namespace Magento\Centinel\Model;
 /**
  * 3D Secure Validation Library for Payment
  */
-include_once '3Dsecure/CentinelClient.php';
+include_once 'CardinalCommerce/CentinelClient.php';
 /**
  * 3D Secure Validation Api
  */

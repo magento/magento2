@@ -49,7 +49,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public static function performUploadButtonTest(\Magento\View\Element\AbstractBlock $block)
     {
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Layout');
         $layout->addBlock($block, 'links');
         $expected = uniqid();
         $text = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

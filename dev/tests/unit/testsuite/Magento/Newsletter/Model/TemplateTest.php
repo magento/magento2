@@ -35,13 +35,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock('Magento\Model\Context', array(), array(), '', false);
         $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $storeManager->expects($this->once())->method('hasSingleStore')->will($this->returnValue($isSingleStore));
 
         $request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
 
         if ($isSingleStore) {
-            $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+            $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
             $store->expects($this->once())->method('getId')->will($this->returnValue('test_id'));
 
             $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
@@ -71,7 +71,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('processed text')
         );
 
-        $storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
         $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory');
         $data = array('template_text' => 'template text');
 
@@ -89,7 +89,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $storeManager,
                 $request,
                 $filter,
-                $storeConfig,
+                $scopeConfig,
                 $templateFactory,
                 $filterManager,
                 $data

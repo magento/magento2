@@ -42,7 +42,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('install');
 
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Layout');
         /** @var $block \Magento\Install\Block\Admin */
         $block = $layout->createBlock('Magento\Install\Block\Admin');
         $output = $block->toHtml();

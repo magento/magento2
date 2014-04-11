@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Install\Model\Installer', array(), array(), '', false),
             $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
             $this->_filesystemMock,
-            $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false),
+            $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
             $this->_messageManager
         );
     }

@@ -32,7 +32,11 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $cacheManager = $this->getMock('Magento\App\CacheInterface');
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $actionValidatorMock = $this->getMock(
-            '\Magento\Model\ActionValidator\RemoveAction', array(), array(), '', false
+            '\Magento\Model\ActionValidator\RemoveAction',
+            array(),
+            array(),
+            '',
+            false
         );
         $context = new \Magento\Model\Context(
             $logger,
@@ -47,13 +51,12 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $coreConfig = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $coreConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
 
         $model = $this->getMock(
             'Magento\Backend\Model\Config\Backend\Secure',
             array('getOldValue'),
-            array($context, $coreRegistry, $storeManager, $coreConfig, $mergeService, $resource, $resourceCollection)
+            array($context, $coreRegistry, $coreConfig, $mergeService, $resource, $resourceCollection)
         );
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 

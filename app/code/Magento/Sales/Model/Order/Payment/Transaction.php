@@ -170,11 +170,17 @@ class Transaction extends \Magento\Model\AbstractModel
     protected $_dateFactory;
 
     /**
+     * @var TransactionFactory
+     */
+    protected $_transactionFactory;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
+     * @param TransactionFactory $transactionFactory
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -185,6 +191,7 @@ class Transaction extends \Magento\Model\AbstractModel
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
+        TransactionFactory $transactionFactory,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -192,6 +199,7 @@ class Transaction extends \Magento\Model\AbstractModel
         $this->_paymentFactory = $paymentFactory;
         $this->_orderFactory = $orderFactory;
         $this->_dateFactory = $dateFactory;
+        $this->_transactionFactory = $transactionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -279,8 +287,7 @@ class Transaction extends \Magento\Model\AbstractModel
             $this->_parentTransaction = false;
             $parentId = $this->getParentId();
             if ($parentId) {
-                $class = get_class($this);
-                $this->_parentTransaction = new $class();
+                $this->_parentTransaction = $this->_transactionFactory->create();
                 if ($shouldLoad) {
                     $this->_parentTransaction->setOrderPaymentObject($this->_paymentObject)->load($parentId);
                     if (!$this->_parentTransaction->getId()) {

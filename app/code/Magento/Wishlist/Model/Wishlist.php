@@ -67,7 +67,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
     /**
      * Store filter for wishlist
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 
@@ -93,7 +93,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -139,7 +139,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param ResourceWishlist $resource
      * @param Collection $resourceCollection
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param ItemFactory $wishlistItemFactory
      * @param CollectionFactory $wishlistCollectionFactory
@@ -156,7 +156,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
         \Magento\Wishlist\Helper\Data $wishlistData,
         ResourceWishlist $resource,
         Collection $resourceCollection,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\DateTime\DateTime $date,
         ItemFactory $wishlistItemFactory,
         CollectionFactory $wishlistCollectionFactory,
@@ -531,7 +531,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
     /**
      * Retrieve wishlist store object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -544,7 +544,7 @@ class Wishlist extends \Magento\Model\AbstractModel implements \Magento\Object\I
     /**
      * Set wishlist store
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return $this
      */
     public function setStore($store)

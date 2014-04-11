@@ -61,7 +61,7 @@ class Js extends \Magento\Backend\Block\Template
     /**
      * Get store object of curently edited product
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

@@ -56,60 +56,53 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $secureSuffix = '{{secure_base_url}}test/';
 
         return array(
-            // any fully qualified URLs regardless of path
             array('any/path', 'http://example.com/'),
             array('any/path', 'http://example.com/uri/'),
-
-            // unsecure base URLs
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecureSuffix),
-
-            // secure base URLs
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, $basePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureSuffix),
-
-            // secure base URLs - in addition can use unsecure
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecureSuffix)
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $basePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecureSuffix)
         );
     }
 
@@ -143,40 +136,32 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $secureWrongSuffix = '{{secure_base_url}}test';
 
         return array(
-            // not a fully qualified URLs regardless path
             array('', 'not a valid URL'),
             array('', 'example.com'),
             array('', 'http://example.com'),
             array('', 'http://example.com/uri'),
-
-            // unsecure base URLs
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, ''), // breaks cache
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, $baseSuffix), // creates redirect loops
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecureSuffix),
-            array(
-                \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL,
-                $unsecurePlaceholder
-            ), // creates endless recursion
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $baseSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecureWrongSuffix),
-
-            // secure base URLs
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, $baseSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, $secureSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, $securePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, ''),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $baseSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureWrongSuffix)
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $baseSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecurePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $baseSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL, $unsecureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL, $unsecureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $baseSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $secureSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $securePlaceholder),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, ''),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $baseSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureWrongSuffix),
+            array(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureWrongSuffix)
         );
     }
 }

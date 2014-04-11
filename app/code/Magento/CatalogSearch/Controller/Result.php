@@ -28,7 +28,7 @@ namespace Magento\CatalogSearch\Controller;
 use Magento\App\Action\Action;
 use Magento\App\Action\Context;
 use Magento\Catalog\Model\Session;
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog Search Controller

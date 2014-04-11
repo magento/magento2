@@ -55,7 +55,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     protected $_directory;
 
     /**
-     * @var \Magento\Core\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManager;
 
@@ -78,7 +78,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
 
         $this->_filesystem->expects(
             $this->once()
@@ -158,13 +158,13 @@ class CronTest extends \PHPUnit_Framework_TestCase
     public function getExpiredImages()
     {
         $website = $this->getMock(
-            'Magento\Core\Model\Website',
+            'Magento\Store\Model\Website',
             array('__wakeup', 'getDefaultStore'),
             array(),
             '',
             false
         );
-        $store = $this->getMock('Magento\Core\Model\Store', array('__wakeup'), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', array('__wakeup'), array(), '', false);
         $website->expects($this->any())->method('getDefaultStore')->will($this->returnValue($store));
         $time = time();
         return array(

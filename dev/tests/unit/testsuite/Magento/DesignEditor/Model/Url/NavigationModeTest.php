@@ -120,7 +120,7 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
         );
 
         $store = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('getBaseUrl', 'isAdmin', 'isAdminUrlSecure', 'isFrontUrlSecure', '__sleep', '__wakeup'),
             array(),
             '',

@@ -35,34 +35,27 @@ class Fault extends \RuntimeException
      * Fault codes that are used in SOAP faults.
      */
     const FAULT_CODE_SENDER = 'Sender';
-
     const FAULT_CODE_RECEIVER = 'Receiver';
 
     /**#@+
      * Nodes that can appear in Detail node of SOAP fault.
      */
-    const NODE_DETAIL_CODE = 'Code';
-
     const NODE_DETAIL_PARAMETERS = 'Parameters';
-
+    const NODE_DETAIL_WRAPPED_ERRORS = 'WrappedErrors';
     /** Note that parameter node must be unique in scope of all complex types declared in WSDL */
     const NODE_DETAIL_PARAMETER = 'GenericFaultParameter';
-
     const NODE_DETAIL_PARAMETER_KEY = 'key';
-
     const NODE_DETAIL_PARAMETER_VALUE = 'value';
-
+    const NODE_DETAIL_WRAPPED_ERROR = 'WrappedError';
+    const NODE_DETAIL_WRAPPED_ERROR_FIELD_NAME = 'fieldName';
+    const NODE_DETAIL_WRAPPED_ERROR_CODE = 'code';
+    const NODE_DETAIL_WRAPPED_ERROR_VALUE = 'value';
     const NODE_DETAIL_TRACE = 'Trace';
-
     const NODE_DETAIL_WRAPPER = 'GenericFault';
-
     /**#@-*/
 
     /** @var string */
     protected $_soapFaultCode;
-
-    /** @var string */
-    protected $_errorCode;
 
     /**
      * Parameters are extracted from exception and can be inserted into 'Detail' node as 'Parameters'.
@@ -70,6 +63,13 @@ class Fault extends \RuntimeException
      * @var array
      */
     protected $_parameters = array();
+
+    /**
+     * Wrapped errors are extracted from exception and can be inserted into 'Detail' node as 'WrappedErrors'.
+     *
+     * @var array
+     */
+    protected $_wrappedErrors = array();
 
     /**
      * Fault name is used for details wrapper node name generation.
@@ -122,7 +122,7 @@ class Fault extends \RuntimeException
         parent::__construct($previousException->getMessage(), $previousException->getCode(), $previousException);
         $this->_soapCode = $previousException->getOriginator();
         $this->_parameters = $previousException->getDetails();
-        $this->_errorCode = $previousException->getCode();
+        $this->_wrappedErrors = $previousException->getWrappedErrors();
         $this->_request = $request;
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
@@ -143,8 +143,8 @@ class Fault extends \RuntimeException
         if ($this->getParameters()) {
             $this->addDetails(array(self::NODE_DETAIL_PARAMETERS => $this->getParameters()));
         }
-        if ($this->getErrorCode()) {
-            $this->addDetails(array(self::NODE_DETAIL_CODE => $this->getErrorCode()));
+        if ($this->getWrappedErrors()) {
+            $this->addDetails(array(self::NODE_DETAIL_WRAPPED_ERRORS => $this->getWrappedErrors()));
         }
 
         return $this->getSoapFaultMessage($this->getMessage(), $this->getSoapCode(), $this->getDetails());
@@ -158,6 +158,16 @@ class Fault extends \RuntimeException
     public function getParameters()
     {
         return $this->_parameters;
+    }
+
+    /**
+     * Retrieve wrapped errors about current fault.
+     *
+     * @return array
+     */
+    public function getWrappedErrors()
+    {
+        return $this->_wrappedErrors;
     }
 
     /**
@@ -186,16 +196,6 @@ class Fault extends \RuntimeException
                 $this->_faultName = ucfirst($soapAction) . ucfirst($exceptionName) . 'Fault';
             }
         }
-    }
-
-    /**
-     * Retrieve error code.
-     *
-     * @return string|null
-     */
-    public function getErrorCode()
-    {
-        return $this->_errorCode;
     }
 
     /**
@@ -252,9 +252,9 @@ class Fault extends \RuntimeException
     {
         $detailXml = $this->_generateDetailXml($details);
         $language = $this->getLanguage();
-        $detailsNamespace = !empty($detailXml) ? 'xmlns:m="' . urlencode(
-            $this->_soapServer->generateUri(true)
-        ) . '"' : '';
+        $detailsNamespace = !empty($detailXml)
+            ? 'xmlns:m="' . urlencode($this->_soapServer->generateUri(true)) . '"'
+            : '';
         $reason = htmlentities($reason);
         $message = <<<FAULT_MESSAGE
 <?xml version="1.0" encoding="utf-8" ?>
@@ -289,10 +289,9 @@ FAULT_MESSAGE;
         if (is_array($details) && !empty($details)) {
             $detailsXml = $this->_convertDetailsToXml($details);
             if ($detailsXml) {
-                $errorDetailsNode = $this->getFaultName() ? $this->getFaultName() : self::NODE_DETAIL_WRAPPER;
-                $detailsXml = "<env:Detail><m:{$errorDetailsNode}>" .
-                    $detailsXml .
-                    "</m:{$errorDetailsNode}></env:Detail>";
+                $errorDetailsNode = $this->getFaultName() ? $this->getFaultName() :self::NODE_DETAIL_WRAPPER;
+                $detailsXml = "<env:Detail><m:{$errorDetailsNode}>"
+                    . $detailsXml . "</m:{$errorDetailsNode}></env:Detail>";
             } else {
                 $detailsXml = '';
             }
@@ -315,15 +314,16 @@ FAULT_MESSAGE;
                 continue;
             }
             switch ($detailNode) {
-                case self::NODE_DETAIL_CODE:
-                    // break is intentionally omitted
                 case self::NODE_DETAIL_TRACE:
                     if (is_string($detailValue) || is_numeric($detailValue)) {
                         $detailsXml .= "<m:{$detailNode}>" . htmlspecialchars($detailValue) . "</m:{$detailNode}>";
                     }
                     break;
                 case self::NODE_DETAIL_PARAMETERS:
-                    $detailsXml .= $this->_getParametersXml($detailValue, $detailNode, $detailsXml);
+                    $detailsXml .= $this->_getParametersXml($detailValue);
+                    break;
+                case self::NODE_DETAIL_WRAPPED_ERRORS:
+                    $detailsXml .= $this->_getWrappedErrorsXml($detailValue);
                     break;
             }
         }
@@ -339,24 +339,72 @@ FAULT_MESSAGE;
     protected function _getParametersXml($parameters)
     {
         $result = '';
-        if (is_array($parameters)) {
-            $paramsXml = '';
-            foreach ($parameters as $parameterName => $parameterValue) {
-                if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
-                    $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
-                    $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
-                    $parameterNode = self::NODE_DETAIL_PARAMETER;
-                    $paramsXml .= "<m:{$parameterNode}><m:{$keyNode}>{$parameterName}</m:{$keyNode}><m:{$valueNode}>" .
-                        htmlspecialchars(
-                            $parameterValue
-                        ) . "</m:{$valueNode}></m:{$parameterNode}>";
-                }
-            }
-            if (!empty($paramsXml)) {
-                $parametersNode = self::NODE_DETAIL_PARAMETERS;
-                $result = "<m:{$parametersNode}>" . $paramsXml . "</m:{$parametersNode}>";
+        if (!is_array($parameters)) {
+            return $result;
+        }
+
+        $paramsXml = '';
+        foreach ($parameters as $parameterName => $parameterValue) {
+            if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
+                $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
+                $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
+                $parameterNode = self::NODE_DETAIL_PARAMETER;
+                $paramsXml .= "<m:$parameterNode><m:$keyNode>$parameterName</m:$keyNode><m:$valueNode>"
+                    . htmlspecialchars($parameterValue) . "</m:$valueNode></m:$parameterNode>";
             }
         }
+        if (!empty($paramsXml)) {
+            $parametersNode = self::NODE_DETAIL_PARAMETERS;
+            $result = "<m:$parametersNode>" . $paramsXml . "</m:$parametersNode>";
+        }
+
         return $result;
+    }
+
+    /**
+     * Generate XML for wrapped errors.
+     *
+     * @param array $wrappedErrors
+     * @return string
+     */
+    protected function _getWrappedErrorsXml($wrappedErrors)
+    {
+        $result = '';
+        if (!is_array($wrappedErrors)) {
+            return $result;
+        }
+
+        $errorsXml = '';
+        foreach ($wrappedErrors as $error) {
+            $errorsXml .= $this->_generateErrorNodeXml($error);
+        }
+        if (!empty($errorsXml)) {
+            $wrappedErrorsNode = self::NODE_DETAIL_WRAPPED_ERRORS;
+            $result = "<m:$wrappedErrorsNode>" . $errorsXml . "</m:$wrappedErrorsNode>";
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generate XML for a particular error node.
+     *
+     * @param array $error
+     * @return string
+     */
+    protected function _generateErrorNodeXML($error)
+    {
+        $fieldNameNode = self::NODE_DETAIL_WRAPPED_ERROR_FIELD_NAME;
+        $codeNode = self::NODE_DETAIL_WRAPPED_ERROR_CODE;
+        $valueNode = self::NODE_DETAIL_WRAPPED_ERROR_VALUE;
+        $wrappedErrorNode = self::NODE_DETAIL_WRAPPED_ERROR;
+
+        $fieldName = isset($error['fieldName']) ? $error['fieldName'] : "";
+        $code = isset($error['code']) ? $error['code'] : "";
+        $value = isset($error['value']) ? $error['value'] : "";
+
+        return "<m:$wrappedErrorNode><m:$fieldNameNode>$fieldName</m:$fieldNameNode><m:$codeNode>"
+            . "$code</m:$codeNode><m:$valueNode>" . htmlspecialchars($value)
+            .  "</m:$valueNode></m:$wrappedErrorNode>";
     }
 }

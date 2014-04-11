@@ -51,7 +51,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var  CustomerGroupServiceInterface */
     private $_groupService;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
     /** @var  View */
@@ -61,7 +61,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $objectManager->get('Magento\Core\Model\StoreManager');
+        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManager');
         $this->_context = $objectManager->get(
             'Magento\Backend\Block\Template\Context',
             array('storeManager' => $this->_storeManager)
@@ -159,8 +159,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $defaultTimeZonePath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Stdlib\DateTime\TimezoneInterface'
         )->getDefaultTimezonePath();
-        $timezone = $this->_context->getStoreConfig()->getConfig(
+        $timezone = $this->_context->getScopeConfig()->getValue(
             $defaultTimeZonePath,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_loadCustomer()->getStoreId()
         );
         $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());

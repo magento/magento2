@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
-class Context extends \Magento\Core\Model\Resource\Setup\Context
+class Context extends \Magento\Module\Setup\Context
 {
     /**
      * @var PropertyMapperInterface
@@ -39,9 +39,7 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Module\ResourceInterface $resourceResource
-     * @param \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
-     * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
+     * @param \Magento\Module\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\App\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
@@ -53,9 +51,7 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Module\ResourceInterface $resourceResource,
-        \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
-        \Magento\Core\Model\Theme\CollectionFactory $themeFactory,
+        \Magento\Module\Setup\MigrationFactory $migrationFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\App\Filesystem $filesystem,
         PropertyMapperInterface $attributeMapper
@@ -69,8 +65,6 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
             $moduleList,
             $resourceResource,
             $migrationFactory,
-            $themeResourceFactory,
-            $themeFactory,
             $encryptor,
             $filesystem
         );

@@ -80,6 +80,18 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      */
     protected function _prepareLayout()
     {
+        $this->getToolbar()->addChild(
+            'save_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Save Currency Symbols'),
+                'class' => 'save primary save-currency-symbols',
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#currency-symbols-form'))
+                )
+            )
+        );
+
         return parent::_prepareLayout();
     }
 
@@ -91,28 +103,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     public function getHeader()
     {
         return __('Currency Symbols');
-    }
-
-    /**
-     * Returns 'Save Currency Symbol' button's HTML code
-     *
-     * @return string
-     */
-    public function getSaveButtonHtml()
-    {
-        /** @var $block \Magento\View\Element\AbstractBlock */
-        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $block->setData(
-            array(
-                'label' => __('Save Currency Symbols'),
-                'class' => 'save',
-                'data_attribute' => array(
-                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#currency-symbols-form'))
-                )
-            )
-        );
-
-        return $block->toHtml();
     }
 
     /**

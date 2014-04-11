@@ -50,6 +50,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_resourcesConfig;
 
+    /**
+     * @var array
+     */
+    protected $_initialResources;
+
     protected function setUp()
     {
         $this->_scopeMock = $this->getMock('Magento\Config\ScopeInterface');
@@ -61,8 +66,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'mainResourceName' => array('name' => 'mainResourceName', 'extends' => 'anotherResourceName'),
             'otherResourceName' => array('name' => 'otherResourceName', 'connection' => 'otherConnectionName'),
             'anotherResourceName' => array('name' => 'anotherResourceName', 'connection' => 'anotherConnection'),
-            'brokenResourceName' => array('name' => 'brokenResourceName', 'extends' => 'absentResourceName')
+            'brokenResourceName' => array('name' => 'brokenResourceName', 'extends' => 'absentResourceName'),
+            'extendedResourceName' => array('name' => 'extendedResourceName', 'extends' => 'validResource')
         );
+
+        $this->_initialResources = [
+            'validResource' => ['connection' => 'validConnectionName']
+        ];
 
         $this->_cacheMock->expects(
             $this->any()
@@ -76,7 +86,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
-            'cacheId'
+            'cacheId',
+            $this->_initialResources
         );
     }
 
@@ -91,6 +102,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testExceptionConstructor()
+    {
+        new \Magento\App\Resource\Config(
+            $this->_readerMock,
+            $this->_scopeMock,
+            $this->_cacheMock,
+            'cacheId',
+            ['validResource' => ['somekey' => 'validConnectionName']]
+        );
+    }
+
+    /**
      * @return array
      */
     public function getConnectionNameDataProvider()
@@ -101,7 +126,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             array(
                 'resourceName' => 'brokenResourceName',
                 'connectionName' => \Magento\App\Resource\Config::DEFAULT_SETUP_CONNECTION
-            )
+            ),
+            array('resourceName' => 'extendedResourceName', 'connectionName' => 'default'),
+            array('resourceName' => 'validResource', 'connectionName' => 'validConnectionName')
         );
     }
 }

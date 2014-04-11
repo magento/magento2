@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Module\Setup */
 
 $data = array(
     array('type_id' => 1, 'type_code' => 'hour', 'period' => 1, 'period_type' => 'HOUR'),

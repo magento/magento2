@@ -66,17 +66,16 @@
             <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Service\V1\Dto\AddressBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\CustomerBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\CustomerGroupBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\Eav\AttributeBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\Eav\OptionBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\FilterBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\RegionBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\SearchCriteriaBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Dto\SearchResultsBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\AddressBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\CustomerBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\CustomerGroupBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Eav\AttributeBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Eav\OptionBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\RegionBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Response\CreateCustomerAccountResponseBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\SearchCriteriaBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\SearchResultsBuilder" shared="false" />
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">

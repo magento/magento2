@@ -123,7 +123,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPriceScopeDefault()
     {
-        // $this->assertEquals(\Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL, $this->_helper->getPriceScope());
+        // $this->assertEquals(\Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL, $this->_helper->getPriceScope());
         $this->assertNull($this->_helper->getPriceScope());
     }
 
@@ -132,7 +132,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPriceScope()
     {
-        $this->assertEquals(\Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE, $this->_helper->getPriceScope());
+        $this->assertEquals(\Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE, $this->_helper->getPriceScope());
     }
 
     public function testIsPriceGlobalDefault()
@@ -176,7 +176,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_helper->isUsingStaticUrlsAllowed());
         $this->_helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId()
         );
         $this->assertTrue($this->_helper->isUsingStaticUrlsAllowed());
@@ -197,7 +197,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_helper->isUrlDirectivesParsingAllowed());
         $this->_helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId()
         );
         $this->assertFalse($this->_helper->isUrlDirectivesParsingAllowed());

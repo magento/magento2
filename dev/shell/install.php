@@ -94,5 +94,5 @@ INSTALLSCHEME;
 define('BARE_BOOTSTRAP', 1);
 require_once __DIR__ . '/../../app/bootstrap.php';
 
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP);
+$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $_SERVER);
 $entryPoint->run('Magento\Install\App\Console', array('arguments' => $args));

@@ -34,12 +34,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeMock;
+    protected $scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -70,9 +65,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Layer\AvailabilityFlagInterface');
         $this->layerMock = $this->getMock('\Magento\Catalog\Model\Layer', array(), array(), '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManagerInterface');
+        $this->scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
         $this->engineMock = $this->getMock('\Magento\CatalogSearch\Model\Resource\EngineInterface');
-        $this->storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
         $this->collectionMock = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Collection', array(), array(), '', false
         );
@@ -81,11 +75,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->engineProviderMock->expects($this->any())->method('get')->will($this->returnValue($this->engineMock));
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
         $this->layerMock->expects($this->any())->method('getProductCollection')
             ->will($this->returnValue($this->collectionMock));
 
-        $this->model = new Plugin($this->storeManagerMock, $this->engineProviderMock);
+        $this->model = new Plugin($this->scopeConfigMock, $this->engineProviderMock);
     }
 
     /**
@@ -98,8 +91,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->method('isLayeredNavigationAllowed')
             ->will($this->returnValue(false));
 
-        $this->storeMock->expects($this->never())
-            ->method('getConfig');
+        $this->scopeConfigMock->expects($this->never())->method('getValue');
 
         $proceed = function () {
             $this->fail('Proceed should not be called in this scenario');
@@ -123,9 +115,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->method('isLayeredNavigationAllowed')
             ->will($this->returnValue(true));
 
-        $this->storeMock->expects($this->once())
-            ->method('getConfig')
-            ->with(Plugin::XML_PATH_DISPLAY_LAYER_COUNT)
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(Plugin::XML_PATH_DISPLAY_LAYER_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($availableResCount));
 
         $this->collectionMock->expects($this->once())
@@ -167,8 +159,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->method('isLayeredNavigationAllowed')
             ->will($this->returnValue(true));
 
-        $this->storeMock->expects($this->once())
-            ->method('getConfig')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue(10));
 
         $this->collectionMock->expects($this->once())

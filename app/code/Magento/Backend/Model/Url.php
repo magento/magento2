@@ -77,24 +77,9 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface
-     */
-    protected $_config;
-
-    /**
-     * @var \Magento\Core\Model\StoreFactory
+     * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
-
-    /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_coreConfig;
-
-    /**
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
 
     /**
      * @var \Magento\Data\Form\FormKey
@@ -102,7 +87,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $formKey;
 
     /**
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_scope;
 
@@ -111,20 +96,19 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Backend\Model\Url\ScopeResolver $scopeResolver
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\Generic $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param Menu\Config $menuConfig
      * @param \Magento\App\CacheInterface $cache
      * @param Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Data\Form\FormKey $formKey
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param string $scopeType
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -134,20 +118,19 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
         \Magento\App\RequestInterface $request,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Backend\Model\Url\ScopeResolver $scopeResolver,
-        \Magento\Core\Model\Session $session,
+        \Magento\Session\Generic $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\App\CacheInterface $cache,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Data\Form\FormKey $formKey,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        $scopeType,
         array $data = array()
     ) {
         $this->_encryptor = $encryptor;
@@ -160,17 +143,16 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
             $sidResolver,
             $routeParamsResolver,
             $queryParamsResolver,
+            $scopeConfig,
+            $scopeType,
             $data
         );
-        $this->_config = $config;
         $this->_backendHelper = $backendHelper;
         $this->_menuConfig = $menuConfig;
         $this->_cache = $cache;
         $this->_session = $authSession;
         $this->formKey = $formKey;
         $this->_storeFactory = $storeFactory;
-        $this->_coreConfig = $coreConfig;
-        $this->_coreStoreConfig = $coreStoreConfig;
     }
 
     /**
@@ -183,7 +165,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
         if ($this->hasData('secure_is_forced')) {
             return $this->getData('secure');
         }
-        return $this->_config->isSetFlag('web/secure/use_in_adminhtml');
+        return $this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml');
     }
 
     /**
@@ -288,7 +270,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     public function useSecretKey()
     {
-        return $this->_config->isSetFlag('admin/security/use_form_key') && !$this->getNoSecret();
+        return $this->_scopeConfig->isSetFlag('admin/security/use_form_key') && !$this->getNoSecret();
     }
 
     /**
@@ -330,7 +312,9 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     public function getStartupPageUrl()
     {
-        $menuItem = $this->_getMenu()->get($this->_coreStoreConfig->getConfig(self::XML_PATH_STARTUP_MENU_ITEM));
+        $menuItem = $this->_getMenu()->get(
+            $this->_scopeConfig->getValue(self::XML_PATH_STARTUP_MENU_ITEM, $this->_scopeType)
+        );
         if (!is_null($menuItem)) {
             if ($menuItem->isAllowed() && $menuItem->getAction()) {
                 return $menuItem->getAction();
@@ -428,7 +412,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Get scope for the url instance
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getScope()
     {
@@ -463,6 +447,6 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     protected function _getConfig($path)
     {
-        return $this->_coreConfig->getValue($path, 'default');
+        return $this->_scopeConfig->getValue($path);
     }
 }

@@ -62,7 +62,7 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->commonPriceMock = $this->getMock(
             'Magento\Catalog\Model\Product\CatalogPrice',
             array(),
@@ -163,7 +163,7 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCatalogPriceWithCustomStoreAndSubProductIsSalable()
     {
-        $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->productMock->expects(
             $this->once()
         )->method(

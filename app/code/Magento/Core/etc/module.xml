@@ -26,21 +26,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Module/etc/module.xsd">
     <module name="Magento_Core" version="1.6.0.16" active="true">
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_Directory"/>
-            <module name="Magento_Index"/>
             <module name="Magento_Cron"/>
             <module name="Magento_Theme"/>
-            <module name="Magento_AdminNotification"/>
-            <module name="Magento_CatalogInventory"/>
-            <module name="Magento_CatalogRule"/>
-            <module name="Magento_CatalogSearch"/>
-            <module name="Magento_CurrencySymbol"/>
-            <module name="Magento_GiftMessage"/>
-            <module name="Magento_GoogleAnalytics"/>
-            <module name="Magento_ImportExport"/>
-            <module name="Magento_ProductAlert"/>
-            <module name="Magento_SalesRule"/>
             <module name="Magento_Eav"/>
             <module name="Magento_PageCache"/>
             <extension name="spl"/>

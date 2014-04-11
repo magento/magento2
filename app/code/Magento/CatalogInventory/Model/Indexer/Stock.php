@@ -61,8 +61,8 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
             \Magento\Index\Model\Event::TYPE_MASS_ACTION,
             \Magento\Index\Model\Event::TYPE_DELETE
         ),
-        \Magento\Core\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
-        \Magento\Core\Model\Store\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Store\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
+        \Magento\Store\Model\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
         \Magento\App\Config\ValueInterface::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
     );
 
@@ -167,31 +167,35 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
         }
 
         $entity = $event->getEntity();
-        if ($entity == \Magento\Core\Model\Store::ENTITY) {
-            /* @var $store \Magento\Core\Model\Store */
+        if ($entity == \Magento\Store\Model\Store::ENTITY) {
+            /* @var $store \Magento\Store\Model\Store */
             $store = $event->getDataObject();
             if ($store && $store->isObjectNew()) {
                 $result = true;
             } else {
                 $result = false;
             }
-        } else if ($entity == \Magento\Core\Model\Store\Group::ENTITY) {
-            /* @var $storeGroup \Magento\Core\Model\Store\Group */
-            $storeGroup = $event->getDataObject();
-            if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
-                $result = true;
-            } else {
-                $result = false;
-            }
-        } else if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
-            $configData = $event->getDataObject();
-            if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
-                $result = $configData->isValueChanged();
-            } else {
-                $result = false;
-            }
         } else {
-            $result = parent::matchEvent($event);
+            if ($entity == \Magento\Store\Model\Group::ENTITY) {
+                /* @var $storeGroup \Magento\Store\Model\Group */
+                $storeGroup = $event->getDataObject();
+                if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
+                    $result = true;
+                } else {
+                    $result = false;
+                }
+            } else {
+                if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
+                    $configData = $event->getDataObject();
+                    if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
+                        $result = $configData->isValueChanged();
+                    } else {
+                        $result = false;
+                    }
+                } else {
+                    $result = parent::matchEvent($event);
+                }
+            }
         }
 
         $event->addNewData(self::EVENT_MATCH_RESULT_KEY, $result);
@@ -217,8 +221,8 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
                 $this->_registerCatalogProductEvent($event);
                 break;
 
-            case \Magento\Core\Model\Store::ENTITY:
-            case \Magento\Core\Model\Store\Group::ENTITY:
+            case \Magento\Store\Model\Store::ENTITY:
+            case \Magento\Store\Model\Group::ENTITY:
             case \Magento\App\Config\ValueInterface::ENTITY:
                 $event->addNewData('cataloginventory_stock_skip_call_event_handler', true);
                 $process = $event->getProcess();

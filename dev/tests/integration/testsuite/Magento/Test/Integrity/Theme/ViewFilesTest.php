@@ -337,33 +337,4 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
         }
         return $result;
     }
-
-    /**
-     * @param string $file
-     * @dataProvider staticLibsDataProvider
-     */
-    public function testStaticLibs($file)
-    {
-        $this->markTestIncomplete('Should be fixed when static when we have static folder jslib implemented');
-        $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\Filesystem'
-            )->getPath(
-                'jslib'
-            ) . '/' . $file
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function staticLibsDataProvider()
-    {
-        return array(
-            array('media/editor.swf'),
-            array('media/flex.swf'), // looks like this one is not used anywhere
-            array('media/uploader.swf'),
-            array('media/uploaderSingle.swf')
-        );
-    }
 }

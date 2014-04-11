@@ -25,21 +25,26 @@
  */
 namespace Magento\Backend\Block\System\Config;
 
+/**
+ * Class Switcher
+ * @package Magento\Backend\Block\System\Config
+ * @deprecated
+ */
 class Switcher extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
@@ -91,8 +96,8 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * Process website info
      *
-     * @param \Magento\Core\Model\System\Store $storeModel
-     * @param \Magento\Core\Model\Website $website
+     * @param \Magento\Store\Model\System\Store $storeModel
+     * @param \Magento\Store\Model\Website $website
      * @param string $section
      * @param string $curStore
      * @param string $curWebsite
@@ -100,8 +105,8 @@ class Switcher extends \Magento\Backend\Block\Template
      * @return array
      */
     protected function _processWebsite(
-        \Magento\Core\Model\System\Store $storeModel,
-        \Magento\Core\Model\Website $website,
+        \Magento\Store\Model\System\Store $storeModel,
+        \Magento\Store\Model\Website $website,
         $section,
         $curStore,
         $curWebsite,

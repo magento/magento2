@@ -113,6 +113,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'send_notification',
                 array(
                     'label' => __('Send Email'),
+                    'class' => 'send-email',
                     'onclick' => 'confirmSetLocation(\'' . __(
                         'Are you sure you want to send an Invoice email to customer?'
                     ) . '\', \'' . $this->getEmailUrl() . '\')'
@@ -132,7 +133,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'capture',
                     array( // capture?
                         'label' => __('Credit Memo'),
-                        'class' => 'go',
+                        'class' => 'credit-memo',
                         'onclick' => 'setLocation(\'' . $this->getCreditMemoUrl() . '\')'
                     )
                 );
@@ -147,7 +148,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'capture',
                 array(
                     'label' => __('Capture'),
-                    'class' => 'save',
+                    'class' => 'capture',
                     'onclick' => 'setLocation(\'' . $this->getCaptureUrl() . '\')'
                 )
             );
@@ -158,7 +159,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'void',
                 array(
                     'label' => __('Void'),
-                    'class' => 'save',
+                    'class' => 'void',
                     'onclick' => 'setLocation(\'' . $this->getVoidUrl() . '\')'
                 )
             );
@@ -169,7 +170,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 'print',
                 array(
                     'label' => __('Print'),
-                    'class' => 'save',
+                    'class' => 'print',
                     'onclick' => 'setLocation(\'' . $this->getPrintUrl() . '\')'
                 )
             );

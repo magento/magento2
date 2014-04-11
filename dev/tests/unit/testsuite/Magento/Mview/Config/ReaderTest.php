@@ -36,14 +36,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_converter;
 
     /**
-     * @var \Magento\Core\Model\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fileResolverMock;
 
     protected function setUp()
     {
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Core\Model\Config\FileResolver',
+            'Magento\App\Config\FileResolver',
             array('get'),
             array(),
             '',

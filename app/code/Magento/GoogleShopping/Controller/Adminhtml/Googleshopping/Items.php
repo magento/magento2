@@ -69,7 +69,7 @@ class Items extends \Magento\Backend\App\Action
                 'adminhtml/*/',
                 array(
                     'store' => $this->_objectManager->get(
-                        'Magento\Core\Model\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getAnyStoreView()->getId(),
                     '_current' => true
                 )
@@ -395,13 +395,13 @@ class Items extends \Magento\Backend\App\Action
     /**
      * Get store object, basing on request
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      * @throws \Magento\Model\Exception
      */
     public function _getStore()
     {
         $store = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             (int)$this->getRequest()->getParam('store', 0)
         );

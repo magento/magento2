@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Usesecretkey extends \Magento\Core\Model\Config\Value
+class Usesecretkey extends \Magento\App\Config\Value
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
@@ -39,8 +39,7 @@ class Usesecretkey extends \Magento\Core\Model\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Config\ScopeConfigInterface $config
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -49,15 +48,14 @@ class Usesecretkey extends \Magento\Core\Model\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
+        \Magento\App\Config\ScopeConfigInterface $config,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_backendUrl = $backendUrl;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

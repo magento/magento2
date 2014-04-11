@@ -59,13 +59,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Filter collection by specified store ids
      *
-     * @param int|\Magento\Core\Model\Store $store
+     * @param int|\Magento\Store\Model\Store $store
      * @return $this
      */
     public function addStoreFilter($store)
     {
         // check and prepare data
-        if ($store instanceof \Magento\Core\Model\Store) {
+        if ($store instanceof \Magento\Store\Model\Store) {
             $store = array($store->getId());
         } elseif (is_numeric($store)) {
             $store = array($store);

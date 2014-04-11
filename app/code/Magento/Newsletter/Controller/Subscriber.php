@@ -26,15 +26,11 @@
 
 /**
  * Newsletter subscribe controller
- *
- * @category    Magento
- * @package     Magento_Newsletter
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Controller;
 
 use Magento\App\Action\Context;
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -64,7 +60,7 @@ class Subscriber extends \Magento\App\Action\Action
     protected $_subscriberFactory;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -205,8 +201,11 @@ class Subscriber extends \Magento\App\Action\Action
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get('Magento\Core\Model\Store\Config')
-                ->getConfig(\Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG) != 1
+        if ($this->_objectManager->get('Magento\App\Config\ScopeConfigInterface')
+                ->getValue(
+                    \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ) != 1
             && !$this->_customerSession->isLoggedIn()
         ) {
             throw new \Magento\Model\Exception(

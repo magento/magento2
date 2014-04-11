@@ -25,8 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()
-    ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
+    \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+);
 
 $addressData = include __DIR__ . '/address_data.php';
 
@@ -57,7 +58,7 @@ $order->setIncrementId(
     $shippingAddress
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Core\Model\StoreManagerInterface'
+        'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setPayment(
     $payment

@@ -46,6 +46,8 @@
     </div>
     <?php echo $this->getHintHtml() ?>
     <?php if ($this->getAuthorization()->isAllowed('Magento_Adminhtml::store')): ?>
-        <div><a href="<?php echo $this->getUrl('*/system_store') ?>"><?php echo __('Stores') ?></a></div>
+        <div class="actions">
+            <a href="<?php echo $this->getUrl('*/system_store') ?>"><?php echo __('Stores') ?></a>
+        </div>
     <?php endif; ?>
 </div>

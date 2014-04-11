@@ -46,15 +46,17 @@ class Shared extends AbstractController
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $formKeyValidator);
+        parent::__construct($context, $formKeyValidator, $customerSession);
     }
 
     /**
@@ -87,7 +89,7 @@ class Shared extends AbstractController
     public function indexAction()
     {
         $wishlist = $this->_getWishlist();
-        $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
+        $customerId = $this->_customerSession->getCustomerId();
 
         if ($wishlist && $wishlist->getCustomerId() && $wishlist->getCustomerId() == $customerId) {
             $this->getResponse()->setRedirect(

@@ -90,7 +90,7 @@ class Context extends \Magento\View\Element\Template\Context
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\App\Config\ScopeConfigInterface|\Magento\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
@@ -103,7 +103,7 @@ class Context extends \Magento\View\Element\Template\Context
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEnginePool $enginePool
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
@@ -128,7 +128,7 @@ class Context extends \Magento\View\Element\Template\Context
         \Magento\View\DesignInterface $design,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
@@ -141,7 +141,7 @@ class Context extends \Magento\View\Element\Template\Context
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEnginePool $enginePool,
         \Magento\App\State $appState,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -175,7 +175,7 @@ class Context extends \Magento\View\Element\Template\Context
             $design,
             $session,
             $sidResolver,
-            $storeConfig,
+            $scopeConfig,
             $viewUrl,
             $viewConfig,
             $cacheState,

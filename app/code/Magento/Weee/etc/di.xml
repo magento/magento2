@@ -31,7 +31,7 @@
     </type>
     <type name="Magento\Weee\Model\Observer">
         <arguments>
-            <argument name="layout" xsi:type="object">Magento\Core\Model\Layout\Proxy</argument>
+            <argument name="layout" xsi:type="object">Magento\View\Layout\Proxy</argument>
             <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
             <argument name="weeeData" xsi:type="object">Magento\Weee\Helper\Data\Proxy</argument>
         </arguments>

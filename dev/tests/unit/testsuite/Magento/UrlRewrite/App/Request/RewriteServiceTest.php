@@ -53,7 +53,7 @@ class RewriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_routerListMock = $this->getMock('\Magento\App\RouterList', array(), array(), '', false);
-        $this->_configMock = $this->getMock('\Magento\App\ConfigInterface', array(), array(), '', false);
+        $this->_configMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
         $this->_requestMock = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
         $this->_rewriteFactoryMock = $this->getMock(
             '\Magento\UrlRewrite\Model\UrlRewriteFactory',

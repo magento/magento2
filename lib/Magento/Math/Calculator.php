@@ -38,16 +38,16 @@ class Calculator
     /**
      * Store instance
      *
-     * @var \Magento\BaseScopeInterface|null
+     * @var \Magento\App\ScopeInterface|null
      */
     protected $_scope = null;
 
     /**
      * Initialize calculator
      *
-     * @param \Magento\BaseScopeInterface $scope
+     * @param \Magento\App\ScopeInterface $scope
      */
-    public function __construct(\Magento\BaseScopeInterface $scope)
+    public function __construct(\Magento\App\ScopeInterface $scope)
     {
         $this->_scope = $scope;
     }

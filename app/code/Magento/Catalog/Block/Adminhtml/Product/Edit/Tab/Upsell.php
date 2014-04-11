@@ -308,8 +308,9 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
             array(
                 'header' => __('Price'),
                 'type' => 'currency',
-                'currency_code' => (string)$this->_storeConfig->getConfig(
-                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE
+                'currency_code' => (string)$this->_scopeConfig->getValue(
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price',
                 'header_css_class' => 'col-price',

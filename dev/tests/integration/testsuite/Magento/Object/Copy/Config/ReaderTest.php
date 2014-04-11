@@ -78,9 +78,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/Magento/Test/etc');
 
-        /** @var \Magento\Core\Model\Config\FileResolver $fileResolver */
+        /** @var \Magento\App\Config\FileResolver $fileResolver */
         $fileResolver = $objectManager->create(
-            'Magento\Core\Model\Config\FileResolver',
+            'Magento\App\Config\FileResolver',
             array('moduleReader' => $moduleReader)
         );
 
