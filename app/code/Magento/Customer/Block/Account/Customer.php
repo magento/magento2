@@ -34,7 +34,7 @@ class Customer extends \Magento\View\Element\Template
     protected $_viewHelper;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -47,7 +47,7 @@ class Customer extends \Magento\View\Element\Template
      * @param \Magento\View\Element\Template\Context $context
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      */
@@ -55,7 +55,7 @@ class Customer extends \Magento\View\Element\Template
         \Magento\View\Element\Template\Context $context,
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Helper\View $viewHelper,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array()
     ) {

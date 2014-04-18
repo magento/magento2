@@ -74,7 +74,7 @@ class Inline extends \Magento\View\Element\Template
     protected $_imageHelper;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -83,7 +83,7 @@ class Inline extends \Magento\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
      * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -91,7 +91,7 @@ class Inline extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_imageHelper = $imageHelper;

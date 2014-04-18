@@ -27,10 +27,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -258,10 +254,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
             return false;
         }
 
-        if ($this->getAttribute()->getIsUnique() && !$this->getAttribute()->getIsRequired() && ($value == '' ||
-            $this->getAttribute()->isValueEmpty(
-                $value
-            ))
+        if ($this->getAttribute()->getIsUnique()
+            && !$this->getAttribute()->getIsRequired()
+            && ($value == '' || $this->getAttribute()->isValueEmpty($value))
         ) {
             return true;
         }

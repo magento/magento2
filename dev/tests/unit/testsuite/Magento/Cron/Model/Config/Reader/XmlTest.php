@@ -38,7 +38,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $fileResolver = $this->getMockBuilder(
-            'Magento\App\Config\FileResolver'
+            'Magento\Framework\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
         $converter = $this->getMockBuilder(
             'Magento\Cron\Model\Config\Converter\Xml'

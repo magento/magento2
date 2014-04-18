@@ -47,7 +47,7 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_initialConfigMock = $this->getMock('Magento\App\Config\Initial', array(), array(), '', false);
+        $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', array(), array(), '', false);
         $this->_collectionFactory = $this->getMock(
             'Magento\Store\Model\Resource\Config\Collection\ScopedFactory',
             array('create'),
@@ -55,11 +55,11 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_model = new \Magento\Store\Model\Config\Reader\DefaultReader(
             $this->_initialConfigMock,
-            new \Magento\App\Config\Scope\Converter(),
+            new \Magento\Framework\App\Config\Scope\Converter(),
             $this->_collectionFactory,
             $this->_appStateMock
         );
@@ -72,7 +72,7 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            \Magento\App\ScopeInterface::SCOPE_DEFAULT
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         )->will(
             $this->returnValue(array('config' => array('key1' => 'default_value1', 'key2' => 'default_value2')))
         );

@@ -31,7 +31,7 @@ namespace Magento\Sales\Model\Resource;
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -43,18 +43,18 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     /**
      * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $moduleName = 'Magento_Sales',
         $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
@@ -267,7 +267,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     /**
      * Get config model
      *
-     * @return \Magento\App\Config\ScopeConfigInterface
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
      */
     public function getConfigModel()
     {

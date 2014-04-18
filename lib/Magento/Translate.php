@@ -99,7 +99,7 @@ class Translate implements \Magento\TranslateInterface
     protected $_modulesReader;
 
     /**
-     * @var \Magento\App\ScopeResolverInterface
+     * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
 
@@ -114,7 +114,7 @@ class Translate implements \Magento\TranslateInterface
     protected $_locale;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -140,11 +140,11 @@ class Translate implements \Magento\TranslateInterface
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Module\ModuleList $moduleList
      * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\App\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Translate\ResourceInterface $translate
      * @param \Magento\Locale\ResolverInterface $locale
-     * @param \Magento\App\State $appState
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param App\RequestInterface $request
      * @param \Magento\File\Csv $csvParser
      *
@@ -157,12 +157,12 @@ class Translate implements \Magento\TranslateInterface
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Module\ModuleList $moduleList,
         \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\App\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Translate\ResourceInterface $translate,
         \Magento\Locale\ResolverInterface $locale,
-        \Magento\App\State $appState,
-        \Magento\App\Filesystem $filesystem,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\File\Csv $csvParser
     ) {
         $this->_viewDesign = $viewDesign;
@@ -175,7 +175,7 @@ class Translate implements \Magento\TranslateInterface
         $this->_locale = $locale;
         $this->_appState = $appState;
         $this->request = $request;
-        $this->directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->_localeHierarchy = $config->getHierarchy();
         $this->_csvParser = $csvParser;
     }
@@ -375,7 +375,7 @@ class Translate implements \Magento\TranslateInterface
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
-        $file = $this->_modulesReader->getModuleDir(\Magento\App\Filesystem::LOCALE_DIR, $moduleName);
+        $file = $this->_modulesReader->getModuleDir(\Magento\Framework\App\Filesystem::LOCALE_DIR, $moduleName);
         $file .= '/' . $locale . '.csv';
         return $file;
     }
@@ -389,7 +389,7 @@ class Translate implements \Magento\TranslateInterface
     protected function _getThemeTranslationFile($locale)
     {
         return $this->_viewFileSystem->getFilename(
-            \Magento\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv',
+            \Magento\Framework\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv',
             ['area' => $this->getConfig('area')]
         );
     }
@@ -470,7 +470,7 @@ class Translate implements \Magento\TranslateInterface
     protected function getCacheId()
     {
         if ($this->_cacheId === null) {
-            $this->_cacheId = \Magento\App\Cache\Type\Translate::TYPE_IDENTIFIER;
+            $this->_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
             if (isset($this->_config['locale'])) {
                 $this->_cacheId .= '_' . $this->_config['locale'];
             }

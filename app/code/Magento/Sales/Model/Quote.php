@@ -210,7 +210,7 @@ class Quote extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -220,7 +220,7 @@ class Quote extends \Magento\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -304,9 +304,9 @@ class Quote extends \Magento\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param CustomerGroupServiceInterface $customerGroupService
@@ -330,9 +330,9 @@ class Quote extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         CustomerGroupServiceInterface $customerGroupService,

@@ -27,9 +27,10 @@
 
 <?php $options = $this->getOptionList(); ?>
 <?php if ($options): ?>
-<div class="truncated" data-mage-init='{"truncateOptions":[]}'>
-  <div class="truncated full value">
-      <p><?php echo __('Options Details'); ?></p>
+<div class="tooltip box">
+  <span class="action details tooltip toggle"><?php echo __('View Details') ?></span>
+  <div class="tooltip content">
+      <strong class="subtitle"><?php echo __('Options Details'); ?></strong>
       <dl>
           <?php foreach ($options as $option): ?>
           <dt class="label"><?php echo $this->escapeHtml($option['label']) ?></dt>
@@ -43,6 +44,5 @@
           <?php endforeach; ?>
       </dl>
   </div>
-  <a href="#" onclick="return false;" class="action details"><?php echo __('View Details') ?></a>
 </div>
 <?php endif ?>

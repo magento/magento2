@@ -51,12 +51,17 @@ $data = ['fptAttribute' => [
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="4"><?php echo $this->getAddButtonHtml(); ?></td>
+                    <td colspan="4" class="col-actions-add"><?php echo $this->getAddButtonHtml(); ?></td>
                 </tr>
             </tfoot>
             <tbody data-role="fpt-item-container" class="fpt-item-container">
             </tbody>
         </table>
+        <!--
+            Hidden field below with attribute code id is necessary for jQuery validation plugin.
+            Validation message will be displayed after this field.
+        -->
+        <input type="hidden" name="<?php echo $this->getElement()->getHtmlId(); ?>" id="<?php echo $this->getElement()->getHtmlId(); ?>" disabled="disabled">
     </div>
 
     <script data-role="row-template" type="text/x-jquery-tmpl">

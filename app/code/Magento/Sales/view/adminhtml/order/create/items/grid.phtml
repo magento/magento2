@@ -33,69 +33,53 @@
 <?php $_items = $this->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
-        <table cellspacing="0" class="data order-tables">
-            <col />
-            <col width="100" />
-            <col width="40" />
-            <col width="100" />
-            <col width="80" />
-            <col width="100" />
-            <col width="80" />
+        <table cellspacing="0" class="data-table order-tables">
             <thead>
                 <tr class="headings">
-                    <th class="no-link"><span><?php echo __('Product') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Price') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Qty') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Discount') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Row Subtotal') ?></span></th>
-
-                    <th class="no-link last"><span><?php echo __('Action') ?></span></th>
+                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
+                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                    <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
+                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                    <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
+                    <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
+                    <th class="col-action"><span><?php echo __('Action') ?></span></th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="even">
-                    <td class="empty-text a-center" colspan="100"><?php echo __('No ordered items') ?></td>
+                    <td class="empty-text" colspan="100"><?php echo __('No ordered items') ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
 <?php else: ?>
-<div>
+
+<div class="grid" id="order-items_grid">
+    <div class="hor-scroll">
     <?php if(count($_items)>10): ?>
-    <p class="a-right">
-        <?php echo $this->getButtonHtml(__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?>
-    </p>
+        <div class="actions update">
+            <?php echo $this->getButtonHtml(__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?>
+        </div>
     <?php endif; ?>
-    <div class="grid" id="order-items_grid">
-        <table cellspacing="0" class="data order-tables">
-            <col />
-            <col width="100" />
-            <col width="100" />
-            <col width="40"  />
-            <col width="100" />
-            <col width="80"  />
-            <col width="100" />
-            <col width="80" />
+        <table cellspacing="0" class="data-table order-tables">
             <thead>
                 <tr class="headings">
-                    <th class="no-link" colspan="2"><span><?php echo __('Product') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Price') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Qty') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Discount') ?></span></th>
-                    <th class="no-link"><span><?php echo __('Row Subtotal') ?></span></th>
-
-                    <th class="no-link last"><span><?php echo __('Action') ?></span></th>
+                    <th class="col-product" colspan="2"><span><?php echo __('Product') ?></span></th>
+                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                    <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
+                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                    <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
+                    <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
+                    <th class="col-action"><span><?php echo __('Action') ?></span></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <td class="a-left" colspan="2"><?php echo __('Total %1 product(s)', count($_items)) ?></td>
-                    <td colspan="2" class="a-right"><?php echo __('Subtotal:') ?></td>
-                    <td class="price"><strong><?php echo $this->formatPrice($this->getSubtotal()) ?></strong></td>
-                    <td class="price"><strong><?php echo $this->formatPrice($this->getDiscountAmount()) ?></strong></td>
-                    <td class="price"><strong>
+                    <td class="col-total" colspan="2"><?php echo __('Total %1 product(s)', count($_items)) ?></td>
+                    <td colspan="2" class="col-subtotal"><?php echo __('Subtotal:') ?></td>
+                    <td class="col-price"><strong><?php echo $this->formatPrice($this->getSubtotal()) ?></strong></td>
+                    <td class="col-price"><strong><?php echo $this->formatPrice($this->getDiscountAmount()) ?></strong></td>
+                    <td class="col-price"><strong>
                     <?php
                         echo $this->formatPrice($this->getSubtotal() + $this->getDiscountAmount());
                     ?></strong></td>
@@ -106,7 +90,7 @@
                 <?php foreach ($_items as $_item):$i++ ?>
                 <tbody class="<?php echo ($i%2)?'even':'odd' ?>">
                     <tr>
-                        <td>
+                        <td class="col-product">
                             <span id="order_item_<?php echo $_item->getId() ?>_title"><?php echo $this->escapeHtml($_item->getName()) ?></span>
                             <div>
                                 <strong><?php echo __('SKU') ?>:</strong>
@@ -115,24 +99,21 @@
                             <?php if($_item->getMessage(false)): ?>
                                 <?php foreach ($_item->getMessage(false) as $message): ?>
                                 <div class="<?php if($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
-                                    <div style="font-size:95%"><?php echo $this->escapeHtml($message); ?></div>
+                                    <?php echo $this->escapeHtml($message); ?>
                                 </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </td>
-                        <td class="a-center v-middle">
+                        <td class="col-configure">
                             <?php echo $this->getConfigureButtonHtml($_item) ?>
                         </td>
-                        <td class="price">
-
-
-
+                        <td class="col-price">
 
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax($this->getStore()) || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
             <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
-        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
             <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?>
         <?php else: ?>
             <?php echo $this->formatPrice($_item->getCalculationPrice()) ?>
@@ -141,17 +122,17 @@
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></span><br />
@@ -159,7 +140,7 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <br />
                 <span class="nobr"><?php echo __('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?></span>
             <?php endif; ?>
@@ -172,24 +153,24 @@
             <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
         <?php endif; ?>
         <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
                 <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedAmount()); ?>
             <?php else: ?>
                 <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxDisposition()) ?>
             <?php endif; ?>
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></span><br />
@@ -197,14 +178,11 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedAmount()); ?></span>
             <?php endif; ?>
         <?php endif; ?>
     <?php endif; ?>
-
-
-
 
                             <?php $_isCustomPrice = $this->usedCustomPriceForItem($_item) ?>
                             <?php if($_tier = $this->getTierHtml($_item)): ?>
@@ -221,17 +199,13 @@
                             <?php endif; ?>
                             <input id="item_custom_price_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][custom_price]" value="<?php echo sprintf("%.2f", $this->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?> style="display:none" disabled="disabled"<?php endif; ?> class="input-text item-price"/>
                         </td>
-                        <td><input name="item[<?php echo $_item->getId() ?>][qty]" class="input-text item-qty" value="<?php echo $_item->getQty()*1 ?>" maxlength="12" /></td>
-                        <td class="price">
-
-
-
-
+                        <td class="col-qty"><input name="item[<?php echo $_item->getId() ?>][qty]" class="input-text item-qty" value="<?php echo $_item->getQty()*1 ?>" maxlength="12" /></td>
+                        <td class="col-subtotal col-price">
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax($this->getStore()) || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
             <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
-        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
             <?php echo $this->formatPrice($_item->getRowTotal()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?>
         <?php else: ?>
             <?php echo $this->formatPrice($_item->getRowTotal()) ?>
@@ -240,17 +214,17 @@
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
@@ -258,37 +232,36 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <br />
                 <span class="nobr"><?php echo __('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?></span>
             <?php endif; ?>
         <?php endif; ?>
     <?php endif; ?>
 
-
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax($this->getStore()) || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
             <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
         <?php endif; ?>
         <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
                 <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?>
             <?php else: ?>
                 <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxRowDisposition()) ?>
             <?php endif; ?>
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
@@ -296,29 +269,26 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
             <?php endif; ?>
         <?php endif; ?>
     <?php endif; ?>
 
-
-
                         </td>
-                        <td class="price">
+                        <td class="col-discount col-price">
                             <?php echo $this->formatPrice(-$_item->getDiscountAmount()) ?><br />
                             <input id="item_use_discount_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][use_discount]"<?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?> value="1" type="checkbox" />
                             <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
                         </td>
-                        <td class="price">
-
+                        <td class="col-price col-row-subtotal">
 
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax($this->getStore()) || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
         <?php $_rowTotalWithoutDiscount = $_item->getPriceInclTax() * $_item->getQty() - $_item->getDiscountAmount() - $_item->getTaxAmount(); ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices($this->getStore())): ?>
             <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
-        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
             <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition())); ?>
         <?php else: ?>
             <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
@@ -327,17 +297,17 @@
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
@@ -345,7 +315,7 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <br />
                 <span class="nobr"><?php echo __('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?></span>
             <?php endif; ?>
@@ -358,24 +328,24 @@
             <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
         <?php endif; ?>
         <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getDiscountAmount(); ?>
-        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales')): ?>
             <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?>
         <?php else: ?>
             <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxRowDisposition()) ?>
         <?php endif; ?>
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
                 <?php endforeach; ?>
                 </small>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
                 <?php endforeach; ?>
-            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 4, 'sales')): ?>
+            <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales')): ?>
                 <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
                     <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
@@ -383,14 +353,14 @@
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): ?>
+            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): ?>
                 <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
             <?php endif; ?>
         <?php endif; ?>
     <?php endif; ?>
 
                         </td>
-                        <td class="last">
+                        <td class="col-actions last">
                             <select name="item[<?php echo $_item->getId() ?>][action]" style="width:100px;">
                                 <option value=""></option>
                                 <option value="remove"><?php echo __('Remove') ?></option>
@@ -416,11 +386,10 @@
                 </tbody>
                 <?php endforeach; ?>
         </table>
+        <p><small><?php echo $this->getInclExclTaxMessage(); ?></small></p>
+        <p><?php echo $this->getButtonHtml(__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?></p>
     </div>
-    <p><small><?php echo $this->getInclExclTaxMessage(); ?></small></p>
-    <p><?php echo $this->getButtonHtml(__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?></p>
     <div class="order-coupons" id="order-coupons"><?php echo $this->getChildHtml();?></div>
-    <div class="clearfix"></div>
     <script type="text/javascript">order.itemsOnchangeBind()</script>
 </div>
 

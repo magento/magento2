@@ -52,8 +52,8 @@ class NavigationMode extends \Magento\Url
     protected $_themeId;
 
     /**
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Session\Generic $session
@@ -61,13 +61,13 @@ class NavigationMode extends \Magento\Url
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Session\Generic $session,
@@ -75,7 +75,7 @@ class NavigationMode extends \Magento\Url
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\DesignEditor\Helper\Data $helper,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,
         array $data = array()
     ) {

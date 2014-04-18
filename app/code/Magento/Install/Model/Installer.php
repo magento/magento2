@@ -47,24 +47,24 @@ class Installer extends \Magento\Object
     /**
      * Application chache model
      *
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
     /**
      * Application config model
      *
-     * @var \Magento\App\Config\ReinitableConfigInterface
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -90,14 +90,14 @@ class Installer extends \Magento\Object
     /**
      * Area list
      *
-     * @var \Magento\App\AreaList
+     * @var \Magento\Framework\App\AreaList
      */
     protected $_areaList;
 
     /**
      * Application
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -137,7 +137,7 @@ class Installer extends \Magento\Object
     protected $_session;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -154,7 +154,7 @@ class Installer extends \Magento\Object
     /**
      * Configuration arguments
      *
-     * @var \Magento\App\Arguments
+     * @var \Magento\Framework\App\Arguments
      */
     protected $_arguments;
 
@@ -184,15 +184,15 @@ class Installer extends \Magento\Object
     protected $_localeResolver;
 
     /**
-     * @param \Magento\App\Config\ReinitableConfigInterface $config
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Module\UpdaterInterface $dbUpdater
-     * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Install\Model\Setup $installSetup
-     * @param \Magento\App\Arguments $arguments
-     * @param \Magento\App\AreaList $areaList
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\Arguments $arguments
+     * @param \Magento\Framework\App\AreaList $areaList
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\User\Model\UserFactory $userModelFactory
      * @param Installer\Filesystem $filesystem
@@ -202,7 +202,7 @@ class Installer extends \Magento\Object
      * @param \Magento\Session\Generic $session
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Module\DependencyManagerInterface $dependencyManager
      * @param \Magento\Message\ManagerInterface $messageManager
@@ -211,15 +211,15 @@ class Installer extends \Magento\Object
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ReinitableConfigInterface $config,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Module\UpdaterInterface $dbUpdater,
-        \Magento\App\CacheInterface $cache,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Install\Model\Setup $installSetup,
-        \Magento\App\Arguments $arguments,
-        \Magento\App\AreaList $areaList,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\Arguments $arguments,
+        \Magento\Framework\App\AreaList $areaList,
+        \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\User\Model\UserFactory $userModelFactory,
         \Magento\Install\Model\Installer\Filesystem $filesystem,
@@ -229,7 +229,7 @@ class Installer extends \Magento\Object
         \Magento\Session\Generic $session,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Math\Random $mathRandom,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Module\DependencyManagerInterface $dependencyManager,
         \Magento\Message\ManagerInterface $messageManager,
@@ -495,7 +495,7 @@ class Installer extends \Magento\Object
         // \Magento\User\Model\User belongs to adminhtml area
         $this->_areaList
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-            ->load(\Magento\App\AreaInterface::PART_CONFIG);
+            ->load(\Magento\Framework\App\AreaInterface::PART_CONFIG);
 
         /** @var $user \Magento\User\Model\User */
         $user = $this->_userModelFactory->create();

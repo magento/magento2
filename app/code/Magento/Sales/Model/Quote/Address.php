@@ -208,7 +208,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -260,7 +260,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory
      * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory
@@ -285,7 +285,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory,
         \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory,

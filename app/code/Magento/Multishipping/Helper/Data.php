@@ -26,7 +26,7 @@ namespace Magento\Multishipping\Helper;
 /**
  * Data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**#@+
      * Xml paths for multishipping checkout
@@ -40,7 +40,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -54,13 +54,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Construct
      *
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->scopeConfig = $scopeConfig;

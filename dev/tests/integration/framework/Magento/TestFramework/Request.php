@@ -30,7 +30,7 @@
  */
 namespace Magento\TestFramework;
 
-class Request extends \Magento\App\Request\Http
+class Request extends \Magento\Framework\App\Request\Http
 {
     /**
      * Server super-global mock

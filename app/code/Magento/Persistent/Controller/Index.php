@@ -28,7 +28,7 @@ namespace Magento\Persistent\Controller;
 /**
  * Persistent front controller
  */
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Whether clear checkout session when logout
@@ -61,13 +61,13 @@ class Index extends \Magento\App\Action\Action
     /**
      * Construct
      *
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Persistent\Model\Observer $persistentObserver
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Persistent\Model\Observer $persistentObserver,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession

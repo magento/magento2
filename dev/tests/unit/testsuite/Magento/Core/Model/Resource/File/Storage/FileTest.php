@@ -39,7 +39,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemMock;
 
@@ -55,7 +55,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->filesystemMock = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryRead'),
             array(),
             '',
@@ -90,7 +90,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            $this->equalTo(\Magento\App\Filesystem::MEDIA_DIR)
+            $this->equalTo(\Magento\Framework\App\Filesystem::MEDIA_DIR)
         )->will(
             $this->returnValue($this->directoryReadMock)
         );

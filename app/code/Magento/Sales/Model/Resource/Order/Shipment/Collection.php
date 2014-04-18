@@ -26,7 +26,7 @@
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
 /**
- * Flat sales order shipment collection
+ * Sales order shipment collection
  *
  * @category    Magento
  * @package     Magento_Sales

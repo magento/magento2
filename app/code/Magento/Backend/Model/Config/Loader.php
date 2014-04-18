@@ -34,14 +34,14 @@ class Loader
     /**
      * Config data factory
      *
-     * @var \Magento\App\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      */
-    public function __construct(\Magento\App\Config\ValueFactory $configValueFactory)
+    public function __construct(\Magento\Framework\App\Config\ValueFactory $configValueFactory)
     {
         $this->_configValueFactory = $configValueFactory;
     }

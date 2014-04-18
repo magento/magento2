@@ -26,7 +26,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\System\Config;
 /**
  * Flat category on/off backend
  */
-class Mode extends \Magento\App\Config\Value
+class Mode extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Indexer\Model\IndexerInterface
@@ -41,7 +41,7 @@ class Mode extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Indexer\Model\IndexerInterface $flatIndexer
      * @param \Magento\Indexer\Model\Indexer\State $indexerState
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -51,7 +51,7 @@ class Mode extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Indexer\Model\IndexerInterface $flatIndexer,
         \Magento\Indexer\Model\Indexer\State $indexerState,
         \Magento\Model\Resource\AbstractResource $resource = null,

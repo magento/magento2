@@ -106,7 +106,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Setup callbacks for filters
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -120,7 +120,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * App state
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -129,12 +129,12 @@ class Filter extends \Magento\Filter\Template
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param array $variables
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -144,12 +144,12 @@ class Filter extends \Magento\Filter\Template
         \Magento\Logger $logger,
         \Magento\Escaper $escaper,
         \Magento\View\Url $viewUrl,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\LayoutFactory $layoutFactory,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         $variables = array()
     ) {
         $this->_escaper = $escaper;

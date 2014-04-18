@@ -29,7 +29,7 @@ namespace Magento\Widget\Model\Config;
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Filesystem\DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     protected $directoryList;
 
@@ -42,16 +42,22 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $this->directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
         $dirPath = ltrim(
             str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files',
             '/'
         );
-        $this->directoryList->addDirectory(\Magento\App\Filesystem::MODULES_DIR, array('path' => $dirPath . '/code'));
-        $this->directoryList->addDirectory(\Magento\App\Filesystem::CONFIG_DIR, array('path' => $dirPath));
-        $this->directoryList->addDirectory(\Magento\App\Filesystem::ROOT_DIR, array('path' => $dirPath));
+        $this->directoryList->addDirectory(
+            \Magento\Framework\App\Filesystem::MODULES_DIR,
+            array('path' => $dirPath . '/code')
+        );
+        $this->directoryList->addDirectory(\Magento\Framework\App\Filesystem::CONFIG_DIR, array('path' => $dirPath));
+        $this->directoryList->addDirectory(\Magento\Framework\App\Filesystem::ROOT_DIR, array('path' => $dirPath));
 
-        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $this->directoryList));
+        $filesystem = $objectManager->create(
+            'Magento\Framework\App\Filesystem',
+            array('directoryList' => $this->directoryList)
+        );
 
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(

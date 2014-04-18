@@ -260,14 +260,14 @@ class Input implements \Zend_Filter_Interface
      * Call specified helper method for $value filtration
      *
      * @param mixed $value
-     * @param \Magento\App\Helper\AbstractHelper $helper
+     * @param \Magento\Framework\App\Helper\AbstractHelper $helper
      * @param array $filterData
      * @return mixed
      * @throws \Exception
      */
     protected function _applyFiltrationWithHelper(
         $value,
-        \Magento\App\Helper\AbstractHelper $helper,
+        \Magento\Framework\App\Helper\AbstractHelper $helper,
         array $filterData
     ) {
         if (!isset($filterData['method']) || empty($filterData['method'])) {
@@ -286,7 +286,7 @@ class Input implements \Zend_Filter_Interface
      * Try to create Magento helper for filtration based on $filterData. Return false on failure
      *
      * @param \Zend_Filter_Interface|array $filterData
-     * @return false|\Magento\App\Helper\AbstractHelper
+     * @return false|\Magento\Framework\App\Helper\AbstractHelper
      * @throws \Exception
      */
     protected function _getFiltrationHelper($filterData)
@@ -296,7 +296,7 @@ class Input implements \Zend_Filter_Interface
             $helper = $filterData['helper'];
             if (is_string($helper)) {
                 $helper = $this->_objectManager->get($helper);
-            } elseif (!$helper instanceof \Magento\App\Helper\AbstractHelper) {
+            } elseif (!$helper instanceof \Magento\Framework\App\Helper\AbstractHelper) {
                 throw new \Exception("Filter '{$helper}' not found");
             }
         }

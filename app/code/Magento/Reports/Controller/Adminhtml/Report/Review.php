@@ -33,22 +33,22 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Review extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -98,7 +98,7 @@ class Review extends \Magento\Backend\App\Action
             'adminhtml.block.report.review.customer.grid',
             'grid.export'
         );
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -114,7 +114,7 @@ class Review extends \Magento\Backend\App\Action
             'adminhtml.block.report.review.customer.grid',
             'grid.export'
         );
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -148,7 +148,7 @@ class Review extends \Magento\Backend\App\Action
             'adminhtml.block.report.review.product.grid',
             'grid.export'
         );
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -164,7 +164,7 @@ class Review extends \Magento\Backend\App\Action
             'adminhtml.block.report.review.product.grid',
             'grid.export'
         );
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -202,7 +202,7 @@ class Review extends \Magento\Backend\App\Action
             'Magento\Reports\Block\Adminhtml\Review\Detail\Grid'
         )->getCsv();
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -219,7 +219,7 @@ class Review extends \Magento\Backend\App\Action
             $fileName
         );
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

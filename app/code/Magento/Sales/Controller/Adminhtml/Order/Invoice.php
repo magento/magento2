@@ -26,10 +26,10 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Model\Exception;
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
- * Adminhtml sales order edit controller
+ * Adminhtml sales order invoice edit controller
  *
  * @category   Magento
  * @package    Magento_Sales
@@ -45,18 +45,18 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\App\Action\Title
+     * @var \Magento\Framework\App\Action\Title
      */
     protected $_title;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -82,11 +82,10 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     /**
      * Initialize invoice model instance
      *
-     * @param bool $update
      * @return \Magento\Sales\Model\Order\Invoice
      * @throws Exception
      */
-    protected function _initInvoice($update = false)
+    protected function _initInvoice()
     {
         $this->_title->add(__('Invoices'));
 
@@ -447,6 +446,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     }
 
     /**
+     * Add comment to invoice action
+     *
      * @return void
      */
     public function addCommentAction()

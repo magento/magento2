@@ -32,13 +32,13 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\AreaList
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\AreaList
      */
     protected $areaListMock;
 
     protected function setUp()
     {
-        $this->areaListMock = $this->getMock('Magento\App\AreaList', array('getCodes'), array(), '', false);
+        $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', array('getCodes'), array(), '', false);
         $this->model = new Scope($this->areaListMock);
     }
 

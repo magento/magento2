@@ -49,7 +49,7 @@ class Grouped extends AbstractType
     protected $_importFactory;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -64,7 +64,7 @@ class Grouped extends AbstractType
      * @param array $params
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $productLinkFactory
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -72,7 +72,7 @@ class Grouped extends AbstractType
         array $params,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\Catalog\Model\Resource\Product\LinkFactory $productLinkFactory,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_importFactory = $importFactory;
         $this->_resource = $resource;

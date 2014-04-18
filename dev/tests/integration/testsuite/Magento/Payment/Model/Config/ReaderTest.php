@@ -38,8 +38,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $cache \Magento\App\Cache */
-        $cache = $objectManager->create('Magento\App\Cache');
+        /** @var $cache \Magento\Framework\App\Cache */
+        $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
         $this->_fileResolverMock = $this->getMockBuilder(
             'Magento\Config\FileResolverInterface'

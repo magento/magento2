@@ -43,8 +43,8 @@ class Invoice extends AbstractPdf
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
@@ -59,8 +59,8 @@ class Invoice extends AbstractPdf
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Stdlib\String $string,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Filesystem $filesystem,
         Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,

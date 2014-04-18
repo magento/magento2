@@ -28,8 +28,6 @@ namespace Magento\Bundle\Model;
 /**
  * Bundle Selection Model
  *
- * @method \Magento\Bundle\Model\Resource\Selection _getResource()
- * @method \Magento\Bundle\Model\Resource\Selection getResource()
  * @method int getOptionId()
  * @method \Magento\Bundle\Model\Selection setOptionId(int $value)
  * @method int getParentProductId()
@@ -48,10 +46,6 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Selection setSelectionQty(float $value)
  * @method int getSelectionCanChangeQty()
  * @method \Magento\Bundle\Model\Selection setSelectionCanChangeQty(int $value)
- *
- * @category    Magento
- * @package     Magento_Bundle
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Selection extends \Magento\Model\AbstractModel
 {
@@ -60,7 +54,7 @@ class Selection extends \Magento\Model\AbstractModel
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * @param \Magento\Model\Context $context

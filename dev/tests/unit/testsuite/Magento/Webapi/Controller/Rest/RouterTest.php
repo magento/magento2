@@ -54,7 +54,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             array('match')
         )->getMock();
-        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
         $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         $this->_request = new \Magento\Webapi\Controller\Rest\Request(

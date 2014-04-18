@@ -23,7 +23,7 @@
  */
 namespace Magento\Css\PreProcessor\Cache\Import\Map;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 
 /**
  * Storage for import cache

@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
-class Minqty extends \Magento\App\Config\Value
+class Minqty extends \Magento\Framework\App\Config\Value
 {
     /**
      * Validate minimum product qty value

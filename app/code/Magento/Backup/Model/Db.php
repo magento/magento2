@@ -48,15 +48,15 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
     /**
      * Core resource model
      *
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource = null;
 
     /**
      * @param \Magento\Backup\Model\Resource\Db $resourceDb
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(\Magento\Backup\Model\Resource\Db $resourceDb, \Magento\App\Resource $resource)
+    public function __construct(\Magento\Backup\Model\Resource\Db $resourceDb, \Magento\Framework\App\Resource $resource)
     {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;

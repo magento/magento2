@@ -111,11 +111,11 @@ class Layout
             'argumentParser' => $objectManager->get('Magento\View\Layout\Argument\Parser'),
             'argumentInterpreter' => $objectManager->get('layoutArgumentInterpreter'),
             'scheduledStructure' => $objectManager->create('Magento\View\Layout\ScheduledStructure', array()),
-            'scopeConfig' => $objectManager->create('Magento\App\Config\ScopeConfigInterface'),
-            'appState' => $objectManager->get('Magento\App\State'),
+            'scopeConfig' => $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
+            'appState' => $objectManager->get('Magento\Framework\App\State'),
             'messageManager' => $objectManager->get('Magento\Message\ManagerInterface'),
             'themeResolver' => $objectManager->get('Magento\View\Design\Theme\ResolverInterface'),
-            'scopeResolver' => $objectManager->get('Magento\App\ScopeResolverInterface'),
+            'scopeResolver' => $objectManager->get('Magento\Framework\App\ScopeResolverInterface'),
             'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
         );
     }

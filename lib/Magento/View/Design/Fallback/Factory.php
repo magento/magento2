@@ -23,7 +23,7 @@
  */
 namespace Magento\View\Design\Fallback;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\View\Design\Fallback\Rule\Composite;
 use Magento\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\View\Design\Fallback\Rule\RuleInterface;

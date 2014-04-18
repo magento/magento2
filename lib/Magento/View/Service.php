@@ -36,7 +36,7 @@ class Service
     /**
      * Application state
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -64,20 +64,20 @@ class Service
     /**
      * Constructor
      *
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\View\DesignInterface $design,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_appState = $appState;
         $this->_design = $design;
-        $this->_pubDirectory = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        $this->_pubDirectory = $filesystem->getPath(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
         $this->themeFactory = $themeFactory;
     }
 
@@ -117,7 +117,7 @@ class Service
      */
     public function isViewFileOperationAllowed()
     {
-        return $this->getAppMode() != \Magento\App\State::MODE_PRODUCTION;
+        return $this->getAppMode() != \Magento\Framework\App\State::MODE_PRODUCTION;
     }
 
     /**

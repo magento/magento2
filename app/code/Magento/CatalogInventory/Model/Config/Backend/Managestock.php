@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
-class Managestock extends \Magento\App\Config\Value
+class Managestock extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Status
@@ -44,7 +44,7 @@ class Managestock extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\CatalogInventory\Model\Stock\Status $stockStatus
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -53,7 +53,7 @@ class Managestock extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

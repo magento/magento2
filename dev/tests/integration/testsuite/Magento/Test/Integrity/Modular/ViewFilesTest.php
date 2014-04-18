@@ -32,10 +32,10 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
-            /**
-             * @param string $application
-             * @param string $file
-             */
+        /**
+         * @param string $application
+         * @param string $file
+         */
             function ($application, $file) {
                 \Magento\TestFramework\Helper\Bootstrap::getInstance()
                     ->loadArea($application);
@@ -45,6 +45,17 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                 $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\View\FileSystem')
                     ->getViewFile($file);
+
+                $fileInfo = pathinfo($result);
+                if ($fileInfo['extension'] === 'css') {
+                    if (!file_exists($result)) {
+                        $file = str_replace('.css', '.less', $file);
+                        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                            ->get('Magento\View\FileSystem')
+                            ->getViewFile($file);
+                    };
+                }
+
                 $this->assertFileExists($result);
             },
             $this->viewFilesFromModulesViewDataProvider()
@@ -94,8 +105,8 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                 continue;
             }
             foreach (new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($viewAppDir->getRealPath())
-            ) as $fileInfo) {
+                         new \RecursiveDirectoryIterator($viewAppDir->getRealPath())
+                     ) as $fileInfo) {
                 $references = $this->_findReferencesToViewFile($fileInfo);
                 if (!isset($files[$area])) {
                     $files[$area] = $references;
@@ -136,18 +147,18 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
-            /**
-             * getViewUrl() hard-coded in the php-files
-             *
-             * @param string $application
-             * @param string $file
-             */
+        /**
+         * getViewUrl() hard-coded in the php-files
+         *
+         * @param string $application
+         * @param string $file
+         */
             function ($application, $file) {
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\App\State'
+                    'Magento\Framework\App\State'
                 )->setAreaCode(
-                    $application
-                );
+                        $application
+                    );
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     'Magento\View\DesignInterface'
                 )->setDefaultDesignTheme();

@@ -41,10 +41,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
-        $responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $responseMock->headersSentThrowsException = false;
 
-        $requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $requestMock->expects($this->any())->method('getActionName')->will($this->returnValue('add'));
         $requestMock->expects(
             $this->at(0)
@@ -56,7 +56,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('http://malicious.com/')
         );
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
-        $redirect = $this->getMock('Magento\App\Response\RedirectInterface');
+        $redirect = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
         $redirect->expects(
             $this->any()
         )->method(
@@ -93,7 +93,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://some-url/'));
 
-        $configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $configMock->expects(
             $this->once()
         )->method(

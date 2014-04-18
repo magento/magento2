@@ -59,9 +59,9 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager', array('create'));
         $this->_config = $this->getMock('Magento\View\Asset\ConfigInterface', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_state = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_state = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_filesystem->expects(
             $this->any()
         )->method(
@@ -140,37 +140,37 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
             'js production mode' => array(
                 $jsAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_JS,
-                \Magento\App\State::MODE_PRODUCTION,
+                \Magento\Framework\App\State::MODE_PRODUCTION,
                 'Magento\View\Asset\MergeStrategy\FileExists'
             ),
             'css production mode' => array(
                 $cssAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                \Magento\App\State::MODE_PRODUCTION,
+                \Magento\Framework\App\State::MODE_PRODUCTION,
                 'Magento\View\Asset\MergeStrategy\FileExists'
             ),
             'js default mode' => array(
                 $jsAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_JS,
-                \Magento\App\State::MODE_DEFAULT,
+                \Magento\Framework\App\State::MODE_DEFAULT,
                 'Magento\View\Asset\MergeStrategy\Checksum'
             ),
             'css default mode' => array(
                 $cssAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                \Magento\App\State::MODE_DEFAULT,
+                \Magento\Framework\App\State::MODE_DEFAULT,
                 'Magento\View\Asset\MergeStrategy\Checksum'
             ),
             'js developer mode' => array(
                 $jsAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_JS,
-                \Magento\App\State::MODE_DEVELOPER,
+                \Magento\Framework\App\State::MODE_DEVELOPER,
                 'Magento\View\Asset\MergeStrategy\Checksum'
             ),
             'css developer mode' => array(
                 $cssAssets,
                 \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                \Magento\App\State::MODE_DEVELOPER,
+                \Magento\Framework\App\State::MODE_DEVELOPER,
                 'Magento\View\Asset\MergeStrategy\Checksum'
             )
         );

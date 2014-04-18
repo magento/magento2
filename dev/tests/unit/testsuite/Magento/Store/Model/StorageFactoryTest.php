@@ -63,7 +63,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     protected $_cookie;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
 
@@ -99,11 +99,11 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $this->_logMock = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->_sidResolverMock = $this->getMock('\Magento\Session\SidResolverInterface', array(), array(), '', false);
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_storage = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->_cookie = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
-        $this->_httpContext = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
-        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_httpContext = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\Store\Model\StorageFactory(
             $this->_objectManagerMock,

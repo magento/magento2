@@ -46,7 +46,7 @@
             </thead>
             <tbody data-role="options-container"></tbody>
             <tfoot>
-                <th colspan="<?php echo $storetotal; ?>">
+                <th colspan="<?php echo $storetotal; ?>" class="col-actions-add">
                     <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
                         <button id="add_new_option_button" title="<?php echo __('Add Option'); ?>"
                             type="button" class="action- scalable add">

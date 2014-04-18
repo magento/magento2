@@ -95,6 +95,7 @@
 }
 
 #product-variations-matrix img.variation {
+    display: block;
     position: relative;
     border: 0;
     width: 32px;
@@ -177,7 +178,7 @@
 #product-variations-matrix .action-choose[disabled] {
     color: #b8b3a7;
     float: right;
-    margin: 6px 0 0 5px;
+    margin: 2px 0 0 5px;
 }
 
 #product-variations-matrix .action-choose:hover {
@@ -191,6 +192,11 @@
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
     content: '\e03f'; /* user icon */
+}
+
+#product-variations-matrix .col-name > a {
+    display: inline-block;
+    margin-top: 5px;
 }
 
 #product-variations-matrix .col-name > a + .action-choose:before {

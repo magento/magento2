@@ -30,7 +30,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\App\Config\ValueInterface;
+use Magento\Framework\App\Config\ValueInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;

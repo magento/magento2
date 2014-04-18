@@ -29,7 +29,7 @@
  */
 namespace Magento\Theme\Helper;
 
-class Storage extends \Magento\App\Helper\AbstractHelper
+class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Parameter name of node
@@ -83,7 +83,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Magento filesystem
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -103,14 +103,14 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     protected $mediaDirectoryWrite;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory
     ) {
@@ -118,7 +118,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
         $this->filesystem = $filesystem;
         $this->_session = $session;
         $this->_themeFactory = $themeFactory;
-        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->mediaDirectoryWrite->create($this->getStorageRoot());
     }
 

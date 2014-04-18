@@ -29,7 +29,7 @@
 <?php
 if ($_product->getPriceType() == 1) {
     $_weeeTaxAmount = $this->helper('Magento\Weee\Helper\Data')->getAmount($_product);
-    if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,2,4))) {
+    if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1,2,4))) {
         $_weeeTaxAttributes = $this->helper('Magento\Weee\Helper\Data')->getProductWeeeAttributesForDisplay($_product);
     }
 }
@@ -52,10 +52,10 @@ $canApplyMAP  = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_pro
                 <?php endif ?>
                 </span>
             </span>
-            <?php if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(2, 1, 4))): ?>
+            <?php if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(2, 1, 4))): ?>
                 <span class="weee">(<small>
                     <?php $_weeeSeparator = ''; foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
-                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(2, 4))): ?>
+                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(2, 4))): ?>
                             <?php $amount = $_weeeTaxAttribute->getAmount()+$_weeeTaxAttribute->getTaxAmount(); ?>
                         <?php else: ?>
                             <?php $amount = $_weeeTaxAttribute->getAmount(); ?>
@@ -82,10 +82,10 @@ $canApplyMAP  = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_pro
                 <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_finalPrice,true,false) ?>
             <?php endif ?>
         </span>
-        <?php if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(2, 1, 4))): ?>
+        <?php if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(2, 1, 4))): ?>
             <span class="weee">(<small>
                 <?php $_weeeSeparator = ''; foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
-                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(2, 4))): ?>
+                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(2, 4))): ?>
                         <?php $amount = $_weeeTaxAttribute->getAmount()+$_weeeTaxAttribute->getTaxAmount(); ?>
                     <?php else: ?>
                         <?php $amount = $_weeeTaxAttribute->getAmount(); ?>

@@ -60,7 +60,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     protected $customerFactoryMock;
 
     /**
-     * @var \Magento\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
@@ -110,7 +110,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->customerMock = $this->getMock(
             'Magento\Customer\Model\Customer',
             array('setGroupId', '__wakeup'),

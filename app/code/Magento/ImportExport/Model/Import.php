@@ -136,16 +136,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_behaviorFactory;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
      * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -158,10 +158,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Logger\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
@@ -240,7 +240,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
             $sourceFile,
-            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)
+            $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR)
         );
     }
 

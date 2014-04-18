@@ -88,7 +88,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_emailConfigMock = $this->getMock('Magento\Email\Model\Template\Config', array(), array(), '', false);
 
         $this->filesystemMock = $this->getMock(
-            '\Magento\App\Filesystem',
+            '\Magento\Framework\App\Filesystem',
             array('getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'),
             array(),
             '',
@@ -256,9 +256,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultTemplatesAsOptionsArray()
     {
         $dirValueMap = array(
-            array(\Magento\App\Filesystem::ROOT_DIR, 'var/www/magento\rootdir/'),
-            array(\Magento\App\Filesystem::APP_DIR, 'var/www/magento\rootdir\app/'),
-            array(\Magento\App\Filesystem::THEMES_DIR, 'var\www/magento\rootdir\app/themes/')
+            array(\Magento\Framework\App\Filesystem::ROOT_DIR, 'var/www/magento\rootdir/'),
+            array(\Magento\Framework\App\Filesystem::APP_DIR, 'var/www/magento\rootdir\app/'),
+            array(\Magento\Framework\App\Filesystem::THEMES_DIR, 'var\www/magento\rootdir\app/themes/')
         );
 
         $this->directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);

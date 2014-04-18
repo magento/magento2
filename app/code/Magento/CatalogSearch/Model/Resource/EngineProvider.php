@@ -42,17 +42,17 @@ class EngineProvider
     protected $_engineFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\CatalogSearch\Model\Resource\EngineFactory $engineFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\CatalogSearch\Model\Resource\EngineFactory $engineFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_engineFactory = $engineFactory;
         $this->_scopeConfig = $scopeConfig;

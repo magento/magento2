@@ -28,33 +28,33 @@ class DesignLoader
     /**
      * Request
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * Application
      *
-     * @var \Magento\App\AreaList
+     * @var \Magento\Framework\App\AreaList
      */
     protected $_areaList;
 
     /**
      * Layout
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\AreaList $areaList
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\AreaList $areaList
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\App\AreaList $areaList,
-        \Magento\App\State $appState
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\AreaList $areaList,
+        \Magento\Framework\App\State $appState
     ) {
         $this->_request = $request;
         $this->_areaList = $areaList;

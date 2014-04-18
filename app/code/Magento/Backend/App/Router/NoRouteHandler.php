@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\App\Router;
 
-class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -33,17 +33,17 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
     protected $_helper;
 
     /**
-     * @var \Magento\App\Route\ConfigInterface
+     * @var \Magento\Framework\App\Route\ConfigInterface
      */
     protected $_routeConfig;
 
     /**
      * @param \Magento\Backend\Helper\Data $helper
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      */
     public function __construct(
         \Magento\Backend\Helper\Data $helper,
-        \Magento\App\Route\ConfigInterface $routeConfig
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig
     ) {
         $this->_helper = $helper;
         $this->_routeConfig = $routeConfig;
@@ -52,10 +52,10 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
     /**
      * Check and process no route request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    public function process(\Magento\App\RequestInterface $request)
+    public function process(\Magento\Framework\App\RequestInterface $request)
     {
         $requestPathParams = explode('/', trim($request->getPathInfo(), '/'));
         $areaFrontName = array_shift($requestPathParams);

@@ -34,14 +34,14 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_blockDependencies = array(
-        'request' => 'Magento\App\RequestInterface',
+        'request' => 'Magento\Framework\App\RequestInterface',
         'layout' => 'Magento\View\LayoutInterface',
         'eventManager' => 'Magento\Event\ManagerInterface',
         'translator' => 'Magento\TranslateInterface',
-        'cache' => 'Magento\App\CacheInterface',
+        'cache' => 'Magento\Framework\App\CacheInterface',
         'design' => 'Magento\View\DesignInterface',
         'session' => 'Magento\Session\SessionManagerInterface',
-        'scopeConfig' => 'Magento\App\Config\ScopeConfigInterface'
+        'scopeConfig' => 'Magento\Framework\App\Config\ScopeConfigInterface'
     );
 
     /**
@@ -51,7 +51,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_modelDependencies = array(
         'eventManager' => 'Magento\Event\ManagerInterface',
-        'cacheManager' => 'Magento\App\CacheInterface',
+        'cacheManager' => 'Magento\Framework\App\CacheInterface',
         'resource' => 'Magento\Model\Resource\AbstractResource',
         'resourceCollection' => 'Magento\Data\Collection\Db'
     );
@@ -70,8 +70,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         }
 
         $area = 'frontend';
-        /** @var $appStateMock \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject */
-        $appStateMock = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
+        /** @var $appStateMock \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+        $appStateMock = $this->getMock('Magento\Framework\App\State', array('getAreaCode'), array(), '', false);
         $appStateMock->expects($this->once())->method('getAreaCode')->will($this->returnValue($area));
 
         $context = $objectManager->getObject('Magento\View\Element\Template\Context');
@@ -90,9 +90,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetModel()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\App\Config\ValueInterface */
-        $model = $objectManager->getObject('Magento\App\Config\Value');
-        $this->assertInstanceOf('Magento\App\Config\Value', $model);
+        /** @var $model \Magento\Framework\App\Config\ValueInterface */
+        $model = $objectManager->getObject('Magento\Framework\App\Config\Value');
+        $this->assertInstanceOf('Magento\Framework\App\Config\Value', $model);
         foreach ($this->_modelDependencies as $propertyName => $propertyType) {
             $this->assertAttributeInstanceOf($propertyType, '_' . $propertyName, $model);
         }
@@ -108,7 +108,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $resourceMock->expects($this->once())->method('_getReadAdapter')->will($this->returnValue(false));
         $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
         $arguments = array('resource' => $resourceMock);
-        $model = $objectManager->getObject('Magento\App\Config\Value', $arguments);
+        $model = $objectManager->getObject('Magento\Framework\App\Config\Value', $arguments);
         $this->assertFalse($model->getResource()->getDataVersion('test'));
     }
 }

@@ -88,7 +88,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_resource = $this->getMock('Magento\Core\Model\Resource\Layout\Update', array(), array(), '', false);
 
-        $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
 
         $this->_logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
@@ -109,7 +109,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false, false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false, false);
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false, false);
         $directory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
 

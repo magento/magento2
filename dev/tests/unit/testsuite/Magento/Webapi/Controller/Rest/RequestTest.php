@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             array('deserialize', 'get')
         )->disableOriginalConstructor()->getMock();
-        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
         $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         /** Instantiate request. */

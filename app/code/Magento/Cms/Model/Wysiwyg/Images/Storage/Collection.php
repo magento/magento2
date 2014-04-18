@@ -31,15 +31,15 @@ namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 class Collection extends \Magento\Data\Collection\Filesystem
 {
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\App\Filesystem $filesystem)
     {
         $this->_filesystem = $filesystem;
         parent::__construct($entityFactory);
@@ -54,7 +54,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected function _generateRow($filename)
     {
         $filename = preg_replace('~[/\\\]+~', '/', $filename);
-        $path = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $path = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         return array(
             'filename' => $filename,
             'basename' => basename($filename),

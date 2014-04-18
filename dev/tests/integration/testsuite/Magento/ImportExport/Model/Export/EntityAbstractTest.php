@@ -46,7 +46,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Export\AbstractEntity',
             array(
-                $objectManager->get('Magento\App\Config\ScopeConfigInterface'),
+                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
@@ -127,7 +127,7 @@ abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
     extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,

@@ -49,14 +49,14 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected $attrLockValidator;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,

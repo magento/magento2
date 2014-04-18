@@ -30,7 +30,7 @@
  */
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
-class Minsaleqty extends \Magento\App\Config\Value
+class Minsaleqty extends \Magento\Framework\App\Config\Value
 {
     /**
      * Catalog inventory minsaleqty
@@ -42,7 +42,7 @@ class Minsaleqty extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -51,7 +51,7 @@ class Minsaleqty extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

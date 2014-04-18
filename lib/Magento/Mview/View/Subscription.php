@@ -70,12 +70,12 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = array();
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Mview\View\CollectionInterface $viewCollection
      * @param \Magento\Mview\ViewInterface $view
@@ -83,7 +83,7 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\DB\Ddl\TriggerFactory $triggerFactory,
         \Magento\Mview\View\CollectionInterface $viewCollection,
         \Magento\Mview\ViewInterface $view,

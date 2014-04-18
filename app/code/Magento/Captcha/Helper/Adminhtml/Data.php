@@ -41,18 +41,18 @@ class Data extends \Magento\Captcha\Helper\Data
     protected $_backendConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManager $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManager $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
@@ -65,7 +65,7 @@ class Data extends \Magento\Captcha\Helper\Data
      *
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Store\Model\Store $store
-     * @return \Magento\App\Config\Element
+     * @return \Magento\Framework\App\Config\Element
      */
     public function getConfig($key, $store = null)
     {

@@ -68,4 +68,14 @@
     <type name="Magento\Catalog\Helper\Product\Configuration">
         <plugin name="grouped_options" type="Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped"/>
     </type>
+    <type name="Magento\Pricing\PriceComposite">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="grouped_final_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Pricing\Price\FinalPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

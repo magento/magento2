@@ -73,7 +73,7 @@ class Config extends \Magento\Config\Data
     protected $_addressHelper;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -82,7 +82,7 @@ class Config extends \Magento\Config\Data
      * @param \Magento\Config\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $cacheId
      */
     public function __construct(
@@ -90,7 +90,7 @@ class Config extends \Magento\Config\Data
         \Magento\Config\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $cacheId = 'address_format'
     ) {
         parent::__construct($reader, $cache, $cacheId);

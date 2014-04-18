@@ -53,6 +53,8 @@
                     <argument name="id" xsi:type="string">product_name</argument>
                     <argument name="index" xsi:type="string">product_name</argument>
                     <argument name="renderer" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item</argument>
+                    <argument name="column_css_class" xsi:type="string">col-name</argument>
+                    <argument name="header_css_class" xsi:type="string">col-name</argument>
                 </arguments>
             </block>
             <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
@@ -68,7 +70,6 @@
                     <argument name="header" xsi:type="string" translate="true">Quantity</argument>
                     <argument name="index" xsi:type="string">qty</argument>
                     <argument name="type" xsi:type="string">number</argument>
-                    <argument name="width" xsi:type="string">60px</argument>
                     <argument name="id" xsi:type="string">qty</argument>
                 </arguments>
             </block>
@@ -77,7 +78,6 @@
                     <argument name="header" xsi:type="string" translate="true">Add Locale</argument>
                     <argument name="index" xsi:type="string">store_id</argument>
                     <argument name="type" xsi:type="string">store</argument>
-                    <argument name="width" xsi:type="string">160px</argument>
                 </arguments>
             </block>
             <block class="Magento\Backend\Block\Widget\Grid\Column" as="added_at">

@@ -41,7 +41,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_appState;
 
@@ -49,8 +49,8 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_config = $this->getMock('Magento\View\Asset\ConfigInterface', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
-        $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directory));
         $directory->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
@@ -190,9 +190,12 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     public function getAssetsAppModesDataProvider()
     {
         return array(
-            'production' => array(\Magento\App\State::MODE_PRODUCTION, 'Magento\Code\Minifier\Strategy\Lite'),
-            'default' => array(\Magento\App\State::MODE_DEFAULT, 'Magento\Code\Minifier\Strategy\Generate'),
-            'developer' => array(\Magento\App\State::MODE_DEVELOPER, 'Magento\Code\Minifier\Strategy\Generate')
+            'production' => array(\Magento\Framework\App\State::MODE_PRODUCTION, 'Magento\Code\Minifier\Strategy\Lite'),
+            'default' => array(\Magento\Framework\App\State::MODE_DEFAULT, 'Magento\Code\Minifier\Strategy\Generate'),
+            'developer' => array(
+                \Magento\Framework\App\State::MODE_DEVELOPER,
+                'Magento\Code\Minifier\Strategy\Generate'
+            )
         );
     }
 }

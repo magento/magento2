@@ -28,14 +28,14 @@ use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 class LockValidator implements LockValidatorInterface
 {
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(\Magento\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\Resource $resource)
     {
         $this->resource = $resource;
     }

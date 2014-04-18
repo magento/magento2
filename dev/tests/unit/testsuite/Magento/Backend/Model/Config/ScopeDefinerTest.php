@@ -40,13 +40,13 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
         $this->_model = new \Magento\Backend\Model\Config\ScopeDefiner($this->_requestMock);
     }
 
     public function testGetScopeReturnsDefaultScopeIfNoScopeDataIsSpecified()
     {
-        $this->assertEquals(\Magento\App\ScopeInterface::SCOPE_DEFAULT, $this->_model->getScope());
+        $this->assertEquals(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsStoreScopeIfStoreIsSpecified()

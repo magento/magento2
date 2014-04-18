@@ -25,6 +25,6 @@
  */
 require __DIR__ . '/../app/bootstrap.php';
 $params = $_SERVER;
-$params[\Magento\App\Filesystem::PARAM_APP_DIRS][\Magento\App\Filesystem::PUB_DIR] = array('uri' => '');
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
-$entryPoint->run('Magento\App\Http');
+$params[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS][\Magento\Framework\App\Filesystem::PUB_DIR] = array('uri' => '');
+$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
+$entryPoint->run('Magento\Framework\App\Http');

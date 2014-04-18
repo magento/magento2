@@ -23,14 +23,14 @@
  */
 namespace Magento\Sales\Controller;
 
-use Magento\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Magento\Sales\Model\Download as ModelDownload;
 use Magento\Catalog\Model\Product\Type\AbstractType as AbstractProductType;
 
 /**
  * Sales controller for download purposes
  */
-class Download extends \Magento\App\Action\Action
+class Download extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Sales\Model\Download

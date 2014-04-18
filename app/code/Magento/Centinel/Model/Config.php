@@ -48,14 +48,14 @@ class Config
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * Core config interface
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -67,13 +67,13 @@ class Config
     protected $_encryptor;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Encryption\EncryptorInterface $encryptor
     ) {
         $this->_scopeConfig = $scopeConfig;

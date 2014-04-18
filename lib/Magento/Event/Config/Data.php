@@ -35,7 +35,7 @@ class Data extends \Magento\Config\Data\Scoped
     protected $_scopePriorityScheme = array('global');
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -43,14 +43,14 @@ class Data extends \Magento\Config\Data\Scoped
      * @param \Magento\Event\Config\Reader $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Event\Config\Reader $reader,
         \Magento\Config\ScopeInterface $configScope,
         \Magento\Config\CacheInterface $cache,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         $cacheId = 'event_config_cache'
     ) {
         $this->_appState = $appState;

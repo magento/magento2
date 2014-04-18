@@ -81,7 +81,7 @@ class Begin extends \Magento\Install\Block\AbstractBlock
     public function getLicenseHtml()
     {
         return $this->_eulaFile ? $this->_filesystem->getDirectoryRead(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->readFile(
             $this->_eulaFile
         ) : '';

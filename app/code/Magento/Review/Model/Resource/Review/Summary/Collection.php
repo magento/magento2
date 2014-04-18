@@ -43,13 +43,13 @@ class Collection extends \Magento\Data\Collection\Db
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_setIdFieldName('primary_id');
 

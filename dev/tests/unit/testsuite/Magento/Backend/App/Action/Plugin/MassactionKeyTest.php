@@ -51,7 +51,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', array(), array(), '', false);
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->plugin = new \Magento\Backend\App\Action\Plugin\MassactionKey();
     }
 

@@ -47,15 +47,18 @@ class Config
     private $_isDryRun;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param array $cmdOptions
      * @param array $allowedFiles Non-generated files delivered with the application,
      *     so allowed to be present in the publication directory
      * @throws \Magento\Exception
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, array $cmdOptions, $allowedFiles = array())
-    {
-        $rootDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+    public function __construct(
+        \Magento\Framework\App\Filesystem $filesystem,
+        array $cmdOptions,
+        $allowedFiles = array()
+    ) {
+        $rootDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $sourceDir = isset($cmdOptions['source']) ? $cmdOptions['source'] : $rootDirectory->getAbsolutePath();
         if (!$rootDirectory->isDirectory($rootDirectory->getRelativePath($sourceDir))) {
             throw new \Magento\Exception('Source directory does not exist: ' . $sourceDir);
@@ -64,7 +67,7 @@ class Config
         if (isset($cmdOptions['destination'])) {
             $destinationDir = $cmdOptions['destination'];
         } else {
-            $destinationDir = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+            $destinationDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
         }
         $destinationDirRelative = $rootDirectory->getRelativePath($destinationDir);
         if (!$rootDirectory->isDirectory($destinationDirRelative)) {

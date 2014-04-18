@@ -23,12 +23,17 @@
  */
 ?>
 <?php
+/**
+ * Template for displaying new products widget
+ *
+ * @var $this \Magento\Catalog\Block\Product\Widget\NewWidget
+ */
 if ($exist = ($this->getProductCollection() && $this->getProductCollection()->getSize())) {
     $type = 'widget-new-list';
 
     $mode = 'list';
 
-    $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+    $imageBlock = $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image ='new_products_content_widget_list';
     $title = __('New Products');
     $items = $this->getProductCollection()->getItems();
@@ -65,7 +70,7 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                                         <?php echo $this->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
-                                <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
+                                <?php echo $this->getProductPriceHtml($_item, $type); ?>
 
                                 <?php if ($templateType): ?>
                                     <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>

@@ -32,7 +32,7 @@ use Magento\Sales\Model\Order;
  * @package    Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Standard extends \Magento\App\Action\Action
+class Standard extends \Magento\Framework\App\Action\Action
 {
     /**
      * Order instance

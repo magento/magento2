@@ -54,12 +54,12 @@ class Resolver implements \Magento\Locale\ResolverInterface
     protected $_localeCode;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -76,16 +76,16 @@ class Resolver implements \Magento\Locale\ResolverInterface
     protected $_localeFactory;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\LocaleFactory $localeFactory
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param mixed $locale
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\LocaleFactory $localeFactory,
         $defaultLocalePath,
         $scopeType,

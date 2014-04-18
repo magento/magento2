@@ -87,7 +87,7 @@ class Form extends \Magento\View\Element\Template
     protected $messageManager;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -100,7 +100,7 @@ class Form extends \Magento\View\Element\Template
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -112,7 +112,7 @@ class Form extends \Magento\View\Element\Template
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Message\ManagerInterface $messageManager,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_coreData = $coreData;

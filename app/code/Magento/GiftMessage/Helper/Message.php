@@ -73,32 +73,51 @@ class Message extends \Magento\Core\Helper\Data
     protected $_escaper;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * Pages to skip message checks
+     *
+     * @var array
+     */
+    protected $skipMessageCheck = array();
+
+    /**
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\View\LayoutFactory $layoutFactory
      * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
      * @param \Magento\Escaper $escaper
+     * @param array $skipMessageCheck
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
+        \Magento\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\View\LayoutFactory $layoutFactory,
         \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory,
         \Magento\Escaper $escaper,
+        $skipMessageCheck = array(),
         $dbCompatibleMode = true
     ) {
         $this->_escaper = $escaper;
         $this->_productFactory = $productFactory;
         $this->_layoutFactory = $layoutFactory;
         $this->_giftMessageFactory = $giftMessageFactory;
-        parent::__construct($context, $scopeConfig, $storeManager, $appState, $dbCompatibleMode);
+        $this->skipMessageCheck = $skipMessageCheck;
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $storeManager,
+            $appState,
+            $priceCurrency,
+            $dbCompatibleMode
+        );
     }
 
     /**
@@ -111,20 +130,23 @@ class Message extends \Magento\Core\Helper\Data
      */
     public function getInline($type, \Magento\Object $entity, $dontDisplayContainer = false)
     {
-        if (!$this->isMessagesAvailable($type, $entity)) {
+        if (!$this->skipPage($type) && !$this->isMessagesAvailable($type, $entity)) {
             return '';
         }
-        return $this->_layoutFactory->create()->createBlock(
-            'Magento\GiftMessage\Block\Message\Inline'
-        )->setId(
-            'giftmessage_form_' . $this->_nextId++
-        )->setDontDisplayContainer(
-            $dontDisplayContainer
-        )->setEntity(
-            $entity
-        )->setType(
-            $type
-        )->toHtml();
+        return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')
+            ->setId('giftmessage_form_' . $this->_nextId++)
+            ->setDontDisplayContainer($dontDisplayContainer)
+            ->setEntity($entity)
+            ->setType($type)->toHtml();
+    }
+
+    /**
+     * @param string $pageType
+     * @return bool
+     */
+    protected function skipPage($pageType)
+    {
+        return in_array($pageType, $this->skipMessageCheck);
     }
 
     /**

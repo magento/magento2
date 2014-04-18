@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class Shell extends \Magento\App\AbstractShell
+class Shell extends \Magento\Framework\App\AbstractShell
 {
     /**
      * Error status - whether errors have happened
@@ -43,13 +43,13 @@ class Shell extends \Magento\App\AbstractShell
     protected $indexerFactory;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string $entryPoint
      * @param Indexer\CollectionFactory $indexersFactory
      * @param IndexerFactory $indexerFactory
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         $entryPoint,
         Indexer\CollectionFactory $indexersFactory,
         IndexerFactory $indexerFactory

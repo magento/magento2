@@ -55,7 +55,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_readerMock = $this->getMock('Magento\Event\Config\Reader', array(), array(), '', false);
         $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_model = new \Magento\Event\Config\Data(
             $this->_readerMock,
             $this->_configScopeMock,

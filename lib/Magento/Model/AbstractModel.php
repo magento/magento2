@@ -117,7 +117,7 @@ abstract class AbstractModel extends \Magento\Object
     /**
      * Application Cache Manager
      *
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cacheManager;
 
@@ -132,7 +132,7 @@ abstract class AbstractModel extends \Magento\Object
     protected $_logger;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -210,9 +210,9 @@ abstract class AbstractModel extends \Magento\Object
      */
     public function __wakeup()
     {
-        $objectManager = \Magento\App\ObjectManager::getInstance();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eventManager = $objectManager->get('Magento\Event\ManagerInterface');
-        $this->_cacheManager = $objectManager->get('Magento\App\CacheInterface');
+        $this->_cacheManager = $objectManager->get('Magento\Framework\App\CacheInterface');
         $this->_registry = $objectManager->get('Magento\Registry');
         $context = $objectManager->get('Magento\Model\Context');
         if ($context instanceof \Magento\Model\Context) {
@@ -250,7 +250,7 @@ abstract class AbstractModel extends \Magento\Object
             throw new \Magento\Model\Exception(__('Resource is not set.'));
         }
 
-        return $this->_resource ? : \Magento\App\ObjectManager::getInstance()->get($this->_resourceName);
+        return $this->_resource ? : \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
     }
 
     /**
@@ -276,7 +276,7 @@ abstract class AbstractModel extends \Magento\Object
             throw new \Magento\Model\Exception(__('Model collection resource name is not defined.'));
         }
         return $this->_resourceCollection ? clone $this
-            ->_resourceCollection : \Magento\App\ObjectManager::getInstance()
+            ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
             ->create(
                 $this->_collectionName
             );

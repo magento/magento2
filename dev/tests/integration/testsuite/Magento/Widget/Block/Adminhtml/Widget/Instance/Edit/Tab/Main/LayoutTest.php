@@ -64,7 +64,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetLayoutsChooser()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\State'
+            'Magento\Framework\App\State'
         )->setAreaCode(
             \Magento\Core\Model\App\Area::AREA_FRONTEND
         );

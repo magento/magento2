@@ -25,12 +25,12 @@
  */
 namespace Magento\Rss\Controller;
 
-use Magento\App\Action\NotFoundException;
+use Magento\Framework\App\Action\NotFoundException;
 
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -45,14 +45,14 @@ class Index extends \Magento\App\Action\Action
     protected $_customerSession;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Rss\Helper\WishlistRss $wishlistHelper
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Rss\Helper\WishlistRss $wishlistHelper,
         \Magento\Customer\Model\Session $customerSession
     ) {

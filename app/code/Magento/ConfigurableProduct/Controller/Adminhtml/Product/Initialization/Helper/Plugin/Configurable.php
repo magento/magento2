@@ -29,11 +29,11 @@ class Configurable
 {
     /**
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->productType = $productType;
         $this->request = $request;

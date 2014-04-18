@@ -52,7 +52,7 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystemMock = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryRead', '__wakeup'),
             array(),
             '',

@@ -61,10 +61,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\QuoteFactory'
         )->disableOriginalConstructor()->getMock();
 
-        $appState = $this->getMock('\Magento\App\State', array(), array(), '', false);
+        $appState = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
 
-        $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
         $request->expects($this->any())->method('getHttpHost')->will($this->returnValue(array()));
 
         $constructArguments = $this->_helper->getConstructArguments(

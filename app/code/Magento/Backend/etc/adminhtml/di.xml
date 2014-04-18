@@ -26,15 +26,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Locale\ResolverInterface" type="Magento\Backend\Model\Locale\Resolver" />
-    <preference for="Magento\App\Action\Context" type="Magento\Backend\App\Action\Context" />
+    <preference for="Magento\Framework\App\Action\Context" type="Magento\Backend\App\Action\Context" />
     <preference for="Magento\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
-    <preference for="Magento\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
+    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
-    <preference for="Magento\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
-    <preference for="Magento\App\View" type="Magento\Backend\Model\View" />
+    <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
+    <preference for="Magento\Framework\App\View" type="Magento\Backend\Model\View" />
     <preference for="Magento\Model\ActionValidator\RemoveAction" type="Magento\Model\ActionValidator\RemoveAction\Allowed" />
      <type name="Magento\Backend\App\Action\Context">
         <arguments>
@@ -90,7 +90,7 @@
             <argument name="area" xsi:type="string">adminhtml</argument>
         </arguments>
     </type>
-    <type name="Magento\App\RouterList">
+    <type name="Magento\Framework\App\RouterList">
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="admin" xsi:type="array">
@@ -99,7 +99,7 @@
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
                 <item name="default" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\App\Router\DefaultRouter</item>
+                    <item name="class" xsi:type="string">Magento\Framework\App\Router\DefaultRouter</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>
@@ -115,7 +115,7 @@
             <argument name="canUseSessionIdInParam" xsi:type="boolean">false</argument>
         </arguments>
     </type>
-    <type name="Magento\App\Action\Action">
+    <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" disabled="true" />
     </type>
     <type name="Magento\Message\Manager">
@@ -125,8 +125,13 @@
     </type>
     <type name="Magento\Translate">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
             <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Core\Model\Session\Config">
+        <arguments>
+            <argument name="lifetimePath" xsi:type="const">Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME</argument>
         </arguments>
     </type>
 </config>

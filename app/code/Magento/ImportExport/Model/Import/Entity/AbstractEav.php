@@ -94,10 +94,10 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -106,10 +106,10 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,

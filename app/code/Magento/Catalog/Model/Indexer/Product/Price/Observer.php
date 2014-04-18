@@ -33,7 +33,7 @@ class Observer
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -64,7 +64,7 @@ class Observer
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -72,7 +72,7 @@ class Observer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,

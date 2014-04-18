@@ -262,8 +262,8 @@ class TransportBuilder
     {
         $template = $this->getTemplate();
         $types = array(
-            \Magento\App\TemplateTypesInterface::TYPE_TEXT => \Magento\Mail\MessageInterface::TYPE_TEXT,
-            \Magento\App\TemplateTypesInterface::TYPE_HTML => \Magento\Mail\MessageInterface::TYPE_HTML
+            \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT => \Magento\Mail\MessageInterface::TYPE_TEXT,
+            \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML => \Magento\Mail\MessageInterface::TYPE_HTML
         );
 
         $body = $template->processTemplate();

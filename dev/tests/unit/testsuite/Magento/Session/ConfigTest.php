@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_configMock;
 
@@ -45,27 +45,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_stringHelperMock;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_stringHelperMock = $this->getMock('\Magento\Stdlib\String', array(), array(), '', false, false);
         $this->_requestMock = $this->getMock(
-            '\Magento\App\Request\Http',
+            '\Magento\Framework\App\Request\Http',
             array('getBasePath', 'isSecure', 'getHttpHost'),
             array(),
             '',
@@ -80,9 +80,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('init.host')
         );
-        $this->_appState = $this->getMock('\Magento\App\State', array('isInstalled'), array(), '', false, false);
+        $this->_appState = $this->getMock('\Magento\Framework\App\State', array('isInstalled'), array(), '', false, false);
         $this->_appState->expects($this->atLeastOnce())->method('isInstalled')->will($this->returnValue(true));
-        $this->_filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false, false);
+        $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false, false);
 
         $this->config = new \Magento\Session\Config(
             $this->_configMock,

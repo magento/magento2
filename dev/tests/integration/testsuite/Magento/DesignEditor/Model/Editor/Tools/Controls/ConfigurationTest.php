@@ -44,7 +44,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode(\Magento\View\DesignInterface::DEFAULT_AREA);
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode(\Magento\View\DesignInterface::DEFAULT_AREA);
         $this->_design = $objectManager->get('Magento\View\DesignInterface');
         $this->_design->setDesignTheme('vendor_test_child');
         $this->_configFactory = $objectManager->create('Magento\DesignEditor\Model\Editor\Tools\Controls\Factory');
@@ -60,18 +60,18 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testLoadConfigurations($type, $controlName, $controlData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
         $relativePath = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryRead(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->getRelativePath(
             __DIR__ . '/../../../_files/design'
         );
-        /** @var \Magento\App\Filesystem\DirectoryList $directoryList */
-        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
-        $directoryList->addDirectory(\Magento\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
+        /** @var \Magento\Framework\App\Filesystem\DirectoryList $directoryList */
+        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
         $designTheme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->getDesignTheme();

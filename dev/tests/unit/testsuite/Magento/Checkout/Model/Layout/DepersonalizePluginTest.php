@@ -47,7 +47,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
@@ -80,7 +80,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->moduleManagerMock = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
         $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
 

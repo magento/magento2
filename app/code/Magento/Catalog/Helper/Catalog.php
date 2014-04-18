@@ -32,7 +32,7 @@ namespace Magento\Catalog\Helper;
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Catalog extends \Magento\App\Helper\AbstractHelper
+class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Config path to valid file paths
@@ -61,19 +61,19 @@ class Catalog extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);

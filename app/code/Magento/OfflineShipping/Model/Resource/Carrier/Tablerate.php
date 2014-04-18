@@ -98,7 +98,7 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
     protected $_conditionFullNames = array();
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -130,29 +130,29 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Filesystem instance
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Logger $logger,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         parent::__construct($resource);
         $this->_coreConfig = $coreConfig;
@@ -273,7 +273,7 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
         $this->_importErrors = array();
         $this->_importedRows = 0;
 
-        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         $path = $tmpDirectory->getRelativePath($csvFile);
         $stream = $tmpDirectory->openFile($path);
 

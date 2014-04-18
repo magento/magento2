@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_rootDirectory;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -41,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_rootDirectory = $this->getMockForAbstractClass('Magento\Filesystem\Directory\WriteInterface');
         $this->_rootDirectory->expects($this->never())->method('getAbsolutePath');
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_filesystem->expects(
             $this->once()
         )->method(

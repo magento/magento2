@@ -30,7 +30,7 @@ namespace Magento\Customer\Model\Config\Backend\Address;
  *
  * @method string getWebsiteCode
  */
-class Street extends \Magento\App\Config\Value
+class Street extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
@@ -53,7 +53,7 @@ class Street extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
@@ -84,7 +84,7 @@ class Street extends \Magento\App\Config\Value
                 }
                 break;
 
-            case \Magento\App\ScopeInterface::SCOPE_DEFAULT:
+            case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
                 $attribute->setData('multiline_count', $value);
                 break;
         }

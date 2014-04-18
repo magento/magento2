@@ -18,24 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Bundle\Model\Product;
+
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 
 /**
  * Bundle Price Model
- *
- * @category Magento
- * @package  Magento_Bundle
- * @author   Magento Core Team <core@magentocommerce.com>
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
+    /**
+     * Fixed bundle price type
+     */
     const PRICE_TYPE_FIXED = 1;
 
+    /**
+     * Dynamic bundle price type
+     */
     const PRICE_TYPE_DYNAMIC = 0;
 
     /**
@@ -92,6 +95,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float
+     * @deprecated
      */
     public function getPrice($product)
     {
@@ -303,7 +307,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                             }
 
                             $multiTypes = array(
-                                //Magento_Catalog_Model_Product_Option::OPTION_TYPE_DROP_DOWN,
                                 \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX,
                                 \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE
                             );
@@ -429,6 +432,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         $multiplyQty = true,
         $takeTierPrice = true
     ) {
+        if (null === $bundleQty) {
+            $bundleQty = 1.;
+        }
         if (is_null($selectionQty)) {
             $selectionQty = $selectionProduct->getSelectionQty();
         }
@@ -552,7 +558,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getTierPrice($qty, $product)
     {
-        $allGroups = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+        $allGroups = CustomerGroupServiceInterface::CUST_GROUP_ALL;
         $prices = $product->getData('tier_price');
 
         if (is_null($prices)) {

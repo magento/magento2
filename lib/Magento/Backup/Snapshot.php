@@ -45,7 +45,7 @@ class Snapshot extends Filesystem
     /**
      * Filesystem facade
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -55,10 +55,10 @@ class Snapshot extends Filesystem
     protected $_backupFactory;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param Factory $backupFactory
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, Factory $backupFactory)
+    public function __construct(\Magento\Framework\App\Filesystem $filesystem, Factory $backupFactory)
     {
         $this->_filesystem = $filesystem;
         $this->_backupFactory = $backupFactory;
@@ -138,7 +138,7 @@ class Snapshot extends Filesystem
         )->setTime(
             $this->getTime()
         )->setBackupsDir(
-            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR)
+            $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::VAR_DIR)
         )->setResourceModel(
             $this->getResourceModel()
         );

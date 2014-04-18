@@ -27,7 +27,7 @@ namespace Magento\Catalog\Controller;
 
 use Magento\Catalog\Model\Product as ModelProduct;
 
-class Product extends \Magento\App\Action\Action implements \Magento\Catalog\Controller\Product\View\ViewInterface
+class Product extends \Magento\Framework\App\Action\Action implements \Magento\Catalog\Controller\Product\View\ViewInterface
 {
     /**
      * Initialize requested product object
@@ -71,8 +71,8 @@ class Product extends \Magento\App\Action\Action implements \Magento\Catalog\Con
     public function viewAction()
     {
         // Get initial data from request
-        $categoryId = (int)$this->getRequest()->getParam('category', false);
-        $productId = (int)$this->getRequest()->getParam('id');
+        $categoryId = (int) $this->getRequest()->getParam('category', false);
+        $productId = (int) $this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
         if ($this->getRequest()->isPost() && $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {

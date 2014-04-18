@@ -149,7 +149,7 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
 
         $methods[] = array(
             'name' => '__wakeup',
-            'body' => "\$this->pluginLocator = \\Magento\\App\\ObjectManager::getInstance();\n" .
+            'body' => "\$this->pluginLocator = \\Magento\\Framework\\App\\ObjectManager::getInstance();\n" .
             "\$this->pluginList = \$this->pluginLocator->get('Magento\\Interception\\PluginList');\n" .
             "\$this->chain = \$this->pluginLocator->get('Magento\\Interception\\Chain');\n" .
             "\$this->subjectType = get_parent_class(\$this);\n"

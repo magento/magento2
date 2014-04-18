@@ -53,7 +53,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
         $this->readAdapter = $this->getMock('\Magento\DB\Adapter\AdapterInterface', array(), array(), '', false);
         $this->writeAdapter = $this->getMock('\Magento\DB\Adapter\AdapterInterface', array(), array(), '', false);
         $this->model = $objectManager->getObject(

@@ -29,7 +29,7 @@
             <block class="Magento\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
         </block>
         <container name="after_body_start" as="after_body_start" label="Page Top">
-            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
+            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml" cacheable="false"/>
         </container>
         <container name="header-container" label="Page Header Container" as="header-container" htmlTag="header" htmlClass="page header">
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
@@ -109,13 +109,6 @@
         <container name="before_body_end" as="before_body_end" label="Page Bottom"/>
     </block>
     <update handle="default_head_blocks"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-msg-box-js" after="jquery-jquery-ui-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/msg-box.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\View\Element\FormKey" name="formkey"/>
     </referenceContainer>

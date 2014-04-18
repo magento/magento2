@@ -30,7 +30,7 @@ use Magento\Exception\NoSuchEntityException;
 /**
  * Controller for onepage checkouts
  */
-abstract class Action extends \Magento\App\Action\Action
+abstract class Action extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -48,13 +48,13 @@ abstract class Action extends \Magento\App\Action\Action
     protected $_customerMetadataService;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService

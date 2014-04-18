@@ -65,7 +65,7 @@ class Factory
     protected $fileIteratorFactory;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -73,13 +73,13 @@ class Factory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Config\FileIteratorFactory $fileIteratorFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_objectManager = $objectManager;
         $this->_viewFileSystem = $viewFileSystem;
@@ -134,7 +134,7 @@ class Factory
                 throw new \Magento\Exception("Unknown control configuration type: \"{$type}\"");
                 break;
         }
-        $rootDirectory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $rootDirectory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $paths = array();
         foreach ($files as $file) {
             $paths[] = $rootDirectory->getRelativePath($file);

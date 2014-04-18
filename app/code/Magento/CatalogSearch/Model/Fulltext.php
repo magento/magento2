@@ -25,7 +25,7 @@
  */
 namespace Magento\CatalogSearch\Model;
 
-use Magento\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogSearch\Helper\Data;
 use Magento\CatalogSearch\Model\Query;
 use Magento\Model\AbstractModel;

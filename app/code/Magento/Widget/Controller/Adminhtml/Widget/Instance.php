@@ -340,7 +340,7 @@ class Instance extends \Magento\Backend\App\Action
     public function blocksAction()
     {
         $this->_objectManager->get(
-            'Magento\App\State'
+            'Magento\Framework\App\State'
         )->emulateAreaCode(
             'frontend',
             array($this, 'renderPageContainers')

@@ -59,7 +59,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
         $methods = array(
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',

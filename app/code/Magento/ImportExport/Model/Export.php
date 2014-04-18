@@ -80,7 +80,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory
@@ -89,7 +89,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Logger\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,

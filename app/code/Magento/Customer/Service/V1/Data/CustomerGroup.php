@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1\Data;
 
 /**
@@ -28,6 +29,13 @@ namespace Magento\Customer\Service\V1\Data;
  */
 class CustomerGroup extends \Magento\Service\Data\AbstractObject
 {
+    /**#@+
+     * Constants for Data Object keys
+     */
+    const ID = 'id';
+    const CODE = 'code';
+    const TAX_CLASS_ID = 'tax_class_id';
+
     /**
      * Get id
      *
@@ -35,7 +43,7 @@ class CustomerGroup extends \Magento\Service\Data\AbstractObject
      */
     public function getId()
     {
-        return $this->_get('id');
+        return $this->_get(self::ID);
     }
 
     /**
@@ -45,7 +53,7 @@ class CustomerGroup extends \Magento\Service\Data\AbstractObject
      */
     public function getCode()
     {
-        return $this->_get('code');
+        return $this->_get(self::CODE);
     }
 
     /**
@@ -55,6 +63,16 @@ class CustomerGroup extends \Magento\Service\Data\AbstractObject
      */
     public function getTaxClassId()
     {
-        return $this->_get('tax_class_id');
+        return $this->_get(self::TAX_CLASS_ID);
+    }
+
+    /**
+     * Retrieve tax class name
+     *
+     * @return string|null
+     */
+    public function getTaxClassName()
+    {
+        return $this->_get('tax_class_name');
     }
 }

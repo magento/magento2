@@ -86,8 +86,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $themeCollection = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', array(), array(), '', false);
 
         // 6.
-        /** @var $context \Magento\App\Helper\Context */
-        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        /** @var $context \Magento\Framework\App\Helper\Context */
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
 
         // 7. Get view file system model mock
         $params = array('area' => $themeArea, 'themeModel' => $theme, 'skipProxy' => true);
@@ -465,13 +465,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getFilesystem()
     {
-        /** @var $filesystem \Magento\App\Filesystem */
+        /** @var $filesystem \Magento\Framework\App\Filesystem */
         $filesystem = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getPath', '__wakeup', 'getDirectoryRead'),
             array(),
             '',
@@ -484,11 +484,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
-                    array(\Magento\App\Filesystem::APP_DIR, self::APP_DIR),
-                    array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
-                    array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
-                    array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR)
+                    array(\Magento\Framework\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
+                    array(\Magento\Framework\App\Filesystem::APP_DIR, self::APP_DIR),
+                    array(\Magento\Framework\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
+                    array(\Magento\Framework\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
+                    array(\Magento\Framework\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR)
                 )
             )
         );
@@ -554,8 +554,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        /** @var $context \Magento\App\Helper\Context */
-        $context = $this->getMock('Magento\App\Helper\Context', null, array(), '', false);
+        /** @var $context \Magento\Framework\App\Helper\Context */
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', null, array(), '', false);
 
         /** @var $fileSystem \Magento\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
         $fileSystem = $this->getMockBuilder(

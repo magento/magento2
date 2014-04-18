@@ -29,7 +29,7 @@
 $installFile = __DIR__ . '/upgrade-1.6.0.0.1-1.6.0.0.2.php';
 
 /** @var \Magento\Filesystem\Directory\Read $moduleDirectory */
-$moduleDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+$moduleDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
 if ($moduleDirectory->isExist($moduleDirectory->getRelativePath($installFile))) {
     include $installFile;
 }

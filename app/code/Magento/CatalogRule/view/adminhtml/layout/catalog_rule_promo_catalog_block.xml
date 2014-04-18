@@ -46,15 +46,14 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
                         <argument name="index" xsi:type="string">rule_id</argument>
-                        <argument name="align" xsi:type="string">right</argument>
-                        <argument name="width" xsi:type="string">50</argument>
                         <argument name="type" xsi:type="string">text</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Rule</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">name</argument>
                         <argument name="type" xsi:type="string">text</argument>
                     </arguments>
@@ -62,27 +61,25 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="from_date">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Start on</argument>
-                        <argument name="align" xsi:type="string">left</argument>
-                        <argument name="width" xsi:type="string">120</argument>
                         <argument name="type" xsi:type="string">date</argument>
                         <argument name="index" xsi:type="string">from_date</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="to_date">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">End on</argument>
-                        <argument name="align" xsi:type="string">left</argument>
-                        <argument name="width" xsi:type="string">120</argument>
                         <argument name="type" xsi:type="string">date</argument>
                         <argument name="default" xsi:type="string">--</argument>
                         <argument name="index" xsi:type="string">to_date</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Status</argument>
-                        <argument name="align" xsi:type="string">left</argument>
-                        <argument name="width" xsi:type="string">80</argument>
                         <argument name="index" xsi:type="string">is_active</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="array">
@@ -100,11 +97,9 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="rule_website">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Web Site</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">website_ids</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="type" xsi:type="string">options</argument>
-                        <argument name="width" xsi:type="string">200</argument>
                         <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Website\OptionHash"/>
                     </arguments>
                 </block>

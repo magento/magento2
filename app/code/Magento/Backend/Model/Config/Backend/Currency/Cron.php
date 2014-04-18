@@ -29,20 +29,20 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class Cron extends \Magento\App\Config\Value
+class Cron extends \Magento\Framework\App\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
 
     /**
-     * @var \Magento\App\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -50,8 +50,8 @@ class Cron extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Config\ValueFactory $configValueFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -83,7 +83,7 @@ class Cron extends \Magento\App\Config\Value
         $cronExprString = join(' ', $cronExprArray);
 
         try {
-            /** @var $configValue \Magento\App\Config\ValueInterface */
+            /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_STRING_PATH, 'path');
             $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();

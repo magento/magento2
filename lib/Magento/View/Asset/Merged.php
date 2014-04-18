@@ -173,10 +173,10 @@ class Merged implements \Iterator
      */
     protected function getMergedFilePath(array $publicFiles)
     {
-        /** @var \Magento\App\Filesystem $filesystem */
-        $filesystem = $this->objectManager->get('Magento\App\Filesystem');
-        $jsDir = $filesystem->getPath(\Magento\App\Filesystem::PUB_LIB_DIR);
-        $publicDir = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        $filesystem = $this->objectManager->get('Magento\Framework\App\Filesystem');
+        $jsDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::PUB_LIB_DIR);
+        $publicDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
 
         $prefixRemovals = array($jsDir, $publicDir);
 
@@ -186,7 +186,7 @@ class Merged implements \Iterator
         }
 
         $mergedDir = $filesystem->getDirectoryRead(
-            \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+            \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
         )->getAbsolutePath(
             self::PUBLIC_MERGE_DIR
         );

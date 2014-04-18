@@ -25,7 +25,7 @@
  */
 namespace Magento\HTTP\PhpEnvironment;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Library for working with server ip address

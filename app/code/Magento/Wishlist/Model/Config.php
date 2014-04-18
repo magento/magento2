@@ -53,12 +53,12 @@ class Config
     private $_sharingEmailLimit;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig
     ) {

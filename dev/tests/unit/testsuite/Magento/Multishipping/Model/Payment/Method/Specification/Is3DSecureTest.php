@@ -45,14 +45,14 @@ class Is3DSecureTest extends \PHPUnit_Framework_TestCase
     /**
      * Store config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     public function setUp()
     {
         $this->paymentConfigMock = $this->getMock('\Magento\Payment\Model\Config', array(), array(), '', false);
-        $this->scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 

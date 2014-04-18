@@ -30,7 +30,7 @@ namespace Magento\Catalog\Model\Config\CatalogClone\Media;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Image extends \Magento\App\Config\Value
+class Image extends \Magento\Framework\App\Config\Value
 {
     /**
      * Eav config
@@ -49,7 +49,7 @@ class Image extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -59,7 +59,7 @@ class Image extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,

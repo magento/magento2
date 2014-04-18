@@ -30,20 +30,20 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Usecustom extends \Magento\App\Config\Value
+class Usecustom extends \Magento\Framework\App\Config\Value
 {
     /**
      * Writer of configuration storage
      *
-     * @var \Magento\App\Config\Storage\WriterInterface
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
      */
     protected $_configWriter;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -51,8 +51,8 @@ class Usecustom extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

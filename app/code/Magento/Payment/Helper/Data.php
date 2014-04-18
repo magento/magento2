@@ -32,14 +32,14 @@ use Magento\View\Element\Template;
 /**
  * Payment module base helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_PAYMENT_METHODS = 'payment';
 
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -70,30 +70,30 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_appEmulation;
 
     /**
-     * @var \Magento\App\Config\Initial
+     * @var \Magento\Framework\App\Config\Initial
      */
     protected $_initialConfig;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param \Magento\App\Config\Initial $initialConfig
+     * @param \Magento\Framework\App\Config\Initial $initialConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\View\LayoutInterface $layout,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Payment\Model\Config $paymentConfig,
-        \Magento\App\Config\Initial $initialConfig
+        \Magento\Framework\App\Config\Initial $initialConfig
     ) {
         parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;

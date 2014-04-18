@@ -26,8 +26,8 @@
  */
 /** @var \Magento\Filesystem\Directory\Write $rootDirectory */
 $rootDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\App\Filesystem'
+    'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(
-    \Magento\App\Filesystem::ROOT_DIR
+    \Magento\Framework\App\Filesystem::ROOT_DIR
 );
 $rootDirectory->copyFile($rootDirectory->getRelativePath(__DIR__ . '/robots.txt'), 'robots.txt');

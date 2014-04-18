@@ -47,7 +47,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
     /**
@@ -76,7 +76,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->urlBuilder = $this->getMock('Magento\Url', array('getUrl'), array(), '', false);
-        $this->scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $scopeConfig = array(
             array(\Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'),

@@ -41,12 +41,12 @@ abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
         \Magento\Stdlib\DateTime $dateTime
     ) {

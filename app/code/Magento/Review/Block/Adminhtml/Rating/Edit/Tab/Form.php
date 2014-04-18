@@ -211,15 +211,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _getWarningHtml()
     {
-        return '<div>
-<div class="messages">
-    <div class="message notice">
+        return '
+    <div class="message info">
         <div>' .
         __(
             'Please specify a rating title for a store, or we\'ll just use the default value.'
         ) . '</div>
-    </div>
-</div>
-</div>';
+    </div>';
     }
 }

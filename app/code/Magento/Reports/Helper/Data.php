@@ -32,7 +32,7 @@ namespace Magento\Reports\Helper;
 use Magento\Data\Collection;
 use Magento\Stdlib\DateTime;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const REPORT_PERIOD_TYPE_DAY = 'day';
 
@@ -46,10 +46,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_itemFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ItemFactory $itemFactory
      */
-    public function __construct(\Magento\App\Helper\Context $context, \Magento\Reports\Model\ItemFactory $itemFactory)
+    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Reports\Model\ItemFactory $itemFactory)
     {
         parent::__construct($context);
         $this->_itemFactory = $itemFactory;

@@ -38,8 +38,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testCartAction()
     {
-        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
 
         $wishlistItem = $this->getMock(
             'Magento\Object',
@@ -121,16 +121,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * Create the tested object
      *
-     * @param \Magento\App\Request\Http $request
-     * @param \Magento\App\Response\Http|null $response
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\Response\Http|null $response
      * @param \Magento\ObjectManager|null $objectManager
      * @return \Magento\Wishlist\Controller\Index
      */
     protected function _factory($request, $response = null, $objectManager = null)
     {
         if (!$response) {
-            /** @var $response \Magento\App\ResponseInterface */
-            $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+            /** @var $response \Magento\Framework\App\ResponseInterface */
+            $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
             $response->headersSentThrowsException = false;
         }
         if (!$objectManager) {
@@ -140,7 +140,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'Magento\UrlRewrite\Model\UrlRewriteFactory', array('create'), array(), '', false
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $varienFront = $helper->getObject('Magento\App\FrontController', array('rewriteFactory' => $rewriteFactory));
+        $varienFront = $helper->getObject(
+            'Magento\Framework\App\FrontController',
+            array('rewriteFactory' => $rewriteFactory)
+        );
 
         $arguments = array(
             'request' => $request,

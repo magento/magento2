@@ -45,7 +45,7 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -78,7 +78,7 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -93,7 +93,7 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

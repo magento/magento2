@@ -38,5 +38,5 @@ require_once realpath(
     dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))))
 ) . '/app/code/Magento/Core/Model/Resource/Setup/Migration.php';
 
-$objectManager = new \Magento\App\ObjectManager();
+$objectManager = new \Magento\Framework\App\ObjectManager();
 return $objectManager->create('\Magento\Module\Setup\Migration')->getCompositeModules();

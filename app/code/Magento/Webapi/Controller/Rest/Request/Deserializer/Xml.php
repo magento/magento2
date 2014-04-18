@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 
 class Xml implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {

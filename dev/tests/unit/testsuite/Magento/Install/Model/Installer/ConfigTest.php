@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystemMock;
 
@@ -57,13 +57,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
 
-        $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_filesystemMock->expects(
             $this->any()
         )->method(
             'getPath'
         )->with(
-            \Magento\App\Filesystem::CONFIG_DIR
+            \Magento\Framework\App\Filesystem::CONFIG_DIR
         )->will(
             $this->returnValue(TESTS_TEMP_DIR)
         );
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_messageManager = $this->getMock('\Magento\Message\ManagerInterface', array(), array(), '', false);
         $this->_model = new \Magento\Install\Model\Installer\Config(
             $this->getMock('Magento\Install\Model\Installer', array(), array(), '', false),
-            $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false),
             $this->_filesystemMock,
             $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
             $this->_messageManager

@@ -93,7 +93,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -165,7 +165,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
@@ -176,7 +176,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -189,7 +189,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory,
@@ -200,7 +200,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory $productCollectionFactory,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = array()
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;

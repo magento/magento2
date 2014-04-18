@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Controller;
 
-class Currency extends \Magento\App\Action\Action
+class Currency extends \Magento\Framework\App\Action\Action
 {
     /**
      * @return void

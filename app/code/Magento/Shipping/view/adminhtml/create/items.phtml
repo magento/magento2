@@ -66,26 +66,25 @@
     </div>
     <div class="order-totals">
         <div class="fieldset-wrapper">
-            <div class="clearfix">
-                <div class="actions">
-                    <?php echo $this->getChildHtml('submit_button') ?>
+            <?php if ($this->canCreateShippingLabel()): ?>
+                <div class="field choice field-create">
+                    <input id="create_shipping_label" name="shipment[create_shipping_label]" value="1" type="checkbox"
+                           onclick="toggleCreateLabelCheckbox();"/>
+                    <label class="normal" for="create_shipping_label"><?php echo __('Create Shipping Label') ?></label>
                 </div>
-              <?php if ($this->canCreateShippingLabel()): ?>
-              <div>
-                  <label class="normal" for="create_shipping_label"><?php echo __('Create Shipping Label') ?></label>
-                  <input id="create_shipping_label" name="shipment[create_shipping_label]" value="1" type="checkbox"  onclick="toggleCreateLabelCheckbox();" />
-              </div>
-              <?php endif ?>
-              <div>
-                  <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
-                  <input id="notify_customer" name="shipment[comment_customer_notify]" value="1" type="checkbox" />
-              </div>
-              <?php if ($this->canSendShipmentEmail()): ?>
-              <div>
-                  <label class="normal" for="send_email"><?php echo __('Email Copy of Shipment') ?></label>
-                  <input id="send_email" name="shipment[send_email]" value="1" type="checkbox" />
-              </div>
-              <?php endif; ?>
+            <?php endif ?>
+            <div class="field choice field-append">
+                <input id="notify_customer" name="shipment[comment_customer_notify]" value="1" type="checkbox"/>
+                <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
+            </div>
+            <?php if ($this->canSendShipmentEmail()): ?>
+                <div class="field choice field-email">
+                    <input id="send_email" name="shipment[send_email]" value="1" type="checkbox"/>
+                    <label class="normal" for="send_email"><?php echo __('Email Copy of Shipment') ?></label>
+                </div>
+            <?php endif; ?>
+            <div class="actions">
+                <?php echo $this->getChildHtml('submit_button') ?>
             </div>
         </div>
     </div>

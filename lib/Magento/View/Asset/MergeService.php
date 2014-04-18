@@ -45,14 +45,14 @@ class MergeService
     /**
      * Filesystem
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
     /**
      * State
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $state;
 
@@ -61,14 +61,14 @@ class MergeService
      *
      * @param \Magento\ObjectManager $objectManager
      * @param ConfigInterface $config
-     * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\App\State $state
+     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         ConfigInterface $config,
-        \Magento\App\Filesystem $filesystem,
-        \Magento\App\State $state
+        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\App\State $state
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
@@ -95,7 +95,7 @@ class MergeService
         $isCssMergeEnabled = $this->config->isMergeCssFiles();
         $isJsMergeEnabled = $this->config->isMergeJsFiles();
         if ($isCss && $isCssMergeEnabled || $isJs && $isJsMergeEnabled) {
-            if ($this->state->getMode() == \Magento\App\State::MODE_PRODUCTION) {
+            if ($this->state->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
                 $mergeStrategyClass = 'Magento\View\Asset\MergeStrategy\FileExists';
             } else {
                 $mergeStrategyClass = 'Magento\View\Asset\MergeStrategy\Checksum';
@@ -119,7 +119,7 @@ class MergeService
     public function cleanMergedJsCss()
     {
         $this->filesystem->getDirectoryWrite(
-            \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+            \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
         )->delete(
             Merged::PUBLIC_MERGE_DIR
         );

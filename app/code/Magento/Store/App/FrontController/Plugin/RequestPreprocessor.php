@@ -26,12 +26,12 @@ namespace Magento\Store\App\FrontController\Plugin;
 class RequestPreprocessor
 {
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\ResponseFactory
+     * @var \Magento\Framework\App\ResponseFactory
      */
     protected $_responseFactory;
 
@@ -41,7 +41,7 @@ class RequestPreprocessor
     protected $_url;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -52,17 +52,17 @@ class RequestPreprocessor
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\UrlInterface $url
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\ResponseFactory $responseFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\ResponseFactory $responseFactory
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\UrlInterface $url,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\ResponseFactory $responseFactory
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\ResponseFactory $responseFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
@@ -75,17 +75,17 @@ class RequestPreprocessor
      * Auto-redirect to base url (without SID) if the requested url doesn't match it.
      * By default this feature is enabled in configuration.
      *
-     * @param \Magento\App\FrontController $subject
+     * @param \Magento\Framework\App\FrontController $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\FrontController $subject,
+        \Magento\Framework\App\FrontController $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         if ($this->_appState->isInstalled() && !$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
@@ -131,7 +131,7 @@ class RequestPreprocessor
      * Check if base url enabled
      *
      * @param array $uri
-     * @param \Magento\App\Request\Http $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @return bool
      */
     protected function _isBaseUrlCorrect($uri, $request)

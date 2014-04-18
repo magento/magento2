@@ -33,7 +33,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_eventDispatcher;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cacheManager;
 
@@ -43,7 +43,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_logger;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -55,15 +55,15 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventDispatcher
-     * @param \Magento\App\CacheInterface $cacheManager
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\CacheInterface $cacheManager
+     * @param \Magento\Framework\App\State $appState
      * @param ActionValidator\RemoveAction $actionValidator
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventDispatcher,
-        \Magento\App\CacheInterface $cacheManager,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\CacheInterface $cacheManager,
+        \Magento\Framework\App\State $appState,
         \Magento\Model\ActionValidator\RemoveAction $actionValidator
     ) {
         $this->_eventDispatcher = $eventDispatcher;
@@ -74,7 +74,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\App\CacheInterface
+     * @return \Magento\Framework\App\CacheInterface
      */
     public function getCacheManager()
     {
@@ -98,7 +98,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\App\State
+     * @return \Magento\Framework\App\State
      */
     public function getAppState()
     {

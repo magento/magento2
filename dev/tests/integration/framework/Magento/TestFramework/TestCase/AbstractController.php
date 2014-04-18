@@ -80,8 +80,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_objectManager->removeSharedInstance('Magento\App\ResponseInterface');
-        $this->_objectManager->removeSharedInstance('Magento\App\RequestInterface');
+        $this->_objectManager->removeSharedInstance('Magento\Framework\App\ResponseInterface');
+        $this->_objectManager->removeSharedInstance('Magento\Framework\App\RequestInterface');
     }
 
     protected function tearDown()
@@ -121,7 +121,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\App\RequestInterface');
+            $this->_request = $this->_objectManager->get('Magento\Framework\App\RequestInterface');
         }
         return $this->_request;
     }
@@ -134,7 +134,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\App\ResponseInterface');
+            $this->_response = $this->_objectManager->get('Magento\Framework\App\ResponseInterface');
         }
         return $this->_response;
     }

@@ -24,12 +24,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <type name="Magento\App\Cache">
+    <type name="Magento\Framework\App\Cache">
         <arguments>
             <argument name="storeManager" xsi:type="object">customStoreManagerProxy</argument>
         </arguments>
     </type>
-    <type name="Magento\App\Action\Context">
+    <type name="Magento\Framework\App\Action\Context">
         <arguments>
             <argument name="layoutFactory" xsi:type="object">customLayoutFactory</argument>
         </arguments>

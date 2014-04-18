@@ -202,13 +202,14 @@ class Quote
         if (!$quote->getCustomerIsGuest()) {
             $customerData = $quote->getCustomerData();
             $addresses = $quote->getCustomerAddressData();
+            $customerDetails = $this->_customerDetailsBuilder
+                ->setCustomer($customerData)
+                ->setAddresses($addresses)
+                ->create();
             if ($customerData->getId()) {
-                $this->_customerAccountService->saveCustomer($customerData);
-                $this->_customerAddressService->saveAddresses($customerData->getId(), $addresses);
+                $this->_customerAccountService->updateCustomer($customerDetails);
             } else { //for new customers
-                $customerDetails =
-                    $this->_customerDetailsBuilder->setCustomer($customerData)->setAddresses($addresses)->create();
-                $customerData = $this->_customerAccountService->createAccount(
+                $customerData = $this->_customerAccountService->createCustomer(
                     $customerDetails,
                     null,
                     $quote->getPasswordHash()

@@ -25,7 +25,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Adminhtml order shipment controller
@@ -42,7 +42,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
@@ -53,13 +53,13 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Registry $coreRegistry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory
     ) {
@@ -500,12 +500,12 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         $shipment->setShippingLabel($outputPdf->render());
         $carrierCode = $carrier->getCarrierCode();
         $carrierTitle = $this->_objectManager->get(
-            'Magento\App\Config\ScopeConfigInterface',
+            'Magento\Framework\App\Config\ScopeConfigInterface',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->getValue(
             'carriers/' . $carrierCode . '/title',
-            $shipment->getStoreId(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $shipment->getStoreId()
         );
         if ($trackingNumbers) {
             foreach ($trackingNumbers as $trackingNumber) {
@@ -583,7 +583,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 return $this->_fileFactory->create(
                     'ShippingLabel(' . $shipment->getIncrementId() . ').pdf',
                     $pdfContent,
-                    \Magento\App\Filesystem::VAR_DIR,
+                    \Magento\Framework\App\Filesystem::VAR_DIR,
                     'application/pdf'
                 );
             }
@@ -617,7 +617,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                     'Y-m-d_H-i-s'
                 ) . '.pdf',
                 $pdf->render(),
-                \Magento\App\Filesystem::VAR_DIR,
+                \Magento\Framework\App\Filesystem::VAR_DIR,
                 'application/pdf'
             );
         } else {
@@ -678,7 +678,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             return $this->_fileFactory->create(
                 'ShippingLabels.pdf',
                 $outputPdf->render(),
-                \Magento\App\Filesystem::VAR_DIR,
+                \Magento\Framework\App\Filesystem::VAR_DIR,
                 'application/pdf'
             );
         }
@@ -688,7 +688,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $this->_redirect('sales/order/index');
         } else {
             $this->messageManager->addError(__('There are no shipping labels related to selected shipments.'));
-            $this->_redirect('adminhtml/order_shipment/index');
+            $this->_redirect('sales/shipment/index');
         }
     }
 
@@ -727,9 +727,9 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     {
         /** @var \Magento\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
-            \Magento\App\Filesystem::TMP_DIR
+            \Magento\Framework\App\Filesystem::TMP_DIR
         );
         $directory->create();
         $image = imagecreatefromstring($imageString);

@@ -46,4 +46,14 @@ class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
         $qty = $item->getQty();
         return $qty ? $qty : 1;
     }
+
+    /**
+     * Return product for current item
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function getProductItem()
+    {
+        return $this->getItem()->getProduct();
+    }
 }

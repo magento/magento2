@@ -51,14 +51,14 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Escaper $escaper
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Stdlib\String $string,
         \Magento\Escaper $escaper,
         array $data = array()

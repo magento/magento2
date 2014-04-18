@@ -91,7 +91,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\ImportExport\Model\Export\Entity\Eav\Customer(
-            $this->getMock('Magento\App\Config\ScopeConfigInterface'),
+            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock(

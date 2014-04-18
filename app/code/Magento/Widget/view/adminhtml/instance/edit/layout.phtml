@@ -226,7 +226,7 @@ var WidgetInstance = {
                 additional.position = data.position;
                 additional.for_value = data.for_value;
                 additional.template = '';
-                if (data.group == 'pages') {
+                if (data.group == 'pages' || data.group == 'page_layouts') {
                     layoutSelect = pageGroup.down('select#layout_handle');
                     if (layoutSelect) {
                         for (var i = 0; i < layoutSelect.options.length; i++) {

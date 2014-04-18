@@ -37,7 +37,7 @@ class Minsaleqty
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -47,11 +47,11 @@ class Minsaleqty
     protected $mathRandom;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Math\Random $mathRandom
     ) {
         $this->_scopeConfig = $scopeConfig;

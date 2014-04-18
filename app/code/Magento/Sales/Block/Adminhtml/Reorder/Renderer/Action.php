@@ -115,7 +115,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
             $attributesObject->setData($action['@']);
             $html[] = '<a ' . $attributesObject->serialize() . '>' . $action['#'] . '</a>';
         }
-        return implode($html, '<span class="separator">|</span>');
+        return implode($html, '');
     }
 
     /**

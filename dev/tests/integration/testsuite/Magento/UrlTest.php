@@ -434,7 +434,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\App\RequestInterface');
+        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
         $request->setServer(array('HTTP_REFERER' => 'http://localhost/'));
         $this->assertTrue($this->_model->isOwnOriginUrl());
 

@@ -162,7 +162,7 @@ class Item extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -211,7 +211,7 @@ class Item extends \Magento\Model\AbstractModel
      * @param Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Math\Division $mathDivision
@@ -228,7 +228,7 @@ class Item extends \Magento\Model\AbstractModel
         Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Math\Division $mathDivision,

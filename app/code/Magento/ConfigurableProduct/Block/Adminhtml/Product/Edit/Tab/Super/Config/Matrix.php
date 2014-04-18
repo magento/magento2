@@ -51,7 +51,7 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $_productFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_applicationConfig;
 

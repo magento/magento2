@@ -28,7 +28,7 @@ namespace Magento\Eav\Helper;
 /**
  * Eav data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * XML path to input types validator data in config
@@ -50,7 +50,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -65,15 +65,15 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_eavConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->_scopeConfig = $scopeConfig;

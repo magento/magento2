@@ -68,7 +68,7 @@ class ThemeDeployment
     private $_isDryRun;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     private $appState;
 
@@ -91,10 +91,10 @@ class ThemeDeployment
      * Constructor
      *
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\Asset\PreProcessor\PreProcessorInterface $preProcessor
      * @param \Magento\View\Publisher\FileFactory $fileFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Core\Model\Theme\DataFactory $themeFactory
      * @param string $destinationHomeDir
      * @param string $configPermitted
@@ -105,10 +105,10 @@ class ThemeDeployment
      */
     public function __construct(
         \Magento\View\Url\CssResolver $cssUrlResolver,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\Asset\PreProcessor\PreProcessorInterface $preProcessor,
         \Magento\View\Publisher\FileFactory $fileFactory,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\Core\Model\Theme\DataFactory $themeFactory,
         $destinationHomeDir,
         $configPermitted,
@@ -118,7 +118,7 @@ class ThemeDeployment
         $this->themeFactory = $themeFactory;
         $this->appState = $appState;
         $this->preProcessor = $preProcessor;
-        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->fileFactory = $fileFactory;
         $this->_cssUrlResolver = $cssUrlResolver;
         $this->_destinationHomeDir = $destinationHomeDir;

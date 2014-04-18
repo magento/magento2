@@ -58,7 +58,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Core config model
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -69,14 +69,14 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;

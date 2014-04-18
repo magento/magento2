@@ -49,10 +49,10 @@ class Link extends \Magento\Model\Resource\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param Relation $catalogProductRelation
      */
-    public function __construct(\Magento\App\Resource $resource, Relation $catalogProductRelation)
+    public function __construct(\Magento\Framework\App\Resource $resource, Relation $catalogProductRelation)
     {
         $this->_catalogProductRelation = $catalogProductRelation;
         parent::__construct($resource);

@@ -59,14 +59,14 @@ class MinifyService
     /**
      * Applicaiton State
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
      * Filesystem instance
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -75,14 +75,14 @@ class MinifyService
      *
      * @param ConfigInterface $config
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\State $appState
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         ConfigInterface $config,
         \Magento\ObjectManager $objectManager,
-        \Magento\App\State $appState,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
@@ -126,7 +126,7 @@ class MinifyService
             $adapter = $this->getAdapter($contentType);
             $strategyParams = array('adapter' => $adapter);
             switch ($this->appState->getMode()) {
-                case \Magento\App\State::MODE_PRODUCTION:
+                case \Magento\Framework\App\State::MODE_PRODUCTION:
                     $strategy = $this->objectManager->create('Magento\Code\Minifier\Strategy\Lite', $strategyParams);
                     break;
                 default:
@@ -136,7 +136,7 @@ class MinifyService
                     );
             }
             $baseDir = $this->_filesystem->getDirectoryRead(
-                \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+                \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
             )->getAbsolutePath(
                 'minify'
             );

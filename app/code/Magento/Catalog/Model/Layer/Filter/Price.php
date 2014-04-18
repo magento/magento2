@@ -92,7 +92,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_customerSession;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -104,7 +104,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
@@ -115,7 +115,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
         \Magento\Registry $coreRegistry,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = array()
     ) {
         $this->_resource = $filterPriceFactory->create();

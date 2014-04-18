@@ -32,12 +32,12 @@ use Magento\Sales\Controller\Adminhtml\Order as OrderController;
 class Order extends OrderController
 {
     /**
-     * @var \Magento\App\Action\Title
+     * @var \Magento\Framework\App\Action\Title
      */
     public $_title;
 
     /**
-     * @var \Magento\App\Action\Title
+     * @var \Magento\Framework\App\Action\Title
      */
     public $_view;
 

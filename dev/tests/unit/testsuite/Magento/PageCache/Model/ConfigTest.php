@@ -33,12 +33,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Cache\StateInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
@@ -47,9 +47,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
-        $this->_coreConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
-        $this->_cacheState = $this->getMock('\Magento\App\Cache\State', array('isEnabled'), array(), '', false);
+        $filesystemMock =
+            $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_cacheState =
+            $this->getMock('\Magento\Framework\App\Cache\State', array('isEnabled'), array(), '', false);
 
         $modulesDirectoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $filesystemMock->expects(
@@ -57,7 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::MODULES_DIR
+            \Magento\Framework\App\Filesystem::MODULES_DIR
         )->will(
             $this->returnValue($modulesDirectoryMock)
         );

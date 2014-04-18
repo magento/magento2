@@ -44,7 +44,7 @@ class DesignAbstraction extends \Magento\View\Element\Html\Select
     protected $_themesFactory;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -52,14 +52,14 @@ class DesignAbstraction extends \Magento\View\Element\Html\Select
      * @param \Magento\View\Element\Context $context
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Context $context,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         array $data = array()
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;

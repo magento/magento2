@@ -35,6 +35,16 @@
     }
 }
 
-.data.table.wishlist .box.tocart .qty {
-    &:extend(.input-qty all);
+.data.table.wishlist {
+    .product.name {
+        display: inline-block;
+        margin-bottom: @indent-s-base;
+    }
+    .box.tocart {
+        margin: @indent-s-base 0;
+        .qty {
+            vertical-align: middle;
+            &:extend(.input-qty all);
+        }
+    }
 }

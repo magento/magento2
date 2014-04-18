@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Helper;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class File extends \Magento\App\Helper\AbstractHelper
+class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Core file storage database
@@ -44,7 +44,7 @@ class File extends \Magento\App\Helper\AbstractHelper
     /**
      * Filesystem object.
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -56,15 +56,15 @@ class File extends \Magento\App\Helper\AbstractHelper
     protected $_mediaDirectory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param array $mimeTypes
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         array $mimeTypes = array()
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;

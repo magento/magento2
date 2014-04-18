@@ -26,8 +26,8 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\App\Filesystem;
-use Magento\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -154,7 +154,7 @@ class Application
                 Filesystem::GENERATION_DIR => array('path' => $generationDir),
                 Filesystem::CACHE_DIR => array('path' => $installDir . '/cache')
             ),
-            \Magento\App\State::PARAM_MODE => $appMode
+            \Magento\Framework\App\State::PARAM_MODE => $appMode
         );
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory();
     }
@@ -205,7 +205,7 @@ class Application
     public function initialize($overriddenParams = array())
     {
         $overriddenParams['base_dir'] = BP;
-        $overriddenParams[\Magento\App\State::PARAM_MODE] = $this->_appMode;
+        $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
         $overriddenParams = $this->_customizeParams($overriddenParams);
 
         /** @var \Magento\TestFramework\ObjectManager $objectManager */
@@ -221,17 +221,17 @@ class Application
         ) ? $overriddenParams[Filesystem::PARAM_APP_DIRS] : array();
         $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList(BP, $directories);
 
-        $objectManager->addSharedInstance($directoryList, 'Magento\App\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
         $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
-        $objectManager->removeSharedInstance('Magento\App\Filesystem');
-        $objectManager->removeSharedInstance('Magento\App\Filesystem\DirectoryList\Verification');
+        $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem');
+        $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem\DirectoryList\Verification');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
         $objectManager->configure(
             array(
                 'preferences' => array(
-                    'Magento\App\State' => 'Magento\TestFramework\App\State'
+                    'Magento\Framework\App\State' => 'Magento\TestFramework\App\State'
                 )
             )
         );
@@ -254,17 +254,17 @@ class Application
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\Phrase::setRenderer($objectManager->get('Magento\Phrase\RendererInterface'));
 
-        /** @var \Magento\App\Filesystem\DirectoryList\Verification $verification */
-        $verification = $objectManager->get('Magento\App\Filesystem\DirectoryList\Verification');
+        /** @var \Magento\Framework\App\Filesystem\DirectoryList\Verification $verification */
+        $verification = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList\Verification');
         $verification->createAndVerifyDirectories();
 
-        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $directoryListConfig = $objectManager->get('Magento\App\Filesystem\DirectoryList\Configuration');
+        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $directoryListConfig = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList\Configuration');
         $directoryListConfig->configure($directoryList);
 
         $directories = isset(
-            $overriddenParams[\Magento\App\Filesystem::PARAM_APP_DIRS]
-        ) ? $overriddenParams[\Magento\App\Filesystem::PARAM_APP_DIRS] : array();
+            $overriddenParams[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
+        ) ? $overriddenParams[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS] : array();
         foreach ($directories as $code => $configOverrides) {
             $config = array_merge($directoryList->getConfig($code), $configOverrides);
             $directoryList->addDirectory($code, $config);
@@ -288,8 +288,8 @@ class Application
     public function run()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Http $app */
-        $app = $objectManager->get('Magento\App\Http');
+        /** @var \Magento\Framework\App\Http $app */
+        $app = $objectManager->get('Magento\Framework\App\Http');
         $response = $app->launch();
         $response->sendResponse();
     }
@@ -345,7 +345,7 @@ class Application
         /* Initialize an application in non-installed mode */
         $this->initialize();
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
             ->getArea('install')->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         /* Run all install and data-install scripts */
@@ -355,13 +355,13 @@ class Application
         $updater->updateData();
 
         /* Enable configuration cache by default in order to improve tests performance */
-        /** @var $cacheState \Magento\App\Cache\StateInterface */
+        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Cache\StateInterface'
+            'Magento\Framework\App\Cache\StateInterface'
         );
-        $cacheState->setEnabled(\Magento\App\Cache\Type\Config::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\App\Cache\Type\Layout::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\App\Cache\Type\Translate::TYPE_IDENTIFIER, true);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER, true);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER, true);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER, true);
         $cacheState->setEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER, true);
         $cacheState->persist();
 
@@ -379,8 +379,8 @@ class Application
         /* Switch an application to installed mode */
         $this->initialize();
         //hot fix for \Magento\Catalog\Model\Product\Attribute\Backend\SkuTest::testGenerateUniqueLongSku
-        /** @var $appState \Magento\App\State */
-        $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State');
+        /** @var $appState \Magento\Framework\App\State */
+        $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State');
         $appState->setInstallDate(date('r', strtotime('now')));
     }
 
@@ -508,12 +508,12 @@ class Application
         $scope->setCurrentScope($areaCode);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\ObjectManager\ConfigLoader'
+                'Magento\Framework\App\ObjectManager\ConfigLoader'
             )->load(
                 $areaCode
             )
         );
-        $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList');
+        $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList');
         if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
             $app->getArea($areaCode)->load(\Magento\Core\Model\App\Area::PART_CONFIG);
         } else {

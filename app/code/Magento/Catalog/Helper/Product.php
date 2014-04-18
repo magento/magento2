@@ -28,8 +28,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
- *
- * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Product extends \Magento\Core\Helper\Url
 {
@@ -90,12 +88,12 @@ class Product extends \Magento\Core\Helper\Url
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -133,7 +131,7 @@ class Product extends \Magento\Core\Helper\Url
     protected $_reindexPriceIndexerData;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -141,13 +139,13 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param string $typeSwitcherLabel
      * @param \Magento\Catalog\Model\CategoryFactory $reindexPriceIndexerData
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -155,8 +153,8 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\View\Url $viewUrl,
         \Magento\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         $typeSwitcherLabel,
         $reindexPriceIndexerData
     ) {
@@ -182,7 +180,7 @@ class Product extends \Magento\Core\Helper\Url
      */
     public function isDataForPriceIndexerWasChanged($data)
     {
-        if ($data instanceof \Magento\Catalog\Model\Product) {
+        if ($data instanceof ModelProduct) {
             foreach ($this->_reindexPriceIndexerData['byDataResult'] as $param) {
                 if ($data->getData($param)) {
                     return true;
@@ -438,7 +436,7 @@ class Product extends \Magento\Core\Helper\Url
      *     If empty (except FALSE) - will be guessed (e.g. from last visited) to load as current.
      *
      * @param int $productId
-     * @param \Magento\App\Action\Action $controller
+     * @param \Magento\Framework\App\Action\Action $controller
      * @param \Magento\Object $params
      *
      * @return false|ModelProduct

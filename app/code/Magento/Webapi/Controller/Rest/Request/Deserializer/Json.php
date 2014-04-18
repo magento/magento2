@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
-use \Magento\App\State;
+use \Magento\Framework\App\State;
 
 class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {
@@ -41,7 +41,7 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
 
     /**
      * @param \Magento\Core\Helper\Data $helper
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(\Magento\Core\Helper\Data $helper, State $appState)
     {

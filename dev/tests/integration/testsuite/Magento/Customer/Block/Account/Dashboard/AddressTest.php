@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
@@ -51,7 +52,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '',
                 array('customerSession' => $this->_customerSession)
             );
-        $this->objectManager->get('Magento\App\ViewInterface')->setIsLayoutLoaded(true);
+        $this->objectManager->get('Magento\Framework\App\ViewInterface')->setIsLayoutLoaded(true);
     }
 
     protected function tearDown()
@@ -108,7 +109,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryShippingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
+        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
             . "\nUnited States<br/>\nT: 3468676\n\n";
 
         return array(
@@ -135,7 +136,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryBillingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
+        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
             . "\nUnited States<br/>\nT: 3468676\n\n";
         return [
             '0' => [0, 'You have not set a default billing address.'],

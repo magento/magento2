@@ -52,7 +52,7 @@ abstract class AbstractAction
     /**
      * Resource instance
      *
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -71,7 +71,7 @@ abstract class AbstractAction
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -134,10 +134,10 @@ abstract class AbstractAction
     protected $_flatTableBuilder;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param Processor $flatProductProcessor
@@ -145,10 +145,10 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $flatProductProcessor,

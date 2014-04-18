@@ -43,4 +43,15 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Pricing\Adjustment\Pool">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="weee" xsi:type="array">
+                    <item name="className" xsi:type="string">Magento\Weee\Pricing\Adjustment</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

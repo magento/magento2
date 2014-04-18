@@ -101,7 +101,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
                 'Magento\Backend\Block\Widget\Button',
                 array(
                     'label' => __('Refund Offline'),
-                    'class' => 'save submit-button',
+                    'class' => 'save submit-button primary',
                     'onclick' => 'disableElements(\'submit-button\');submitCreditMemoOffline()'
                 )
             );

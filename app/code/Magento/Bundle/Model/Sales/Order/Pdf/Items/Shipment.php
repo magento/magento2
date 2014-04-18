@@ -39,7 +39,7 @@ class Shipment extends AbstractItems
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -50,7 +50,7 @@ class Shipment extends AbstractItems
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Stdlib\String $string,
         \Magento\Model\Resource\AbstractResource $resource = null,

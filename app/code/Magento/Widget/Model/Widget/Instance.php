@@ -101,7 +101,7 @@ class Instance extends \Magento\Model\AbstractModel
     protected $_namespaceResolver;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -130,13 +130,13 @@ class Instance extends \Magento\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Widget\Model\Config\Reader $reader
      * @param \Magento\Widget\Model\Widget $widgetModel
      * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param string[] $relatedCacheTypes
@@ -147,13 +147,13 @@ class Instance extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\View\FileSystem $viewFileSystem,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Widget\Model\Config\Reader $reader,
         \Magento\Widget\Model\Widget $widgetModel,
         \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
         \Magento\Math\Random $mathRandom,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = array(),
@@ -167,7 +167,7 @@ class Instance extends \Magento\Model\AbstractModel
         $this->_reader = $reader;
         $this->_widgetModel = $widgetModel;
         $this->mathRandom = $mathRandom;
-        $this->_directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->_directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->_namespaceResolver = $namespaceResolver;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -216,7 +216,7 @@ class Instance extends \Magento\Model\AbstractModel
                     if ($pageGroupData['page_id']) {
                         $pageGroupIds[] = $pageGroupData['page_id'];
                     }
-                    if ($pageGroup['page_group'] == 'pages') {
+                    if (in_array($pageGroup['page_group'], array('pages', 'page_layouts'))) {
                         $layoutHandle = $pageGroupData['layout_handle'];
                     } else {
                         $layoutHandle = $this->_layoutHandles[$pageGroup['page_group']];

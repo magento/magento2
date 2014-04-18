@@ -37,7 +37,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         $product = $objectManager->create('Magento\Catalog\Model\Product');
         $product->setIsRecurring('1');

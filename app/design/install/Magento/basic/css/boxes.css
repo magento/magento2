@@ -149,42 +149,27 @@ p.required {
     }
 
 
-
 /********************** Messages  */
-.success { color:#3d6611; }
-.error { color:#df280a; }
-.success, .error { font-weight:bold; }
-.error-msg, .success-msg, .notice-msg, .note-msg {
-    min-height:23px !important;
-    margin-bottom:1em !important;
-    border-style:solid !important;
-    border-width:1px !important;
-    background-repeat:no-repeat !important;
-    background-position:10px 10px !important;
-    padding:8px 8px 8px 32px !important;
-    font-size:.95em !important;
-    font-weight:bold !important;
-    }
-.error-msg li, .success-msg li, .notice-msg li {margin-bottom:.2em; }
-.error-msg {
-    border-color:#f16048;
-    color:#df280a;
-    background-color:#faebe7;
-    background-image:url(../images/error_msg_icon.gif);
-    }
-.success-msg {
-    border-color:#446423;
-    color:#3d6611;
-    background-color:#eff5ea;
-    background-image:url(../images/success_msg_icon.gif);
-    }
-.notice-msg, .note-msg {
-    border-color:#fcd344;
-    color:#3d6611;
-    background-color:#fafaec;
-    background-image:url(../images/note_msg_icon.gif);
-    }
+.messages { width:100%; overflow:hidden; text-align:left; margin-top:10px; }
+.messages .message { padding:10px 17px; position:relative; }
+.messages .message a { text-decoration:underline; }
+.messages .message a:hover { text-decoration:none; }
 
+.messages .message.error,
+.messages .message.success,
+.messages .message.note,
+.messages .message.notice { border-style:solid !important; border-width:1px !important; font-size:12px !important; }
+
+.messages .message.error { border-color:#e9581f; background-color:#fff5f3; color:#d91a00; }
+.messages .message.error a { color:#d91a00; }
+
+.messages .message.success { border-color:#446423; background-color:#eff5ea; color:#3d6611; }
+.messages .message.success a { color:#3d6611; }
+
+.messages .message.note,
+.messages .message.notice { border-color:#fcd344; background-color:#fafaec; color:#3d6611; }
+.messages .message.note a,
+.messages .message.notice a { color:#3d6611; }
 
 
 /********************** Headings */

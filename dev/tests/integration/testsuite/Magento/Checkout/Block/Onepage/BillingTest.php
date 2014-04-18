@@ -81,7 +81,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $checkoutSession->setQuoteId($quote->getId());
         $checkoutSession->setLoadInactive(true);
 
-        $objectManager->get('Magento\App\Http\Context')
+        $objectManager->get('Magento\Framework\App\Http\Context')
             ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
         $this->_block = $objectManager->get('Magento\View\LayoutInterface')
             ->createBlock(

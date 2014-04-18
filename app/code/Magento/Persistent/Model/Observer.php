@@ -25,6 +25,8 @@
  */
 namespace Magento\Persistent\Model;
 
+use Magento\Customer\Model\Converter as CustomerConverter;
+
 /**
  * Persistent Observer
  *
@@ -70,7 +72,7 @@ class Observer
     /**
      * Request http
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_requestHttp;
 
@@ -146,6 +148,11 @@ class Observer
     protected $_expressRedirectHelper;
 
     /**
+     * @var CustomerConverter
+     */
+    protected $customerConverter;
+
+    /**
      * Construct
      *
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -159,11 +166,12 @@ class Observer
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Persistent\Model\Persistent\ConfigFactory $persistentConfigFactory
-     * @param \Magento\App\RequestInterface $requestHttp
+     * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Escaper $escaper
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\Checkout\Helper\ExpressRedirect $expressRedirectHelper
+     * @param CustomerConverter $customerConverter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -179,11 +187,12 @@ class Observer
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Persistent\Model\Persistent\ConfigFactory $persistentConfigFactory,
-        \Magento\App\RequestInterface $requestHttp,
+        \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\View\LayoutInterface $layout,
         \Magento\Escaper $escaper,
         \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Checkout\Helper\ExpressRedirect $expressRedirectHelper
+        \Magento\Checkout\Helper\ExpressRedirect $expressRedirectHelper,
+        CustomerConverter $customerConverter
     ) {
         $this->_eventManager = $eventManager;
         $this->_persistentSession = $persistentSession;
@@ -201,6 +210,7 @@ class Observer
         $this->_escaper = $escaper;
         $this->messageManager = $messageManager;
         $this->_expressRedirectHelper = $expressRedirectHelper;
+        $this->customerConverter = $customerConverter;
     }
 
     /**
@@ -327,7 +337,9 @@ class Observer
         }
 
         if ($this->_isShoppingCartPersist()) {
-            $this->_checkoutSession->setCustomer($this->_getPersistentCustomer());
+            $this->_checkoutSession->setCustomerData(
+                $this->customerConverter->createCustomerFromModel($this->_getPersistentCustomer())
+            );
             if (!$this->_checkoutSession->hasQuote()) {
                 $this->_checkoutSession->getQuote();
             }
@@ -643,17 +655,13 @@ class Observer
     {
         $quote = $this->_checkoutSession->setLoadInactive()->getQuote();
         if ($quote->getIsActive() && $quote->getCustomerId()) {
-            $this->_checkoutSession->setCustomer(null)->clearQuote()->clearStorage();
+            $this->_checkoutSession->setCustomerData(null)->clearQuote()->clearStorage();
         } else {
-            $quote->setIsActive(
-                true
-            )->setIsPersistent(
-                false
-            )->setCustomerId(
-                null
-            )->setCustomerGroupId(
-                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
-            );
+            $quote
+                ->setIsActive(true)
+                ->setIsPersistent(false)
+                ->setCustomerId(null)
+                ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         }
     }
 

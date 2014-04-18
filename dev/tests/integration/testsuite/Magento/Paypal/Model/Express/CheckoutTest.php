@@ -66,7 +66,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $checkout->place('token');
 
         $this->assertEquals(1, $quote->getCustomerId());
-        $addressService->getAddresses($quote->getCustomerId());
         $this->assertEquals(2, count($addressService->getAddresses($quote->getCustomerId())));
 
         $this->assertEquals(1, $quote->getBillingAddress()->getCustomerAddressId());

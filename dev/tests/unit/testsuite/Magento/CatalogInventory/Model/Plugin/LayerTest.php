@@ -31,7 +31,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfigMock;
 
@@ -42,7 +42,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_stockStatusMock = $this->getMock(
             '\Magento\CatalogInventory\Model\Stock\Status',
             array(),

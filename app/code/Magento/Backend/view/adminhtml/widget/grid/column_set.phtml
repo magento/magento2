@@ -140,7 +140,7 @@ $numColumns = sizeof($this->getColumns());
         <?php endforeach; ?>
         <?php elseif ($this->getEmptyText()): ?>
             <tr data-role="row">
-                <td class="empty-text <?php echo $this->getEmptyTextClass() ?>"
+                <td class="<?php echo $this->getEmptyTextClass() ?>"
                     colspan="<?php echo $numColumns ?>"
                 ><?php echo $this->getEmptyText() ?></td>
             </tr>

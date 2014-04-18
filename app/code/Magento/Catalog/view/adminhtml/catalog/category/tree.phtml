@@ -189,6 +189,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 function reRenderTree(switcherParams) {
     // re-render tree by store switcher
     if (tree && switcherParams) {
+        var url;
         if (switcherParams.useConfirm) {
             if (!confirm("<?php echo __('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
                 return false;
@@ -203,26 +204,34 @@ function reRenderTree(switcherParams) {
                 $('add_root_category_button').hide();
             }
         }
-        // add form key
-        switcherParams.scopeParams.form_key = FORM_KEY;
 
-        // retain current selected category id
-        var url = tree.switchTreeUrl + switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+        if (tree.useAjax) {
+            // retain current selected category id
+            url = tree.switchTreeUrl + switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+            // load from cache
+            // load from ajax
+            // add form key
+            var params = {
+                form_key : FORM_KEY
+            };
+            new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ), {
+                parameters:params,
+                method:'post',
+                onComplete:function (transport) {
+                    var response = eval('(' + transport.responseText + ')');
+                    if (!response['parameters']) {
+                        return false;
+                    }
 
-        // load from cache
-        // load from ajax
-        new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ), {
-            parameters:switcherParams.scopeParams,
-            method:'post',
-            onComplete:function (transport) {
-                var response = eval('(' + transport.responseText + ')');
-                if (!response['parameters']) {
-                    return false;
+                    _renderNewTree(response, switcherParams.scopeParams);
                 }
-
-                _renderNewTree(response, switcherParams.scopeParams);
-            }
-        });
+            });
+        } else {
+            var baseUrl = '<?php echo $this->getEditUrl() ?>';
+            var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+            url = parseSidUrl(baseUrl, urlExt);
+            setLocation(url);
+        }
     }
     // render default tree
     else {
@@ -258,7 +267,7 @@ function _renderNewTree(config, scopeParams) {
             url = url + 'id/' + config.parameters.category_id;
         }
         <?php endif;?>
-    updateContent(url);
+    //updateContent(url); //commented since ajax requests replaced with http ones to load a category
 }
 
 Ext.onReady(function () {
@@ -435,9 +444,9 @@ function categoryMove(obj) {
     };
 
     var failure = function (o) {
-        try {
+        if (window.console) {
             console.log(o.statusText);
-        } catch (e2) {
+        } else {
             alert(o.statusText);
         }
         location.reload();

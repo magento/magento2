@@ -42,8 +42,8 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $this->_response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
     }
 
@@ -67,7 +67,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(urlencode(base64_encode(json_encode(array(1)))))
         );
         $this->_request->expects($this->at(1))->method('getParam')->with('h')->will($this->returnValue($fixture));
-        $tunnelResponse = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $tunnelResponse = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $httpClient = $this->getMock(
             'Magento\HTTP\ZendClient',
             array('setUri', 'setParameterGet', 'setConfig', 'request', 'getHeaders')
@@ -239,22 +239,25 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
     /**
      * Create the tested object
      *
-     * @param Magento\App\Request\Http $request
-     * @param \Magento\App\Response\Http|null $response
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\Response\Http|null $response
      * @return \Magento\Backend\Controller\Adminhtml\Dashboard|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _factory($request, $response = null)
     {
         if (!$response) {
-            /** @var $response \Magento\App\ResponseInterface|PHPUnit_Framework_MockObject_MockObject */
-            $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+            /** @var $response \Magento\Framework\App\ResponseInterface|PHPUnit_Framework_MockObject_MockObject */
+            $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
             $response->headersSentThrowsException = false;
         }
         $rewriteFactory = $this->getMock(
             'Magento\UrlRewrite\Model\UrlRewriteFactory', array('create'), array(), '', false
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $varienFront = $helper->getObject('Magento\App\FrontController', array('rewriteFactory' => $rewriteFactory));
+        $varienFront = $helper->getObject(
+            'Magento\Framework\App\FrontController',
+            array('rewriteFactory' => $rewriteFactory)
+        );
 
         $arguments = array(
             'request' => $request,

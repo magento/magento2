@@ -200,8 +200,25 @@
     @_element-border-color-error: @form-element-validation-border-error,
     @_element-border-color-valid: @form-element-validation-border-valid,
     @_element-background-error: @form-element-validation-background-error,
-    @_element-background-valid: @form-element-validation-background-valid,
+    @_element-background-valid: @form-element-validation-background-valid
+) {
+    &.mage-error {
+        .form-element-color(
+            @_border-color: @_element-border-color-error,
+            @_background: @_element-background-error,
+            @_color: @_element-color-error
+        );
+    }
+    &.valid {
+        .form-element-color(
+            @_border-color: @_element-border-color-valid,
+            @_background: @_element-background-valid,
+            @_color: @_element-color-valid
+        );
+    }
+}
 
+.form-validation-note(
     @_note-font-size: @form-validation-note-font-size,
     @_note-color: @form-validation-note-color-error,
     @_note-font-family: @form-validation-note-font-family,
@@ -224,46 +241,28 @@
     @_note-icon-font-position: @form-validation-note-icon-font-position,
     @_note-icon-font-text-hide: @form-validation-note-icon-font-text-hide
 ) {
-    &.mage-error {
-        .form-element-color(
-            @_border-color: @_element-border-color-error,
-            @_background: @_element-background-error,
-            @_color: @_element-color-error
-        );
-    }
-    &.valid {
-        .form-element-color(
-            @_border-color: @_element-border-color-valid,
-            @_background: @_element-background-valid,
-            @_color: @_element-color-valid
-        );
-    }
-    + div.mage-error {
-        .typography(
-            @_font-size: @_note-font-size,
-            @_color: @_note-color,
-            @_font-family: @_note-font-family,
-            @_font-weight: @_note-font-weight,
-            @_line-height: @_note-line-height,
-            @_font-style: @_note-font-style
-        );
-        .add-margin(@_note-margin);
-        .add-padding(@_note-padding);
-        ._form-validation-icon(
-            @_note-icon-use,
-            @_note-icon-font-content,
-            @_note-icon-font,
-            @_note-icon-font-size,
-            @_note-icon-font-line-height,
-            @_note-icon-font-color,
-            @_note-icon-font-color-hover,
-            @_note-icon-font-color-active,
-            @_note-icon-font-margin,
-            @_note-icon-font-vertical-align,
-            @_note-icon-font-position,
-            @_note-icon-font-text-hide
-        );
-    }
+    .typography(
+        @_font-size: @_note-font-size,
+        @_color: @_note-color,
+        @_font-family: @_note-font-family,
+        @_font-weight: @_note-font-weight,
+        @_line-height: @_note-line-height,
+        @_font-style: @_note-font-style
+    );
+    ._form-validation-icon(
+        @_note-icon-use,
+        @_note-icon-font-content,
+        @_note-icon-font,
+        @_note-icon-font-size,
+        @_note-icon-font-line-height,
+        @_note-icon-font-color,
+        @_note-icon-font-color-hover,
+        @_note-icon-font-color-active,
+        @_note-icon-font-margin,
+        @_note-icon-font-vertical-align,
+        @_note-icon-font-position,
+        @_note-icon-font-text-hide
+    );
 }
 
 .form-validation-color(
@@ -272,8 +271,7 @@
     @_element-color-error: '',
     @_element-border-color-valid: '',
     @_element-background-valid: '',
-    @_element-color-valid: '',
-    @_note-color: ''
+    @_element-color-valid: ''
 ) {
     &.mage-error {
         .form-element-color(
@@ -288,9 +286,6 @@
             @_background: @_element-background-valid,
             @_color: @_element-color-valid
         );
-    }
-    + div.mage-error {
-        .add-color(@_note-color);
     }
 }
 
@@ -340,6 +335,10 @@
     select,
     textarea {
         .form-validation();
+    }
+
+    div.mage-error[generated] {
+        .form-validation-note();
     }
 
     input[type="button"],

@@ -31,22 +31,25 @@ use Magento\Eav\Exception;
  * EAV Entity attribute model
  *
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
-    \Magento\Object\IdentityInterface
+class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements \Magento\Object\IdentityInterface
 {
+    /**
+     * Attribute code max length
+     */
+    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+
+    /**
+     * Cache tag
+     */
+    const CACHE_TAG = 'EAV_ATTRIBUTE';
+
     /**
      * Prefix of model events names
      *
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute';
-
-    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
 
     /**
      * Parameter name in event
@@ -56,8 +59,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @var string
      */
     protected $_eventObject = 'attribute';
-
-    const CACHE_TAG = 'EAV_ATTRIBUTE';
 
     /**
      * @var string
@@ -148,6 +149,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             case 'increment_id':
                 return 'Magento\Eav\Model\Entity\Attribute\Backend\Increment';
+
+            default:
+                break;
         }
 
         return parent::_getDefaultBackendModel();
@@ -341,6 +345,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             case 'weight':
                 $field = 'decimal';
                 break;
+
+            default:
+                break;
         }
 
         return $field;
@@ -381,6 +388,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             case 'boolean':
                 $field = 'default_value_yesno';
+                break;
+
+            default:
                 break;
         }
 
@@ -440,12 +450,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function getSortWeight($setId)
     {
-        $groupSortWeight = isset(
-            $this->_data['attribute_set_info'][$setId]['group_sort']
-        ) ? (double)$this->_data['attribute_set_info'][$setId]['group_sort'] * 1000 : 0.0;
-        $sortWeight = isset(
-            $this->_data['attribute_set_info'][$setId]['sort']
-        ) ? (double)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001 : 0.0;
+        $groupSortWeight = isset($this->_data['attribute_set_info'][$setId]['group_sort'])
+            ? (float) $this->_data['attribute_set_info'][$setId]['group_sort'] * 1000
+            : 0.0;
+        $sortWeight = isset($this->_data['attribute_set_info'][$setId]['sort'])
+            ? (float) $this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
+            : 0.0;
         return $groupSortWeight + $sortWeight;
     }
 

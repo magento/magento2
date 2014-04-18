@@ -33,24 +33,24 @@ class Authentication
     /**
      * Request object
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
      * Response object
      *
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @param \Magento\App\RequestInterface $httpRequest
-     * @param \Magento\App\ResponseInterface $httpResponse
+     * @param \Magento\Framework\App\RequestInterface $httpRequest
+     * @param \Magento\Framework\App\ResponseInterface $httpResponse
      */
     public function __construct(
-        \Magento\App\RequestInterface $httpRequest,
-        \Magento\App\ResponseInterface $httpResponse
+        \Magento\Framework\App\RequestInterface $httpRequest,
+        \Magento\Framework\App\ResponseInterface $httpResponse
     ) {
         $this->request = $httpRequest;
         $this->response = $httpResponse;

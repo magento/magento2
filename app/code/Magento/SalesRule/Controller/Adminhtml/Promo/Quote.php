@@ -35,7 +35,7 @@ class Quote extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
@@ -47,13 +47,13 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
-        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);
@@ -381,7 +381,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Export coupon codes as excel xml file
      *
-     * @return \Magento\App\ResponseInterface|null
+     * @return \Magento\Framework\App\ResponseInterface|null
      */
     public function exportCouponsXmlAction()
     {
@@ -394,7 +394,7 @@ class Quote extends \Magento\Backend\App\Action
             )->getExcelFile(
                 $fileName
             );
-            return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
+            return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;
@@ -404,7 +404,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Export coupon codes as CSV file
      *
-     * @return \Magento\App\ResponseInterface|null
+     * @return \Magento\Framework\App\ResponseInterface|null
      */
     public function exportCouponsCsvAction()
     {
@@ -415,7 +415,7 @@ class Quote extends \Magento\Backend\App\Action
             $content = $this->_view->getLayout()->createBlock(
                 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid'
             )->getCsvFile();
-            return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
+            return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;

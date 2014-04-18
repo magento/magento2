@@ -41,7 +41,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', array(), array(), '', false);
-
         $objectManagerMock = $this->getMockForAbstractClass(
             '\Magento\ObjectManager',
             array(),
@@ -51,9 +50,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             true,
             array('get')
         );
-
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($productActionMock));
-
         $this->_priceProcessor = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Price\Processor',
             array(),
@@ -61,19 +58,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $requestInterfaceMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
-
-        $responseInterfaceMock = $this->getMock('Magento\App\ResponseInterface', array('setRedirect', 'sendResponse'));
-
+        $requestInterfaceMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
+        $responseInterfaceMock = $this->getMock(
+            'Magento\Framework\App\ResponseInterface',
+            array('setRedirect', 'sendResponse')
+        );
         $managerInterfaceMock = $this->getMock('Magento\Message\ManagerInterface', array(), array(), '', false);
-
         $sessionMock = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
-
-        $actionFlagMock = $this->getMock('Magento\App\ActionFlag', array(), array(), '', false);
-
+        $actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
         $helperDataMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-
         $contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
             array(
@@ -89,27 +82,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
-
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
-
         $contextMock->expects($this->any())->method('getObjectManager')->will($this->returnValue($objectManagerMock));
-
-        $contextMock->expects(
-            $this->any()
-        )->method(
-            'getMessageManager'
-        )->will(
-            $this->returnValue($managerInterfaceMock)
-        );
-
+        $contextMock->expects($this->any())
+            ->method('getMessageManager')
+            ->will($this->returnValue($managerInterfaceMock));
         $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
-
         $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
-
         $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
-
         $this->_controller = new \Magento\Catalog\Controller\Adminhtml\Product(
             $contextMock,
             $this->getMock('Magento\Registry', array(), array(), '', false),

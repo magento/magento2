@@ -41,7 +41,7 @@ class Config
     const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service\\\\(V\d+)+(\\\\.+)Interface$/';
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 

@@ -98,7 +98,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 'null' => new \Magento\Data\Argument\Interpreter\NullType(),
                 'object' => new \Magento\Data\Argument\Interpreter\Object($booleanUtils),
                 'const' => $constInterpreter,
-                'init_parameter' => new \Magento\App\Arguments\ArgumentInterpreter($constInterpreter)
+                'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter)
             ],
             \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
         );

@@ -34,15 +34,15 @@
  */
 namespace Magento\Wishlist\Controller;
 
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Index extends \Magento\Wishlist\Controller\AbstractController implements
     \Magento\Catalog\Controller\Product\View\ViewInterface
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileResponseFactory;
 
@@ -81,23 +81,23 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
     protected $_customerHelperView;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\App\Response\Http\FileFactory $fileResponseFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Customer\Helper\View $customerHelperView
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Registry $coreRegistry,
         \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\App\Response\Http\FileFactory $fileResponseFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Customer\Helper\View $customerHelperView
@@ -114,7 +114,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
     /**
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws \Magento\App\Action\NotFoundException
+     * @throws \Magento\Framework\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -132,7 +132,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $customerSession->setBeforeWishlistRequest($request->getParams());
         }
         if (!$this->_objectManager->get(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->isSetFlag(
             'wishlist/general/active'
         )
@@ -776,7 +776,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $sharingCode = $wishlist->getSharingCode();
 
             try {
-                $scopeConfig = $this->_objectManager->get('Magento\App\Config\ScopeConfigInterface');
+                $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
                 $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
@@ -879,9 +879,9 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
         try {
             $info = unserialize($option->getValue());
             $filePath = $this->_objectManager->get(
-                'Magento\App\Filesystem'
+                'Magento\Framework\App\Filesystem'
             )->getPath(
-                \Magento\App\Filesystem::ROOT_DIR
+                \Magento\Framework\App\Filesystem::ROOT_DIR
             ) . $info['quote_path'];
             $secretKey = $this->getRequest()->getParam('key');
 
@@ -889,7 +889,7 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
                 $this->_fileResponseFactory->create(
                     $info['title'],
                     array('value' => $filePath, 'type' => 'filename'),
-                    \Magento\App\Filesystem::ROOT_DIR
+                    \Magento\Framework\App\Filesystem::ROOT_DIR
                 );
             }
         } catch (\Exception $e) {

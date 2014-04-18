@@ -88,7 +88,7 @@ class Proxy extends \Magento\View\Layout
      */
     public function __wakeup()
     {
-        $this->objectManager = \Magento\App\ObjectManager::getInstance();
+        $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**
@@ -496,7 +496,7 @@ class Proxy extends \Magento\View\Layout
      *
      * @param string $type
      * @throws \Magento\Model\Exception
-     * @return \Magento\App\Helper\AbstractHelper
+     * @return \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBlockSingleton($type)
     {

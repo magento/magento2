@@ -38,7 +38,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         /** Prepare mocks for SUT constructor. */
         $this->_xmlParserMock = $this->getMock('Magento\Xml\Parser', array('xmlToArray', 'loadXML'));
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         /** Initialize SUT. */
         $this->_xmlDeserializer = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Xml(
             $this->_xmlParserMock,

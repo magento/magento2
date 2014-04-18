@@ -22,8 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $cacheTypeList \Magento\App\Cache\TypeListInterface */
+/** @var $cacheTypeList \Magento\Framework\App\Cache\TypeListInterface */
 $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\App\Cache\TypeListInterface'
+    'Magento\Framework\App\Cache\TypeListInterface'
 );
 $cacheTypeList->invalidate(array_keys($cacheTypeList->getTypes()));

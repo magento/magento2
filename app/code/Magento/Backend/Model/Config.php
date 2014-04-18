@@ -59,14 +59,14 @@ class Config extends \Magento\Object
     /**
      * Application config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_appConfig;
 
     /**
      * Global factory
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_objectFactory;
 
@@ -87,7 +87,7 @@ class Config extends \Magento\Object
     /**
      * Config data factory
      *
-     * @var \Magento\App\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
@@ -97,22 +97,22 @@ class Config extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Config\ReinitableConfigInterface $config
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\DB\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
-     * @param \Magento\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ReinitableConfigInterface $config,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\DB\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,
-        \Magento\App\Config\ValueFactory $configValueFactory,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
@@ -255,7 +255,7 @@ class Config extends \Magento\Object
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Field */
                 $field = $this->_configStructure->getElement($groupPath . '/' . $originalFieldId);
 
-                /** @var \Magento\App\Config\ValueInterface $backendModel */
+                /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
                 $backendModel = $field->hasBackendModel() ? $field
                     ->getBackendModel() : $this
                     ->_configValueFactory
@@ -423,7 +423,7 @@ class Config extends \Magento\Object
      * Set correct scope if isSingleStoreMode = true
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $fieldConfig
-     * @param \Magento\App\Config\ValueInterface $dataObject
+     * @param \Magento\Framework\App\Config\ValueInterface $dataObject
      * @return void
      */
     protected function _checkSingleStoreMode(

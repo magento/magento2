@@ -72,7 +72,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         );
         $this->_model->setUrlBuilder($urlBuilderMock);
 
-        $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false, false);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
 
         $mockData = $this->getMock('Magento\Object', array('toHtml'));

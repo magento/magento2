@@ -34,7 +34,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_catalogUrlBuilder;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -50,7 +50,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder
      * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -60,7 +60,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_cartHelper = $cartHelper;

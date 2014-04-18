@@ -47,7 +47,7 @@ class Observer
     protected $_authSession;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -60,14 +60,14 @@ class Observer
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Store\Model\StoreManagerInterfac $storeManager
      */
     public function __construct(
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Registry $coreRegistry,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\App\ResponseInterface $response,
+        \Magento\Framework\App\ResponseInterface $response,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendData = $backendData;

@@ -38,7 +38,7 @@ class ListBlock extends \Magento\View\Element\Template
     protected $_rssFeeds = array();
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -49,13 +49,13 @@ class ListBlock extends \Magento\View\Element\Template
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = array()
     ) {

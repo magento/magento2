@@ -31,7 +31,7 @@ class String extends \Magento\Model\Resource\Db\AbstractDb
     protected $_localeResolver;
 
     /**
-     * @var \Magento\App\ScopeResolverInterface
+     * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $scopeResolver;
 
@@ -41,15 +41,15 @@ class String extends \Magento\Model\Resource\Db\AbstractDb
     protected $scope;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Locale\ResolverInterface $localeResolver
-     * @param \Magento\App\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string|null $scope
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Locale\ResolverInterface $localeResolver,
-        \Magento\App\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         $scope = null
     ) {
         $this->_localeResolver = $localeResolver;

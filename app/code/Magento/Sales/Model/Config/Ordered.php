@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Config;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Ordered extends \Magento\App\Config\Base
+abstract class Ordered extends \Magento\Framework\App\Config\Base
 {
     /**
      * Cache key for collectors
@@ -77,7 +77,7 @@ abstract class Ordered extends \Magento\App\Config\Base
     protected $_collectors = array();
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -92,13 +92,13 @@ abstract class Ordered extends \Magento\App\Config\Base
     protected $_salesConfig;
 
     /**
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Logger $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Simplexml\Element $sourceData
      */
     public function __construct(
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Logger $logger,
         \Magento\Sales\Model\Config $salesConfig,
         $sourceData = null
@@ -141,7 +141,7 @@ abstract class Ordered extends \Magento\App\Config\Base
      * Prepare configuration array for total model
      *
      * @param   string $code
-     * @param   \Magento\App\Config\Element $totalConfig
+     * @param   \Magento\Framework\App\Config\Element $totalConfig
      * @return  array
      */
     protected function _prepareConfigArray($code, $totalConfig)

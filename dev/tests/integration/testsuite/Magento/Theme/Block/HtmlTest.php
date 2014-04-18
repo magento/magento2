@@ -35,7 +35,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
     public function testGetPrintLogoUrl($configData, $returnValue)
     {
         $scopeConfig = $this->getMockBuilder(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $scopeConfig->expects($this->atLeastOnce())->method('getValue')->will($this->returnValueMap($configData));
 
@@ -45,15 +45,15 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             'Magento\Url',
             array('getBaseUrl'),
             array(
-                $this->getMock('Magento\App\Route\ConfigInterface'),
-                $this->getMock('Magento\App\Request\Http', array(), array(), '', false),
+                $this->getMock('Magento\Framework\App\Route\ConfigInterface'),
+                $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false),
                 $securityInfoMock,
                 $this->getMock('Magento\Url\ScopeResolverInterface', array(), array(), '', false),
                 $this->getMock('Magento\Session\Generic', array(), array(), '', false),
                 $this->getMock('Magento\Session\SidResolverInterface', array(), array(), '', false),
                 $this->getMock('Magento\Url\RouteParamsResolverFactory', array(), array(), '', false),
                 $this->getMock('Magento\Url\QueryParamsResolver', array(), array(), '', false),
-                $this->getMock('Magento\App\Config\ScopeConfigInterface', array(), array(), '', false),
+                $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', array(), array(), '', false),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 array()
             )

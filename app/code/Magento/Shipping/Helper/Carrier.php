@@ -26,7 +26,7 @@ namespace Magento\Shipping\Helper;
 /**
  * Carrier helper
  */
-class Carrier extends \Magento\App\Helper\AbstractHelper
+class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Carriers root xml path
@@ -43,19 +43,19 @@ class Carrier extends \Magento\App\Helper\AbstractHelper
     /**
      * Store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Locale\ResolverInterface $localeResolver
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Locale\ResolverInterface $localeResolver,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->localeResolver = $localeResolver;
         $this->scopeConfig = $scopeConfig;

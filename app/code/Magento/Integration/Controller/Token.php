@@ -30,7 +30,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * oAuth token controller
  */
-class Token extends \Magento\App\Action\Action
+class Token extends \Magento\Framework\App\Action\Action
 {
     /** @var  \Magento\Oauth\OauthInterface */
     protected $_oauthService;
@@ -45,14 +45,14 @@ class Token extends \Magento\App\Action\Action
     protected $_helper;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Oauth\OauthInterface $oauthService
      * @param IntegrationOauthService $intOauthService
      * @param IntegrationService $integrationService
      * @param \Magento\Oauth\Helper\Request $helper
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Oauth\OauthInterface $oauthService,
         IntegrationOauthService $intOauthService,
         IntegrationService $integrationService,

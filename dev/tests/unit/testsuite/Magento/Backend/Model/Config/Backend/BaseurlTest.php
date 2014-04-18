@@ -28,8 +28,8 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     public function testSaveMergedJsCssMustBeCleaned()
     {
         $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $cacheManager = $this->getMock('Magento\App\CacheInterface');
+        $appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $cacheManager = $this->getMock('Magento\Framework\App\CacheInterface');
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $actionValidatorMock = $this->getMock(
             'Magento\Model\ActionValidator\RemoveAction',
@@ -52,7 +52,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $coreConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $coreConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $model = $this->getMock(
             'Magento\Backend\Model\Config\Backend\Baseurl',

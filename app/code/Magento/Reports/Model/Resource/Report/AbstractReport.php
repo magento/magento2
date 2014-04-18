@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Reports\Model\Resource\Report;
 
 /**
  * Abstract report aggregate resource model
- *
- * @category    Magento
- * @package     Magento_Reports
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model\Resource\Report;
-
 abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
@@ -59,7 +54,7 @@ abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
     protected $_reportsFlagFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Logger $logger
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -67,7 +62,7 @@ abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Logger $logger,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
@@ -461,7 +456,7 @@ abstract class AbstractReport extends \Magento\Model\Resource\Db\AbstractDb
                 $tr = $transitions[$i];
                 try {
                     $this->timezoneValidator->validate($tr['ts'], $to);
-                } catch (\Exception $e) {
+                } catch (\Magento\Stdlib\DateTime\Timezone\ValidationException $e) {
                     continue;
                 }
 

@@ -246,26 +246,26 @@ abstract class AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         array $data = array()
     ) {
         $this->_scopeConfig = $scopeConfig;

@@ -169,16 +169,16 @@ class Settlement extends \Magento\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
     * @param \Magento\Model\Context $context
     * @param \Magento\Registry $registry
-    * @param \Magento\App\Filesystem $filesystem
+    * @param \Magento\Framework\App\Filesystem $filesystem
     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-    * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+    * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     * @param \Magento\Model\Resource\AbstractResource $resource
     * @param \Magento\Data\Collection\Db $resourceCollection
     * @param array $data
@@ -186,14 +186,14 @@ class Settlement extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_tmpDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $this->_tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         $this->_storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

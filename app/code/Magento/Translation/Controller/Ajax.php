@@ -23,7 +23,7 @@
  */
 namespace Magento\Translation\Controller;
 
-class Ajax extends \Magento\App\Action\Action
+class Ajax extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Translate\Inline\ParserInterface
@@ -31,11 +31,11 @@ class Ajax extends \Magento\App\Action\Action
     protected $inlineParser;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Translate\Inline\ParserInterface $inlineParser
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Translate\Inline\ParserInterface $inlineParser
     ) {
         parent::__construct($context);

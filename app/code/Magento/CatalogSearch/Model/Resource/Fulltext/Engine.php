@@ -83,7 +83,7 @@ class Engine extends \Magento\Model\Resource\Db\AbstractDb implements
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory $catalogSearchAdvancedCollectionFactory
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory $catalogSearchFulltextCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -93,7 +93,7 @@ class Engine extends \Magento\Model\Resource\Db\AbstractDb implements
      * @param \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory $catalogSearchAdvancedCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory $catalogSearchFulltextCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,

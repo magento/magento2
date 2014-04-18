@@ -28,7 +28,7 @@ namespace Magento\Paypal\Model\System\Config\Backend;
 /**
  * Backend model for saving certificate file in case of using certificate based authentication
  */
-class Cert extends \Magento\App\Config\Value
+class Cert extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Paypal\Model\CertFactory
@@ -48,10 +48,10 @@ class Cert extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -59,17 +59,17 @@ class Cert extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Paypal\Model\CertFactory $certFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_certFactory = $certFactory;
         $this->_encryptor = $encryptor;
-        $this->_tmpDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $this->_tmpDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 

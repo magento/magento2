@@ -128,7 +128,8 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('backend/admin/index/index');
 
-        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ResponseInterface');
+        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\ResponseInterface');
         $code = $response->getHttpResponseCode();
         $this->assertTrue($code >= 300 && $code < 400, 'Incorrect response code');
 

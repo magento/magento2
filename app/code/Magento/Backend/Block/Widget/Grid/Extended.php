@@ -146,7 +146,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      *
      * @var string|null
      */
-    protected $_emptyTextCss = 'a-center';
+    protected $_emptyTextCss = 'empty-text';
 
     /**
      * @var bool
@@ -192,7 +192,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         parent::_construct();
         $this->_emptyText = __('We couldn\'t find any records.');
 
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

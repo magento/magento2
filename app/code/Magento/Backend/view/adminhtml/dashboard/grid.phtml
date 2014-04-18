@@ -58,7 +58,7 @@ $numColumns = sizeof($this->getColumns());
         <?php endforeach; ?>
         <?php elseif ($this->getEmptyText()): ?>
             <tr>
-                <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="100"><?php echo $this->getEmptyText() ?></td>
+                <td class="<?php echo $this->getEmptyTextClass() ?>" colspan="100"><?php echo $this->getEmptyText() ?></td>
             </tr>
         <?php endif; ?>
         </tbody>

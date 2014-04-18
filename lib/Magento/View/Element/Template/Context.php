@@ -26,7 +26,7 @@ class Context extends \Magento\View\Element\Context
     /**
      * Filesystem instance
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -47,7 +47,7 @@ class Context extends \Magento\View\Element\Context
     /**
      * Application state
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -59,55 +59,55 @@ class Context extends \Magento\View\Element\Context
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\TranslateInterface $translator
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
-     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEnginePool $enginePool
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\UrlInterface $urlBuilder,
         \Magento\TranslateInterface $translator,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
-        \Magento\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Logger $logger,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEnginePool $enginePool,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct(
@@ -142,7 +142,7 @@ class Context extends \Magento\View\Element\Context
     /**
      * Get filesystem instance
      *
-     * @return \Magento\App\Filesystem
+     * @return \Magento\Framework\App\Filesystem
      */
     public function getFilesystem()
     {
@@ -182,7 +182,7 @@ class Context extends \Magento\View\Element\Context
     /**
      * Get app state object
      *
-     * @return \Magento\App\State
+     * @return \Magento\Framework\App\State
      */
     public function getAppState()
     {

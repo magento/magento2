@@ -23,7 +23,7 @@
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\App\Config\MutableScopeConfigInterface'
+    'Magento\Framework\App\Config\MutableScopeConfigInterface'
 )->setValue(
     'carriers/flatrate/active',
     1,

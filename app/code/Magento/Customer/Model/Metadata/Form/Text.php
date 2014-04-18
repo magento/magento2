@@ -59,7 +59,7 @@ class Text extends AbstractData
     /**
      * {@inheritdoc}
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
         return $this->_applyInputFilter($this->_getRequestValue($request));
     }

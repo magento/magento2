@@ -456,7 +456,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelMock()
     {
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $storeManager = $this->getMock('\Magento\Store\Model\StoreManager', array('getWebsites'), array(), '', false);
         $storeManager->expects(
             $this->once()
@@ -472,7 +472,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false),
-            $this->getMock('Magento\App\Resource', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),

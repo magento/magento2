@@ -48,7 +48,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $scopeConfig = $this->getMockBuilder(
-            '\Magento\App\Config\ScopeConfigInterface'
+            '\Magento\Framework\App\Config\ScopeConfigInterface'
         )->setMethods(
             array('isSetFlag', 'getValue')
         )->disableOriginalConstructor()->getMock();

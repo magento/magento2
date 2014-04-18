@@ -23,7 +23,7 @@
  */
 namespace Magento\View\Element;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 
 /**
  * Base html block
@@ -102,7 +102,7 @@ class Template extends AbstractBlock
     /**
      * Application state
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 

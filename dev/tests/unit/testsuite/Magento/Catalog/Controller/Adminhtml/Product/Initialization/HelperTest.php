@@ -72,7 +72,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', array(), array(), '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);

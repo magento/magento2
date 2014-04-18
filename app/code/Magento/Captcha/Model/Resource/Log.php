@@ -55,12 +55,12 @@ class Log extends \Magento\Model\Resource\Db\AbstractDb
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $coreDate,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {

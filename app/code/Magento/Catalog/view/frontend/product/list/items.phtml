@@ -209,7 +209,7 @@ switch($type = $this->getType()) {
                             <?php echo $this->escapeHtml($_item->getName()) ?></a>
                         </strong>
 
-                            <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
+                        <?php echo $this->getProductPrice($_item); ?>
 
                             <?php if ($templateType): ?>
                                 <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>

@@ -28,10 +28,10 @@ require __DIR__ . '/../../Customer/_files/customer_two_addresses.php';
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\App\Config\MutableScopeConfigInterface')
+    ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
     ->setValue('carriers/flatrate/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\App\Config\MutableScopeConfigInterface')
+    ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
     ->setValue('payment/paypal_express/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
 /** @var $product \Magento\Catalog\Model\Product */

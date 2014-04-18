@@ -44,8 +44,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareLayout()
     {
-        $customer = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
-        $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $customerId = 1;
         $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $args = array(
             'getIncrementId',
@@ -85,9 +84,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registry'
         )->with(
-            'current_customer'
+            'current_customer_id'
         )->will(
-            $this->returnValue($customer)
+            $this->returnValue($customerId)
         );
         $payment->expects($this->once())->method('setStore')->with($store)->will($this->returnValue($payment));
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');

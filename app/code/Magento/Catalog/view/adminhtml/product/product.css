@@ -54,7 +54,7 @@
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    content: '\e07d'; 
+    content: '\e07d';
     font-size: 16px;
 }
 
@@ -64,11 +64,13 @@
     overflow: hidden;
     text-indent: -999em;
 }*/
-
+.product-actions {
+    padding: 5px 18px;
+}
 .product-actions .switcher {
     display: inline-block;
     vertical-align: top;
-    margin: 6px 17px 6px 6px;
+    margin: 6px 0 6px 6px;
 }
 
 /* Image Management */
@@ -499,10 +501,6 @@
     top: 30px;
 }
 
-.field-tax_class_id .addon select {
-    border-radius: 4px;
-}
-
 /*
     Advanced Pricing tab
 -------------------------------------- */
@@ -566,7 +564,7 @@
     width: 150px;
 }
 
-.tiers_table .col-qty > input {
+.tiers_table .col-qty > input[type="text"] {
     width: 40%;
     margin-right: 5px;
 }
@@ -580,7 +578,7 @@
 }
 
 .tiers_table .col-price {
-    width: 15%;
+    width: 16%;
 }
 
 .new-variation-set {

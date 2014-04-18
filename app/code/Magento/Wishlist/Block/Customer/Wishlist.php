@@ -55,7 +55,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param \Magento\Data\Form\FormKey $formKey
@@ -64,7 +64,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
         \Magento\Data\Form\FormKey $formKey,

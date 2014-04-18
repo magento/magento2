@@ -41,4 +41,14 @@
             <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Pricing\Adjustment\Pool">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="tax" xsi:type="array">
+                    <item name="className" xsi:type="string">Magento\Tax\Pricing\Adjustment</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -79,7 +79,7 @@ class UrlResolver implements PreProcessorInterface
     protected $fileFactory;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\RelatedFile $relatedFile
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
      * @param \Magento\View\Publisher $publisher
@@ -87,14 +87,14 @@ class UrlResolver implements PreProcessorInterface
      * @param \Magento\View\Publisher\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\RelatedFile $relatedFile,
         \Magento\View\Url\CssResolver $cssUrlResolver,
         \Magento\View\Publisher $publisher,
         \Magento\Logger $logger,
         \Magento\View\Publisher\FileFactory $fileFactory
     ) {
-        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->relatedFile = $relatedFile;
         $this->cssUrlResolver = $cssUrlResolver;
         $this->publisher = $publisher;

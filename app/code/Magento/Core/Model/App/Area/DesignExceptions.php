@@ -39,14 +39,14 @@ class DesignExceptions
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
@@ -54,10 +54,10 @@ class DesignExceptions
     /**
      * Get theme that should be applied for current user-agent according to design exceptions configuration
      *
-     * @param \Magento\App\Request\Http $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @return string|bool
      */
-    public function getThemeForUserAgent(\Magento\App\Request\Http $request)
+    public function getThemeForUserAgent(\Magento\Framework\App\Request\Http $request)
     {
         $userAgent = $request->getServer('HTTP_USER_AGENT');
         if (empty($userAgent)) {

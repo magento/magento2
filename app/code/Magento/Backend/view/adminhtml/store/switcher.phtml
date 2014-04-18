@@ -129,13 +129,14 @@
     function switchScope(obj) {
         var switcher = jQuery(obj);
         var scopeId = switcher.val();
-        var scopeParams = switcher.data('param') + '/' + scopeId + '/';
+        var scopeParams = '';
+        if (scopeId) {
+            scopeParams = switcher.data('param') + '/' + scopeId + '/';
+        }
 
         if (obj.switchParams) {
             scopeParams += obj.switchParams;
         }
-
-        var url = '<?php echo $this->getSwitchUrl() ?>' + scopeParams;
 
         if ((typeof scopeSwitcherHandler) != 'undefined') {
             var switcherParams = {
@@ -145,15 +146,16 @@
             };
             scopeSwitcherHandler(switcherParams);
         } else {
-        <?php if ($this->getUseConfirm()): ?>
+            var url = '<?php echo $this->getSwitchUrl() ?>' + scopeParams;
+            <?php if ($this->getUseConfirm()): ?>
             if (confirm("<?php echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>")) {
                 setLocation(url);
             } else {
                 obj.value = '<?php echo $this->getStoreId() ?>';
             }
-        <?php else: ?>
+            <?php else: ?>
             setLocation(url);
-        <?php endif; ?>
+            <?php endif; ?>
         }
     }
 </script>

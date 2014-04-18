@@ -44,7 +44,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Config\Reader'
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock = $this->getMockBuilder(
-            'Magento\App\Cache\Type\Config'
+            'Magento\Framework\App\Cache\Type\Config'
         )->disableOriginalConstructor()->getMock();
     }
 

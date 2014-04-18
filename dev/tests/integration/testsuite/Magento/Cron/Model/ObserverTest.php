@@ -32,7 +32,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
             ->getArea('crontab')
             ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -33,14 +33,14 @@
         <plugin name="core-session-depersonalize"
                 type="Magento\Core\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
     </type>
-    <type name="Magento\App\FrontController">
+    <type name="Magento\Framework\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>
-    <type name="Magento\App\Action\Action">
+    <type name="Magento\Framework\App\Action\Action">
         <plugin name="core-app-action-dispatchController-context-plugin" type="Magento\Core\Model\App\Action\ContextPlugin" sortOrder="10"/>
         <plugin name="lastUrl" type="Magento\Core\App\Action\Plugin\LastUrl" sortOrder="70"/>
     </type>
-    <type name="Magento\App\RouterList" shared="true">
+    <type name="Magento\Framework\App\RouterList" shared="true">
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="standard" xsi:type="array">
@@ -49,7 +49,7 @@
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
                 <item name="default" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\App\Router\DefaultRouter</item>
+                    <item name="class" xsi:type="string">Magento\Framework\App\Router\DefaultRouter</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>

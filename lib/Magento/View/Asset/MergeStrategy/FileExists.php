@@ -38,7 +38,7 @@ class FileExists implements \Magento\View\Asset\MergeStrategyInterface
     /**
      * Filesystem
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -46,11 +46,11 @@ class FileExists implements \Magento\View\Asset\MergeStrategyInterface
      * Constructor
      *
      * @param \Magento\View\Asset\MergeStrategyInterface $strategy
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\View\Asset\MergeStrategyInterface $strategy,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->strategy = $strategy;
         $this->filesystem = $filesystem;
@@ -61,7 +61,7 @@ class FileExists implements \Magento\View\Asset\MergeStrategyInterface
      */
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType)
     {
-        $directory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_DIR);
+        $directory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::PUB_DIR);
         if (!$directory->isExist($directory->getRelativePath($destinationFile))) {
             $this->strategy->mergeFiles($publicFiles, $destinationFile, $contentType);
         }

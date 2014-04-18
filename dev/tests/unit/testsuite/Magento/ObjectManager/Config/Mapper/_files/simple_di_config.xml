@@ -26,9 +26,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <!-- Comment within root node -->
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
-    <preference for="Magento\App\RequestInterface" type="Magento\App\Request\Http\Proxy" />
+    <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http\Proxy" />
     <!--Arguments only-->
-    <type name="Magento\App\State">
+    <type name="Magento\Framework\App\State">
         <arguments>
             <argument name="test name" xsi:type="string">test value</argument>
         </arguments>
@@ -48,6 +48,6 @@
             <argument name="test name" xsi:type="string">test value</argument>
         </arguments>
     </type>
-    <virtualType name="customCacheInstance" type="Magento\App\Cache" shared="true" />
+    <virtualType name="customCacheInstance" type="Magento\Framework\App\Cache" shared="true" />
     <virtualType name="customOverriddenInstance" shared="false" />
 </config>

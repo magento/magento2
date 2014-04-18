@@ -47,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->loggerMock = $this->getMock('Magento\Logger', array('log'), array(), '', false);
         $this->resourceMock = $this->getMock(
-            'Magento\App\Resource', array('getConnection', 'getTableName'), array(), '', false
+            'Magento\Framework\App\Resource', array('getConnection', 'getTableName'), array(), '', false
         );
         $this->adapterMock = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql', array('select', 'query'), array(), '', false

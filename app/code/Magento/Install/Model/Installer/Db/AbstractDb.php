@@ -73,18 +73,18 @@ abstract class AbstractDb
     /**
      * Configuration arguments
      *
-     * @var \Magento\App\Arguments
+     * @var \Magento\Framework\App\Arguments
      */
     protected $_arguments;
 
     /**
      * @param \Magento\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory
-     * @param \Magento\App\Arguments $arguments
+     * @param \Magento\Framework\App\Arguments $arguments
      * @param array $dbExtensions
      */
     public function __construct(
         \Magento\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory,
-        \Magento\App\Arguments $arguments,
+        \Magento\Framework\App\Arguments $arguments,
         array $dbExtensions = array()
     ) {
         $this->_adapterFactory = $adapterFactory;

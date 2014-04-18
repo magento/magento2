@@ -31,4 +31,12 @@
     <type name="Magento\Multishipping\Block\Checkout\Shipping">
         <plugin name="getItemsBoxTextAfter" type="Magento\GiftMessage\Block\Message\Multishipping\Plugin\ItemsBox"/>
     </type>
+    <type name="Magento\GiftMessage\Helper\Message">
+        <arguments>
+            <argument name="skipMessageCheck" xsi:type="array">
+                <item name="checkout_page" xsi:type="string">onepage_checkout</item>
+                <item name="multishipping_page" xsi:type="string">multishipping_address</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

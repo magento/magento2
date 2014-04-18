@@ -32,7 +32,7 @@ namespace Magento\Cms\Controller;
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Page extends \Magento\App\Action\Action
+class Page extends \Magento\Framework\App\Action\Action
 {
     /**
      * View CMS page action

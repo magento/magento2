@@ -50,7 +50,7 @@ class Emulation extends \Magento\Object
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -79,7 +79,7 @@ class Emulation extends \Magento\Object
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Design $design
      * @param \Magento\TranslateInterface $translate
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $inlineConfig
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Locale\ResolverInterface $localeResolver
@@ -90,7 +90,7 @@ class Emulation extends \Magento\Object
         \Magento\View\DesignInterface $viewDesign,
         \Magento\Core\Model\Design $design,
         \Magento\TranslateInterface $translate,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         ConfigInterface $inlineConfig,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Locale\ResolverInterface $localeResolver,

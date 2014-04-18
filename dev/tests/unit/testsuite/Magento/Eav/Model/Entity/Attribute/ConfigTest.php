@@ -73,7 +73,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Config', array(), array(), '', false);
         $this->_cacheId = 'eav_attributes';
         $this->_cacheMock->expects(
             $this->once()

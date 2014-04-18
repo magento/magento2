@@ -80,13 +80,6 @@
     }
 }
 
-.truncated.full.value {
-    display: none;
-    &.show {
-        display: block;
-    }
-}
-
 //My account
 .layout-2-left.account {
     .column.sidebar {
@@ -156,16 +149,26 @@
             padding: 0;
             margin: 0;
             .nav.item {
-                margin: 2px 0 0;
+                margin: 3px 0 0;
                 &:first-child {
                     margin-top: 0;
                 }
-                padding: 0 18px 0 15px;
-                line-height: 30px;
-                border-left: 3px solid transparent;
+                a,
+                strong {
+                    display: block;
+                    padding: 0 18px 0 15px;
+                    line-height: 30px;
+                    border-left: 3px solid transparent;
+                }
+                a {
+                    text-decoration: none;
+                    &:hover {
+                        background: #e8e8e8;
+                    }
+                }
                 &.current {
-                    border-color: #ff5501;
                     strong {
+                        border-color: #ff5501;
                         font-weight: normal;
                     }
                 }
@@ -384,4 +387,9 @@
     .product.name a {
         &:extend(.product-link all);
     }
+}
+
+// Calendar
+.ui-datepicker td {
+  padding: 0;
 }

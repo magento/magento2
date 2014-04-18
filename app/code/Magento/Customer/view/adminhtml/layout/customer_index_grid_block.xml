@@ -104,7 +104,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
                         <argument name="type" xsi:type="string">number</argument>
-                        <argument name="width" xsi:type="string">50px</argument>
                         <argument name="id" xsi:type="string">entity_id</argument>
                         <argument name="index" xsi:type="string">entity_id</argument>
                     </arguments>
@@ -118,14 +117,12 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Email</argument>
-                        <argument name="width" xsi:type="string">150px</argument>
                         <argument name="index" xsi:type="string">email</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="group">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Group</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="index" xsi:type="string">group_id</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Customer\Model\Config\Source\Group\Multiselect"/>
@@ -134,21 +131,20 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_telephone">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Phone</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="index" xsi:type="string">billing_telephone</argument>
+                        <argument name="column_css_class" xsi:type="string">col-phone</argument>
+                        <argument name="header_css_class" xsi:type="string">col-phone</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_postcode">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ZIP</argument>
-                        <argument name="width" xsi:type="string">90px</argument>
                         <argument name="index" xsi:type="string">billing_postcode</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_country_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Country</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="index" xsi:type="string">billing_country_id</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Locale\Country"/>
@@ -157,7 +153,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_region">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">State/Province</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="index" xsi:type="string">billing_region</argument>
                     </arguments>
                 </block>
@@ -165,7 +160,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Customer Since</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
-                        <argument name="align" xsi:type="string">center</argument>
                         <argument name="index" xsi:type="string">created_at</argument>
                         <argument name="gmtoffset" xsi:type="boolean">true</argument>
                     </arguments>
@@ -173,8 +167,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="website_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Web Site</argument>
-                        <argument name="align" xsi:type="string">center</argument>
-                        <argument name="width" xsi:type="string">80px</argument>
                         <argument name="column_css_class" xsi:type="string">col-store</argument>
                         <argument name="header_css_class" xsi:type="string">col-store</argument>
                         <argument name="type" xsi:type="string">options</argument>

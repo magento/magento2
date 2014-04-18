@@ -38,7 +38,7 @@ class AbstractAction
     protected $attributeCodes;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $resource;
 
@@ -62,12 +62,12 @@ class AbstractAction
     protected $columns = array();
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {

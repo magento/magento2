@@ -41,7 +41,7 @@ class Config extends \Magento\Object
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -53,12 +53,12 @@ class Config extends \Magento\Object
     /**
      * Constructor
      *
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()
     ) {

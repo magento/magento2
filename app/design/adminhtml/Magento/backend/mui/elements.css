@@ -24,9 +24,9 @@
 /*
     Close btn
 -------------------------------------- */
-.close:before {
+/*.close:before {
     content: '\00D7\00A0';
-}
+}*/
 
 /*
     Tooltips
@@ -1067,10 +1067,6 @@ table.loading:after {
     border: 1px solid #b8b8b8;
 }
 
-.popup-header,
-.popup-content {
-}
-
 .popup-header {
     font-weight: bold;
 }
@@ -1090,6 +1086,10 @@ table.loading:after {
     height: 20px;
     overflow: hidden;
     padding-left: 5px;
+}
+
+.popup .close:before {
+    content: '\00D7\00A0';
 }
 
 .popup-system {

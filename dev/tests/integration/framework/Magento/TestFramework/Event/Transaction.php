@@ -138,8 +138,8 @@ class Transaction
      */
     protected function _getAdapter($connectionName = 'core_write')
     {
-        /** @var $resource \Magento\App\Resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
+        /** @var $resource \Magento\Framework\App\Resource */
+        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
         return $resource->getConnection($connectionName);
     }
 

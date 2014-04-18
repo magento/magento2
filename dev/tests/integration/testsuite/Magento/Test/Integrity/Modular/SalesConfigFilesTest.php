@@ -27,7 +27,7 @@ class SalesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * attributes represent merging rules
-     * copied from original namespace Magento\App\Route\Config;
+     * copied from original namespace Magento\Framework\App\Route\Config;
      *
      * class Reader
      *

@@ -48,13 +48,13 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig

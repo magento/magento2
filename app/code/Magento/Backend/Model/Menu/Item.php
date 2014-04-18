@@ -134,7 +134,7 @@ class Item
     protected $_urlModel;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -165,7 +165,7 @@ class Item
     /**
      * @param Item\Validator $validator
      * @param \Magento\AuthorizationInterface $authorization
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\UrlInterface $urlModel
      * @param \Magento\Module\ModuleListInterface $moduleList
@@ -175,7 +175,7 @@ class Item
     public function __construct(
         \Magento\Backend\Model\Menu\Item\Validator $validator,
         \Magento\AuthorizationInterface $authorization,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Module\ModuleListInterface $moduleList,
@@ -490,11 +490,11 @@ class Item
      */
     public function __wakeup()
     {
-        $objectManager = \Magento\App\ObjectManager::getInstance();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_moduleManager = $objectManager->get('Magento\Module\Manager');
         $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
         $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
-        $this->_scopeConfig = $objectManager->get('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
         $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
         $this->_moduleList = $objectManager->get('Magento\Module\ModuleListInterface');

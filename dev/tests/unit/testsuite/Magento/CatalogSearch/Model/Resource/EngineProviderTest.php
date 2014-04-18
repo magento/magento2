@@ -39,7 +39,7 @@ class EngineProviderTest extends \PHPUnit_Framework_TestCase
     protected $_engineFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfigMock;
 
@@ -52,7 +52,7 @@ class EngineProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\CatalogSearch\Model\Resource\EngineProvider(
             $this->_engineFactoryMock,

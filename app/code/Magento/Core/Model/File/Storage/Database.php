@@ -66,7 +66,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Stdlib\DateTime\DateTime $dateModel
-     * @param \Magento\App\Config\ScopeConfigInterface $configuration
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Resource\File\Storage\Database $resource
      * @param Directory\DatabaseFactory $directoryFactory
@@ -79,7 +79,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\App\Config\ScopeConfigInterface $configuration,
+        \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Resource\File\Storage\Database $resource,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,

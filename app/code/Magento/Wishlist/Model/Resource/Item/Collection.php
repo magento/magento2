@@ -127,7 +127,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     protected $_productVisibility;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_coreResource;
 
@@ -152,7 +152,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     protected $_catalogAttrFactory;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -167,13 +167,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\App\Resource $coreResource
+     * @param \Magento\Framework\App\Resource $coreResource
      * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -189,13 +189,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\App\Resource $coreResource,
+        \Magento\Framework\App\Resource $coreResource,
         \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         $connection = null
     ) {
         $this->_inventoryData = $catalogInventoryData;

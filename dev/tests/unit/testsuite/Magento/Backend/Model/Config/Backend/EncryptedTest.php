@@ -66,7 +66,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_encryptorMock = $this->getMock('Magento\Encryption\EncryptorInterface', array(), array(), '', false);
         $this->_model = $helper->getObject(

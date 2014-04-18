@@ -115,7 +115,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -154,7 +154,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     protected $_localeDate;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
@@ -163,7 +163,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Helper $resourceHelper
      * @param \Magento\Stdlib\DateTime $dateTime
@@ -171,7 +171,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
@@ -180,7 +180,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Filter\FilterManager $filter,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper,
         \Magento\Stdlib\DateTime $dateTime,

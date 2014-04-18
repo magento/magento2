@@ -101,7 +101,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $request = new \Magento\Object();
-        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $controller = $this->getMock(
             'Magento\Checkout\Controller\Action',
             array('getRequest', 'getResponse'),

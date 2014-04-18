@@ -44,7 +44,7 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -80,7 +80,7 @@ class Observer
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory
@@ -90,7 +90,7 @@ class Observer
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory,

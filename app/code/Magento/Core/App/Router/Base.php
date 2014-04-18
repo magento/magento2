@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\App\Router;
 
-class Base extends \Magento\App\Router\AbstractRouter
+class Base extends \Magento\Framework\App\Router\AbstractRouter
 {
     /**
      * @var array
@@ -45,7 +45,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     protected $_requiredParams = array('moduleFrontName', 'controllerName', 'actionName');
 
     /**
-     * @var \Magento\App\Route\ConfigInterface
+     * @var \Magento\Framework\App\Route\ConfigInterface
      */
     protected $_routeConfig;
 
@@ -59,7 +59,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -74,17 +74,17 @@ class Base extends \Magento\App\Router\AbstractRouter
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\App\ResponseFactory
+     * @var \Magento\Framework\App\ResponseFactory
      */
     protected $_responseFactory;
 
     /**
-     * @var \Magento\App\DefaultPathInterface
+     * @var \Magento\Framework\App\DefaultPathInterface
      */
     protected $_defaultPath;
 
@@ -94,28 +94,28 @@ class Base extends \Magento\App\Router\AbstractRouter
     protected $nameBuilder;
 
     /**
-     * @param \Magento\App\ActionFactory $actionFactory
-     * @param \Magento\App\DefaultPathInterface $defaultPath
-     * @param \Magento\App\ResponseFactory $responseFactory
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\ActionFactory $actionFactory
+     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
+     * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\UrlInterface $url
      * @param \Magento\Store\Model\StoreManagerInterface|\Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
      * @param \Magento\Code\NameBuilder $nameBuilder
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        \Magento\App\ActionFactory $actionFactory,
-        \Magento\App\DefaultPathInterface $defaultPath,
-        \Magento\App\ResponseFactory $responseFactory,
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\ActionFactory $actionFactory,
+        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        \Magento\Framework\App\ResponseFactory $responseFactory,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\State $appState,
         \Magento\UrlInterface $url,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
         \Magento\Code\NameBuilder $nameBuilder
@@ -135,10 +135,10 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Match provided request and if matched - return corresponding controller
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\Action\Action|null
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\Action\Action|null
      */
-    public function match(\Magento\App\RequestInterface $request)
+    public function match(\Magento\Framework\App\RequestInterface $request)
     {
         $params = $this->_parseRequest($request);
 
@@ -148,10 +148,10 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Parse request URL params
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return array
      */
-    protected function _parseRequest(\Magento\App\RequestInterface $request)
+    protected function _parseRequest(\Magento\Framework\App\RequestInterface $request)
     {
         $output = array();
 
@@ -171,11 +171,11 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Match module front name
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $param
      * @return string|null
      */
-    protected function _matchModuleFrontName(\Magento\App\RequestInterface $request, $param)
+    protected function _matchModuleFrontName(\Magento\Framework\App\RequestInterface $request, $param)
     {
         // get module name
         if ($request->getModuleName()) {
@@ -195,11 +195,11 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Match controller name
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $param
      * @return string
      */
-    protected function _matchControllerName(\Magento\App\RequestInterface $request, $param)
+    protected function _matchControllerName(\Magento\Framework\App\RequestInterface $request, $param)
     {
         if ($request->getControllerName()) {
             $controller = $request->getControllerName();
@@ -215,11 +215,11 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Match controller name
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $param
      * @return string
      */
-    protected function _matchActionName(\Magento\App\RequestInterface $request, $param)
+    protected function _matchActionName(\Magento\Framework\App\RequestInterface $request, $param)
     {
         if ($request->getActionName()) {
             $action = $request->getActionName();
@@ -236,10 +236,10 @@ class Base extends \Magento\App\Router\AbstractRouter
      * Get not found controller instance
      *
      * @param string $currentModuleName
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\Action\Action|null
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\Action\Action|null
      */
-    protected function _getNotFoundControllerInstance($currentModuleName, \Magento\App\RequestInterface $request)
+    protected function _getNotFoundControllerInstance($currentModuleName, \Magento\Framework\App\RequestInterface $request)
     {
         if (!$this->_noRouteShouldBeApplied()) {
             return null;
@@ -257,11 +257,11 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Create matched controller instance
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param array $params
-     * @return \Magento\App\Action\Action|null
+     * @return \Magento\Framework\App\Action\Action|null
      */
-    protected function _matchController(\Magento\App\RequestInterface $request, array $params)
+    protected function _matchController(\Magento\Framework\App\RequestInterface $request, array $params)
     {
         $moduleFrontName = $this->_matchModuleFrontName($request, $params['moduleFrontName']);
         if (empty($moduleFrontName)) {
@@ -360,11 +360,11 @@ class Base extends \Magento\App\Router\AbstractRouter
      * Check that request uses https protocol if it should.
      * Function redirects user to correct URL if needed.
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $path
      * @return void
      */
-    protected function _checkShouldBeSecure(\Magento\App\RequestInterface $request, $path = '')
+    protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
         if (!$this->_appState->isInstalled() || $request->getPost()) {
             return;
@@ -394,7 +394,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Retrieve secure url for current request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return string
      */
     protected function _getCurrentSecureUrl($request)

@@ -34,14 +34,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     protected function setUp()
     {
         $this->_scopeConfig = $this->getMockBuilder(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_model = new \Magento\Core\Model\View\Url\Config($this->_scopeConfig);
     }

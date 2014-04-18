@@ -33,12 +33,12 @@
     </type>
     <type name="Magento\Store\Model\Config\Reader\Website">
         <arguments>
-            <argument name="scopePool" xsi:type="object">Magento\App\Config\ScopePool\Proxy</argument>
+            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Config\Reader\Store">
         <arguments>
-            <argument name="scopePool" xsi:type="object">Magento\App\Config\ScopePool\Proxy</argument>
+            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
@@ -63,12 +63,12 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
-    <preference for="Magento\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
-    <type name="Magento\App\Action\Action">
+    <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
+    <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
     </type>
-    <type name="Magento\App\FrontController">
+    <type name="Magento\Framework\App\FrontController">
         <plugin name="dispatchExceptionHandler" type="Magento\Store\App\FrontController\Plugin\DispatchExceptionHandler" sortOrder="30"/>
     </type>
     <type name="Magento\Store\Model\Resource\Website\Collection">
@@ -94,13 +94,13 @@
     </type>
     <type name="Magento\Store\Model\StoreManager">
         <arguments>
-            <argument name="request" xsi:type="object">Magento\App\Request\Http\Proxy</argument>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
             <argument name="helper" xsi:type="object">Magento\Core\Helper\Data\Proxy</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Collection</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
@@ -110,7 +110,7 @@
     </virtualType>
     <virtualType name="Magento\Store\Model\Resource\Store\Collection\FetchStrategy" type="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Collection</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
@@ -120,7 +120,7 @@
     </virtualType>
     <virtualType name="Magento\Store\Model\Resource\Website\Collection\FetchStrategy" type="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Collection</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
@@ -130,7 +130,7 @@
     </virtualType>
     <type name="Magento\Store\Model\Config\Processor\Placeholder">
         <arguments>
-            <argument name="request" xsi:type="object">Magento\App\Request\Http\Proxy</argument>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
             <argument name="urlPaths" xsi:type="array">
                 <item name="unsecureBaseUrl" xsi:type="string">web/unsecure/base_url</item>
                 <item name="secureBaseUrl" xsi:type="string">web/secure/base_url</item>

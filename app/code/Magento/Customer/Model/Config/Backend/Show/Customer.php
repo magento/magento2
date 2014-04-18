@@ -34,7 +34,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\App\Config\Value
+class Customer extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
@@ -47,7 +47,7 @@ class Customer extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -57,7 +57,7 @@ class Customer extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,

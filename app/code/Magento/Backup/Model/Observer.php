@@ -70,14 +70,14 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * Filesystem facade
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -90,16 +90,16 @@ class Observer
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Backup\Factory $backupFactory
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Backup\Factory $backupFactory
     ) {
         $this->_backupData = $backupData;
@@ -143,7 +143,7 @@ class Observer
 
             if ($type != \Magento\Backup\Factory::TYPE_DB) {
                 $backupManager->setRootDir(
-                    $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR)
+                    $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::ROOT_DIR)
                 )->addIgnorePaths(
                     $this->_backupData->getBackupIgnorePaths()
                 );

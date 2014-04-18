@@ -25,7 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Core\Model\Theme" type="Magento\Core\Model\Theme\Data" />
-    <type name="Magento\App\RouterList" shared="true">
+    <type name="Magento\Framework\App\RouterList" shared="true">
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="install" xsi:type="array">

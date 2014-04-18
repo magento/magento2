@@ -457,10 +457,10 @@ abstract class AbstractData
     /**
      * Return Original Attribute value from Request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      */
-    protected function _getRequestValue(\Magento\App\RequestInterface $request)
+    protected function _getRequestValue(\Magento\Framework\App\RequestInterface $request)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
         if ($this->_requestScope) {
@@ -496,10 +496,10 @@ abstract class AbstractData
     /**
      * Extract data from request and return value
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return array|string
      */
-    abstract public function extractValue(\Magento\App\RequestInterface $request);
+    abstract public function extractValue(\Magento\Framework\App\RequestInterface $request);
 
     /**
      * Validate data

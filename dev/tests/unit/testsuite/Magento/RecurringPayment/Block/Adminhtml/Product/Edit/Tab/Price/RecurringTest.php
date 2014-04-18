@@ -51,7 +51,7 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
     protected $_eventManager;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -70,7 +70,7 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
         $this->_registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
         $this->_eventManager = $this->getMock('Magento\Event\Manager', array(), array(), '', false);
-        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_context = $helper->getObject(
             'Magento\Backend\Block\Template\Context',
             array('eventManager' => $this->_eventManager, 'scopeConfig' => $this->_scopeConfig)

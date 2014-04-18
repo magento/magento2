@@ -68,7 +68,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
 
         $this->_modelBuilder = $this->getMockBuilder(
             'Magento\View\Design\Theme\Customization\AbstractFile'
@@ -251,7 +251,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->will(
             $this->returnValue($directoryMock)
         );
@@ -292,7 +292,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->will(
             $this->returnValue($directoryMock)
         );

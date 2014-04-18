@@ -39,7 +39,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $compareHelper;
 
     /**
-     * @var \Magento\App\Helper\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
@@ -54,7 +54,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $postDataHelper;
 
     /**
-     * @var \Magento\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
@@ -63,10 +63,10 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->urlBuilder = $this->getMock('Magento\Url', array('getUrl'), array(), '', false);
-        $this->request = $this->getMock('Magento\App\Request\Http', array('getServer'), array(), '', false);
-        /** @var \Magento\App\Helper\Context $context */
+        $this->request = $this->getMock('Magento\Framework\App\Request\Http', array('getServer'), array(), '', false);
+        /** @var \Magento\Framework\App\Helper\Context $context */
         $this->context = $this->getMock(
-            'Magento\App\Helper\Context',
+            'Magento\Framework\App\Helper\Context',
             array('getUrlBuilder', 'getRequest'),
             array(),
             '',
@@ -99,7 +99,8 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $removeUrl = 'catalog/product_compare/remove';
         $compareListUrl = 'catalog/product_compare';
         $postParams = array(
-            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->compareHelper->urlEncode($compareListUrl),
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->compareHelper
+                ->urlEncode($compareListUrl),
             'product' => $productId
         );
 
@@ -146,7 +147,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $refererUrl = 'home/';
         $clearUrl = 'catalog/product_compare/clear';
         $postParams = array(
-            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->compareHelper->urlEncode($refererUrl)
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->compareHelper->urlEncode($refererUrl)
         );
 
         //Verification

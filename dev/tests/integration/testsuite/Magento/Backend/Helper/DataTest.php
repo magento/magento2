@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testPageHelpUrl()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\RequestInterface'
+            'Magento\Framework\App\RequestInterface'
         )->setControllerModule(
             'dummy'
         )->setControllerName(

@@ -42,16 +42,16 @@ class TableData implements \Magento\Catalog\Model\Indexer\Product\Flat\TableData
     protected $_productIndexerHelper;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
     ) {
         $this->_resource = $resource;

@@ -104,8 +104,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'added_at',
                 'gmtoffset' => true,
                 'type' => 'datetime',
-                'header_css_class' => 'col-added',
-                'column_css_class' => 'col-added'
+                'header_css_class' => 'col-added col-date',
+                'column_css_class' => 'col-added col-date'
             )
         );
 
@@ -116,8 +116,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'modified_at',
                 'gmtoffset' => true,
                 'type' => 'datetime',
-                'header_css_class' => 'col-updated',
-                'column_css_class' => 'col-updated'
+                'header_css_class' => 'col-updated col-date',
+                'column_css_class' => 'col-updated col-date'
             )
         );
 

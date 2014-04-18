@@ -58,13 +58,12 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
     }
 
     /**
-     * Get Products with this tax class
-     *
-     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
+     * {@inheritdoc}
      */
-    public function getAssignedToObjects()
+    public function isAssignedToObjects()
     {
-        return $this->_modelProduct->getCollection()->addAttributeToFilter('tax_class_id', $this->getId());
+        return $this->_modelProduct->getCollection()->addAttributeToFilter('tax_class_id', $this->getId())
+            ->getSize() > 0;
     }
 
     /**

@@ -28,17 +28,20 @@
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
-            customOptionsInfo: '.product-custom-option'
+            customOptionsInfo: '.product-custom-option',
+            qtyInfo: '#qty'
         },
         _create: function () {
             this._bind();
         },
         _bind: function() {
             var changeCustomOption = 'change ' + this.options.customOptionsInfo,
+                changeQty = 'change ' + this.options.qtyInfo,
                 changeProductInfo = 'change ' + this.options[this.options.productType + 'Info'],
                 events = {};
             events[changeCustomOption] = '_updateWishlistData';
             events[changeProductInfo] = '_updateWishlistData';
+            events[changeQty] = '_updateWishlistData';
             this._on(events);
         },
         _updateWishlistData: function(event) {

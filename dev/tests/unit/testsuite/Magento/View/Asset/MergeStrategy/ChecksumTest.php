@@ -72,7 +72,8 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $this->_filesystem =
+            $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_filesystem->expects(
             $this->once()

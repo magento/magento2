@@ -67,7 +67,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             'Magento\Store\Model\Store'
         )->disableOriginalConstructor()->getMock();
 
-        $this->_areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $this->_areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
         $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
         $this->_storeManagerMock->expects(
             $this->any()
@@ -92,7 +92,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         parent::setUp();
     }

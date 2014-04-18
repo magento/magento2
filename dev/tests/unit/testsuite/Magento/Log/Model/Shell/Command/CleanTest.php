@@ -42,7 +42,7 @@ class CleanTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mutableConfigMock = $this->getMock('Magento\App\Config\MutableScopeConfigInterface');
+        $this->_mutableConfigMock = $this->getMock('Magento\Framework\App\Config\MutableScopeConfigInterface');
         $this->_logFactoryMock = $this->getMock('Magento\Log\Model\LogFactory', array('create'), array(), '', false);
         $this->_logMock = $this->getMock('Magento\Log\Model\Log', array(), array(), '', false);
         $this->_logFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_logMock));

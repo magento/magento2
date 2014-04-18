@@ -36,7 +36,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected $_initialConfigMock;
 
     /**
-     * @var \Magento\App\Config\ScopePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopePool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopePullMock;
 
@@ -57,8 +57,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_initialConfigMock = $this->getMock('Magento\App\Config\Initial', array(), array(), '', false);
-        $this->_scopePullMock = $this->getMock('Magento\App\Config\ScopePool', array(), array(), '', false);
+        $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', array(), array(), '', false);
+        $this->_scopePullMock = $this->getMock('Magento\Framework\App\Config\ScopePool', array(), array(), '', false);
         $this->_collectionFactory = $this->getMock(
             'Magento\Store\Model\Resource\Config\Collection\ScopedFactory',
             array('create'),
@@ -76,13 +76,13 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->_websiteMock = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
         $websiteFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_websiteMock));
 
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
 
         $this->_model = new \Magento\Store\Model\Config\Reader\Website(
             $this->_initialConfigMock,
             $this->_scopePullMock,
-            new \Magento\App\Config\Scope\Converter(),
+            new \Magento\Framework\App\Config\Scope\Converter(),
             $this->_collectionFactory,
             $websiteFactoryMock,
             $this->_appStateMock
@@ -94,7 +94,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $websiteCode = 'default';
         $websiteId = 1;
 
-        $dataMock = $this->getMock('Magento\App\Config\Data', array(), array(), '', false);
+        $dataMock = $this->getMock('Magento\Framework\App\Config\Data', array(), array(), '', false);
         $dataMock->expects(
             $this->any()
         )->method(

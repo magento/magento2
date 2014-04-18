@@ -40,11 +40,13 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileSystemMock = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array(), array(), '', false
         );
         $this->fileSystemMock->expects($this->any())
-            ->method('getPath')->with(\Magento\App\Filesystem::ROOT_DIR)->will($this->returnValue('schema_dir'));
+            ->method('getPath')
+            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->will($this->returnValue('schema_dir'));
 
         $this->model =
             new \Magento\Object\Copy\Config\SchemaLocator($this->fileSystemMock, 'schema.xsd', 'perFileSchema.xsd');

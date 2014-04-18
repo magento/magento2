@@ -60,11 +60,11 @@ class PathTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('__wakeup'), array(), '', false);
-        $this->_appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
+        $this->_appState = $this->getMock('Magento\Framework\App\State', array('getAreaCode'), array(), '', false);
         $appStateProperty = new \ReflectionProperty('\Magento\Core\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
         $appStateProperty->setValue($this->_theme, $this->_appState);
-        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
         $this->_directory->expects($this->once())->method('getAbsolutePath')->will($this->returnArgument(0));

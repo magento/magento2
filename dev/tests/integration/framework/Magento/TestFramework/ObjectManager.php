@@ -25,7 +25,7 @@
  */
 namespace Magento\TestFramework;
 
-class ObjectManager extends \Magento\App\ObjectManager
+class ObjectManager extends \Magento\Framework\App\ObjectManager
 {
     /**
      * Classes with xml properties to explicitly call __destruct() due to https://bugs.php.net/bug.php?id=62468
@@ -38,7 +38,7 @@ class ObjectManager extends \Magento\App\ObjectManager
      * @var array
      */
     protected $persistedInstances = array(
-        'Magento\App\Resource',
+        'Magento\Framework\App\Resource',
         'Magento\Config\Scope',
         'Magento\ObjectManager\Relations',
         'Magento\ObjectManager\Config',
@@ -61,8 +61,8 @@ class ObjectManager extends \Magento\App\ObjectManager
             }
         }
 
-        \Magento\App\Config\Base::destroy();
-        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this);
+        \Magento\Framework\App\Config\Base::destroy();
+        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\Framework\App\ObjectManager' => $this);
         foreach ($this->persistedInstances as $persistedClass) {
             if (isset($this->_sharedInstances[$persistedClass])) {
                 $sharedInstances[$persistedClass] = $this->_sharedInstances[$persistedClass];

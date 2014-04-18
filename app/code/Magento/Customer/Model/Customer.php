@@ -156,7 +156,7 @@ class Customer extends \Magento\Model\AbstractModel
     protected $_customerData = null;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -216,7 +216,7 @@ class Customer extends \Magento\Model\AbstractModel
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Resource\Customer $resource
      * @param Config\Share $configShare
      * @param AddressFactory $addressFactory
@@ -237,7 +237,7 @@ class Customer extends \Magento\Model\AbstractModel
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $config,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Resource\Customer $resource,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Customer\Model\AddressFactory $addressFactory,

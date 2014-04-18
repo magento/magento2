@@ -44,7 +44,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Filesystem facade
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -59,12 +59,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
@@ -94,7 +94,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $path = $this->_filesystem->getDirectoryRead(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         )->getAbsolutePath(
             'catalog/category/'
         );

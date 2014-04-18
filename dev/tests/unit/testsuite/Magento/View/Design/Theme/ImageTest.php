@@ -38,7 +38,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystemMock;
 
@@ -73,7 +73,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_filesystemMock = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryWrite', '__wakeup'),
             array(),
             '',
@@ -85,7 +85,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         )->will(
             $this->returnValue($this->_directoryMock)
         );

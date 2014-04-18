@@ -71,7 +71,7 @@ class Design implements \Magento\View\DesignInterface
     protected $_themeFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_scopeConfig;
 
@@ -81,26 +81,26 @@ class Design implements \Magento\View\DesignInterface
     protected $_locale;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
      * @param \Magento\Locale\ResolverInterface $locale
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param array $themes
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
         \Magento\Locale\ResolverInterface $locale,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         array $themes
     ) {
         $this->_storeManager = $storeManager;
@@ -181,7 +181,7 @@ class Design implements \Magento\View\DesignInterface
         if ($this->_isThemePerStoveView($area)) {
             $theme = $this->_storeManager->isSingleStoreMode() ? $this->_scopeConfig->getValue(
                 self::XML_PATH_THEME_ID,
-                \Magento\App\ScopeInterface::SCOPE_DEFAULT
+                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
             ) : (string)$this->_scopeConfig->getValue(
                 self::XML_PATH_THEME_ID,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

@@ -30,7 +30,7 @@ class CarrierFactory implements CarrierFactoryInterface
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -40,11 +40,11 @@ class CarrierFactory implements CarrierFactoryInterface
     protected $_objectManager;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ObjectManager $objectManager
     ) {
         $this->_scopeConfig = $scopeConfig;

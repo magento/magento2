@@ -35,9 +35,9 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     /**
      * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory
      * @param string $moduleName
      * @param string $connectionName
@@ -45,9 +45,9 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     public function __construct(
         \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory,
         $moduleName = 'Magento_GiftMessage',
         $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION

@@ -42,10 +42,10 @@ class Design extends \Magento\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param DateTime $dateTime
      */
-    public function __construct(\Magento\App\Resource $resource, DateTime $dateTime)
+    public function __construct(\Magento\Framework\App\Resource $resource, DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
         parent::__construct($resource);

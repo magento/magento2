@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Controller;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Sales orders controller
@@ -36,7 +36,7 @@ class Order extends \Magento\Sales\Controller\AbstractController
      * Check customer authentication for some actions
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {

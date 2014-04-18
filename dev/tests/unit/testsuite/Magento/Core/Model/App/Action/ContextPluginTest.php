@@ -43,12 +43,12 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
-     * @var \Magento\App\Http\Context $httpContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context $httpContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \Magento\App\Request\Http $httpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http $httpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpRequestMock;
 
@@ -94,9 +94,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->sessionMock = $this->getMock('Magento\Session\Generic',
             array('getCurrencyCode'), array(), '', false);
-        $this->httpContextMock = $this->getMock('Magento\App\Http\Context',
+        $this->httpContextMock = $this->getMock('Magento\Framework\App\Http\Context',
             array(), array(), '', false);
-        $this->httpRequestMock = $this->getMock('Magento\App\Request\Http',
+        $this->httpRequestMock = $this->getMock('Magento\Framework\App\Request\Http',
             array('getCookie', 'getParam'), array(), '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager',
             array('getWebsite', '__wakeup'), array(), '', false);
@@ -109,8 +109,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'ExpectedValue';
         };
-        $this->subjectMock = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
-        $this->requestMock = $this->getMock('Magento\App\RequestInterface');
+        $this->subjectMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->plugin = new \Magento\Core\Model\App\Action\ContextPlugin(
             $this->sessionMock,
             $this->httpContextMock,

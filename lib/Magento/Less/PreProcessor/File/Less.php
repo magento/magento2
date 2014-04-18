@@ -41,7 +41,7 @@ class Less
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -67,14 +67,14 @@ class Less
 
     /**
      * @param View\FileSystem $viewFileSystem
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string $filePath
      * @param array $viewParams
      * @param string|null $sourcePath
      */
     public function __construct(
         View\FileSystem $viewFileSystem,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         $filePath,
         array $viewParams,
         $sourcePath = null
@@ -185,7 +185,7 @@ class Less
      */
     public function getDirectoryRead()
     {
-        return $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        return $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
     }
 
     /**
@@ -195,6 +195,6 @@ class Less
      */
     public function getDirectoryWrite()
     {
-        return $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::TMP_DIR);
+        return $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::TMP_DIR);
     }
 }

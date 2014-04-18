@@ -33,7 +33,7 @@ use Magento\Model\AbstractModel;
 use Magento\Model\Context;
 use Magento\Registry;
 use Magento\Model\Resource\AbstractResource;
-use Magento\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Data\Collection\Db;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;

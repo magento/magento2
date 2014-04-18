@@ -50,7 +50,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
 
-        $cacheInterfaceMock = $this->getMock('Magento\App\CacheInterface', array(), array(), '', false);
+        $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface', array(), array(), '', false);
 
         $actionValidatorMock = $this->getMock(
             '\Magento\Model\ActionValidator\RemoveAction', array(), array(), '', false

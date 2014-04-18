@@ -104,7 +104,7 @@ class Categories
     protected function getObjectManager()
     {
         if (!$this->_objectManager) {
-            $locatorFactory = new \Magento\App\ObjectManagerFactory();
+            $locatorFactory = new \Magento\Framework\App\ObjectManagerFactory();
             $this->_objectManager = $locatorFactory->create(BP, $_SERVER);
         }
         return $this->_objectManager;

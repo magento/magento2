@@ -126,9 +126,6 @@ class Filesystem implements \Magento\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @throws \Magento\Exception
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function read($scope = null)
     {

@@ -28,7 +28,7 @@ namespace Magento\Backend\App\Action;
 /**
  * Backend Controller context
  */
-class Context extends \Magento\App\Action\Context
+class Context extends \Magento\Framework\App\Action\Context
 {
     /**
      * @var \Magento\AuthorizationInterface
@@ -56,7 +56,7 @@ class Context extends \Magento\App\Action\Context
     protected $_formKeyValidator;
 
     /**
-     * @var \Magento\App\Action\Title
+     * @var \Magento\Framework\App\Action\Title
      */
     protected $_title;
 
@@ -76,14 +76,14 @@ class Context extends \Magento\App\Action\Context
     protected $_localeResolver;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\UrlInterface $url
-     * @param \Magento\App\Response\RedirectInterface $redirect
-     * @param \Magento\App\ActionFlag $actionFlag
-     * @param \Magento\App\ViewInterface $view
+     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
+     * @param \Magento\Framework\App\ActionFlag $actionFlag
+     * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\AuthorizationInterface $authorization
@@ -91,19 +91,19 @@ class Context extends \Magento\App\Action\Context
      * @param \Magento\Backend\Helper\Data $helper
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\App\Action\Title $title
+     * @param \Magento\Framework\App\Action\Title $title
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param bool $canUseBaseUrl
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\App\ResponseInterface $response,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\ResponseInterface $response,
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\UrlInterface $url,
-        \Magento\App\Response\RedirectInterface $redirect,
-        \Magento\App\ActionFlag $actionFlag,
-        \Magento\App\ViewInterface $view,
+        \Magento\Framework\App\Response\RedirectInterface $redirect,
+        \Magento\Framework\App\ActionFlag $actionFlag,
+        \Magento\Framework\App\ViewInterface $view,
         \Magento\Message\ManagerInterface $messageManager,
         \Magento\Backend\Model\Session $session,
         \Magento\AuthorizationInterface $authorization,
@@ -111,7 +111,7 @@ class Context extends \Magento\App\Action\Context
         \Magento\Backend\Helper\Data $helper,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\App\Action\Title $title,
+        \Magento\Framework\App\Action\Title $title,
         \Magento\Locale\ResolverInterface $localeResolver,
         $canUseBaseUrl = false
     ) {
@@ -195,7 +195,7 @@ class Context extends \Magento\App\Action\Context
     }
 
     /**
-     * @return \Magento\App\Action\Title
+     * @return \Magento\Framework\App\Action\Title
      */
     public function getTitle()
     {

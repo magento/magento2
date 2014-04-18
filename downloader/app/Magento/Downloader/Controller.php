@@ -534,7 +534,7 @@ final class Controller
                     }
                     include_once self::$_instance->getBootstrapPath();
 
-                    \Magento\App\ObjectManager::getInstance()->get('Magento\App\State')->setIsDownloader();
+                    \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\State')->setIsDownloader();
                 }
                 if (self::isInstalled()) {
                     \Mage::getSingleton('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
@@ -977,7 +977,7 @@ final class Controller
                 \Mage::app()->getConfig()->reinit();
 
                 /** @var $updater \Magento\Module\UpdaterInterface*/
-                $updater = \Magento\App\ObjectManager::getInstance()->get('Magento\Module\UpdaterInterface');
+                $updater = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Module\UpdaterInterface');
                 $updater->updateScheme();
                 $updater->updateData();
                 $message .= 'Cache cleaned successfully';
@@ -1071,7 +1071,7 @@ final class Controller
                 \Mage::getBaseDir('var') . '/backups'
             );
 
-            \Magento\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Registry'
             )->register(
                 'backup_manager',

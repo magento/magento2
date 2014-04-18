@@ -40,32 +40,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $cacheTypeList \Magento\App\Cache\TypeListInterface */
+        /** @var $cacheTypeList \Magento\Framework\App\Cache\TypeListInterface */
         $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Cache\TypeListInterface'
+            'Magento\Framework\App\Cache\TypeListInterface'
         );
         $types = array_keys($cacheTypeList->getTypes());
 
-        /** @var $cacheState \Magento\App\Cache\StateInterface */
+        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Cache\StateInterface'
+            'Magento\Framework\App\Cache\StateInterface'
         );
         foreach ($types as $type) {
             $cacheState->setEnabled($type, false);
         }
         $cacheState->persist();
 
-        /** @var \Magento\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array(
                 'directoryList' => $this->_objectManager->create(
-                    'Magento\App\Filesystem\DirectoryList',
+                    'Magento\Framework\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
                         'directories' => array(
-                            \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
-                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files')
+                            \Magento\Framework\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
+                            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files')
                         )
                     )
                 )
@@ -98,9 +98,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/Magento/Test/etc');
 
-        /** @var \Magento\App\Config\FileResolver $fileResolver */
+        /** @var \Magento\Framework\App\Config\FileResolver $fileResolver */
         $fileResolver = $this->_objectManager->create(
-            'Magento\App\Config\FileResolver',
+            'Magento\Framework\App\Config\FileResolver',
             array('moduleReader' => $moduleReader)
         );
 

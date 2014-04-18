@@ -89,11 +89,17 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('name', array('header' => __('Product'), 'width' => '30%', 'index' => 'name'));
+        $this->addColumn('name', array('header' => __('Product'), 'index' => 'name'));
 
         $this->addColumn(
             'expires',
-            array('header' => __('Expires'), 'type' => 'datetime', 'width' => '100px', 'index' => 'expires')
+            array(
+                'header' => __('Expires'),
+                'type' => 'datetime',
+                'index' => 'expires',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
         );
 
         return parent::_prepareColumns();

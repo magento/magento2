@@ -29,14 +29,14 @@
  */
 namespace Magento\Newsletter\Controller;
 
-use Magento\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Customer\Helper\Data as CustomerHelper;
 
-class Subscriber extends \Magento\App\Action\Action
+class Subscriber extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer session
@@ -201,7 +201,7 @@ class Subscriber extends \Magento\App\Action\Action
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get('Magento\App\Config\ScopeConfigInterface')
+        if ($this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
                 ->getValue(
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE

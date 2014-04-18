@@ -69,7 +69,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $this->_requestMock = $this->getMock(
+            'Magento\Framework\App\RequestInterface',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
         $this->_requestMock->expects(
             $this->any()
         )->method(

@@ -32,7 +32,7 @@ namespace Magento\User\Helper;
  * @package  Magento_User
  * @author   Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Configuration path to expiration period of reset password link
@@ -50,12 +50,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $mathRandom;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\App\ConfigInterface $config,
         \Magento\Math\Random $mathRandom
     ) {

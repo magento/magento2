@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Catalog\Model\Category as ModelCategory;
 use Magento\Store\Model\Store;
 
@@ -59,7 +59,7 @@ class Category extends AbstractHelper
     /**
      * Scope config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -85,17 +85,17 @@ class Category extends AbstractHelper
     protected $_dataCollectionFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Data\CollectionFactory $dataCollectionFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Data\CollectionFactory $dataCollectionFactory
     ) {
         $this->_categoryFactory = $categoryFactory;

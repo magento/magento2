@@ -23,7 +23,7 @@
  */
 namespace Magento\Store\Model\Resolver;
 
-class Store implements \Magento\App\ScopeResolverInterface
+class Store implements \Magento\Framework\App\ScopeResolverInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -44,7 +44,7 @@ class Store implements \Magento\App\ScopeResolverInterface
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
-        if (!$scope instanceof \Magento\App\ScopeInterface) {
+        if (!$scope instanceof \Magento\Framework\App\ScopeInterface) {
             throw new \Magento\Store\Model\Exception('Invalid scope object');
         }
 

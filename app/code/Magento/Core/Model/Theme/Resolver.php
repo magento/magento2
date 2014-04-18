@@ -39,17 +39,17 @@ class Resolver implements \Magento\View\Design\Theme\ResolverInterface
     protected $themeFactory;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeFactory
      */
     public function __construct(
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themeFactory
     ) {

@@ -46,13 +46,13 @@ class Source extends AbstractEav
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper

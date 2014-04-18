@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\App;
 
-class Indexer implements \Magento\AppInterface
+class Indexer implements \Magento\Framework\AppInterface
 {
     /**
      * Report directory
@@ -65,7 +65,7 @@ class Indexer implements \Magento\AppInterface
     public function launch()
     {
         /* Clean reports */
-        $directory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $directory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $path = $directory->getRelativePath($this->reportDir);
         if ($directory->isExist($path)) {
             $directory->delete($path);

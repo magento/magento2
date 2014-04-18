@@ -62,9 +62,9 @@ class Currencysymbol
      * @var array
      */
     protected $_cacheTypes = array(
-        \Magento\App\Cache\Type\Config::TYPE_IDENTIFIER,
-        \Magento\App\Cache\Type\Block::TYPE_IDENTIFIER,
-        \Magento\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+        \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+        \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+        \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
         \Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER
     );
 
@@ -93,7 +93,7 @@ class Currencysymbol
     protected $_eventManager;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -118,32 +118,32 @@ class Currencysymbol
     protected $_locale;
 
     /**
-     * @var \Magento\App\Config\ReinitableConfigInterface
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
      */
     protected $_coreConfig;
 
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Config\ReinitableConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig
      * @param \Magento\Backend\Model\Config\Factory $configFactory
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Config\ReinitableConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig,
         \Magento\Backend\Model\Config\Factory $configFactory,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Store\Model\System\Store $systemStore,

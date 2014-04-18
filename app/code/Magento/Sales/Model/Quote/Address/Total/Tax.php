@@ -42,7 +42,7 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -53,12 +53,12 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
     /**
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Tax\Model\Calculation $calculation
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Tax\Model\Calculation $calculation
     ) {
         $this->_taxData = $taxData;

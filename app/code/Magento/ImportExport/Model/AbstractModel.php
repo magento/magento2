@@ -78,18 +78,18 @@ abstract class AbstractModel extends \Magento\Object
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Logger\AdapterFactory $adapterFactory,
         array $data = array()
     ) {
         $this->_logger = $logger;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->_adapterFactory = $adapterFactory;
         parent::__construct($data);
     }

@@ -26,7 +26,6 @@
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
-use Magento\Customer\Block\Account\AuthorizationLink;
 use Magento\Object;
 
 class Link extends AbstractRenderer

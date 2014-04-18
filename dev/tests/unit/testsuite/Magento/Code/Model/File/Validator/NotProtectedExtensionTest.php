@@ -31,7 +31,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfig;
 
@@ -42,7 +42,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_scopeConfig->expects(
             $this->atLeastOnce()
         )->method(

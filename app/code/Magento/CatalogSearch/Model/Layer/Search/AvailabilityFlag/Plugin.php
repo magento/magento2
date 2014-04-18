@@ -31,7 +31,7 @@ class Plugin
     const XML_PATH_DISPLAY_LAYER_COUNT = 'catalog/search/use_layered_navigation_count';
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -41,11 +41,11 @@ class Plugin
     protected $engineProvider;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param EngineProvider $engineProvider
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         EngineProvider $engineProvider
     ) {
         $this->scopeConfig = $scopeConfig;

@@ -68,7 +68,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_description">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Description</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">description</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="column_css_class" xsi:type="string">indexer-description</argument>
@@ -77,8 +76,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_mode">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Mode</argument>
-                        <argument name="width" xsi:type="string">150</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="getter" xsi:type="string">isScheduled</argument>
                         <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
@@ -88,8 +85,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_status">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Status</argument>
-                        <argument name="width" xsi:type="string">120</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="getter" xsi:type="string">getStatus</argument>
                         <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
@@ -99,14 +94,13 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_updated">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Updated</argument>
-                        <argument name="width" xsi:type="string">180</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">updated</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
                         <argument name="getter" xsi:type="string">getLatestUpdated</argument>
                         <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="column_css_class" xsi:type="string">indexer-updated</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
             </block>

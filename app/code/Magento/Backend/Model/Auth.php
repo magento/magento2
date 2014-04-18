@@ -55,7 +55,7 @@ class Auth
     protected $_eventManager;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -69,7 +69,7 @@ class Auth
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Backend\Model\Auth\StorageInterface $authStorage
      * @param \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Core\Model\Factory $modelFactory
      */
     public function __construct(
@@ -77,7 +77,7 @@ class Auth
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Backend\Model\Auth\StorageInterface $authStorage,
         \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Core\Model\Factory $modelFactory
     ) {
         $this->_eventManager = $eventManager;

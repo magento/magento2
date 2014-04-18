@@ -37,10 +37,10 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'Magento_Catalog')
+    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'Magento_Catalog')
     {
         parent::__construct($resource, $modulePrefix);
     }

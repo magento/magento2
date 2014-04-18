@@ -54,15 +54,15 @@ class Survey
     protected $_flagFactory;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * @param \Magento\FlagFactory $flagFactory
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
-    public function __construct(\Magento\FlagFactory $flagFactory, \Magento\App\RequestInterface $request)
+    public function __construct(\Magento\FlagFactory $flagFactory, \Magento\Framework\App\RequestInterface $request)
     {
         $this->_request = $request;
         $this->_flagFactory = $flagFactory;

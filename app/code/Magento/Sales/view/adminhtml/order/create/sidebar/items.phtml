@@ -93,7 +93,7 @@
             </tbody>
         </table>
         <?php else: ?>
-            <?php echo __('No items') ?>
+            <span class="no-items"><?php echo __('No items') ?></span>
         <?php endif ?>
         </div>
         <?php if ($this->getItemCount() && $this->canRemoveItems()): ?>

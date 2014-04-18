@@ -83,7 +83,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param \Magento\Downloadable\Helper\File $downloadableFile
@@ -103,7 +103,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\Downloadable\Helper\File $downloadableFile,

@@ -39,7 +39,7 @@ class LayoutPlugin
     protected $config;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
@@ -47,12 +47,12 @@ class LayoutPlugin
      * Constructor
      *
      * @param \Magento\View\Layout $layout
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\PageCache\Model\Config $config
      */
     public function __construct(
         \Magento\View\Layout $layout,
-        \Magento\App\ResponseInterface $response,
+        \Magento\Framework\App\ResponseInterface $response,
         \Magento\PageCache\Model\Config $config
     ) {
         $this->layout = $layout;

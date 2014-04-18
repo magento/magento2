@@ -66,7 +66,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array(
                 $this->_objectManager->create('Magento\Core\Model\Resource\Theme\Data\CollectionFactory'),
                 $this->_objectManager->create('Magento\Core\Model\Theme\Data\Collection'),
-                $this->_objectManager->create('Magento\App\Filesystem')
+                $this->_objectManager->create('Magento\Framework\App\Filesystem')
             )
         );
         $themeRegistration->expects($this->once())->method('register')->with($this->equalTo($pattern));

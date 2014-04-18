@@ -30,7 +30,7 @@ class Allmethods implements \Magento\Option\ArrayInterface
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -40,11 +40,11 @@ class Allmethods implements \Magento\Option\ArrayInterface
     protected $_shippingConfig;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig
     ) {
         $this->_scopeConfig = $scopeConfig;

@@ -50,14 +50,14 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cssUrlResolver = $this->getMock('Magento\View\Url\CssResolver', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_filesystem->expects(
             $this->once()
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::PUB_DIR
+            \Magento\Framework\App\Filesystem::PUB_DIR
         )->will(
             $this->returnValue($this->_directory)
         );

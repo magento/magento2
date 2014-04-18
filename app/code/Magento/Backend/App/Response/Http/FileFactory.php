@@ -23,7 +23,7 @@
  */
 namespace Magento\Backend\App\Response\Http;
 
-class FileFactory extends \Magento\App\Response\Http\FileFactory
+class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
 {
     /**
      * @var \Magento\Backend\Model\Auth
@@ -36,7 +36,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_backendUrl;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -46,7 +46,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_session;
 
     /**
-     * @var \Magento\App\ActionFlag
+     * @var \Magento\Framework\App\ActionFlag
      */
     protected $_flag;
 
@@ -56,21 +56,21 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_helper;
 
     /**
-     * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\App\ActionFlag $flag
+     * @param \Magento\Framework\App\ActionFlag $flag
      * @param \Magento\Backend\Helper\Data $helper
      */
     public function __construct(
-        \Magento\App\ResponseInterface $response,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\ResponseInterface $response,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Session $session,
-        \Magento\App\ActionFlag $flag,
+        \Magento\Framework\App\ActionFlag $flag,
         \Magento\Backend\Helper\Data $helper
     ) {
         $this->_auth = $auth;
@@ -86,7 +86,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      *
      * @param   string $path
      * @param   array $arguments
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      * @TODO move method
      */
     protected function _redirect($path, $arguments = array())
@@ -107,12 +107,12 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function create(
         $fileName,
         $content,
-        $baseDir = \Magento\App\Filesystem::ROOT_DIR,
+        $baseDir = \Magento\Framework\App\Filesystem::ROOT_DIR,
         $contentType = 'application/octet-stream',
         $contentLength = null
     ) {

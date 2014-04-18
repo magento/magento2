@@ -26,7 +26,7 @@ namespace Magento\ImportExport\Model\Import\Source;
 class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -40,7 +40,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
     }
 

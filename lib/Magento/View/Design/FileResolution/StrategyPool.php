@@ -24,8 +24,8 @@
 namespace Magento\View\Design\FileResolution;
 
 use Magento\Exception;
-use Magento\App\State;
-use Magento\App\Filesystem;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Filesystem;
 use Magento\ObjectManager;
 
 /**

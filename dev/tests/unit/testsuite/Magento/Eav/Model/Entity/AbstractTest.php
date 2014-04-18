@@ -39,7 +39,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Eav\Model\Entity\AbstractEntity',
             array(
-                $this->getMock('Magento\App\Resource', array(), array(), '', false),
+                $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
                 $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
                 $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
                 $this->getMock('\Magento\Locale\FormatInterface'),
@@ -289,7 +289,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributes[$attributeCode] = $attribute;
 
         $data = array(
-            $this->getMock('Magento\App\Resource', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
             $this->getMock('Magento\Locale\FormatInterface'),

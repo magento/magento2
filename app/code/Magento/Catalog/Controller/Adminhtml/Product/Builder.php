@@ -24,7 +24,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg;
 use Magento\Registry;

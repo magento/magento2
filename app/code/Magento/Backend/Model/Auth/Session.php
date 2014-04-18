@@ -40,6 +40,9 @@ namespace Magento\Backend\Model\Auth;
  */
 class Session extends \Magento\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {
+    /**
+     * Admin session lifetime config path
+     */
     const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
@@ -67,7 +70,12 @@ class Session extends \Magento\Session\SessionManager implements \Magento\Backen
     protected $_config;
 
     /**
-     * @param \Magento\App\Request\Http $request
+     * @var \Magento\Stdlib\Cookie
+     */
+    protected $_cookie;
+
+    /**
+     * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Session\SaveHandlerInterface $saveHandler
@@ -76,9 +84,10 @@ class Session extends \Magento\Session\SessionManager implements \Magento\Backen
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
+     * @param \Magento\Stdlib\Cookie $cookie
      */
     public function __construct(
-        \Magento\App\Request\Http $request,
+        \Magento\Framework\App\Request\Http $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Session\SaveHandlerInterface $saveHandler,
@@ -86,11 +95,13 @@ class Session extends \Magento\Session\SessionManager implements \Magento\Backen
         \Magento\Session\StorageInterface $storage,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Backend\App\ConfigInterface $config
+        \Magento\Backend\App\ConfigInterface $config,
+        \Magento\Stdlib\Cookie $cookie
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
+        $this->_cookie = $cookie;
         parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
         $this->start();
     }
@@ -162,10 +173,34 @@ class Session extends \Magento\Session\SessionManager implements \Magento\Backen
         }
 
         if ($this->getUser() && $this->getUser()->getId()) {
-            $this->setUpdatedAt($currentTime);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Set session UpdatedAt to current time and update cookie expiration time
+     *
+     * @return void
+     */
+    public function prolong()
+    {
+        $lifetime = $this->_config->getValue(self::XML_PATH_SESSION_LIFETIME);
+        $currentTime = time();
+
+        $this->setUpdatedAt($currentTime);
+        $cookieValue = $this->_cookie->get($this->getName());
+        if ($cookieValue) {
+            $this->_cookie->set(
+                $this->getName(),
+                $cookieValue,
+                $lifetime,
+                $this->sessionConfig->getCookiePath(),
+                $this->sessionConfig->getCookieDomain(),
+                $this->sessionConfig->getCookieSecure(),
+                $this->sessionConfig->getCookieHttpOnly()
+            );
+        }
     }
 
     /**

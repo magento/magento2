@@ -154,6 +154,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getJsonConfig()
     {
+        /** @var \Magento\Bundle\Model\Option[] $optionsArray */
         $optionsArray = $this->getOptions();
         $options = array();
         $selected = array();
@@ -165,6 +166,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             $preConfiguredValues = $currentProduct->getPreconfiguredValues();
             $defaultValues = array();
         }
+
 
         $position = 0;
         foreach ($optionsArray as $_option) {
@@ -189,37 +191,58 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $_qty = !($_selection->getSelectionQty() * 1) ? '1' : $_selection->getSelectionQty() * 1;
                 // recalculate currency
                 $tierPrices = $_selection->getTierPrice();
-                foreach ($tierPrices as &$tierPriceInfo) {
-                    $tierPriceInfo['price'] = $this->coreData->currency($tierPriceInfo['price'], false, false);
-                }
-                unset($tierPriceInfo);
-                // break the reference with the last element
 
-                $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice(
-                    $currentProduct,
-                    $_selection,
-                    $currentProduct->getQty(),
-                    $_selection->getQty(),
-                    false,
-                    false
-                );
+                foreach ($tierPrices as &$tierPriceInfo) {
+                    $tierPriceAmount = $_selection->getPriceInfo()->getPrice('regular_price')
+                        ->getCustomAmount($tierPriceInfo['price']);
+                    $tierPriceInfo['price'] = $this->coreData->currency($tierPriceInfo['price'], false, false);
+                    $tierPriceInfo['inclTaxPrice'] = $this->coreData->currency(
+                        $tierPriceAmount->getValue(),
+                        false,
+                        false
+                    );
+                    $tierPriceInfo['exclTaxPrice'] = $this->coreData->currency(
+                        $tierPriceAmount->getBaseAmount(),
+                        false,
+                        false
+                    );
+                }
+                // unset($tierPriceInfo);
+                // break the reference with the last element
 
                 $canApplyMAP = false;
 
-                $_priceInclTax = $this->_taxData->getPrice($_selection, $itemPrice, true);
-                $_priceExclTax = $this->_taxData->getPrice($_selection, $itemPrice);
+                $bundleOptionPriceAmount = $currentProduct->getPriceInfo()->getPrice('bundle_option')
+                    ->getOptionSelectionAmount($_selection);
+                $_priceInclTax = $bundleOptionPriceAmount->getValue();
+                $_priceExclTax = $bundleOptionPriceAmount->getBaseAmount();
 
-                if ($currentProduct->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-                    $_priceInclTax = $this->_taxData->getPrice($currentProduct, $itemPrice, true);
-                    $_priceExclTax = $this->_taxData->getPrice($currentProduct, $itemPrice);
-                }
+                //if ($currentProduct->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
+                //    $_priceInclTax = $this->_taxData->getPrice($currentProduct, $itemPrice, true);
+                //    $_priceExclTax = $this->_taxData->getPrice($currentProduct, $itemPrice);
+                //}
+                //$itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice(
+                //    $currentProduct,
+                //    $_selection,
+                //    $currentProduct->getQty(),
+                //    $_selection->getQty(),
+                //   false,
+                //    false
+                //);
 
                 $selection = array(
                     'qty' => $_qty,
                     'customQty' => $_selection->getSelectionCanChangeQty(),
-                    'price' => $this->coreData->currency($_selection->getFinalPrice(), false, false),
-                    'priceInclTax' => $this->coreData->currency($_priceInclTax, false, false),
-                    'priceExclTax' => $this->coreData->currency($_priceExclTax, false, false),
+                    'inclTaxPrice' => $this->coreData->currency(
+                        $_priceInclTax,
+                        false,
+                        false
+                    ),
+                    'exclTaxPrice' => $this->coreData->currency(
+                        $_priceExclTax,
+                        false,
+                        false
+                    ),
                     'priceValue' => $this->coreData->currency($_selection->getSelectionPriceValue(), false, false),
                     'priceType' => $_selection->getSelectionPriceType(),
                     'tierPrice' => $tierPrices,
@@ -228,6 +251,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     'minusDisposition' => 0,
                     'canApplyMAP' => $canApplyMAP
                 );
+
+                $selection['price'] = $this->_taxData->displayPriceIncludingTax()
+                    ? $selection['inclTaxPrice']
+                    : $selection['exclTaxPrice'];
 
                 $responseObject = new \Magento\Object();
                 $args = array('response_object' => $responseObject, 'selection' => $_selection);
@@ -240,7 +267,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $option['selections'][$selectionId] = $selection;
 
                 if (($_selection->getIsDefault() ||
-                    $selectionCount == 1 && $_option->getRequired()) && $_selection->isSalable()
+                        $selectionCount == 1 && $_option->getRequired()) && $_selection->isSalable()
                 ) {
                     $selected[$optionId][] = $selectionId;
                 }
@@ -263,12 +290,23 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'bundleId' => $currentProduct->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'basePrice' => $this->coreData->currency($currentProduct->getPrice(), false, false),
+            'showIncludeTax' => $this->_taxData->displayPriceIncludingTax(),
+            'finalBasePriceInclTax' => $this->coreData->currency(
+                $this->_taxData->getPrice($currentProduct, $currentProduct->getFinalPrice(), true),
+                false,
+                false
+            ),
+            'finalBasePriceExclTax' => $this->coreData->currency($currentProduct->getFinalPrice(), false, false),
             'priceType' => $currentProduct->getPriceType(),
             'specialPrice' => $currentProduct->getSpecialPrice(),
             'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
             'isFixedPrice' => $isFixedPrice,
             'isMAPAppliedDirectly' => $this->_catalogData->canApplyMsrp($this->getProduct(), null, false)
         );
+
+        $config['finalPrice'] = $this->_taxData->displayPriceIncludingTax()
+            ? $config['finalBasePriceInclTax']
+            : $config['finalBasePriceExclTax'];
 
         if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;

@@ -29,22 +29,22 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Files extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -169,7 +169,7 @@ class Files extends \Magento\Backend\App\Action
             return $this->_fileFactory->create(
                 $file,
                 array('type' => 'filename', 'value' => $helper->getThumbnailPath($file)),
-                \Magento\App\Filesystem::MEDIA_DIR
+                \Magento\Framework\App\Filesystem::MEDIA_DIR
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);

@@ -29,6 +29,9 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\Pricing\Object\SaleableInterface;
+
 class Type
 {
     /**#@+
@@ -39,7 +42,6 @@ class Type
     const TYPE_BUNDLE = 'bundle';
 
     const TYPE_VIRTUAL = 'virtual';
-
     /**#@-*/
 
     /**
@@ -105,20 +107,28 @@ class Type
     protected $_priceFactory;
 
     /**
+     * @var \Magento\Pricing\PriceInfo\Factory
+     */
+    protected $_priceInfoFactory;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type\Pool $productTypePool
      * @param \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
+     * @param \Magento\Pricing\PriceInfo\Factory $priceInfoFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Catalog\Model\Product\Type\Pool $productTypePool,
-        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
+        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory,
+        \Magento\Pricing\PriceInfo\Factory $priceInfoFactory
     ) {
         $this->_config = $config;
         $this->_productTypePool = $productTypePool;
         $this->_priceFactory = $priceFactory;
+        $this->_priceInfoFactory = $priceInfoFactory;
     }
 
     /**
@@ -166,6 +176,17 @@ class Type
 
         $this->_priceModels[$productType] = $this->_priceFactory->create($priceModelName);
         return $this->_priceModels[$productType];
+    }
+
+    /**
+     * Get Product Price Info object
+     *
+     * @param SaleableInterface $product
+     * @return \Magento\Pricing\PriceInfoInterface
+     */
+    public function getPriceInfo(SaleableInterface $product)
+    {
+        return $this->_priceInfoFactory->create($product);
     }
 
     /**

@@ -73,17 +73,17 @@ class Observer
     protected $_config;
 
     /**
-     * @var \Magento\App\ObjectManager
+     * @var \Magento\Framework\App\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -93,7 +93,7 @@ class Observer
     protected $_scheduleFactory;
 
     /**
-     * @var \Magento\App\Console\Request
+     * @var \Magento\Framework\App\Console\Request
      */
     protected $_request;
 
@@ -105,19 +105,19 @@ class Observer
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param ScheduleFactory $scheduleFactory
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param ConfigInterface $config
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Console\Request $request
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\ShellInterface $shell
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Cron\Model\ScheduleFactory $scheduleFactory,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Cron\Model\ConfigInterface $config,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Console\Request $request,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Console\Request $request,
         \Magento\ShellInterface $shell
     ) {
         $this->_objectManager = $objectManager;
@@ -155,7 +155,7 @@ class Observer
                     '%s -f %s -- --group=%s',
                     array(
                         PHP_BINARY,
-                        BP . DIRECTORY_SEPARATOR . \Magento\App\Filesystem::PUB_DIR .  DIRECTORY_SEPARATOR . 'cron.php',
+                        BP . '/' . \Magento\Framework\App\Filesystem::PUB_DIR . '/cron.php',
                         $groupId
                     )
                 );

@@ -26,7 +26,7 @@
  */
 namespace Magento\View\Element;
 
-use Magento\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoAppIsolation enabled
@@ -47,7 +47,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDefaultDesignTheme();
@@ -68,17 +69,17 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
     public function testCssWithWrongImage()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
         $relativePath = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryRead(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->getRelativePath(
             __DIR__ . '/_files'
         );
-        /** @var $directoryList \Magento\App\Filesystem\DirectoryList */
-        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
+        /** @var $directoryList \Magento\Framework\App\Filesystem\DirectoryList */
+        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
 
         $cssUrl = $this->_block->getViewFileUrl(
             'css/wrong.css',
@@ -89,7 +90,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequest()
     {
-        $this->assertInstanceOf('Magento\App\RequestInterface', $this->_block->getRequest());
+        $this->assertInstanceOf('Magento\Framework\App\RequestInterface', $this->_block->getRequest());
     }
 
     /**

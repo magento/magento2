@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Adminhtml sales orders controller
@@ -35,17 +35,17 @@ use Magento\App\ResponseInterface;
 class AbstractShipment extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -80,9 +80,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('Shipments'));
 
-        $this->_initAction()->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Shipment')
-        );
+        $this->_initAction();
         $this->_view->renderLayout();
     }
 
@@ -125,7 +123,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
             return $this->_fileFactory->create(
                 'packingslip' . $date . '.pdf',
                 $pdf->render(),
-                \Magento\App\Filesystem::VAR_DIR,
+                \Magento\Framework\App\Filesystem::VAR_DIR,
                 'application/pdf'
             );
         }
@@ -150,7 +148,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'packingslip' . $date . '.pdf',
                     $pdf->render(),
-                    \Magento\App\Filesystem::VAR_DIR,
+                    \Magento\Framework\App\Filesystem::VAR_DIR,
                     'application/pdf'
                 );
             }

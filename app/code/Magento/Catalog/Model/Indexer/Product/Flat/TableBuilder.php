@@ -50,11 +50,11 @@ class TableBuilder
 
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->_connection = $resource->getConnection('write');

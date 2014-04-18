@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\App\Response\Http;
+use Magento\Framework\App\Response\Http;
 
 class Response extends Http
 {
@@ -43,12 +43,12 @@ class Response extends Http
      * Constructor
      *
      * @param \Magento\Stdlib\Cookie              $cookie
-     * @param \Magento\App\Http\Context           $context
+     * @param \Magento\Framework\App\Http\Context           $context
      * @param \Magento\File\Transfer\Adapter\Http $transferAdapter
      */
     public function __construct(
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\Http\Context $context,
+        \Magento\Framework\App\Http\Context $context,
         \Magento\File\Transfer\Adapter\Http $transferAdapter
     ) {
         parent::__construct($cookie, $context);

@@ -31,7 +31,7 @@ namespace Magento\Customer\Helper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Customer group cache context
@@ -131,7 +131,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_customerAddress = null;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -161,10 +161,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $mathRandom;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
@@ -174,10 +174,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
@@ -475,7 +475,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         return (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
-            \Magento\App\ScopeInterface::SCOPE_DEFAULT
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         );
     }
 
@@ -658,7 +658,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Perform customer data filtration based on form code and form object
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $formCode The code of EAV form to take the list of attributes from
      * @param string $entityType entity type for the form
      * @param string[] $additionalAttributes The list of attribute codes to skip filtration for
@@ -667,7 +667,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @return array Filtered customer data
      */
     public function extractCustomerData(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         $formCode,
         $entityType,
         $additionalAttributes = array(),

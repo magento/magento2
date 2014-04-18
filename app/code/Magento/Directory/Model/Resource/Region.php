@@ -44,10 +44,10 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
     protected $_localeResolver;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Locale\ResolverInterface $localeResolver
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Locale\ResolverInterface $localeResolver)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Locale\ResolverInterface $localeResolver)
     {
         parent::__construct($resource);
         $this->_localeResolver = $localeResolver;
@@ -78,7 +78,7 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
 
         $locale = $this->_localeResolver->getLocaleCode();
-        $systemLocale = \Magento\AppInterface::DISTRO_LOCALE_CODE;
+        $systemLocale = \Magento\Framework\AppInterface::DISTRO_LOCALE_CODE;
 
         $regionField = $adapter->quoteIdentifier($this->getMainTable() . '.' . $this->getIdFieldName());
 

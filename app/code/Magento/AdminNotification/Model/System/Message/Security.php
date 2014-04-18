@@ -44,7 +44,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     private $_verificationTimeOut = 2;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -54,7 +54,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     protected $_backendConfig;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -64,15 +64,15 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     protected $_curlFactory;
 
     /**
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;

@@ -81,7 +81,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $areaList = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
+        $areaList = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
         $areaList->expects($this->any())->method('getCodes')->will($this->returnValue(array()));
         $configScope = new \Magento\Config\Scope($areaList, 'global');
         $cache = $this->getMock('Magento\Config\CacheInterface');

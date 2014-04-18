@@ -163,6 +163,7 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @deprecated
      */
     public function getTierPrices($product = null)
     {

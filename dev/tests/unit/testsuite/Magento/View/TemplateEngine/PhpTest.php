@@ -113,7 +113,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
     public function testHelperWithValidClass()
     {
-        $class = 'Magento\App\Helper\AbstractHelper';
+        $class = 'Magento\Framework\App\Helper\AbstractHelper';
         $object = $this->getMockForAbstractClass($class, array(), '', false);
         $this->_helperFactoryMock->expects(
             $this->once()

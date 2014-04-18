@@ -26,7 +26,7 @@
  */
 namespace Magento\View\Design\FileResolution;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 
 /**
  * StrategyPool Test
@@ -46,7 +46,7 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected $appState;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -58,11 +58,11 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
-        $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\App\Filesystem', array('getPath'), array(), '', false);
+        $this->appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\Framework\App\Filesystem', array('getPath'), array(), '', false);
         $pathMap = array(
-            array(\Magento\App\Filesystem::VAR_DIR, 'base_dir/var'),
-            array(\Magento\App\Filesystem::ROOT_DIR, 'base_dir')
+            array(\Magento\Framework\App\Filesystem::VAR_DIR, 'base_dir/var'),
+            array(\Magento\Framework\App\Filesystem::ROOT_DIR, 'base_dir')
         );
         $this->filesystem->expects($this->any())->method('getPath')->will($this->returnValueMap($pathMap));
 

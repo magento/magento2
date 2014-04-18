@@ -67,7 +67,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\Filesystem'
+                'Magento\Framework\App\Filesystem'
             )->getPath(
                 'session'
             ),

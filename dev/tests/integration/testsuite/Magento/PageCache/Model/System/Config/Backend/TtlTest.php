@@ -34,14 +34,14 @@ class TtlTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     protected function setUp()
     {
         $this->_config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Config\ScopeConfigInterface');
+            ->create('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\PageCache\Model\System\Config\Backend\Ttl');
     }

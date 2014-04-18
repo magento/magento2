@@ -52,12 +52,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
-        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
         $this->_helper = $objectManager->getObject(
             'Magento\GoogleAdwords\Helper\Data',
             array(

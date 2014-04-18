@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Helper;
 
-class Admin extends \Magento\App\Helper\AbstractHelper
+class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Sales\Model\Config
@@ -38,12 +38,12 @@ class Admin extends \Magento\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig
     ) {

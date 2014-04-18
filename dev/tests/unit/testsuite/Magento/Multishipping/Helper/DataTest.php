@@ -38,14 +38,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Core store config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
      * Context mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Helper\Context
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Helper\Context
      */
     protected $contextMock;
 
@@ -65,8 +65,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
-        $this->scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', array(), array(), '', false);
         $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', array(), array(), '', false);
 

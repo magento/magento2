@@ -24,7 +24,7 @@
 namespace Magento\Css\PreProcessor\Cache\Import;
 
 use Magento\Exception;
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 
 /**
  * File cache entity for entry file

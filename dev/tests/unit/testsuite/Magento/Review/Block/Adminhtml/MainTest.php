@@ -34,7 +34,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
@@ -51,7 +51,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomer')
             ->with('customer id')
             ->will($this->returnValue(new \Magento\Object()));
-        $this->request = $this->getMockForAbstractClass('Magento\App\RequestInterface');
+        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with('customerId', false)

@@ -46,13 +46,13 @@ class BackendFactory
      * Create backend model by name
      *
      * @param string $modelName
-     * @return \Magento\App\Config\ValueInterface
+     * @return \Magento\Framework\App\Config\ValueInterface
      * @throws \InvalidArgumentException
      */
     public function create($modelName)
     {
         $model = $this->_objectManager->create($modelName);
-        if (!$model instanceof \Magento\App\Config\ValueInterface) {
+        if (!$model instanceof \Magento\Framework\App\Config\ValueInterface) {
             throw new \InvalidArgumentException('Invalid config field backend model: ' . $modelName);
         }
         return $model;

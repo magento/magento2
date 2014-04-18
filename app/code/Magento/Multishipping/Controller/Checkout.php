@@ -23,7 +23,7 @@
  */
 namespace Magento\Multishipping\Controller;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
@@ -35,13 +35,13 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
 {
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService
@@ -93,7 +93,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {

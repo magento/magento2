@@ -30,7 +30,7 @@ namespace Magento\Backend\Model\Config\Backend;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class File extends \Magento\App\Config\Value
+class File extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface
@@ -45,7 +45,7 @@ class File extends \Magento\App\Config\Value
     protected $_maxFileSize = 0;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -62,10 +62,10 @@ class File extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -73,10 +73,10 @@ class File extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -84,7 +84,7 @@ class File extends \Magento\App\Config\Value
         $this->_uploaderFactory = $uploaderFactory;
         $this->_requestData = $requestData;
         $this->_filesystem = $filesystem;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
@@ -145,7 +145,7 @@ class File extends \Magento\App\Config\Value
      */
     public function validateMaxSize($filePath)
     {
-        $directory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $directory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         if ($this->_maxFileSize > 0 && $directory->stat(
             $directory->getRelativePath($filePath)
         )['size'] > $this->_maxFileSize * 1024
@@ -211,7 +211,7 @@ class File extends \Magento\App\Config\Value
     protected function _prependScopeInfo($path)
     {
         $scopeInfo = $this->getScope();
-        if (\Magento\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
             $scopeInfo .= '/' . $this->getScopeId();
         }
         return $scopeInfo . '/' . $path;
@@ -228,7 +228,7 @@ class File extends \Magento\App\Config\Value
     protected function _appendScopeInfo($path)
     {
         $path .= '/' . $this->getScope();
-        if (\Magento\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
             $path .= '/' . $this->getScopeId();
         }
         return $path;

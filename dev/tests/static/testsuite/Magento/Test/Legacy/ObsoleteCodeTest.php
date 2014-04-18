@@ -337,7 +337,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media' .
             '|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
             $content,
-            'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\App\Filesystem'
+            'The class \Magento\Core\Model\Config\Options is obsolete. '
+            . 'Replacement suggestion: \Magento\Framework\App\Filesystem'
         );
     }
 

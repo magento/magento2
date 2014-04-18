@@ -56,9 +56,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         );
 
         if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
@@ -111,7 +111,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testCleanCache()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\CacheInterface'
+            'Magento\Framework\App\CacheInterface'
         )->save(
             'test',
             'catalog_product_999',
@@ -121,7 +121,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->setId(999)->cleanCache();
         $this->assertFalse(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\CacheInterface'
+                'Magento\Framework\App\CacheInterface'
             )->load(
                 'catalog_product_999'
             )
@@ -157,9 +157,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         );
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());

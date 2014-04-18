@@ -25,7 +25,7 @@ namespace Magento\Core\Controller\Request;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\App\RequestInterface */
+    /** @var \Magento\Framework\App\RequestInterface */
     protected $_model;
 
     /**
@@ -35,10 +35,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_routerListMock = $this->getMock('\Magento\App\Route\ConfigInterface');
-        $infoProcessorMock = $this->getMock('Magento\App\Request\PathInfoProcessorInterface');
+        $this->_routerListMock = $this->getMock('\Magento\Framework\App\Route\ConfigInterface');
+        $infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->_model = new \Magento\App\Request\Http($this->_routerListMock, $infoProcessorMock);
+        $this->_model = new \Magento\Framework\App\Request\Http($this->_routerListMock, $infoProcessorMock);
     }
 
     /**

@@ -47,7 +47,7 @@ class Multishipping extends \Magento\Object
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -109,7 +109,7 @@ class Multishipping extends \Magento\Object
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param CustomerAddressServiceInterface $customerAddressService
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Session\Generic $session
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Convert\Quote $quote
@@ -124,7 +124,7 @@ class Multishipping extends \Magento\Object
         \Magento\Sales\Model\OrderFactory $orderFactory,
         CustomerAddressServiceInterface $customerAddressService,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Session\Generic $session,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         \Magento\Sales\Model\Convert\Quote $quote,

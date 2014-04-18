@@ -50,7 +50,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param array $data
@@ -58,7 +58,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         array $data = array(),

@@ -40,10 +40,10 @@ class Online extends \Magento\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime\DateTime $date)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Stdlib\DateTime\DateTime $date)
     {
         $this->_date = $date;
         parent::__construct($resource);

@@ -25,7 +25,7 @@
  */
 namespace Magento\Module;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 use Magento\Module\Updater\SetupFactory;
 
 class Updater implements \Magento\Module\UpdaterInterface
@@ -47,7 +47,7 @@ class Updater implements \Magento\Module\UpdaterInterface
     /**
      * Application state model
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 

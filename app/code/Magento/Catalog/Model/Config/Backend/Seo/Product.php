@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Config\Backend\Seo;
 
-use Magento\App\Config\Value;
+use Magento\Framework\App\Config\Value;
 
 class Product extends Value
 {

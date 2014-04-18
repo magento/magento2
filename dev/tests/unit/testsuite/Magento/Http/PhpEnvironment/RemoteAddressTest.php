@@ -29,7 +29,7 @@ namespace Magento\Http\PhpEnvironment;
 class RemoteAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Request\Http
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     protected $_request;
 
@@ -41,7 +41,7 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_request = $this->getMockBuilder(
-            'Magento\App\Request\Http'
+            'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->setMethods(
             array('getServer')
         )->getMock();

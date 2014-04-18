@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Locale extends \Magento\App\Config\Value
+class Locale extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Core\Model\Resource\Config\Data\CollectionFactory
@@ -54,7 +54,7 @@ class Locale extends \Magento\App\Config\Value
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory
      * @param \Magento\Store\Model\Website\Factory $websiteFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
@@ -68,7 +68,7 @@ class Locale extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory,
         \Magento\Store\Model\Website\Factory $websiteFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
@@ -111,7 +111,7 @@ class Locale extends \Magento\App\Config\Value
                     }
 
                     switch ($data->getScope()) {
-                        case \Magento\App\ScopeInterface::SCOPE_DEFAULT:
+                        case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
                             $scopeName = __('Default scope');
                             break;
 

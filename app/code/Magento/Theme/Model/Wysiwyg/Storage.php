@@ -86,18 +86,18 @@ class Storage
     /**
      * Initialize dependencies
      *
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Theme\Helper\Storage $helper
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Image\AdapterFactory $imageFactory
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Theme\Helper\Storage $helper,
         \Magento\ObjectManager $objectManager,
         \Magento\Image\AdapterFactory $imageFactory
     ) {
-        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;

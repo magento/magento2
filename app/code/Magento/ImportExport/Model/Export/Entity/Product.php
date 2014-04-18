@@ -180,7 +180,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_categoryColFactory;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resourceModel;
 
@@ -219,7 +219,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
@@ -237,7 +237,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function __construct(
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Logger $logger,
         \Magento\Catalog\Model\Resource\Product\Collection $collection,

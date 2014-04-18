@@ -28,6 +28,8 @@ use Magento\Service\Data\AbstractObject;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
 use Magento\Webapi\Controller\Rest\Router;
+use Magento\Webapi\Model\PathProcessor;
+use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Front controller for WebAPI REST area.
@@ -36,7 +38,7 @@ use Magento\Webapi\Controller\Rest\Router;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rest implements \Magento\App\FrontControllerInterface
+class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
     /** @var Router */
     protected $_router;
@@ -50,7 +52,7 @@ class Rest implements \Magento\App\FrontControllerInterface
     /** @var \Magento\ObjectManager */
     protected $_objectManager;
 
-    /** @var \Magento\App\State */
+    /** @var \Magento\Framework\App\State */
     protected $_appState;
 
     /** @var \Magento\View\LayoutInterface */
@@ -71,8 +73,11 @@ class Rest implements \Magento\App\FrontControllerInterface
     /** @var ErrorProcessor */
     protected $_errorProcessor;
 
+    /** @var PathProcessor */
+    protected $_pathProcessor;
+
     /**
-     * @var \Magento\App\AreaList
+     * @var \Magento\Framework\App\AreaList
      */
     protected $areaList;
 
@@ -83,14 +88,15 @@ class Rest implements \Magento\App\FrontControllerInterface
      * @param RestResponse $response
      * @param Router $router
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Oauth\OauthInterface $oauthService
      * @param \Magento\Oauth\Helper\Request $oauthHelper
      * @param AuthorizationService $authorizationService
      * @param ServiceArgsSerializer $serializer
      * @param ErrorProcessor $errorProcessor
-     * @param \Magento\App\AreaList $areaList
+     * @param PathProcessor $pathProcessor
+     * @param \Magento\Framework\App\AreaList $areaList
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -100,14 +106,15 @@ class Rest implements \Magento\App\FrontControllerInterface
         RestResponse $response,
         Router $router,
         \Magento\ObjectManager $objectManager,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\View\LayoutInterface $layout,
         \Magento\Oauth\OauthInterface $oauthService,
         \Magento\Oauth\Helper\Request $oauthHelper,
         AuthorizationService $authorizationService,
         ServiceArgsSerializer $serializer,
         ErrorProcessor $errorProcessor,
-        \Magento\App\AreaList $areaList
+        PathProcessor $pathProcessor,
+        \Magento\Framework\App\AreaList $areaList
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -120,20 +127,20 @@ class Rest implements \Magento\App\FrontControllerInterface
         $this->_authorizationService = $authorizationService;
         $this->_serializer = $serializer;
         $this->_errorProcessor = $errorProcessor;
+        $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
     }
 
     /**
      * Handle REST request
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(\Magento\App\RequestInterface $request)
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
-        $pathParts = explode('/', trim($request->getPathInfo(), '/'));
-        array_shift($pathParts);
-        $request->setPathInfo('/' . implode('/', $pathParts));
+        $path = $this->_pathProcessor->process($request->getPathInfo());
+        $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);
         try {
@@ -169,6 +176,7 @@ class Rest implements \Magento\App\FrontControllerInterface
             $inputData = $this->_request->getRequestData();
             $serviceMethodName = $route->getServiceMethod();
             $serviceClassName = $route->getServiceClass();
+            $inputData = $this->_overrideParams($inputData, $route->getParameters());
             $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Service\Data\AbstractObject $outputData */
@@ -214,5 +222,22 @@ class Rest implements \Magento\App\FrontControllerInterface
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Override parameter values based on webapi.xml
+     *
+     * @param array $inputData Incoming data from request
+     * @param array $parameters Contains parameters to replace or default
+     * @return array Data in same format as $inputData with appropriate parameters added or changed
+     */
+    protected function _overrideParams(array $inputData, array $parameters)
+    {
+        foreach ($parameters as $name => $paramData) {
+            if ($paramData[Converter::KEY_FORCE] || !isset($inputData[$name])) {
+                $inputData[$name] = $paramData[Converter::KEY_VALUE];
+            }
+        }
+        return $inputData;
     }
 }

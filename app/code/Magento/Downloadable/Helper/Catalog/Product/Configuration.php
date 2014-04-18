@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Helper\Catalog\Product;
  * @package    Magento_Downloadable
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Configuration extends \Magento\App\Helper\AbstractHelper implements
+class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
     \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
@@ -45,19 +45,19 @@ class Configuration extends \Magento\App\Helper\AbstractHelper implements
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfigur
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfigur,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_productConfigur = $productConfigur;
         $this->_scopeConfig = $scopeConfig;

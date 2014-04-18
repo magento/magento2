@@ -29,18 +29,18 @@ namespace Magento\Rss\Model\System\Config\Backend;
  * Cache cleaner backend model
  *
  */
-class Links extends \Magento\App\Config\Value
+class Links extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -48,8 +48,8 @@ class Links extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

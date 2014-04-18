@@ -51,12 +51,12 @@ class Advanced extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Event\ManagerInterface $eventManager
     ) {

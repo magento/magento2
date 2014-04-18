@@ -37,14 +37,14 @@ class TableData implements TableDataInterface
     protected $_connection;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(\Magento\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\Resource $resource)
     {
         $this->_resource = $resource;
     }

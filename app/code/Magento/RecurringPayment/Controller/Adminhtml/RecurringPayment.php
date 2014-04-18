@@ -23,7 +23,7 @@
  */
 namespace Magento\RecurringPayment\Controller\Adminhtml;
 
-use Magento\App\Action\NotFoundException;
+use Magento\Framework\App\Action\NotFoundException;
 use Magento\Model\Exception as CoreException;
 use Magento\Customer\Controller\RegistryConstants;
 

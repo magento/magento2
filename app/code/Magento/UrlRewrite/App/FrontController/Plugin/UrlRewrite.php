@@ -33,17 +33,17 @@ class UrlRewrite
     protected $_rewriteService;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_state;
 
     /**
      * @param \Magento\UrlRewrite\App\Request\RewriteService $rewriteService
-     * @param \Magento\App\State $state
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\UrlRewrite\App\Request\RewriteService $rewriteService,
-        \Magento\App\State $state
+        \Magento\Framework\App\State $state
     ) {
         $this->_rewriteService = $rewriteService;
         $this->_state = $state;
@@ -52,17 +52,17 @@ class UrlRewrite
     /**
      * Perform url rewites
      *
-     * @param \Magento\App\FrontController $subject
+     * @param \Magento\Framework\App\FrontController $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\FrontController $subject,
+        \Magento\Framework\App\FrontController $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->_state->isInstalled()) {
             return $proceed($request);

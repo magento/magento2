@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
-class Sender extends \Magento\App\Config\Value
+class Sender extends \Magento\Framework\App\Config\Value
 {
     /**
      * Check sender name validity

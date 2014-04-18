@@ -28,7 +28,7 @@ namespace Magento\Store\Model\Config\Processor;
 class Placeholder
 {
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -43,11 +43,11 @@ class Placeholder
     protected $urlPlaceholder;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string[] $urlPaths
      * @param string $urlPlaceholder
      */
-    public function __construct(\Magento\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
+    public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
     {
         $this->request = $request;
         $this->urlPaths = $urlPaths;

@@ -36,10 +36,10 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
     protected $_dateFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory)
     {
         $this->_dateFactory = $dateFactory;
         parent::__construct($resource);

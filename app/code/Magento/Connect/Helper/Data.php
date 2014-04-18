@@ -31,7 +31,7 @@ namespace Magento\Connect\Helper;
 class Data extends \Magento\Core\Helper\Data
 {
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -46,27 +46,36 @@ class Data extends \Magento\Core\Helper\Data
     protected $readDirectory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\State $appState
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Convert\Xml $xmlConverter
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\State $appState,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\State $appState,
+        \Magento\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Convert\Xml $xmlConverter,
         $dbCompatibleMode = true
     ) {
         $this->filesystem = $filesystem;
-        $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::VAR_DIR);
+        $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->_xmlConverter = $xmlConverter;
-        parent::__construct($context, $scopeConfig, $storeManager, $appState, $dbCompatibleMode);
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $storeManager,
+            $appState,
+            $priceCurrency,
+            $dbCompatibleMode
+        );
     }
 
     /**

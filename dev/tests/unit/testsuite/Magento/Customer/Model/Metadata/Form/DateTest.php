@@ -66,7 +66,9 @@ class DateTest extends AbstractFormTestCase
 
     public function testExtractValue()
     {
-        $requestMock = $this->getMockBuilder('Magento\App\RequestInterface')->disableOriginalConstructor()->getMock();
+        $requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $requestMock->expects($this->once())->method('getParam')->will($this->returnValue('1999-1-2'));
 
         // yyyy-MM-dd

@@ -47,7 +47,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     protected $_rateMethodFactory;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
@@ -55,7 +55,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,

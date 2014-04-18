@@ -34,7 +34,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
  * @package    Magento_Bundle
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Configuration extends \Magento\App\Helper\AbstractHelper implements
+class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
     \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
@@ -57,13 +57,13 @@ class Configuration extends \Magento\App\Helper\AbstractHelper implements
     protected $_escaper;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Escaper $escaper
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Escaper $escaper

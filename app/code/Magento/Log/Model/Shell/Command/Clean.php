@@ -30,7 +30,7 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
     /**
      * Mutable Config
      *
-     * @var \Magento\App\Config\MutableScopeConfigInterface
+     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
      */
     protected $_mutableConfig;
 
@@ -47,12 +47,12 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
     protected $_days;
 
     /**
-     * @param \Magento\App\Config\MutableScopeConfigInterface $mutableConfig
+     * @param \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
      * @param LogFactory $logFactory
      * @param int $days
      */
     public function __construct(
-        \Magento\App\Config\MutableScopeConfigInterface $mutableConfig,
+        \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig,
         LogFactory $logFactory,
         $days
     ) {

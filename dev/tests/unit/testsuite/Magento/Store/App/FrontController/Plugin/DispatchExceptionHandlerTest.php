@@ -53,17 +53,17 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', array(), array(), '', false);
-        $this->_filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->subjectMock = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', array(), array(), '', false);
         $this->_model = new DispatchExceptionHandler($this->_storeManagerMock, $this->_filesystemMock);
     }
 
     public function testAroundDispatch()
     {
-        $requestMock = $this->getMock('Magento\App\RequestInterface');
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->assertEquals(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $requestMock)

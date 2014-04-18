@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Config\Backend;
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Category extends \Magento\App\Config\Value
+class Category extends \Magento\Framework\App\Config\Value
 {
     /**
      * Catalog category
@@ -46,7 +46,7 @@ class Category extends \Magento\App\Config\Value
      *
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -55,7 +55,7 @@ class Category extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

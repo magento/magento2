@@ -30,7 +30,7 @@ namespace Magento\PageCache\Model\System\Config\Backend;
  * Class Ttl
  * @package Magento\PageCache\Model\System\Config\Backend
  */
-class Ttl extends \Magento\App\Config\Value
+class Ttl extends \Magento\Framework\App\Config\Value
 {
     /**
      * Throw exception if Ttl data is invalid or empty

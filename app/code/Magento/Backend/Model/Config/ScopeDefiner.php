@@ -34,14 +34,14 @@ class ScopeDefiner
     /**
      * Request object
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
-    public function __construct(\Magento\App\RequestInterface $request)
+    public function __construct(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_request = $request;
     }
@@ -57,6 +57,6 @@ class ScopeDefiner
             'store'
         ) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORE : ($this->_request->getParam(
             'website'
-        ) ? \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE : \Magento\App\ScopeInterface::SCOPE_DEFAULT);
+        ) ? \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE : \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
     }
 }

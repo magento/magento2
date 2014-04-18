@@ -32,26 +32,23 @@
     <div class="entry-edit">
         <?php if ($this->getHideFormElement() !== true):?>
             <form action="" id="<?php echo $this->getHtmlId() ?>-form" method="post">
-            <?php endif ?>
+        <?php endif ?>
                 <?php echo $this->getBlockHtml('formkey')?>
-                <fieldset>
-                    <span class="field-row">
-                        <label><?php echo __('Actions') ?>
-                            <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
-                                <option value=""></option>
-                                <?php foreach ($this->getItems() as $_item): ?>
-                                    <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
-                    </span>
-                    <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
-                    <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
-                    <span class="field-row">
-                        <?php echo $this->getApplyButtonHtml() ?>
-                    </span>
-                </fieldset>
-            <?php if ($this->getHideFormElement() !== true):?>
+                <span class="field-row">
+                    <label class="label"><?php echo __('Actions') ?></label>
+                    <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
+                        <option value=""></option>
+                        <?php foreach ($this->getItems() as $_item): ?>
+                            <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </span>
+                <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
+                <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
+                <span class="field-row">
+                    <?php echo $this->getApplyButtonHtml() ?>
+                </span>
+        <?php if ($this->getHideFormElement() !== true):?>
             </form>
         <?php endif ?>
         <div class="no-display">
@@ -62,26 +59,55 @@
             <?php endforeach; ?>
         </div>
     </div>
-    <ul>
-        <?php if ($this->getUseSelectAll()):?>
-        <li>
-            <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo __('Select All') ?></a>
-        </li>
-        <li>
-            <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo __('Unselect All') ?></a>
-        </li>
-        <?php endif; ?>
-        <li>
-            <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo __('Select Visible') ?></a>
-        </li>
-        <li>
-            <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo __('Unselect Visible') ?></a>
-        </li>
-        <li>
+    <div class="entry-select">
+        <select id="massaction-select" class="select">
+            <option value="">
+                <?php echo __('Mass Actions')?>
+            </option>
+            <?php if ($this->getUseSelectAll()):?>
+                <option value="selectAll">
+                    <?php echo __('Select All') ?>
+                </option>
+                <option value="unselectAll">
+                    <?php echo __('Unselect All') ?>
+                </option>
+            <?php endif; ?>
+            <option value="selectVisible">
+                <?php echo __('Select Visible') ?>
+            </option>
+            <option value="unselectVisible">
+                <?php echo __('Unselect Visible') ?>
+            </option>
+        </select>
+        <span class="items">
             <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo __('items selected') ?>
-        </li>
-    </ul>
+        </span>
+    </div>
 </div>
+<script type="text/javascript">
+    (function($) {
+        'use strict';
+        $('#massaction-select').change(function () {
+            var massAction = $('option:selected', this).val();
+            switch (massAction) {
+                <?php if ($this->getUseSelectAll()):?>
+                case 'selectAll':
+                    return <?php echo $this->getJsObjectName() ?>.selectAll()
+                    break
+                case 'unselectAll':
+                    return <?php echo $this->getJsObjectName() ?>.unselectAll()
+                    break
+                <?php endif; ?>
+                case 'selectVisible':
+                    return <?php echo $this->getJsObjectName() ?>.selectVisible()
+                    break
+                case 'unselectVisible':
+                    return <?php echo $this->getJsObjectName() ?>.unselectVisible()
+                    break
+            }
+        });
+    })(window.jQuery);
+</script>
 <?php if (!$this->getParentBlock()->canDisplayContainer()): ?>
 <script type="text/javascript">
     <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');

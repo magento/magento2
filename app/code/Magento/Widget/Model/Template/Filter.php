@@ -45,12 +45,12 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      */
@@ -59,12 +59,12 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Logger $logger,
         \Magento\Escaper $escaper,
         \Magento\View\Url $viewUrl,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\LayoutFactory $layoutFactory,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {

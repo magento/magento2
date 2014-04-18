@@ -40,7 +40,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -58,9 +58,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Filter\FilterManager $filterManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param \Magento\Model\Resource\AbstractResource $resource
@@ -71,9 +71,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Filter\FilterManager $filterManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         \Magento\Model\Resource\AbstractResource $resource = null,

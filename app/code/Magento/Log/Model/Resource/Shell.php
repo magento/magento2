@@ -36,7 +36,7 @@ namespace Magento\Log\Model\Resource;
 class Shell
 {
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -47,11 +47,11 @@ class Shell
 
     /**
      * @param \Magento\Log\Model\Resource\Helper $resourceHelper
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Log\Model\Resource\Helper $resourceHelper,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceHelper = $resourceHelper;
         $this->_resource = $resource;

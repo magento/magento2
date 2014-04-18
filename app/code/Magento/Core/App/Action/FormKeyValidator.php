@@ -41,10 +41,10 @@ class FormKeyValidator
     /**
      * Validate form key
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    public function validate(\Magento\App\RequestInterface $request)
+    public function validate(\Magento\Framework\App\RequestInterface $request)
     {
         $formKey = $request->getParam('form_key', null);
         if (!$formKey || $formKey !== $this->_formKey->getFormKey()) {

@@ -33,7 +33,7 @@ namespace Magento\Core\Model;
 class Observer
 {
     /**
-     * @var \Magento\App\Cache\Frontend\Pool
+     * @var \Magento\Framework\App\Cache\Frontend\Pool
      */
     private $_cacheFrontendPool;
 
@@ -48,7 +48,7 @@ class Observer
     private $_pageAssets;
 
     /**
-     * @var \Magento\App\Config\ReinitableConfigInterface
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
      */
     protected $_config;
 
@@ -68,19 +68,19 @@ class Observer
     protected $_logger;
 
     /**
-     * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Asset\GroupedCollection $assets
-     * @param \Magento\App\Config\ReinitableConfigInterface $config
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\View\Asset\PublicFileFactory $assetFileFactory
      * @param Theme\Registration $registration
      * @param \Magento\Logger $logger
      */
     public function __construct(
-        \Magento\App\Cache\Frontend\Pool $cacheFrontendPool,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\View\DesignInterface $design,
         \Magento\View\Asset\GroupedCollection $assets,
-        \Magento\App\Config\ReinitableConfigInterface $config,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\View\Asset\PublicFileFactory $assetFileFactory,
         \Magento\Core\Model\Theme\Registration $registration,
         \Magento\Logger $logger

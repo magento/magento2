@@ -21,21 +21,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-#integrationGrid_table .col-name {
-    width: 75%;
-}
-
-#integrationGrid_table .col-status,
-#integrationGrid_table .col-reauthorize,
-#integrationGrid_table .col-authorize {
-    width: 10%;
-}
-
-#integrationGrid_table .col-delete,
-#integrationGrid_table .col-edit {
-    width: 2%;
-}
-
 #integration-popup-container #resource-tree {
     max-height: 170px;
     overflow: auto;

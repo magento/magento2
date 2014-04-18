@@ -67,11 +67,11 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAfterClearCache()
     {
-        /** @var $appCache \Magento\App\Cache */
-        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Cache');
-        /** @var \Magento\App\Cache\Type\Layout $layoutCache */
+        /** @var $appCache \Magento\Framework\App\Cache */
+        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        /** @var \Magento\Framework\App\Cache\Type\Layout $layoutCache */
         $layoutCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Cache\Type\Layout'
+            'Magento\Framework\App\Cache\Type\Layout'
         );
 
         $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'));

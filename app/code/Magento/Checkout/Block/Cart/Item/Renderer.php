@@ -340,7 +340,7 @@ class Renderer extends \Magento\View\Element\Template implements \Magento\View\B
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return $this->getUrl(
             'checkout/cart/delete',
-            array('id' => $this->getItem()->getId(), \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl)
+            array('id' => $this->getItem()->getId(), \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl)
         );
     }
 
@@ -429,7 +429,7 @@ class Renderer extends \Magento\View\Element\Template implements \Magento\View\B
         $helper = $this->_productConfig;
         $params = array(
             'max_length' => 55,
-            'cut_replacer' => ' <a href="#" class="dots" onclick="return false">...</a>'
+            'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
         );
         return $helper->getFormattedOptionValue($optionValue, $params);
     }

@@ -94,7 +94,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             array('create')
         )->disableOriginalConstructor()->getMock();
         $this->_scopeConfigMock = $this->getMockBuilder(
-            '\Magento\App\Config\ScopeConfigInterface'
+            '\Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper(
             $this->_configStructureMock,

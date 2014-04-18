@@ -48,14 +48,14 @@ class Synchronization
 
     /**
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->storageFactory = $storageFactory;
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_DIR);
     }
 
     /**

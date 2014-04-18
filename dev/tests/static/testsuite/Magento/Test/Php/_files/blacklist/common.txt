@@ -36,7 +36,7 @@ dev/tests/unit/testsuite/Magento/Core/Model/Resource/Db/AbstractTest.php
 dev/tests/unit/testsuite/Magento/Session/ConfigTest.php
 dev/tests/unit/testsuite/Magento/View/TemplateEngine/_files
 dev/tools/Magento/Tools/I18n/Zend
-lib/Magento/App/Config/Element.php
+lib/Magento/Framework/App/Config/Element.php
 lib/Magento/Archive
 lib/Magento/Autoload/Simple.php
 lib/Magento/Backup

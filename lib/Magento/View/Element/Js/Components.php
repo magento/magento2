@@ -23,7 +23,7 @@
  */
 namespace Magento\View\Element\Js;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 use Magento\View\Element\Template;
 
 class Components extends Template

@@ -50,10 +50,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Registry', array(), array(), '', false),
                 $this->getMock('Magento\Core\Model\App\Emulation', array(), array(), '', false),
                 $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false),
-                $this->getMock('Magento\App\Filesystem', array(), array(), '', false),
+                $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false),
                 $this->getMock('Magento\View\Url', array(), array(), '', false),
                 $this->getMock('Magento\View\FileSystem', array(), array(), '', false),
-                $this->getMock('Magento\App\Config\ScopeConfigInterface'),
+                $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $this->getMock('Magento\Email\Model\Template\FilterFactory', array(), array(), '', false),
                 $emailConfig,
                 array('template_id' => 10)

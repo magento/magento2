@@ -53,14 +53,14 @@ class Rules extends \Magento\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Logger $logger
      * @param \Magento\Acl\RootResource $rootResource
      * @param \Magento\Acl\CacheInterface $aclCache
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Logger $logger,
         \Magento\Acl\RootResource $rootResource,

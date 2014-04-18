@@ -36,7 +36,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -59,12 +59,12 @@ class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\Ab
      *
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Cache\Type\Config $configCacheType
+        \Magento\Framework\App\Cache\Type\Config $configCacheType
     ) {
         $this->_countryFactory = $countryFactory;
         $this->_storeManager = $storeManager;

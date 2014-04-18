@@ -79,7 +79,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $fileFactory = $this->getMock('Magento\View\Publisher\FileFactory', array(), array(), '', false);
         $fileFactory->expects($this->any())->method('create')->will($this->returnValue($cssFile));
 
-        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->rootDirectory));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

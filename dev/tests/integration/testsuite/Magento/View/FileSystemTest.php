@@ -39,14 +39,15 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array(
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
                         'path' => dirname(__DIR__) . '/Core/Model/_files/design'
                     )
                 )
             )
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\FileSystem');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'

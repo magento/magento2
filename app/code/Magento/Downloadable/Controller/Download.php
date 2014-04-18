@@ -23,7 +23,7 @@
  */
 namespace Magento\Downloadable\Controller;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Model\Exception as CoreException;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
@@ -33,7 +33,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Download extends \Magento\App\Action\Action
+class Download extends \Magento\Framework\App\Action\Action
 {
     /**
      * Return core session object

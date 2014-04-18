@@ -52,16 +52,16 @@ class Config
 
     /**
      * @param \Magento\Core\Model\File\Storage $storage
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string $cacheFile
      */
     public function __construct(
         \Magento\Core\Model\File\Storage $storage,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         $cacheFile
     ) {
         $this->config = $storage->getScriptConfig();
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_DIR);
         $this->cacheFilePath = $cacheFile;
     }
 

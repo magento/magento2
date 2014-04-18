@@ -28,8 +28,8 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     public function testCleanMediaAction()
     {
         // Wire object with mocks
-        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
-        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
 
         $objectManager = $this->getMock('Magento\ObjectManager');
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);

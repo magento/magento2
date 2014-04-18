@@ -43,9 +43,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_translator = $this->getMock('Magento\Translate\Inline\StateInterface', array(), array(), '', false);
-        $context = $this->getMock('\Magento\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('\Magento\Framework\App\Helper\Context', array(), array(), '', false);
 
-        $scopeConfig = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $scopeConfig->expects(
             $this->any()
         )->method(

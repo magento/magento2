@@ -49,7 +49,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $this->viewService = $objectManager->create('Magento\View\Service');
         $this->fileSystem = $objectManager->create('Magento\View\FileSystem');
         $this->viewUrl = $objectManager->create('Magento\View\Url');
@@ -59,8 +59,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         /** @var Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
-        $publicDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\App\Filesystem');
+        $publicDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
         $publicDir->delete('adminhtml');
         $publicDir->delete('frontend');
         $this->model = null;
@@ -72,8 +73,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testGetPublicDir()
     {
         /** @var $filesystem Filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
-        $expectedPublicDir = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Filesystem');
+        $expectedPublicDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
         $this->assertEquals($expectedPublicDir, $this->viewService->getPublicDir());
     }
 
@@ -420,8 +422,10 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPublishResourcesAndCssWhenChangedCssDevMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
-        if ($mode != \Magento\App\State::MODE_DEVELOPER) {
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\State')
+            ->getMode();
+        if ($mode != \Magento\Framework\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in developer mode only');
         }
         $this->_testPublishResourcesAndCssWhenChangedCss(true);
@@ -435,8 +439,10 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotPublishResourcesAndCssWhenChangedCssUsualMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
-        if ($mode == \Magento\App\State::MODE_DEVELOPER) {
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\State')
+            ->getMode();
+        if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in non-developer mode only');
         }
         $this->_testPublishResourcesAndCssWhenChangedCss(false);
@@ -452,7 +458,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         $this->model = $objectManager->get('Magento\View\DesignInterface');
         $this->model->setDesignTheme('test_default');
@@ -497,8 +503,10 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPublishChangedResourcesWhenUnchangedCssDevMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
-        if ($mode != \Magento\App\State::MODE_DEVELOPER) {
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\State')
+            ->getMode();
+        if ($mode != \Magento\Framework\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in developer mode only');
         }
 
@@ -513,8 +521,10 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotPublishChangedResourcesWhenUnchangedCssUsualMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
-        if ($mode == \Magento\App\State::MODE_DEVELOPER) {
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\State')
+            ->getMode();
+        if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in non-developer mode only');
         }
 
@@ -531,14 +541,16 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array('path' => "{$appInstallDir}/media_for_change")
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
+                        'path' => "{$appInstallDir}/media_for_change"
+                    )
                 )
             )
         );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         $this->model = $objectManager->get('Magento\View\DesignInterface');
         $this->model->setDesignTheme('test_default');
@@ -581,15 +593,15 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array(
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
                         'path' => dirname(__DIR__) . '/Core/Model/_files/design'
                     )
                 )
             )
         );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         if ($allowDuplication !== null) {
             $objectManager->configure(
@@ -627,14 +639,14 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array(
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
                         'path' => dirname(__DIR__) . '/Core/Model/_files/design/'
                     )
                 )
             )
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
@@ -687,9 +699,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = 'mage/mage.js';
         $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getPath(
-            \Magento\App\Filesystem::PUB_LIB_DIR
+            \Magento\Framework\App\Filesystem::PUB_LIB_DIR
         ) . '/' . $filePath;
         $this->assertFileExists($expectedFile, 'Please verify existence of public library file');
 
@@ -697,7 +709,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }
-class MockedFilesystem extends \Magento\App\Filesystem
+class MockedFilesystem extends \Magento\Framework\App\Filesystem
 {
     /**
      * Re-write modules directory
@@ -707,6 +719,6 @@ class MockedFilesystem extends \Magento\App\Filesystem
      */
     public function getPath($code = self::ROOT_DIR)
     {
-        return $code == \Magento\App\Filesystem::MODULES_DIR ? __DIR__ . '/_files' : parent::getPath($code);
+        return $code == \Magento\Framework\App\Filesystem::MODULES_DIR ? __DIR__ . '/_files' : parent::getPath($code);
     }
 }

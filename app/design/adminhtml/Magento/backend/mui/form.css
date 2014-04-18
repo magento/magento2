@@ -66,7 +66,6 @@
 .control select,
 .control textarea {
     margin: 0;
-    border-radius: 4px;
 }
 
 /*
@@ -157,14 +156,14 @@ span.required {
 .addon select:first-child,
 .addon input:first-child,
 .addon .addbefore:first-child {
-    border-radius: 4px 0 0 4px;
+    border-radius: 2px 0 0 2px;
 }
 
 .addon textarea:last-child,
 .addon select:last-child,
 .addon input:last-child,
 .addon .addafter:last-child {
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 2px 2px 0;
 }
 
 .addon .addbefore,

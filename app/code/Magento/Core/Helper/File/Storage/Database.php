@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Helper\File\Storage;
 
-class Database extends \Magento\App\Helper\AbstractHelper
+class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Database storage model
@@ -62,7 +62,7 @@ class Database extends \Magento\App\Helper\AbstractHelper
     protected $_mediaBaseDirectory;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -77,23 +77,23 @@ class Database extends \Magento\App\Helper\AbstractHelper
     protected $_fileStorage;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $config;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory
      * @param \Magento\Core\Model\File\Storage\File $fileStorage
-     * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory,
         \Magento\Core\Model\File\Storage\File $fileStorage,
-        \Magento\App\Filesystem $filesystem,
-        \Magento\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_filesystem = $filesystem;
         $this->_dbStorageFactory = $dbStorageFactory;
@@ -323,7 +323,7 @@ class Database extends \Magento\App\Helper\AbstractHelper
             $uniqueResultFile = $this->getUniqueFilename($path, $file);
 
             if ($uniqueResultFile !== $file) {
-                $dirWrite = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+                $dirWrite = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
                 $dirWrite->renameFile($path . $file, $path . $uniqueResultFile);
             }
             $this->saveFile($path . $uniqueResultFile);
@@ -354,7 +354,7 @@ class Database extends \Magento\App\Helper\AbstractHelper
     public function getMediaBaseDir()
     {
         if (null === $this->_mediaBaseDirectory) {
-            $mediaDir = $this->_filesystem->getPath(\Magento\App\Filesystem::MEDIA_DIR);
+            $mediaDir = $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR);
             $this->_mediaBaseDirectory = rtrim($mediaDir, '\\/');
         }
         return $this->_mediaBaseDirectory;

@@ -23,12 +23,12 @@
  */
 namespace Magento\Shipping\Controller;
 
-use Magento\App\Action\NotFoundException;
+use Magento\Framework\App\Action\NotFoundException;
 
 /**
  * Sales orders controller
  */
-class Tracking extends \Magento\App\Action\Action
+class Tracking extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
@@ -48,13 +48,13 @@ class Tracking extends \Magento\App\Action\Action
     protected $_orderFactory;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Shipping\Model\InfoFactory $shippingInfoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
         \Magento\Shipping\Model\InfoFactory $shippingInfoFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory

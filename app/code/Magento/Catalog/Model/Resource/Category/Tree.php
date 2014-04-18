@@ -84,7 +84,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     protected $_storeId = null;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_coreResource;
 
@@ -98,7 +98,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     /**
      * Cache
      *
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -113,18 +113,18 @@ class Tree extends \Magento\Data\Tree\Dbp
      * Construct
      *
      * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category $catalogCategory,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory

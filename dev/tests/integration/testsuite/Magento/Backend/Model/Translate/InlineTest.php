@@ -27,8 +27,6 @@
 namespace Magento\Backend\Model\Translate;
 
 /**
- * Test class for \Magento\Backend\Model\Translate\Inline.
- *
  * @magentoAppArea adminhtml
  */
 class InlineTest extends \PHPUnit_Framework_TestCase
@@ -47,7 +45,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAdminConfigFixture dev/translate_inline/active_admin 1
-     * @covers \Magento\Backend\Model\Translate\Inline::_getAjaxUrl
+     * @covers \Magento\Translate\Inline::getAjaxUrl
      */
     public function testAjaxUrl()
     {

@@ -54,7 +54,7 @@ class Cron extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -84,7 +84,7 @@ class Cron extends \Magento\Model\AbstractModel
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Log\Model\Log $log
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -96,7 +96,7 @@ class Cron extends \Magento\Model\AbstractModel
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Log\Model\Log $log,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

@@ -69,7 +69,7 @@ class StorageFactory
     protected $_sidResolver;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -84,7 +84,7 @@ class StorageFactory
     protected $_cookie;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
 
@@ -93,10 +93,10 @@ class StorageFactory
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Logger $logger
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\App\Http\Context $httpContext
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $defaultStorageClassName
      * @param string $installedStoreClassName
      * @param string $writerModel
@@ -106,10 +106,10 @@ class StorageFactory
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Logger $logger,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\Http\Context $httpContext,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $defaultStorageClassName = 'Magento\Store\Model\Storage\DefaultStorage',
         $installedStoreClassName = 'Magento\Store\Model\Storage\Db',
         $writerModel = ''
@@ -166,7 +166,7 @@ class StorageFactory
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $store
                 );
-                if ($logActive || $this->_appState->getMode() === \Magento\App\State::MODE_DEVELOPER) {
+                if ($logActive || $this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $logFile = $this->_scopeConfig->getValue(
                         'dev/log/file',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

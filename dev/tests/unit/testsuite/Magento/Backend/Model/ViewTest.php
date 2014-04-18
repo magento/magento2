@@ -49,7 +49,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             array(
                 'aclFilter' => $aclFilter,
                 'layout' => $this->_layoutMock,
-                'request' => $this->getMock('Magento\App\Request\Http', array(), array(), '', false)
+                'request' => $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false)
             )
         );
     }

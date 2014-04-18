@@ -244,7 +244,7 @@ class Connect
     public function run($command, $options = array(), $params = array())
     {
         @set_time_limit(0);
-        @ini_set('memory_limit', '2048M');
+        @ini_set('memory_limit', '256M');
 
         if (empty($this->_cmdCache[$command])) {
             \Magento\Connect\Command::getCommands();

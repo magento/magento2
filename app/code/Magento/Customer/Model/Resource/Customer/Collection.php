@@ -55,7 +55,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
@@ -71,7 +71,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,

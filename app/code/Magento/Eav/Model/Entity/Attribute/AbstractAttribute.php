@@ -27,10 +27,6 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Entity/Attribute/Model - attribute abstract
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements AttributeInterface
 {
@@ -603,11 +599,11 @@ abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements
      */
     public function getIdByCode($entityType, $code)
     {
-        $k = "{$entityType}|{$code}";
-        if (!isset($this->_attributeIdCache[$k])) {
-            $this->_attributeIdCache[$k] = $this->getResource()->getIdByCode($entityType, $code);
+        $cacheKey = "{$entityType}|{$code}";
+        if (!isset($this->_attributeIdCache[$cacheKey])) {
+            $this->_attributeIdCache[$cacheKey] = $this->getResource()->getIdByCode($entityType, $code);
         }
-        return $this->_attributeIdCache[$k];
+        return $this->_attributeIdCache[$cacheKey];
     }
 
     /**
@@ -731,6 +727,8 @@ abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements
                     'extra' => null
                 );
                 break;
+            default:
+                break;
         }
 
         return $columns;
@@ -805,6 +803,8 @@ abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements
                     'extra' => null
                 );
                 break;
+            default:
+                break;
         }
         return $columns;
     }
@@ -868,6 +868,8 @@ abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements
                 case 'varchar':
                     $indexName = 'IDX_' . strtoupper($this->getAttributeCode());
                     $indexes[$indexName] = array('type' => 'index', 'fields' => array($this->getAttributeCode()));
+                    break;
+                default:
                     break;
             }
 

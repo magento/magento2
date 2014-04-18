@@ -28,7 +28,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
     protected $helper;
 
-    /** @var \Magento\App\Helper\Context */
+    /** @var \Magento\Framework\App\Helper\Context */
     protected $context;
 
     /** @var \Magento\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -37,7 +37,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
-    /** @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfig;
 
     /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -48,7 +48,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\App\Helper\Context')->disableOriginalConstructor()->getMock();
+        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->blockFactory = $this->getMockBuilder(
             'Magento\View\Element\BlockFactory'
         )->disableOriginalConstructor()->getMock();
@@ -56,7 +58,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Store\Model\StoreManagerInterface'
         )->disableOriginalConstructor()->getMock();
         $this->scopeConfig = $this->getMockBuilder(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->customerMetadataService = $this->getMockBuilder(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'

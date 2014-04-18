@@ -52,13 +52,13 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryRead'), array(), '', false);
         $filesystem->expects(
             $this->once()
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::THEMES_DIR
+            \Magento\Framework\App\Filesystem::THEMES_DIR
         )->will(
             $this->returnValue($this->directory)
         );

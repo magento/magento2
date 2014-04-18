@@ -184,7 +184,7 @@ class Bootstrap
      */
     public function loadArea($areaCode)
     {
-        self::$_objectManager->get('Magento\App\State')->setAreaCode($areaCode);
-        self::$_objectManager->get('Magento\App\AreaList')->getArea($areaCode)->load();
+        self::$_objectManager->get('Magento\Framework\App\State')->setAreaCode($areaCode);
+        self::$_objectManager->get('Magento\Framework\App\AreaList')->getArea($areaCode)->load();
     }
 }

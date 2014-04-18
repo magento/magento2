@@ -45,12 +45,12 @@ class Block extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {

@@ -41,7 +41,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected $themeCollectionFactoryMock;
 
     /**
-     * @var \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $appStateMock;
 
@@ -73,7 +73,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->appStateMock = $this->getMock(
-            'Magento\App\State',
+            'Magento\Framework\App\State',
             [],
             [],
             '',

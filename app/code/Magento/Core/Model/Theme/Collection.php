@@ -58,7 +58,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
     {
         parent::__construct($entityFactory);
-        $this->_directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
+        $this->_directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::THEMES_DIR);
     }
 
     /**

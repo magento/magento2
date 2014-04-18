@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 
 class Fault extends \RuntimeException
 {
@@ -86,7 +86,7 @@ class Fault extends \RuntimeException
     protected $_details = array();
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -101,19 +101,19 @@ class Fault extends \RuntimeException
     protected $_localeResolver;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param Server $soapServer
      * @param \Magento\Webapi\Exception $previousException
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param State $appState
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         Server $soapServer,
         \Magento\Webapi\Exception $previousException,
         \Magento\Locale\ResolverInterface $localeResolver,

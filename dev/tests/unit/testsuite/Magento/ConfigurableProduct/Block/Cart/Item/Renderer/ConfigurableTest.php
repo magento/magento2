@@ -34,7 +34,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     protected $_imageHelper;
 
-    /** @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_scopeConfig;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -55,7 +55,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->productConfigMock = $this->getMock(
             'Magento\Catalog\Helper\Product\Configuration',
             array(),

@@ -32,7 +32,7 @@ namespace Magento\Catalog\Helper\Product;
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Options extends \Magento\App\Helper\AbstractHelper
+class Options extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Filesystem\Directory\ReadInterface
@@ -40,13 +40,13 @@ class Options extends \Magento\App\Helper\AbstractHelper
     protected $directory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\App\Helper\Context $context, \Magento\App\Filesystem $filesystem)
+    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\App\Filesystem $filesystem)
     {
         parent::__construct($context);
-        $this->directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
     }
 
     /**
@@ -57,7 +57,7 @@ class Options extends \Magento\App\Helper\AbstractHelper
      *  - 'size' - size of file
      *  - 'title' - user-friendly name of file (usually - original name as uploaded in Magento)
      *
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Framework\App\ResponseInterface $response
      * @param string $filePath
      * @param array $info
      * @return bool

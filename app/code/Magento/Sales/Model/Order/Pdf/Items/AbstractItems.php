@@ -86,7 +86,7 @@ abstract class AbstractItems extends \Magento\Model\AbstractModel
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Filesystem $filesystem ,
+     * @param \Magento\Framework\App\Filesystem $filesystem ,
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -96,7 +96,7 @@ abstract class AbstractItems extends \Magento\Model\AbstractModel
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -104,7 +104,7 @@ abstract class AbstractItems extends \Magento\Model\AbstractModel
     ) {
         $this->filterManager = $filterManager;
         $this->_taxData = $taxData;
-        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 

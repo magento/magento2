@@ -37,7 +37,7 @@ class Provider extends \Magento\Translate\Inline\Provider
     protected $inlineTranslate;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -50,13 +50,13 @@ class Provider extends \Magento\Translate\Inline\Provider
      * @param \Magento\Translate\InlineInterface $vdeInlineTranslate
      * @param \Magento\Translate\InlineInterface $inlineTranslate
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\Translate\InlineInterface $vdeInlineTranslate,
         \Magento\Translate\InlineInterface $inlineTranslate,
         \Magento\DesignEditor\Helper\Data $helper,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->vdeInlineTranslate = $vdeInlineTranslate;
         $this->inlineTranslate = $inlineTranslate;

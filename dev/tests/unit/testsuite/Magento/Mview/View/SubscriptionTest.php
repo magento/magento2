@@ -38,7 +38,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Resource
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Resource
      */
     protected $resourceMock;
 
@@ -62,7 +62,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
         $this->resourceMock = $this->getMock(
-            'Magento\App\Resource', array('getConnection', 'getTableName'), [], '', false, false
+            'Magento\Framework\App\Resource', array('getConnection', 'getTableName'), [], '', false, false
         );
         $this->mockGetConnection($this->connectionMock);
         $this->triggerFactoryMock = $this->getMock(

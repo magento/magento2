@@ -52,7 +52,7 @@ class DefaultLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $backendData = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
         $this->_requestMock = $this->getMockForAbstractClass(
-            'Magento\App\RequestInterface',
+            'Magento\Framework\App\RequestInterface',
             array($backendData),
             '',
             false,
@@ -60,7 +60,7 @@ class DefaultLocatorTest extends \PHPUnit_Framework_TestCase
             true,
             array('getParam')
         );
-        $this->_configMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->_configMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_model = new \Magento\Directory\Model\Currency\DefaultLocator(
             $this->_configMock,

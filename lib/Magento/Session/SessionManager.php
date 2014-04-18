@@ -58,7 +58,7 @@ class SessionManager implements SessionManagerInterface
     /**
      * Request
      *
-     * @var \Magento\App\Request\Http
+     * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -93,7 +93,7 @@ class SessionManager implements SessionManagerInterface
     /**
      * Constructor
      *
-     * @param \Magento\App\Request\Http $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param Config\ConfigInterface $sessionConfig
      * @param SaveHandlerInterface $saveHandler
@@ -101,7 +101,7 @@ class SessionManager implements SessionManagerInterface
      * @param StorageInterface $storage
      */
     public function __construct(
-        \Magento\App\Request\Http $request,
+        \Magento\Framework\App\Request\Http $request,
         SidResolverInterface $sidResolver,
         Config\ConfigInterface $sessionConfig,
         SaveHandlerInterface $saveHandler,

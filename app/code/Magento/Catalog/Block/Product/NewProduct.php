@@ -46,7 +46,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     protected $_productsCount;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -68,7 +68,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      * @param Context $context
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      * @param array $priceBlockTypes
      */
@@ -76,7 +76,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {

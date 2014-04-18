@@ -29,17 +29,13 @@
 
 .block {
     &.add.review {
+        margin-bottom: @indent-xl-base;
         > .title {
             .heading(h2);
         }
-        fieldset {
-            .form-fieldset(
-                @_margin: 0,
-                @_legend-margin: 0 0 10px
-            );
-        }
         .legend {
             .heading(h3);
+            margin: 0 0 @indent-base;
         }
         .field.rating {
             display: table-row;
@@ -52,9 +48,6 @@
                 display: table-cell;
                 vertical-align: top;
             }
-        }
-        .form.actions {
-            margin-left: @form-field-type-inline-label-width;
         }
     }
     &.reviews.list {
@@ -88,11 +81,12 @@
 
 .product.reviews.summary {
     display: table;
-    margin-left: -@indent-xs-base;
     &.empty {
         margin-left: 0;
     }
     .rating.summary {
+        position: relative;
+        left: -@indent-xs-base;
         display: table-cell;
         vertical-align: middle;
     }

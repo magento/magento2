@@ -24,7 +24,7 @@
 namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Plugin for product type transition manager
@@ -34,7 +34,7 @@ class Downloadable
     /**
      * Request instance
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 

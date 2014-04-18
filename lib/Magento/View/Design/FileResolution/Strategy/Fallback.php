@@ -23,7 +23,7 @@
  */
 namespace Magento\View\Design\FileResolution\Strategy;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\View\Design\Fallback\Factory;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
 use Magento\View\Design\ThemeInterface;

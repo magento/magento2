@@ -25,14 +25,14 @@
  */
 namespace Magento\CatalogSearch\Helper;
 
-use Magento\App\Helper\AbstractHelper;
-use Magento\App\Helper\Context;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\CatalogSearch\Model\Fulltext;
 use Magento\CatalogSearch\Model\Query;
 use Magento\CatalogSearch\Model\QueryFactory;
 use Magento\CatalogSearch\Model\Resource\Fulltext\Engine;
 use Magento\CatalogSearch\Model\Resource\Query\Collection;
-use Magento\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Escaper;
 use Magento\Filter\FilterManager;
 use Magento\Stdlib\String;

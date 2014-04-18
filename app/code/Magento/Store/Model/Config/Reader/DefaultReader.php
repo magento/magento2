@@ -25,15 +25,15 @@
  */
 namespace Magento\Store\Model\Config\Reader;
 
-class DefaultReader implements \Magento\App\Config\Scope\ReaderInterface
+class DefaultReader implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
     /**
-     * @var \Magento\App\Config\Initial
+     * @var \Magento\Framework\App\Config\Initial
      */
     protected $_initialConfig;
 
     /**
-     * @var \Magento\App\Config\Scope\Converter
+     * @var \Magento\Framework\App\Config\Scope\Converter
      */
     protected $_converter;
 
@@ -43,21 +43,21 @@ class DefaultReader implements \Magento\App\Config\Scope\ReaderInterface
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
-     * @param \Magento\App\Config\Initial $initialConfig
-     * @param \Magento\App\Config\Scope\Converter $converter
+     * @param \Magento\Framework\App\Config\Initial $initialConfig
+     * @param \Magento\Framework\App\Config\Scope\Converter $converter
      * @param \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\App\Config\Initial $initialConfig,
-        \Magento\App\Config\Scope\Converter $converter,
+        \Magento\Framework\App\Config\Initial $initialConfig,
+        \Magento\Framework\App\Config\Scope\Converter $converter,
         \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory,
-        \Magento\App\State $appState
+        \Magento\Framework\App\State $appState
     ) {
         $this->_initialConfig = $initialConfig;
         $this->_converter = $converter;
@@ -72,10 +72,10 @@ class DefaultReader implements \Magento\App\Config\Scope\ReaderInterface
      */
     public function read()
     {
-        $config = $this->_initialConfig->getData(\Magento\App\ScopeInterface::SCOPE_DEFAULT);
+        $config = $this->_initialConfig->getData(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
         if ($this->_appState->isInstalled()) {
             $collection = $this->_collectionFactory->create(
-                array('scope' => \Magento\App\ScopeInterface::SCOPE_DEFAULT)
+                array('scope' => \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT)
             );
             $dbDefaultConfig = array();
             foreach ($collection as $item) {

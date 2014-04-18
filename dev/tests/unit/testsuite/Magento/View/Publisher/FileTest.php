@@ -33,7 +33,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $filesystemMock;
 
     /** @var \Magento\View\Service|\PHPUnit_Framework_MockObject_MockObject */
@@ -75,13 +75,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\WriteInterface');
 
-        $this->filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->filesystemMock->expects(
             $this->once()
         )->method(
             'getDirectoryWrite'
         )->with(
-            $this->equalTo(\Magento\App\Filesystem::ROOT_DIR)
+            $this->equalTo(\Magento\Framework\App\Filesystem::ROOT_DIR)
         )->will(
             $this->returnValue($this->rootDirectory)
         );
@@ -143,11 +143,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function getPathCallback($param)
     {
         switch ($param) {
-            case \Magento\App\Filesystem::PUB_LIB_DIR:
+            case \Magento\Framework\App\Filesystem::PUB_LIB_DIR:
                 return $this->libDir;
-            case \Magento\App\Filesystem::STATIC_VIEW_DIR:
+            case \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR:
                 return $this->viewStaticDir;
-            case \Magento\App\Filesystem::THEMES_DIR:
+            case \Magento\Framework\App\Filesystem::THEMES_DIR:
                 return $this->themeDir;
             default:
                 throw new \UnexpectedValueException('Path callback received wrong value: ' . $param);

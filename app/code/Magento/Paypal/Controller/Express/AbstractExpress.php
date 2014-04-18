@@ -24,7 +24,7 @@
 namespace Magento\Paypal\Controller\Express;
 
 use Magento\Checkout\Model\Type\Onepage;
-use Magento\App\Action\Action as AppAction;
+use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 
 /**
@@ -106,7 +106,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
     protected $_paypalSession;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -115,7 +115,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      * @param \Magento\Session\Generic $paypalSession
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,

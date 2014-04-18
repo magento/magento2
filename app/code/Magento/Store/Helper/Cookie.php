@@ -26,7 +26,7 @@ namespace Magento\Store\Helper;
 /**
  * Cookie helper
  */
-class Cookie extends \Magento\App\Helper\AbstractHelper
+class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Cookie name for users who allowed cookie save
@@ -54,22 +54,22 @@ class Cookie extends \Magento\App\Helper\AbstractHelper
     protected $_website;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = array()
     ) {
         parent::__construct($context);

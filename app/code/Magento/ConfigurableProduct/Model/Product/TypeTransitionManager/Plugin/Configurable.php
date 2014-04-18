@@ -26,14 +26,14 @@
 namespace Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 class Configurable
 {
     /**
      * Request instance
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 

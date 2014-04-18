@@ -49,13 +49,13 @@ class Generate implements \Magento\Code\Minifier\StrategyInterface
 
     /**
      * @param \Magento\Code\Minifier\AdapterInterface $adapter
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Code\Minifier\AdapterInterface $adapter, \Magento\App\Filesystem $filesystem)
+    public function __construct(\Magento\Code\Minifier\AdapterInterface $adapter, \Magento\Framework\App\Filesystem $filesystem)
     {
         $this->adapter = $adapter;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
-        $this->pubViewCacheDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->pubViewCacheDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR);
     }
 
     /**

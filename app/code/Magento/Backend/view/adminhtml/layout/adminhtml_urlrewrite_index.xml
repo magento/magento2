@@ -44,16 +44,16 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="url_rewrite_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="id" xsi:type="string">url_rewrite_id</argument>
                             <argument name="index" xsi:type="string">url_rewrite_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store View</argument>
-                            <argument name="width" xsi:type="string">200px</argument>
                             <argument name="type" xsi:type="string">store</argument>
                             <argument name="id" xsi:type="string">store_id</argument>
                             <argument name="index" xsi:type="string">store_id</argument>
@@ -63,7 +63,6 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_system">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Type</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="id" xsi:type="string">is_system</argument>
                             <argument name="index" xsi:type="string">is_system</argument>
@@ -82,7 +81,6 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="id_path">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID Path</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="id" xsi:type="string">id_path</argument>
                             <argument name="index" xsi:type="string">id_path</argument>
@@ -91,7 +89,6 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="request_path">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Request Path</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="id" xsi:type="string">request_path</argument>
                             <argument name="index" xsi:type="string">request_path</argument>
@@ -100,7 +97,6 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="target_path">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Target Path</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="id" xsi:type="string">target_path</argument>
                             <argument name="index" xsi:type="string">target_path</argument>
@@ -109,7 +105,6 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="options">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Options</argument>
-                            <argument name="width" xsi:type="string">50px</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="id" xsi:type="string">options</argument>
                             <argument name="index" xsi:type="string">options</argument>
@@ -120,7 +115,6 @@
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="width" xsi:type="string">15px</argument>
                             <argument name="type" xsi:type="string">action</argument>
                             <argument name="id" xsi:type="string">actions</argument>
                             <argument name="index" xsi:type="string">url_rewrite_id</argument>

@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * GoogleShopping Admin Item Types Controller
@@ -53,7 +53,7 @@ class Types extends \Magento\Backend\App\Action
      * Dispatches controller_action_postdispatch_adminhtml Event
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {

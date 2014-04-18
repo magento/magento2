@@ -25,7 +25,7 @@
  */
 namespace Magento\Cron\App\Cron\Plugin;
 
-use \Magento\App\State;
+use \Magento\Framework\App\State;
 
 class ApplicationInitializer
 {
@@ -52,13 +52,13 @@ class ApplicationInitializer
     /**
      * Perform required checks before cron run
      *
-     * @param \Magento\App\Cron $subject
+     * @param \Magento\Framework\App\Cron $subject
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Exception
      */
-    public function beforeLaunch(\Magento\App\Cron $subject)
+    public function beforeLaunch(\Magento\Framework\App\Cron $subject)
     {
         $this->_sidResolver->setUseSessionInUrl(false);
         if (false == $this->_appState->isInstalled()) {

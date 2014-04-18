@@ -36,7 +36,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resourceModel;
 
@@ -66,7 +66,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -75,24 +75,24 @@ class Context implements \Magento\ObjectManager\ContextInterface
      *
      * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Module\ResourceInterface $resourceResource
      * @param \Magento\Module\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Module\ResourceInterface $resourceResource,
         \Magento\Module\Setup\MigrationFactory $migrationFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_logger = $logger;
         $this->_eventManager = $eventManager;
@@ -138,7 +138,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\App\Resource
+     * @return \Magento\Framework\App\Resource
      */
     public function getResourceModel()
     {
@@ -170,7 +170,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\App\Filesystem
+     * @return \Magento\Framework\App\Filesystem
      */
     public function getFilesystem()
     {

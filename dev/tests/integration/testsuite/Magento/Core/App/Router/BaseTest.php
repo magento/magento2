@@ -56,9 +56,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->get('Magento\TestFramework\Request');
 
-        $this->assertInstanceOf('Magento\App\ActionInterface', $this->_model->match($request));
+        $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
         $request->setRequestUri('core/index/index');
-        $this->assertInstanceOf('Magento\App\ActionInterface', $this->_model->match($request));
+        $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
 
         $request->setPathInfo(
             'not_exists/not_exists/not_exists'

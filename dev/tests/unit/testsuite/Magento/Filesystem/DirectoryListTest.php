@@ -24,7 +24,7 @@
 namespace Magento\Filesystem;
 
 use Magento\Filesystem;
-use Magento\App\Filesystem as AppFilesystem;
+use Magento\Framework\App\Filesystem as AppFilesystem;
 
 class DirectoryListTest extends \PHPUnit_Framework_TestCase
 {

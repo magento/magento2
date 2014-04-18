@@ -465,7 +465,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -483,7 +483,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
      * @param \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory
      * @param \Magento\ImportExport\Model\Import\UploaderFactory $uploaderFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -496,7 +496,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Stdlib\String $string,
         \Magento\Event\ManagerInterface $eventManager,
@@ -514,7 +514,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
         \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,
         \Magento\ImportExport\Model\Import\UploaderFactory $uploaderFactory,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -536,7 +536,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_linkFactory = $linkFactory;
         $this->_proxyProdFactory = $proxyProdFactory;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_stockResItemFac = $stockResItemFac;
         $this->_stockItemFactory = $stockItemFactory;
         $this->_localeDate = $localeDate;

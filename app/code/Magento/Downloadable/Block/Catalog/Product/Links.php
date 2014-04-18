@@ -132,7 +132,8 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         }
 
         if (!$this->calculationModel->getCustomerData()->getId()
-            && $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)) {
+            && $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+        ) {
             $customer = $this->accountService
                 ->getCustomer($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID));
             $this->calculationModel->setCustomerData($customer);
@@ -151,12 +152,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         } elseif ($taxHelper->displayBothPrices()) {
             $priceStr .= $coreHelper->currencyByStore($_priceExclTax, $store);
             if ($_priceInclTax != $_priceExclTax) {
-                $priceStr .= ' (+' . $coreHelper->currencyByStore(
-                    $_priceInclTax,
-                    $store
-                ) . ' ' . __(
-                    'Incl. Tax'
-                ) . ')';
+                $priceStr .= ' (+' . $coreHelper->currencyByStore($_priceInclTax, $store) . ' ' . __('Incl. Tax') . ')';
             }
         }
         $priceStr .= '</span>';
@@ -183,8 +179,23 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         $config = array();
 
+        $priceModel = $this->getProduct()->getPriceInfo()->getPrice('final_price');
+
         foreach ($this->getLinks() as $link) {
-            $config[$link->getId()] = $this->coreData->currency($link->getPrice(), false, false);
+            $amount = $priceModel->getCustomAmount($link->getPrice());
+            $config[$link->getId()] = [
+                'price' => $this->coreData->currency($link->getPrice(), false, false),
+                'inclTaxPrice' => $this->coreData->currency(
+                    $amount->getValue(),
+                    false,
+                    false
+                ),
+                'exclTaxPrice' => $this->coreData->currency(
+                    $amount->getBaseAmount(),
+                    false,
+                    false
+                )
+            ];
         }
 
         return $this->jsonEncoder->encode($config);
@@ -248,5 +259,37 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getLinkCheckedValue($link)
     {
         return $this->getIsLinkChecked($link) ? 'checked' : '';
+    }
+
+    /**
+     * @param Link $link
+     * @return \Magento\Pricing\Amount\AmountInterface
+     */
+    protected function getLinkAmount($link)
+    {
+        return $this->getPriceType()->getLinkAmount($link);
+    }
+
+    /**
+     * @param Link $link
+     * @return string
+     */
+    public function getLinkPrice(Link $link)
+    {
+        return $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
+            $this->getLinkAmount($link),
+            $this->getPriceType(),
+            $this->getProduct()
+        );
+    }
+
+    /**
+     * Get LinkPrice Type
+     *
+     * @return \Magento\Pricing\Price\PriceInterface
+     */
+    protected function getPriceType()
+    {
+        return $this->getProduct()->getPriceInfo()->getPrice('link_price');
     }
 }

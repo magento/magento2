@@ -36,7 +36,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -46,25 +46,25 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\Validator\Factory $validatorFactory,
         \Magento\Stdlib\DateTime $dateTime,
         $data = array()

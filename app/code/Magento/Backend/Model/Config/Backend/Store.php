@@ -29,18 +29,18 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Store extends \Magento\App\Config\Value
+class Store extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\App\Config\MutableScopeConfigInterface
+     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
      */
     protected $_mutableConfig;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Config\MutableScopeConfigInterface $mutableConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -48,8 +48,8 @@ class Store extends \Magento\App\Config\Value
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Config\MutableScopeConfigInterface $mutableConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

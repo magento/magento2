@@ -37,7 +37,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ActionFactory'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ActionFactory'),
             new \Magento\Event\ManagerInterfaceStub(
                 $this->getMockForAbstractClass('Magento\Event\InvokerInterface'),
                 $this->getMock('Magento\Event\Config', array(), array(), '', false),
@@ -45,7 +45,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Event\ObserverFactory', array(), array(), '', false)
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\UrlInterface'),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\StateInterface'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\StateInterface'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\PageFactory'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 'Magento\Store\Model\StoreManagerInterface'
@@ -62,11 +62,12 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
         $this->markTestIncomplete('MAGETWO-3393');
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\RequestInterface');
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\App\RequestInterface');
         //Open Node
         $request->setPathInfo('parent_node');
         $controller = $this->_model->match($request);
-        $this->assertInstanceOf('Magento\App\Action\Redirect', $controller);
+        $this->assertInstanceOf('Magento\Framework\App\Action\Redirect', $controller);
     }
 }
 /**

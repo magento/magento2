@@ -163,7 +163,7 @@ class Image extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -187,11 +187,11 @@ class Image extends \Magento\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Image\Factory $imageFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -202,11 +202,11 @@ class Image extends \Magento\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Image\Factory $imageFactory,
         \Magento\View\Url $viewUrl,
         \Magento\View\FileSystem $viewFileSystem,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -215,7 +215,7 @@ class Image extends \Magento\Model\AbstractModel
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_mediaDirectory->create($this->_catalogProductMediaConfig->getBaseMediaPath());
         $this->_imageFactory = $imageFactory;
         $this->_viewUrl = $viewUrl;

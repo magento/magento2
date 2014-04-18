@@ -35,14 +35,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * Request mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * Response mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\ResponseInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -56,7 +56,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * ObjectManager mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
      */
     protected $_objectManager;
 
@@ -92,10 +92,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')->disableOriginalConstructor()->getMock();
+        $this->_request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_response = $this->getMockBuilder(
-            'Magento\App\Response\Http'
+            'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->setMethods(
             array('setRedirect', 'getHeader')
         )->getMock();
@@ -111,15 +113,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_objectManager = $this->getMockBuilder(
-            'Magento\App\ObjectManager'
+            'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->setMethods(
             array('get', 'create')
         )->getMock();
         $frontControllerMock = $this->getMockBuilder(
-            'Magento\App\FrontController'
+            'Magento\Framework\App\FrontController'
         )->disableOriginalConstructor()->getMock();
 
-        $actionFlagMock = $this->getMockBuilder('Magento\App\ActionFlag')->disableOriginalConstructor()->getMock();
+        $actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_session = $this->getMockBuilder(
             'Magento\Backend\Model\Session'
@@ -429,8 +433,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'initiatePasswordReset'
         )->with(
             $email,
-            $websiteId,
-            CustomerAccountServiceInterface::EMAIL_REMINDER
+            CustomerAccountServiceInterface::EMAIL_REMINDER,
+            $websiteId
         );
 
         // verify success message

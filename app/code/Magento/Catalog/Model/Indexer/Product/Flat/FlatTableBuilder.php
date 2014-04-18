@@ -42,7 +42,7 @@ class FlatTableBuilder
     protected $_connection;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface $config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     protected $_config;
 
@@ -58,15 +58,15 @@ class FlatTableBuilder
 
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\App\Resource $resource,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
     ) {

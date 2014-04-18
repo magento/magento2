@@ -33,7 +33,7 @@ class RemoteAddress
     /**
      * Request object
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -50,10 +50,10 @@ class RemoteAddress
     protected $alternativeHeaders;
 
     /**
-     * @param \Magento\App\RequestInterface $httpRequest
+     * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param array $alternativeHeaders
      */
-    public function __construct(\Magento\App\RequestInterface $httpRequest, array $alternativeHeaders = array())
+    public function __construct(\Magento\Framework\App\RequestInterface $httpRequest, array $alternativeHeaders = array())
     {
         $this->request = $httpRequest;
         $this->alternativeHeaders = $alternativeHeaders;

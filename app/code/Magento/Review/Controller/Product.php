@@ -25,7 +25,7 @@
  */
 namespace Magento\Review\Controller;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Review\Model\Review;
 
@@ -34,7 +34,7 @@ use Magento\Review\Model\Review;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Product extends \Magento\App\Action\Action
+class Product extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
@@ -114,7 +114,7 @@ class Product extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
@@ -128,7 +128,7 @@ class Product extends \Magento\App\Action\Action
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
@@ -160,7 +160,7 @@ class Product extends \Magento\App\Action\Action
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {

@@ -27,7 +27,7 @@
     <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <arguments>
-            <argument name="attributeLabelCache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+            <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Session">

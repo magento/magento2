@@ -93,20 +93,20 @@ class Publisher implements PublicFilesManagerInterface
     protected $pubDirectory;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param FileSystem $viewFileSystem
      * @param Asset\PreProcessor\PreProcessorInterface $preProcessor
      * @param Publisher\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\Asset\PreProcessor\PreProcessorInterface $preProcessor,
         Publisher\FileFactory $fileFactory
     ) {
-        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
-        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
         $this->viewFileSystem = $viewFileSystem;
         $this->preProcessor = $preProcessor;
         $this->fileFactory = $fileFactory;

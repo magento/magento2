@@ -40,12 +40,12 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $this->messageManager = $this->getMock('\Magento\Message\Manager', array(), array(), '', false);
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('\Magento\App\Route\ConfigInterface', array(), array(), '', false),
-            $this->getMock('Magento\App\Request\PathInfoProcessorInterface', array(), array(), '', false)
+            $this->getMock('\Magento\Framework\App\Route\ConfigInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', array(), array(), '', false)
         );
         $response = new \Magento\TestFramework\Response(
             $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false),
-            $this->getMock('Magento\App\Http\Context', array(), array(), '', false)
+            $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false)
         );
 
         $this->_objectManager = $this->getMock(
@@ -60,8 +60,8 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->will(
                 $this->returnValueMap(
                     array(
-                        array('Magento\App\RequestInterface', $request),
-                        array('Magento\App\ResponseInterface', $response),
+                        array('Magento\Framework\App\RequestInterface', $request),
+                        array('Magento\Framework\App\ResponseInterface', $response),
                         array('Magento\Message\Manager', $this->messageManager),
                     )
                 )
@@ -134,7 +134,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testAssertRedirect()
     {
         /*
-         * Prevent calling \Magento\App\Response\Http::setRedirect() because it dispatches event,
+         * Prevent calling \Magento\Framework\App\Response\Http::setRedirect() because it dispatches event,
          * which requires fully initialized application environment intentionally not available
          * for unit tests
          */

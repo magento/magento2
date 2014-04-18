@@ -25,7 +25,7 @@
  */
 namespace Magento\PageCache\Model;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -66,7 +66,7 @@ class Config
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -76,7 +76,7 @@ class Config
     const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
 
     /**
-     * @var \Magento\App\Cache\StateInterface $_cacheState
+     * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
      */
     protected $_cacheState;
 
@@ -87,15 +87,15 @@ class Config
 
     /**
      * @param Filesystem $filesystem
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Cache\StateInterface $cacheState
+        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Cache\StateInterface $cacheState
     ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
     }

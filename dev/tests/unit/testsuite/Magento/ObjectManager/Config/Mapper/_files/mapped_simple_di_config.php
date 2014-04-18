@@ -24,9 +24,9 @@
 return array(
     'preferences' => array(
         'Magento\Module\UpdaterInterface' => 'Magento\Module\Updaterter',
-        'Magento\App\RequestInterface' => 'Magento\App\Request\Http\Proxy',
+        'Magento\Framework\App\RequestInterface' => 'Magento\Framework\App\Request\Http\Proxy',
     ),
-    'Magento\App\State' => array('arguments' => array('test name' => 'test value')),
+    'Magento\Framework\App\State' => array('arguments' => array('test name' => 'test value')),
     'Magento\Core\Model\Config\Modules' => array(
         'arguments' => array('test name' => 'test value'),
         'plugins' => array(
@@ -43,6 +43,6 @@ return array(
         )
     ),
     'Magento\Http\Handler\Composite' => array('shared' => false, 'arguments' => array('test name' => 'test value')),
-    'customCacheInstance' => array('shared' => true, 'type' => 'Magento\App\Cache', 'arguments' => array()),
+    'customCacheInstance' => array('shared' => true, 'type' => 'Magento\Framework\App\Cache', 'arguments' => array()),
     'customOverriddenInstance' => array('shared' => false, 'arguments' => array())
 );

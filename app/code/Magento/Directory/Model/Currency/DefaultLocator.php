@@ -30,7 +30,7 @@ class DefaultLocator
     /**
      * Config object
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_configuration;
 
@@ -42,11 +42,11 @@ class DefaultLocator
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $configuration
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $configuration,
+        \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_configuration = $configuration;
@@ -56,10 +56,10 @@ class DefaultLocator
     /**
      * Retrieve default currency for selected store, website or website group
      * @todo: Refactor to ScopeDefiner
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return string
      */
-    public function getDefaultCurrency(\Magento\App\RequestInterface $request)
+    public function getDefaultCurrency(\Magento\Framework\App\RequestInterface $request)
     {
         if ($request->getParam('store')) {
             $store = $request->getParam('store');

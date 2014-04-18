@@ -29,7 +29,7 @@ use Magento\User\Model\Acl\Role\User as RoleUser;
 class Role implements \Magento\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -46,12 +46,12 @@ class Role implements \Magento\Acl\LoaderInterface
     /**
      * @param \Magento\User\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\User\Model\Acl\Role\UserFactory $roleFactory
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\User\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\User\Model\Acl\Role\UserFactory $roleFactory,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;

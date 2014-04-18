@@ -43,7 +43,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_factoryMock = $this->getMock('Magento\Log\Model\Shell\Command\Factory', array(), array(), '', false);
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_model = $this->getMock(
             'Magento\Log\Model\Shell',
             array('_applyPhpVariables'),

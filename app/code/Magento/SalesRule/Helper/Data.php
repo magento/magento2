@@ -30,7 +30,7 @@ use Magento\Sales\Model\Quote\Item\AbstractItem;
 /**
  * SalesRule data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Set store and base price which will be used during discount calculation to item object

@@ -114,7 +114,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     /**
      * Request instance
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -145,7 +145,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     /**
      * Constructor
      *
-     * @var \Magento\App\Route\ConfigInterface
+     * @var \Magento\Framework\App\Route\ConfigInterface
      */
     protected $_routeConfig;
 
@@ -165,33 +165,33 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     protected $_queryParamsResolver;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Session\Generic $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Session\Generic $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,
         array $data = array()
     ) {
@@ -313,10 +313,10 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     /**
      * Set request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\UrlInterface
      */
-    public function setRequest(\Magento\App\RequestInterface $request)
+    public function setRequest(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_request = $request;
         return $this;
@@ -325,7 +325,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     /**
      * Zend request object
      *
-     * @return \Magento\App\RequestInterface
+     * @return \Magento\Framework\App\RequestInterface
      */
     protected function _getRequest()
     {
@@ -1037,8 +1037,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         $port = $this->_request->getServer('SERVER_PORT');
         if ($port) {
             $defaultPorts = array(
-                \Magento\App\Request\Http::DEFAULT_HTTP_PORT,
-                \Magento\App\Request\Http::DEFAULT_HTTPS_PORT
+                \Magento\Framework\App\Request\Http::DEFAULT_HTTP_PORT,
+                \Magento\Framework\App\Request\Http::DEFAULT_HTTPS_PORT
             );
             $port = in_array($port, $defaultPorts) ? '' : ':' . $port;
         }

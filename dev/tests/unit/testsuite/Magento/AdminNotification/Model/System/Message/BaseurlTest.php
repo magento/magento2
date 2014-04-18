@@ -63,19 +63,19 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_configMock = $this->getMock('Magento\App\Config', array(), array(), '', false);
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config', array(), array(), '', false);
         $this->_urlBuilderMock = $this->getMock('Magento\UrlInterface');
 
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $configFactoryMock = $this->getMock(
-            'Magento\App\Config\ValueFactory',
+            'Magento\Framework\App\Config\ValueFactory',
             array('create'),
             array(),
             '',
             false
         );
         $this->_configDataMock = $this->getMock(
-            'Magento\App\Config\Value',
+            'Magento\Framework\App\Config\Value',
             array('getScope', 'getScopeId', 'getCollection', '__sleep', '__wakeup'),
             array(),
             '',

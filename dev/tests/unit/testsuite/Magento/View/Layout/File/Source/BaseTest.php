@@ -47,7 +47,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystem = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryRead', '__wakeup'),
             array(),
             '',
@@ -58,7 +58,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::MODULES_DIR
+            \Magento\Framework\App\Filesystem::MODULES_DIR
         )->will(
             $this->returnValue($this->directory)
         );

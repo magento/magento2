@@ -123,7 +123,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->setAddresses(
             $this->getSampleAddressEntity()
         )->create();
-        $customerData = $this->_customerAccountService->createAccount($customerDetails, 'password');
+        $customerData = $this->_customerAccountService->createCustomer($customerDetails, 'password');
 
         $existingCustomerId = $customerData->getId();
         $customerData = $this->_customerBuilder->mergeDataObjectWithArray(

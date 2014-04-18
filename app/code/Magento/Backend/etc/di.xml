@@ -24,8 +24,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\App\Config\Storage\Writer" />
-    <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
+    <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
@@ -33,7 +33,7 @@
     <preference for="Magento\Adminhtml\Helper\Data" type="Magento\Backend\Helper\Data" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Backend\Model\UrlInterface" type="Magento\Backend\Model\Url" />
-    <type name="Magento\App\AreaList">
+    <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="adminhtml" xsi:type="array">
@@ -50,7 +50,7 @@
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\System\Config\Save">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Layout</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">
@@ -70,7 +70,7 @@
             <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\App\Router\NoRouteHandlerList">
+    <type name="Magento\Framework\App\Router\NoRouteHandlerList">
         <arguments>
             <argument name="handlerClassesList" xsi:type="array">
                 <item name="backend" xsi:type="array">
@@ -104,7 +104,7 @@
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">
         <arguments>
-            <argument name="installDate" xsi:type="init_parameter">Magento\App\State::PARAM_INSTALL_DATE</argument>
+            <argument name="installDate" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_INSTALL_DATE</argument>
         </arguments>
     </type>
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />

@@ -49,7 +49,7 @@ class Success extends \Magento\View\Element\Template
     protected $_orderConfig;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -59,7 +59,7 @@ class Success extends \Magento\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -68,7 +68,7 @@ class Success extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         parent::__construct($context, $data);

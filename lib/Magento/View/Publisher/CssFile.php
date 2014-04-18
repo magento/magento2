@@ -45,7 +45,8 @@ class CssFile extends FileAbstract
             } elseif (!$this->isViewStaticFile($filePath)) {
                 $this->isPublicationAllowed = true;
             } else {
-                $this->isPublicationAllowed = $this->viewService->getAppMode() === \Magento\App\State::MODE_DEVELOPER;
+                $this->isPublicationAllowed =
+                    $this->viewService->getAppMode() === \Magento\Framework\App\State::MODE_DEVELOPER;
             }
         }
         return $this->isPublicationAllowed;

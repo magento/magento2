@@ -31,7 +31,7 @@ namespace Magento\Catalog\Helper\Product\Flat;
  * @category   Magento
  * @package    Magento_Catalog
  */
-class Indexer extends \Magento\App\Helper\AbstractHelper
+class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Path to list of attributes used for flat indexer
@@ -46,7 +46,7 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     /**
      * Resource instance
      *
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -141,8 +141,8 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     protected $_changelog;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
@@ -154,8 +154,8 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
      * @param array $flatAttributeGroups
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,

@@ -27,6 +27,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Model\Exception;
 use Magento\Model\AbstractModel;
 
@@ -430,7 +431,7 @@ class Option extends AbstractModel
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
-            $basePrice = $this->getProduct()->getFinalPrice();
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_TYPE_BASE_PRICE)->getValue();
             $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }

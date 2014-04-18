@@ -32,7 +32,7 @@ class Config
     const CACHE_MENU_OBJECT = 'backend_menu_object';
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -64,7 +64,7 @@ class Config
     protected $_configReader;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -74,7 +74,7 @@ class Config
     protected $_director;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -83,22 +83,22 @@ class Config
      * @param \Magento\Backend\Model\Menu\AbstractDirector $menuDirector
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Menu\Config\Reader $configReader
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Builder $menuBuilder,
         \Magento\Backend\Model\Menu\AbstractDirector $menuDirector,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\Menu\Config\Reader $configReader,
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Logger $logger,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\State $appState
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\State $appState
     ) {
         $this->_menuBuilder = $menuBuilder;
         $this->_director = $menuDirector;

@@ -28,7 +28,7 @@ namespace Magento\Eav\Model\Entity;
 class Setup extends \Magento\Module\Setup
 {
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -45,7 +45,7 @@ class Setup extends \Magento\Module\Setup
     /**
      * @param Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param string $moduleName
      * @param string $connectionName
@@ -53,7 +53,7 @@ class Setup extends \Magento\Module\Setup
     public function __construct(
         \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         $moduleName = 'Magento_Eav',
         $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION

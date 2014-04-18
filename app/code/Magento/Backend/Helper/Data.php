@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Helper;
 
-use Magento\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -40,7 +40,7 @@ class Data extends AbstractHelper
     protected $_pageHelpUrl;
 
     /**
-     * @var \Magento\App\Route\Config
+     * @var \Magento\Framework\App\Route\Config
      */
     protected $_routeConfig;
 
@@ -70,8 +70,8 @@ class Data extends AbstractHelper
     protected $mathRandom;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Route\Config $routeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Auth $auth
@@ -79,8 +79,8 @@ class Data extends AbstractHelper
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Route\Config $routeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Route\Config $routeConfig,
         \Magento\Locale\ResolverInterface $locale,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Auth $auth,

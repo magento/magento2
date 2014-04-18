@@ -39,15 +39,15 @@ class Config implements \Magento\Sales\Model\ConfigInterface
     protected $_dataContainer;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
      * @param \Magento\Sales\Model\Config\Data $dataContainer
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Sales\Model\Config\Data $dataContainer, \Magento\App\State $appState)
+    public function __construct(\Magento\Sales\Model\Config\Data $dataContainer, \Magento\Framework\App\State $appState)
     {
         $this->_dataContainer = $dataContainer;
         $this->_appState = $appState;

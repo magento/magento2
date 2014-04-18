@@ -48,7 +48,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      */
@@ -58,7 +58,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array()
     ) {

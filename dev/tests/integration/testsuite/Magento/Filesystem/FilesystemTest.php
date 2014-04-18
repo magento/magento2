@@ -36,13 +36,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
     protected function setUp()
     {
-        $this->filesystem = Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $this->filesystem = Bootstrap::getObjectManager()->create('Magento\Framework\App\Filesystem');
     }
 
     /**
@@ -50,7 +50,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirectoryReadInstance()
     {
-        $dir = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::VAR_DIR);
+        $dir = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->assertInstanceOf('\Magento\Filesystem\Directory\Read', $dir);
     }
 
@@ -59,7 +59,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirectoryWriteInstance()
     {
-        $dir = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $dir = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->assertInstanceOf('\Magento\Filesystem\Directory\Write', $dir);
     }
 
@@ -70,7 +70,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirectoryWriteException()
     {
-        $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::THEMES_DIR);
+        $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::THEMES_DIR);
     }
 
     /**
@@ -78,6 +78,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUri()
     {
-        $this->assertContains('media', $this->filesystem->getPath(\Magento\App\Filesystem::MEDIA_DIR));
+        $this->assertContains('media', $this->filesystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR));
     }
 }

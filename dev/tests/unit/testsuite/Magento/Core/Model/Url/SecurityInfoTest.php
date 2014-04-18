@@ -37,7 +37,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_model = new \Magento\Core\Model\Url\SecurityInfo($this->_scopeConfigMock, array('/account', '/cart'));
     }
 

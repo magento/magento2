@@ -30,10 +30,10 @@ namespace Magento\Rss\Helper;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order extends \Magento\App\Helper\AbstractHelper
+class Order extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -43,13 +43,13 @@ class Order extends \Magento\App\Helper\AbstractHelper
     protected $_orderFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         $this->_scopeConfig = $scopeConfig;

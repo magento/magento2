@@ -72,7 +72,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->_localeMock = $this->getMock('Magento\Locale\CurrencyInterface');
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface');
+        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
 
         $this->_curLocatorMock = $this->getMock(
             'Magento\Directory\Model\Currency\DefaultLocator',

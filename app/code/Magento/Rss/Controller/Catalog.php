@@ -28,20 +28,20 @@ namespace Magento\Rss\Controller;
 /**
  * RSS Controller for Catalog feeds
  */
-class Catalog extends \Magento\App\Action\Action
+class Catalog extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);

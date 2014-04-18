@@ -47,12 +47,12 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     protected $_customersFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
     ) {

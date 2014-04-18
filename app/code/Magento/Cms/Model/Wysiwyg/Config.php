@@ -81,7 +81,7 @@ class Config extends \Magento\Object
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -103,7 +103,7 @@ class Config extends \Magento\Object
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Core\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $windowSize
      * @param array $data
      */
@@ -115,7 +115,7 @@ class Config extends \Magento\Object
         \Magento\View\Url $viewUrl,
         \Magento\Core\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $windowSize = array(),
         array $data = array()
     ) {

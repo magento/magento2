@@ -42,9 +42,9 @@
           <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
               <span class="label"><?php echo __('Incl. Tax'); ?>:</span>
           <?php endif; ?>
-          <?php if ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 0, 'sales')): // including ?>
+          <?php if ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(0, 'sales')): // including ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item)+$_item->getWeeeTaxAppliedAmount()); ?>
-          <?php elseif ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): // incl. + weee ?>
+          <?php elseif ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): // incl. + weee ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item)+$_item->getWeeeTaxAppliedAmount()); ?>
               <br />
               <small>
@@ -53,7 +53,7 @@
                   <span class="nobr">+ <?php echo $tax['title']; ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($tax['amount'],true,true); ?></span><br />
               <?php endforeach; ?>
               </small>
-          <?php elseif ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): // excl. + weee + final ?>
+          <?php elseif ($_item->getWeeeTaxAppliedAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): // excl. + weee + final ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item)); ?>
               <br />
               <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
@@ -85,9 +85,9 @@
               <span class="label"><?php echo __('Incl. Tax'); ?>:</span>
           <?php endif; ?>
 
-          <?php if ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 0, 'sales')): // including ?>
+          <?php if ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(0, 'sales')): // including ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item)+$_item->getWeeeTaxAppliedRowAmount()); ?>
-          <?php elseif ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 1, 'sales')): // incl. + weee ?>
+          <?php elseif ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales')): // incl. + weee ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item)+$_item->getWeeeTaxAppliedRowAmount()); ?>
               <br />
               <small>
@@ -96,7 +96,7 @@
                   <span class="nobr">+ <?php echo $tax['title']; ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($tax['row_amount'],true,true); ?></span><br />
               <?php endforeach; ?>
               </small>
-          <?php elseif ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_item, 2, 'sales')): // excl. + weee + final ?>
+          <?php elseif ($_item->getWeeeTaxAppliedRowAmount() && $this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales')): // excl. + weee + final ?>
               <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item)); ?>
               <br />
               <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>

@@ -24,11 +24,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/Magento/Cache/etc/cache.xsd">
-    <type name="config" translate="label,description" instance="Magento\App\Cache\Type\Config">
+    <type name="config" translate="label,description" instance="Magento\Framework\App\Cache\Type\Config">
         <label>Configuration</label>
         <description>System(config.xml, local.xml) and modules configuration files(config.xml).</description>
     </type>
-    <type name="layout" translate="label,description" instance="Magento\App\Cache\Type\Layout">
+    <type name="layout" translate="label,description" instance="Magento\Framework\App\Cache\Type\Layout">
         <label>Layouts</label>
         <description>Layout building instructions.</description>
     </type>

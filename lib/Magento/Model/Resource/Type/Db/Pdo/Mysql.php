@@ -23,12 +23,12 @@
  */
 namespace Magento\Model\Resource\Type\Db\Pdo;
 
-class Mysql extends \Magento\Model\Resource\Type\Db implements \Magento\App\Resource\ConnectionAdapterInterface
+class Mysql extends \Magento\Model\Resource\Type\Db implements \Magento\Framework\App\Resource\ConnectionAdapterInterface
 {
     /**
      * Filesystem class
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -58,7 +58,7 @@ class Mysql extends \Magento\Model\Resource\Type\Db implements \Magento\App\Reso
     protected $_isActive;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param string $host
@@ -71,7 +71,7 @@ class Mysql extends \Magento\Model\Resource\Type\Db implements \Magento\App\Reso
      * @param bool $active
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Stdlib\String $string,
         \Magento\Stdlib\DateTime $dateTime,
         $host,

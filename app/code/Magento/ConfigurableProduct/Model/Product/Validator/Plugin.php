@@ -24,7 +24,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Validator;
 
 use Closure;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Event\Manager;
@@ -77,7 +77,7 @@ class Plugin
         \Magento\Catalog\Model\Product\Validator $subject,
         Closure $proceed,
         \Magento\Catalog\Model\Product $product,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Object $response
     ) {
         $result = $proceed($product, $request, $response);

@@ -32,7 +32,7 @@ namespace Magento\Directory\Block;
 class Data extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -60,7 +60,7 @@ class Data extends \Magento\View\Element\Template
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
@@ -69,7 +69,7 @@ class Data extends \Magento\View\Element\Template
         \Magento\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         array $data = array()

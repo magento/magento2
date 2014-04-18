@@ -26,7 +26,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-use Magento\App\Cache\Frontend\Factory;
+use Magento\Framework\App\Cache\Frontend\Factory;
 use Magento\Module\Declaration\Reader\Filesystem;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
@@ -83,7 +83,7 @@ if (empty($mediaDirectory)) {
     $params[Factory::PARAM_CACHE_FORCED_OPTIONS]['frontend_options']['disable_save'] = true;
 }
 
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
+$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
 $entryPoint->run('Magento\Core\App\Media', array(
     'request' => $request,
     'workingDirectory' => __DIR__,

@@ -28,7 +28,7 @@ namespace Magento\Review\Helper;
 /**
  * Default review helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_REVIEW_GUETS_ALLOW = 'catalog/review/allow_guest';
 
@@ -42,7 +42,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -54,14 +54,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filter
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filter
     ) {

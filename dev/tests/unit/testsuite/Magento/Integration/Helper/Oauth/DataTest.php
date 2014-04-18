@@ -25,7 +25,7 @@ namespace Magento\Integration\Helper\Oauth;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\App\Config\ScopeConfigInterface */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $_scopeConfigMock;
 
     /** @var \Magento\Integration\Helper\Oauth\Data */
@@ -34,7 +34,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_scopeConfigMock = $this->getMockBuilder(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
 
         $this->_dataHelper = new \Magento\Integration\Helper\Oauth\Data($this->_scopeConfigMock);

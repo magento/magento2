@@ -620,7 +620,7 @@ class Files
              * of file names
              * Note that realpath() automatically changes directory separator to the OS-native
              */
-            if (realpath($fullPath) == str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fullPath)) {
+            if (realpath($fullPath) == str_replace(array('/', '\\'), '/', $fullPath)) {
                 $fileContent = file_get_contents($fullPath);
                 if (strpos(
                     $fileContent,

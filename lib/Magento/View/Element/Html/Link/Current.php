@@ -38,7 +38,7 @@ class Current extends \Magento\View\Element\Template
     /**
      * Default path
      *
-     * @var \Magento\App\DefaultPathInterface
+     * @var \Magento\Framework\App\DefaultPathInterface
      */
     protected $_defaultPath;
 
@@ -46,12 +46,12 @@ class Current extends \Magento\View\Element\Template
      * Constructor
      *
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\App\DefaultPathInterface $defaultPath
+     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\App\DefaultPathInterface $defaultPath,
+        \Magento\Framework\App\DefaultPathInterface $defaultPath,
         array $data = array()
     ) {
         parent::__construct($context, $data);

@@ -33,7 +33,7 @@ class Config implements \Magento\Module\Output\ConfigInterface
     const XML_PATH_MODULE_OUTPUT_STATUS = 'advanced/modules_disable_output/%s';
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -43,11 +43,11 @@ class Config implements \Magento\Module\Output\ConfigInterface
     protected $_storeType;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType
     ) {
         $this->_scopeConfig = $scopeConfig;

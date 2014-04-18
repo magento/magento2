@@ -33,22 +33,22 @@
  */
 namespace Magento\Tax\Controller\Adminhtml;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Rate extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -337,7 +337,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -349,7 +349,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -491,7 +491,7 @@ class Rate extends \Magento\Backend\App\Action
             $content .= $rate->toString($template) . "\n";
         }
         $this->_view->loadLayout();
-        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

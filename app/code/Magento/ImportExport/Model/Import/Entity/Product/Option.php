@@ -281,7 +281,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -291,7 +291,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_importFactory;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -322,14 +322,14 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Store\Model\StoreManagerInterface $_storeManager
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $data
      *
@@ -337,14 +337,14 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function __construct(
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Store\Model\StoreManagerInterface $_storeManager,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Stdlib\DateTime $dateTime,
         array $data = array()
     ) {

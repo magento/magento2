@@ -32,5 +32,5 @@ $params = array(
     StoreManager::PARAM_RUN_TYPE => 'store'
 );
 
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
+$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
 $entryPoint->run('Magento\Indexer\App\Shell', array('entryFileName' => basename(__FILE__)));

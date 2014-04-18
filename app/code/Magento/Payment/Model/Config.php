@@ -43,7 +43,7 @@ class Config
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -69,15 +69,15 @@ class Config
     /**
      * Construct
      *
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Locale\ListsInterface $localeLists
      * @param \Magento\Config\DataInterface $dataStorage
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Locale\ListsInterface $localeLists,
         \Magento\Config\DataInterface $dataStorage

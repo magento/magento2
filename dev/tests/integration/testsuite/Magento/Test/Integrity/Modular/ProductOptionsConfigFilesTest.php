@@ -34,9 +34,9 @@ class ProductOptionsConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         //init primary configs
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\App\Filesystem */
-        $filesystem = $objectManager->get('Magento\App\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+        /** @var $filesystem \Magento\Framework\App\Filesystem */
+        $filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
+        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
             $modulesDirectory,

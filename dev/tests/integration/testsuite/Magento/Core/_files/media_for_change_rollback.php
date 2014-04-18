@@ -30,8 +30,8 @@ $themeDirectory = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getApp
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
     array(
-        \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-            \Magento\App\Filesystem::VAR_DIR => array('path' => $themeDirectory)
+        \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+            \Magento\Framework\App\Filesystem::VAR_DIR => array('path' => $themeDirectory)
         )
     )
 );
@@ -39,8 +39,8 @@ $themeDirectory = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getApp
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $directoryWrite \Magento\Filesystem\Directory\Write */
 $directoryWrite = $objectManager->create(
-    'Magento\App\Filesystem'
+    'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(
-    \Magento\App\Filesystem::VAR_DIR
+    \Magento\Framework\App\Filesystem::VAR_DIR
 );
 $directoryWrite->delete();

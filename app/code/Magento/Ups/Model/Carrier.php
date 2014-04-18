@@ -141,7 +141,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
@@ -162,7 +162,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,

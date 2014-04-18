@@ -46,16 +46,16 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Name</argument>
                         <argument name="index" xsi:type="string">code</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="type" xsi:type="string">longtext</argument>
                         <argument name="filter_index" xsi:type="string">code</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_tax_classes">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Customer Tax Class</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">customer_tax_classes</argument>
                         <argument name="filter_index" xsi:type="string">ctc.customer_tax_class_id</argument>
                         <argument name="show_missing_option_values" xsi:type="string">1</argument>
@@ -67,7 +67,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Product Tax Class</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">product_tax_classes</argument>
                         <argument name="filter_index" xsi:type="string">ptc.product_tax_class_id</argument>
                         <argument name="show_missing_option_values" xsi:type="string">1</argument>
@@ -79,19 +78,19 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Tax Rate</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">tax_rates</argument>
                         <argument name="filter_index" xsi:type="string">rate.tax_calculation_rate_id</argument>
                         <argument name="show_missing_option_values" xsi:type="string">1</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Tax\Model\Resource\Rule\Grid\Options\HashOptimized"/>
+                        <argument name="column_css_class" xsi:type="string">col-title</argument>
+                        <argument name="header_css_class" xsi:type="string">col-title</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="priority">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Priority</argument>
                         <argument name="index" xsi:type="string">priority</argument>
-                        <argument name="width" xsi:type="string">50</argument>
                         <argument name="type" xsi:type="string">text</argument>
                     </arguments>
                 </block>
@@ -99,7 +98,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Sort Order</argument>
                         <argument name="index" xsi:type="string">position</argument>
-                        <argument name="width" xsi:type="string">50</argument>
                         <argument name="type" xsi:type="string">text</argument>
                     </arguments>
                 </block>

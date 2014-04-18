@@ -48,7 +48,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_formattedOptionValue = null;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -116,23 +116,23 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\File\Size $fileSize
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Escaper $escaper,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\File\Size $fileSize,
         array $data = array()
     ) {
@@ -141,8 +141,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
-        $this->_rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
-        $this->_mediaDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->_rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->_mediaDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_fileSize = $fileSize;
         $this->_data = $data;
         parent::__construct($checkoutSession, $scopeConfig, $data);
@@ -366,7 +366,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             $filePath = $dispersion;
 
-            $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
+            $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
             $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
             $filePath .= '/' . $fileHash . '.' . $extension;
             $fileFullPath = $this->_mediaDirectory->getAbsolutePath($this->_quotePath . $filePath);
@@ -393,7 +393,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $_height = $_imageSize[1];
                 }
             }
-            $uri = $this->_filesystem->getUri(\Magento\App\Filesystem::MEDIA_DIR);
+            $uri = $this->_filesystem->getUri(\Magento\Framework\App\Filesystem::MEDIA_DIR);
             $this->setUserValue(
                 array(
                     'type' => $fileInfo['type'],

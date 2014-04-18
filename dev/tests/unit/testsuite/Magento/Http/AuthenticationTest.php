@@ -36,9 +36,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
-        $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
         $request->expects($this->once())->method('getServer')->will($this->returnValue($server));
-        $response = $this->getMock('\Magento\App\Response\Http', array(), array(), '', false);
+        $response = $this->getMock('\Magento\Framework\App\Response\Http', array(), array(), '', false);
         $authentication = new \Magento\HTTP\Authentication($request, $response);
         $this->assertSame(array($expectedLogin, $expectedPass), $authentication->getCredentials());
     }
@@ -89,10 +89,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAuthenticationFailed()
     {
-        $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
         $cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
-        $contextMock = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
-        $response = new \Magento\App\Response\Http($cookieMock, $contextMock);
+        $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
+        $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
         $authentication = new \Magento\HTTP\Authentication($request, $response);
         $realm = uniqid();
         $response->headersSentThrowsException = false;

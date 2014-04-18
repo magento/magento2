@@ -23,7 +23,7 @@
  */
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\View\Design\FileResolution\Strategy\Fallback;
 use Magento\View\Design\FileResolution\Strategy\FileInterface;
 use Magento\View\Design\FileResolution\Strategy\LocaleInterface;

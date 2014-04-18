@@ -42,9 +42,6 @@
 .section-config.active > .collapseable + input + fieldset,
 .accordion .collapseable.open + input + fieldset {
     background: #fff;
-    border: 1px solid #eae6e0;
-    border-radius: 5px;
-    margin: 0 0 8px;
     padding: 5px 18px 2px;
     position: relative;
 }
@@ -65,6 +62,7 @@
 .accordion .collapseable.open + input + fieldset {
     padding: 25px 18px 18px;
     display: block;
+    margin-left: 0;
     border-top: 0;
     border-radius: 0 0 5px 5px;
 }
@@ -78,6 +76,7 @@
     text-decoration: none;
     position: relative;
     cursor: pointer;
+    border-bottom: 1px solid #cac3b4;
 }
 
 .section-config > .collapseable > a i,
@@ -89,17 +88,18 @@
 .section-config.active > .collapseable > a,
 .accordion .collapseable.open a,
 .accordion dt.open a {
-    border-bottom: 1px solid #ededed;
+    /*border-bottom: 1px solid #ededed;*/
 }
 .section-config > .collapseable > a:before,
 .accordion > dt a:before,
 .accordion .collapseable > a:before {
     position: absolute;
     left: 0;
-    top: 7px;
+    top: 11px;
     font-family: 'MUI-Icons';
     font-style: normal;
     speak: none;
+    font-size: 16px;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
     content: '\e02a'; /* arrow right icon */
@@ -158,7 +158,7 @@
 .section-config.complex .section-config.with-button > .config {
     margin:10px -10px;
     border:1px solid #d1d0ce;
-    border-radius: 5px;
+    border-radius: 0;
     padding:5px 0;
 }
 .section-config.complex .section-config.with-button > .config > table > tbody > tr > td {
@@ -172,6 +172,12 @@
     padding:5px 10px 2px;
     border-bottom:1px solid #d1d0ce;
     background: transparent;
+}
+.section-config.complex .section-config.with-button > .config > table > tbody > tr > td > .section-config > .entry-edit-head > a {
+  padding-left: 22px;
+}
+.section-config.complex .section-config.with-button > .config > table > tbody > tr > td > .section-config > .entry-edit-head > a:before {
+  left: 0;
 }
 .section-config.complex .section-config.with-button > .config > table > tbody > tr:last-child > td > .section-config > .entry-edit-head {
     border:0;
@@ -493,51 +499,6 @@
     border: 1px solid #999;
     padding: 0 10px;
     margin: 0 0 20px;
-}
-
-/* TODO: arrange range inputs width in tables */
-.grid td input.input-text-range {
-    width: 35%;
-}
-
-.grid td input.input-text-range-date {
-    width: 31%;
-}
-
-/* TODO: styles for required TH fields */
-th.required:after {
-    color: red;
-    content: "*";
-    margin-left: 5px;
-}
-
-/* TODO: set color for messages in Cache Storage Management */
-.grid-severity-critical,
-.grid-severity-major,
-.grid-severity-notice,
-.grid-severity-minor {
-    display: block;
-    border: 1px solid #c76f35;
-    background: #fffbf0;
-    text-align: center;
-}
-
-.grid-severity-critical {
-    border-color: #6e1313;
-    background: #f7bfbf;
-    color: #6e1313;
-}
-
-.grid-severity-major {
-    border-color: #963535;
-    background: #f3dcd8;
-    color: #963535;
-}
-
-.grid-severity-notice {
-    border-color: #185b00;
-    background: #e6ecc0;
-    color: #185b00;
 }
 
 /*

@@ -37,7 +37,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
@@ -48,12 +48,12 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);

@@ -26,7 +26,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Sales\Model\Order;
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Adminhtml sales order creditmemo controller

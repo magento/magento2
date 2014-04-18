@@ -101,7 +101,15 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array('header' => __('ID'), 'width' => '50px', 'index' => 'entity_id'));
+        $this->addColumn(
+            'entity_id',
+            array(
+                'header' => __('ID'),
+                'index' => 'entity_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
         $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
 
@@ -109,20 +117,19 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
             $this->addColumn('custom_name', array('header' => __('Product Store Name'), 'index' => 'custom_name'));
         }
 
-        $this->addColumn('sku', array('header' => __('SKU'), 'width' => '80px', 'index' => 'sku'));
+        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku'));
 
         $this->addColumn('price', array('header' => __('Price'), 'type' => 'currency', 'index' => 'price'));
 
         $this->addColumn(
             'qty',
-            array('header' => __('Quantity'), 'width' => '130px', 'type' => 'number', 'index' => 'qty')
+            array('header' => __('Quantity'), 'type' => 'number', 'index' => 'qty')
         );
 
         $this->addColumn(
             'status',
             array(
                 'header' => __('Status'),
-                'width' => '90px',
                 'index' => 'status',
                 'type' => 'options',
                 'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
@@ -138,7 +145,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
                 'websites',
                 array(
                     'header' => __('Websites'),
-                    'width' => '100px',
                     'sortable' => false,
                     'index' => 'websites',
                     'type' => 'options',

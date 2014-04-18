@@ -25,7 +25,7 @@
  */
 namespace Magento\Module\Declaration;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\Filesystem\Directory\ReadInterface;
 
 class FileResolver implements \Magento\Config\FileResolverInterface

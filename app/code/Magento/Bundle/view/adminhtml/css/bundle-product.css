@@ -36,7 +36,29 @@
 }
 
 #bundle_product_container .col-name {
-    width: 25%;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#bundle_product_container .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#bundle_product_container .col-draggable {
+    width: 10px;
+}
+
+#bundle_product_container .col-actions {
+    width: 40px;
+}
+
+#bundle_product_container .col-qty,
+#bundle_product_container .col-uqty,
+#bundle_product_container .col-default {
+    width: 70px;
 }
 
 #bundle_product_container .field-option-req .control {
@@ -77,7 +99,6 @@
 .field-price .addon > .price + .select {
     width: 96px;
     float: left;
-    border-radius: 4px;
 }
 
 .field-weight .weight {

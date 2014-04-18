@@ -25,7 +25,7 @@
  */
 namespace Magento\Authorizenet\Controller\Authorizenet;
 
-class Payment extends \Magento\App\Action\Action
+class Payment extends \Magento\Framework\App\Action\Action
 {
     /**
      * Checkout session
@@ -35,10 +35,10 @@ class Payment extends \Magento\App\Action\Action
     protected $_session;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Checkout\Model\Session $session
      */
-    public function __construct(\Magento\App\Action\Context $context, \Magento\Checkout\Model\Session $session)
+    public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Checkout\Model\Session $session)
     {
         $this->_session = $session;
         parent::__construct($context);

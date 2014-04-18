@@ -57,7 +57,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\Config\MutableScopeConfigInterface'
+                'Magento\Framework\App\Config\MutableScopeConfigInterface'
             )->setValue(
                 \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
                 $design,
@@ -67,7 +67,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         }
         $this->_model->emulateDesign($store, 'frontend');
         $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\State'
+            'Magento\Framework\App\State'
         )->emulateAreaCode(
             'frontend',
             array($this->_model, 'getProcessedTemplate')
@@ -101,7 +101,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->_model->emulateDesign('default', $area);
         $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\State'
+            'Magento\Framework\App\State'
         )->emulateAreaCode(
             $area,
             array($this->_model, 'getProcessedTemplate')

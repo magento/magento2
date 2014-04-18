@@ -36,12 +36,18 @@ class PostDataTest extends \PHPUnit_Framework_TestCase
             'action' => $url,
             'data' => [
                 'product' => new \Magento\Object(['id' => 1]),
-                \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
                     strtr(base64_encode($url . 'for_uenc'), '+/=', '-_,')
             ]
         ]);
 
-        $contextMock = $this->getMock('Magento\App\Helper\Context', array('getUrlBuilder'), array(), '', false);
+        $contextMock = $this->getMock(
+            'Magento\Framework\App\Helper\Context',
+            array('getUrlBuilder'),
+            array(),
+            '',
+            false
+        );
         $urlBuilderMock = $this->getMockForAbstractClass(
             'Magento\UrlInterface',
             array(),

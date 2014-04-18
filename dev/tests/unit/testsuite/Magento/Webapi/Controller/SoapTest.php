@@ -45,7 +45,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\ErrorProcessor */
     protected $_errorProcessorMock;
 
-    /** @var \Magento\App\State */
+    /** @var \Magento\Framework\App\State */
     protected $_appStateMock;
 
     /** @var \Magento\Oauth\Oauth */
@@ -83,7 +83,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('maskException'))
             ->getMock();
-        $this->_appStateMock =  $this->getMock('\Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock =  $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $localeMock =  $this->getMockBuilder('Magento\Locale')
             ->disableOriginalConstructor()
             ->setMethods(array('getLanguage'))
@@ -107,8 +107,9 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
-        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
-        $areaMock = $this->getMock('Magento\App\AreaInterface');
+        $pathProcessorMock = $this->getMock('Magento\Webapi\Model\PathProcessor', [], [], '', false);
+        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
+        $areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
         $this->_soapController = new \Magento\Webapi\Controller\Soap(
             $this->_requestMock,
@@ -120,6 +121,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $layoutMock,
             $this->_oauthServiceMock,
             $localeResolverMock,
+            $pathProcessorMock,
             $areaListMock
         );
     }

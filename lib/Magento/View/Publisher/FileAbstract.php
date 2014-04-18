@@ -31,7 +31,7 @@ use Magento\Filesystem\Directory\WriteInterface;
 abstract class FileAbstract implements FileInterface
 {
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -102,7 +102,7 @@ abstract class FileAbstract implements FileInterface
     protected $isSourcePathProvided;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\Service $viewService
      * @param \Magento\Module\Dir\Reader $modulesReader
      * @param \Magento\View\FileSystem $viewFileSystem
@@ -112,7 +112,7 @@ abstract class FileAbstract implements FileInterface
      * @param string|null $sourcePath
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\Service $viewService,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\View\FileSystem $viewFileSystem,
@@ -128,7 +128,7 @@ abstract class FileAbstract implements FileInterface
         $this->allowDuplication = $allowDuplication;
         $this->viewParams = $viewParams;
         $this->viewFileSystem = $viewFileSystem;
-        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->setSourcePath($sourcePath);
         $this->isSourcePathProvided = $sourcePath !== null;
     }
@@ -238,7 +238,7 @@ abstract class FileAbstract implements FileInterface
      */
     protected function isLibFile($filePath)
     {
-        $pubLibDir = $this->filesystem->getPath(\Magento\App\Filesystem::PUB_LIB_DIR) . '/';
+        $pubLibDir = $this->filesystem->getPath(\Magento\Framework\App\Filesystem::PUB_LIB_DIR) . '/';
         if (strncmp($filePath, $pubLibDir, strlen($pubLibDir)) === 0) {
             return true;
         }
@@ -251,7 +251,7 @@ abstract class FileAbstract implements FileInterface
      */
     protected function isViewStaticFile($filePath)
     {
-        $pubStaticDir = $this->filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR) . '/';
+        $pubStaticDir = $this->filesystem->getPath(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR) . '/';
         if (strncmp($filePath, $pubStaticDir, strlen($pubStaticDir)) === 0) {
             return true;
         }
@@ -295,7 +295,7 @@ abstract class FileAbstract implements FileInterface
      */
     protected function buildPublicViewSufficientFilename()
     {
-        $designDir = $this->filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR) . '/';
+        $designDir = $this->filesystem->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/';
         if (0 === strpos($this->getSourcePath(), $designDir)) {
             // theme file
             $publicFile = substr($this->getSourcePath(), strlen($designDir));
@@ -336,14 +336,14 @@ abstract class FileAbstract implements FileInterface
      */
     public function __wakeup()
     {
-        $objectManager = \Magento\App\ObjectManager::getInstance();
-        $this->filesystem = $objectManager->get('\Magento\App\Filesystem');
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->filesystem = $objectManager->get('\Magento\Framework\App\Filesystem');
         $this->viewService = $objectManager->get('\Magento\View\Service');
         $this->modulesReader = $objectManager->get('\Magento\Module\Dir\Reader');
         $this->viewFileSystem = $objectManager->get('\Magento\View\FileSystem');
 
         $this->viewService->updateDesignParams($this->viewParams);
 
-        $this->rootDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $this->rootDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
     }
 }

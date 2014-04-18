@@ -36,6 +36,7 @@ $customerAddress->setData(
         'postcode' => 75477,
         'country_id' => 'US',
         'city' => 'CityM',
+        'company' => 'CompanyName',
         'street' => array('Green str, 67'),
         'lastname' => 'Smith',
         'firstname' => 'John',
@@ -46,3 +47,7 @@ $customerAddress->setData(
     1
 );
 $customerAddress->save();
+
+/** @var \Magento\Customer\Model\Customer $customer */
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+$customer->load(1)->save();

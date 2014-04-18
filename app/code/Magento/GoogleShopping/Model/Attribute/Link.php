@@ -37,7 +37,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -49,7 +49,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -61,7 +61,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

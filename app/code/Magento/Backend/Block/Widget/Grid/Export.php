@@ -97,7 +97,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                 $this->addExportType($type['urlPath'], $type['label']);
             }
         }
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

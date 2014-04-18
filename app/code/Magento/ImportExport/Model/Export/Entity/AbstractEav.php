@@ -75,7 +75,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     protected $_localeDate;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
@@ -84,7 +84,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,

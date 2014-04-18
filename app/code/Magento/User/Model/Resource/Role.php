@@ -57,13 +57,13 @@ class Role extends \Magento\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Stdlib\DateTime $dateTime
     ) {
         $this->dateTime = $dateTime;

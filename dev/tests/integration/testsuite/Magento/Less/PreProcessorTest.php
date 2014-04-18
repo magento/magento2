@@ -34,14 +34,14 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => __DIR__ . '/_files/lib'),
-                    \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::PUB_LIB_DIR => array('path' => __DIR__ . '/_files/lib'),
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
                 )
             )
         );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
     }
 
     /**
@@ -55,7 +55,7 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $lessPreProcessor = $this->objectManager->create('Magento\Css\PreProcessor\Less');
         /** @var $filesystem \Magento\Filesystem */
         $filesystem = $this->objectManager->get('Magento\Filesystem');
-        $targetDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::TMP_DIR);
+        $targetDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::TMP_DIR);
         $designParams = array('area' => 'frontend', 'theme' => 'test_pre_process');
         /** @var \Magento\View\Service $viewService */
         $viewService = $this->objectManager->get('Magento\View\Service');

@@ -134,7 +134,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_areaFrontName)
         );
-        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
@@ -210,7 +210,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_model->setRequest($this->_requestMock);
     }
 

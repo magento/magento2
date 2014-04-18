@@ -23,13 +23,13 @@
  */
 namespace Magento\Downloadable\Helper;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\Model\Exception as CoreException;
 
 /**
  * Downloadable Products Download Helper
  */
-class Download extends \Magento\App\Helper\AbstractHelper
+class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Link type url
@@ -112,12 +112,12 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -128,20 +128,20 @@ class Download extends \Magento\App\Helper\AbstractHelper
     protected $_workingDirectory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;

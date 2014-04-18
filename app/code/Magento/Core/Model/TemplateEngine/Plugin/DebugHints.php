@@ -42,7 +42,7 @@ class DebugHints
     private $_objectManager;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_scopeConfig;
 
@@ -53,12 +53,12 @@ class DebugHints
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Helper\Data $coreData
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Helper\Data $coreData
     ) {
         $this->_objectManager = $objectManager;

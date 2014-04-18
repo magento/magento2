@@ -114,14 +114,14 @@ class Review extends \Magento\Model\Resource\Db\AbstractDb
     protected $_ratingOptions;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Resource\Rating\Option $ratingOptions
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\RatingFactory $ratingFactory,

@@ -62,7 +62,7 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $config;
 
     /**
-     * @var \Magento\App\ScopeResolverInterface
+     * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $scopeResolver;
 
@@ -89,7 +89,7 @@ class Inline implements \Magento\Translate\InlineInterface
     /**
      * Initialize inline translation model
      *
-     * @param \Magento\App\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\UrlInterface $url
      * @param \Magento\View\LayoutInterface $layout
      * @param Inline\ConfigInterface $config
@@ -100,7 +100,7 @@ class Inline implements \Magento\Translate\InlineInterface
      * @param null $scope
      */
     public function __construct(
-        \Magento\App\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\UrlInterface $url,
         \Magento\View\LayoutInterface $layout,
         \Magento\Translate\Inline\ConfigInterface $config,
@@ -129,7 +129,7 @@ class Inline implements \Magento\Translate\InlineInterface
     public function isAllowed()
     {
         if ($this->isAllowed === null) {
-            if (!$this->scope instanceof \Magento\App\ScopeInterface) {
+            if (!$this->scope instanceof \Magento\Framework\App\ScopeInterface) {
                 $scope = $this->scopeResolver->getScope($this->scope);
             }
             $this->isAllowed = $this->config->isActive($scope)

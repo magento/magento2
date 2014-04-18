@@ -49,7 +49,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
+        $this->_responseMock = $this->getMock('Magento\Framework\App\Console\Response', array(), array(), '', false);
         $this->_model = new \Magento\Log\App\Shell('shell.php', $this->_shellFactoryMock, $this->_responseMock);
     }
 

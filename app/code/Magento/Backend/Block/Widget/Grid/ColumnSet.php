@@ -65,7 +65,7 @@ class ColumnSet extends \Magento\View\Element\Template
      *
      * @var string
      */
-    protected $_emptyTextCss = 'a-center';
+    protected $_emptyTextCss = 'empty-text';
 
     /**
      * Label for empty cell

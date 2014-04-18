@@ -470,7 +470,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\App\ObjectManager::getInstance()->create($this->getResourceModelName());
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create($this->getResourceModelName());
         }
         return $this->_resource;
     }

@@ -83,7 +83,7 @@ class Config implements \Magento\View\ConfigInterface
      * Constructor
      *
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\Service  $viewService
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
@@ -91,14 +91,14 @@ class Config implements \Magento\View\ConfigInterface
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\Service $viewService,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Config\FileIteratorFactory $fileIteratorFactory,
         $filename = self::CONFIG_FILE_NAME
     ) {
         $this->moduleReader = $moduleReader;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->viewService = $viewService;
         $this->viewFileSystem = $viewFileSystem;
         $this->filename = $filename;

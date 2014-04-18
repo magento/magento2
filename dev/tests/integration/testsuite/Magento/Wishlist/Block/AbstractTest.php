@@ -40,7 +40,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Wishlist\Block\AbstractBlock', 
             array(
                 $objectManager->get('Magento\Catalog\Block\Product\Context'),
-                $objectManager->get('Magento\App\Http\Context'),
+                $objectManager->get('Magento\Framework\App\Http\Context'),
                 $objectManager->get('Magento\Catalog\Model\ProductFactory'),
             )
         );

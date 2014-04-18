@@ -58,12 +58,12 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -112,11 +112,11 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\HTTP\Header $httpHeader
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
@@ -131,11 +131,11 @@ class Visitor extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\HTTP\Header $httpHeader,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,

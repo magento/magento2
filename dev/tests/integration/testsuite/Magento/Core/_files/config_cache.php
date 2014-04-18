@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var \Magento\App\Cache\Type\Config $layoutCache */
-$layoutCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Cache\Type\Config');
+/** @var \Magento\Framework\App\Cache\Type\Config $layoutCache */
+$layoutCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get('Magento\Framework\App\Cache\Type\Config');
 $layoutCache->save('fixture config cache data', 'CONFIG_CACHE_FIXTURE');

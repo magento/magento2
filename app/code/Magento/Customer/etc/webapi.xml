@@ -23,54 +23,256 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
-    <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" baseUrl="/V1/customerGroup">
-        <rest-route httpMethod="GET" method="getGroup" resources="Magento_Customer::group">/:groupId</rest-route>
-        <rest-route httpMethod="GET" method="getGroups" resources="Magento_Customer::group"></rest-route>
-        <rest-route httpMethod="GET" method="getDefaultGroup" resources="Magento_Customer::group">/default/:storeId</rest-route>
-        <rest-route httpMethod="GET" method="canDelete" resources="Magento_Customer::group">/canDelete/:groupId</rest-route>
-        <rest-route httpMethod="PUT" method="saveGroup" resources="Magento_Customer::group"></rest-route>
-        <rest-route httpMethod="DELETE" method="deleteGroup" resources="Magento_Customer::group">/:groupId</rest-route>
-    </service>
-    <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" baseUrl="/V1/customerMetadata">
-        <rest-route httpMethod="GET" method="getAttributeMetadata" resources="Magento_Customer::customer">/:entityType/entity/:attributeCode/attribute</rest-route>
-        <rest-route httpMethod="GET" method="getAllAttributeSetMetadata" resources="Magento_Customer::customer">/:entityType/entity/:attributeSetId/attributeSet/:storeId/store</rest-route>
-        <rest-route httpMethod="GET" method="getAttributes" resources="Magento_Customer::customer">/:entityType/entity/:formCode/form</rest-route>
-        <rest-route httpMethod="GET" method="getCustomerAttributeMetadata" resources="Magento_Customer::customer">/customer/:attributeCode/attribute</rest-route>
-        <rest-route httpMethod="GET" method="getAllCustomerAttributeMetadata" resources="Magento_Customer::customer">/customer</rest-route>
-        <rest-route httpMethod="GET" method="getAddressAttributeMetadata" resources="Magento_Customer::customer">/address/:attributeCode/attribute</rest-route>
-        <rest-route httpMethod="GET" method="getAllAddressAttributeMetadata" resources="Magento_Customer::customer">/address</rest-route>
-    </service>
-    <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" baseUrl="/V1/customerAccounts">
-        <!-- TODO: changePassword is a case of SELF. Need to revisit. For now manage is assigned -->
-        <!-- TODO: createAccount, authenticate, validateResetPasswordLinkToken, initiatePasswordReset, resetPassword, resendConfirmation apis
-                   can be accessed anonymously and need no resources to be assigned. Webapi framework doesn't support support that as yet.
-                   Adding Magento_Customer::customer temporarily until handling anonymous users is finalized -->
-        <rest-route httpMethod="POST" method="createAccount" resources="Magento_Customer::customer"></rest-route>
-        <rest-route httpMethod="PUT" method="updateCustomer" resources="Magento_Customer::manage"></rest-route>
-        <rest-route httpMethod="GET" method="getCustomerDetails" resources="Magento_Customer::customer">/:customerId</rest-route>
-        <rest-route httpMethod="GET" method="getCustomer" resources="Magento_Customer::customer">/:customerId/customer</rest-route>
-        <rest-route httpMethod="PUT" method="activateCustomer" resources="Magento_Customer::manage">/:customerId/activateCustomer</rest-route>
-        <rest-route httpMethod="PUT" method="searchCustomers" resources="Magento_Customer::customer">/search</rest-route>
-        <rest-route httpMethod="PUT" method="authenticate" resources="Magento_Customer::customer">/authenticate</rest-route>
-        <rest-route httpMethod="GET" method="validateResetPasswordLinkToken" resources="Magento_Customer::customer">/:customerId/validateResetPasswordLinkToken/:resetPasswordLinkToken</rest-route>
-        <rest-route httpMethod="PUT" method="initiatePasswordReset" resources="Magento_Customer::customer">/initiatePasswordReset</rest-route>
-        <rest-route httpMethod="PUT" method="resetPassword" resources="Magento_Customer::customer">/:customerId/resetPassword</rest-route>
-        <rest-route httpMethod="GET" method="getConfirmationStatus" resources="Magento_Customer::customer">/:customerId/confirmationStatus</rest-route>
-        <rest-route httpMethod="PUT" method="resendConfirmation" resources="Magento_Customer::customer">/resendConfirmation</rest-route>
-        <rest-route httpMethod="PUT" method="validateCustomerData" resources="Magento_Customer::manage">/validateCustomerData</rest-route>
-        <rest-route httpMethod="GET" method="canModify" resources="Magento_Customer::customer">/:customerId/canModify</rest-route>
-        <rest-route httpMethod="GET" method="canDelete" resources="Magento_Customer::customer">/:customerId/canDelete</rest-route>
-        <rest-route httpMethod="DELETE" method="deleteCustomer" resources="Magento_Customer::manage">/:customerId</rest-route>
-        <rest-route httpMethod="PUT" method="isEmailAvailable" resources="Magento_Customer::manage">/isEmailAvailable</rest-route>
-    </service>
-    <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" baseUrl="/V1/customer">
-        <rest-route httpMethod="GET" method="getAddresses" resources="Magento_Customer::manage">/:customerId/address</rest-route>
-        <rest-route httpMethod="GET" method="getAddress" resources="Magento_Customer::manage">/address/:addressId</rest-route>
-        <rest-route httpMethod="GET" method="getDefaultBillingAddress" resources="Magento_Customer::manage">/:customerId/address/defaultBilling</rest-route>
-        <rest-route httpMethod="GET" method="getDefaultShippingAddress" resources="Magento_Customer::manage">/:customerId/address/defaultShipping</rest-route>
-        <rest-route httpMethod="DELETE" method="deleteAddress" resources="Magento_Customer::manage">/address/:addressId</rest-route>
-        <rest-route httpMethod="POST" method="saveAddresses" resources="Magento_Customer::manage">/:customerId/address</rest-route>
-    </service>
-</config>
+    <route url="/V1/customerGroup/:groupId" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getGroup"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getGroups"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup/default/:storeId" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getDefaultGroup"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup/canDelete/:groupId" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="canDelete"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup/search" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="searchGroups"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="saveGroup"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroup/:groupId" method="DELETE">
+        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="deleteGroup"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/:entityType/entity/:attributeCode/attribute" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/:entityType/entity/:attributeSetId/attributeSet/:storeId/store" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllAttributeSetMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/:entityType/entity/:formCode/form" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAttributes"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/customer/:attributeCode/attribute" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomerAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/customer/all" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllCustomerAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/customer/custom" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomCustomerAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/address/:attributeCode/attribute" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAddressAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/address/all" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllAddressAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerMetadata/address/custom" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomAddressAttributeMetadata"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <!-- TODO: changePassword is a case of SELF. Need to revisit. For now manage is assigned -->
+    <!-- TODO: createCustomer, authenticate, validateResetPasswordLinkToken, initiatePasswordReset, resetPassword, resendConfirmation apis
+               can be accessed anonymously and need no resources to be assigned. Webapi framework doesn't support support that as yet.
+               Adding Magento_Customer::customer temporarily until handling anonymous users is finalized -->
+    <route url="/V1/customerAccounts" method="POST">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="createCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="updateCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/customer" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="saveCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomerDetails"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/customer" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/activateCustomer" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="activateCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/search" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="searchCustomers"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/authenticate" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="authenticate"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/changePassword" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="changePassword"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/validateResetPasswordLinkToken/:resetPasswordLinkToken" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="validateResetPasswordLinkToken"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/initiatePasswordReset" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="initiatePasswordReset"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/resetPassword" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="resetPassword"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/confirmationStatus" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getConfirmationStatus"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/resendConfirmation" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="resendConfirmation"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/validateCustomerData" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="validateCustomerData"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/canModify" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="canModify"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId/canDelete" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="canDelete"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/:customerId" method="DELETE">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="deleteCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/isEmailAvailable" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="isEmailAvailable"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/address" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="getAddresses"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/address/:addressId" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="getAddress"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/address/defaultBilling" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="getDefaultBillingAddress"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/address/defaultShipping" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="getDefaultShippingAddress"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/address/:addressId" method="DELETE">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="deleteAddress"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/address" method="POST">
+        <service class="Magento\Customer\Service\V1\CustomerAddressServiceInterface" method="saveAddresses"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+</routes>

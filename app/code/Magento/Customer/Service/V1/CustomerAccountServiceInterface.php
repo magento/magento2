@@ -73,7 +73,7 @@ interface CustomerAccountServiceInterface
      * @throws \Magento\Exception\InputException If bad input is provided
      * @throws \Magento\Exception\StateException If the provided email is already used
      */
-    public function createAccount(
+    public function createCustomer(
         \Magento\Customer\Service\V1\Data\CustomerDetails $customerDetails,
         $password = null,
         $hash = null,
@@ -90,19 +90,6 @@ interface CustomerAccountServiceInterface
      * @return bool True if this customer was updated
      */
     public function updateCustomer(\Magento\Customer\Service\V1\Data\CustomerDetails $customerDetails);
-
-    /**
-     * Create or update customer information
-     *
-     * @param \Magento\Customer\Service\V1\Data\Customer $customer
-     * @param string $password Plain text password
-     * @param string $hash Hashed password ready to be saved
-     * @throws \Magento\Customer\Exception If something goes wrong during save
-     * @throws \Magento\Exception\InputException If bad input is provided
-     * @return int customer ID
-     * @deprecated use createAccount or updateCustomer instead
-     */
-    public function saveCustomer(\Magento\Customer\Service\V1\Data\Customer $customer, $password = null, $hash = null);
 
     /**
      * Retrieve Customer
@@ -129,11 +116,11 @@ interface CustomerAccountServiceInterface
     /**
      * Retrieve customers which match a specified criteria
      *
-     * @param \Magento\Customer\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Service\V1\Data\SearchCriteria $searchCriteria
      * @throws \Magento\Exception\InputException if there is a problem with the input
      * @return \Magento\Customer\Service\V1\Data\SearchResults containing Data\CustomerDetails
      */
-    public function searchCustomers(\Magento\Customer\Service\V1\Data\SearchCriteria $searchCriteria);
+    public function searchCustomers(\Magento\Service\V1\Data\SearchCriteria $searchCriteria);
 
     /**
      * Login a customer account using username and password
@@ -183,12 +170,12 @@ interface CustomerAccountServiceInterface
      * Send an email to the customer with a password reset link.
      *
      * @param string $email
-     * @param int $websiteId
      * @param string $template Type of email to send.  Must be one of the email constants.
+     * @param int $websiteId Optional id.  If the website id is not provided
+     *                       it will be retrieved from the store manager
      * @return void
-     * @throws \Magento\Exception\NoSuchEntityException
      */
-    public function initiatePasswordReset($email, $websiteId, $template);
+    public function initiatePasswordReset($email, $template, $websiteId = null);
 
     /**
      * Reset customer password.
@@ -281,12 +268,10 @@ interface CustomerAccountServiceInterface
      * Check if the email has not been associated with a customer account in given website
      *
      * @param string $customerEmail
-     * @param int $websiteId
+     * @param int $websiteId If not set, will use the current websiteId
      * @return bool true if the email is not associated with a customer account in given website
-     * @throws \Magento\Exception\NoSuchEntityException If customer with email is not found
-     * @throws \Magento\Model\Exception If website was not specified
      */
-    public function isEmailAvailable($customerEmail, $websiteId);
+    public function isEmailAvailable($customerEmail, $websiteId = null);
 
     /**
      * Check store availability for customer given the customerId

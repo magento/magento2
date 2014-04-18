@@ -25,7 +25,7 @@ namespace Magento\View\Layout\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Design\ThemeInterface;
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\Filesystem\Directory\ReadInterface;
 use Magento\View\Layout\File\Factory;
 

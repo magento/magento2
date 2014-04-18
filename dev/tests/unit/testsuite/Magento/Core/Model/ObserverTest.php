@@ -59,7 +59,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->_cacheFrontendMock = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
-        $this->_frontendPoolMock = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
+        $this->_frontendPoolMock = $this->getMock(
+            'Magento\Framework\App\Cache\Frontend\Pool',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
         $this->_frontendPoolMock->expects(
             $this->any()
@@ -103,7 +109,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_configMock = $this->getMock(
-            '\Magento\App\Config\ReinitableConfigInterface',
+            '\Magento\Framework\App\Config\ReinitableConfigInterface',
             array(),
             array(),
             '',

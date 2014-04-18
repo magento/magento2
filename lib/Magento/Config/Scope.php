@@ -42,17 +42,17 @@ class Scope implements \Magento\Config\ScopeInterface, \Magento\Config\ScopeList
     /**
      * List of all available areas
      *
-     * @var \Magento\App\AreaList
+     * @var \Magento\Framework\App\AreaList
      */
     protected $_areaList;
 
     /**
      * Constructor
      *
-     * @param \Magento\App\AreaList $areaList
+     * @param \Magento\Framework\App\AreaList $areaList
      * @param string $defaultScope
      */
-    public function __construct(\Magento\App\AreaList $areaList, $defaultScope = 'primary')
+    public function __construct(\Magento\Framework\App\AreaList $areaList, $defaultScope = 'primary')
     {
         $this->_defaultScope = $this->_currentScope = $defaultScope;
         $this->_areaList = $areaList;

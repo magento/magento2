@@ -101,7 +101,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 }
 
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\App\AreaList'
+                    'Magento\Framework\App\AreaList'
                 )->getArea(
                     $area
                 )->load(
@@ -113,12 +113,12 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     $area
                 );
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\App\State'
+                    'Magento\Framework\App\State'
                 )->setAreaCode(
                     $area
                 );
                 $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\App\Http\Context'
+                    'Magento\Framework\App\Http\Context'
                 );
                 $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
                 $context->setValue(

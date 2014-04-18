@@ -23,7 +23,7 @@
  */
 namespace Magento;
 
-use Magento\App\Filesystem as AppFilesystem;
+use Magento\Framework\App\Filesystem as AppFilesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dirWriteFactoryMock;
 
-    /** @var \Magento\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
     protected $_directoryListMock;
 
     /** @var \Magento\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject  */
@@ -52,7 +52,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_directoryListMock = $this->getMock(
-            'Magento\App\Filesystem\DirectoryList',
+            'Magento\Framework\App\Filesystem\DirectoryList',
             array(),
             array(),
             '',

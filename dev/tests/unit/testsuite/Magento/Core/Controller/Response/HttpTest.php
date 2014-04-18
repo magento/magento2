@@ -26,7 +26,7 @@
  */
 
 /**
- * Test class for \Magento\App\ResponseInterface
+ * Test class for \Magento\Framework\App\ResponseInterface
  */
 namespace Magento\Core\Controller\Response;
 
@@ -36,14 +36,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      * Test for getHeader method
      *
      * @dataProvider headersDataProvider
-     * @covers \Magento\App\Response\Http::getHeader
+     * @covers \Magento\Framework\App\Response\Http::getHeader
      * @param string $header
      */
     public function testGetHeaderExists($header)
     {
         $cookieMock = $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false);
-        $contextMock = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
-        $response = new \Magento\App\Response\Http($cookieMock, $contextMock);
+        $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
+        $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
         $response->headersSentThrowsException = false;
         $response->setHeader($header['name'], $header['value'], $header['replace']);
         $this->assertEquals($header, $response->getHeader($header['name']));
@@ -65,13 +65,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for getHeader method. Validation for attempt to get not existing header
      *
-     * @covers \Magento\App\Response\Http::getHeader
+     * @covers \Magento\Framework\App\Response\Http::getHeader
      */
     public function testGetHeaderNotExists()
     {
         $cookieMock = $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false);
-        $contextMock = $this->getMock('Magento\App\Http\Context', array(), array(), '', false);
-        $response = new \Magento\App\Response\Http($cookieMock, $contextMock);
+        $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
+        $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
         $response->headersSentThrowsException = false;
         $response->setHeader('Name', 'value', true);
         $this->assertFalse($response->getHeader('Wrong name'));

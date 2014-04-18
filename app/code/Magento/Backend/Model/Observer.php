@@ -36,24 +36,24 @@ class Observer
     protected $_backendSession;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $cache;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * @param Session $backendSession
-     * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\App\CacheInterface $cache,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->_backendSession = $backendSession;
         $this->cache = $cache;

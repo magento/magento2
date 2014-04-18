@@ -48,7 +48,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_googleAnalyticsHelperMock = $this->getMock(
             'Magento\GoogleAnalytics\Helper\Data',
             array(),
@@ -58,7 +58,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
         $this->_helper = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Helper\Data',
             array(

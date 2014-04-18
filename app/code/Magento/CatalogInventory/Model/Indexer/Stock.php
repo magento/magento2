@@ -63,7 +63,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
         ),
         \Magento\Store\Model\Store::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
         \Magento\Store\Model\Group::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE),
-        \Magento\App\Config\ValueInterface::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
+        \Magento\Framework\App\Config\ValueInterface::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
     );
 
     /**
@@ -185,7 +185,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
                     $result = false;
                 }
             } else {
-                if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
+                if ($entity == \Magento\Framework\App\Config\ValueInterface::ENTITY) {
                     $configData = $event->getDataObject();
                     if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
                         $result = $configData->isValueChanged();
@@ -223,12 +223,12 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
 
             case \Magento\Store\Model\Store::ENTITY:
             case \Magento\Store\Model\Group::ENTITY:
-            case \Magento\App\Config\ValueInterface::ENTITY:
+            case \Magento\Framework\App\Config\ValueInterface::ENTITY:
                 $event->addNewData('cataloginventory_stock_skip_call_event_handler', true);
                 $process = $event->getProcess();
                 $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
 
-                if ($event->getEntity() == \Magento\App\Config\ValueInterface::ENTITY) {
+                if ($event->getEntity() == \Magento\Framework\App\Config\ValueInterface::ENTITY) {
                     $configData = $event->getDataObject();
                     if ($configData->getPath() == \Magento\CatalogInventory\Helper\Data::XML_PATH_SHOW_OUT_OF_STOCK) {
                         $this->_indexer->getProcessByCode(

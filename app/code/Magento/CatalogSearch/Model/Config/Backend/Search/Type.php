@@ -34,9 +34,9 @@
  */
 namespace Magento\CatalogSearch\Model\Config\Backend\Search;
 
-use Magento\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogSearch\Model\Fulltext;
-use Magento\App\Config\Value;
+use Magento\Framework\App\Config\Value;
 use Magento\Model\Context;
 use Magento\Registry;
 use Magento\Model\Resource\AbstractResource;

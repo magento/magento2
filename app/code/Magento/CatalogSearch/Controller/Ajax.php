@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-use Magento\App\Action\Action;
+use Magento\Framework\App\Action\Action;
 
 class Ajax extends Action
 {

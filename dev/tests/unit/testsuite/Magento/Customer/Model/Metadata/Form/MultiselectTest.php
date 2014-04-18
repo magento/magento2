@@ -68,7 +68,7 @@ class MultiselectTest extends AbstractFormTestCase
         )->getMock();
         $multiselect->expects($this->once())->method('_getRequestValue')->will($this->returnValue($value));
 
-        $request = $this->getMockBuilder('Magento\App\RequestInterface')->getMock();
+        $request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')->getMock();
         $actual = $multiselect->extractValue($request);
         $this->assertEquals($expected, $actual);
     }

@@ -71,7 +71,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $this->fallbackFactory = $this->getMock(
             'Magento\View\Design\Fallback\Factory',
             array('createLocaleFileRule', 'createFileRule', 'createViewFileRule'),
-            array($this->getMock('Magento\App\Filesystem', array(), array(), '', false))
+            array($this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false))
         );
         $this->fallbackFactory->expects(
             $this->any()
@@ -229,7 +229,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $targetFile
-     * @return \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFileSystemMock($targetFile)
     {
@@ -249,7 +249,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
             )
         );
         $filesystem = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryRead', '__wakeup'),
             array(),
             '',
@@ -260,7 +260,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->will(
             $this->returnValue($directoryMock)
         );

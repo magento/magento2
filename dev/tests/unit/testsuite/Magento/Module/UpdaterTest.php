@@ -58,7 +58,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_factoryMock = $this->getMock('Magento\Module\Updater\SetupFactory', array(), array(), '', false);
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
         $this->_resourceResolver = $this->getMock('Magento\Module\ResourceResolverInterface');
         $this->_resourceSetupMock = $this->getMock(

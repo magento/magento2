@@ -91,7 +91,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $productLinks;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -103,13 +103,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -122,13 +122,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         array $data = array()
     ) {
         $this->productLinks = $catalogProductLink;

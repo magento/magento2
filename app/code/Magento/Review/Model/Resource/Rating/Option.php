@@ -101,13 +101,13 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     protected $_ratingOptionVoteF;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress

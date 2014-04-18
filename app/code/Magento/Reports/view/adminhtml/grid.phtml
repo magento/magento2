@@ -68,9 +68,9 @@ $numColumns = sizeof($this->getColumns());
             </div>
 
             <div class="show-by">
-                <label>
-                    <?php echo __('Show By') ?>:
-                    <select name="report_period" id="<?php echo $this->getSuffixId('report_period')?>">
+                <label class="label">
+                    <span><?php echo __('Show By') ?>:</span>
+                    <select name="report_period" id="<?php echo $this->getSuffixId('report_period')?>" class="select">
                         <?php foreach ($this->getPeriods() as $_value => $_label): ?>
                         <option value="<?php echo $_value ?>" <?php if ($this->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?php echo $_label ?></option>
                         <?php endforeach; ?>

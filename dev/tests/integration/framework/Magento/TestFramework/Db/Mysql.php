@@ -119,7 +119,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function _getDefaultsExtraFileName()
     {
-        return rtrim($this->_varPath, '\\/') . DIRECTORY_SEPARATOR . self::DEFAULTS_EXTRA_FILE_NAME;
+        return rtrim($this->_varPath, '\\/') . '/' . self::DEFAULTS_EXTRA_FILE_NAME;
     }
 
     /**

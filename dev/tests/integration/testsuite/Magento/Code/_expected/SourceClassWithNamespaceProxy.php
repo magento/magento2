@@ -82,7 +82,7 @@ class Proxy extends \Magento\Code\GeneratorTest\SourceClassWithNamespace
      */
     public function __wakeup()
     {
-        $this->_objectManager = \Magento\App\ObjectManager::getInstance();
+        $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**

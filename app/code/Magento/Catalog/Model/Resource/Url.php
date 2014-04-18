@@ -108,7 +108,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     protected $productResource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Product $productResource
@@ -116,7 +116,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Logger $logger
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,

@@ -57,15 +57,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
-                $objectManager->create('Magento\App\Filesystem'),
+                $objectManager->create('Magento\Framework\App\Filesystem'),
                 $objectManager->create('Magento\View\Url'),
                 $objectManager->create('Magento\View\FileSystem'),
-                $objectManager->create('Magento\App\Config\ScopeConfigInterface'),
+                $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config')
             )
         )->getMock();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }
@@ -115,7 +115,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplate()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\AreaList'
+            'Magento\Framework\App\AreaList'
         )->getArea(
             \Magento\Core\Model\App\Area::AREA_FRONTEND
         )->load();
@@ -147,7 +147,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         );
         $theme->load('Magento/plushe', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Config\MutableScopeConfigInterface'
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
@@ -163,7 +163,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplateDesignChange()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\AreaList'
+            'Magento\Framework\App\AreaList'
         )->getArea(
             \Magento\Core\Model\App\Area::AREA_FRONTEND
         )->load();
@@ -181,7 +181,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplateSubject()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\AreaList'
+            'Magento\Framework\App\AreaList'
         )->getArea(
             \Magento\Core\Model\App\Area::AREA_FRONTEND
         )->load();
@@ -208,7 +208,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultEmailLogo()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\AreaList'
+            'Magento\Framework\App\AreaList'
         )->getArea(
             \Magento\Core\Model\App\Area::AREA_FRONTEND
         )->load();

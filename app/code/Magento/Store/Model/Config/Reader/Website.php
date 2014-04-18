@@ -23,20 +23,20 @@
  */
 namespace Magento\Store\Model\Config\Reader;
 
-class Website implements \Magento\App\Config\Scope\ReaderInterface
+class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
     /**
-     * @var \Magento\App\Config\Initial
+     * @var \Magento\Framework\App\Config\Initial
      */
     protected $_initialConfig;
 
     /**
-     * @var \Magento\App\Config\ScopePool
+     * @var \Magento\Framework\App\Config\ScopePool
      */
     protected $_scopePool;
 
     /**
-     * @var \Magento\App\Config\Scope\Converter
+     * @var \Magento\Framework\App\Config\Scope\Converter
      */
     protected $_converter;
 
@@ -51,25 +51,25 @@ class Website implements \Magento\App\Config\Scope\ReaderInterface
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
-     * @param \Magento\App\Config\Initial $initialConfig
-     * @param \Magento\App\Config\ScopePool $scopePool
-     * @param \Magento\App\Config\Scope\Converter $converter
+     * @param \Magento\Framework\App\Config\Initial $initialConfig
+     * @param \Magento\Framework\App\Config\ScopePool $scopePool
+     * @param \Magento\Framework\App\Config\Scope\Converter $converter
      * @param \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\App\Config\Initial $initialConfig,
-        \Magento\App\Config\ScopePool $scopePool,
-        \Magento\App\Config\Scope\Converter $converter,
+        \Magento\Framework\App\Config\Initial $initialConfig,
+        \Magento\Framework\App\Config\ScopePool $scopePool,
+        \Magento\Framework\App\Config\Scope\Converter $converter,
         \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\App\State $appState
+        \Magento\Framework\App\State $appState
     ) {
         $this->_initialConfig = $initialConfig;
         $this->_scopePool = $scopePool;
@@ -88,7 +88,7 @@ class Website implements \Magento\App\Config\Scope\ReaderInterface
     public function read($code = null)
     {
         $config = array_replace_recursive(
-            $this->_scopePool->getScope(\Magento\App\ScopeInterface::SCOPE_DEFAULT)->getSource(),
+            $this->_scopePool->getScope(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT)->getSource(),
             $this->_initialConfig->getData("websites|{$code}")
         );
 

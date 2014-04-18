@@ -140,7 +140,7 @@
             this._bind();
             // There should only be one instance of this widget, and it should be attached
             // to the body only. Having it on the page twice will trigger multiple processStarts.
-            if (!this.element.is(this.options.defaultContainer) && $.mage.isDevMode(undefined)) {
+            if (window.console && !this.element.is(this.options.defaultContainer) && $.mage.isDevMode(undefined)) {
                 console.warn("This widget is intended to be attached to the body, not below.");
             }
         },
@@ -172,7 +172,7 @@
                 // Check to make sure the loader is there on the page if not report it on the console.
                 // NOTE that this check should be removed before going live. It is just an aid to help
                 // in finding the uses of the loader that maybe broken.
-                if (console && !ctx.parents('[data-role="loader"]').length) {
+                if (window.console && !ctx.parents('[data-role="loader"]').length) {
                     console.warn('Expected to start loader but did not find one in the dom');
                 }
             }

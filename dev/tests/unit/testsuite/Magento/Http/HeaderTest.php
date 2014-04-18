@@ -34,7 +34,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Request\Http
+     * @var \Magento\Framework\App\Request\Http
      */
     protected $_request;
 
@@ -48,7 +48,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_request = $this->getMock(
-            'Magento\App\Request\Http',
+            'Magento\Framework\App\Request\Http',
             array('getServer', 'getRequestUri'),
             array(),
             '',

@@ -36,12 +36,12 @@ class Quote extends AbstractResource
     protected $_config;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Eav\Model\Config $config
     ) {

@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
@@ -117,7 +117,7 @@ class Image extends AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -129,16 +129,16 @@ class Image extends AbstractHelper
     protected $_productImageFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\View\Url $viewUrl,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);

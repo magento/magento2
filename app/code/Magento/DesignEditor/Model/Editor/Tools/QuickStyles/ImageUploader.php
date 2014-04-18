@@ -43,7 +43,7 @@ class ImageUploader extends \Magento\Object
     protected $_storagePath;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -63,12 +63,12 @@ class ImageUploader extends \Magento\Object
      * Generic constructor of change instance
      *
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         array $data = array()
     ) {
         $this->_uploaderFactory = $uploaderFactory;
@@ -154,7 +154,7 @@ class ImageUploader extends \Magento\Object
      */
     public function removeFile($file)
     {
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $path = $directory->getRelativePath($this->getStoragePath() . '/' . $file);
         if ($directory->isExist($path)) {
             $directory->delete($path);

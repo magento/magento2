@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Cache/etc/cache.xsd">
-    <type name="translate" translate="label,description" instance="Magento\App\Cache\Type\Translate">
+    <type name="translate" translate="label,description" instance="Magento\Framework\App\Cache\Type\Translate">
         <label>Translations</label>
         <description>Translation files.</description>
     </type>

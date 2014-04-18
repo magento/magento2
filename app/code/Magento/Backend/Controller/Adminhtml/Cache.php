@@ -31,31 +31,31 @@ use Magento\Model\Exception;
 class Cache extends Action
 {
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     private $_cacheTypeList;
 
     /**
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
     private $_cacheState;
 
     /**
-     * @var \Magento\App\Cache\Frontend\Pool
+     * @var \Magento\Framework\App\Cache\Frontend\Pool
      */
     private $_cacheFrontendPool;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\App\Cache\StateInterface $cacheState
-     * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
         Action\Context $context,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\App\Cache\StateInterface $cacheState,
-        \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
     ) {
         parent::__construct($context);
         $this->_cacheTypeList = $cacheTypeList;

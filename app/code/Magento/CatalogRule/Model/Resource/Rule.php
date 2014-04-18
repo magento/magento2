@@ -109,7 +109,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory
      * @param \Magento\Stdlib\DateTime\DateTime $coreDate
@@ -120,7 +120,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory,
         \Magento\Stdlib\DateTime\DateTime $coreDate,

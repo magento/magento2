@@ -61,8 +61,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $filesystem = $this->_objectManager->create('Magento\App\Filesystem');
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $filesystem = $this->_objectManager->create('Magento\Framework\App\Filesystem');
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
 
         $fullFileName = $this->_varDirectory->getAbsolutePath(self::FILE_PATH);
         $this->_testFileHandler = fopen($fullFileName, 'w');

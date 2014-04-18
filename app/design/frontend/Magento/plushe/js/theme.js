@@ -61,7 +61,9 @@
                             for (var i=perpage; i < items.length; i++) {
                                 $(items[i + page*perpage]).addClass('hidden');
                             };
-                            console.log(i);
+                            if (window.console) {
+                                console.log(i);
+                            }
                             previous.removeAttr('disabled');
                             if (page == pages) {
                                 next.attr('disabled', 'disabled');

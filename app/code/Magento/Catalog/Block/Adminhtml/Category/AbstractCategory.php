@@ -51,19 +51,33 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     protected $_categoryTree;
 
     /**
+     * @var \Magento\Catalog\Model\CategoryFactory
+     */
+    protected $_categoryFactory;
+
+    /**
+     * @var bool
+     */
+    protected $_withProductCount;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Registry $registry
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Registry $registry,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = array()
     ) {
         $this->_categoryTree = $categoryTree;
         $this->_coreRegistry = $registry;
+        $this->_categoryFactory = $categoryFactory;
+        $this->_withProductCount = true;
         parent::__construct($context, $data);
     }
 
@@ -169,6 +183,41 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         }
 
         return $root;
+    }
+
+    /**
+     * @return int
+     */
+    protected function _getDefaultStoreId()
+    {
+        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+    }
+
+    /**
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
+     */
+    public function getCategoryCollection()
+    {
+        $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
+        $collection = $this->getData('category_collection');
+        if (is_null($collection)) {
+            $collection = $this->_categoryFactory->create()->getCollection();
+
+            $collection->addAttributeToSelect(
+                'name'
+            )->addAttributeToSelect(
+                'is_active'
+            )->setProductStoreId(
+                $storeId
+            )->setLoadProductCount(
+                $this->_withProductCount
+            )->setStoreId(
+                $storeId
+            );
+
+            $this->setData('category_collection', $collection);
+        }
+        return $collection;
     }
 
     /**

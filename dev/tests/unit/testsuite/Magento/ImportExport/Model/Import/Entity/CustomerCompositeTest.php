@@ -64,7 +64,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_importFactory;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -112,7 +112,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $translateInline = $this->getMock('\Magento\Translate\InlineInterface', array(), array(), '', false);
         $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
-        $context = $this->getMock('Magento\App\Helper\Context', array('getTranslateInline'), array(), '', false);
+        $context =
+            $this->getMock('Magento\Framework\App\Helper\Context', array('getTranslateInline'), array(), '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
         $data = array(
@@ -130,7 +131,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
         $this->_resourceHelper = $this->getMock(
             'Magento\ImportExport\Model\Resource\Helper',
             array(),
@@ -170,7 +171,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $this->_getCustomerEntityMock();
         $data['address_entity'] = $this->_getAddressEntityMock();
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -225,7 +226,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['address_entity'] = $addressEntity;
         $data['data_source_model'] = $dataSourceMock;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -280,7 +281,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -469,7 +470,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -526,7 +527,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -687,7 +688,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -729,7 +730,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -774,7 +775,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
@@ -974,7 +975,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\CustomerComposite(
             $this->_coreHelper,
             $this->_string,

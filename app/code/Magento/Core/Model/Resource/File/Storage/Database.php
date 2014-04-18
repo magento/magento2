@@ -36,10 +36,10 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\DB\Helper $resourceHelper
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\DB\Helper $resourceHelper)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\DB\Helper $resourceHelper)
     {
         parent::__construct($resource);
         $this->_resourceHelper = $resourceHelper;

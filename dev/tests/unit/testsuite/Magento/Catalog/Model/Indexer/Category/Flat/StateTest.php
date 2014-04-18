@@ -31,7 +31,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfigMock;
 
@@ -42,7 +42,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass('Magento\App\Config\ScopeConfigInterface');
+        $this->scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->flatIndexerMock = $this->getMockForAbstractClass(
             'Magento\Indexer\Model\IndexerInterface',

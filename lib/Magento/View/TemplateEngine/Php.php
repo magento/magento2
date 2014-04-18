@@ -132,14 +132,14 @@ class Php implements TemplateEngineInterface
      * Get helper singleton
      *
      * @param string $className
-     * @return \Magento\App\Helper\AbstractHelper
+     * @return \Magento\Framework\App\Helper\AbstractHelper
      * @throws \LogicException
      */
     public function helper($className)
     {
         $helper = $this->_helperFactory->get($className);
-        if (false === $helper instanceof \Magento\App\Helper\AbstractHelper) {
-            throw new \LogicException($className . ' doesn\'t extends Magento\App\Helper\AbstractHelper');
+        if (false === $helper instanceof \Magento\Framework\App\Helper\AbstractHelper) {
+            throw new \LogicException($className . ' doesn\'t extends Magento\Framework\App\Helper\AbstractHelper');
         }
 
         return $helper;

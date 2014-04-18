@@ -238,6 +238,10 @@ class Read implements ReadInterface
     {
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path, $protocol);
 
+        if (is_null($protocol)) {
+            return $this->driver->fileGetContents($absolutePath, $flag, $context);
+        }
+
         /** @var \Magento\Filesystem\File\Read $fileReader */
         $fileReader = $this->fileFactory->create($absolutePath, $protocol, $this->driver);
         return $fileReader->readAll($flag, $context);

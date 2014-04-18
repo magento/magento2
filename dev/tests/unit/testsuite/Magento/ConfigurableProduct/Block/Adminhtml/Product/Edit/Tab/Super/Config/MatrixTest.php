@@ -40,7 +40,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_appConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_appConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
             'Magento\Backend\Block\Template\Context',

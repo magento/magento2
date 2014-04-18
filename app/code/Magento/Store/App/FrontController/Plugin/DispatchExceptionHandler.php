@@ -26,7 +26,7 @@
 namespace Magento\Store\App\FrontController\Plugin;
 
 use Magento\Store\Model\StoreManager;
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 
 class DispatchExceptionHandler
 {
@@ -38,7 +38,7 @@ class DispatchExceptionHandler
     /**
      * Filesystem instance
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -55,17 +55,17 @@ class DispatchExceptionHandler
     /**
      * Handle dispatch exceptions
      *
-     * @param \Magento\App\FrontController $subject
+     * @param \Magento\Framework\App\FrontController $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\FrontController $subject,
+        \Magento\Framework\App\FrontController $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         try {
             return $proceed($request);

@@ -64,7 +64,7 @@ class Observer
     protected $_settlementFactory;
 
     /**
-     * @var \Magento\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
 
@@ -89,7 +89,7 @@ class Observer
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param Report\SettlementFactory $settlementFactory
-     * @param \Magento\App\ViewInterface $view
+     * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -100,7 +100,7 @@ class Observer
         \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
-        \Magento\App\ViewInterface $view,
+        \Magento\Framework\App\ViewInterface $view,
         \Magento\AuthorizationInterface $authorization,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Checkout\Model\Session $checkoutSession
@@ -180,7 +180,7 @@ class Observer
         if ($order && $order->getId()) {
             $payment = $order->getPayment();
             if ($payment && in_array($payment->getMethod(), $this->_paypalHss->getHssMethods())) {
-                /* @var $controller \Magento\App\Action\Action */
+                /* @var $controller \Magento\Framework\App\Action\Action */
                 $controller = $observer->getEvent()->getData('controller_action');
                 $result = $this->_coreData->jsonDecode($controller->getResponse()->getBody('default'));
 

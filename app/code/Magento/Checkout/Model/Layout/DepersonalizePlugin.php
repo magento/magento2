@@ -42,7 +42,7 @@ class DepersonalizePlugin
     protected $moduleManager;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -54,13 +54,13 @@ class DepersonalizePlugin
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Module\Manager $moduleManager
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Module\Manager $moduleManager,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\PageCache\Model\Config $cacheConfig
     ) {
         $this->checkoutSession = $checkoutSession;

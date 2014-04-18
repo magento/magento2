@@ -30,7 +30,8 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
 {
     public function testToHtmlChildrenInitialized()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
 
         /** @var $layout \Magento\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');

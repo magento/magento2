@@ -38,7 +38,7 @@ class Uploader
     /**
      * File system
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -59,12 +59,12 @@ class Uploader
     /**
      * Constructor
      *
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\HTTP\Adapter\FileTransferFactory $adapterFactory
      * @param \Magento\File\UploaderFactory $uploaderFactory
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\HTTP\Adapter\FileTransferFactory $adapterFactory,
         \Magento\File\UploaderFactory $uploaderFactory
     ) {

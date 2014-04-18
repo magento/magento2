@@ -35,7 +35,7 @@ $_finalPriceInclTax = $this->helper('Magento\Tax\Helper\Data')->getPrice($_produ
 $_catalogHelper = $this->helper('Magento\Catalog\Helper\Data');
 
 $_weeeTaxAmount = $this->helper('Magento\Weee\Helper\Data')->getAmountForDisplay($_product);
-if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,2,4))) {
+if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 2, 4))) {
     $_weeeTaxAttributes = $this->helper('Magento\Weee\Helper\Data')->getProductWeeeAttributesForDisplay($_product);
 }
 
@@ -54,9 +54,9 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                 <?php else: ?>
 
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayBothPrices()): ?>
-                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(0)): ?>
                             <?php echo __('Buy %1 for %2 (%3 incl. tax) each', $_price['price_qty'], $_price['formated_price_incl_weee_only'], $_price['formated_price_incl_weee']) ?>
-                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1)): ?>
                             <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                             <?php if ($_weeeTaxAttributes): ?>
                                 (<small>
@@ -68,7 +68,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                 </small>)
                             <?php endif; ?>
                             <?php echo __('each') ?>
-                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4)): ?>
                             <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                             <?php if ($_weeeTaxAttributes): ?>
                                 (<small>
@@ -80,7 +80,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                 </small>)
                             <?php endif; ?>
                             <?php echo __('each') ?>
-                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2)): ?>
                             <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price']); ?>
                             <?php if ($_weeeTaxAttributes): ?>
                                 (<small>
@@ -96,9 +96,9 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayPriceIncludingTax()): ?>
-                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(0)): ?>
                                 <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_weee']) ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>
@@ -109,7 +109,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                     </small>)
                                 <?php endif; ?>
                                 <?php echo __('each') ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>
@@ -120,7 +120,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                     </small>)
                                 <?php endif; ?>
                                 <?php echo __('each') ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_tax']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>
@@ -135,9 +135,9 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                 <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_tax']) ?>
                             <?php endif; ?>
                         <?php else: ?>
-                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(0)): ?>
                                 <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_weee_only']) ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>
@@ -148,7 +148,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                     </small>)
                                 <?php endif; ?>
                                 <?php echo __('each') ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>
@@ -159,7 +159,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
                                     </small>)
                                 <?php endif; ?>
                                 <?php echo __('each') ?>
-                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2)): ?>
                                 <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price']); ?>
                                 <?php if ($_weeeTaxAttributes): ?>
                                     (<small>

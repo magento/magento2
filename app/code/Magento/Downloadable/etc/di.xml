@@ -52,4 +52,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Pricing\PriceComposite">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="link_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Downloadable\Pricing\Price\LinkPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

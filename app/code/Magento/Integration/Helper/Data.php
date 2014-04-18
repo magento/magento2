@@ -25,7 +25,7 @@ namespace Magento\Integration\Helper;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Make ACL resource array compatible with jQuery jsTree component.

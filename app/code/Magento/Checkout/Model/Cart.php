@@ -60,7 +60,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -96,7 +96,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Resource\Cart $resourceCart
@@ -107,7 +107,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,

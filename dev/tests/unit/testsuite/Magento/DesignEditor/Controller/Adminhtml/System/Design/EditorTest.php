@@ -46,7 +46,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
 
-        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $request->expects($this->any())->method('setActionName')->will($this->returnSelf());
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -224,7 +224,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())->method('getStore')->will($this->returnSelf());
 
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $authMock = $this->getMock('Magento\AuthorizationInterface');
         $authMock->expects($this->any())->method('filterAclNodes')->will($this->returnSelf());
         $backendSession = $this->getMock(
@@ -251,7 +251,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
                 $this->_getThemeCollectionFactory($countCustomization)
             ),
             array('Magento\TranslateInterface', $translate),
-            array('Magento\App\Config\ScopeConfigInterface', $configMock),
+            array('Magento\Framework\App\Config\ScopeConfigInterface', $configMock),
             array('Magento\Event\ManagerInterface', $eventManager),
             array('Magento\Store\Model\StoreManager', $storeManager),
             array('Magento\AuthorizationInterface', $authMock),

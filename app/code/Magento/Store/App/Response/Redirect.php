@@ -25,10 +25,10 @@
  */
 namespace Magento\Store\App\Response;
 
-class Redirect implements \Magento\App\Response\RedirectInterface
+class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -63,7 +63,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     protected $_urlBuilder;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Encryption\UrlCoder $urlCoder
      * @param \Magento\Session\SessionManagerInterface $session
@@ -72,7 +72,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Encryption\UrlCoder $urlCoder,
         \Magento\Session\SessionManagerInterface $session,
@@ -99,11 +99,11 @@ class Redirect implements \Magento\App\Response\RedirectInterface
         if ($url) {
             $refererUrl = $url;
         }
-        $url = $this->_request->getParam(\Magento\App\Action\Action::PARAM_NAME_BASE64_URL);
+        $url = $this->_request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_BASE64_URL);
         if ($url) {
             $refererUrl = $this->_urlCoder->decode($url);
         }
-        $url = $this->_request->getParam(\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $url = $this->_request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED);
         if ($url) {
             $refererUrl = $this->_urlCoder->decode($url);
         }
@@ -128,7 +128,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
      * Set referer url for redirect in response
      *
      * @param   string $defaultUrl
-     * @return  \Magento\App\ActionInterface
+     * @return  \Magento\Framework\App\ActionInterface
      */
     public function getRedirectUrl($defaultUrl = null)
     {
@@ -178,12 +178,12 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     /**
      * Set redirect into response
      *
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Framework\App\ResponseInterface $response
      * @param string $path
      * @param array $arguments
      * @return void
      */
-    public function redirect(\Magento\App\ResponseInterface $response, $path, $arguments = array())
+    public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = array())
     {
         if ($this->_session->getCookieShouldBeReceived() &&
             $this->_urlBuilder->getUseSession() &&

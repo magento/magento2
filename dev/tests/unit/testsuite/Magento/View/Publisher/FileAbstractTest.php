@@ -28,7 +28,7 @@ class FileAbstractTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\View\Publisher\FileAbstract|\PHPUnit_Framework_MockObject_MockObject */
     protected $fileAbstract;
 
-    /** @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $filesystemMock;
 
     /** @var \Magento\View\Service|\PHPUnit_Framework_MockObject_MockObject */
@@ -55,13 +55,13 @@ class FileAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\WriteInterface');
 
-        $this->filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->filesystemMock->expects(
             $this->once()
         )->method(
             'getDirectoryWrite'
         )->with(
-            $this->equalTo(\Magento\App\Filesystem::ROOT_DIR)
+            $this->equalTo(\Magento\Framework\App\Filesystem::ROOT_DIR)
         )->will(
             $this->returnValue($this->rootDirectory)
         );

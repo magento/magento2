@@ -26,8 +26,8 @@ namespace Magento\Customer\Model\Resource;
 use Magento\Core\Model\EntityFactory;
 use Magento\Service\V1\Data\Filter;
 use Magento\Service\V1\Data\FilterBuilder;
-use Magento\Customer\Service\V1\Data\SearchCriteria;
-use Magento\Customer\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Service\V1\Data\SearchCriteria;
+use Magento\Service\V1\Data\SearchCriteriaBuilder;
 use Magento\Exception;
 
 /**
@@ -134,20 +134,18 @@ abstract class AbstractServiceCollection extends \Magento\Data\Collection
     protected function getSearchCriteria()
     {
         foreach ($this->fieldFilters as $filter) {
+            // array of fields, put filters in array to use 'or' group
+            /** @var Filter[] $filterGroup */
+            $filterGroup = array();
             if (!is_array($filter['field'])) {
                 // just one field
-                $this->searchCriteriaBuilder->addFilter(
-                    $this->createFilterData($filter['field'], $filter['condition'])
-                );
+                $filterGroup = [$this->createFilterData($filter['field'], $filter['condition'])];
             } else {
-                // array of fields, put filters in array to use 'or' group
-                /** @var Filter[] $orGroupFilters */
-                $orGroupFilters = array();
                 foreach ($filter['field'] as $index => $field) {
-                    $orGroupFilters[] = $this->createFilterData($field, $filter['condition'][$index]);
+                    $filterGroup[] = $this->createFilterData($field, $filter['condition'][$index]);
                 }
-                $this->searchCriteriaBuilder->addOrGroup($orGroupFilters);
             }
+            $this->searchCriteriaBuilder->addFilter($filterGroup);
         }
         foreach ($this->_orders as $field => $direction) {
             $this->searchCriteriaBuilder->addSortOrder(

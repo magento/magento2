@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Layout;
 class DepersonalizePlugin
 {
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -57,14 +57,14 @@ class DepersonalizePlugin
     protected $messageSession;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Event\Manager $eventManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      * @param \Magento\Message\Session $messageSession
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Module\Manager $moduleManager,
         \Magento\Event\Manager $eventManager,
         \Magento\PageCache\Model\Config $cacheConfig,

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<small class="magento-version"><?php echo __('Magento ver. %1', \Magento\AppInterface::VERSION) ?></small>
+<small class="magento-version"><?php echo __('Magento ver. %1', \Magento\Framework\AppInterface::VERSION) ?></small>
 <?php if ($this->getBugreportUrl()): ?>
 <a class="link-report" href="<?php echo $this->getBugreportUrl(); ?>" id="footer_bug_tracking"><?php echo __('Help Us Keep Magento Healthy - Report All Bugs') ?></a>
 <?php endif; ?>

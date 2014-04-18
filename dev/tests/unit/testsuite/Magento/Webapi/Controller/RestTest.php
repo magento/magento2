@@ -48,7 +48,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \stdClass */
     protected $_serviceMock;
 
-    /** @var \Magento\App\State */
+    /** @var \Magento\Framework\App\State */
     protected $_appStateMock;
 
     /** @var \Magento\Authz\Service\AuthorizationV1Interface */
@@ -58,6 +58,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $areaListMock;
+
+    /**
+     * @var \Magento\Webapi\Controller\ServiceArgsSerializer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serializerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -91,7 +96,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_routeMock = $this->getMockBuilder(
             'Magento\Webapi\Controller\Rest\Router\Route'
         )->setMethods(
-            array('isSecure', 'getServiceMethod', 'getServiceClass')
+            array('isSecure', 'getServiceMethod', 'getServiceClass', 'getParameters')
         )->disableOriginalConstructor()->getMock();
 
         $this->_objectManagerMock = $this->getMockBuilder(
@@ -104,7 +109,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             array(self::SERVICE_METHOD)
         )->disableOriginalConstructor()->getMock();
 
-        $this->_appStateMock = $this->getMockBuilder('Magento\App\State')->disableOriginalConstructor()->getMock();
+        $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_authzServiceMock = $this->getMockBuilder(
             'Magento\Authz\Service\AuthorizationV1Interface'
@@ -116,9 +123,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $serializer = $objectManager->getObject('Magento\Webapi\Controller\ServiceArgsSerializer');
-        $this->areaListMock = $this->getMock('\Magento\App\AreaList', array(), array(), '', false);
-        $this->areaMock = $this->getMock('Magento\App\AreaInterface');
+        $this->serializerMock = $this->getMockBuilder('\Magento\Webapi\Controller\ServiceArgsSerializer')
+            ->disableOriginalConstructor()
+            ->setMethods(['getInputData'])->getMock();
+        $this->areaListMock = $this->getMock('\Magento\Framework\App\AreaList', array(), array(), '', false);
+        $this->areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
 
         /** Init SUT. */
@@ -132,7 +141,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
                 'appState' => $this->_appStateMock,
                 'layout' => $layoutMock,
                 'authorizationService' => $this->_authzServiceMock,
-                'serializer' => $serializer,
+                'serializer' => $this->serializerMock,
                 'errorProcessor' => $errorProcessorMock,
                 'areaList' => $this->areaListMock
             )
@@ -158,7 +167,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
 
         $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_serviceMock));
         $this->_responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue(array()));
-        $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue(array()));
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
 
         parent::setUp();
@@ -188,8 +196,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(array()));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
+        $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue(array()));
+        $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue(array()));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
         $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->serializerMock->expects($this->any())->method('getInputData')->will($this->returnValue([]));
         $this->_restController->dispatch($this->_requestMock);
         $this->assertFalse($this->_responseMock->isException());
     }
@@ -238,7 +249,62 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
     }
+
+    /**
+     * @param array $requestData Data from the request
+     * @param array $parameters Data from config about which parameters to override
+     * @param array $expectedOverriddenParams Result of overriding $requestData when applying rules from $parameters
+     *
+     * @dataProvider overrideParmasDataProvider
+     */
+    public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams)
+    {
+        $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue($parameters));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
+        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue($requestData));
+
+        // serializer should expect overridden params
+        $this->serializerMock->expects($this->once())->method('getInputData')
+            ->with(
+                $this->equalTo('Magento\Webapi\Controller\TestService'),
+                $this->equalTo('testMethod'),
+                $this->equalTo($expectedOverriddenParams)
+            );
+
+        $this->_restController->dispatch($this->_requestMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function overrideParmasDataProvider()
+    {
+        return [
+            'force false, value present' => [
+                ['Name1' => 'valueIn'],
+                ['Name1' => ['force' => false, 'value' => 'valueOverride']],
+                ['Name1' => 'valueIn'],
+            ],
+            'force true, value present' => [
+                ['Name1' => 'valueIn'],
+                ['Name1' => ['force' => true, 'value' => 'valueOverride']],
+                ['Name1' => 'valueOverride']
+            ],
+            'force true, value not present' => [
+                ['Name1' => 'valueIn'],
+                ['Name2' => ['force' => true, 'value' => 'valueOverride']],
+                ['Name1' => 'valueIn', 'Name2' => 'valueOverride']
+            ],
+            'force false, value not present' => [
+                ['Name1' => 'valueIn'],
+                ['Name2' => ['force' => false, 'value' => 'valueOverride']],
+                ['Name1' => 'valueIn', 'Name2' => 'valueOverride'],
+            ],
+        ];
+    }
 }
+
 class TestService
 {
     public function testMethod()

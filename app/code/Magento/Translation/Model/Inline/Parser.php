@@ -123,7 +123,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     protected $_inputFilter;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -133,7 +133,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     protected $_translateInline;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_appCache;
 
@@ -143,16 +143,16 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Translation\Model\Resource\StringFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
-     * @param \Magento\App\State $appState
-     * @param \Magento\App\Cache\TypeListInterface $appCache,
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\App\Cache\TypeListInterface $appCache,
      * @param \Magento\Translate\InlineInterface $translateInline
      */
     public function __construct(
         \Magento\Translation\Model\Resource\StringFactory $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
-        \Magento\App\State $appState,
-        \Magento\App\Cache\TypeListInterface $appCache,
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\App\Cache\TypeListInterface $appCache,
         \Magento\Translate\InlineInterface $translateInline
     ) {
         $this->_resourceFactory = $resource;
@@ -174,7 +174,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
         if (!$this->_translateInline->isAllowed()) {
             return $this;
         }
-        $this->_appCache->invalidate(\Magento\App\Cache\Type\Translate::TYPE_IDENTIFIER);
+        $this->_appCache->invalidate(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER);
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, array('custom'));

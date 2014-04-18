@@ -69,8 +69,8 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = new \Magento\Model\Context(
             $this->getMock('Magento\Logger', array(), array(), '', false),
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            $this->getMock('Magento\App\CacheInterface', array(), array(), '', false),
-            $this->getMock('Magento\App\State', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\CacheInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\State', array(), array(), '', false),
             $this->actionValidatorMock
         );
         $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);

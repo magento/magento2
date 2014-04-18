@@ -77,12 +77,12 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Math\Random $mathRandom
     ) {

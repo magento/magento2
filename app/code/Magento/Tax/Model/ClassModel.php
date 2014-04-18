@@ -107,12 +107,10 @@ class ClassModel extends \Magento\Model\AbstractModel
             );
         }
 
-        $objectCount = $typeModel->getAssignedToObjects()->getSize();
-        if ($objectCount > 0) {
+        if ($typeModel->isAssignedToObjects()) {
             throw new \Magento\Model\Exception(
                 __(
-                    'You cannot delete this tax class because it is used for %1 %2(s).',
-                    $objectCount,
+                    'You cannot delete this tax class because it is used in existing %1(s).',
                     $typeModel->getObjectTypeName()
                 )
             );

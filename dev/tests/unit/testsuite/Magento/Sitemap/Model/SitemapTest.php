@@ -62,7 +62,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected $_sitemapCmsPageMock;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystemMock;
 
@@ -157,7 +157,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_directoryMock->expects($this->any())->method('openFile')->will($this->returnValue($this->_fileMock));
 
         $this->_filesystemMock = $this->getMockBuilder(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->setMethods(
             array('getDirectoryWrite')
         )->disableOriginalConstructor()->getMock();

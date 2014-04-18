@@ -48,6 +48,8 @@
                     <?php endif; ?>
                     <?php if ($_linksPurchasedSeparately): ?>
                     <?php echo $this->getFormattedLinkPrice($_link); ?>
+                        <br />
+                        <?php echo $this->getLinkPrice($_link); ?>
                     <?php endif; ?>
                     </label>
                 <?php if ($_isRequired): ?>

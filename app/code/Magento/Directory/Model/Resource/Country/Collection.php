@@ -41,7 +41,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -68,7 +68,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Locale\ListsInterface $localeLists
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Directory\Model\Resource\CountryFactory $countryFactory
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Locale\ResolverInterface $localeResolver
@@ -81,7 +81,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Locale\ListsInterface $localeLists,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Directory\Model\Resource\CountryFactory $countryFactory,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Locale\ResolverInterface $localeResolver,

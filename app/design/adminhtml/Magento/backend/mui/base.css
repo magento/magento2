@@ -209,35 +209,3 @@ blockquote {
 blockquote small:before {
     content: '\2014 \00A0';
 }
-
-/*
-    Tables
--------------------------------------- */
-table > caption {
-    margin-bottom: 5px;
-}
-
-table tfoot,
-table th {
-    background: #e6e6e6;
-}
-
-table th,
-table td {
-    border: 1px solid #ccc;
-    padding: 10px 15px;
-}
-
-table tbody tr td {
-    background: #fff;
-}
-
-table tbody tr:nth-child(odd) td,
-table tbody tr:nth-child(odd) th {
-    background-color: #f9f9f9;
-}
-
-table tbody tr:hover td,
-table tbody tr:hover th {
-    background-color: #fff9e4;
-}

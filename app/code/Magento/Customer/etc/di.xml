@@ -74,7 +74,6 @@
     <type name="Magento\Customer\Service\V1\Data\Eav\OptionBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\RegionBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\Response\CreateCustomerAccountResponseBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Data\SearchCriteriaBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\SearchResultsBuilder" shared="false" />
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>

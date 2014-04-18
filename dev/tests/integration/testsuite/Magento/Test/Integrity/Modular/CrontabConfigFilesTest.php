@@ -27,7 +27,7 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * attributes represent merging rules
-     * copied from original class \Magento\App\Route\Config\Reader
+     * copied from original class \Magento\Framework\App\Route\Config\Reader
      *
      * @var array
      */

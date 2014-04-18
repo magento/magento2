@@ -69,7 +69,7 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
     public function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->_scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, \Magento\App\ScopeInterface::SCOPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         ));
     }
 

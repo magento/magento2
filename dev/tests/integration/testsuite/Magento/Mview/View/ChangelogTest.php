@@ -35,7 +35,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $resource;
 
@@ -54,7 +54,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\App\Resource');
+        $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
         $this->connection = $this->resource->getConnection('core_write');
 
         $this->model = $this->objectManager->create(

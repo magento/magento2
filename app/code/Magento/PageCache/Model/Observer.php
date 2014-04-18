@@ -38,7 +38,7 @@ class Observer
     protected $_config;
 
     /**
-     * @var \Magento\App\PageCache\Cache
+     * @var \Magento\Framework\App\PageCache\Cache
      */
     protected $_cache;
 
@@ -48,7 +48,7 @@ class Observer
     protected $_helper;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_typeList;
 
@@ -58,7 +58,7 @@ class Observer
     protected $_session;
 
     /**
-     * @var \Magento\App\PageCache\FormKey
+     * @var \Magento\Framework\App\PageCache\FormKey
      */
     protected $_formKey;
 
@@ -66,18 +66,18 @@ class Observer
      * Constructor
      *
      * @param Config $config
-     * @param \Magento\App\PageCache\Cache $cache
+     * @param \Magento\Framework\App\PageCache\Cache $cache
      * @param \Magento\PageCache\Helper\Data $helper
-     * @param \Magento\App\Cache\TypeListInterface $typeList
+     * @param \Magento\Framework\App\Cache\TypeListInterface $typeList
      * @param \Magento\Session\Generic $session
-     * @param \Magento\App\PageCache\FormKey $formKey
+     * @param \Magento\Framework\App\PageCache\FormKey $formKey
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        \Magento\App\PageCache\Cache $cache,
+        \Magento\Framework\App\PageCache\Cache $cache,
         \Magento\PageCache\Helper\Data $helper,
-        \Magento\App\Cache\TypeListInterface $typeList,
-        \Magento\App\PageCache\FormKey $formKey,
+        \Magento\Framework\App\Cache\TypeListInterface $typeList,
+        \Magento\Framework\App\PageCache\FormKey $formKey,
         \Magento\Session\Generic $session
     ) {
         $this->_config = $config;
@@ -195,10 +195,6 @@ class Observer
      */
     public function registerFormKeyFromCookie(\Magento\Event\Observer $observer)
     {
-        if (!$this->_config->isEnabled()) {
-            return;
-        }
-
         $formKeyFromCookie = $this->_formKey->get();
         if ($formKeyFromCookie) {
             $this->_session->setData(\Magento\Data\Form\FormKey::FORM_KEY, $formKeyFromCookie);

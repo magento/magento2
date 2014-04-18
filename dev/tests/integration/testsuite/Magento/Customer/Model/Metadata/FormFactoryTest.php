@@ -75,8 +75,8 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Magento\Customer\Model\Metadata\Form', $form);
         $this->assertNotEmpty($form->getAttributes());
 
-        /** @var \Magento\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->get('Magento\App\RequestInterface');
+        /** @var \Magento\Framework\App\RequestInterface $request */
+        $request = Bootstrap::getObjectManager()->get('Magento\Framework\App\RequestInterface');
         $request->setParams($this->_requestData);
 
         $this->assertEquals($this->_expectedData, $form->restoreData($form->extractData($request)));

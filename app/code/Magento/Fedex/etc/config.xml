@@ -33,6 +33,8 @@
                 <key backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <sandbox_mode>0</sandbox_mode>
+                <production_webservices_url><![CDATA[https://ws.fedex.com:443/web-services/]]></production_webservices_url>
+                <sandbox_webservices_url><![CDATA[https://wsbeta.fedex.com:443/web-services/]]></sandbox_webservices_url>
                 <shipment_requesttype>0</shipment_requesttype>
                 <active>0</active>
                 <sallowspecific>0</sallowspecific>

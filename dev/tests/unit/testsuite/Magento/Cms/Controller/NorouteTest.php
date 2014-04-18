@@ -44,7 +44,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $responseMock->expects(
             $this->at(0)
         )->method(
@@ -66,12 +66,12 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($responseMock)
         );
 
-        $scopeConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', array(), array(), '', false);
         $valueMap = array(
             array(
-                'Magento\App\Config\ScopeConfigInterface',
+                'Magento\Framework\App\Config\ScopeConfigInterface',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock
             ),

@@ -68,8 +68,8 @@ class Attribute extends \Magento\Backend\Helper\Data
     protected $_eavConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Route\Config $routeConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Auth $auth
@@ -80,8 +80,8 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\App\Route\Config $routeConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Route\Config $routeConfig,
         \Magento\Locale\ResolverInterface $locale,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Auth $auth,

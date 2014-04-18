@@ -45,25 +45,28 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Filesystem $filesystem */
-        $filesystem = $objectManager->get('Magento\App\Filesystem');
-        self::$_themePublicDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
-        self::$_viewPublicMergedDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        $filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
+        self::$_themePublicDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
+        self::$_viewPublicMergedDir = $filesystem->getDirectoryWrite(
+            \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
+        );
     }
 
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array(
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
                         'path' => dirname(dirname(__DIR__)) . '/_files/design'
                     ),
-                    \Magento\App\Filesystem::PUB_DIR => array('path' => BP)
+                    \Magento\Framework\App\Filesystem::PUB_DIR => array('path' => BP)
                 )
             )
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDesignTheme(

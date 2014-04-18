@@ -150,7 +150,7 @@ class Sitemap extends \Magento\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -164,13 +164,13 @@ class Sitemap extends \Magento\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
      * @param \Magento\Stdlib\DateTime\DateTime $modelDate
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -181,13 +181,13 @@ class Sitemap extends \Magento\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory,
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
         \Magento\Stdlib\DateTime\DateTime $modelDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -195,7 +195,7 @@ class Sitemap extends \Magento\Model\AbstractModel
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;

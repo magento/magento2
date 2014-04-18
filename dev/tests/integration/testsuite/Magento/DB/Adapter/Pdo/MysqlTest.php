@@ -132,8 +132,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     protected function _getDbAdapter()
     {
         if (is_null($this->_dbAdapter)) {
-            /** @var $coreResource \Magento\App\Resource */
-            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
+            /** @var $coreResource \Magento\Framework\App\Resource */
+            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
             $this->_dbAdapter = $coreResource->getConnection('default_setup');
         }
         return $this->_dbAdapter;

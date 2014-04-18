@@ -23,13 +23,13 @@
  */
 namespace Magento\Contact\Controller;
 
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Contact index controller
  */
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
 
@@ -50,12 +50,12 @@ class Index extends \Magento\App\Action\Action
     protected $inlineTranslation;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
@@ -68,13 +68,13 @@ class Index extends \Magento\App\Action\Action
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
-     * @throws \Magento\App\Action\NotFoundException
+     * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
         if (!$this->_objectManager->get(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->isSetFlag(
             self::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -144,7 +144,7 @@ class Index extends \Magento\App\Action\Action
                     throw new \Exception();
                 }
 
-                $scopeConfig = $this->_objectManager->get('Magento\App\Config\ScopeConfigInterface');
+                $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
                 $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 $transport = $this->_transportBuilder->setTemplateIdentifier(
                     $scopeConfig->getValue(

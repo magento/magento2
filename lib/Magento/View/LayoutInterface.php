@@ -321,4 +321,11 @@ interface LayoutInterface
      * @return LayoutInterface
      */
     public function setBlock($name, $block);
+
+    /**
+     * Check is exists non-cacheable layout elements
+     *
+     * @return bool
+     */
+    public function isCacheable();
 }

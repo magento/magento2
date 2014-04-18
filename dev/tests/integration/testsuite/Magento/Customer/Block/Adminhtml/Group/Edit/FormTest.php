@@ -28,7 +28,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Service\V1\Data\CustomerGroup;
 use Magento\Service\V1\Data\FilterBuilder;
-use Magento\Customer\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Service\V1\Data\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -106,9 +106,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormExistInCustomGroup()
     {
+        /** @var \Magento\Service\V1\Data\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\Data\SearchCriteriaBuilder')
-            ->addFilter((new FilterBuilder())->setField('code')->setValue('custom_group')->create())->create();
+            ->create('Magento\Service\V1\Data\SearchCriteriaBuilder')
+            ->addFilter([(new FilterBuilder())->setField('code')->setValue('custom_group')->create()])->create();
         /** @var CustomerGroup $customerGroup */
         $customerGroup = $this->customerGroupService->searchGroups($searchCriteria)->getItems()[0];
         $this->registry->register(RegistryConstants::CURRENT_GROUP_ID, $customerGroup->getId());

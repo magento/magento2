@@ -46,99 +46,69 @@ $numColumns = sizeof($this->getColumns());
                 <h1 class="title"><?php echo $this->getGridHeader(); ?></h1>
             </div>
         </div>
-        <?php endif ?>
-
-        <div id="<?php echo $this->getId() ?>">
-    <?php else: ?>
-        <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
-        <?php endif; ?>
-    <?php if ($this->getPagerVisibility() || $this->getExportTypes() || $this->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
-        <div class="grid-actions">
-            <?php if ($this->getChildBlock('grid.export')): ?>
-            <div class="export">
-                <?php echo $this->getChildHtml('grid.export');?>
-            </div>
-            <?php endif; ?>
-            <div class="filter-actions">
-                <?php echo $this->getMainButtonsHtml() ?>
-            </div>
-            <?php if ($this->getPagerVisibility()): ?>
-            <div class="pager">
-                <label>
-                    <?php echo __('Page') ?>
-
-                    <?php $_curPage = $this->getCollection()->getCurPage() ?>
-                    <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
-
-                    <?php if ($_curPage > 1): ?>
-                        <a href="#" title="<?php echo __('Previous page') ?>" class="action-previous" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage - 1) ?>');return false;"><?php echo __('Previous page') ?></a>
-                    <?php else: ?>
-                        <span class="action-previous disabled"><?php echo __('Previous page') ?></span>
-                    <?php endif; ?>
-
-                    <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
-                           class="input-text page"
-                           onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $this->getUiId('current-page') ?>/>
-                </label>
-
-                <?php if ($_curPage < $_lastPage): ?>
-                    <a href="#" title="<?php echo __('Next page') ?>" class="action-next" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage + 1) ?>');return false;"><?php echo __('Next page') ?></a>
-                <?php else: ?>
-                    <span class="action-next disabled"><?php echo __('Next page') ?></span>
-                <?php endif; ?>
-
-                <?php echo __('of %1 pages', $this->getCollection()->getLastPageNumber()) ?>
-                <span class="separator">|</span>
-                <label>
-                    <?php echo __('View') ?>
-                    <select name="<?php echo $this->getVarNameLimit() ?>"
-                            onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)" <?php echo $this->getUiId('per-page') ?>>
-                        <option value="20"<?php if ($this->getCollection()->getPageSize() == 20): ?>
-                                selected="selected"<?php endif; ?>>20
-                        </option>
-                        <option value="30"<?php if ($this->getCollection()->getPageSize() == 30): ?>
-                                selected="selected"<?php endif; ?>>30
-                        </option>
-                        <option value="50"<?php if ($this->getCollection()->getPageSize() == 50): ?>
-                                selected="selected"<?php endif; ?>>50
-                        </option>
-                        <option value="100"<?php if ($this->getCollection()->getPageSize() == 100): ?>
-                                selected="selected"<?php endif; ?>>100
-                        </option>
-                        <option value="200"<?php if ($this->getCollection()->getPageSize() == 200): ?>
-                                selected="selected"<?php endif; ?>>200
-                        </option>
-                    </select>
-                </label>
-                <?php echo __('per page') ?>
-                <span class="separator">|</span>
-                <?php $countRecords = $this->getCollection()->getSize(); ?>
-                <?php echo __('Total %1 records found', $countRecords) ?>
-                <span id="<?php echo $this->getHtmlId() ?>-total-count"
-                      class="total-count no-display"<?php echo $this->getUiId('total-count') ?>><?php echo $countRecords ?></span>
-                <?php if ($this->getRssLists()): ?>
-                    <?php foreach ($this->getRssLists() as $_rss): ?>
-                        <span class="separator">|</span>
-                        <a href="<?php echo $_rss->getUrl() ?>" class="link-feed"><?php echo $_rss->getLabel() ?></a>
-                    <?php endforeach ?>
-                <?php endif; ?>
-            </div>
-            <?php endif ?>
-        </div>
-        <?php endif; ?>
-    <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
-        <?php echo $this->getChildHtml('grid.massaction') ?>
     <?php endif ?>
 
-    <?php if ($this->getGridCssClass()): ?>
-        <div class="grid-container">
-            <table class="<?php echo $this->getGridCssClass() ?>" id="<?php echo $this->getId() ?>_table">
-                <!-- Rendering column set -->
-                <?php echo $this->getChildHtml('grid.columnSet'); ?>
-            </table>
-        </div>
-    <?php else: ?>
-        <div class="grid">
+    <div id="<?php echo $this->getId() ?>">
+        <?php else: ?>
+            <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+        <?php endif; ?>
+        <?php if ($this->getPagerVisibility() || $this->getExportTypes() || $this->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
+            <div class="grid-actions">
+                <?php if ($this->getChildBlock('grid.export')): ?>
+                    <div class="export">
+                        <?php echo $this->getChildHtml('grid.export'); ?>
+                    </div>
+                <?php endif; ?>
+                <div class="filter-actions">
+                    <?php echo $this->getMainButtonsHtml() ?>
+                </div>
+                <?php if ($this->getPagerVisibility()): ?>
+                    <div class="pager">
+                        <?php $countRecords = $this->getCollection()->getSize(); ?>
+                        <span class="pages-total-found"><?php echo __('Total %1 records found', $countRecords) ?></span>
+                        <span id="<?php echo $this->getHtmlId() ?>-total-count"
+                              class="total-count no-display"<?php echo $this->getUiId('total-count') ?>>
+                            <?php echo $countRecords ?>
+                        </span>
+                        <label class="view-pages">
+                            <?php echo __('View') ?>
+                            <select name="<?php echo $this->getVarNameLimit() ?>"
+                                    onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)" <?php echo $this->getUiId('per-page') ?>
+                                    class="select">
+                                <option value="20"<?php if ($this->getCollection()->getPageSize() == 20): ?>
+                                    selected="selected"<?php endif; ?>>20
+                                </option>
+                                <option value="30"<?php if ($this->getCollection()->getPageSize() == 30): ?>
+                                    selected="selected"<?php endif; ?>>30
+                                </option>
+                                <option value="50"<?php if ($this->getCollection()->getPageSize() == 50): ?>
+                                    selected="selected"<?php endif; ?>>50
+                                </option>
+                                <option value="100"<?php if ($this->getCollection()->getPageSize() == 100): ?>
+                                    selected="selected"<?php endif; ?>>100
+                                </option>
+                                <option value="200"<?php if ($this->getCollection()->getPageSize() == 200): ?>
+                                    selected="selected"<?php endif; ?>>200
+                                </option>
+                            </select>
+                            <?php echo __('per page') ?>
+                        </label>
+                    </div>
+                <?php endif ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
+            <?php echo $this->getChildHtml('grid.massaction') ?>
+        <?php endif ?>
+
+        <?php if ($this->getGridCssClass()): ?>
+            <div class="grid-container">
+                <table class="<?php echo $this->getGridCssClass() ?>" id="<?php echo $this->getId() ?>_table">
+                    <!-- Rendering column set -->
+                    <?php echo $this->getChildHtml('grid.columnSet'); ?>
+                </table>
+            </div>
+        <?php else: ?>
             <div class="grid">
                 <div class="hor-scroll">
                     <table class="data" id="<?php echo $this->getId() ?>_table">
@@ -146,13 +116,48 @@ $numColumns = sizeof($this->getColumns());
                         <?php echo $this->getChildHtml('grid.columnSet'); ?>
                     </table>
                 </div>
+                <?php if ($this->getPagerVisibility()): ?>
+                    <div class="pager">
+                        <label class="page"><?php echo __('Page') ?></label>
+
+                        <?php $_curPage = $this->getCollection()->getCurPage() ?>
+                        <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+
+                        <?php if ($_curPage > 1): ?>
+                            <a href="#" title="<?php echo __('Previous page') ?>" class="action-previous"
+                               onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo($_curPage - 1) ?>');return false;"><span><?php echo __('Previous page') ?></span></a>
+                        <?php else: ?>
+                            <span class="action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
+                        <?php endif; ?>
+
+                        <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
+                               class="input-text page"
+                               onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $this->getUiId('current-page') ?> />
+
+                        <span class="pages-total">
+                            <?php echo __('of %1', $this->getCollection()->getLastPageNumber()) ?></span>
+                        </span>
+
+                        <?php if ($_curPage < $_lastPage): ?>
+                            <a href="#" title="<?php echo __('Next page') ?>" class="action-next"
+                               onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;"><span><?php echo __('Next page') ?></span></a>
+                        <?php else: ?>
+                            <span class="action-next disabled"><span><?php echo __('Next page') ?></span></span>
+                        <?php endif; ?>
+                        <?php if ($this->getRssLists()): ?>
+                            <?php foreach ($this->getRssLists() as $_rss): ?>
+                                <a href="<?php echo $_rss->getUrl() ?>"
+                                   class="link-feed"><?php echo $_rss->getLabel() ?></a>
+                            <?php endforeach ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif ?>
             </div>
-        </div>
-    <?php endif ?>
-    <?php if ($this->canDisplayContainer()): ?>
-</div>
-<script type="text/javascript">
-        <?php echo $this->getJsObjectName() ?>= new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
+        <?php endif ?>
+        <?php if ($this->canDisplayContainer()): ?>
+    </div>
+    <script type="text/javascript">
+        <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
         <?php echo $this->getJsObjectName() ?>.useAjax = <?php echo $this->getUseAjax() ? 'true' : 'false' ?>;
         <?php if ($this->getRowClickCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
@@ -172,9 +177,9 @@ $numColumns = sizeof($this->getColumns());
         <?php echo $this->getChildBlock('grid.massaction')->getJavaScript() ?>
         <?php endif ?>
         <?php echo $this->getAdditionalJavaScript(); ?>
-</script>
-    <?php endif; ?>
-<?php if ($this->getChildBlock('grid.js')): ?>
-    <?php echo $this->getChildHtml('grid.js'); ?>
+    </script>
+<?php endif; ?>
+    <?php if ($this->getChildBlock('grid.js')): ?>
+        <?php echo $this->getChildHtml('grid.js'); ?>
     <?php endif; ?>
 <?php endif ?>

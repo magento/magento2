@@ -69,12 +69,12 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_namespaceResolver = $this->getMockBuilder(
             '\Magento\Widget\Model\NamespaceResolver'
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheTypesListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
+        $this->_cacheTypesListMock = $this->getMock('Magento\Framework\App\Cache\TypeListInterface');
         $this->_readerMock = $this->getMockBuilder(
             'Magento\Widget\Model\Config\Reader'
         )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystemMock->expects(
             $this->any()

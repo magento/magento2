@@ -101,8 +101,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->get('Magento\Session\SaveHandler\DbTable');
 
-        /** @var $resource \Magento\App\Resource */
-        $resource = $this->_objectManager->get('Magento\App\Resource');
+        /** @var $resource \Magento\Framework\App\Resource */
+        $resource = $this->_objectManager->get('Magento\Framework\App\Resource');
         $this->_connection = $resource->getConnection('core_write');
         $this->_sessionTable = $resource->getTableName('core_session');
 

@@ -60,7 +60,7 @@ class Sample_Proxy extends \Magento\ObjectManager\Code\Generator\Sample
      */
     public function __wakeup()
     {
-        $this->_objectManager = \Magento\App\ObjectManager::getInstance();
+        $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**

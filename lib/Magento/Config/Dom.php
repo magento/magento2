@@ -222,7 +222,14 @@ class Dom
         $prefix = is_null($this->_rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
         $idAttribute = $this->_nodeMergingConfig->getIdAttribute($path);
-        if ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
+        if (is_array($idAttribute)) {
+            $constraints = [];
+            foreach ($idAttribute as $attribute) {
+                $value = $node->getAttribute($attribute);
+                $constraints[] = "@{$attribute}='{$value}'";
+            }
+            $path .= '[' . join(' and ', $constraints) . ']';
+        } elseif ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
         return $path;

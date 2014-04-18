@@ -56,13 +56,13 @@ abstract class AbstractAdapter
     /**
      * Constructor
      *
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string|null $destination
      * @throws \Magento\Model\Exception
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, $destination = null)
+    public function __construct(\Magento\Framework\App\Filesystem $filesystem, $destination = null)
     {
-        $this->_directoryHandle = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $this->_directoryHandle = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         if (!$destination) {
             $destination = uniqid('importexport_');
             $this->_directoryHandle->touch($destination);

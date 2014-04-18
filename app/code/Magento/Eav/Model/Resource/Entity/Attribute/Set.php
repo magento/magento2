@@ -40,11 +40,11 @@ class Set extends \Magento\Model\Resource\Db\AbstractDb
     protected $_attrGroupFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory
     ) {
         parent::__construct($resource);

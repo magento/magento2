@@ -76,23 +76,13 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $priceModifier;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Product\Price $priceHelper
-     * @param \Magento\Catalog\Model\Product\PriceModifierInterface $priceModifier
      * @param CustomerAccountService $customerAccountService
+     * @param \Magento\Catalog\Model\Product\PriceModifierInterface $priceModifier
      * @param array $data
      * @param array $priceBlockTypes
      *
@@ -207,6 +197,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $store = $this->getCurrentStore();
         $taxHelper = $this->_taxData;
         $currentProduct = $this->getProduct();
+        $baseImageUrl = (string)$this->_imageHelper->init($currentProduct, 'image');
         $preConfiguredValues = null;
 
         $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
@@ -217,7 +208,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
         foreach ($this->getAllowProducts() as $product) {
             $productId = $product->getId();
-            $image = $this->_imageHelper->init($product, 'image');
+            $this->_imageHelper->init($product, 'image');
 
             foreach ($this->getAllowAttributes() as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
@@ -231,10 +222,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                     $options[$productAttributeId][$attributeValue] = array();
                 }
                 $options[$productAttributeId][$attributeValue][] = $productId;
-                !$product->getImage() ||
-                    $product->getImage() ===
-                    'no_selection' ? $options['images'][$productAttributeId][$attributeValue][$productId] = null :
-                    ($options['images'][$productAttributeId][$attributeValue][$productId] = (string)$image);
+
+                if (!$product->getImage() || $product->getImage() === 'no_selection') {
+                    $options['images'][$productAttributeId][$attributeValue][$productId] = $baseImageUrl;
+                } else {
+                    $options['images'][$productAttributeId][$attributeValue][$productId] = (string)$this->_imageHelper;
+                }
             }
         }
 
@@ -272,16 +265,24 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         $productsIndex = array();
                     }
 
+                    // @todo resolve issue with weee specifics
                     $info['options'][] = array(
                         'id' => $value['value_index'],
                         'label' => $value['label'],
                         'price' => $configurablePrice,
                         'oldPrice' => $this->_prepareOldPrice($value['pricing_value'], $value['is_percent']),
+                        'inclTaxPrice' => $currentProduct
+                            ->getPriceInfo()
+                            ->getPrice('final_price')
+                            ->getCustomAmount($configurablePrice, 'weee')
+                            ->getValue(),
+                        'exclTaxPrice' => $configurablePrice,
                         'products' => $productsIndex
                     );
                     $optionPrices[] = $configurablePrice;
                 }
             }
+
             /**
              * Prepare formatted values for options choose
              */

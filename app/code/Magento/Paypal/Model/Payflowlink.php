@@ -149,7 +149,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Module\ModuleListInterface $moduleList
@@ -161,7 +161,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\App\RequestInterface $requestHttp
+     * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param array $data
      *
@@ -170,7 +170,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Logger $logger,
         \Magento\Module\ModuleListInterface $moduleList,
@@ -182,7 +182,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\App\RequestInterface $requestHttp,
+        \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         array $data = array()
     ) {

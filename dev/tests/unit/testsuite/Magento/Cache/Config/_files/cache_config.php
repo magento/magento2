@@ -26,14 +26,14 @@ return array(
         'config' => array(
             'name' => 'config',
             'translate' => 'label,description',
-            'instance' => 'Magento\App\Cache\Type\Config',
+            'instance' => 'Magento\Framework\App\Cache\Type\Config',
             'label' => 'Configuration',
             'description' => 'System(config.xml, local.xml) and modules configuration files(config.xml).'
         ),
         'layout' => array(
             'name' => 'layout',
             'translate' => 'label,description',
-            'instance' => 'Magento\App\Cache\Type\Layout',
+            'instance' => 'Magento\Framework\App\Cache\Type\Layout',
             'label' => 'Layouts',
             'description' => 'Layout building instructions.'
         )

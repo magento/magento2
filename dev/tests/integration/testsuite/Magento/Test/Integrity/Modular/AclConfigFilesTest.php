@@ -45,9 +45,9 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getPath(
-            \Magento\App\Filesystem::LIB_DIR
+            \Magento\Framework\App\Filesystem::LIB_DIR
         ) . '/Magento/Acl/etc/acl.xsd';
     }
 
@@ -74,9 +74,9 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $fileList = glob(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\Filesystem'
+                'Magento\Framework\App\Filesystem'
             )->getPath(
-                \Magento\App\Filesystem::APP_DIR
+                \Magento\Framework\App\Filesystem::APP_DIR
             ) . '/*/*/*/etc/adminhtml/acl.xml'
         );
         $dataProviderResult = array();

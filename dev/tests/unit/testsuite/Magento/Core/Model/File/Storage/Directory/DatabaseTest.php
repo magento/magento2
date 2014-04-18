@@ -67,7 +67,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $directoryFactoryMock;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -132,7 +132,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->configMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->configMock->expects(
             $this->any()
         )->method(

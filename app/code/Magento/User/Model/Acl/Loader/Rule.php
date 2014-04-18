@@ -26,19 +26,19 @@ namespace Magento\User\Model\Acl\Loader;
 class Rule implements \Magento\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
     /**
      * @param \Magento\Acl\RootResource $rootResource
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
     public function __construct(
         \Magento\Acl\RootResource $rootResource,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         array $data = array()
     ) {
         $this->_resource = $resource;

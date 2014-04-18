@@ -75,7 +75,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheInstanceMock = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false);
+        $this->_cacheInstanceMock = $this->getMock(
+            'Magento\Framework\App\Cache\Type\Config',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $this->_directorMock = $this->getMock(
             'Magento\Backend\Model\Menu\AbstractDirector',
@@ -124,11 +130,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_menuMock));
 
-        $scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_configReaderMock->expects($this->any())->method('read')->will($this->returnValue(array()));
 
-        $appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
+        $appState = $this->getMock('Magento\Framework\App\State', array('getAreaCode'), array(), '', false);
         $appState->expects(
             $this->any()
         )->method(

@@ -43,12 +43,12 @@ class Helper extends \Magento\DB\Helper
     protected $_coreDate;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param string $modulePrefix
      * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         $modulePrefix,
         \Magento\Stdlib\DateTime\DateTime $coreDate
     ) {

@@ -312,6 +312,38 @@
 }
 
 //
+//    Button revert secondary color
+//-------------------------------------- */
+.button-revert-secondary-color(
+    @_button-color: @button-color,
+    @_button-background: @button-background,
+    @_button-border: @button-border,
+
+    @_button-color-hover: @button-color-hover,
+    @_button-background-hover: @button-background-hover,
+    @_button-border-hover: @button-border-hover,
+
+    @_button-color-active: @button-color-active,
+    @_button-background-active: @button-background-active,
+    @_button-border-active: @button-border-active
+) {
+    .css(background, @_button-background);
+    .css(color, @_button-color);
+    .css(border, @_button-border);
+    &:focus,
+    &:active {
+        .css(background, @_button-background-active);
+        .css(color, @_button-color-active);
+        .css(border, @_button-border-active);
+    }
+    &:hover {
+        .css(background, @_button-background-hover);
+        .css(color, @_button-color-hover);
+        .css(border, @_button-border-hover);
+    }
+}
+
+//
 //    Inner buttons mixins
 //-------------------------------------- */
 

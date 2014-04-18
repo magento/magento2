@@ -47,7 +47,7 @@ abstract class AbstractFile implements
     /**
      * File system
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -56,12 +56,12 @@ abstract class AbstractFile implements
      *
      * @param \Magento\View\Design\Theme\Customization\Path $customizationPath
      * @param \Magento\View\Design\Theme\FileFactory $fileFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\View\Design\Theme\Customization\Path $customizationPath,
         \Magento\View\Design\Theme\FileFactory $fileFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_customizationPath = $customizationPath;
         $this->_fileFactory = $fileFactory;
@@ -221,6 +221,6 @@ abstract class AbstractFile implements
      */
     protected function getDirectoryWrite()
     {
-        return $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        return $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
     }
 }

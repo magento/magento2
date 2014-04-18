@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Wishlist\Helper;
 
 /**
  * Wishlist Data Helper
@@ -32,9 +32,7 @@
  * @package    Magento_Wishlist
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Helper;
-
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Config key 'Display Wishlist Summary'
@@ -91,7 +89,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -121,10 +119,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_customerViewHelper;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -132,10 +130,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Registry $coreRegistry,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -398,16 +396,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getAddToCartUrl($item)
     {
-        $continueUrl = $this->_coreData->urlEncode(
-            $this->_getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true, '_scope_to_url' => true))
-        );
-
-        $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
-        $params = array(
-            'item' => is_string($item) ? $item : $item->getWishlistItemId(),
-            $urlParamName => $continueUrl
-        );
-        return $this->_getUrlStore($item)->getUrl('wishlist/index/cart', $params);
+        return $this->_getUrlStore($item)->getUrl('wishlist/index/cart', $this->_getCartUrlParameters($item));
     }
 
     /**
@@ -418,16 +407,23 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getSharedAddToCartUrl($item)
     {
+        return $this->_getUrlStore($item)->getUrl('wishlist/shared/cart', $this->_getCartUrlParameters($item));
+    }
+
+    /**
+     * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @return array
+     */
+    protected function _getCartUrlParameters($item)
+    {
         $continueUrl = $this->_coreData->urlEncode(
             $this->_getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true, '_scope_to_url' => true))
         );
 
-        $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
-        $params = array(
+        return array(
             'item' => is_string($item) ? $item : $item->getWishlistItemId(),
-            $urlParamName => $continueUrl
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $continueUrl
         );
-        return $this->_getUrlStore($item)->getUrl('wishlist/shared/cart', $params);
     }
 
     /**

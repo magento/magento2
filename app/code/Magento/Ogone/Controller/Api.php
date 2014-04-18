@@ -30,7 +30,7 @@ use Magento\Sales\Model\Order;
 /**
  * Ogone Api Controller
  */
-class Api extends \Magento\App\Action\Action
+class Api extends \Magento\Framework\App\Action\Action
 {
     /**
      * Order instance
@@ -50,12 +50,12 @@ class Api extends \Magento\App\Action\Action
     protected $_transactionFactory;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\DB\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\OrderFactory $salesOrderFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\DB\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\OrderFactory $salesOrderFactory
     ) {

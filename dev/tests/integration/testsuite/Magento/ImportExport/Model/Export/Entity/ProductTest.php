@@ -91,7 +91,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportStockItemAttributesAreFilled()
     {
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
 
         $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));

@@ -30,7 +30,7 @@
 <?php else:  ?>
     <div data-block="minicart" class="minicart wrapper">
 <?php endif; ?>
-<?php $_cartQty = $this->getSummaryCount() ?>
+<?php $_cartQty = (float) $this->getSummaryCount() ?>
 <?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>
     <a <?php if ($this->getIsNeedToDisplaySideBar()): ?>data-toggle="dropdown"<?php endif ?> class="action showcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>

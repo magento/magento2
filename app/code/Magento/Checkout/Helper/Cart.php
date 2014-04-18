@@ -49,7 +49,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -64,18 +64,18 @@ class Cart extends \Magento\Core\Helper\Url
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
@@ -106,7 +106,7 @@ class Cart extends \Magento\Core\Helper\Url
     public function getAddUrl($product, $additional = array())
     {
         $continueUrl = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
-        $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
         $routeParams = array($urlParamName => $continueUrl, 'product' => $product->getEntityId());
 
@@ -137,7 +137,7 @@ class Cart extends \Magento\Core\Helper\Url
     {
         $params = array(
             'id' => $item->getId(),
-            \Magento\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url()
+            \Magento\Framework\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url()
         );
         return $this->_getUrl('checkout/cart/delete', $params);
     }

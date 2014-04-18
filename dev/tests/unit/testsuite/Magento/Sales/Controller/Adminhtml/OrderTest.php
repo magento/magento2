@@ -75,8 +75,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             array('addError')
         )->getMock();
 
-        $titleMock = $this->getMock('\Magento\App\Action\Title', array('__wakeup', 'add'), array(), '', false);
-        $viewMock = $this->getMockForAbstractClass('\Magento\App\ViewInterface');
+        $titleMock =
+            $this->getMock('\Magento\Framework\App\Action\Title', array('__wakeup', 'add'), array(), '', false);
+        $viewMock = $this->getMockForAbstractClass('\Magento\Framework\App\ViewInterface');
 
         $this->_controllerMock = $this->getMockBuilder(
             '\Magento\Sales\Controller\Adminhtml\Stub\Order'
@@ -110,7 +111,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         )->method(
             '_initAction'
         )->will(
-            $this->throwException(new \Magento\App\Action\Exception($msg))
+            $this->throwException(new \Magento\Framework\App\Action\Exception($msg))
         );
         $this->_orderMock->expects($this->never())->method('getRealOrderId');
 

@@ -65,7 +65,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Layer\AvailabilityFlagInterface');
         $this->layerMock = $this->getMock('\Magento\Catalog\Model\Layer', array(), array(), '', false);
-        $this->scopeConfigMock = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->engineMock = $this->getMock('\Magento\CatalogSearch\Model\Resource\EngineInterface');
         $this->collectionMock = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Collection', array(), array(), '', false

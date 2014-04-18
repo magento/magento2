@@ -51,12 +51,12 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
     /**
      * Class constructor
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $arguments
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Core\Helper\Data $coreHelper,
         array $arguments = array()
     ) {

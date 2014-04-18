@@ -23,4 +23,4 @@
  */
 
 /** @var $reportData array */
-\Magento\App\Error\HandlerTest::assertNotEmpty($reportData);
+\Magento\Framework\App\Error\HandlerTest::assertNotEmpty($reportData);

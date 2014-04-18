@@ -31,24 +31,24 @@ class RewriteService
     protected $_rewriteFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\App\RouterList
+     * @var \Magento\Framework\App\RouterList
      */
     protected $_routerList;
 
     /**
-     * @param \Magento\App\RouterList $routerList
+     * @param \Magento\Framework\App\RouterList $routerList
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\App\RouterList $routerList,
+        \Magento\Framework\App\RouterList $routerList,
         \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_rewriteFactory = $rewriteFactory;
         $this->_config = $config;
@@ -58,10 +58,10 @@ class RewriteService
     /**
      * Apply rewrites to current request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      */
-    public function applyRewrites(\Magento\App\RequestInterface $request)
+    public function applyRewrites(\Magento\Framework\App\RequestInterface $request)
     {
         // URL rewrite
         if (!$request->isStraight()) {

@@ -37,7 +37,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $schemaLocatorMock = $this->getMock('Magento\Module\Declaration\SchemaLocator', array(), array(), '', false);
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
 
-        $appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
 
         $dependencyManager = $this->getMock('Magento\Module\DependencyManagerInterface');
@@ -106,8 +106,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFileResolver($baseDir)
     {
-        $filesystem = new \Magento\App\Filesystem(
-            new \Magento\App\Filesystem\DirectoryList($baseDir),
+        $filesystem = new \Magento\Framework\App\Filesystem(
+            new \Magento\Framework\App\Filesystem\DirectoryList($baseDir),
             new \Magento\Filesystem\Directory\ReadFactory(),
             new \Magento\Filesystem\Directory\WriteFactory()
         );

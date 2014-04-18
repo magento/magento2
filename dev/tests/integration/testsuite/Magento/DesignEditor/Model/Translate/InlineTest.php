@@ -34,7 +34,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -45,7 +45,8 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDesignTheme(
@@ -58,7 +59,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->_model = $objectManager->get('Magento\DesignEditor\Model\Translate\Inline');
-        $this->_request = $objectManager->get('Magento\App\RequestInterface');
+        $this->_request = $objectManager->get('Magento\Framework\App\RequestInterface');
         $this->_request->setParam('translation_mode', 'text');
 
         $this->_helperData = $objectManager->get('Magento\DesignEditor\Helper\Data');
@@ -68,7 +69,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function testObjectCreation()
     {
         $this->assertInstanceOf('Magento\DesignEditor\Model\Translate\Inline', $this->_model);
-        $this->assertInstanceOf('Magento\App\RequestInterface', $this->_request);
+        $this->assertInstanceOf('Magento\Framework\App\RequestInterface', $this->_request);
         $this->assertInstanceOf('Magento\DesignEditor\Helper\Data', $this->_helperData);
     }
 

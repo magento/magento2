@@ -42,19 +42,19 @@ class Mapper
     protected $_fieldFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator
      * @param FieldFactory $fieldFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator,
         FieldFactory $fieldFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
 
         $this->_fieldLocator = $fieldLocator;

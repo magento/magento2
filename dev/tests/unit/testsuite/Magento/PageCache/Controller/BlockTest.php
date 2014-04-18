@@ -38,17 +38,17 @@ namespace Magento\PageCache\Controller;
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -71,15 +71,16 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             'Magento\View\Layout'
         )->disableOriginalConstructor()->getMock();
 
-        $contextMock = $this->getMockBuilder('Magento\App\Action\Context')->disableOriginalConstructor()->getMock();
+        $contextMock =
+            $this->getMockBuilder('Magento\Framework\App\Action\Context')->disableOriginalConstructor()->getMock();
 
         $this->requestMock = $this->getMockBuilder(
-            'Magento\App\Request\Http'
+            'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->getMock();
         $this->responseMock = $this->getMockBuilder(
-            'Magento\App\Response\Http'
+            'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\App\View')->disableOriginalConstructor()->getMock();
+        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')->disableOriginalConstructor()->getMock();
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));

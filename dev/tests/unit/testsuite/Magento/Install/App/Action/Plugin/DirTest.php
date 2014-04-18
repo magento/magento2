@@ -35,7 +35,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     /**
      * App state mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\State
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
      */
     protected $appStateMock;
 
@@ -58,8 +58,9 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $this->appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $filesystem =
+            $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $this->varDirectory = $this->getMock(
             'Magento\Filesystem\Directory\Write',
             array('read', 'isDirectory', 'delete'),
@@ -72,13 +73,13 @@ class DirTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::VAR_DIR
+            \Magento\Framework\App\Filesystem::VAR_DIR
         )->will(
             $this->returnValue($this->varDirectory)
         );
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->subjectMock = $this->getMock('Magento\Install\Controller\Index', array(), array(), '', false);
-        $this->requestMock = $this->getMock('Magento\App\RequestInterface');
+        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->plugin = new \Magento\Install\App\Action\Plugin\Dir($this->appStateMock, $filesystem, $logger);
     }
 

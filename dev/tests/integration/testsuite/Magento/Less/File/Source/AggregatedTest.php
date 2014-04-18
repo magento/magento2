@@ -39,27 +39,29 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => dirname(dirname(__DIR__)) . '/_files/lib'),
-                    \Magento\App\Filesystem::THEMES_DIR => array(
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::PUB_LIB_DIR => array(
+                        'path' => dirname(dirname(__DIR__)) . '/_files/lib'
+                    ),
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
                         'path' => dirname(dirname(__DIR__)) . '/_files/design'
                     )
                 )
             )
         );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->objectManager->create(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array(
                 'directoryList' => $this->objectManager->create(
                     'Magento\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
                         'directories' => array(
-                            \Magento\App\Filesystem::MODULES_DIR => array(
+                            \Magento\Framework\App\Filesystem::MODULES_DIR => array(
                                 'path' => dirname(dirname(__DIR__)) . '/_files/code'
                             )
                         )

@@ -34,14 +34,14 @@ class ServerAddressTest extends \PHPUnit_Framework_TestCase
     protected $_serverAddress;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Request\Http
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     protected $_request;
 
     protected function setUp()
     {
         $this->_request = $this->getMockBuilder(
-            'Magento\App\Request\Http'
+            'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->setMethods(
             array('getServer')
         )->getMock();

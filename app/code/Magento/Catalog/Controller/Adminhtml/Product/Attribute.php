@@ -66,10 +66,10 @@ class Attribute extends \Magento\Backend\App\Action
     /**
      * Dispatch request
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(\Magento\App\RequestInterface $request)
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_entityTypeId = $this->_objectManager->create(
             'Magento\Eav\Model\Entity'

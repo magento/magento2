@@ -32,7 +32,7 @@ class Multiline extends Text
     /**
      * {@inheritdoc}
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         if (!is_array($value)) {

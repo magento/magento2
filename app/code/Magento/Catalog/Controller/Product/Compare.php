@@ -32,7 +32,7 @@ use Magento\Core\App\Action\FormKeyValidator;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Compare extends \Magento\App\Action\Action
+class Compare extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer id
@@ -101,7 +101,7 @@ class Compare extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
@@ -113,7 +113,7 @@ class Compare extends \Magento\App\Action\Action
      * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,

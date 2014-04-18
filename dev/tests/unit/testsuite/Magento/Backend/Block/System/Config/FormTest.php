@@ -88,7 +88,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false, false);
         $requestParams = array(
             array('website', '', 'website_code'),
             array('section', '', 'section_code'),
@@ -131,7 +131,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->_coreConfigMock = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_backendConfigMock = $this->getMock('Magento\Backend\Model\Config', array(), array(), '', false, false);
 

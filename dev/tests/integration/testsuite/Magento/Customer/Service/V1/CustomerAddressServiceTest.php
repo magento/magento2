@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1;
 
 use Magento\Exception\InputException;
@@ -59,62 +60,53 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
         $this->_customerBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
 
-        $this->_addressBuilder->setId(
-            1
-        )->setCountryId(
-            'US'
-        )->setCustomerId(
-            1
-        )->setDefaultBilling(
-            true
-        )->setDefaultShipping(
-            true
-        )->setPostcode(
-            '75477'
-        )->setRegion(
-            (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
-        )->setStreet(
-            array('Green str, 67')
-        )->setTelephone(
-            '3468676'
-        )->setCity(
-            'CityM'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
+        $region = (new \Magento\Customer\Service\V1\Data\RegionBuilder())
+            ->setRegionCode('AL')
+            ->setRegion('Alabama')
+            ->setRegionId(1)
+            ->create();
+        $this->_addressBuilder
+            ->setId(1)
+            ->setCountryId('US')
+            ->setCustomerId(1)
+            ->setDefaultBilling(true)
+            ->setDefaultShipping(true)
+            ->setPostcode('75477')
+            ->setRegion($region)
+            ->setStreet(array('Green str, 67'))
+            ->setTelephone('3468676')
+            ->setCity('CityM')
+            ->setFirstname('John')
+            ->setLastname('Smith')
+            ->setCompany('CompanyName');
         $address = $this->_addressBuilder->create();
 
         /* XXX: would it be better to have a clear method for this? */
-        $this->_addressBuilder->setId(
-            2
-        )->setCountryId(
-            'US'
-        )->setCustomerId(
-            1
-        )->setDefaultBilling(
-            false
-        )->setDefaultShipping(
-            false
-        )->setPostcode(
-            '47676'
-        )->setRegion(
-            (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
-        )->setStreet(
-            array('Black str, 48')
-        )->setCity(
-            'CityX'
-        )->setTelephone(
-            '3234676'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
+        $this->_addressBuilder
+            ->setId(2)
+            ->setCountryId('US')
+            ->setCustomerId(1)
+            ->setDefaultBilling(false)
+            ->setDefaultShipping(false)
+            ->setPostcode('47676')
+            ->setRegion($region)
+            ->setStreet(array('Black str, 48'))
+            ->setCity('CityX')
+            ->setTelephone('3234676')
+            ->setFirstname('John')
+            ->setLastname('Smith');
+
         $address2 = $this->_addressBuilder->create();
 
         $this->_expectedAddresses = array($address, $address2);
+    }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
+        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry->remove(1);
     }
 
     /**
@@ -481,10 +473,12 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_service->saveAddresses(4200, array($proposedAddress));
             $this->fail('Expected exception not thrown');
-        } catch (NoSuchEntityException $nsee) {
-            $expectedParams = array('customerId' => '4200');
-            $this->assertEquals($expectedParams, $nsee->getParams());
-            $this->assertEquals('No such entity with customerId = 4200', $nsee->getMessage());
+        } catch (NoSuchEntityException $e) {
+            $expectedParams = [
+                'customerId' => '4200',
+            ];
+            $this->assertEquals($expectedParams, $e->getParams());
+            $this->assertEquals('No such entity with customerId = 4200', $e->getMessage());
         }
     }
 
@@ -494,10 +488,10 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_service->saveAddresses('this_is_not_a_valid_id', array($proposedAddress));
             $this->fail('Expected exception not thrown');
-        } catch (NoSuchEntityException $nsee) {
+        } catch (NoSuchEntityException $e) {
             $expectedParams = array('customerId' => 'this_is_not_a_valid_id');
-            $this->assertEquals($expectedParams, $nsee->getParams());
-            $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
+            $this->assertEquals($expectedParams, $e->getParams());
+            $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $e->getMessage());
         }
     }
 

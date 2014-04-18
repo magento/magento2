@@ -36,15 +36,15 @@ class RendererList extends AbstractBlock
      * Retrieve renderer by code
      *
      * @param string $type
-     * @param string $defalut
+     * @param string $default
      * @param string $rendererTemplate
      * @return bool|AbstractBlock
      * @throws \RuntimeException
      */
-    public function getRenderer($type, $defalut = null, $rendererTemplate = null)
+    public function getRenderer($type, $default = null, $rendererTemplate = null)
     {
         /** @var \Magento\View\Element\Template $renderer */
-        $renderer = $this->getChildBlock($type) ?: $this->getChildBlock($defalut);
+        $renderer = $this->getChildBlock($type) ?: $this->getChildBlock($default);
         if (!$renderer instanceof BlockInterface) {
             throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
         }

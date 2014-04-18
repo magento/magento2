@@ -32,16 +32,16 @@ namespace Magento\ProductAlert\Controller;
  * @package    Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\RequestInterface;
 
-class Unsubscribe extends \Magento\App\Action\Action
+class Unsubscribe extends \Magento\Framework\App\Action\Action
 {
     /**
      * Check customer authentication for some actions
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {

@@ -52,13 +52,13 @@ class Log extends \Magento\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Stdlib\DateTime $dateTime

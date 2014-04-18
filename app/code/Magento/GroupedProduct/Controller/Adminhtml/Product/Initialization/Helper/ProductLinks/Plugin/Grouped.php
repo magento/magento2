@@ -26,14 +26,14 @@ namespace Magento\GroupedProduct\Controller\Adminhtml\Product\Initialization\Hel
 class Grouped
 {
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
-    public function __construct(\Magento\App\RequestInterface $request)
+    public function __construct(\Magento\Framework\App\RequestInterface $request)
     {
         $this->request = $request;
     }

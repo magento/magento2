@@ -55,7 +55,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         if (!empty($xmlFiles)) {
 
             $this->_fileResolverMock = $this->getMockBuilder(
-                'Magento\App\Arguments\FileResolver\Primary'
+                'Magento\Framework\App\Arguments\FileResolver\Primary'
             )->disableOriginalConstructor()->getMock();
 
             /* Enable Validation regardles of MAGE_MODE */
@@ -73,8 +73,8 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 )
             );
 
-            $filesystem = $this->_objectManager->get('Magento\App\Filesystem');
-            $modulesDir = $filesystem->getPath(\Magento\App\Filesystem::MODULES_DIR);
+            $filesystem = $this->_objectManager->get('Magento\Framework\App\Filesystem');
+            $modulesDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::MODULES_DIR);
             $this->_schemaFile = $modulesDir . $this->_getXsdPath();
         }
     }
@@ -151,9 +151,9 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directory = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryRead(
-            \Magento\App\Filesystem::MODULES_DIR
+            \Magento\Framework\App\Filesystem::MODULES_DIR
         );
         return $objectManager->get(
             '\Magento\Config\FileIteratorFactory'

@@ -37,7 +37,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Request
      *
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -72,7 +72,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Cache
      *
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -100,7 +100,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Scope config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -121,7 +121,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Cache state
      *
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
@@ -157,19 +157,19 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $inlineTranslation;
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\TranslateInterface $translator
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
-     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
@@ -179,19 +179,19 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\UrlInterface $urlBuilder,
         \Magento\TranslateInterface $translator,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
-        \Magento\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Logger $logger,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
@@ -221,7 +221,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Get cache
      *
-     * @return \Magento\App\CacheInterface
+     * @return \Magento\Framework\App\CacheInterface
      */
     public function getCache()
     {
@@ -261,7 +261,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Get request
      *
-     * @return \Magento\App\RequestInterface
+     * @return \Magento\Framework\App\RequestInterface
      */
     public function getRequest()
     {
@@ -291,7 +291,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Get scope config
      *
-     * @return \Magento\App\Config\ScopeConfigInterface
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
      */
     public function getScopeConfig()
     {
@@ -351,7 +351,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     /**
      * Get cache state
      *
-     * @return \Magento\App\Cache\StateInterface
+     * @return \Magento\Framework\App\Cache\StateInterface
      */
     public function getCacheState()
     {

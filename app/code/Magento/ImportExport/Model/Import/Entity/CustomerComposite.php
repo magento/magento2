@@ -146,10 +146,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\ImportExport\Model\Import\Entity\Eav\CustomerFactory $customerFactory
      * @param \Magento\ImportExport\Model\Import\Entity\Eav\Customer\AddressFactory $addressFactory
@@ -160,10 +160,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Stdlib\String $string,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\ImportExport\Model\Import\Entity\Eav\CustomerFactory $customerFactory,
         \Magento\ImportExport\Model\Import\Entity\Eav\Customer\AddressFactory $addressFactory,

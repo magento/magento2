@@ -23,7 +23,7 @@
  */
 namespace Magento\Code\Minifier\Strategy;
 
-use Magento\App\Filesystem;
+use Magento\Framework\App\Filesystem;
 use Magento\Filesystem\Directory\Write;
 use Magento\Filesystem\Directory\Read;
 
@@ -57,7 +57,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $this->pubViewCacheDir = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->filesystem = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryWrite', 'getDirectoryRead', '__wakeup'),
             array(),
             '',
@@ -68,7 +68,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->will(
             $this->returnValue($this->rootDirectory)
         );
@@ -77,7 +77,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+            \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
         )->will(
             $this->returnValue($this->pubViewCacheDir)
         );

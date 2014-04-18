@@ -83,10 +83,10 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             array(
                 $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\View\Design\Theme\FlyweightFactory'),
-                $objectManager->get('Magento\App\Config\ScopeConfigInterface'),
+                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Core\Model\ThemeFactory'),
                 $objectManager->get('Magento\Locale\ResolverInterface'),
-                $objectManager->get('Magento\App\State'),
+                $objectManager->get('Magento\Framework\App\State'),
                 array('frontend' => 'test_default')
             )
         );
@@ -106,8 +106,8 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Translation/_files/db_translate.php
      * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_enabled.php
-     * @covers \Magento\Backend\Model\Resource\Translate::_getStoreId
-     * @covers \Magento\Backend\Model\Resource\Translate\String::_getStoreId
+     * @covers \Magento\Translation\Model\Resource\Translate::getStoreId
+     * @covers \Magento\Translation\Model\Resource\String::getStoreId
      */
     public function testLoadDataCaching()
     {

@@ -42,7 +42,8 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\View\DesignInterface'
         )->setDesignTheme(
@@ -67,7 +68,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
             'dev/translate_inline/active'
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Config\MutableScopeConfigInterface'
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             'dev/translate_inline/active',
             true,

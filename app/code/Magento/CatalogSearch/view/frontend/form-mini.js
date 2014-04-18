@@ -162,9 +162,9 @@
         _onPropertyChange: function() {
             var searchField = this.element,
                 clonePosition = {
-                    position: 'absolute',
-                    left: searchField.offset().left,
-                    top: searchField.offset().top + searchField.outerHeight(),
+                    //position: 'absolute',
+                    //left: searchField.offset().left,
+                    //top: searchField.offset().top + searchField.outerHeight(),
                     width: searchField.outerWidth()
                 };
             if (searchField.val().length >= parseInt(this.options.minSearchLength, 10)) {

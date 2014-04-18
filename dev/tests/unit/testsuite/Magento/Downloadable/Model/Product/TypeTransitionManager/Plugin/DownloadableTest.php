@@ -52,7 +52,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->model = new Downloadable($this->requestMock);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',

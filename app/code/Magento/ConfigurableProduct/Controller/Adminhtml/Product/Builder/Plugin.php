@@ -52,7 +52,7 @@ class Plugin
     /**
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -61,7 +61,7 @@ class Plugin
     public function aroundBuild(
         \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $product = $proceed($request);
 

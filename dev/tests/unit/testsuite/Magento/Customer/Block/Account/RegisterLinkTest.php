@@ -44,7 +44,7 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $context = $this->_objectManager->getObject('Magento\View\Element\Template\Context');
-        $httpContext = $this->getMockBuilder('Magento\App\Http\Context')
+        $httpContext = $this->getMockBuilder('Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
             ->setMethods(array('getValue'))
             ->getMock();

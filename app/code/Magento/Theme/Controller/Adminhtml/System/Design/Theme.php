@@ -29,7 +29,7 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Theme extends \Magento\Backend\App\Action
 {
@@ -41,19 +41,19 @@ class Theme extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -324,7 +324,7 @@ class Theme extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     $customCssFile->getFileName(),
                     array('type' => 'filename', 'value' => $customCssFile->getFullPath()),
-                    \Magento\App\Filesystem::ROOT_DIR
+                    \Magento\Framework\App\Filesystem::ROOT_DIR
                 );
             }
         } catch (\Exception $e) {
@@ -364,7 +364,7 @@ class Theme extends \Magento\Backend\App\Action
             return $this->_fileFactory->create(
                 $fileName,
                 array('type' => 'filename', 'value' => $themeCss[$fileName]['path']),
-                \Magento\App\Filesystem::ROOT_DIR
+                \Magento\Framework\App\Filesystem::ROOT_DIR
             );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot find file "%1".', $fileName));

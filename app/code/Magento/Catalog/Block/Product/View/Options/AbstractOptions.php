@@ -152,8 +152,6 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
             return '';
         }
 
-        $store = $this->getProduct()->getStore();
-
         $sign = '+';
         if ($value['pricing_value'] < 0) {
             $sign = '-';
@@ -161,25 +159,14 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
         }
 
         $priceStr = $sign;
-        $_priceInclTax = $this->getPrice($value['pricing_value'], true);
-        $_priceExclTax = $this->getPrice($value['pricing_value']);
-        if ($this->_taxData->displayPriceIncludingTax()) {
-            $priceStr .= $this->_coreHelper->currencyByStore($_priceInclTax, $store, true, $flag);
-        } elseif ($this->_taxData->displayPriceExcludingTax()) {
-            $priceStr .= $this->_coreHelper->currencyByStore($_priceExclTax, $store, true, $flag);
-        } elseif ($this->_taxData->displayBothPrices()) {
-            $priceStr .= $this->_coreHelper->currencyByStore($_priceExclTax, $store, true, $flag);
-            if ($_priceInclTax != $_priceExclTax) {
-                $priceStr .= ' (' . $sign . $this->_coreHelper->currencyByStore(
-                    $_priceInclTax,
-                    $store,
-                    true,
-                    $flag
-                ) . ' ' . __(
-                    'Incl. Tax'
-                ) . ')';
-            }
-        }
+
+        $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
+        $optionAmount = $customOptionPrice->getCustomAmount($value['pricing_value']);
+        $priceStr .= $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
+            $optionAmount,
+            $customOptionPrice,
+            $this->getProduct()
+        );
 
         if ($flag) {
             $priceStr = '<span class="price-notice">' . $priceStr . '</span>';

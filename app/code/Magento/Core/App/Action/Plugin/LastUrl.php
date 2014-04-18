@@ -64,17 +64,17 @@ class LastUrl
     /**
      * Process request
      *
-     * @param \Magento\App\Action\Action $subject
+     * @param \Magento\Framework\App\Action\Action $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\Action\Action $subject,
+        \Magento\Framework\App\Action\Action $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $result = $proceed($request);
         $this->_session->setLastUrl($this->_url->getUrl('*/*/*', array('_current' => true)));

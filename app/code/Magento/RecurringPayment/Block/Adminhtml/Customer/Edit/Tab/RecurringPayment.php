@@ -23,7 +23,6 @@
  */
 namespace Magento\RecurringPayment\Block\Adminhtml\Customer\Edit\Tab;
 
-use Magento\Customer\Controller\Adminhtml\Index as CustomerController;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\RecurringPayment\Block\Adminhtml\Payment\Grid as PaymentGrid;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -66,15 +65,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-
-        // @todo remove usage of CURRENT_CUSTOMER in advantage of CURRENT_CUSTOMER_ID
-        $currentCustomer = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER);
-        if ($currentCustomer) {
-            $this->_currentCustomerId = $currentCustomer->getId();
-        } else {
-            $this->_currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        }
-
+        $this->_currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         parent::__construct($context, $backendHelper, $paymentCollection, $recurringStates, $fields, $payments, $data);
     }
 

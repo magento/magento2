@@ -31,7 +31,7 @@ class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterfac
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -41,21 +41,21 @@ class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterfac
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\UrlInterface $urlBuilder,
-        \Magento\App\Config\ValueFactory $configValueFactory
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory
     ) {
         $this->_urlBuilder = $urlBuilder;
         $this->_config = $config;
@@ -84,7 +84,7 @@ class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterfac
             $dataCollection = $this->_configValueFactory->create()->getCollection();
             $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
 
-            /** @var $data \Magento\App\Config\ValueInterface */
+            /** @var $data \Magento\Framework\App\Config\ValueInterface */
             foreach ($dataCollection as $data) {
                 if ($data->getScope() == 'stores') {
                     $code = $this->_storeManager->getStore($data->getScopeId())->getCode();

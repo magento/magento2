@@ -41,7 +41,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         $this->customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $this->block = $objectManager->get('Magento\View\LayoutInterface')

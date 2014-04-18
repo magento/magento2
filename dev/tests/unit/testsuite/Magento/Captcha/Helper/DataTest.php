@@ -35,7 +35,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
     }
 
     protected function _getHelper($store, $config, $factory)
@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($this->_getWebsiteStub()));
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
 
         return new \Magento\Captcha\Helper\Data($context, $storeManager, $config, $this->_filesystem, $factory);
     }
@@ -120,7 +120,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPath'
         )->with(
-            \Magento\App\Filesystem::LIB_DIR
+            \Magento\Framework\App\Filesystem::LIB_DIR
         )->will(
             $this->returnValue(TESTS_TEMP_DIR . '/lib')
         );
@@ -173,7 +173,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         )->will(
             $this->returnValue($dirWriteMock)
         );
@@ -209,11 +209,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Create Config Stub
      *
-     * @return \Magento\App\Config\ScopeConfigInterface
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected function _getConfigStub()
     {
-        $config = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $config = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         return $config;
     }
 

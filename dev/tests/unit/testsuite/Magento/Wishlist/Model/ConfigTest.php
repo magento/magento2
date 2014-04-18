@@ -47,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMock('Magento\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_catalogConfig = $this->getMock('Magento\Catalog\Model\Config', array(), array(), '', false);
         $this->_attributeConfig = $this->getMock(
             'Magento\Catalog\Model\Attribute\Config',

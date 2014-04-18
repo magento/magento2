@@ -26,8 +26,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <type name="Magento\Theme\Model\Config">
         <arguments>
-            <argument name="configCache" xsi:type="object">Magento\App\Cache\Type\Config</argument>
-            <argument name="layoutCache" xsi:type="object">Magento\App\Cache\Type\Layout</argument>
+            <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="layoutCache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Uploader\Service">

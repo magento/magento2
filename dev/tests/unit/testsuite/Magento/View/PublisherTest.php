@@ -33,7 +33,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $filesystemMock;
 
     /** @var \Magento\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
@@ -81,7 +81,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->filesystemMock->expects(
             $this->any()
         )->method(
@@ -114,11 +114,11 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     public function getDirectoryWriteCallback($param)
     {
         switch ($param) {
-            case \Magento\App\Filesystem::ROOT_DIR:
+            case \Magento\Framework\App\Filesystem::ROOT_DIR:
                 return $this->rootDirectory;
-            case \Magento\App\Filesystem::VAR_DIR:
+            case \Magento\Framework\App\Filesystem::VAR_DIR:
                 return $this->tmpDirectory;
-            case \Magento\App\Filesystem::STATIC_VIEW_DIR:
+            case \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR:
                 return $this->pubDirectory;
             default:
                 throw new \UnexpectedValueException('Directory write callback received wrong value: ' . $param);

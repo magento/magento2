@@ -25,13 +25,13 @@
  */
 namespace Magento\DesignEditor\Helper;
 
-use Magento\App\Helper\Context;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Design Editor main helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Parameter to indicate the translation mode (null, text, script, or alt).

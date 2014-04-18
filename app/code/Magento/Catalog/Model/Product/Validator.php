@@ -24,7 +24,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product;
 
 class Validator

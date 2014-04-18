@@ -32,12 +32,12 @@ namespace Magento\Theme\Model;
 class Config
 {
     /**
-     * @var \Magento\App\Config\Storage\WriterInterface
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
      */
     protected $_configWriter;
 
     /**
-     * @var \Magento\App\Config\ValueInterface
+     * @var \Magento\Framework\App\Config\ValueInterface
      */
     protected $_configData;
 
@@ -64,16 +64,16 @@ class Config
     protected $_layoutCache;
 
     /**
-     * @param \Magento\App\Config\ValueInterface $configData
-     * @param \Magento\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\App\Config\ValueInterface $configData
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Cache\FrontendInterface $configCache
      * @param \Magento\Cache\FrontendInterface $layoutCache
      */
     public function __construct(
-        \Magento\App\Config\ValueInterface $configData,
-        \Magento\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\App\Config\ValueInterface $configData,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Cache\FrontendInterface $configCache,
@@ -193,7 +193,7 @@ class Config
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {
         $configPath = \Magento\View\DesignInterface::XML_PATH_THEME_ID;
-        $this->_configWriter->save($configPath, $themeId, \Magento\App\ScopeInterface::SCOPE_DEFAULT);
+        $this->_configWriter->save($configPath, $themeId, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
         $isReassigned = true;
         return $this;
     }

@@ -65,7 +65,7 @@ if (isset($options['help'])) {
 $logger->log('Deploying...', \Zend_Log::INFO);
 try {
 
-    $objectManagerFactory = new \Magento\App\ObjectManagerFactory();
+    $objectManagerFactory = new \Magento\Framework\App\ObjectManagerFactory();
     $objectManager = $objectManagerFactory->create(BP, $_SERVER);
 
     $config = $objectManager->create(

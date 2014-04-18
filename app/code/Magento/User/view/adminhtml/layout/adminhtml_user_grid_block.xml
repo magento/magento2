@@ -48,10 +48,11 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="user_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
-                        <argument name="width" xsi:type="string">5px</argument>
-                        <argument name="align" xsi:type="string">right</argument>
                         <argument name="sortable" xsi:type="string">true</argument>
                         <argument name="index" xsi:type="string">user_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
+
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="username">
@@ -60,6 +61,8 @@
                         <argument name="type" xsi:type="string">text</argument>
                         <argument name="index" xsi:type="string">username</argument>
                         <argument name="escape" xsi:type="string">1</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="firstname">
@@ -68,6 +71,8 @@
                         <argument name="type" xsi:type="string">text</argument>
                         <argument name="index" xsi:type="string">firstname</argument>
                         <argument name="escape" xsi:type="string">1</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="lastname">
@@ -76,14 +81,14 @@
                         <argument name="type" xsi:type="string">text</argument>
                         <argument name="index" xsi:type="string">lastname</argument>
                         <argument name="escape" xsi:type="string">1</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Email</argument>
                         <argument name="type" xsi:type="string">text</argument>
-                        <argument name="width" xsi:type="string">40px</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">email</argument>
                     </arguments>
                 </block>
@@ -102,6 +107,8 @@
                             </item>
                         </argument>
                         <argument name="index" xsi:type="string">is_active</argument>
+                        <argument name="column_css_class" xsi:type="string">col-status</argument>
+                        <argument name="header_css_class" xsi:type="string">col-status</argument>
                     </arguments>
                 </block>
             </block>

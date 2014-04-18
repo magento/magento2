@@ -46,17 +46,17 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($currencyFactory);
         $this->_scopeConfig = $scopeConfig;

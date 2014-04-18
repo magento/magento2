@@ -39,7 +39,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Helper object.
      *
-     * @var \Magento\App\Helper\AbstractHelper
+     * @var \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_helper;
 
@@ -206,22 +206,22 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         return '<strong>' . __(
             'From'
         ) .
-            ':</strong>&nbsp;' .
-            '<input type="text" name="' .
-            $name .
-            '[]" class="input-text input-text-range"' .
-            ' value="' .
-            $fromValue .
-            '"/>&nbsp;' .
-            '<strong>' .
-            __(
-                'To'
-            ) .
-            ':</strong>&nbsp;<input type="text" name="' .
-            $name .
-            '[]" class="input-text input-text-range" value="' .
-            $toValue .
-            '" />';
+        ':</strong>&nbsp;' .
+        '<input type="text" name="' .
+        $name .
+        '[]" class="input-text input-text-range"' .
+        ' value="' .
+        $fromValue .
+        '"/>&nbsp;' .
+        '<strong>' .
+        __(
+            'To'
+        ) .
+        ':</strong>&nbsp;<input type="text" name="' .
+        $name .
+        '[]" class="input-text input-text-range" value="' .
+        $toValue .
+        '" />';
     }
 
     /**
@@ -285,15 +285,30 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'field_name' => \Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP . '[]',
                 'filter' => false,
                 'sortable' => false,
-                'align' => 'center',
-                'index' => 'attribute_id'
+                'index' => 'attribute_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
             )
         );
         $this->addColumn(
             'frontend_label',
-            array('header' => __('Attribute Label'), 'index' => 'frontend_label', 'sortable' => false)
+            array(
+                'header' => __('Attribute Label'),
+                'index' => 'frontend_label',
+                'sortable' => false,
+                'header_css_class' => 'col-label',
+                'column_css_class' => 'col-label'
+            )
         );
-        $this->addColumn('attribute_code', array('header' => __('Attribute Code'), 'index' => 'attribute_code'));
+        $this->addColumn(
+            'attribute_code',
+            array(
+                'header' => __('Attribute Code'),
+                'index' => 'attribute_code',
+                'header_css_class' => 'col-code',
+                'column_css_class' => 'col-code'
+            )
+        );
         $this->addColumn(
             'filter',
             array(

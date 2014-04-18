@@ -44,12 +44,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareLayout()
     {
-        $customer = $this->getMockBuilder(
-            'Magento\Customer\Model\Customer'
-        )->disableOriginalConstructor()->setMethods(
-            array('getId', '__wakeup')
-        )->getMock();
-        $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $customerId = 1;
         $registry = $this->getMockBuilder(
             'Magento\Registry'
         )->disableOriginalConstructor()->setMethods(
@@ -60,9 +55,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registry'
         )->with(
-            'current_customer'
+            'current_customer_id'
         )->will(
-            $this->returnValue($customer)
+            $this->returnValue($customerId)
         );
         $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $collectionElement = $this->getMockBuilder(

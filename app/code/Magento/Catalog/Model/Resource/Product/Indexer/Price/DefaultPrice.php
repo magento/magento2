@@ -64,13 +64,13 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData

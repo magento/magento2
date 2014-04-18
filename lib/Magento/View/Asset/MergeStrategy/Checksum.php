@@ -39,7 +39,7 @@ class Checksum implements \Magento\View\Asset\MergeStrategyInterface
     /**
      * Filesystem
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -47,11 +47,11 @@ class Checksum implements \Magento\View\Asset\MergeStrategyInterface
      * Constructor
      *
      * @param \Magento\View\Asset\MergeStrategyInterface $strategy
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\View\Asset\MergeStrategyInterface $strategy,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->strategy = $strategy;
         $this->filesystem = $filesystem;
@@ -62,7 +62,7 @@ class Checksum implements \Magento\View\Asset\MergeStrategyInterface
      */
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType)
     {
-        $directory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
+        $directory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_DIR);
         $mergedMTimeFile = $directory->getRelativePath($destinationFile . '.dat');
 
         // Check whether we have already merged these files

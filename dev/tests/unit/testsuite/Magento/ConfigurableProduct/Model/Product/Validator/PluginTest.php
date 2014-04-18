@@ -93,7 +93,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->requestMock = $this->getMock(
-            'Magento\App\Request\Http',
+            'Magento\Framework\App\Request\Http',
             array('getPost', 'getParam', '__wakeup'),
             array(),
             '',

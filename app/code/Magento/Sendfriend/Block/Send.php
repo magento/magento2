@@ -54,7 +54,7 @@ class Send extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -63,7 +63,7 @@ class Send extends \Magento\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -71,7 +71,7 @@ class Send extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
         \Magento\Registry $registry,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;

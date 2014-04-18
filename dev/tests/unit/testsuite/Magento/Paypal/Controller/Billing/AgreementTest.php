@@ -36,7 +36,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -93,16 +93,16 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_agreement)
         );
 
-        $this->_request = $this->getMock('Magento\App\RequestInterface');
+        $this->_request = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->_request->expects($this->once())->method('getParam')->with('agreement')->will($this->returnValue(15));
 
-        $response = $this->getMock('Magento\App\ResponseInterface');
+        $response = $this->getMock('Magento\Framework\App\ResponseInterface');
 
-        $redirect = $this->getMock('Magento\App\Response\RedirectInterface');
+        $redirect = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
 
         $this->_messageManager = $this->getMock('Magento\Message\ManagerInterface');
 
-        $context = $this->getMock('Magento\App\Action\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Action\Context', array(), array(), '', false);
         $context->expects($this->any())->method('getObjectManager')->will($this->returnValue($this->_objectManager));
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
         $context->expects($this->any())->method('getResponse')->will($this->returnValue($response));
@@ -111,7 +111,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
 
         $this->_registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
-        $title = $this->getMock('Magento\App\Action\Title', array(), array(), '', false);
+        $title = $this->getMock('Magento\Framework\App\Action\Title', array(), array(), '', false);
 
         $this->_controller = new Agreement($context, $this->_registry, $title);
     }

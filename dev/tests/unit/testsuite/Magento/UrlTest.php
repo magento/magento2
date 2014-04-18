@@ -61,7 +61,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
 
@@ -74,7 +74,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->queryParamsResolverMock = $this->getMock('Magento\Url\QueryParamsResolverInterface', [], [], '', false);
         $this->sidResolverMock = $this->getMock('Magento\Session\SidResolverInterface');
         $this->sessionMock = $this->getMock('Magento\Session\Generic', [], [], '', false);
-        $this->scopeConfig = $this->getMock('\Magento\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
     }
 
     /**
@@ -90,12 +90,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $mockMethods
-     * @return \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getRequestMock($mockMethods = [])
     {
         $interfaceMethods = array('getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam');
-        return $this->getMock('Magento\App\RequestInterface', array_merge($interfaceMethods, $mockMethods));
+        return $this->getMock('Magento\Framework\App\RequestInterface', array_merge($interfaceMethods, $mockMethods));
     }
 
     /**
@@ -179,7 +179,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl($query, $queryResult, $returnUri)
     {
         $requestMock = $this->getRequestMock(['isDirectAccessFrontendName', 'getAlias']);
-        $routeConfigMock = $this->getMock('Magento\App\Route\ConfigInterface');
+        $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
             ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
@@ -290,7 +290,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'getRequestedControllerName',
             'getRequestedActionName',
         ]);
-        $routeConfigMock = $this->getMock('Magento\App\Route\ConfigInterface');
+        $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
             ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
@@ -319,7 +319,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetDirectUrl()
     {
         $requestMock = $this->getRequestMock(['isDirectAccessFrontendName', 'getAlias']);
-        $routeConfigMock = $this->getMock('Magento\App\Route\ConfigInterface');
+        $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
             ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,

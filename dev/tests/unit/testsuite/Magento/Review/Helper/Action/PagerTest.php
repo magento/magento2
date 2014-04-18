@@ -60,7 +60,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $contextMock = $this->getMock(
-            'Magento\App\Helper\Context',
+            'Magento\Framework\App\Helper\Context',
             array('getModuleManager', 'getRequest'),
             array(),
             '',

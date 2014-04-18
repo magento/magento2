@@ -30,10 +30,6 @@ use Magento\Catalog\Model\Product\Validator;
 
 /**
  * Catalog product controller
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\App\Action
 {
@@ -54,7 +50,7 @@ class Product extends \Magento\Backend\App\Action
      *
      * @var \Magento\Registry
      */
-    protected $registry = null;
+    protected $registry;
 
     /**
      * @var \Magento\Stdlib\DateTime\Filter\Date
@@ -140,15 +136,11 @@ class Product extends \Magento\Backend\App\Action
         \Magento\Backend\Block\Widget\Grid $gridBlock,
         $productsArray
     ) {
-        return $this->_view->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer'
-        )->setGridBlock(
-            $gridBlock
-        )->setProducts(
-            $productsArray
-        )->setInputElementName(
-            $inputName
-        );
+        return $this->_view->getLayout()
+            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer')
+            ->setGridBlock($gridBlock)
+            ->setProducts($productsArray)
+            ->setInputElementName($inputName);
     }
 
     /**
@@ -236,7 +228,7 @@ class Product extends \Magento\Backend\App\Action
     public function editAction()
     {
         $this->_title->add(__('Products'));
-        $productId = (int)$this->getRequest()->getParam('id');
+        $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
         if ($productId && !$product->getId()) {
@@ -265,16 +257,14 @@ class Product extends \Magento\Backend\App\Action
             'store_switcher'
         ))
         ) {
-            $switchBlock->setDefaultStoreName(
-                __('Default Values')
-            )->setWebsiteIds(
-                $product->getWebsiteIds()
-            )->setSwitchUrl(
-                $this->getUrl(
-                    'catalog/*/*',
-                    array('_current' => true, 'active_tab' => null, 'tab' => null, 'store' => null)
-                )
-            );
+            $switchBlock->setDefaultStoreName(__('Default Values'))
+                ->setWebsiteIds($product->getWebsiteIds())
+                ->setSwitchUrl(
+                    $this->getUrl(
+                        'catalog/*/*',
+                        array('_current' => true, 'active_tab' => null, 'tab' => null, 'store' => null)
+                    )
+                );
         }
 
         $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
@@ -384,11 +374,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.related'
-        )->setProductsRelated(
-            $this->getRequest()->getPost('products_related', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.related')
+            ->setProductsRelated($this->getRequest()->getPost('products_related', null));
         $this->_view->renderLayout();
     }
 
@@ -401,11 +388,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.upsell'
-        )->setProductsUpsell(
-            $this->getRequest()->getPost('products_upsell', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.upsell')
+            ->setProductsUpsell($this->getRequest()->getPost('products_upsell', null));
         $this->_view->renderLayout();
     }
 
@@ -418,11 +402,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.crosssell'
-        )->setProductsCrossSell(
-            $this->getRequest()->getPost('products_crosssell', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.crosssell')
+            ->setProductsCrossSell($this->getRequest()->getPost('products_crosssell', null));
         $this->_view->renderLayout();
     }
 
@@ -435,11 +416,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.related'
-        )->setProductsRelated(
-            $this->getRequest()->getPost('products_related', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.related')
+            ->setProductsRelated($this->getRequest()->getPost('products_related', null));
         $this->_view->renderLayout();
     }
 
@@ -452,11 +430,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.upsell'
-        )->setProductsRelated(
-            $this->getRequest()->getPost('products_upsell', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.upsell')
+            ->setProductsRelated($this->getRequest()->getPost('products_upsell', null));
         $this->_view->renderLayout();
     }
 
@@ -469,11 +444,8 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'catalog.product.edit.tab.crosssell'
-        )->setProductsRelated(
-            $this->getRequest()->getPost('products_crosssell', null)
-        );
+        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.crosssell')
+            ->setProductsRelated($this->getRequest()->getPost('products_crosssell', null));
         $this->_view->renderLayout();
     }
 
@@ -560,7 +532,6 @@ class Product extends \Magento\Backend\App\Action
         $storeId = $this->getRequest()->getParam('store');
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
-        $isEdit = (int)($this->getRequest()->getParam('id') != null);
 
         $data = $this->getRequest()->getPost();
         if ($data) {
@@ -581,15 +552,11 @@ class Product extends \Magento\Backend\App\Action
                  */
                 if (isset($data['copy_to_stores'])) {
                     foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
-                        $this->_objectManager->create(
-                            'Magento\Catalog\Model\Product'
-                        )->setStoreId(
-                            $storeFrom
-                        )->load(
-                            $productId
-                        )->setStoreId(
-                            $storeTo
-                        )->save();
+                        $this->_objectManager->create('Magento\Catalog\Model\Product')
+                            ->setStoreId($storeFrom)
+                            ->load($productId)
+                            ->setStoreId($storeTo)
+                            ->save();
                     }
                 }
 
@@ -690,21 +657,19 @@ class Product extends \Magento\Backend\App\Action
     public function massDeleteAction()
     {
         $productIds = $this->getRequest()->getParam('product');
-        if (!is_array($productIds)) {
+        if (!is_array($productIds) || empty($productIds)) {
             $this->messageManager->addError(__('Please select product(s).'));
         } else {
-            if (!empty($productIds)) {
-                try {
-                    foreach ($productIds as $productId) {
-                        $product = $this->_objectManager->get('Magento\Catalog\Model\Product')->load($productId);
-                        $product->delete();
-                    }
-                    $this->messageManager->addSuccess(
-                        __('A total of %1 record(s) have been deleted.', count($productIds))
-                    );
-                } catch (\Exception $e) {
-                    $this->messageManager->addError($e->getMessage());
+            try {
+                foreach ($productIds as $productId) {
+                    $product = $this->_objectManager->get('Magento\Catalog\Model\Product')->load($productId);
+                    $product->delete();
                 }
+                $this->messageManager->addSuccess(
+                    __('A total of %1 record(s) have been deleted.', count($productIds))
+                );
+            } catch (\Exception $e) {
+                $this->messageManager->addError($e->getMessage());
             }
         }
         $this->_redirect('catalog/*/index');
@@ -717,22 +682,15 @@ class Product extends \Magento\Backend\App\Action
      */
     public function massStatusAction()
     {
-        $productIds = (array)$this->getRequest()->getParam('product');
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
-        $status = (int)$this->getRequest()->getParam('status');
+        $productIds = (array) $this->getRequest()->getParam('product');
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $status = (int) $this->getRequest()->getParam('status');
 
         try {
             $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get(
-                'Magento\Catalog\Model\Product\Action'
-            )->updateAttributes(
-                $productIds,
-                array('status' => $status),
-                $storeId
-            );
-
+            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
+                ->updateAttributes($productIds, array('status' => $status), $storeId);
             $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
-
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Core\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
@@ -783,13 +741,11 @@ class Product extends \Magento\Backend\App\Action
     public function showUpdateResultAction()
     {
         $session = $this->_objectManager->get('Magento\Backend\Model\Session');
-        if ($session->hasCompositeProductResult() && $session->getCompositeProductResult() instanceof \Magento\Object
+        if ($session->hasCompositeProductResult()
+            && $session->getCompositeProductResult() instanceof \Magento\Object
         ) {
-            $this->_objectManager->get(
-                'Magento\Catalog\Helper\Product\Composite'
-            )->renderUpdateResult(
-                $session->getCompositeProductResult()
-            );
+            $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
+                ->renderUpdateResult($session->getCompositeProductResult());
             $session->unsCompositeProductResult();
         } else {
             $session->unsCompositeProductResult();
@@ -829,14 +785,9 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->getResponse()->setBody(
-            $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
-            )->jsonEncode(
-                $this->_view->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Product\TemplateSelector'
-                )->getSuggestedTemplates(
-                    $this->getRequest()->getParam('label_part')
-                )
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
+                $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Product\TemplateSelector')
+                    ->getSuggestedTemplates($this->getRequest()->getParam('label_part'))
             )
         );
     }
@@ -849,9 +800,7 @@ class Product extends \Magento\Backend\App\Action
     public function suggestAttributesAction()
     {
         $this->getResponse()->setBody(
-            $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
-            )->jsonEncode(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
                 $this->_view->getLayout()->createBlock(
                     'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
                 )->getSuggestedAttributes(
@@ -871,17 +820,11 @@ class Product extends \Magento\Backend\App\Action
         $request = $this->getRequest();
         try {
             /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
-            $attribute = $this->_objectManager->create(
-                'Magento\Eav\Model\Entity\Attribute'
-            )->load(
-                $request->getParam('attribute_id')
-            );
+            $attribute = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute')
+                ->load($request->getParam('attribute_id'));
 
-            $attributeSet = $this->_objectManager->create(
-                'Magento\Eav\Model\Entity\Attribute\Set'
-            )->load(
-                $request->getParam('template_id')
-            );
+            $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+                ->load($request->getParam('template_id'));
 
             /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection $attributeGroupCollection */
             $attributeGroupCollection = $this->_objectManager->get(
@@ -895,15 +838,11 @@ class Product extends \Magento\Backend\App\Action
 
             $attribute->setAttributeSetId($attributeSet->getId())->loadEntityAttributeIdBySet();
 
-            $attribute->setEntityTypeId(
-                $attributeSet->getEntityTypeId()
-            )->setAttributeSetId(
-                $request->getParam('template_id')
-            )->setAttributeGroupId(
-                $attributeGroup->getId()
-            )->setSortOrder(
-                '0'
-            )->save();
+            $attribute->setEntityTypeId($attributeSet->getEntityTypeId())
+                ->setAttributeSetId($request->getParam('template_id'))
+                ->setAttributeGroupId($attributeGroup->getId())
+                ->setSortOrder('0')
+                ->save();
 
             $this->getResponse()->setBody($attribute->toJson());
         } catch (\Exception $e) {

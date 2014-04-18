@@ -44,7 +44,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_storeManagerMock;
 
     /**
-     * @var \Magento\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -79,7 +79,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
         $this->_dateTimeMock = $this->getMock('Magento\Stdlib\DateTime', array(), array(), '', false);
         $this->_localeDateMock = $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface');
         $this->_eavConfigMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);

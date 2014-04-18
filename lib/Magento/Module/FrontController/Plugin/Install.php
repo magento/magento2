@@ -27,12 +27,12 @@ namespace Magento\Module\FrontController\Plugin;
 
 use Magento\Cache\FrontendInterface;
 use Magento\Module\UpdaterInterface;
-use Magento\App\State;
+use Magento\Framework\App\State;
 
 class Install
 {
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -59,17 +59,17 @@ class Install
     }
 
     /**
-     * @param \Magento\App\FrontController $subject
+     * @param \Magento\Framework\App\FrontController $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\FrontController $subject,
+        \Magento\Framework\App\FrontController $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         if ($this->_appState->isInstalled() && !$this->_cache->load('data_upgrade')) {
             $this->_dbUpdater->updateScheme();

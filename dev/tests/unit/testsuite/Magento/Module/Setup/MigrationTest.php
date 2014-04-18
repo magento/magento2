@@ -163,7 +163,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
         $moduleListMock->expects($this->once())->method('getModule')->will($this->returnValue(array()));
 
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $modulesDirMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirMock));
 
@@ -174,7 +174,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)));
         $contextMock->expects($this->once())
             ->method('getResourceModel')
-            ->will($this->returnValue($this->getMock('Magento\App\Resource', array(), array(), '', false)));
+            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', array(), array(), '', false)));
         $contextMock->expects($this->once())
             ->method('getLogger')
             ->will($this->returnValue($this->getMock('Magento\Logger', array(), array(), '', false)));
@@ -246,12 +246,12 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $tableRowsCount = count($tableData);
 
         $setupModel = new \Magento\Module\Setup\Migration(
-            $this->getMock('Magento\App\Resource', array(), array(), '', false, false),
-            $this->getMock('Magento\App\Filesystem', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false),
+            $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->getMock('Magento\Logger', array(), array(), '', false),
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            $this->getMock('Magento\App\Config\ScopeConfigInterface'),
+            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $this->getMock('Magento\Module\ModuleListInterface'),
             $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false, false),
             $this->getMock('Magento\Install\Model\Resource\Resource', array(), array(), '', false),
@@ -300,11 +300,11 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Filesystem
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem
      */
     protected function _getFilesystemMock()
     {
-        $mock = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
+        $mock = $this->getMockBuilder('Magento\Framework\App\Filesystem')->disableOriginalConstructor()->getMock();
         return $mock;
     }
 }

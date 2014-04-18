@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Custompath extends \Magento\App\Config\Value
+class Custompath extends \Magento\Framework\App\Config\Value
 {
     /**
      * Check whether redirect should be set

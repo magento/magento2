@@ -64,8 +64,9 @@
                             <argument name="header" xsi:type="string" translate="true">Default Status</argument>
                             <argument name="index" xsi:type="string">is_default</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="width" xsi:type="string">100</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">col-status-default</argument>
+                            <argument name="header_css_class" xsi:type="string">col-status-default</argument>
                             <argument name="options" xsi:type="array">
                                 <item name="no" xsi:type="array">
                                     <item name="value" xsi:type="string">0</item>
@@ -83,7 +84,6 @@
                             <argument name="header" xsi:type="string" translate="true">State Code and Title</argument>
                             <argument name="index" xsi:type="string">state</argument>
                             <argument name="type" xsi:type="string">text</argument>
-                            <argument name="width" xsi:type="string">250</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Sales\Block\Status\Grid\Column\Unassign" as="unassign">
@@ -91,9 +91,10 @@
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="index" xsi:type="string">unassign</argument>
                             <argument name="type" xsi:type="string">text</argument>
-                            <argument name="width" xsi:type="string">100</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">col-actions</argument>
+                            <argument name="header_css_class" xsi:type="string">col-actions</argument>
                         </arguments>
                     </block>
                 </block>

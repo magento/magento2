@@ -37,7 +37,7 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -45,14 +45,14 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $data = array()
     ) {
         $this->_scopeConfig = $scopeConfig;

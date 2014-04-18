@@ -59,7 +59,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
             'dev/translate_inline/active'
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Config\MutableScopeConfigInterface'
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             'dev/translate_inline/active',
             true,

@@ -67,7 +67,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_menuConfig;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
@@ -92,18 +92,18 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_scope;
 
     /**
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Backend\Model\Url\ScopeResolver $scopeResolver
      * @param \Magento\Session\Generic $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param Menu\Config $menuConfig
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Store\Model\StoreFactory $storeFactory
@@ -114,18 +114,18 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\RequestInterface $request,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Backend\Model\Url\ScopeResolver $scopeResolver,
         \Magento\Session\Generic $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Backend\Model\Menu\Config $menuConfig,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreFactory $storeFactory,

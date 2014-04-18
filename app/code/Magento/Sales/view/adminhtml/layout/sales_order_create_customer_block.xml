@@ -48,7 +48,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
                         <argument name="index" xsi:type="string">entity_id</argument>
-                        <argument name="width" xsi:type="string">50</argument>
                         <argument name="align" xsi:type="string">right</argument>
                     </arguments>
                 </block>
@@ -62,28 +61,26 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Email</argument>
                         <argument name="index" xsi:type="string">email</argument>
-                        <argument name="width" xsi:type="string">150</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="Telephone">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Phone</argument>
                         <argument name="index" xsi:type="string">billing_telephone</argument>
-                        <argument name="width" xsi:type="string">100</argument>
+                        <argument name="column_css_class" xsi:type="string">col-phone</argument>
+                        <argument name="header_css_class" xsi:type="string">col-phone</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_postcode">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ZIP/Post Code</argument>
                         <argument name="index" xsi:type="string">billing_postcode</argument>
-                        <argument name="width" xsi:type="string">120</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_country_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Country</argument>
                         <argument name="index" xsi:type="string">billing_country_id</argument>
-                        <argument name="width" xsi:type="string">100</argument>
                         <argument name="type" xsi:type="string">country</argument>
                     </arguments>
                 </block>
@@ -91,14 +88,12 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">State/Province</argument>
                         <argument name="index" xsi:type="string">billing_regione</argument>
-                        <argument name="width" xsi:type="string">100</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="store_name">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Signed-up Point</argument>
                         <argument name="index" xsi:type="string">store_name</argument>
-                        <argument name="width" xsi:type="string">130</argument>
                         <argument name="align" xsi:type="string">center</argument>
                     </arguments>
                 </block>

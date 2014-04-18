@@ -31,10 +31,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Controller\Adminhtml\System\Account */
     protected $_controller;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\RequestInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface */
     protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\ResponseInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface */
     protected $_responseMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ObjectManager\ObjectManager */
@@ -64,12 +64,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_requestMock = $this->getMockBuilder(
-            'Magento\App\Request\Http'
+            'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->setMethods(
             array('getOriginalPathInfo')
         )->getMock();
         $this->_responseMock = $this->getMockBuilder(
-            'Magento\App\Response\Http'
+            'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->setMethods(
             array()
         )->getMock();
@@ -79,7 +79,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             array('get', 'create')
         )->getMock();
         $frontControllerMock = $this->getMockBuilder(
-            'Magento\App\FrontController'
+            'Magento\Framework\App\FrontController'
         )->disableOriginalConstructor()->getMock();
 
         $this->_helperMock = $this->getMockBuilder(

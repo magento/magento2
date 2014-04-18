@@ -36,7 +36,7 @@ class Setup extends \Magento\Module\Setup
      * @param int $scopeId
      * @return $this
      */
-    public function setConfigData($path, $value, $scope = \Magento\App\ScopeInterface::SCOPE_DEFAULT, $scopeId = 0)
+    public function setConfigData($path, $value, $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $scopeId = 0)
     {
         $table = $this->getTable('core_config_data');
         // this is a fix for mysql 4.1

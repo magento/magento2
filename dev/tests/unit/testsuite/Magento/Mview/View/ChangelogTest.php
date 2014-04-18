@@ -38,7 +38,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     protected $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Resource
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Resource
      */
     protected $resourceMock;
 
@@ -47,7 +47,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
 
         $this->resourceMock = $this->getMock(
-            'Magento\App\Resource',
+            'Magento\Framework\App\Resource',
             array('getConnection', 'getTableName'),
             array(),
             '',
@@ -61,7 +61,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOf()
     {
-        $resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
+        $resourceMock =
+            $this->getMock('Magento\Framework\App\Resource', array('getConnection'), array(), '', false, false);
         $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(true));
         $model = new \Magento\Mview\View\Changelog($resourceMock);
         $this->assertInstanceOf('\Magento\Mview\View\ChangelogInterface', $model);
@@ -73,7 +74,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckConnectionException()
     {
-        $resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
+        $resourceMock =
+            $this->getMock('Magento\Framework\App\Resource', array('getConnection'), array(), '', false, false);
         $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(null));
         $model = new \Magento\Mview\View\Changelog($resourceMock);
         $model->setViewId('ViewIdTest');

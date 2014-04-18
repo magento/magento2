@@ -76,7 +76,7 @@ class Session extends \Magento\Model\AbstractModel
     protected $_coreData;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -109,7 +109,7 @@ class Session extends \Magento\Model\AbstractModel
      *
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Stdlib\Cookie $cookie
@@ -123,7 +123,7 @@ class Session extends \Magento\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Stdlib\Cookie $cookie,

@@ -60,7 +60,7 @@ class Express extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $_customerHelper;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -73,7 +73,7 @@ class Express extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,

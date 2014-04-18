@@ -45,8 +45,10 @@ class Transactions extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }

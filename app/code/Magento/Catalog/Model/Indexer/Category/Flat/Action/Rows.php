@@ -31,13 +31,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     protected $categoryFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory

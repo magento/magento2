@@ -34,7 +34,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -52,7 +52,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_viewFileSystem = $this->getMock('\Magento\View\FileSystem', array(), array(), '', false);
 
-        $this->_filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
 
         $this->_templateEngine = $this->getMock(
             'Magento\View\TemplateEnginePool',
@@ -64,7 +64,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->_templateEngine->expects($this->any())->method('get')->will($this->returnValue($this->_templateEngine));
 
-        $appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
+        $appState = $this->getMock('Magento\Framework\App\State', array('getAreaCode'), array(), '', false);
         $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $helper->getObject(

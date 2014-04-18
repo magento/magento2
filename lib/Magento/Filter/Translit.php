@@ -356,9 +356,9 @@ class Translit implements \Zend_Filter_Interface
     );
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\App\Config\ScopeConfigInterface $config)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
         $convertConfig = $config->getValue('url/convert', 'default');
         if ($convertConfig) {

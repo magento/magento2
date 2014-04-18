@@ -99,7 +99,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_eventManager;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
 
@@ -109,7 +109,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_converter;
 
     /**
-     * @param \Magento\App\Request\Http $request
+     * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Session\SaveHandlerInterface $saveHandler
@@ -123,13 +123,13 @@ class Session extends \Magento\Session\SessionManager
      * @param \Magento\UrlFactory $urlFactory
      * @param \Magento\Session\Generic $session
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param Converter $converter
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param null $sessionName
      */
     public function __construct(
-        \Magento\App\Request\Http $request,
+        \Magento\Framework\App\Request\Http $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Session\SaveHandlerInterface $saveHandler,
@@ -143,7 +143,7 @@ class Session extends \Magento\Session\SessionManager
         \Magento\UrlFactory $urlFactory,
         \Magento\Session\Generic $session,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
         CustomerAccountServiceInterface $customerAccountService,
         $sessionName = null
@@ -465,11 +465,11 @@ class Session extends \Magento\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   \Magento\App\Action\Action $action
+     * @param   \Magento\Framework\App\Action\Action $action
      * @param   bool|null $loginUrl
      * @return  bool
      */
-    public function authenticate(\Magento\App\Action\Action $action, $loginUrl = null)
+    public function authenticate(\Magento\Framework\App\Action\Action $action, $loginUrl = null)
     {
         if ($this->isLoggedIn()) {
             return true;

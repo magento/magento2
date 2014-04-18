@@ -47,7 +47,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManager->create(
             'Magento\Session\SessionManager',
             array(
-                $objectManager->get('Magento\App\Request\Http'),
+                $objectManager->get('Magento\Framework\App\Request\Http'),
                 $this->_sidResolver,
                 $objectManager->get('Magento\Session\Config\ConfigInterface'),
                 $objectManager->get('Magento\Session\SaveHandlerInterface'),

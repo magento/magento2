@@ -110,7 +110,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     private $_resource;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     private $_appState;
 
@@ -130,7 +130,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     protected $_logger;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -141,11 +141,11 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Layout\File\SourceInterface $fileSource
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Cache\FrontendInterface $cache
      * @param \Magento\Core\Model\Layout\Update\Validator $validator
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\View\Design\ThemeInterface $theme Non-injectable theme instance
      */
     public function __construct(
@@ -153,11 +153,11 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\View\Layout\File\SourceInterface $fileSource,
         \Magento\Core\Model\Resource\Layout\Update $resource,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\State $appState,
         \Magento\Cache\FrontendInterface $cache,
         \Magento\Core\Model\Layout\Update\Validator $validator,
         \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
         $this->_theme = $theme ?: $design->getDesignTheme();
@@ -386,7 +386,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
 
         $layout = $this->asString();
         $layoutStr = '<handle id="handle">' . $layout . '</handle>';
-        if ($this->_appState->getMode() === \Magento\App\State::MODE_DEVELOPER) {
+        if ($this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
             if (!$this->_layoutValidator->isValid(
                 $layoutStr,
                 \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_MERGED,
@@ -613,7 +613,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         $layoutStr = '';
         $theme = $this->_getPhysicalTheme($this->_theme);
         $updateFiles = $this->_fileSource->getFiles($theme);
-        $dir = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $dir = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
             $filename = $dir->getRelativePath($file->getFilename());

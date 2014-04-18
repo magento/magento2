@@ -25,7 +25,7 @@
  */
 namespace Magento\Store\Model\Storage;
 
-use Magento\App\State;
+use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Group\Factory;
@@ -87,7 +87,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     /**
      * Config model
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
@@ -142,7 +142,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param StoreFactory $storeFactory
      * @param WebsiteFactory $websiteFactory
      * @param Factory $groupFactory
-     * @param \Magento\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Stdlib\Cookie $cookie
      * @param State $appState
      * @param \Magento\Core\Helper\Data $helper
@@ -153,7 +153,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
         StoreFactory $storeFactory,
         WebsiteFactory $websiteFactory,
         Factory $groupFactory,
-        \Magento\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Stdlib\Cookie $cookie,
         State $appState,
         \Magento\Core\Helper\Data $helper,

@@ -43,7 +43,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
     protected $_request;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
@@ -55,7 +55,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Shipping\Model\Shipment\Request $request
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,

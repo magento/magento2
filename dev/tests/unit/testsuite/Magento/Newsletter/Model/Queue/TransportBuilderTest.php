@@ -43,7 +43,7 @@ class TransportBuilderTest extends \Magento\Mail\Template\TransportBuilderTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetTransport(
-        $templateType = \Magento\App\TemplateTypesInterface::TYPE_HTML,
+        $templateType = \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
         $messageType = \Magento\Mail\Message::TYPE_HTML,
         $bodyText = '<h1>Html message</h1>'
     ) {

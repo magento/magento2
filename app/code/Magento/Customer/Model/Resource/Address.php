@@ -38,7 +38,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_customerFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
      * @param \Magento\Locale\FormatInterface $localeFormat
@@ -49,7 +49,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Locale\FormatInterface $localeFormat,

@@ -206,7 +206,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_httpClientFactory;
 
     /**
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
@@ -225,13 +225,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Division $mathDivision
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
@@ -250,12 +250,12 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\String $string,
         \Magento\Math\Division $mathDivision,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\HTTP\ZendClientFactory $httpClientFactory,
         array $data = array()
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
         $this->_carrierHelper = $carrierHelper;
         $this->_coreDate = $coreDate;
         $this->_storeManager = $storeManager;

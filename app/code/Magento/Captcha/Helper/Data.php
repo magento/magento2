@@ -28,7 +28,7 @@ namespace Magento\Captcha\Helper;
 /**
  * Captcha image model
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Used for "name" attribute of captcha's input field
@@ -62,12 +62,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_captcha = array();
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -82,17 +82,17 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_factory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $config
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $config,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
     ) {
         $this->_storeManager = $storeManager;
@@ -128,7 +128,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Store\Model\Store $store
-     * @return \Magento\App\Config\Element
+     * @return \Magento\Framework\App\Config\Element
      */
     public function getConfig($key, $store = null)
     {
@@ -152,7 +152,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $fontsConfig = $this->_config->getValue(\Magento\Captcha\Helper\Data::XML_PATH_CAPTCHA_FONTS, 'default');
         $fonts = array();
         if ($fontsConfig) {
-            $libDir = $this->_filesystem->getPath(\Magento\App\Filesystem::LIB_DIR);
+            $libDir = $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::LIB_DIR);
             foreach ($fontsConfig as $fontName => $fontConfig) {
                 $fonts[$fontName] = array(
                     'label' => $fontConfig['label'],
@@ -171,7 +171,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getImgDir($website = null)
     {
-        $mediaDir = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $mediaDir = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $captchaDir = '/captcha/' . $this->_getWebsiteCode($website);
         $mediaDir->create($captchaDir);
         $mediaDir->changePermissions($captchaDir, 0775);
@@ -199,7 +199,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getImgUrl($website = null)
     {
         return $this->_storeManager->getStore()->getBaseUrl(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         ) . 'captcha' . '/' . $this->_getWebsiteCode(
             $website
         ) . '/';

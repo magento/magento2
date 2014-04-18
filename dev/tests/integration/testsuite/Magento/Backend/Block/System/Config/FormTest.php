@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Block\System\Config;
-use Magento\App\Cache\State;
+use Magento\Framework\App\Cache\State;
 
 /**
  * @magentoAppArea adminhtml
@@ -258,16 +258,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\App\Config\FileResolver'
+            'Magento\Framework\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Filesystem');
         /** @var $directory  \Magento\Filesystem\Directory\Read */
-        $directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Config\FileIteratorFactory'
         );
@@ -314,10 +315,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testInitFormAddsFieldsets()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\ResponseInterface'
+            'Magento\Framework\App\ResponseInterface'
         )->headersSentThrowsException = false;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\RequestInterface'
+            'Magento\Framework\App\RequestInterface'
         )->setParam(
             'section',
             'general'

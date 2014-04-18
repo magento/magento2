@@ -72,7 +72,7 @@
                   method="flushCacheByTags" />
     </event>
     <event name="controller_action_predispatch">
-        <observer name="register_from_key"
+        <observer name="register_form_key"
                   instance="Magento\PageCache\Model\Observer"
                   method="registerFormKeyFromCookie" />
     </event>

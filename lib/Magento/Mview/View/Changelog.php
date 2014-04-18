@@ -50,14 +50,14 @@ class Changelog implements ChangelogInterface
     protected $viewId;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(\Magento\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\Resource $resource)
     {
         $this->write = $resource->getConnection('core_write');
         $this->resource = $resource;

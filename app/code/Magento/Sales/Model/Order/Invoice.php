@@ -227,7 +227,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -278,7 +278,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Invoice\Config $invoiceConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory
@@ -298,7 +298,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Helper\Data $salesData,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory,

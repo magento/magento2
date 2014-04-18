@@ -105,7 +105,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Submit Shipment'),
-                'class' => 'save submit-button',
+                'class' => 'save submit-button primary',
                 'onclick' => 'submitShipment(this);'
             )
         );

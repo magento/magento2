@@ -30,19 +30,28 @@
  */
 ?>
 <?php if(count($this->getGroups())>1): ?>
-<div class="switcher-store">
-    <label><?php echo __('Select Store') ?>:</label>
-    <ul id="select-store">
-    <?php foreach ($this->getGroups() as $_group): ?>
+<div class="switcher store">
+    <strong class="label"><span><?php echo __('Select Store') ?></span></strong>
+    <div class="options">
+        <?php foreach ($this->getGroups() as $_group): ?>
         <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
-        <li class="current"><strong><?php echo $this->escapeHtml($_group->getName()) ?></strong></li>
-        <?php else: ?>
-        <li>
-            <a href="#" data-post='<?php echo $this->getTargetStorePostData($_group->getDefaultStore()); ?>'>
-                <?php echo $this->escapeHtml($_group->getName()) ?></a>
-        </li>
+            <strong>
+                <span><?php echo $this->escapeHtml($_group->getName()) ?></span>
+            </strong>
         <?php endif; ?>
-    <?php endforeach; ?>
-    </ul>
+        <?php endforeach; ?>
+        <button type="button" data-toggle="dropdown" class="action switch"><span><?php echo __('Change')?></span></button>
+        <ul data-target="dropdown">
+            <?php foreach ($this->getGroups() as $_group): ?>
+            <?php if (!($_group->getId()==$this->getCurrentGroupId())): ?>
+                <li>
+                    <a href="#" data-post='<?php echo $this->getTargetStorePostData($_group->getDefaultStore()); ?>'>
+                        <?php echo $this->escapeHtml($_group->getName()) ?>
+                    </a>
+                </li>
+            <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 <?php endif; ?>

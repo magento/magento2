@@ -1,3 +1,60 @@
+2.0.0.0-dev74
+=============
+* Pricing Improvements:
+  * Added price calculation component to library
+  * Eliminated price calculation from blocks and templates and implemented new calculation models for the following product types:
+     * Bundle
+     * Simple/Virtual
+     * Grouped
+     * Downloadable
+  * Resolved price calculation dependencies on the Tax and Weee modules
+* Themes update:
+  * Updated the look&feel of the Admin theme
+* Fixed bugs:
+  * Fixed an issue with the inability to save product with grouped price when Price Scope = Website
+  * Fixed an issue with fatal error on attempt to edit product from wishlist in stores with multiple store views
+  * Fixed an issue where it was impossible to add to a wishlist a product with custom quantity
+  * Fixed an issue where JS validation was skipped during CMS page creation
+  * Fixed an issue with the New Customer Address Attribute page and the New Customer Attribute page having the same title
+  * Fixed an issue where a form was submitted two times during CMS page creation
+  * Fixed an issue where a fatal error appeared when trying to edit product in a wishlist in stores with multiple store views
+  * Fixed an issue with inability to change page layout for categories
+  * Fixed an issue where the Quantity drop-down list box was disabled for bundle products
+  * Fixed an issue where inactive Related Products rules were applied
+  * Fixed a clickjacking vulnerability
+  * Fixed bugs and added improvements in the Blank theme
+  * Fixed an issue where the Flat Rate shipping method was not enabled by default
+  * Fixed an issue with incorrect order of products on the Add Product split button
+  * Fixed an issue with saving the tier price attribute value
+  * Fixed an issue with creating integration from config file
+  * Fixed an issue where the Cookie Restriction Mode = Yes configuration was not applied
+  * Fixed an issue where it was impossible to perform ajax actions from backend grids in Internet Explorer
+  * Fixed the improper usage of DIRECTORY_SEPARATOR
+  * Fixed an issue where it was impossible to add new address on customer's account page if default address had been already set
+  * Fixed an issue where setting memory_limit to -1 caused installation failure
+  * Fixed an issue where the configuration of Admin Session Lifetime was not applied correctly
+  * Fixed an issue where Scheduled Export was not performed if exporting to remote FTP server
+  * Fixed the wrong default value for PHP memory_limit
+  * Fixed an issue where frontend messages were not displayed when FPC was turned off
+  * Fixed the position of page action buttons on the Categories page in the backend
+  * Improved backend grids UI
+* Framework Improvements:
+  * Simplified Search related Data Objects
+  * Moved lib/Magento/* to lib/Magento/Framework/*
+    * Moved lib/Magento/App to lib/Magento/Framework/App
+* Refactored the following modules to use Customer service:
+  * PayPalRecurringPayment
+  * RecurringPayment
+  * Multishipping
+  * Paypal
+* Customer Service usage:
+  * Implemented Service Context Provider
+  * Restructured webapi.xml
+  * Renamed createAccount to createCustomer in CustomerAccountService
+  * Implemented Caching strategy for the Customer service
+* GitHub requests:
+  * [#488] (https://github.com/magento/magento2/issues/488) -- Converted several grids from Magento\Sales module to new layout XML config format
+
 2.0.0.0-dev73
 =============
 * Framework Improvements:

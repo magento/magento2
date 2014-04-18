@@ -26,12 +26,12 @@ namespace Magento\Core\Model\Url;
 class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteParamsResolverInterface
 {
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -46,15 +46,15 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
     protected $_queryParamsResolver;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
         array $data = array()
@@ -125,13 +125,14 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
         }
 
         if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
+            $store = $this->getScope() ? : $this->_storeManager->getStore();
             if (!$this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getScope()
             ) && !$this->_storeManager->hasSingleStore()
             ) {
-                $this->_queryParamsResolver->setQueryParam('___store', $this->getScope()->getCode());
+                $this->_queryParamsResolver->setQueryParam('___store', $store->getCode());
             }
         }
         unset($data['_scope_to_url']);

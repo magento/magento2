@@ -22,3 +22,30 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+.tooltip.box {
+    .tooltip(
+        @_tooltip-position: bottom,
+        @_tooltip-selector-content: ~".tooltip.content",
+        @_tooltip-selector-toggle: ~".tooltip.toggle"
+    );
+    .tooltip.content {
+        dl {
+            margin-bottom: 0;
+        }
+        .subtitle {
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .label {
+            margin-top: @indent-s-base;
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+        .values {
+            margin: 0;
+        }
+    }
+}

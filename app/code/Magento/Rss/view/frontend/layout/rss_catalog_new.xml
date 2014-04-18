@@ -28,4 +28,10 @@
     <block class="Magento\Rss\Block\Catalog\NewCatalog" output="1" name="rss.catalog.new" cacheable="false">
         <block class="Magento\View\Element\RendererList" name="catalog.product.rss.feed.renderer.list" as="renderer.list" />
     </block>
+    <block class="Magento\Pricing\Render" name="product.price.render.default">
+        <arguments>
+            <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
+            <!-- set "override" configuration settings here -->
+        </arguments>
+    </block>
 </layout>

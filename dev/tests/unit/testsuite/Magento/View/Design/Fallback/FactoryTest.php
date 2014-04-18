@@ -43,13 +43,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystemMock = $this->getMock(
-            '\Magento\App\Filesystem',
+            '\Magento\Framework\App\Filesystem',
             array('getPath', 'getDirectoryRead', '__wakeup'),
             array(
                 'dir' => array(
-                    \Magento\App\Filesystem::THEMES_DIR => 'themes',
-                    \Magento\App\Filesystem::MODULES_DIR => 'modules',
-                    \Magento\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => 'themes',
+                    \Magento\Framework\App\Filesystem::MODULES_DIR => 'modules',
+                    \Magento\Framework\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
                 )
             ),
             '',
@@ -62,9 +62,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    \Magento\App\Filesystem::THEMES_DIR => 'themes',
-                    \Magento\App\Filesystem::MODULES_DIR => 'modules',
-                    \Magento\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => 'themes',
+                    \Magento\Framework\App\Filesystem::MODULES_DIR => 'modules',
+                    \Magento\Framework\App\Filesystem::PUB_LIB_DIR => 'pub_lib'
                 )
             )
         );

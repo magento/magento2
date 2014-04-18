@@ -43,7 +43,7 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutUtility = new \Magento\View\Utility\Layout($this);
-        $appState = $objectManager->get('Magento\App\State');
+        $appState = $objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $processorMock = $this->getMock(
             'Magento\View\Layout\Processor',

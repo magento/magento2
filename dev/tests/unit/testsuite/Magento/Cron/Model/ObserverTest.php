@@ -37,7 +37,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -57,12 +57,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_scheduleFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\Console\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_request;
 
@@ -85,12 +85,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = $this->getMockBuilder(
-            'Magento\App\ObjectManager'
+            'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->getMock();
-        $this->_cache = $this->getMock('Magento\App\CacheInterface');
+        $this->_cache = $this->getMock('Magento\Framework\App\CacheInterface');
         $this->_config = $this->getMockBuilder('Magento\Cron\Model\Config')->disableOriginalConstructor()->getMock();
         $this->_scopeConfig = $this->getMockBuilder(
-            'Magento\App\Config\ScopeConfigInterface'
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_collection = $this->getMockBuilder(
             'Magento\Cron\Model\Resource\Schedule\Collection'
@@ -105,7 +105,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array('create')
         )->disableOriginalConstructor()->getMock();
         $this->_request = $this->getMockBuilder(
-            'Magento\App\Console\Request'
+            'Magento\Framework\App\Console\Request'
         )->disableOriginalConstructor()->getMock();
         $this->_shell = $this->getMockBuilder(
             'Magento\ShellInterface'

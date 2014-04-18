@@ -40,16 +40,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Filesystem\DirectoryList',
+            'Magento\Framework\App\Filesystem\DirectoryList',
             array(
-                'root' => \Magento\App\Filesystem::ROOT_DIR,
+                'root' => \Magento\Framework\App\Filesystem::ROOT_DIR,
                 'directories' => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
+                        'path' => dirname(__DIR__) . '/_files/design'
+                    )
                 )
             )
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('directoryList' => $directoryList)
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

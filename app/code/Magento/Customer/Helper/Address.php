@@ -33,7 +33,7 @@ use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Address extends \Magento\App\Helper\AbstractHelper
+class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * VAT Validation parameters XML paths
@@ -87,7 +87,7 @@ class Address extends \Magento\App\Helper\AbstractHelper
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManager;
 
-    /** @var \Magento\App\Config\ScopeConfigInterface */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $_scopeConfig;
 
     /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface */
@@ -97,18 +97,18 @@ class Address extends \Magento\App\Helper\AbstractHelper
     protected $_addressConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\View\Element\BlockFactory $blockFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\View\Element\BlockFactory $blockFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
         \Magento\Customer\Model\Address\Config $addressConfig
     ) {

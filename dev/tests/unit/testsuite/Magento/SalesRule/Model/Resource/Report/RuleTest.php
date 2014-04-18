@@ -72,7 +72,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $resourceMock = $this->getMock(
-            'Magento\App\Resource',
+            'Magento\Framework\App\Resource',
             array('getConnection', 'getTableName'),
             array(),
             '',
