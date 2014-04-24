@@ -81,6 +81,13 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_storageFactory;
 
     /**
+     * Code of a primary attribute which identifies the entity group if import contains of multiple rows
+     *
+     * @var string
+     */
+    protected $masterAttributeCode = '_email';
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

@@ -456,6 +456,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
+     * Code of a primary attribute which identifies the entity group if import contains of multiple rows
+     *
+     * @var string
+     */
+    protected $masterAttributeCode = 'sku';
+
+    /**
      * @var \Magento\Logger
      */
     private $_logger;

@@ -244,6 +244,13 @@ abstract class AbstractEntity
     protected $_bunchSize;
 
     /**
+     * Code of a primary attribute which identifies the entity group if import contains of multiple rows
+     *
+     * @var string
+     */
+    protected $masterAttributeCode;
+
+    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -337,22 +344,23 @@ abstract class AbstractEntity
     protected function _saveValidatedBunches()
     {
         $source = $this->getSource();
-        $processedDataSize = 0;
         $bunchRows = array();
         $startNewBunch = false;
-        $nextRowBackup = array();
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
 
-        while ($source->valid() || $bunchRows) {
+        while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
             if ($startNewBunch || !$source->valid()) {
+                /* If the end approached add last validated entity group to the bunch */
+                if (!$source->valid() && isset($entityGroup)) {
+                    $bunchRows = array_merge($bunchRows, $entityGroup);
+                    unset($entityGroup);
+                }
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
-                $bunchRows = $nextRowBackup;
-                $processedDataSize = strlen(serialize($bunchRows));
+                $bunchRows = array();
                 $startNewBunch = false;
-                $nextRowBackup = array();
             }
             if ($source->valid()) {
                 // errors limit check
@@ -360,21 +368,30 @@ abstract class AbstractEntity
                     return $this;
                 }
                 $rowData = $source->current();
-                // add row to bunch for save
-                if ($this->validateRow($rowData, $source->key())) {
-                    $rowData = $this->_prepareRowForDb($rowData);
-                    $rowSize = strlen($this->_jsonHelper->jsonEncode($rowData));
 
-                    $isBunchSizeExceeded = $this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize;
+                if (isset($rowData[$this->masterAttributeCode]) && trim($rowData[$this->masterAttributeCode])) {
+                    /* Add entity group that passed validation to bunch */
+                    if (isset($entityGroup)) {
+                        $bunchRows = array_merge($bunchRows, $entityGroup);
+                        $productDataSize = strlen(serialize($bunchRows));
 
-                    if ($processedDataSize + $rowSize >= $this->_maxDataSize || $isBunchSizeExceeded) {
-                        $startNewBunch = true;
-                        $nextRowBackup = array($source->key() => $rowData);
-                    } else {
-                        $bunchRows[$source->key()] = $rowData;
-                        $processedDataSize += $rowSize;
+                        /* Check if the nw bunch should be started */
+                        $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
+                        $startNewBunch = $productDataSize >= $this->_maxDataSize || $isBunchSizeExceeded;
                     }
+
+                    /* And start a new one */
+                    $entityGroup = array();
                 }
+
+                if (isset($entityGroup) && $this->validateRow($rowData, $source->key())) {
+                    /* Add row to entity group */
+                    $entityGroup[$source->key()] = $this->_prepareRowForDb($rowData);
+                } elseif (isset($entityGroup)) {
+                    /* In case validation of one line of the group fails kill the entire group */
+                    unset($entityGroup);
+                }
+
                 $this->_processedRowsCount++;
                 $source->next();
             }
