@@ -32,7 +32,7 @@ class Process extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -48,13 +48,13 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Index\Model\Indexer $indexer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Index\Model\ProcessFactory $processFactory,
         \Magento\Index\Model\Indexer $indexer
     ) {
@@ -138,7 +138,7 @@ class Process extends \Magento\Backend\App\Action
             try {
                 $process->save();
                 $this->messageManager->addSuccess(__('The index has been saved.'));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('There was a problem with saving process.'));
@@ -161,12 +161,12 @@ class Process extends \Magento\Backend\App\Action
         $process = $this->_initProcess();
         if ($process) {
             try {
-                \Magento\Profiler::start('__INDEX_PROCESS_REINDEX_ALL__');
+                \Magento\Framework\Profiler::start('__INDEX_PROCESS_REINDEX_ALL__');
 
                 $process->reindexEverything();
-                \Magento\Profiler::stop('__INDEX_PROCESS_REINDEX_ALL__');
+                \Magento\Framework\Profiler::stop('__INDEX_PROCESS_REINDEX_ALL__');
                 $this->messageManager->addSuccess(__('%1 index was rebuilt.', $process->getIndexer()->getName()));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('There was a problem with reindexing process.'));
@@ -218,7 +218,7 @@ class Process extends \Magento\Backend\App\Action
                     }
                 }
                 $this->messageManager->addSuccess(__('Total of %1 index(es) have reindexed data.', $counter));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Cannot initialize the indexer process.'));
@@ -251,7 +251,7 @@ class Process extends \Magento\Backend\App\Action
                     }
                 }
                 $this->messageManager->addSuccess(__('Total of %1 index(es) have changed index mode.', $counter));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Cannot initialize the indexer process.'));

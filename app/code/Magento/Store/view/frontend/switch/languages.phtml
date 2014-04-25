@@ -35,8 +35,8 @@
         <strong class="view-<?php echo $this->escapeHtml($this->getCurrentStoreCode()) ?>">
             <span><?php echo $this->escapeHtml($this->getStoreName()) ?></span>
         </strong>
-        <button type="button" data-toggle="dropdown" class="action switch"><span><?php echo __('Change')?></span></button>
-        <ul data-target="dropdown">
+        <button type="button" id="language-switcher" class="action switch"><span><?php echo __('Change')?></span></button>
+        <ul data-mage-init='{"dropdownDialog":{"appendTo":".switcher.language > .options", "triggerTarget":"#language-switcher", "closeOnMouseLeave": false, "triggerClass":"active", "parentClass":"active", "buttons":null}}'>
             <?php foreach ($this->getStores() as $_lang): ?>
                 <?php if($_lang->getId()!=$this->getCurrentStoreId()): ?>
                     <li class="view-<?php echo $this->escapeHtml($_lang->getCode()); ?>">

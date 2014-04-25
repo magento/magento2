@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Model\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Converting data to array type

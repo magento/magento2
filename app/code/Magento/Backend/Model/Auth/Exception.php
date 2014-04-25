@@ -32,6 +32,6 @@ namespace Magento\Backend\Model\Auth;
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Exception extends \Magento\Model\Exception
+class Exception extends \Magento\Framework\Model\Exception
 {
 }

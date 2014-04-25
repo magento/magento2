@@ -65,14 +65,14 @@ class Config
     /** @var ModelConfig */
     protected $_config;
 
-    /** @var \Magento\Controller\Router\Route\Factory */
+    /** @var \Magento\Framework\Controller\Router\Route\Factory */
     protected $_routeFactory;
 
     /**
      * @param ModelConfig $config
-     * @param \Magento\Controller\Router\Route\Factory $routeFactory
+     * @param \Magento\Framework\Controller\Router\Route\Factory $routeFactory
      */
-    public function __construct(ModelConfig $config, \Magento\Controller\Router\Route\Factory $routeFactory)
+    public function __construct(ModelConfig $config, \Magento\Framework\Controller\Router\Route\Factory $routeFactory)
     {
         $this->_config = $config;
         $this->_routeFactory = $routeFactory;

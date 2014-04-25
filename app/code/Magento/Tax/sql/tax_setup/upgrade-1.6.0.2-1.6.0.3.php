@@ -34,7 +34,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('sales_order_tax_item'),
     'tax_percent',
     array(
-        'TYPE' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+        'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         'SCALE' => 4,
         'PRECISION' => 12,
         'NULLABLE' => false,

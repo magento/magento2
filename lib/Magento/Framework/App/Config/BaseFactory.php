@@ -28,14 +28,14 @@ namespace Magento\Framework\App\Config;
 class BaseFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -43,7 +43,7 @@ class BaseFactory
     /**
      * Create config model
      *
-     * @param string|\Magento\Simplexml\Element $sourceData
+     * @param string|\Magento\Framework\Simplexml\Element $sourceData
      * @return \Magento\Framework\App\Config\Base
      */
     public function create($sourceData = null)

@@ -44,7 +44,7 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
         $this->_object = $testHelper->getObject('Magento\Backend\Block\System\Config\Form\Field\Select\Allowspecific');
         $this->_object->setData('html_id', 'spec_element');
         $this->_formMock = $this->getMock(
-            'Magento\Data\Form',
+            'Magento\Framework\Data\Form',
             array('getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement'),
             array(),
             '',
@@ -90,7 +90,7 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
         $this->_object->setForm($this->_formMock);
 
         $elementMock = $this->getMock(
-            'Magento\Data\Form\Element\Select',
+            'Magento\Framework\Data\Form\Element\Select',
             array('setDisabled'),
             array(),
             '',

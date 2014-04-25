@@ -31,25 +31,25 @@ class Recurring extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\View\Element\BlockFactory
+     * @var \Magento\Framework\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\View\Element\BlockFactory $blockFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\View\Element\BlockFactory $blockFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\Element\BlockFactory $blockFactory,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;

@@ -25,12 +25,12 @@
  */
 namespace Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Grid;
 
-use Magento\Module\Manager;
+use Magento\Framework\Module\Manager;
 
 class Observer
 {
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -43,7 +43,7 @@ class Observer
     }
 
     /**
-     * @param \Magento\Event $event
+     * @param \Magento\Framework\Event $event
      * @return void
      */
     public function observe($event)

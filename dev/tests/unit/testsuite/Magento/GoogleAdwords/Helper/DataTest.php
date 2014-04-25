@@ -54,7 +54,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);

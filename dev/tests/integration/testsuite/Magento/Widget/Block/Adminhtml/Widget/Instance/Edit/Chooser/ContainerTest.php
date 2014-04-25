@@ -41,7 +41,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container'
         );

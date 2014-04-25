@@ -54,7 +54,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
@@ -155,7 +155,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
@@ -216,7 +216,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Delete model
      *
-     * @param \Magento\Model\AbstractModel $duplicate
+     * @param \Magento\Framework\Model\AbstractModel $duplicate
      */
     protected function _undo($duplicate)
     {
@@ -378,7 +378,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Check is model empty or not
      *
-     * @param \Magento\Model\AbstractModel $model
+     * @param \Magento\Framework\Model\AbstractModel $model
      */
     protected function _assertEmpty($model)
     {
@@ -400,9 +400,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $request = new \Magento\Object();
+        $request = new \Magento\Framework\Object();
         $result = $this->_model->processBuyRequest($request);
-        $this->assertInstanceOf('Magento\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\Object', $result);
         $this->assertArrayHasKey('errors', $result->getData());
     }
 

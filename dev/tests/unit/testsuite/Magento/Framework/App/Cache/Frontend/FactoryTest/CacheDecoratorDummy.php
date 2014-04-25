@@ -27,7 +27,7 @@
  */
 namespace Magento\Framework\App\Cache\Frontend\FactoryTest;
 
-class CacheDecoratorDummy extends \Magento\Cache\Frontend\Decorator\Bare
+class CacheDecoratorDummy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
     /**
      * @var array
@@ -35,10 +35,10 @@ class CacheDecoratorDummy extends \Magento\Cache\Frontend\Decorator\Bare
     protected $_params;
 
     /**
-     * @param \Magento\Cache\FrontendInterface $frontend
+     * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @param array $params
      */
-    public function __construct(\Magento\Cache\FrontendInterface $frontend, array $params)
+    public function __construct(\Magento\Framework\Cache\FrontendInterface $frontend, array $params)
     {
         parent::__construct($frontend);
         $this->_params = $params;

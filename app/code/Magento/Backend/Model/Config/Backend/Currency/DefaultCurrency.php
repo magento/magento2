@@ -37,18 +37,18 @@ class DefaultCurrency extends AbstractCurrency
      * Check default currency is available in allowed currencies
      *
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Sorry, we haven\'t installed the default display currency you selected.')
             );
         }
 
         if (!in_array($this->getValue(), $this->_getAllowedCurrencies())) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Sorry, the default display currency you selected in not available in allowed currencies.')
             );
         }

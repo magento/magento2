@@ -222,4 +222,13 @@
             this._super();
         }
     });
+
+    // Overrides the "today" button functionality to select today's date when clicked.
+    $.datepicker._gotoTodayOriginal = $.datepicker._gotoToday;
+
+    $.datepicker._gotoToday = function(el) {
+        $.datepicker._gotoTodayOriginal.call(this, el);
+        $.datepicker._selectDate.call(this, el);
+        $(el).blur();   // To ensure that user can re-select date field without clicking outside it first.
+    };
 })(jQuery);

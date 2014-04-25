@@ -28,7 +28,7 @@ namespace Magento\Webapi\Model\Cache;
 /**
  * System / Cache Management / Cache type "Integration Api Configuration"
  */
-class TypeIntegration extends \Magento\Cache\Frontend\Decorator\TagScope
+class TypeIntegration extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types

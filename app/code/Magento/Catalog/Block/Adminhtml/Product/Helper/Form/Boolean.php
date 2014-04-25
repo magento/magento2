@@ -32,7 +32,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Boolean extends \Magento\Data\Form\Element\Select
+class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * @return void

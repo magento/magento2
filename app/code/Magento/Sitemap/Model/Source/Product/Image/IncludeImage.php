@@ -32,7 +32,7 @@
  */
 namespace Magento\Sitemap\Model\Source\Product\Image;
 
-class IncludeImage implements \Magento\Option\ArrayInterface
+class IncludeImage implements \Magento\Framework\Option\ArrayInterface
 {
     /**#@+
      * Add Images into Sitemap possible values

@@ -33,7 +33,7 @@ use Magento\Customer\Service\V1\Data\Customer as CustomerData;
 /**
  * Customer session model
  */
-class Session extends \Magento\Session\SessionManager
+class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
      * Customer object
@@ -76,7 +76,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_configShare;
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
@@ -89,12 +89,12 @@ class Session extends \Magento\Session\SessionManager
     protected $_customerFactory;
 
     /**
-     * @var \Magento\UrlFactory
+     * @var \Magento\Framework\UrlFactory
      */
     protected $_urlFactory;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -110,19 +110,19 @@ class Session extends \Magento\Session\SessionManager
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Session\SaveHandlerInterface $saveHandler
-     * @param \Magento\Session\ValidatorInterface $validator
-     * @param \Magento\Session\StorageInterface $storage
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Framework\Session\ValidatorInterface $validator
+     * @param \Magento\Framework\Session\StorageInterface $storage
      * @param Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Customer\Helper\Data $customerData
      * @param ResourceCustomer $customerResource
      * @param CustomerFactory $customerFactory
-     * @param \Magento\UrlFactory $urlFactory
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\UrlFactory $urlFactory
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param Converter $converter
      * @param CustomerAccountServiceInterface $customerAccountService
@@ -130,19 +130,19 @@ class Session extends \Magento\Session\SessionManager
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Session\SaveHandlerInterface $saveHandler,
-        \Magento\Session\ValidatorInterface $validator,
-        \Magento\Session\StorageInterface $storage,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Framework\Session\ValidatorInterface $validator,
+        \Magento\Framework\Session\StorageInterface $storage,
         Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Customer\Helper\Data $customerData,
         Resource\Customer $customerResource,
         CustomerFactory $customerFactory,
-        \Magento\UrlFactory $urlFactory,
-        \Magento\Session\Generic $session,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\UrlFactory $urlFactory,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
         CustomerAccountServiceInterface $customerAccountService,
@@ -560,7 +560,7 @@ class Session extends \Magento\Session\SessionManager
     }
 
     /**
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     protected function _createUrl()
     {

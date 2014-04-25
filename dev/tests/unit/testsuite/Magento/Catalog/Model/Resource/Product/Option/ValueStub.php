@@ -39,9 +39,9 @@ class ValueStub extends \Magento\Catalog\Model\Resource\Product\Option\Value
     /**
      * Save option value price data
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      */
-    public function saveValueTitles(\Magento\Model\AbstractModel $object)
+    public function saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->_saveValueTitles($object);
     }

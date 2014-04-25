@@ -39,8 +39,8 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
      * Set current attribute to entry (for specified product)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     public function convertAttribute($product, $entry)
     {
@@ -52,10 +52,10 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
 
         $from = $to = null;
         if (!empty($fromValue) && \Zend_Date::isDate($fromValue, \Zend_Date::ATOM)) {
-            $from = new \Magento\Stdlib\DateTime\Date($fromValue, \Zend_Date::ATOM);
+            $from = new \Magento\Framework\Stdlib\DateTime\Date($fromValue, \Zend_Date::ATOM);
         }
         if (!empty($toValue) && \Zend_Date::isDate($toValue, \Zend_Date::ATOM)) {
-            $to = new \Magento\Stdlib\DateTime\Date($toValue, \Zend_Date::ATOM);
+            $to = new \Magento\Framework\Stdlib\DateTime\Date($toValue, \Zend_Date::ATOM);
         }
 
         $dateString = null;
@@ -71,7 +71,7 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
 
         // if we have only "to" date, use "now" date for "from"
         if (is_null($from) && !is_null($to)) {
-            $from = new \Magento\Stdlib\DateTime\Date();
+            $from = new \Magento\Framework\Stdlib\DateTime\Date();
             // if "now" date is earlier than "to" date
             if ($from->isEarlier($to)) {
                 $dateString = $from->toString(\Zend_Date::ATOM) . '/' . $to->toString(\Zend_Date::ATOM);

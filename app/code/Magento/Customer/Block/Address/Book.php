@@ -35,7 +35,7 @@ use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Book extends \Magento\View\Element\Template
+class Book extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Service\V1\CustomerCurrentService
@@ -58,7 +58,7 @@ class Book extends \Magento\View\Element\Template
     protected $_addressConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
@@ -66,7 +66,7 @@ class Book extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         CustomerAccountServiceInterface $customerAccountService,
         CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
@@ -142,7 +142,7 @@ class Book extends \Magento\View\Element\Template
     {
         try {
             $addresses = $this->_addressService->getAddresses($this->currentCustomer->getCustomerId());
-        } catch (\Magento\Exception\NoSuchEntityException $e) {
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return false;
         }
         $primaryAddressIds = array($this->getDefaultBilling(), $this->getDefaultShipping());
@@ -179,7 +179,7 @@ class Book extends \Magento\View\Element\Template
         if (is_null($customer)) {
             try {
                 $customer = $this->_customerAccountService->getCustomer($this->currentCustomer->getCustomerId());
-            } catch (\Magento\Exception\NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 return null;
             }
             $this->setData('customer', $customer);
@@ -208,7 +208,7 @@ class Book extends \Magento\View\Element\Template
     {
         try {
             return $this->_addressService->getAddress($addressId);
-        } catch (\Magento\Exception\NoSuchEntityException $e) {
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }
     }

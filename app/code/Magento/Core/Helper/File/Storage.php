@@ -139,7 +139,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param  int|null $storage
      * @param  array $params
-     * @return \Magento\Model\AbstractModel|bool
+     * @return \Magento\Framework\Model\AbstractModel|bool
      */
     public function getStorageModel($storage = null, $params = array())
     {

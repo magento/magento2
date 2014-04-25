@@ -28,22 +28,22 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     /** @var Filesystem */
     protected $_filesystem;
 
-    /** @var \Magento\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dirReadFactoryMock;
 
-    /** @var \Magento\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dirWriteFactoryMock;
 
     /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
     protected $_directoryListMock;
 
-    /** @var \Magento\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject  */
     protected $_fileReadFactoryMock;
 
     public function setUp()
     {
         $this->_dirReadFactoryMock = $this->getMock(
-            'Magento\Filesystem\Directory\ReadFactory',
+            'Magento\Framework\Filesystem\Directory\ReadFactory',
             array(),
             array(),
             '',
@@ -57,14 +57,14 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_dirWriteFactoryMock = $this->getMock(
-            'Magento\Filesystem\Directory\WriteFactory',
+            'Magento\Framework\Filesystem\Directory\WriteFactory',
             array(),
             array(),
             '',
             false
         );
         $this->_fileReadFactoryMock = $this->getMock(
-            'Magento\Filesystem\File\ReadFactory',
+            'Magento\Framework\Filesystem\File\ReadFactory',
             array(),
             array(),
             '',

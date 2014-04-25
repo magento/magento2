@@ -86,7 +86,7 @@ class ViewTest extends \Magento\Backend\Utility\Controller
         $billingAgreement = $billingAgreementCollection->getFirstItem();
         $billingAgreement->addOrderRelation($orderA->getId())->save();
 
-        $registry = Bootstrap::getObjectManager()->get('Magento\Registry');
+        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
         $registry->register('current_billing_agreement', $billingAgreement);
 
         $relatedOrders = $this->_block->getRelatedOrders();

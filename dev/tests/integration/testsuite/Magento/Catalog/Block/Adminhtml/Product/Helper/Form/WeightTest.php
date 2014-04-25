@@ -29,19 +29,19 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 class WeightTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $this->_objectManager->create('Magento\Data\FormFactory');
+        $this->_formFactory = $this->_objectManager->create('Magento\Framework\Data\FormFactory');
     }
 
     /**

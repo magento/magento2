@@ -44,17 +44,17 @@ foreach ($priceIndexerTables as $table) {
     $connection->addColumn(
         $installer->getTable($table),
         'group_price',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group price')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group price')
     );
     $connection->addColumn(
         $installer->getTable($table),
         'base_group_price',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Base Group Price')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Base Group Price')
     );
     $connection->addColumn(
         $installer->getTable($table),
         'group_price_percent',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group Price Percent')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group Price Percent')
     );
 }
 
@@ -62,7 +62,7 @@ foreach (array_merge($optionsPriceIndexerTables, $selectionPriceIndexerTables) a
     $connection->addColumn(
         $installer->getTable($table),
         'group_price',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group price')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Group price')
     );
 }
 
@@ -70,7 +70,7 @@ foreach ($optionsPriceIndexerTables as $table) {
     $connection->addColumn(
         $installer->getTable($table),
         'alt_group_price',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Alt Group Price')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, 'length' => '12,4', 'comment' => 'Alt Group Price')
     );
 }
 

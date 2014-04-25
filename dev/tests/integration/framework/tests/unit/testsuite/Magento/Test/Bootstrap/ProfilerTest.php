@@ -38,14 +38,14 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected $_object;
 
     /**
-     * @var \Magento\Profiler\Driver\Standard|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_driver;
 
     protected function setUp()
     {
         $this->expectOutputString('');
-        $this->_driver = $this->getMock('Magento\Profiler\Driver\Standard', array('registerOutput'));
+        $this->_driver = $this->getMock('Magento\Framework\Profiler\Driver\Standard', array('registerOutput'));
         $this->_object = new \Magento\TestFramework\Bootstrap\Profiler($this->_driver);
     }
 
@@ -62,7 +62,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registerOutput'
         )->with(
-            $this->isInstanceOf('Magento\Profiler\Driver\Standard\Output\Csvfile')
+            $this->isInstanceOf('Magento\Framework\Profiler\Driver\Standard\Output\Csvfile')
         );
         $this->_object->registerFileProfiler('php://output');
     }

@@ -65,16 +65,16 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $mask = $magentoBaseDir . '/app/code/*/*/etc/*/routes.xml';
         $files = glob($mask);
-        $mergedConfig = new \Magento\Config\Dom('<config></config>', $this->_idAttributes);
+        $mergedConfig = new \Magento\Framework\Config\Dom('<config></config>', $this->_idAttributes);
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
             try {
-                new \Magento\Config\Dom($content, $this->_idAttributes, null, $this->_schemaFile);
+                new \Magento\Framework\Config\Dom($content, $this->_idAttributes, null, $this->_schemaFile);
 
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);
-            } catch (\Magento\Config\Dom\ValidationException $e) {
+            } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 $invalidFiles[] = $file;
             }
         }

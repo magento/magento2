@@ -26,7 +26,7 @@ namespace Magento\Sales\Block\Guest;
 /**
  * "Orders and Returns" link
  */
-class Link extends \Magento\View\Element\Html\Link\Current
+class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -34,13 +34,13 @@ class Link extends \Magento\View\Element\Html\Link\Current
     protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\DefaultPathInterface $defaultPath,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()

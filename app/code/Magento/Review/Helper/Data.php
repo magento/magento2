@@ -35,7 +35,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Filter manager
      *
-     * @var \Magento\Filter\FilterManager
+     * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filter;
 
@@ -49,21 +49,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Escaper
      *
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Filter\FilterManager $filter
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Filter\FilterManager $filter
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Escaper $escaper,
-        \Magento\Filter\FilterManager $filter
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\Filter\FilterManager $filter
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_escaper = $escaper;

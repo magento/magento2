@@ -26,7 +26,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
 use Exception;
-use Magento\Model\Exception as CoreException;
+use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Catalog composite product configuration controller
@@ -85,7 +85,7 @@ class Wishlist extends \Magento\Backend\App\Action
      */
     public function configureAction()
     {
-        $configureResult = new \Magento\Object();
+        $configureResult = new \Magento\Framework\Object();
         try {
             $this->_initData();
 
@@ -115,11 +115,11 @@ class Wishlist extends \Magento\Backend\App\Action
     public function updateAction()
     {
         // Update wishlist item
-        $updateResult = new \Magento\Object();
+        $updateResult = new \Magento\Framework\Object();
         try {
             $this->_initData();
 
-            $buyRequest = new \Magento\Object($this->getRequest()->getParams());
+            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
 
             $this->_wishlist->updateItem($this->_wishlistItem->getId(), $buyRequest)->save();
 

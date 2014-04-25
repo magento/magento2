@@ -170,7 +170,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDefaultDesignTheme();
         $this->getRequest()->setServer(
             array(

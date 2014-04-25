@@ -29,7 +29,7 @@ namespace Magento\Framework\App;
 class RouterList implements RouterListInterface
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -41,10 +41,10 @@ class RouterList implements RouterListInterface
     protected $_routerList;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $routerList
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $routerList)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $routerList)
     {
         $this->_objectManager = $objectManager;
         $this->_routerList = $routerList;

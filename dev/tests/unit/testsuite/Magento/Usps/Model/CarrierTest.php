@@ -115,14 +115,14 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $httpClient = $this->getMockBuilder(
-            '\Magento\HTTP\ZendClient'
+            '\Magento\Framework\HTTP\ZendClient'
         )->disableOriginalConstructor()->setMethods(
             array('request')
         )->getMock();
         $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->_httpResponse));
 
         $httpClientFactory = $this->getMockBuilder(
-            '\Magento\HTTP\ZendClientFactory'
+            '\Magento\Framework\HTTP\ZendClientFactory'
         )->disableOriginalConstructor()->setMethods(
             array('create')
         )->getMock();

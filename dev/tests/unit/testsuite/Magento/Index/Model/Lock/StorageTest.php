@@ -42,10 +42,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFile()
     {
-        $streamMock = $this->getMockBuilder('Magento\Filesystem\File\Write')->disableOriginalConstructor()->getMock();
+        $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\Write')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $directoryMock = $this->getMockBuilder(
-            'Magento\Filesystem\Directory\Write'
+            'Magento\Framework\Filesystem\Directory\Write'
         )->disableOriginalConstructor()->getMock();
         $directoryMock->expects($this->exactly(2))->method('create');
 

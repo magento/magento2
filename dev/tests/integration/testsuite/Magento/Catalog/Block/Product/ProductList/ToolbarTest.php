@@ -30,12 +30,14 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetPagerHtml()
     {
-        /** @var $layout \Magento\View\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar */
         $block = $layout->createBlock('Magento\Catalog\Block\Product\ProductList\Toolbar', 'block');
-        /** @var $childBlock \Magento\View\Element\Text */
-        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'product_list_toolbar_pager', 'block');
+        /** @var $childBlock \Magento\Framework\View\Element\Text */
+        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'product_list_toolbar_pager', 'block');
 
         $expectedHtml = '<b>Any text there</b>';
         $this->assertNotEquals($expectedHtml, $block->getPagerHtml());

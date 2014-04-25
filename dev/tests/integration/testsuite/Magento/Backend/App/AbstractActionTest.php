@@ -38,7 +38,7 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
     {
         $this->markTestSkipped('Session destruction doesn\'t work');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Config\ScopeInterface'
+            'Magento\Framework\Config\ScopeInterface'
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
@@ -101,15 +101,19 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
 
-        /** @var $acl \Magento\Acl */
-        $acl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Acl\Builder')->getAcl();
+        /** @var $acl \Magento\Framework\Acl */
+        $acl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Acl\Builder')
+            ->getAcl();
         if ($isLimitedAccess) {
             $acl->deny(null, $resource);
         }
 
         $this->dispatch('backend/admin/dashboard');
 
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $actualBlocks = $layout->getAllBlocks();
 
         $this->assertNotEmpty($actualBlocks);

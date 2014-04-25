@@ -117,21 +117,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $httpClient = $this->getMockBuilder(
-            '\Magento\HTTP\ZendClient'
+            '\Magento\Framework\HTTP\ZendClient'
         )->disableOriginalConstructor()->setMethods(
             array('request')
         )->getMock();
         $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->_httpResponse));
 
         $httpClientFactory = $this->getMockBuilder(
-            '\Magento\HTTP\ZendClientFactory'
+            '\Magento\Framework\HTTP\ZendClientFactory'
         )->disableOriginalConstructor()->setMethods(
             array('create')
         )->getMock();
 
         $httpClientFactory->expects($this->any())->method('create')->will($this->returnValue($httpClient));
         $modulesDirectory = $this->getMockBuilder(
-            '\Magento\Filesystem\Directory\Read'
+            '\Magento\Framework\Filesystem\Directory\Read'
         )->disableOriginalConstructor()->setMethods(
             array('getRelativePath', 'readFile')
         )->getMock();
@@ -209,7 +209,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider prepareShippingLabelContentExceptionDataProvider
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Unable to retrieve shipping label
      */
     public function testPrepareShippingLabelContentException(\SimpleXMLElement $xml)
@@ -238,7 +238,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
     {

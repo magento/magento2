@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Model\Config\Source\Group;
 
-class Multiselect implements \Magento\Option\ArrayInterface
+class Multiselect implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Customer groups options array
@@ -40,17 +40,17 @@ class Multiselect implements \Magento\Option\ArrayInterface
     protected $_groupService;
 
     /**
-     * @var \Magento\Convert\Object
+     * @var \Magento\Framework\Convert\Object
      */
     protected $_converter;
 
     /**
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Convert\Object $converter
+     * @param \Magento\Framework\Convert\Object $converter
      */
     public function __construct(
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Convert\Object $converter
+        \Magento\Framework\Convert\Object $converter
     ) {
         $this->_groupService = $groupService;
         $this->_converter = $converter;

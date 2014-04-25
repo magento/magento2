@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $context              = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->_scopeConfig   = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $layout               = $this->getMock('Magento\View\LayoutInterface', [], [], '', false);
+        $layout               = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
         $this->_methodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
         $appEmulation         = $this->getMock('Magento\Core\Model\App\Emulation', [], [], '', false);
         $paymentConfig        = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);

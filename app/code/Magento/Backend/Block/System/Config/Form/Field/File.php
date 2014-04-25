@@ -34,7 +34,7 @@
  */
 namespace Magento\Backend\Block\System\Config\Form\Field;
 
-class File extends \Magento\Data\Form\Element\File
+class File extends \Magento\Framework\Data\Form\Element\File
 {
     /**
      * Get element html

@@ -29,19 +29,19 @@ namespace Magento\Core\Model\Resource;
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\DB\Helper
+     * @var \Magento\Framework\DB\Helper
      */
     protected $_model;
 
     /**
-     * @var \Magento\DB\Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\DB\Helper',
+            'Magento\Framework\DB\Helper',
             array('modulePrefix' => 'core')
         );
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

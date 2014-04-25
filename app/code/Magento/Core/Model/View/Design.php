@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Model\View;
 
-class Design implements \Magento\View\DesignInterface
+class Design implements \Magento\Framework\View\DesignInterface
 {
     /**
      * Package area
@@ -61,7 +61,7 @@ class Design implements \Magento\View\DesignInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\View\Design\Theme\FlyweightFactory
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $_flyweightFactory;
 
@@ -76,7 +76,7 @@ class Design implements \Magento\View\DesignInterface
     private $_scopeConfig;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_locale;
 
@@ -87,19 +87,19 @@ class Design implements \Magento\View\DesignInterface
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory
+     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Locale\ResolverInterface $locale
+     * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\View\Design\Theme\FlyweightFactory $flyweightFactory,
+        \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Locale\ResolverInterface $locale,
+        \Magento\Framework\Locale\ResolverInterface $locale,
         \Magento\Framework\App\State $appState,
         array $themes
     ) {
@@ -139,7 +139,7 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Set theme path
      *
-     * @param \Magento\View\Design\ThemeInterface|string $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface|string $theme
      * @param string $area
      * @return $this
      */
@@ -151,7 +151,7 @@ class Design implements \Magento\View\DesignInterface
             $area = $this->getArea();
         }
 
-        if ($theme instanceof \Magento\View\Design\ThemeInterface) {
+        if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
             $this->_theme = $theme;
         } else {
             $this->_theme = $this->_flyweightFactory->create($theme, $area);

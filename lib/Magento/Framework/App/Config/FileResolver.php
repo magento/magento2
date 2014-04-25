@@ -25,31 +25,31 @@
  */
 namespace Magento\Framework\App\Config;
 
-class FileResolver implements \Magento\Config\FileResolverInterface
+class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
      * Module configuration file reader
      *
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
      * File iterator factory
      *
-     * @var \Magento\Config\FileIteratorFactory
+     * @var \Magento\Framework\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Config\FileIteratorFactory $iteratorFactory
+     * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $moduleReader,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Config\FileIteratorFactory $iteratorFactory
+        \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->filesystem = $filesystem;

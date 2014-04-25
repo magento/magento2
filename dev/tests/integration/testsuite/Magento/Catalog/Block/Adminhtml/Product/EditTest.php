@@ -51,9 +51,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Catalog\Block\Adminhtml\Product\Edit'
         );

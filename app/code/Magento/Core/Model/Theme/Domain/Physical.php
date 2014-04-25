@@ -29,12 +29,12 @@
  */
 namespace Magento\Core\Model\Theme\Domain;
 
-class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
+class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalInterface
 {
     /**
      * Physical theme model instance
      *
-     * @var \Magento\View\Design\ThemeInterface
+     * @var \Magento\Framework\View\Design\ThemeInterface
      */
     protected $_theme;
 
@@ -54,13 +54,13 @@ class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
     protected $_themeCollection;
 
     /**
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
      * @param \Magento\Theme\Model\CopyService $themeCopyService
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      */
     public function __construct(
-        \Magento\View\Design\ThemeInterface $theme,
+        \Magento\Framework\View\Design\ThemeInterface $theme,
         \Magento\Core\Model\ThemeFactory $themeFactory,
         \Magento\Theme\Model\CopyService $themeCopyService,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection
@@ -74,8 +74,8 @@ class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
     /**
      * Create theme customization
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
-     * @return \Magento\View\Design\ThemeInterface
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @return \Magento\Framework\View\Design\ThemeInterface
      */
     public function createVirtualTheme($theme)
     {
@@ -84,9 +84,9 @@ class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
         $themeData['theme_id'] = null;
         $themeData['theme_path'] = null;
         $themeData['theme_title'] = $this->_getVirtualThemeTitle($theme);
-        $themeData['type'] = \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL;
+        $themeData['type'] = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL;
 
-        /** @var $themeCustomization \Magento\View\Design\ThemeInterface */
+        /** @var $themeCustomization \Magento\Framework\View\Design\ThemeInterface */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
         $themeCustomization->getThemeImage()->createPreviewImageCopy($theme->getPreviewImage());
         $themeCustomization->save();
@@ -99,15 +99,15 @@ class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
     /**
      * Get virtual theme title
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string
      */
     protected function _getVirtualThemeTitle($theme)
     {
         $themeCopyCount = $this->_themeCollection->addAreaFilter(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->addTypeFilter(
-            \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
         )->addFilter(
             'parent_id',
             $theme->getId()

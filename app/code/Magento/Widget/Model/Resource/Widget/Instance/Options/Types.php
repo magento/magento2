@@ -32,7 +32,7 @@
  */
 namespace Magento\Widget\Model\Resource\Widget\Instance\Options;
 
-class Types implements \Magento\Option\ArrayInterface
+class Types implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance

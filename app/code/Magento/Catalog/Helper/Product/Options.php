@@ -35,7 +35,7 @@ namespace Magento\Catalog\Helper\Product;
 class Options extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $directory;
 

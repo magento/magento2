@@ -34,7 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
@@ -55,14 +55,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\AuthorizationInterface $authorization,
+        \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
     ) {
@@ -81,10 +81,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBackupTypes()
     {
         return array(
-            \Magento\Backup\Factory::TYPE_DB => __('Database'),
-            \Magento\Backup\Factory::TYPE_MEDIA => __('Database and Media'),
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('System'),
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __('System (excluding Media)')
+            \Magento\Framework\Backup\Factory::TYPE_DB => __('Database'),
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => __('Database and Media'),
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('System'),
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __('System (excluding Media)')
         );
     }
 
@@ -96,10 +96,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBackupTypesList()
     {
         return array(
-            \Magento\Backup\Factory::TYPE_DB,
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT,
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA,
-            \Magento\Backup\Factory::TYPE_MEDIA
+            \Magento\Framework\Backup\Factory::TYPE_DB,
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT,
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA,
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA
         );
     }
 
@@ -110,7 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getDefaultBackupType()
     {
-        return \Magento\Backup\Factory::TYPE_DB;
+        return \Magento\Framework\Backup\Factory::TYPE_DB;
     }
 
     /**
@@ -143,10 +143,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getExtensions()
     {
         return array(
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
-            \Magento\Backup\Factory::TYPE_MEDIA => 'tgz',
-            \Magento\Backup\Factory::TYPE_DB => 'gz'
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_DB => 'gz'
         );
     }
 
@@ -158,7 +158,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function generateBackupDownloadName(\Magento\Backup\Model\Backup $backup)
     {
-        $additionalExtension = $backup->getType() == \Magento\Backup\Factory::TYPE_DB ? '.sql' : '';
+        $additionalExtension = $backup->getType() == \Magento\Framework\Backup\Factory::TYPE_DB ? '.sql' : '';
         return $backup->getTime() .
             '_' .
             $backup->getType() .
@@ -259,12 +259,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCreateSuccessMessageByType($type)
     {
         $messagesMap = array(
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('The system backup has been created.'),
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __(
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('The system backup has been created.'),
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __(
                 'The system backup (excluding media) has been created.'
             ),
-            \Magento\Backup\Factory::TYPE_MEDIA => __('The database and media backup has been created.'),
-            \Magento\Backup\Factory::TYPE_DB => __('The database backup has been created.')
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => __('The database and media backup has been created.'),
+            \Magento\Framework\Backup\Factory::TYPE_DB => __('The database backup has been created.')
         );
 
         if (!isset($messagesMap[$type])) {
@@ -326,7 +326,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Extracts information from backup's filename
      *
      * @param string $filename
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function extractDataFromFilename($filename)
     {
@@ -352,7 +352,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $name = substr($name, 1);
         }
 
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         $result->addData(array('name' => $name, 'type' => $type, 'time' => $time));
 
         return $result;

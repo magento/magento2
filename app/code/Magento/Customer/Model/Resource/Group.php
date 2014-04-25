@@ -32,7 +32,7 @@ namespace Magento\Customer\Model\Resource;
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Customer data
@@ -86,14 +86,14 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Check if group uses as default
      *
-     * @param  \Magento\Model\AbstractModel $group
+     * @param  \Magento\Framework\Model\AbstractModel $group
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeDelete(\Magento\Model\AbstractModel $group)
+    protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $group)
     {
         if ($group->usesAsDefault()) {
-            throw new \Magento\Model\Exception(__('The group "%1" cannot be deleted', $group->getCode()));
+            throw new \Magento\Framework\Model\Exception(__('The group "%1" cannot be deleted', $group->getCode()));
         }
         return parent::_beforeDelete($group);
     }
@@ -101,10 +101,10 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Method set default group id to the customers collection
      *
-     * @param \Magento\Model\AbstractModel $group
+     * @param \Magento\Framework\Model\AbstractModel $group
      * @return $this
      */
-    protected function _afterDelete(\Magento\Model\AbstractModel $group)
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $group)
     {
         $customerCollection = $this->_createCustomersCollection()->addAttributeToFilter(
             'group_id',

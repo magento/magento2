@@ -41,9 +41,9 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        /** @var $blockFactory \Magento\View\Element\BlockFactory */
+        /** @var $blockFactory \Magento\Framework\View\Element\BlockFactory */
         $blockFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\Element\BlockFactory'
+            'Magento\Framework\View\Element\BlockFactory'
         );
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Store\Model\StoreManagerInterface'
@@ -74,7 +74,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($model->getTitle());
         foreach (array($model->getFormBlockType(), $model->getInfoBlockType()) as $blockClass) {
             $message = "Block class: {$blockClass}";
-            /** @var $block \Magento\View\Element\Template */
+            /** @var $block \Magento\Framework\View\Element\Template */
             $block = $blockFactory->createBlock($blockClass);
             $block->setArea('frontend');
             $this->assertFileExists($block->getTemplateFile(), $message);

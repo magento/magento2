@@ -34,12 +34,12 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-use Magento\View\Element\BlockInterface;
+use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Class AbstractProduct
  */
-abstract class AbstractProduct extends \Magento\View\Element\Template
+abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
@@ -99,7 +99,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -125,7 +125,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     protected $_catalogConfig;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $_mathRandom;
 
@@ -303,7 +303,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * Prepares and returns block to render some product type
      *
      * @param string $productType
-     * @return \Magento\View\Element\Template
+     * @return \Magento\Framework\View\Element\Template
      */
     public function _preparePriceRenderer($productType)
     {
@@ -626,7 +626,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     /**
      * Retrieve current page layout
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getPageLayout()
     {
@@ -651,7 +651,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     public function displayProductStockStatus()
     {
-        $statusInfo = new \Magento\Object(array('display_status' => true));
+        $statusInfo = new \Magento\Framework\Object(array('display_status' => true));
         $this->_eventManager->dispatch('catalog_block_product_status_display', array('status' => $statusInfo));
         return (bool) $statusInfo->getDisplayStatus();
     }
@@ -831,7 +831,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->getProductPriceHtml(
             $product,
             \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
-            \Magento\Pricing\Render::ZONE_ITEM_LIST
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
         );
     }
 
@@ -847,14 +847,14 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,
         $priceType,
-        $renderZone = \Magento\Pricing\Render::ZONE_ITEM_LIST,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
         if (!isset($arguments['zone'])) {
             $arguments['zone'] = $renderZone;
         }
 
-        /** @var \Magento\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         $price = '';
 

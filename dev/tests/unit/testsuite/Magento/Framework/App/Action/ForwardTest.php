@@ -86,7 +86,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     {
         $infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $routerListMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
-        $cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
+        $cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
         $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
         $request = new \Magento\Framework\App\Request\Http($routerListMock, $infoProcessorMock);
         $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);

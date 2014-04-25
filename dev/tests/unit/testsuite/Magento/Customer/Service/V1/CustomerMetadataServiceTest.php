@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -197,11 +197,10 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         try {
             $service->getAttributeMetadata('entityCode', 'attributeId');
             $this->fail('Expected exception not thrown.');
-        } catch (\Magento\Exception\NoSuchEntityException $e) {
-            $this->assertEquals(\Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(
-                array('entityType' => 'entityCode', 'attributeCode' => 'attributeId'),
-                $e->getParams()
+        } catch (NoSuchEntityException $e) {
+            $this->assertSame(
+                "No such entity with entityType = entityCode, attributeCode = attributeId",
+                $e->getMessage()
             );
         }
     }
@@ -332,8 +331,10 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
             $service->getCustomerAttributeMetadata('attributeId');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(array('entityType' => 'customer', 'attributeCode' => 'attributeId'), $e->getParams());
+            $this->assertSame(
+                "No such entity with entityType = customer, attributeCode = attributeId",
+                $e->getMessage()
+            );
         }
     }
 
@@ -369,10 +370,9 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
             $service->getAddressAttributeMetadata('attributeId');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(
-                array('entityType' => 'customer_address', 'attributeCode' => 'attributeId'),
-                $e->getParams()
+            $this->assertSame(
+                "No such entity with entityType = customer_address, attributeCode = attributeId",
+                $e->getMessage()
             );
         }
     }

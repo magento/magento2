@@ -67,7 +67,13 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $optionBlock->expects($this->any())->method('setOption')->will($this->returnValue($optionBlock));
         $optionBlock->expects($this->any())->method('getPriceBlockTypes')->will($this->returnValue(array()));
         $optionBlock->expects($this->any())->method('toHtml')->will($this->returnValue('option html'));
-        $layout = $this->getMock('Magento\View\Layout', array('getChildName', 'getBlock'), array(), '', false);
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock'),
+            array(),
+            '',
+            false
+        );
         $layout->expects($this->any())->method('getChildName')->will($this->returnValue('name'));
         $layout->expects($this->any())->method('getBlock')->will($this->returnValue($optionBlock));
         $this->_bundleBlock->setLayout($layout);

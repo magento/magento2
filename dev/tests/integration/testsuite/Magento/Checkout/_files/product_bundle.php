@@ -113,7 +113,7 @@ foreach ($optionCollection as $option) {
     $bundleOptionsQty[$option->getId()] = 1;
 }
 
-$requestInfo = new \Magento\Object(
+$requestInfo = new \Magento\Framework\Object(
     array('qty' => 1, 'bundle_option' => $bundleOptions, 'bundle_option_qty' => $bundleOptionsQty)
 );
 $product->setSkipCheckRequiredOption(true);

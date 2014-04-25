@@ -33,7 +33,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManagerMock;
 
@@ -50,7 +50,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
             'default' => array('class' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5)
         );
 
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Framework\App\RouterList($this->_objectManagerMock, $this->_routerList);
     }
 

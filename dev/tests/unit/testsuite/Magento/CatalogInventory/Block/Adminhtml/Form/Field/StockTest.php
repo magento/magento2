@@ -36,22 +36,22 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $_coreHelperMock;
 
     /**
-     * @var \Magento\Data\Form\Element\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_factoryElementMock;
 
     /**
-     * @var \Magento\Data\Form\Element\CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Data\Form\Element\Text|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Text|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_qtyMock;
 
     /**
-     * @var \Magento\Data\Form\Element\TextFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\TextFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_factoryTextMock;
 
@@ -62,22 +62,28 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryElementMock = $this->getMock('Magento\Data\Form\Element\Factory', array(), array(), '', false);
+        $this->_factoryElementMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Factory',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_collectionFactoryMock = $this->getMock(
-            'Magento\Data\Form\Element\CollectionFactory',
+            'Magento\Framework\Data\Form\Element\CollectionFactory',
             array(),
             array(),
             '',
             false
         );
         $this->_qtyMock = $this->getMock(
-            'Magento\Data\Form\Element\Text',
+            'Magento\Framework\Data\Form\Element\Text',
             array('setForm', 'setValue', 'setName'),
             array(),
             '',
             false
         );
-        $this->_factoryTextMock = $this->getMock('Magento\Data\Form\Element\TextFactory', array('create'));
+        $this->_factoryTextMock = $this->getMock('Magento\Framework\Data\Form\Element\TextFactory', array('create'));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(
@@ -98,13 +104,13 @@ class StockTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setForm'
         )->with(
-            $this->isInstanceOf('Magento\Data\Form\Element\AbstractElement')
+            $this->isInstanceOf('Magento\Framework\Data\Form\Element\AbstractElement')
         );
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block->setForm(
             $objectManager->getObject(
-                'Magento\Data\Form\Element\Text',
+                'Magento\Framework\Data\Form\Element\Text',
                 array(
                     'factoryElement' => $this->_factoryElementMock,
                     'factoryCollection' => $this->_collectionFactoryMock

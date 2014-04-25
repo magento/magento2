@@ -42,7 +42,7 @@ class Order extends OrderController
     public $_view;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     public $messageManager;
 }

@@ -53,10 +53,10 @@ class Observer
     /**
      * Generate options for currency displaying with custom currency symbol
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function currencyDisplayOptions(\Magento\Event\Observer $observer)
+    public function currencyDisplayOptions(\Magento\Framework\Event\Observer $observer)
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();

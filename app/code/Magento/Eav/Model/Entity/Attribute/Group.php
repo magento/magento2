@@ -45,7 +45,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
  * @method string getTabGroupCode()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
  */
-class Group extends \Magento\Model\AbstractModel
+class Group extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Resource initialization

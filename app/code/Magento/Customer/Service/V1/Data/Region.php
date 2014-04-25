@@ -26,7 +26,7 @@ namespace Magento\Customer\Service\V1\Data;
 /**
  * Data Object for Address Region
  */
-class Region extends \Magento\Service\Data\AbstractObject
+class Region extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**#@+
      * Array keys

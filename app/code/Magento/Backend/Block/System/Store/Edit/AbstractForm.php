@@ -54,7 +54,7 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
@@ -89,9 +89,9 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Build store type specific fieldset
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return void
      * @abstract
      */
-    abstract protected function _prepareStoreFieldset(\Magento\Data\Form $form);
+    abstract protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form);
 }

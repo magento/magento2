@@ -43,13 +43,13 @@ class LockValidator implements LockValidatorInterface
     /**
      * Check attribute lock state
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param null $attributeSet
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      *
      * @return void
      */
-    public function validate(\Magento\Model\AbstractModel $object, $attributeSet = null)
+    public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
         $adapter = $this->resource->getConnection('read');
         $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
@@ -77,7 +77,7 @@ class LockValidator implements LockValidatorInterface
         }
 
         if ($adapter->fetchOne($select, $bind)) {
-            throw new \Magento\Model\Exception(__('This attribute is used in configurable products.'));
+            throw new \Magento\Framework\Model\Exception(__('This attribute is used in configurable products.'));
         }
     }
 }

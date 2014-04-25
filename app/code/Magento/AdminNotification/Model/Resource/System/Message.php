@@ -23,7 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\Resource\System;
 
-class Message extends \Magento\Model\Resource\Db\AbstractDb
+class Message extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Flag that notifies whether Primary key of table is auto-incremeted

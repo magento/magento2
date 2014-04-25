@@ -103,10 +103,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
         if ($errors) {
             if (!is_null($fileSchemaFile)) {
-                $moreErrors = \Magento\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
+                $moreErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
                 if (empty($moreErrors)) {
                     return;
                 } else {
@@ -136,7 +136,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $actualErrors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $actualErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
 
         if (isset($expectedErrors)) {
             $this->assertNotEmpty(

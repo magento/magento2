@@ -39,19 +39,19 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     protected $commonPriceModel;
 
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel,
-        \Magento\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry
     ) {
         $this->storeManager = $storeManager;
         $this->commonPriceModel = $commonPriceModel;
@@ -76,7 +76,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
         $this->coreRegistry->unregister('rule_data');
         $this->coreRegistry->register(
             'rule_data',
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'store_id' => $product->getStoreId(),
                     'website_id' => $product->getWebsiteId(),

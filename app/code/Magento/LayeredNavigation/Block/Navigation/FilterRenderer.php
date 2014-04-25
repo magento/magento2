@@ -25,9 +25,9 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
-class FilterRenderer extends \Magento\View\Element\Template implements
+class FilterRenderer extends \Magento\Framework\View\Element\Template implements
     \Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface
 {
     /**

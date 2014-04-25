@@ -41,12 +41,12 @@ class Observer
      * Constructor
      *
      * @param \Magento\GoogleAdwords\Helper\Data $helper
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Resource\Order\Collection $collection
      */
     public function __construct(
         \Magento\GoogleAdwords\Helper\Data $helper,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Resource\Order\Collection $collection
     ) {
         $this->_helper = $helper;
@@ -57,10 +57,10 @@ class Observer
     /**
      * Set base grand total of order to registry
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return \Magento\GoogleAdwords\Model\Observer
      */
-    public function setConversionValue(\Magento\Event\Observer $observer)
+    public function setConversionValue(\Magento\Framework\Event\Observer $observer)
     {
         if (!($this->_helper->isGoogleAdwordsActive() && $this->_helper->isDynamicConversionValue())) {
             return $this;

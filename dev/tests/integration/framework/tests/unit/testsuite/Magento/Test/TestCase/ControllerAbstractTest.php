@@ -33,18 +33,18 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 {
     protected $_bootstrap;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Message\Manager */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Message\Manager */
     private $messageManager;
 
     protected function setUp()
     {
-        $this->messageManager = $this->getMock('\Magento\Message\Manager', array(), array(), '', false);
+        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', array(), array(), '', false);
         $request = new \Magento\TestFramework\Request(
             $this->getMock('\Magento\Framework\App\Route\ConfigInterface', array(), array(), '', false),
             $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', array(), array(), '', false)
         );
         $response = new \Magento\TestFramework\Response(
-            $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false),
+            $this->getMock('\Magento\Framework\Stdlib\Cookie', array(), array(), '', false),
             $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false)
         );
 
@@ -62,7 +62,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                     array(
                         array('Magento\Framework\App\RequestInterface', $request),
                         array('Magento\Framework\App\ResponseInterface', $response),
-                        array('Magento\Message\Manager', $this->messageManager),
+                        array('Magento\Framework\Message\Manager', $this->messageManager),
                     )
                 )
             );
@@ -167,15 +167,15 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         return array(
             'message waning type filtering' => array(
                 array('some_warning'),
-                \Magento\Message\MessageInterface::TYPE_WARNING
+                \Magento\Framework\Message\MessageInterface::TYPE_WARNING
             ),
             'message error type filtering' => array(
                 array('error_one', 'error_two'),
-                \Magento\Message\MessageInterface::TYPE_ERROR
+                \Magento\Framework\Message\MessageInterface::TYPE_ERROR
             ),
             'message success type filtering'    => array(
                 array('success!'),
-                \Magento\Message\MessageInterface::TYPE_SUCCESS
+                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
             ),
         );
     }
@@ -199,7 +199,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
     public function testAssertSessionMessagesEmpty()
     {
-        $messagesCollection =  new \Magento\Message\Collection();
+        $messagesCollection =  new \Magento\Framework\Message\Collection();
         $this->messageManager->expects($this->any())->method('getMessages')
             ->will($this->returnValue($messagesCollection));
 
@@ -209,13 +209,13 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     private function addSessionMessages()
     {
         // emulate session messages
-        $messagesCollection = new \Magento\Message\Collection();
+        $messagesCollection = new \Magento\Framework\Message\Collection();
         $messagesCollection
-            ->addMessage(new \Magento\Message\Warning('some_warning'))
-            ->addMessage(new \Magento\Message\Error('error_one'))
-            ->addMessage(new \Magento\Message\Error('error_two'))
-            ->addMessage(new \Magento\Message\Notice('some_notice'))
-            ->addMessage(new \Magento\Message\Success('success!'));
+            ->addMessage(new \Magento\Framework\Message\Warning('some_warning'))
+            ->addMessage(new \Magento\Framework\Message\Error('error_one'))
+            ->addMessage(new \Magento\Framework\Message\Error('error_two'))
+            ->addMessage(new \Magento\Framework\Message\Notice('some_notice'))
+            ->addMessage(new \Magento\Framework\Message\Success('success!'));
         $this->messageManager->expects($this->any())->method('getMessages')
             ->will($this->returnValue($messagesCollection));
     }

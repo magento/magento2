@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
-class Catalog implements \Magento\Option\ArrayInterface
+class Catalog implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

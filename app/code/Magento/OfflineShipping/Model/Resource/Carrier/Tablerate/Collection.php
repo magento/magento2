@@ -28,7 +28,7 @@ namespace Magento\OfflineShipping\Model\Resource\Carrier\Tablerate;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Directory/country table name

@@ -68,7 +68,7 @@ abstract class AbstractDb
     protected $_varPath = '';
 
     /**
-     * @var \Magento\Shell
+     * @var \Magento\Framework\Shell
      */
     protected $_shell;
 
@@ -80,13 +80,13 @@ abstract class AbstractDb
      * @param string $password
      * @param string $schema
      * @param string $varPath
-     * @param \Magento\Shell $shell
-     * @throws \Magento\Exception
+     * @param \Magento\Framework\Shell $shell
+     * @throws \Magento\Framework\Exception
      */
-    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Shell $shell)
+    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
         if (!is_dir($varPath) || !is_writable($varPath)) {
-            throw new \Magento\Exception("The specified '{$varPath}' is not a directory or not writable.");
+            throw new \Magento\Framework\Exception("The specified '{$varPath}' is not a directory or not writable.");
         }
         $this->_host = $host;
         $this->_user = $user;

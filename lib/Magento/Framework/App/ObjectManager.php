@@ -23,14 +23,14 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\ObjectManager\Factory;
+use Magento\Framework\ObjectManager\Factory;
 
 /**
  * A wrapper around object manager with workarounds to access it in client code
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObjectManager extends \Magento\ObjectManager\ObjectManager
+class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
 {
     /**
      * @var ObjectManager
@@ -48,7 +48,7 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
      */
     public static function getInstance()
     {
-        if (!self::$_instance instanceof \Magento\ObjectManager) {
+        if (!self::$_instance instanceof \Magento\Framework\ObjectManager) {
             throw new \RuntimeException('ObjectManager isn\'t initialized');
         }
         return self::$_instance;
@@ -57,23 +57,23 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
     /**
      * Set object manager instance
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @throws \LogicException
      * @return void
      */
-    public static function setInstance(\Magento\ObjectManager $objectManager)
+    public static function setInstance(\Magento\Framework\ObjectManager $objectManager)
     {
         self::$_instance = $objectManager;
     }
 
     /**
      * @param Factory $factory
-     * @param \Magento\ObjectManager\Config $config
+     * @param \Magento\Framework\ObjectManager\Config $config
      * @param array $sharedInstances
      */
     public function __construct(
         Factory $factory,
-        \Magento\ObjectManager\Config $config,
+        \Magento\Framework\ObjectManager\Config $config,
         array $sharedInstances = array()
     ) {
         parent::__construct($factory, $config, $sharedInstances);

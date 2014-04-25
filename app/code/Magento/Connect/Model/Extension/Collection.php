@@ -32,7 +32,7 @@ namespace Magento\Connect\Model\Extension;
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Data\Collection\Filesystem
+class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
      * Files and folders regexsp
@@ -57,7 +57,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $filesystem;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $connectDirectory;
 

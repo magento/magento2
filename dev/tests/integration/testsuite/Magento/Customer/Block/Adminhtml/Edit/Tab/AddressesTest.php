@@ -45,13 +45,13 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerAddressServiceInterface */
     private $_addressService;
 
-    /** @var  \Magento\Registry */
+    /** @var  \Magento\Framework\Registry */
     private $_coreRegistry;
 
     /** @var \Magento\Backend\Model\Session */
     private $_backendSession;
 
-    /** @var  \Magento\ObjectManager */
+    /** @var  \Magento\Framework\ObjectManager */
     private $_objectManager;
 
     /** @var  array */
@@ -66,7 +66,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $this->_addressService = $this->_objectManager->get(
             'Magento\Customer\Service\V1\CustomerAddressServiceInterface'
         );
-        $this->_coreRegistry = $this->_objectManager->get('Magento\Registry');
+        $this->_coreRegistry = $this->_objectManager->get('Magento\Framework\Registry');
         $this->_backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
 
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
@@ -88,7 +88,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
 
         /** @var Addresses $block */
         $block = $block->initForm();
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $block->getForm();
 
         // Validate Country gets set
@@ -102,27 +102,27 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
 
         /** @var Addresses $block */
         $block = $block->initForm();
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $block->getForm();
 
-        $this->assertInstanceOf('Magento\Data\Form\Element\Fieldset', $form->getElement('address_fieldset'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('prefix'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('firstname'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('middlename'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('lastname'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('suffix'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('company'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Multiline', $form->getElement('street'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Fieldset', $form->getElement('address_fieldset'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('prefix'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('firstname'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('middlename'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('lastname'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('suffix'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('company'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Multiline', $form->getElement('street'));
         $this->assertEquals(2, $form->getElement('street')->getLineCount());
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('city'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Select', $form->getElement('country_id'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('city'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Select', $form->getElement('country_id'));
         $this->assertEquals('US', $form->getElement('country_id')->getValue());
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('region'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Hidden', $form->getElement('region_id'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('postcode'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('telephone'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('fax'));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Text', $form->getElement('vat_id'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('region'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Hidden', $form->getElement('region_id'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('postcode'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('telephone'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('fax'));
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Text', $form->getElement('vat_id'));
     }
 
     public function testToHtml()
@@ -130,7 +130,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $this->setupExistingCustomerData();
         /** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses $block */
         $block = $this->_objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses'
         );
@@ -167,7 +167,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $customer = $this->_customerAccountService->getCustomer(1);
         $this->_customerData = array(
             'customer_id' => $customer->getId(),
-            'account' => \Magento\Service\DataObjectConverter::toFlatArray($customer)
+            'account' => \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer)
         );
         $this->_customerData['account']['id'] = $customer->getId();
         /** @var Address[] $addresses */

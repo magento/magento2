@@ -52,7 +52,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     protected $_ctlgProdConfigur = null;
 
     /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
@@ -60,13 +60,13 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Escaper $escaper
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_ctlgProdConfigur = $ctlgProdConfigur;
         $this->_coreData = $coreData;

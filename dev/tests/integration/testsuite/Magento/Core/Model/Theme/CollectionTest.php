@@ -102,7 +102,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     'theme_path' => 'magento_default',
                     'code' => 'magento_default',
                     'preview_image' => null,
-                    'type' => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
+                    'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
                 )
             )
         );
@@ -117,9 +117,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasThemeInCollection()
     {
-        /** @var $themeModel \Magento\View\Design\ThemeInterface */
+        /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\Design\ThemeInterface'
+            'Magento\Framework\View\Design\ThemeInterface'
         );
         $themeModel->setData(
             array(
@@ -130,7 +130,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'is_featured' => false,
                 'theme_path' => 'default_space',
                 'preview_image' => 'images/preview.png',
-                'type' => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
+                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
             )
         );
 

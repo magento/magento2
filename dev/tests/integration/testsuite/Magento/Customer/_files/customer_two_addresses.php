@@ -38,7 +38,7 @@ $customerAddress->setData(
         'postcode' => 47676,
         'country_id' => 'US',
         'city' => 'CityX',
-        'street' => 'Black str, 48',
+        'street' => ['Black str, 48'],
         'lastname' => 'Smith',
         'firstname' => 'John',
         'parent_id' => 1,

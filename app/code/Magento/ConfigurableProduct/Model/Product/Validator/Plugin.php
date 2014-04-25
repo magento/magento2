@@ -27,7 +27,7 @@ use Closure;
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Event\Manager;
+use Magento\Framework\Event\Manager;
 use Magento\Core\Helper;
 
 /**
@@ -36,7 +36,7 @@ use Magento\Core\Helper;
 class Plugin
 {
     /**
-     * @var \Magento\Event\Manager
+     * @var \Magento\Framework\Event\Manager
      */
     protected $eventManager;
 
@@ -69,7 +69,7 @@ class Plugin
      * @param Closure $proceed
      * @param Product $product
      * @param RequestInterface $request
-     * @param \Magento\Object $response
+     * @param \Magento\Framework\Object $response
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -78,7 +78,7 @@ class Plugin
         Closure $proceed,
         \Magento\Catalog\Model\Product $product,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Object $response
+        \Magento\Framework\Object $response
     ) {
         $result = $proceed($product, $request, $response);
         $variationProducts = (array)$request->getPost('variations-matrix');

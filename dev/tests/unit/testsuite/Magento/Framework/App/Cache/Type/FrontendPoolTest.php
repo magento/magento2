@@ -31,7 +31,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -47,7 +47,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $this->_arguments = $this->getMock('Magento\Framework\App\Arguments', array(), array(), '', false);
         $this->_cachePool = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', array(), array(), '', false);
         $this->_model = new FrontendPool(
@@ -77,7 +77,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($fixtureFrontendId)
         );
 
-        $cacheFrontend = $this->getMock('Magento\Cache\FrontendInterface');
+        $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
         $this->_cachePool->expects(
             $this->once()
         )->method(

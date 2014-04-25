@@ -33,7 +33,7 @@ namespace Magento\Catalog\Block\Product\Compare;
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Sidebar extends \Magento\Catalog\Block\Product\Compare\AbstractCompare implements
-    \Magento\View\Block\IdentityInterface
+    \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * The property is used to define content-scope of block. Can be private or public.
@@ -124,7 +124,7 @@ class Sidebar extends \Magento\Catalog\Block\Product\Compare\AbstractCompare imp
         $identities = array();
         foreach ($this->getItems() as $item) {
             $product = $item->getProduct();
-            if ($product instanceof \Magento\Object\IdentityInterface) {
+            if ($product instanceof \Magento\Framework\Object\IdentityInterface) {
                 $identities = array_merge($identities, $product->getIdentities());
             }
         }

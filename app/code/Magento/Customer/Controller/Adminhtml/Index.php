@@ -31,8 +31,9 @@ use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
-use Magento\Exception\NoSuchEntityException;
-use Magento\Message\Error;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\Error;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadata;
 use Magento\Customer\Service\V1\Data\AddressConverter;
 
@@ -46,14 +47,14 @@ use Magento\Customer\Service\V1\Data\AddressConverter;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Validator
+     * @var \Magento\Framework\Validator
      */
     protected $_validator;
 
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -103,12 +104,12 @@ class Index extends \Magento\Backend\App\Action
     /** @var  \Magento\Customer\Helper\View */
     protected $_viewHelper;
 
-    /** @var \Magento\Math\Random */
+    /** @var \Magento\Framework\Math\Random */
     protected $_random;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
@@ -121,13 +122,13 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
      * @param \Magento\Customer\Helper\View $viewHelper
      * @param \Magento\Customer\Helper\Data $helper
-     * @param \Magento\Math\Random $random
+     * @param \Magento\Framework\Math\Random $random
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
@@ -140,7 +141,7 @@ class Index extends \Magento\Backend\App\Action
         CustomerAccountServiceInterface $accountService,
         \Magento\Customer\Helper\View $viewHelper,
         \Magento\Customer\Helper\Data $helper,
-        \Magento\Math\Random $random
+        \Magento\Framework\Math\Random $random
     ) {
         $this->_fileFactory = $fileFactory;
         $this->_coreRegistry = $coreRegistry;
@@ -244,7 +245,7 @@ class Index extends \Magento\Backend\App\Action
         if ($isExistingCustomer) {
             try {
                 $customer = $this->_customerAccountService->getCustomer($customerId);
-                $customerData['account'] = \Magento\Service\DataObjectConverter::toFlatArray($customer);
+                $customerData['account'] = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer);
                 $customerData['account']['id'] = $customerId;
                 try {
                     $addresses = $this->_addressService->getAddresses($customerId);
@@ -394,7 +395,7 @@ class Index extends \Magento\Backend\App\Action
                 if ($isExistingCustomer) {
                     $savedCustomerData = $this->_customerAccountService->getCustomer($customerId);
                     $customerData = array_merge(
-                        \Magento\Service\DataObjectConverter::toFlatArray($savedCustomerData),
+                        \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($savedCustomerData),
                         $customerData
                     );
                 }
@@ -443,19 +444,19 @@ class Index extends \Magento\Backend\App\Action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
-            } catch (\Magento\Validator\ValidatorException $exception) {
+            } catch (\Magento\Framework\Validator\ValidatorException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessages());
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
-            } catch (\Magento\Model\Exception $exception) {
-                $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
+            } catch (\Magento\Framework\Model\Exception $exception) {
+                $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
                 if (!count($messages)) {
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
-            } catch (\Magento\Exception\Exception $exception) {
+            } catch (LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
@@ -498,8 +499,8 @@ class Index extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(__('Customer will receive an email with a link to reset password.'));
         } catch (NoSuchEntityException $exception) {
             return $this->_redirect('customer/index');
-        } catch (\Magento\Model\Exception $exception) {
-            $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
+        } catch (\Magento\Framework\Model\Exception $exception) {
+            $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
             if (!count($messages)) {
                 $messages = $exception->getMessage();
             }
@@ -706,7 +707,7 @@ class Index extends \Magento\Backend\App\Action
             try {
                 $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId)->delete();
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Logger')->logException($exception);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($exception);
             }
         }
 
@@ -811,7 +812,7 @@ class Index extends \Magento\Backend\App\Action
      */
     public function validateAction()
     {
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setError(0);
 
         $customer = $this->_validateCustomer($response);
@@ -830,7 +831,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Customer validation
      *
-     * @param \Magento\Object $response
+     * @param \Magento\Framework\Object $response
      * @return Customer|null
      */
     protected function _validateCustomer($response)
@@ -845,7 +846,7 @@ class Index extends \Magento\Backend\App\Action
             $customerForm = $this->_formFactory->create(
                 'customer',
                 'adminhtml_customer',
-                \Magento\Service\DataObjectConverter::toFlatArray($customer),
+                \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer),
                 true
             );
             $customerForm->setInvisibleIgnored(true);
@@ -858,9 +859,9 @@ class Index extends \Magento\Backend\App\Action
 
             $customer = $this->_customerBuilder->populateWithArray($data)->create();
             $errors = $this->_customerAccountService->validateCustomerData($customer);
-        } catch (\Magento\Model\Exception $exception) {
+        } catch (\Magento\Framework\Model\Exception $exception) {
             /* @var $error Error */
-            foreach ($exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $error) {
+            foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }
         }
@@ -878,7 +879,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Customer address validation.
      *
-     * @param \Magento\Object $response
+     * @param \Magento\Framework\Object $response
      * @return void
      */
     protected function _validateCustomerAddress($response)

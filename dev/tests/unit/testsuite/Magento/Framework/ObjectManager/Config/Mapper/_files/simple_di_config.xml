@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <!-- Comment within root node -->
+    <preference for="Magento\Framework\Module\UpdaterInterface" type="Magento\Framework\Module\Updaterter" />
+    <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http\Proxy" />
+    <!--Arguments only-->
+    <type name="Magento\Framework\App\State">
+        <arguments>
+            <argument name="test name" xsi:type="string">test value</argument>
+        </arguments>
+    </type>
+    <!--Arguments and plugins-->
+    <type name="Magento\Core\Model\Config\Modules">
+        <arguments>
+            <argument name="test name" xsi:type="string">test value</argument>
+        </arguments>
+        <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config\Modules\Plugin" disabled="true" sortOrder="10" />
+        <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
+        <plugin name="overridden_plugin" sortOrder="30" disabled="true" />
+    </type>
+    <!--Shared type-->
+    <type name="Magento\Framework\HTTP\Handler\Composite" shared="false">
+        <arguments>
+            <argument name="test name" xsi:type="string">test value</argument>
+        </arguments>
+    </type>
+    <virtualType name="customCacheInstance" type="Magento\Framework\App\Cache" shared="true" />
+    <virtualType name="customOverriddenInstance" shared="false" />
+</config>

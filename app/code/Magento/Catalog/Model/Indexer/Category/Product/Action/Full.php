@@ -45,7 +45,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Return select for remove unnecessary data
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function getSelectUnnecessaryData()
     {
@@ -95,7 +95,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                     $query,
                     $this->getMainTable(),
                     array('category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'),
-                    \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
         }

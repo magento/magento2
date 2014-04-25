@@ -38,7 +38,7 @@ class Price extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $product = $this->_coreRegistry->registry('product');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset('tiered_price', array('legend' => __('Tier Pricing')));
 

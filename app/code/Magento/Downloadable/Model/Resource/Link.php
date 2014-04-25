@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Model\Resource;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Model\Resource\Db\AbstractDb
+class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Catalog data

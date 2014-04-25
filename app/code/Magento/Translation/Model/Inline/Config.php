@@ -26,7 +26,7 @@ namespace Magento\Translation\Model\Inline;
 /**
  * Inline Translation config
  */
-class Config implements \Magento\Translate\Inline\ConfigInterface
+class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 {
     /**
      * Core store config

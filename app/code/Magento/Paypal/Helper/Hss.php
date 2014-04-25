@@ -45,19 +45,19 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutInterface $layout
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\View\LayoutInterface $layout
+        \Magento\Framework\View\LayoutInterface $layout
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_layout = $layout;

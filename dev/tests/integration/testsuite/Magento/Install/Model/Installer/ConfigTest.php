@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected static $_tmpDir = '';
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected static $_varDirectory;
 
@@ -91,9 +91,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Install\Model\Installer\Config'
         );
-        /** @var $result \Magento\Object */
+        /** @var $result \Magento\Framework\Object */
         $result = $model->getFormData();
-        $this->assertInstanceOf('Magento\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\Object', $result);
         $data = $result->getData();
         $this->assertArrayHasKey('db_host', $data);
     }

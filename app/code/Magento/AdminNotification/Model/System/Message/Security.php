@@ -59,7 +59,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     protected $_config;
 
     /**
-     * @var \Magento\HTTP\Adapter\CurlFactory
+     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
      */
     protected $_curlFactory;
 
@@ -67,13 +67,13 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\HTTP\Adapter\CurlFactory $curlFactory
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;
         $this->_backendConfig = $backendConfig;
@@ -110,7 +110,7 @@ class Security implements \Magento\AdminNotification\Model\System\MessageInterfa
     {
         $unsecureBaseURL = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        /** @var $http \Magento\HTTP\Adapter\Curl */
+        /** @var $http \Magento\Framework\HTTP\Adapter\Curl */
         $http = $this->_curlFactory->create();
         $http->setConfig(array('timeout' => $this->_verificationTimeOut));
         $http->write(\Zend_Http_Client::POST, $unsecureBaseURL . $this->_filePath);

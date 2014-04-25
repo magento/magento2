@@ -36,7 +36,7 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
+        $frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
 
         $cacheEnabler = $this->getMock('Magento\Framework\App\Cache\StateInterface');
         $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));

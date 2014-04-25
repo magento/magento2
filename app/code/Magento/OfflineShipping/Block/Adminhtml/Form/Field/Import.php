@@ -30,7 +30,7 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
  * @package    Magento_OfflineShipping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Import extends \Magento\Data\Form\Element\AbstractElement
+class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * @return void

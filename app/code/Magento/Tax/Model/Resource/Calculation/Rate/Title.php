@@ -32,7 +32,7 @@ namespace Magento\Tax\Model\Resource\Calculation\Rate;
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Title extends \Magento\Model\Resource\Db\AbstractDb
+class Title extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

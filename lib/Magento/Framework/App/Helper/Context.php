@@ -25,25 +25,25 @@
  */
 namespace Magento\Framework\App\Helper;
 
-class Context implements \Magento\ObjectManager\ContextInterface
+class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
     /**
-     * @var  \Magento\Event\ManagerInterface
+     * @var  \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -53,48 +53,48 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_httpRequest;
 
     /**
-     * @var \Magento\Cache\ConfigInterface
+     * @var \Magento\Framework\Cache\ConfigInterface
      */
     protected $_cacheConfig;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\HTTP\Header
+     * @var \Magento\Framework\HTTP\Header
      */
     protected $_httpHeader;
 
     /**
-     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Translate\InlineInterface $translateInline
-     * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\App\RequestInterface $httpRequest
-     * @param \Magento\Cache\ConfigInterface $cacheConfig
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\HTTP\Header $httpHeader
-     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Framework\Cache\ConfigInterface $cacheConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\HTTP\Header $httpHeader
+     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Translate\InlineInterface $translateInline,
-        \Magento\Module\Manager $moduleManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
-        \Magento\Cache\ConfigInterface $cacheConfig,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\UrlInterface $urlBuilder,
-        \Magento\HTTP\Header $httpHeader,
-        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        \Magento\Framework\Cache\ConfigInterface $cacheConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\HTTP\Header $httpHeader,
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
         $this->translateInline = $translateInline;
         $this->_moduleManager = $moduleManager;
@@ -108,7 +108,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Translate\InlineInterface
+     * @return \Magento\Framework\Translate\InlineInterface
      */
     public function getTranslateInline()
     {
@@ -116,7 +116,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Module\Manager
+     * @return \Magento\Framework\Module\Manager
      */
     public function getModuleManager()
     {
@@ -124,7 +124,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     public function getUrlBuilder()
     {
@@ -140,7 +140,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Cache\ConfigInterface
+     * @return \Magento\Framework\Cache\ConfigInterface
      */
     public function getCacheConfig()
     {
@@ -148,7 +148,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Event\ManagerInterface
+     * @return \Magento\Framework\Event\ManagerInterface
      */
     public function getEventManager()
     {
@@ -156,7 +156,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Logger
+     * @return \Magento\Framework\Logger
      */
     public function getLogger()
     {
@@ -164,7 +164,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\HTTP\Header
+     * @return \Magento\Framework\HTTP\Header
      */
     public function getHttpHeader()
     {
@@ -172,7 +172,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\HTTP\PhpEnvironment\RemoteAddress
+     * @return \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
     public function getRemoteAddress()
     {

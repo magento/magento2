@@ -44,16 +44,16 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
 
         $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $request->expects($this->any())->method('setActionName')->will($this->returnSelf());
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        /** @var $layoutMock \Magento\View\Layout|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $layoutMock \Magento\Framework\View\Layout|PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMock(
-            'Magento\View\Layout',
+            'Magento\Framework\View\Layout',
             array(
                 'getBlock',
                 'getUpdate',
@@ -68,17 +68,17 @@ class EditorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        /** @var $layoutMock \Magento\View\LayoutInterface */
+        /** @var $layoutMock \Magento\Framework\View\LayoutInterface */
         $layoutMock->expects($this->any())->method('generateXml')->will($this->returnSelf());
         $layoutMock->expects(
             $this->any()
         )->method(
             'getNode'
         )->will(
-            $this->returnValue(new \Magento\Simplexml\Element('<root />'))
+            $this->returnValue(new \Magento\Framework\Simplexml\Element('<root />'))
         );
         $blockMessage = $this->getMock(
-            'Magento\View\Element\Messages',
+            'Magento\Framework\View\Element\Messages',
             array('addMessages', 'setEscapeMessageFlag', 'addStorageType'),
             array(),
             '',
@@ -87,7 +87,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMessage));
 
         $blockMock = $this->getMock(
-            'Magento\View\Element\Template',
+            'Magento\Framework\View\Element\Template',
             array('setActive', 'getMenuModel', 'getParentItems'),
             array(),
             '',
@@ -137,7 +137,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addTypeFilter'
         )->with(
-            \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
         )->will(
             $this->returnValue($themeCollectionMock)
         );
@@ -211,7 +211,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getObjectManagerMap($countCustomization)
     {
-        $translate = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
+        $translate = $this->getMock('Magento\Framework\TranslateInterface', array(), array(), '', false);
         $translate->expects($this->any())->method('translate')->will($this->returnSelf());
 
         $storeManager = $this->getMock(
@@ -223,9 +223,9 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         );
         $storeManager->expects($this->any())->method('getStore')->will($this->returnSelf());
 
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $authMock = $this->getMock('Magento\AuthorizationInterface');
+        $authMock = $this->getMock('Magento\Framework\AuthorizationInterface');
         $authMock->expects($this->any())->method('filterAclNodes')->will($this->returnSelf());
         $backendSession = $this->getMock(
             'Magento\Backend\Model\Session',
@@ -239,10 +239,10 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getMessages'
         )->will(
-            $this->returnValue($this->getMock('Magento\Message\Collection', array(), array(), '', false))
+            $this->returnValue($this->getMock('Magento\Framework\Message\Collection', array(), array(), '', false))
         );
 
-        $inlineMock = $this->getMock('Magento\Translate\Inline', array(), array(), '', false);
+        $inlineMock = $this->getMock('Magento\Framework\Translate\Inline', array(), array(), '', false);
         $aclFilterMock = $this->getMock('Magento\Backend\Model\Layout\Filter\Acl', array(), array(), '', false);
 
         return array(
@@ -250,13 +250,13 @@ class EditorTest extends \PHPUnit_Framework_TestCase
                 'Magento\Core\Model\Resource\Theme\CollectionFactory',
                 $this->_getThemeCollectionFactory($countCustomization)
             ),
-            array('Magento\TranslateInterface', $translate),
+            array('Magento\Framework\TranslateInterface', $translate),
             array('Magento\Framework\App\Config\ScopeConfigInterface', $configMock),
-            array('Magento\Event\ManagerInterface', $eventManager),
+            array('Magento\Framework\Event\ManagerInterface', $eventManager),
             array('Magento\Store\Model\StoreManager', $storeManager),
-            array('Magento\AuthorizationInterface', $authMock),
+            array('Magento\Framework\AuthorizationInterface', $authMock),
             array('Magento\Backend\Model\Session', $backendSession),
-            array('Magento\Translate\Inline', $inlineMock),
+            array('Magento\Framework\Translate\Inline', $inlineMock),
             array('Magento\Backend\Model\Layout\Filter\Acl', $aclFilterMock)
         );
     }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for config
@@ -35,10 +35,10 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_schema = null;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param string $moduleName
      */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader, $moduleName)
+    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader, $moduleName)
     {
         $this->_schema = $moduleReader->getModuleDir('etc', $moduleName) . '/config.xsd';
     }

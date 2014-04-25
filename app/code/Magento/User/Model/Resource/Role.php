@@ -28,7 +28,7 @@ use Magento\User\Model\Acl\Role\User as RoleUser;
 /**
  * Admin role resource model
  */
-class Role extends \Magento\Model\Resource\Db\AbstractDb
+class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Users table
@@ -47,24 +47,24 @@ class Role extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Cache
      *
-     * @var \Magento\Cache\FrontendInterface
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         $this->dateTime = $dateTime;
         parent::__construct($resource);
@@ -87,10 +87,10 @@ class Role extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Process role before saving
      *
-     * @param \Magento\Model\AbstractModel $role
+     * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $role)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $role)
     {
         if (!$role->getId()) {
             $role->setCreated($this->dateTime->formatDate(true));
@@ -134,10 +134,10 @@ class Role extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Process role after saving
      *
-     * @param \Magento\Model\AbstractModel $role
+     * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $role)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $role)
     {
         $this->_updateRoleUsersAcl($role);
         $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(\Magento\Backend\Block\Menu::CACHE_TAGS));
@@ -147,10 +147,10 @@ class Role extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Process role after deleting
      *
-     * @param \Magento\Model\AbstractModel $role
+     * @param \Magento\Framework\Model\AbstractModel $role
      * @return $this
      */
-    protected function _afterDelete(\Magento\Model\AbstractModel $role)
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $role)
     {
         $adapter = $this->_getWriteAdapter();
 

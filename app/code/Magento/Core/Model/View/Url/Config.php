@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\View\Url;
 
-class Config implements \Magento\View\Url\ConfigInterface
+class Config implements \Magento\Framework\View\Url\ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

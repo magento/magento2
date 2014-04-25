@@ -38,15 +38,15 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode(\Magento\Framework\App\Area::AREA_FRONTEND);
         $area = $objectManager->get('Magento\Framework\App\AreaList')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+            ->getArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $area->load();
 
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get('Magento\Newsletter\Model\Template\Filter');
 
-        $transport = $this->getMock('\Magento\Mail\TransportInterface');
+        $transport = $this->getMock('\Magento\Framework\Mail\TransportInterface');
         $transport->expects($this->exactly(2))->method('sendMessage')->will($this->returnSelf());
 
         $builder = $this->getMock(
@@ -79,17 +79,17 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $errorMsg = md5(microtime());
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $transport = $this->getMock('\Magento\Mail\TransportInterface');
+        $transport = $this->getMock('\Magento\Framework\Mail\TransportInterface');
         $transport->expects(
             $this->any()
         )->method(
             'sendMessage'
         )->will(
-            $this->throwException(new \Magento\Mail\Exception($errorMsg, 99))
+            $this->throwException(new \Magento\Framework\Mail\Exception($errorMsg, 99))
         );
 
         $builder = $this->getMock(

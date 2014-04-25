@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractObjectBuilder;
 
 class NestedDataBuilder extends AbstractObjectBuilder
 {

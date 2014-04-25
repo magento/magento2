@@ -140,8 +140,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 array(
-                    new \Magento\Object(array('path' => 'config/key1', 'value' => 'website_db_value1')),
-                    new \Magento\Object(array('path' => 'config/key3', 'value' => 'website_db_value3'))
+                    new \Magento\Framework\Object(array('path' => 'config/key1', 'value' => 'website_db_value1')),
+                    new \Magento\Framework\Object(array('path' => 'config/key3', 'value' => 'website_db_value3'))
                 )
             )
         );

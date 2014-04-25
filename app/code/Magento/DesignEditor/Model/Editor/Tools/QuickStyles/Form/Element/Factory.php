@@ -25,12 +25,12 @@
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element;
 
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -47,7 +47,7 @@ class Factory
      *
      * @param string $className
      * @param array $data
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function create($className, array $data = array())
     {

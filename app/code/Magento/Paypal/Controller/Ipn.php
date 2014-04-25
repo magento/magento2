@@ -29,7 +29,7 @@ namespace Magento\Paypal\Controller;
 class Ipn extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -41,12 +41,12 @@ class Ipn extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
-        \Magento\Logger $logger
+        \Magento\Framework\Logger $logger
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;

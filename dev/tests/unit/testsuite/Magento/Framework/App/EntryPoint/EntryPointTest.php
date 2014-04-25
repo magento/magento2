@@ -53,7 +53,7 @@ class EntryPointTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_parameters = array('MAGE_MODE' => 'developer');
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $this->_rootDir = realpath(__DIR__ . '/../../../../../../../');
         $this->_model = new \Magento\Framework\App\EntryPoint\EntryPoint(

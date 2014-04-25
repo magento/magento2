@@ -25,7 +25,7 @@
  */
 namespace Magento\Directory\Model\Config\Source;
 
-class Country implements \Magento\Option\ArrayInterface
+class Country implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Countries

@@ -52,10 +52,10 @@ class File extends AbstractData
     protected $_fileSystem;
 
     /**
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param null $value
      * @param string $entityTypeCode
      * @param bool $isAjax
@@ -64,10 +64,10 @@ class File extends AbstractData
      * @param \Magento\Framework\App\Filesystem $fileSystem
      */
     public function __construct(
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Logger $logger,
         \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
         $isAjax,
@@ -252,14 +252,15 @@ class File extends AbstractData
             }
         }
 
-        $path = $this->_fileSystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR) . '/' . $this->_entityTypeCode;
+        $path = $this->_fileSystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR)
+            . '/' . $this->_entityTypeCode;
 
         $result = $original;
         // unlink entity file
         if ($toDelete) {
             $result = '';
             $file = $path . $original;
-            $ioFile = new \Magento\Io\File();
+            $ioFile = new \Magento\Framework\Io\File();
             if ($ioFile->fileExists($file)) {
                 $ioFile->rm($file);
             }
@@ -267,7 +268,7 @@ class File extends AbstractData
 
         if (!empty($value['tmp_name'])) {
             try {
-                $uploader = new \Magento\File\Uploader($value);
+                $uploader = new \Magento\Framework\File\Uploader($value);
                 $uploader->setFilesDispersion(true);
                 $uploader->setFilenamesCaseSensitivity(false);
                 $uploader->setAllowRenameFiles(true);

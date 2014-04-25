@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $reader;
 
     /**
-     * @var \Magento\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cache;
 
@@ -59,7 +59,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->reader = $this->getMock('Magento\Indexer\Model\Config\Reader', array('read'), array(), '', false);
         $this->cache = $this->getMockForAbstractClass(
-            'Magento\Config\CacheInterface',
+            'Magento\Framework\Config\CacheInterface',
             array(),
             '',
             false,

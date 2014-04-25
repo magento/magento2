@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Downloadable\Helper\Download">
         <arguments>
             <argument name="coreFileStorageDb" xsi:type="object">Magento\Core\Helper\File\Storage\Database\Proxy</argument>
@@ -34,7 +34,7 @@
             <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="downloadable_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
@@ -52,7 +52,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Pricing\PriceComposite">
+    <type name="Magento\Framework\Pricing\PriceComposite">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="link_price" xsi:type="array">

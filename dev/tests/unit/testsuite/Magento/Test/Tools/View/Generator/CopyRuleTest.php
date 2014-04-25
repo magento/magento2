@@ -59,7 +59,7 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_directoryMock = $this->getMock(
-            '\Magento\Filesystem\Directory\Read',
+            '\Magento\Framework\Filesystem\Directory\Read',
             array('search', 'isDirectory', 'getAbsolutePath', 'getRelativePath'),
             array(),
             '',
@@ -78,11 +78,13 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
             array(
                 $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false),
                 $filesystemMock,
-                $this->getMock('\Magento\Config\FileIteratorFactory', array(), array(), '', false)
+                $this->getMock('\Magento\Framework\Config\FileIteratorFactory', array(), array(), '', false)
             )
         );
         $this->_themeCollection->expects($this->any())->method('isLoaded')->will($this->returnValue(true));
-        $this->_fallbackRule = $this->getMockForAbstractClass('Magento\View\Design\Fallback\Rule\RuleInterface');
+        $this->_fallbackRule = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Design\Fallback\Rule\RuleInterface'
+        );
         $this->_object = new \Magento\Tools\View\Generator\CopyRule(
             $filesystemMock,
             $this->_themeCollection,

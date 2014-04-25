@@ -36,7 +36,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDesignTheme(
             'Magento/blank'
         );
@@ -44,8 +44,9 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var $inline \Magento\Translate\Inline */
-        $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Translate\Inline');
+        /** @var $inline \Magento\Framework\Translate\Inline */
+        $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Translate\Inline');
         $this->_inlineParser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Translation\Model\Inline\Parser',
             array('translateInline' => $inline)
@@ -88,7 +89,9 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
             $model->delete();
         } catch (\Exception $e) {
             $model->delete();
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Logger')->logException($e);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Framework\Logger')
+                ->logException($e);
         }
     }
 

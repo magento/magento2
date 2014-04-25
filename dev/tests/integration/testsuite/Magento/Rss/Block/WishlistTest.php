@@ -39,7 +39,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $_coreData;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -95,8 +95,8 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Escaper $escaper */
-        $escaper = $this->_objectManager->create('Magento\Escaper');
+        /** @var \Magento\Framework\Escaper $escaper */
+        $escaper = $this->_objectManager->create('Magento\Framework\Escaper');
 
         $expectedSting = '%A' . __("<title><![CDATA[%1 %2's Wishlist]]></title>",
                 $escaper->escapeHtml($this->_customerSession->getCustomerDataObject()->getFirstname()),

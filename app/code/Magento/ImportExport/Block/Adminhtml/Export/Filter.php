@@ -100,13 +100,13 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'id' => $this->getFilterElementId($attribute->getAttributeCode()),
             'class' => 'input-text input-text-range-date',
             'date_format' => $this->_localeDate->getDateFormat(
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
             ),
             'image' => $this->getViewFileUrl('images/grid-cal.gif')
         );
-        /** @var $selectBlock \Magento\View\Element\Html\Date */
+        /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->getBlockFactory()->createBlock(
-            'Magento\View\Element\Html\Date',
+            'Magento\Framework\View\Element\Html\Date',
             array('data' => $arguments)
         );
         $fromValue = null;
@@ -175,9 +175,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'class' => 'multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
             );
-            /** @var $selectBlock \Magento\View\Element\Html\Select */
+            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Element\Html\Select',
+                'Magento\Framework\View\Element\Html\Select',
                 array('data' => $arguments)
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
@@ -256,9 +256,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class' => 'select select-export-filter'
             );
-            /** @var $selectBlock \Magento\View\Element\Html\Select */
+            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Element\Html\Select',
+                'Magento\Framework\View\Element\Html\Select',
                 array('data' => $arguments)
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
@@ -339,11 +339,11 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param mixed $value
      * @param Attribute $row
-     * @param \Magento\Object $column
+     * @param \Magento\Framework\Object $column
      * @param boolean $isExport
      * @return string
      */
-    public function decorateFilter($value, Attribute $row, \Magento\Object $column, $isExport)
+    public function decorateFilter($value, Attribute $row, \Magento\Framework\Object $column, $isExport)
     {
         $value = null;
         $values = $column->getValues();
@@ -405,10 +405,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection by setting page number, sorting etc..
      *
-     * @param \Magento\Data\Collection $collection
+     * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
      */
-    public function prepareCollection(\Magento\Data\Collection $collection)
+    public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {
         $this->setCollection($collection);
         return $this->getCollection();

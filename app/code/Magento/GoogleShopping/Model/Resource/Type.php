@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model\Resource;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Type extends \Magento\Model\Resource\Db\AbstractDb
+class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * @return void

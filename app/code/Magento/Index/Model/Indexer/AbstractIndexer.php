@@ -33,7 +33,7 @@ namespace Magento\Index\Model\Indexer;
 use Magento\Index\Model\Event;
 use Magento\Index\Model\IndexerInterface;
 
-abstract class AbstractIndexer extends \Magento\Model\AbstractModel implements IndexerInterface
+abstract class AbstractIndexer extends \Magento\Framework\Model\AbstractModel implements IndexerInterface
 {
     /**
      * @var array

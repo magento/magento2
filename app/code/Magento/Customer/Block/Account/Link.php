@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Block\Account;
 
-class Link extends \Magento\View\Element\Html\Link
+class Link extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * @var \Magento\Customer\Helper\Data
@@ -31,12 +31,12 @@ class Link extends \Magento\View\Element\Html\Link
     protected $_customerHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {

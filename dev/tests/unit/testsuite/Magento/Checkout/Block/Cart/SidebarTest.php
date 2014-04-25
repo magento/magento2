@@ -35,10 +35,10 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testDeserializeRenders()
     {
-        $childBlock = $this->getMock('Magento\View\Element\AbstractBlock', array(), array(), '', false);
-        /** @var $layout \Magento\View\LayoutInterface */
+        $childBlock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', array(), array(), '', false);
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $this->getMock(
-            'Magento\View\Layout',
+            'Magento\Framework\View\Layout',
             array('createBlock', 'getChildName', 'setChild'),
             array(),
             '',
@@ -59,7 +59,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\View\Element\RendererList'
+            'Magento\Framework\View\Element\RendererList'
         )->will(
             $this->returnValue($rendererList)
         );

@@ -32,7 +32,7 @@ namespace Magento\Paypal\Block\Express;
  * @package    Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\View\Element\Template
+class Review extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\Quote
@@ -71,13 +71,13 @@ class Review extends \Magento\View\Element\Template
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Model\Address\Config $addressConfig,
         array $data = array()
@@ -132,7 +132,7 @@ class Review extends \Magento\View\Element\Template
     {
         /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */
         $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
-        $addressData = \Magento\Convert\ConvertArray::toFlatArray($address->getData());
+        $addressData = \Magento\Framework\Convert\ConvertArray::toFlatArray($address->getData());
         return $renderer->renderArray($addressData);
     }
 
@@ -153,10 +153,10 @@ class Review extends \Magento\View\Element\Template
     /**
      * Get either shipping rate code or empty value on error
      *
-     * @param \Magento\Object $rate
+     * @param \Magento\Framework\Object $rate
      * @return string
      */
-    public function renderShippingRateValue(\Magento\Object $rate)
+    public function renderShippingRateValue(\Magento\Framework\Object $rate)
     {
         if ($rate->getErrorMessage()) {
             return '';
@@ -167,7 +167,7 @@ class Review extends \Magento\View\Element\Template
     /**
      * Get shipping rate code title and its price or error message
      *
-     * @param \Magento\Object $rate
+     * @param \Magento\Framework\Object $rate
      * @param string $format
      * @param string $inclTaxFormat
      * @return string

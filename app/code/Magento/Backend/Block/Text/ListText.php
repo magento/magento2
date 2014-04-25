@@ -34,6 +34,6 @@
  */
 namespace Magento\Backend\Block\Text;
 
-class ListText extends \Magento\View\Element\Text\ListText
+class ListText extends \Magento\Framework\View\Element\Text\ListText
 {
 }

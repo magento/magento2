@@ -40,7 +40,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Backend\Block\Template\Context */
     private $_context;
 
-    /** @var  \Magento\Registry */
+    /** @var  \Magento\Framework\Registry */
     private $_coreRegistry;
 
     /** @var  CustomerBuilder */
@@ -55,7 +55,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     private $_objectManager;
 
     /** @var  View */
@@ -72,14 +72,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_customerBuilder = $this->_objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
-        $this->_coreRegistry = $this->_objectManager->get('Magento\Registry');
+        $this->_coreRegistry = $this->_objectManager->get('Magento\Framework\Registry');
         $this->_customerAccountService = $this->_objectManager->get(
             'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
         );
         $this->_groupService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
         $this->_block = $this->_objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Adminhtml\Edit\Tab\View',
             '',
@@ -131,7 +131,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $createdAt = $this->_block->formatDate(
             $this->_loadCustomer()->getCreatedAt(),
-            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
             true
         );
         $this->assertEquals($createdAt, $this->_block->getCreateDate());
@@ -146,7 +146,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $date = $this->_context->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
         $storeCreateDate = $this->_block->formatDate(
             $date,
-            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
             true
         );
         $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());
@@ -158,9 +158,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCreateDateTimezone()
     {
         /**
-         * @var \Magento\Stdlib\DateTime\TimezoneInterface $defaultTimeZonePath
+         * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $defaultTimeZonePath
          */
-        $defaultTimeZonePath = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')
+        $defaultTimeZonePath = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->getDefaultTimezonePath();
         $timezone = $this->_context->getScopeConfig()->getValue(
             $defaultTimeZonePath,

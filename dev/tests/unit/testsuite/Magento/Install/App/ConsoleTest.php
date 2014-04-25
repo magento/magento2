@@ -108,14 +108,14 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(array('di' => 'config'))
         );
 
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_objectManagerMock->expects($this->once())->method('configure')->with(array('di' => 'config'));
     }
 
     protected function _createModel($params = array())
     {
         $directory = $this->getMock(
-            'Magento\Filesystem\Directory\Read',
+            'Magento\Framework\Filesystem\Directory\Read',
             array('isExist', 'getRelativePath'),
             array(),
             '',

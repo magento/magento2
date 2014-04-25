@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Model\Resource\Db\AbstractDb
+class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * catalog_product entity type id

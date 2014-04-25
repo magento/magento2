@@ -39,20 +39,20 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $scopeConfig->expects($this->atLeastOnce())->method('getValue')->will($this->returnValueMap($configData));
 
-        $securityInfoMock = $this->getMock('Magento\Url\SecurityInfoInterface');
+        $securityInfoMock = $this->getMock('Magento\Framework\Url\SecurityInfoInterface');
         $codeData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $urlBuilder = $this->getMock(
-            'Magento\Url',
+            'Magento\Framework\Url',
             array('getBaseUrl'),
             array(
                 $this->getMock('Magento\Framework\App\Route\ConfigInterface'),
                 $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false),
                 $securityInfoMock,
-                $this->getMock('Magento\Url\ScopeResolverInterface', array(), array(), '', false),
-                $this->getMock('Magento\Session\Generic', array(), array(), '', false),
-                $this->getMock('Magento\Session\SidResolverInterface', array(), array(), '', false),
-                $this->getMock('Magento\Url\RouteParamsResolverFactory', array(), array(), '', false),
-                $this->getMock('Magento\Url\QueryParamsResolver', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Url\ScopeResolverInterface', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Session\Generic', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Session\SidResolverInterface', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Url\RouteParamsResolverFactory', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Url\QueryParamsResolver', array(), array(), '', false),
                 $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', array(), array(), '', false),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 array()
@@ -67,7 +67,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
         );
 
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\Element\Template\Context',
+            'Magento\Framework\View\Element\Template\Context',
             array('scopeConfig' => $scopeConfig, 'urlBuilder' => $urlBuilder)
         );
         $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

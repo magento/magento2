@@ -46,7 +46,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree'
         );
@@ -90,7 +90,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLoadTreeUrl()
     {
-        $row = new \Magento\Object(array('id' => 1));
+        $row = new \Magento\Framework\Object(array('id' => 1));
         $this->assertStringStartsWith(
             'http://localhost/index.php',
             $this->_treeBlock->getLoadTreeUrl($row),

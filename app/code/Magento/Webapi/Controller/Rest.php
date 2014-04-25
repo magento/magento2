@@ -24,12 +24,15 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
-use Magento\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\Eav\AbstractObject as EavAbstractObject;
+use Magento\Framework\Service\EavDataObjectConverter;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Model\PathProcessor;
 use Magento\Webapi\Model\Config\Converter;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Front controller for WebAPI REST area.
@@ -49,19 +52,19 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /** @var RestResponse */
     protected $_response;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     protected $_objectManager;
 
     /** @var \Magento\Framework\App\State */
     protected $_appState;
 
-    /** @var \Magento\View\LayoutInterface */
+    /** @var \Magento\Framework\View\LayoutInterface */
     protected $_layout;
 
-    /** @var \Magento\Oauth\OauthInterface */
+    /** @var \Magento\Framework\Oauth\OauthInterface */
     protected $_oauthService;
 
-    /** @var  \Magento\Oauth\Helper\Request */
+    /** @var  \Magento\Framework\Oauth\Helper\Request */
     protected $_oauthHelper;
 
     /** @var AuthorizationService */
@@ -87,11 +90,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param RestRequest $request
      * @param RestResponse $response
      * @param Router $router
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Oauth\OauthInterface $oauthService
-     * @param \Magento\Oauth\Helper\Request $oauthHelper
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\Oauth\OauthInterface $oauthService
+     * @param \Magento\Framework\Oauth\Helper\Request $oauthHelper
      * @param AuthorizationService $authorizationService
      * @param ServiceArgsSerializer $serializer
      * @param ErrorProcessor $errorProcessor
@@ -105,11 +108,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         RestRequest $request,
         RestResponse $response,
         Router $router,
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\State $appState,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\Oauth\OauthInterface $oauthService,
-        \Magento\Oauth\Helper\Request $oauthHelper,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\Oauth\OauthInterface $oauthService,
+        \Magento\Framework\Oauth\Helper\Request $oauthHelper,
         AuthorizationService $authorizationService,
         ServiceArgsSerializer $serializer,
         ErrorProcessor $errorProcessor,
@@ -142,7 +145,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $path = $this->_pathProcessor->process($request->getPathInfo());
         $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
-            ->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);
+            ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
             if (!$this->_appState->isInstalled()) {
                 throw new \Magento\Webapi\Exception(__('Magento is not yet installed'));
@@ -157,15 +160,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $route = $this->_router->match($this->_request);
 
             if (!$this->_authorizationService->isAllowed($route->getAclResources())) {
-                // TODO: Consider passing Integration ID instead of Consumer ID
-                throw new \Magento\Webapi\ServiceAuthorizationException(
-                    "Not Authorized.",
-                    0,
-                    null,
-                    array(),
-                    'authorization',
-                    "Consumer ID = {$consumerId}",
-                    implode($route->getAclResources(), ', ')
+                throw new AuthorizationException(
+                    AuthorizationException::NOT_AUTHORIZED,
+                    ['consumer_id' => $consumerId, 'resources' => implode(', ', $route->getAclResources())]
                 );
             }
 
@@ -179,7 +176,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $inputData = $this->_overrideParams($inputData, $route->getParameters());
             $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
-            /** @var \Magento\Service\Data\AbstractObject $outputData */
+            /** @var \Magento\Framework\Service\Data\AbstractObject $outputData */
             $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
             $outputArray = $this->_processServiceOutput($outputData);
             $this->_response->prepareResponse($outputArray);
@@ -208,20 +205,39 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $result = [];
             foreach ($data as $datum) {
                 if ($datum instanceof AbstractObject) {
-                    $result[] = $datum->__toArray();
-                } else {
-                    $result[] = $datum;
+                    $datum = $this->processDataObject($datum->__toArray());
                 }
+                $result[] = $datum;
             }
+            return $result;
         } else if ($data instanceof AbstractObject) {
-            $result = $data->__toArray();
+            return $this->processDataObject($data->__toArray());
         } else if (is_null($data)) {
-            $result = [];
+            return [];
         } else {
             /** No processing is required for scalar types */
-            $result = $data;
+            return $data;
         }
-        return $result;
+    }
+
+    /**
+     * Convert data object to array and process available custom attributes
+     *
+     * @param array $dataObjectArray
+     * @return array
+     */
+    protected function processDataObject($dataObjectArray)
+    {
+        if (isset($dataObjectArray[EavAbstractObject::CUSTOM_ATTRIBUTES_KEY])) {
+            $dataObjectArray = EavDataObjectConverter::convertCustomAttributesToSequentialArray($dataObjectArray);
+        }
+        //Check for nested custom_attributes
+        foreach ($dataObjectArray as $key => $value) {
+            if (is_array($value)) {
+                $dataObjectArray[$key] = $this->processDataObject($value);
+            }
+        }
+        return $dataObjectArray;
     }
 
     /**

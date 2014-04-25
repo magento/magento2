@@ -39,12 +39,12 @@ class AbstractCatalogTest extends \PHPUnit_Framework_TestCase
     public function testRenderPriceHtml()
     {
         $priceHtmlForTest = '<html>Price is 10 for example</html>';
-        $templateContextMock = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
+        $templateContextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $httpContextMock = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
         $helperMock = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
         $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $layoutMock = $this->getMockForAbstractClass(
-            'Magento\View\LayoutInterface',
+            'Magento\Framework\View\LayoutInterface',
             [],
             '',
             true,
@@ -52,7 +52,7 @@ class AbstractCatalogTest extends \PHPUnit_Framework_TestCase
             true,
             ['getBlock']
         );
-        $priceRendererMock = $this->getMock('Magento\Pricing\Render', ['render'], [], '', false);
+        $priceRendererMock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false);
 
         $layoutMock->expects($this->once())
             ->method('getBlock')

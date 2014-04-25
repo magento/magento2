@@ -28,19 +28,19 @@ namespace Magento\Install\Model;
 /**
  * Installer model
  */
-class Installer extends \Magento\Object
+class Installer extends \Magento\Framework\Object
 {
     /**
      * Installer data model used to store data between installation steps
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_dataModel;
 
     /**
      * DB updated model
      *
-     * @var \Magento\Module\UpdaterInterface
+     * @var \Magento\Framework\Module\UpdaterInterface
      */
     protected $_dbUpdater;
 
@@ -132,7 +132,7 @@ class Installer extends \Magento\Object
     /**
      * Install session
      *
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
@@ -142,12 +142,12 @@ class Installer extends \Magento\Object
     protected $_resource;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -159,33 +159,33 @@ class Installer extends \Magento\Object
     protected $_arguments;
 
     /**
-     * @var \Magento\Module\ModuleListInterface
+     * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $moduleList;
 
     /**
-     * @var \Magento\Module\DependencyManagerInterface
+     * @var \Magento\Framework\Module\DependencyManagerInterface
      */
     protected $dependencyManager;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Module\UpdaterInterface $dbUpdater
+     * @param \Magento\Framework\Module\UpdaterInterface $dbUpdater
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
@@ -199,20 +199,20 @@ class Installer extends \Magento\Object
      * @param Installer\Pear $installerPear
      * @param Installer\Db $installerDb
      * @param Installer\Config $installerConfig
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Module\DependencyManagerInterface $dependencyManager
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Framework\Module\DependencyManagerInterface $dependencyManager
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Module\UpdaterInterface $dbUpdater,
+        \Magento\Framework\Module\UpdaterInterface $dbUpdater,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
@@ -226,15 +226,15 @@ class Installer extends \Magento\Object
         \Magento\Install\Model\Installer\Pear $installerPear,
         \Magento\Install\Model\Installer\Db $installerDb,
         \Magento\Install\Model\Installer\Config $installerConfig,
-        \Magento\Session\Generic $session,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Math\Random $mathRandom,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Module\DependencyManagerInterface $dependencyManager,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Module\ModuleListInterface $moduleList,
+        \Magento\Framework\Module\DependencyManagerInterface $dependencyManager,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_dbUpdater = $dbUpdater;
@@ -277,7 +277,7 @@ class Installer extends \Magento\Object
     /**
      * Get data model
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getDataModel()
     {
@@ -290,7 +290,7 @@ class Installer extends \Magento\Object
     /**
      * Set data model to store data between installation steps
      *
-     * @param \Magento\Object $model
+     * @param \Magento\Framework\Object $model
      * @return $this
      */
     public function setDataModel($model)
@@ -463,11 +463,11 @@ class Installer extends \Magento\Object
     /**
      * Set order number prefix
      *
-     * @param \Magento\Module\Setup $setupModel
+     * @param \Magento\Framework\Module\Setup $setupModel
      * @param string $orderIncrementPrefix
      * @return void
      */
-    protected function _setOrderIncrementPrefix(\Magento\Module\Setup $setupModel, $orderIncrementPrefix)
+    protected function _setOrderIncrementPrefix(\Magento\Framework\Module\Setup $setupModel, $orderIncrementPrefix)
     {
         $select = $setupModel->getConnection()->select()->from(
             $setupModel->getTable('eav_entity_type'),

@@ -42,10 +42,10 @@ class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * Returns value of the row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return mixed|string
      */
-    protected function _getValue(\Magento\Object $row)
+    protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
         if (!is_null($data)) {

@@ -69,7 +69,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {

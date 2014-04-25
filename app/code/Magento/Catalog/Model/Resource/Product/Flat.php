@@ -34,7 +34,7 @@ use Magento\Store\Model\Store;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Flat extends \Magento\Model\Resource\Db\AbstractDb
+class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Store scope Id

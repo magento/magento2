@@ -42,7 +42,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', array(), array(), '', false);
         $objectManagerMock = $this->getMockForAbstractClass(
-            '\Magento\ObjectManager',
+            '\Magento\Framework\ObjectManager',
             array(),
             '',
             true,
@@ -63,7 +63,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\ResponseInterface',
             array('setRedirect', 'sendResponse')
         );
-        $managerInterfaceMock = $this->getMock('Magento\Message\ManagerInterface', array(), array(), '', false);
+        $managerInterfaceMock = $this->getMock(
+            'Magento\Framework\Message\ManagerInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
         $sessionMock = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
         $actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
         $helperDataMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
@@ -93,8 +99,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
         $this->_controller = new \Magento\Catalog\Controller\Adminhtml\Product(
             $contextMock,
-            $this->getMock('Magento\Registry', array(), array(), '', false),
-            $this->getMock('Magento\Stdlib\DateTime\Filter\Date', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Registry', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Stdlib\DateTime\Filter\Date', array(), array(), '', false),
             $this->getMock(
                 'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
                 array(),

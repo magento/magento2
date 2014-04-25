@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -36,9 +36,9 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Xml\Generator" shared="false" />
-    <type name="Magento\Xml\Parser" shared="false" />
-    <type name="Magento\Code\Scanner\DirectoryScanner" shared="false" />
+    <type name="Magento\Framework\Xml\Generator" shared="false" />
+    <type name="Magento\Framework\Xml\Parser" shared="false" />
+    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
     <type name="Magento\Server\Reflection" shared="false" />
     <type name="Magento\Integration\Service\IntegrationV1">
         <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\IntegrationServiceV1"/>

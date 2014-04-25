@@ -33,7 +33,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class AuthorizationAmounts implements \Magento\Option\ArrayInterface
+class AuthorizationAmounts implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

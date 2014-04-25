@@ -33,9 +33,15 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet(array $fileList, $scope, $filename)
     {
-        $directory = $this->getMock('Magento\Filesystem\Directory\Read', array('search'), array(), '', false);
+        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array('search'), array(), '', false);
         $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryRead'), array(), '', false);
-        $iteratorFactory = $this->getMock('Magento\Config\FileIteratorFactory', array('create'), array(), '', false);
+        $iteratorFactory = $this->getMock(
+            'Magento\Framework\Config\FileIteratorFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
 
         $filesystem->expects(
             $this->once()

@@ -28,12 +28,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Factory */
     protected $_model;
 
-    /** @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $_objectManagerMock;
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Factory($this->_objectManagerMock);
     }
 

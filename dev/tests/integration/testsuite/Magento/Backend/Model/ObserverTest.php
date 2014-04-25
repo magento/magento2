@@ -108,7 +108,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Builds a dummy observer for testing adminPreDispatch method
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _buildObserver()
     {
@@ -122,9 +122,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $controller = new \Magento\Object(array('request' => $request));
-        $event = new \Magento\Object(array('controller_action' => $controller));
-        $observer = new \Magento\Object(array('event' => $event));
+        $controller = new \Magento\Framework\Object(array('request' => $request));
+        $event = new \Magento\Framework\Object(array('controller_action' => $controller));
+        $observer = new \Magento\Framework\Object(array('event' => $event));
         return $observer;
     }
 }

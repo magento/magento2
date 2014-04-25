@@ -23,21 +23,21 @@
  */
 namespace Magento\Core\Model;
 
-class EntityFactory implements \Magento\Data\Collection\EntityFactoryInterface
+class EntityFactory implements \Magento\Framework\Data\Collection\EntityFactoryInterface
 {
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -48,7 +48,7 @@ class EntityFactory implements \Magento\Data\Collection\EntityFactoryInterface
      * @param string $className
      * @param array $data
      * @throws \LogicException
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function create($className, array $data = array())
     {

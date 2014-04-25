@@ -76,7 +76,7 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                     $isCompounded = false;
                 }
                 if ((double)$itemRowTotal > 0 && ($label = $model->getLabel())) {
-                    $totalDetails[] = new \Magento\Object(
+                    $totalDetails[] = new \Magento\Framework\Object(
                         array('label' => $label, 'amount' => $itemRowTotal, 'is_compounded' => $isCompounded)
                     );
                 }

@@ -38,7 +38,7 @@
  */
 namespace Magento\Directory\Model;
 
-class Country extends \Magento\Model\AbstractModel
+class Country extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var array
@@ -46,7 +46,7 @@ class Country extends \Magento\Model\AbstractModel
     public static $_format = array();
 
     /**
-     * @var \Magento\Locale\ListsInterface
+     * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_localeLists;
 
@@ -61,23 +61,23 @@ class Country extends \Magento\Model\AbstractModel
     protected $_regionCollectionFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param Country\FormatFactory $formatFactory
      * @param Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Locale\ListsInterface $localeLists,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -133,11 +133,11 @@ class Country extends \Magento\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Object $address
+     * @param \Magento\Framework\Object $address
      * @param bool $html
      * @return string
      */
-    public function formatAddress(\Magento\Object $address, $html = false)
+    public function formatAddress(\Magento\Framework\Object $address, $html = false)
     {
         //TODO: is it still used?
         $address->getRegion();
@@ -163,7 +163,7 @@ T: {{telephone}}";
             }
         }
 
-        $filter = new \Magento\Filter\Template\Simple();
+        $filter = new \Magento\Framework\Filter\Template\Simple();
         $addressText = $filter->setData($address->getData())->filter($template);
 
         if ($html) {

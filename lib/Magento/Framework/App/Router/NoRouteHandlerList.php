@@ -40,15 +40,15 @@ class NoRouteHandlerList
     protected $_handlerList;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $handlerClassesList
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $handlerClassesList)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $handlerClassesList)
     {
         $this->_handlerList = $handlerClassesList;
         $this->_objectManager = $objectManager;

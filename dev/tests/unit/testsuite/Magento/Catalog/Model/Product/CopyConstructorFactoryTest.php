@@ -37,7 +37,7 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('\Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManager');
         $this->_model = new CopyConstructorFactory($this->_objectManagerMock);
     }
 
@@ -45,10 +45,10 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\InvalidArgumentException',
-            'Magento\Object does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
+            'Magento\Framework\Object does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
         );
         $this->_objectManagerMock->expects($this->never())->method('create');
-        $this->_model->create('Magento\Object');
+        $this->_model->create('Magento\Framework\Object');
     }
 
     public function testCreateWithValidType()

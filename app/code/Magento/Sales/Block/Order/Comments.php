@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Block\Order;
 
-class Comments extends \Magento\View\Element\Template
+class Comments extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory
@@ -57,14 +57,14 @@ class Comments extends \Magento\View\Element\Template
     protected $_commentCollection;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory,
@@ -104,7 +104,7 @@ class Comments extends \Magento\View\Element\Template
      * Initialize model comments and return comment collection
      *
      * @return \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getComments()
     {
@@ -117,7 +117,7 @@ class Comments extends \Magento\View\Element\Template
             } else if ($entity instanceof \Magento\Sales\Model\Order\Shipment) {
                 $this->_commentCollection = $this->_shipmentCollectionFactory->create();
             } else {
-                throw new \Magento\Model\Exception(__('We found an invalid entity model.'));
+                throw new \Magento\Framework\Model\Exception(__('We found an invalid entity model.'));
             }
 
             $this->_commentCollection->setParentFilter($entity)->setCreatedAtOrder()->addVisibleOnFrontFilter();

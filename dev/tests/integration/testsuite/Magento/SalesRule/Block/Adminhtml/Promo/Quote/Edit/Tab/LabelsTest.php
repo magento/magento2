@@ -33,7 +33,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels',
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\View\LayoutInterface'
+                'Magento\Framework\View\LayoutInterface'
             )->createBlock(
                 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels'
             )

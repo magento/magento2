@@ -81,7 +81,7 @@ class Config
     protected $_cacheState;
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_modulesDirectory;
 

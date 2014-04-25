@@ -46,14 +46,14 @@ class Main extends AbstractMain
     {
         parent::_prepareForm();
         $attributeObject = $this->getAttributeObject();
-        /* @var $form \Magento\Data\Form */
+        /* @var $form \Magento\Framework\Data\Form */
         $form = $this->getForm();
-        /* @var $fieldset \Magento\Data\Form\Element\Fieldset */
+        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
         $fieldset = $form->getElement('base_fieldset');
         $fiedsToRemove = array('attribute_code', 'is_unique', 'frontend_class');
 
         foreach ($fieldset->getElements() as $element) {
-            /** @var \Magento\Data\Form\AbstractForm $element  */
+            /** @var \Magento\Framework\Data\Form\AbstractForm $element  */
             if (substr($element->getId(), 0, strlen('default_value')) == 'default_value') {
                 $fiedsToRemove[] = $element->getId();
             }
@@ -72,7 +72,7 @@ class Main extends AbstractMain
             );
         }
 
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setTypes(array());
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', array('response' => $response));
         $_disabledTypes = array();

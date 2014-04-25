@@ -29,17 +29,17 @@
  */
 namespace Magento\Theme\Model;
 
-use Magento\View\Design\ThemeInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 
 class CopyService
 {
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $_directory;
 
     /**
-     * @var \Magento\View\Design\Theme\FileFactory
+     * @var \Magento\Framework\View\Design\Theme\FileFactory
      */
     protected $_fileFactory;
 
@@ -54,30 +54,30 @@ class CopyService
     protected $_updateFactory;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\View\Design\Theme\Customization\Path
+     * @var \Magento\Framework\View\Design\Theme\Customization\Path
      */
     protected $_customizationPath;
 
     /**
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\View\Design\Theme\FileFactory $fileFactory
+     * @param \Magento\Framework\View\Design\Theme\FileFactory $fileFactory
      * @param \Magento\Core\Model\Layout\Link $link
      * @param \Magento\Core\Model\Layout\UpdateFactory $updateFactory
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\View\Design\Theme\Customization\Path $customization
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\View\Design\Theme\Customization\Path $customization
      */
     public function __construct(
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\View\Design\Theme\FileFactory $fileFactory,
+        \Magento\Framework\View\Design\Theme\FileFactory $fileFactory,
         \Magento\Core\Model\Layout\Link $link,
         \Magento\Core\Model\Layout\UpdateFactory $updateFactory,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\View\Design\Theme\Customization\Path $customization
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\View\Design\Theme\Customization\Path $customization
     ) {
         $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_fileFactory = $fileFactory;

@@ -51,10 +51,10 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that getConfig method retrieve \Magento\Object object
+     * Test that getConfig method retrieve \Magento\Framework\Object object
      */
     public function testGetConfig()
     {
-        $this->assertInstanceOf('Magento\Object', $this->_block->getConfig());
+        $this->assertInstanceOf('Magento\Framework\Object', $this->_block->getConfig());
     }
 }

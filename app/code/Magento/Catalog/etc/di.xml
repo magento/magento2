@@ -23,23 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
     <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
     <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider" />
-    <preference for="Magento\Pricing\PriceInfoInterface" type="Magento\Pricing\PriceInfo\Base" />
-    <preference for="Magento\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
-    <preference for="Magento\Pricing\Adjustment\CalculatorInterface" type="Magento\Pricing\Adjustment\Calculator" />
+    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
+    <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
+    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Indexer\Model\Indexer\State">
         <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
     </type>
-    <type name="Magento\Mview\View\StateInterface">
+    <type name="Magento\Framework\Mview\View\StateInterface">
         <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState" />
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState">
@@ -49,8 +49,8 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState">
         <arguments>
-            <argument name="state" xsi:type="object" shared="false">Magento\Mview\View\StateInterface</argument>
-            <argument name="changelog" xsi:type="object" shared="false">Magento\Mview\View\ChangelogInterface</argument>
+            <argument name="state" xsi:type="object" shared="false">Magento\Framework\Mview\View\StateInterface</argument>
+            <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product">
@@ -120,7 +120,7 @@
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="catalog_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
@@ -133,7 +133,7 @@
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">catalog</argument>
         </arguments>
@@ -312,7 +312,7 @@
         <plugin name="page-cache-indexer-reindex-product-flat"
                 type="Magento\Catalog\Model\Indexer\Product\AffectCache" sortOrder="10"/>
     </type>
-    <type name="Magento\Model\ActionValidator\RemoveAction">
+    <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
             <argument name="protectedModels" xsi:type="array">
                 <item name="catalogCategory" xsi:type="string">Magento\Catalog\Model\Category</item>
@@ -320,14 +320,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Pricing\PriceInfo\Factory">
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
         <arguments>
             <argument name="types" xsi:type="array">
-                <item name="simple" xsi:type="string">Magento\Pricing\PriceInfo\Base</item>
+                <item name="simple" xsi:type="string">Magento\Framework\Pricing\PriceInfo\Base</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Pricing\PriceComposite">
+    <type name="Magento\Framework\Pricing\PriceComposite">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="regular_price" xsi:type="array">
@@ -365,7 +365,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Pricing\Adjustment\Collection">
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
         <arguments>
             <argument name="adjustments" xsi:type="array">
                 <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::CODE</item>

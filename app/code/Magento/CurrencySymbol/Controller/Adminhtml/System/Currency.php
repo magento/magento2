@@ -38,15 +38,15 @@ class Currency extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -87,7 +87,7 @@ class Currency extends \Magento\Backend\App\Action
      * Fetch rates action
      *
      * @return void
-     * @throws \Exception|\Magento\Model\Exception
+     * @throws \Exception|\Magento\Framework\Model\Exception
      */
     public function fetchRatesAction()
     {
@@ -107,7 +107,7 @@ class Currency extends \Magento\Backend\App\Action
                     $service
                 );
             } catch (\Exception $e) {
-                throw new \Magento\Model\Exception(__('We can\'t initialize the import model.'));
+                throw new \Magento\Framework\Model\Exception(__('We can\'t initialize the import model.'));
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();
@@ -141,7 +141,7 @@ class Currency extends \Magento\Backend\App\Action
             try {
                 foreach ($data as $currencyCode => $rate) {
                     foreach ($rate as $currencyTo => $value) {
-                        $value = abs($this->_objectManager->get('Magento\Locale\FormatInterface')->getNumber($value));
+                        $value = abs($this->_objectManager->get('Magento\Framework\Locale\FormatInterface')->getNumber($value));
                         $data[$currencyCode][$currencyTo] = $value;
                         if ($value == 0) {
                             $this->messageManager->addWarning(

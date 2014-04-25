@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleAdwords\Model\Config\Source;
 
-class ValueType implements \Magento\Option\ArrayInterface
+class ValueType implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Get conversation value type option

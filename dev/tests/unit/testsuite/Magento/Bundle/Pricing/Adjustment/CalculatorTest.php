@@ -35,12 +35,12 @@ use Magento\Bundle\Model\Product\Price as ProductPrice;
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 
     /**
-     * @var \Magento\Pricing\Price\PriceInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var \Magento\Framework\Pricing\Price\PriceInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
     protected $priceMocks = [];
 
@@ -50,7 +50,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected $baseAmount = 50.;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $baseCalculator;
 
@@ -72,7 +72,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->saleableItem = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $priceInfo = $this->getMock('Magento\Pricing\PriceInfoInterface', [], [], '', true);
+        $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', true);
         $priceInfo->expects($this->any())->method('getPrice')->will($this->returnCallback(function ($type) {
             if (!isset($this->priceMocks[$type])) {
                 throw new \PHPUnit_Framework_ExpectationFailedException('Unexpected type of price model');
@@ -82,8 +82,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->saleableItem->expects($this->any())->method('getPriceInfo')->will($this->returnValue($priceInfo));
 
 
-        $this->baseCalculator = $this->getMock('Magento\Pricing\Adjustment\Calculator', [], [], '', false);
-        $this->amountFactory = $this->getMock('Magento\Pricing\Amount\AmountFactory', [], [], '', false);
+        $this->baseCalculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->amountFactory = $this->getMock('Magento\Framework\Pricing\Amount\AmountFactory', [], [], '', false);
         $this->selectionFactory = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,12 +142,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      * Create amount mock
      *
      * @param array $amountData
-     * @return \Magento\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createAmountMock($amountData)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Pricing\Amount\Base $amount */
-        $amount = $this->getMock('Magento\Pricing\Amount\Base', [], [], '', false);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
+        $amount = $this->getMock('Magento\Framework\Pricing\Amount\Base', [], [], '', false);
         $amount->expects($this->any())->method('getAdjustmentAmounts')
             ->will($this->returnValue($amountData['adjustmentsAmounts']));
         $amount->expects($this->any())->method('getValue')->will($this->returnValue($amountData['amount']));

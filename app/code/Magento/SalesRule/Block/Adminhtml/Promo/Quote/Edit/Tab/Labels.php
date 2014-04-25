@@ -69,7 +69,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -104,9 +104,9 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Create store specific fieldset
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param array $labels
-     * @return \Magento\Data\Form\Element\Fieldset
+     * @return \Magento\Framework\Data\Form\Element\Fieldset
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {

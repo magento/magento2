@@ -27,9 +27,9 @@
 namespace Magento\CatalogRule\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Pricing\Adjustment\Calculator;
-use Magento\Pricing\Object\SaleableInterface;
-use Magento\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Customer\Model\Session;
 use Magento\CatalogRule\Model\Resource\RuleFactory;
@@ -50,7 +50,7 @@ class CatalogRulePrice extends RegularPrice
     protected $priceType = self::PRICE_TYPE;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $dateTime;
 

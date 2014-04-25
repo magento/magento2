@@ -27,6 +27,6 @@
  */
 namespace Magento\Store\Model;
 
-class Exception extends \Magento\Model\Exception
+class Exception extends \Magento\Framework\Model\Exception
 {
 }

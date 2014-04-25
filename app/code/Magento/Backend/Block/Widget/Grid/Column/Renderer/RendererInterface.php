@@ -56,8 +56,8 @@ interface RendererInterface
     /**
      * Renders grid column
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row);
+    public function render(\Magento\Framework\Object $row);
 }

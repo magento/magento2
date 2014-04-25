@@ -37,12 +37,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $directoryDatabase;
 
     /**
-     * @var \Magento\Model\Context |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
 
@@ -52,7 +52,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $helperStorageDatabase;
 
     /**
-     * @var \Magento\Stdlib\DateTime\DateTime |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dateModelMock;
 
@@ -77,7 +77,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $resourceDirectoryDatabaseMock;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $loggerMock;
 
@@ -91,8 +91,8 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Model\Context', array(), array(), '', false);
-        $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', array(), array(), '', false);
+        $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->helperStorageDatabase = $this->getMock(
             'Magento\Core\Helper\File\Storage\Database',
             array(),
@@ -100,7 +100,13 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dateModelMock = $this->getMock('Magento\Stdlib\DateTime\DateTime', array(), array(), '', false);
+        $this->dateModelMock = $this->getMock(
+            'Magento\Framework\Stdlib\DateTime\DateTime',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->directoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\Directory\Database',
             array('setPath', 'setName', '__wakeup', 'save', 'getParentId'),
@@ -122,7 +128,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
 
         $this->directoryFactoryMock->expects(
             $this->any()

@@ -25,8 +25,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-use Magento\Framework\App\ResponseInterface;
-
 /**
  * System Configuration controller
  */

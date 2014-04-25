@@ -26,7 +26,7 @@ namespace Magento\Store\Model\Resource;
 /**
  * Store Resource Model
  */
-class Store extends \Magento\Model\Resource\Db\AbstractDb
+class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table and primary key
@@ -70,10 +70,10 @@ class Store extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Update Store Group data after save store
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
         $this->_updateGroupDefaultStore($object->getGroupId(), $object->getId());
@@ -85,10 +85,10 @@ class Store extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Remove configuration data after delete store
      *
-     * @param \Magento\Model\AbstractModel $model
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _afterDelete(\Magento\Model\AbstractModel $model)
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
         $where = array(
             'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
@@ -131,10 +131,10 @@ class Store extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Change store group for store
      *
-     * @param \Magento\Model\AbstractModel $model
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _changeGroup(\Magento\Model\AbstractModel $model)
+    protected function _changeGroup(\Magento\Framework\Model\AbstractModel $model)
     {
         if ($model->getOriginalGroupId() && $model->getGroupId() != $model->getOriginalGroupId()) {
             $adapter = $this->_getReadAdapter();
@@ -160,8 +160,8 @@ class Store extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {

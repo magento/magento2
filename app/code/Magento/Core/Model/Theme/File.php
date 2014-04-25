@@ -25,9 +25,9 @@
  */
 namespace Magento\Core\Model\Theme;
 
-use Magento\Model\AbstractModel;
-use Magento\View\Design\Theme\FileInterface;
-use Magento\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\View\Design\Theme\FileInterface;
+use Magento\Framework\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
 
 /**
  * Theme files model class
@@ -49,12 +49,12 @@ class File extends AbstractModel implements FileInterface
     protected $_eventObject = 'file';
 
     /**
-     * @var \Magento\View\Design\ThemeInterface
+     * @var \Magento\Framework\View\Design\ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\View\Design\Theme\Customization\FileServiceFactory
+     * @var \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory
      */
     protected $_fileServiceFactory;
 
@@ -64,26 +64,26 @@ class File extends AbstractModel implements FileInterface
     protected $_fileService;
 
     /**
-     * @var \Magento\View\Design\Theme\FlyweightFactory
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
+     * @param \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
+        \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_themeFactory = $themeFactory;
@@ -131,7 +131,7 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      */
-    public function setTheme(\Magento\View\Design\ThemeInterface $theme)
+    public function setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $this->_theme = $theme;
         $this->setData('theme_id', $theme->getId());
@@ -142,13 +142,13 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getTheme()
     {
         $theme = $this->_themeFactory->create($this->getData('theme_id'));
         if (!$theme) {
-            throw new \Magento\Exception('Theme id should be set');
+            throw new \Magento\Framework\Exception('Theme id should be set');
         }
         return $theme;
     }

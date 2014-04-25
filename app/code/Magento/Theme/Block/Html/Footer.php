@@ -26,7 +26,7 @@ namespace Magento\Theme\Block\Html;
 /**
  * Html page footer block
  */
-class Footer extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
+class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Copyright information
@@ -41,12 +41,12 @@ class Footer extends \Magento\View\Element\Template implements \Magento\View\Blo
     protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {

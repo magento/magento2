@@ -33,16 +33,16 @@ class ProTypeFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -52,7 +52,7 @@ class ProTypeFactory
      *
      * @param string $className
      * @param array $data
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function create($className, array $data = array())
     {

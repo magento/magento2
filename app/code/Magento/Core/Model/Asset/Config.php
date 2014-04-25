@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Asset;
 /**
  * View asset configuration interface
  */
-class Config implements \Magento\View\Asset\ConfigInterface
+class Config implements \Magento\Framework\View\Asset\ConfigInterface
 {
     /**
      * XML path for CSS files merge configuration

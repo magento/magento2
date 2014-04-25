@@ -23,9 +23,9 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite;
-use Magento\Filesystem\File\Write;
-use Magento\Filesystem\FilesystemException;
+use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Filesystem\FilesystemException;
 
 class Config
 {

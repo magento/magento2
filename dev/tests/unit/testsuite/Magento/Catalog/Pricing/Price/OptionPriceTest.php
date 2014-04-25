@@ -26,7 +26,7 @@
  */
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Class OptionPriceTest
@@ -44,17 +44,17 @@ class OptionPriceTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfo;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $calculator;
 
     /**
-     * @var \Magento\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $amount;
 
@@ -72,7 +72,7 @@ class OptionPriceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->priceInfo = $this->getMock(
-            'Magento\Pricing\PriceInfo\Base',
+            'Magento\Framework\Pricing\PriceInfo\Base',
             [],
             [],
             '',
@@ -84,7 +84,7 @@ class OptionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->priceInfo));
 
         $this->calculator = $this->getMock(
-            'Magento\Pricing\Adjustment\Calculator',
+            'Magento\Framework\Pricing\Adjustment\Calculator',
             [],
             [],
             '',
@@ -92,7 +92,7 @@ class OptionPriceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->amount = $this->getMock(
-            'Magento\Pricing\Amount\Base',
+            'Magento\Framework\Pricing\Amount\Base',
             [],
             [],
             '',
@@ -152,7 +152,7 @@ class OptionPriceTest extends \PHPUnit_Framework_TestCase
         $optionValueMock->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($optionValue));
-        $optionIds = new \Magento\Object(['value' => '1']);
+        $optionIds = new \Magento\Framework\Object(['value' => '1']);
 
         $customOptions = ['option_ids' => $optionIds, 'option_1' => $optionValueMock];
         $this->product->setCustomOptions($customOptions);

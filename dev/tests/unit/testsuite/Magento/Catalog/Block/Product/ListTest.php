@@ -30,7 +30,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMode()
     {
-        $childBlock = new \Magento\Object();
+        $childBlock = new \Magento\Framework\Object();
 
         $block = $this->getMock(
             'Magento\Catalog\Block\Product\ListProduct',

@@ -54,7 +54,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
 
         $arguments = array(
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false),

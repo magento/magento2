@@ -114,7 +114,7 @@ class Config
     protected $_entityTypeFactory;
 
     /**
-     * @var \Magento\Validator\UniversalFactory
+     * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
 
@@ -122,13 +122,13 @@ class Config
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Entity\TypeFactory $entityTypeFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
-     * @param \Magento\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Validator\UniversalFactory $universalFactory
+        \Magento\Framework\Validator\UniversalFactory $universalFactory
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
@@ -276,7 +276,7 @@ class Config
         if (is_array($this->_entityData)) {
             return $this;
         }
-        \Magento\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
 
         /**
          * try load information about entity types from cache
@@ -287,7 +287,7 @@ class Config
                 $typeId = $data['entity_type_id'];
                 $this->_addEntityTypeReference($typeId, $typeCode);
             }
-            \Magento\Profiler::stop('EAV: ' . __METHOD__);
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
             return $this;
         }
 
@@ -321,7 +321,7 @@ class Config
                 )
             );
         }
-        \Magento\Profiler::stop('EAV: ' . __METHOD__);
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $this;
     }
 
@@ -330,14 +330,14 @@ class Config
      *
      * @param int|string $code
      * @return Type
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getEntityType($code)
     {
         if ($code instanceof Type) {
             return $code;
         }
-        \Magento\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
 
         if (is_numeric($code)) {
             $entityCode = $this->_getEntityTypeReference($code);
@@ -349,7 +349,7 @@ class Config
         $entityKey = $this->_getEntityKey($code);
         $entityType = $this->_load($entityKey);
         if ($entityType) {
-            \Magento\Profiler::stop('EAV: ' . __METHOD__);
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
             return $entityType;
         }
 
@@ -365,13 +365,13 @@ class Config
             }
 
             if (!$entityType->getId()) {
-                throw new \Magento\Model\Exception(__('Invalid entity_type specified: %1', $code));
+                throw new \Magento\Framework\Model\Exception(__('Invalid entity_type specified: %1', $code));
             }
         }
         $this->_addEntityTypeReference($entityType->getId(), $entityType->getEntityTypeCode());
         $this->_save($entityType, $entityKey);
 
-        \Magento\Profiler::stop('EAV: ' . __METHOD__);
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $entityType;
     }
 
@@ -389,7 +389,7 @@ class Config
         if (isset($this->_initializedAttributes[$entityTypeCode])) {
             return $this;
         }
-        \Magento\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
 
         $attributesInfo = $this->_universalFactory->create(
             $entityType->getEntityAttributeCollection()
@@ -406,7 +406,7 @@ class Config
         $entityType->setAttributeCodes($codes);
         $this->_initializedAttributes[$entityTypeCode] = true;
 
-        \Magento\Profiler::stop('EAV: ' . __METHOD__);
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $this;
     }
 
@@ -423,7 +423,7 @@ class Config
             return $code;
         }
 
-        \Magento\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
 
         $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
         $entityType = $this->getEntityType($entityType);
@@ -444,7 +444,7 @@ class Config
          */
         $attribute = $this->_load($attributeKey);
         if ($attribute) {
-            \Magento\Profiler::stop('EAV: ' . __METHOD__);
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
             return $attribute;
         }
 
@@ -484,7 +484,7 @@ class Config
             $this->_addAttributeReference($attribute->getId(), $attribute->getAttributeCode(), $entityTypeCode);
             $this->_save($attribute, $attributeKey);
         }
-        \Magento\Profiler::stop('EAV: ' . __METHOD__);
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
 
         return $attribute;
     }
@@ -493,18 +493,18 @@ class Config
      * Get codes of all entity type attributes
      *
      * @param  mixed $entityType
-     * @param  \Magento\Object $object
+     * @param  \Magento\Framework\Object $object
      * @return array
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
-        if ($object instanceof \Magento\Object && $object->getAttributeSetId()) {
+        if ($object instanceof \Magento\Framework\Object && $object->getAttributeSetId()) {
             $attributeSetId = $object->getAttributeSetId();
         }
         $storeId = 0;
-        if ($object instanceof \Magento\Object && $object->getStoreId()) {
+        if ($object instanceof \Magento\Framework\Object && $object->getStoreId()) {
             $storeId = $object->getStoreId();
         }
         $cacheKey = sprintf('%d-%d', $entityType->getId(), $attributeSetId);
@@ -566,7 +566,7 @@ class Config
         if (empty($attributes)) {
             return $this;
         }
-        \Magento\Profiler::start(
+        \Magento\Framework\Profiler::start(
             'EAV: ' . __METHOD__ . ':' . $entityTypeCode,
             array('group' => 'EAV', 'method' => __METHOD__, 'entity_type_code' => $entityTypeCode)
         );
@@ -580,7 +580,7 @@ class Config
         )->getData();
 
         if (!$attributesInfo) {
-            \Magento\Profiler::stop('EAV: ' . __METHOD__ . ':' . $entityTypeCode);
+            \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__ . ':' . $entityTypeCode);
             return $this;
         }
 
@@ -601,7 +601,7 @@ class Config
 
         $this->_attributeData[$entityTypeCode] = $attributesData;
 
-        \Magento\Profiler::stop('EAV: ' . __METHOD__ . ':' . $entityTypeCode);
+        \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__ . ':' . $entityTypeCode);
 
         return $this;
     }

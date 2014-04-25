@@ -39,7 +39,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * HTTP client
      *
-     * @var \Magento\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\ZendClient
      */
     protected $_httpClient;
 
@@ -60,7 +60,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     ) {
         parent::__construct($currencyFactory);
         $this->_scopeConfig = $scopeConfig;
-        $this->_httpClient = new \Magento\HTTP\ZendClient();
+        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
     }
 
     /**

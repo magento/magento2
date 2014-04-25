@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Block;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 class ShortcutButtons extends Template
 {

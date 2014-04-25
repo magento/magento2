@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App\Resource;
 
-class Config extends \Magento\Config\Data\Scoped implements ConfigInterface
+class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
     const DEFAULT_SETUP_CONNECTION = 'default';
 
@@ -40,16 +40,16 @@ class Config extends \Magento\Config\Data\Scoped implements ConfigInterface
 
     /**
      * @param Config\Reader $reader
-     * @param \Magento\Config\ScopeInterface $configScope
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      * @param array $initialResources
      * @throws \InvalidArgumentException
      */
     public function __construct(
         Config\Reader $reader,
-        \Magento\Config\ScopeInterface $configScope,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'resourcesCache',
         $initialResources = array()
     ) {

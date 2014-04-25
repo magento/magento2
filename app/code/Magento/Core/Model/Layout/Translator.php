@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Layout;
 
-use Magento\Simplexml\Element;
+use Magento\Framework\Simplexml\Element;
 
 class Translator
 {

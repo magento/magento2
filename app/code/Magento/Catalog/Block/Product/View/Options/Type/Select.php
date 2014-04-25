@@ -42,13 +42,13 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     protected $_coreHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
@@ -77,7 +77,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $require = $_option->getIsRequire() ? ' required' : '';
             $extraParams = '';
             $select = $this->getLayout()->createBlock(
-                'Magento\View\Element\Html\Select'
+                'Magento\Framework\View\Element\Html\Select'
             )->setData(
                 array('id' => 'select_' . $_option->getId(), 'class' => $require . ' product-custom-option')
             );

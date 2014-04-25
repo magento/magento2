@@ -52,14 +52,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             array('_getMail')
         )->setConstructorArgs(
             array(
-                $objectManager->get('Magento\Model\Context'),
-                $objectManager->get('Magento\View\DesignInterface'),
-                $objectManager->get('Magento\Registry'),
+                $objectManager->get('Magento\Framework\Model\Context'),
+                $objectManager->get('Magento\Framework\View\DesignInterface'),
+                $objectManager->get('Magento\Framework\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->create('Magento\Framework\App\Filesystem'),
-                $objectManager->create('Magento\View\Url'),
-                $objectManager->create('Magento\View\FileSystem'),
+                $objectManager->create('Magento\Framework\View\Url'),
+                $objectManager->create('Magento\Framework\View\FileSystem'),
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config')
@@ -117,7 +117,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\AreaList'
         )->getArea(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->_setNotDefaultThemeForFixtureStore();
         $expectedViewUrl = 'static/frontend/Magento/plushe/en_US/Magento_Theme/favicon.ico';
@@ -143,13 +143,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function _setNotDefaultThemeForFixtureStore()
     {
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\Design\ThemeInterface'
+            'Magento\Framework\View\Design\ThemeInterface'
         );
         $theme->load('Magento/plushe', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
-            \Magento\View\DesignInterface::XML_PATH_THEME_ID,
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             'fixturestore'
@@ -165,7 +165,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\AreaList'
         )->getArea(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsWith(
@@ -183,7 +183,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\AreaList'
         )->getArea(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->_setNotDefaultThemeForFixtureStore();
         $expectedViewUrl = 'static/frontend/Magento/plushe/en_US/Magento_Theme/favicon.ico';
@@ -210,7 +210,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\AreaList'
         )->getArea(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->assertStringEndsWith(
             'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.gif',

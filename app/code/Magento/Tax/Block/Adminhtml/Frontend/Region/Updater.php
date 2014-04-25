@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class Updater extends \Magento\Backend\Block\System\Config\Form\Field
 {

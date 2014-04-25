@@ -83,7 +83,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_aclMock = $this->getMock('Magento\AuthorizationInterface');
+        $this->_aclMock = $this->getMock('Magento\Framework\AuthorizationInterface');
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_menuFactoryMock = $this->getMock(
             'Magento\Backend\Model\MenuFactory',
@@ -93,10 +93,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
-        $this->_moduleManager = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
+        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', array(), array(), '', false);
         $this->_validatorMock = $this->getMock('Magento\Backend\Model\Menu\Item\Validator');
         $this->_validatorMock->expects($this->any())->method('validate');
-        $this->_moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
+        $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
@@ -247,7 +247,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Magento_Backend::config'
         )->will(
-            $this->throwException(new \Magento\Exception())
+            $this->throwException(new \Magento\Framework\Exception())
         );
         $this->assertFalse($this->_model->isAllowed());
     }

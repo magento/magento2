@@ -35,7 +35,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthenticationStartUrl()
     {
-        $url = $this->getMock('Magento\Url', array('getUrl'), array(), '', false);
+        $url = $this->getMock('Magento\Framework\Url', array('getUrl'), array(), '', false);
         $url->expects(
             $this->once()
         )->method(
@@ -59,7 +59,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     public function testLookup()
     {
         $centinelSession = $this->getMock(
-            'Magento\Session\SessionManager',
+            'Magento\Framework\Session\SessionManager',
             array('setData', 'getData'),
             array(),
             '',
@@ -148,7 +148,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $data = new \Magento\Object(array('card_type' => 'cardType'));
+        $data = new \Magento\Framework\Object(array('card_type' => 'cardType'));
 
         $model->lookup($data);
     }

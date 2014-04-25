@@ -125,7 +125,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->prepareSalableItemResource()));
 
         $priceInfo = $this->getMockBuilder(
-            'Magento\Pricing\PriceInfoInterface'
+            'Magento\Framework\Pricing\PriceInfoInterface'
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $priceInfo->expects($this->any())
@@ -149,7 +149,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(['getAttribute', '__wakeup'])->getMock();
 
         $attributeMock = $this->getMock(
-            'Magento\Object',
+            'Magento\Framework\Object',
             ['getBackend', 'afterLoad'],
             [],
             '',

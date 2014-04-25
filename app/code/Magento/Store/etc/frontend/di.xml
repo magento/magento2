@@ -23,8 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Store\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
+    </type>
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="contextPlugin" type="Magento\Store\App\Action\Plugin\Context" sortOrder="10"/>
     </type>
 </config>

@@ -35,12 +35,12 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Toolbar extends \Magento\View\Element\Template
+class Toolbar extends \Magento\Framework\View\Element\Template
 {
     /**
      * Products collection
      *
-     * @var \Magento\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     protected $_collection = null;
 
@@ -138,7 +138,7 @@ class Toolbar extends \Magento\View\Element\Template
     protected $_postDataHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param ToolbarModel $toolbarModel
@@ -148,7 +148,7 @@ class Toolbar extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Config $catalogConfig,
         ToolbarModel $toolbarModel,
@@ -208,7 +208,7 @@ class Toolbar extends \Magento\View\Element\Template
     /**
      * Set collection to pager
      *
-     * @param \Magento\Data\Collection $collection
+     * @param \Magento\Framework\Data\Collection $collection
      * @return $this
      */
     public function setCollection($collection)
@@ -231,7 +231,7 @@ class Toolbar extends \Magento\View\Element\Template
     /**
      * Return products collection instance
      *
-     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -657,7 +657,7 @@ class Toolbar extends \Magento\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Object) {
+        if ($pagerBlock instanceof \Magento\Framework\Object) {
 
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());

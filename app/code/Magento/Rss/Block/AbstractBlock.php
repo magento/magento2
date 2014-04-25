@@ -25,7 +25,7 @@
  */
 namespace Magento\Rss\Block;
 
-class AbstractBlock extends \Magento\View\Element\Template
+class AbstractBlock extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -33,12 +33,12 @@ class AbstractBlock extends \Magento\View\Element\Template
     protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {

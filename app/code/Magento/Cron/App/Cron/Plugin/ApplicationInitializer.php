@@ -35,15 +35,15 @@ class ApplicationInitializer
     protected $_appState;
 
     /**
-     * @var \Magento\Session\SidResolverInterface
+     * @var \Magento\Framework\Session\SidResolverInterface
      */
     protected $_sidResolver;
 
     /**
      * @param State $appState
-     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      */
-    public function __construct(State $appState, \Magento\Session\SidResolverInterface $sidResolver)
+    public function __construct(State $appState, \Magento\Framework\Session\SidResolverInterface $sidResolver)
     {
         $this->_appState = $appState;
         $this->_sidResolver = $sidResolver;
@@ -56,13 +56,13 @@ class ApplicationInitializer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function beforeLaunch(\Magento\Framework\App\Cron $subject)
     {
         $this->_sidResolver->setUseSessionInUrl(false);
         if (false == $this->_appState->isInstalled()) {
-            throw new \Magento\Exception('Application is not installed yet, please complete the installation first.');
+            throw new \Magento\Framework\Exception('Application is not installed yet, please complete the installation first.');
         }
     }
 }

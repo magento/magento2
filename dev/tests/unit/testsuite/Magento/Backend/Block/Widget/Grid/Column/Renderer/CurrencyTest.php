@@ -64,14 +64,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     protected $_currencyMock;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_row;
 
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_localeMock = $this->getMock('Magento\Locale\CurrencyInterface');
+        $this->_localeMock = $this->getMock('Magento\Framework\Locale\CurrencyInterface');
         $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
 
         $this->_curLocatorMock = $this->getMock(
@@ -101,7 +101,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         );
         $currencyFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_currencyMock));
 
-        $this->_row = new \Magento\Object(array('columnIndex' => '10'));
+        $this->_row = new \Magento\Framework\Object(array('columnIndex' => '10'));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_blockCurrency = $helper->getObject(

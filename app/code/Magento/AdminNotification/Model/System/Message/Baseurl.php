@@ -26,7 +26,7 @@ namespace Magento\AdminNotification\Model\System\Message;
 class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -48,13 +48,13 @@ class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterfac
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\UrlInterface $urlBuilder
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\UrlInterface $urlBuilder,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory
     ) {
         $this->_urlBuilder = $urlBuilder;

@@ -29,7 +29,7 @@ class Proxy extends \Magento\Backend\Model\Config\Structure\Element\Group
 {
     /**
      * Object manager
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -39,9 +39,9 @@ class Proxy extends \Magento\Backend\Model\Config\Structure\Element\Group
     protected $_subject;
 
     /**
-     * @param \Magento\ObjectManager $objectManger
+     * @param \Magento\Framework\ObjectManager $objectManger
      */
-    public function __construct(\Magento\ObjectManager $objectManger)
+    public function __construct(\Magento\Framework\ObjectManager $objectManger)
     {
         $this->_objectManager = $objectManger;
     }
@@ -187,7 +187,7 @@ class Proxy extends \Magento\Backend\Model\Config\Structure\Element\Group
     /**
      * Retrieve clone model
      *
-     * @return \Magento\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     public function getCloneModel()
     {
@@ -197,10 +197,10 @@ class Proxy extends \Magento\Backend\Model\Config\Structure\Element\Group
     /**
      * Populate form fieldset with group data
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
      */
-    public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
+    public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
         $this->_getSubject()->populateFieldset($fieldset);
     }

@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
-class Price implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\ActionInterface
+class Price implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Action\Row

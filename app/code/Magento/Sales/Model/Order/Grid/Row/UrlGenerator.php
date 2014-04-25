@@ -31,18 +31,18 @@ namespace Magento\Sales\Model\Order\Grid\Row;
 class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $args
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\AuthorizationInterface $authorization,
+        \Magento\Framework\AuthorizationInterface $authorization,
         array $args = array()
     ) {
         $this->_authorization = $authorization;
@@ -51,7 +51,7 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
 
     /**
      * Generate row url
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return bool|string
      */
     public function getUrl($item)

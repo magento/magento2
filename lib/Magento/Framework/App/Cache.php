@@ -45,7 +45,7 @@ class Cache implements CacheInterface
     /**
      * Cache frontend API
      *
-     * @var \Magento\Cache\FrontendInterface
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_frontend;
 
@@ -61,7 +61,7 @@ class Cache implements CacheInterface
     /**
      * Get cache frontend API object
      *
-     * @return \Magento\Cache\FrontendInterface
+     * @return \Magento\Framework\Cache\FrontendInterface
      */
     public function getFrontend()
     {
@@ -117,7 +117,7 @@ class Cache implements CacheInterface
         } else {
             /** @deprecated special case of cleaning by empty tags is deprecated after 2.0.0.0-dev42 */
             $result = false;
-            /** @var $cacheFrontend \Magento\Cache\FrontendInterface */
+            /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
             foreach ($this->_frontendPool as $cacheFrontend) {
                 if ($cacheFrontend->clean()) {
                     $result = true;

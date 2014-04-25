@@ -36,7 +36,7 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
-abstract class AbstractIncrement extends \Magento\Object implements
+abstract class AbstractIncrement extends \Magento\Framework\Object implements
     \Magento\Eav\Model\Entity\Increment\IncrementInterface
 {
     /**

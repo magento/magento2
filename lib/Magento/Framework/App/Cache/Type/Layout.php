@@ -26,7 +26,7 @@ namespace Magento\Framework\App\Cache\Type;
 /**
  * System / Cache Management / Cache type "Layouts"
  */
-class Layout extends \Magento\Cache\Frontend\Decorator\TagScope
+class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types

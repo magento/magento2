@@ -66,7 +66,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
             $url = $this->_storeManager->getStore(
                 $product->getStore()
             )->getBaseUrl(
-                \Magento\UrlInterface::URL_TYPE_MEDIA
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             ) . 'catalog/product/' . $image;
         } else {
             $url = false;

@@ -88,23 +88,23 @@ class Payment extends \Magento\Payment\Model\Info
     protected $methodSpecificationFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
@@ -151,11 +151,11 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param array $data
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function importData(array $data)
     {
-        $data = new \Magento\Object($data);
+        $data = new \Magento\Framework\Object($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
             array($this->_eventObject => $this, 'input' => $data)
@@ -179,7 +179,7 @@ class Payment extends \Magento\Payment\Model\Info
             $this->getQuote()
         )
         ) {
-            throw new \Magento\Model\Exception(__('The requested Payment Method is not available.'));
+            throw new \Magento\Framework\Model\Exception(__('The requested Payment Method is not available.'));
         }
 
         $method->assignData($data);
@@ -202,7 +202,7 @@ class Payment extends \Magento\Payment\Model\Info
         }
         try {
             $method = $this->getMethodInstance();
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             return parent::_beforeSave();
         }
         $method->prepareSave();

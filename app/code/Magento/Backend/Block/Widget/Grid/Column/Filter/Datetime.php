@@ -67,7 +67,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 )
             );
             $datetimeTo->addDay(1)->subSecond(1);
-            $datetimeTo->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $datetimeTo->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
         }
         return $value;
     }
@@ -77,7 +77,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      *
      * @param string $date
      * @param string $locale
-     * @return \Magento\Stdlib\DateTime\Date|null
+     * @return \Magento\Framework\Stdlib\DateTime\Date|null
      */
     protected function _convertDate($date, $locale)
     {
@@ -97,13 +97,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $dateObj->set(
                     $date,
                     $this->getLocaleDate()->getDateTimeFormat(
-                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     ),
                     $locale
                 );
 
                 //convert store date to default date in UTC timezone without DST
-                $dateObj->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+                $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
 
                 return $dateObj;
             } catch (\Exception $e) {
@@ -121,12 +121,12 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $timeFormat = '';
 
         if ($this->getColumn()->getFilterTime()) {
             $timeFormat = $this->_localeDate->getTimeFormat(
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
             );
         }
 
@@ -185,7 +185,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if ($value instanceof \Zend_Date) {
                 return $value->toString(
                     $this->_localeDate->getDateTimeFormat(
-                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     )
                 );
             }

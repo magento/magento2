@@ -69,7 +69,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testHasDataChanged()
     {
-        $object = new \Magento\Object(array('code' => 'value1', 'value' => 'value2'));
+        $object = new \Magento\Framework\Object(array('code' => 'value1', 'value' => 'value2'));
         $this->assertTrue($this->_model->hasDataChanged($object));
 
         $object->setOrigData();

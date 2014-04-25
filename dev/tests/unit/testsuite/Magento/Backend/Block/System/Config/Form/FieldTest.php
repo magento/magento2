@@ -79,7 +79,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_elementMock = $this->getMock(
-            'Magento\Data\Form\Element\Text',
+            'Magento\Framework\Data\Form\Element\Text',
             array(
                 'getHtmlId',
                 'getName',

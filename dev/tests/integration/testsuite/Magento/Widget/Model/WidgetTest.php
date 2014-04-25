@@ -71,7 +71,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('Magento/backend');
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/backend');
         $expectedFilePath = "/adminhtml/Magento/backend/en_US/{$expectedFile}";
         $expectedPubFile = $objectManager->get(
             'Magento\Framework\App\Filesystem'

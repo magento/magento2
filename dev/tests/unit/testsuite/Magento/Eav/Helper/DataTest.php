@@ -51,10 +51,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributeMetadata()
     {
-        $attribute = new \Magento\Object([
+        $attribute = new \Magento\Framework\Object([
             'entity_type_id' => '1',
             'attribute_id'   => '2',
-            'backend'        => new \Magento\Object(['table' => 'customer_entity_varchar']),
+            'backend'        => new \Magento\Framework\Object(['table' => 'customer_entity_varchar']),
             'backend_type'   => 'varchar'
         ]);
         $this->_eavConfig->expects($this->once())

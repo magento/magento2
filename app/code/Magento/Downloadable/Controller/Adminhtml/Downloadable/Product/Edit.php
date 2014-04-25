@@ -122,7 +122,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
             }
             try {
                 $this->_processDownload($resource, $resourceType);
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
             }
         }

@@ -61,7 +61,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $moduleListMock = $this->getMockBuilder(
-            'Magento\Module\ModuleListInterface'
+            'Magento\Framework\Module\ModuleListInterface'
         )->disableOriginalConstructor()->getMock();
         $moduleListMock->expects(
             $this->any()
@@ -75,7 +75,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
 
 
         $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader',
+            'Magento\Framework\Module\Dir\Reader',
             array('moduleList' => $moduleListMock, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');

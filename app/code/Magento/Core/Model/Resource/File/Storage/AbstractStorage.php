@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\File\Storage;
 /**
  * Class AbstractStorage
  */
-abstract class AbstractStorage extends \Magento\Model\Resource\Db\AbstractDb
+abstract class AbstractStorage extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * File storage connection name
@@ -52,7 +52,7 @@ abstract class AbstractStorage extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve connection for read data
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getReadAdapter()
     {
@@ -62,7 +62,7 @@ abstract class AbstractStorage extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve connection for write data
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getWriteAdapter()
     {
@@ -73,7 +73,7 @@ abstract class AbstractStorage extends \Magento\Model\Resource\Db\AbstractDb
      * Get connection by name or type
      *
      * @param string $resourceName
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getConnection($resourceName)
     {

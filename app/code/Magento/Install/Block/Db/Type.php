@@ -31,7 +31,7 @@
  */
 namespace Magento\Install\Block\Db;
 
-class Type extends \Magento\View\Element\Template
+class Type extends \Magento\Framework\View\Element\Template
 {
     /**
      * Db title
@@ -50,20 +50,20 @@ class Type extends \Magento\View\Element\Template
     /**
      * Install installer config
      *
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer\Config $installerConfig
-     * @param \Magento\Session\Generic $session
+     * @param \Magento\Framework\Session\Generic $session
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer\Config $installerConfig,
-        \Magento\Session\Generic $session,
+        \Magento\Framework\Session\Generic $session,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -84,7 +84,7 @@ class Type extends \Magento\View\Element\Template
     /**
      * Retrieve configuration form data object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormData()
     {
@@ -94,7 +94,7 @@ class Type extends \Magento\View\Element\Template
             if (empty($data)) {
                 $data = $this->_installerConfig->getFormData();
             } else {
-                $data = new \Magento\Object($data);
+                $data = new \Magento\Framework\Object($data);
             }
             $this->setFormData($data);
         }

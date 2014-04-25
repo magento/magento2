@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 /**
  * Form element button
  */
-class Button extends \Magento\Data\Form\Element\AbstractElement
+class Button extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * Additional html attributes

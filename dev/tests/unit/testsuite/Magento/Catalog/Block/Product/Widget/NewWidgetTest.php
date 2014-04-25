@@ -31,7 +31,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $layout;
 
@@ -39,7 +39,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $contextMock = $this->getMock('Magento\Catalog\Block\Product\Context', [], [], '', false, false);
-        $this->layout = $this->getMock('Magento\View\Layout', [], [], '', false);
+        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
 
         $contextMock->expects($this->once())
             ->method('getLayout')
@@ -76,10 +76,10 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             'price_id' => 'old-price-' . $id . '-' . $type,
             'display_minimal_price' => true,
             'include_container' => true,
-            'zone' => \Magento\Pricing\Render::ZONE_ITEM_LIST
+            'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
         ];
 
-        $priceBoxMock = $this->getMock('Magento\Pricing\Render', ['render'], [], '', false, false);
+        $priceBoxMock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false, false);
 
         $this->layout->expects($this->once())
             ->method('getBlock')

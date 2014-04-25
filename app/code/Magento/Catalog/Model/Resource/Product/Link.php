@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Model\Resource\Db\AbstractDb
+class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Product Link Attributes Table

@@ -41,7 +41,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $actionFactoryMock;
 
     /**
-     * @var \Magento\Mview\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -74,7 +74,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->viewMock = $this->getMockForAbstractClass(
-            'Magento\Mview\ViewInterface',
+            'Magento\Framework\Mview\ViewInterface',
             array(),
             '',
             false,

@@ -34,7 +34,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
      * Set Fieldset to Form
      *
      * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes attributes that are to be added
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param array $exclude attributes that should be skipped
      * @return void
      */
@@ -74,7 +74,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
      * Apply configuration specific for different element type
      *
      * @param string $inputType
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
      * @return void
      */

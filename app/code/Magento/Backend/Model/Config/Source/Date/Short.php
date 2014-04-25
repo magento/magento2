@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Date;
 
-class Short implements \Magento\Option\ArrayInterface
+class Short implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

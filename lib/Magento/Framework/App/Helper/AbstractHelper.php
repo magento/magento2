@@ -45,39 +45,39 @@ abstract class AbstractHelper
     protected $_request;
 
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     private $_moduleManager;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\HTTP\Header
+     * @var \Magento\Framework\HTTP\Header
      */
     protected $_httpHeader;
 
     /**
      * Event manager
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
     protected $_remoteAddress;
 
@@ -118,7 +118,7 @@ abstract class AbstractHelper
             $class = get_class($this);
             $this->_moduleName = substr($class, 0, strpos($class, '\\Helper'));
         }
-        return str_replace(\Magento\Autoload\IncludePath::NS_SEPARATOR, '_', $this->_moduleName);
+        return str_replace(\Magento\Framework\Autoload\IncludePath::NS_SEPARATOR, '_', $this->_moduleName);
     }
 
     /**
@@ -126,7 +126,7 @@ abstract class AbstractHelper
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated use \Magento\Module\Manager::isOutputEnabled()
+     * @deprecated use \Magento\Framework\Module\Manager::isOutputEnabled()
      */
     public function isModuleOutputEnabled($moduleName = null)
     {
@@ -141,7 +141,7 @@ abstract class AbstractHelper
      *
      * @param string $moduleName the full module name, example Magento_Core
      * @return boolean
-     * @deprecated use \Magento\Module\Manager::isEnabled()
+     * @deprecated use \Magento\Framework\Module\Manager::isEnabled()
      */
     public function isModuleEnabled($moduleName = null)
     {

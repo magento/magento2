@@ -26,7 +26,7 @@ namespace Magento\Payment\Model\Resource\Grid;
 /**
  * Sales transaction payment method types option array
  */
-class TypeList implements \Magento\Option\ArrayInterface
+class TypeList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Payment data

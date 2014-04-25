@@ -56,7 +56,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
     /**
      * Return image url
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return string|null
      */
     public function getUrl($object)
@@ -64,7 +64,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
         $url = false;
         if ($image = $object->getData($this->getAttribute()->getAttributeCode())) {
             $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\UrlInterface::URL_TYPE_MEDIA
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             ) . self::IMAGE_PATH_SEGMENT . $image;
         }
         return $url;

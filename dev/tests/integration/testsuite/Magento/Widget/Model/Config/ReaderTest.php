@@ -59,24 +59,27 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             array('directoryList' => $this->directoryList)
         );
 
-        /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
+        /** @var \Magento\Framework\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(
-            'Magento\Module\Declaration\FileResolver',
+            'Magento\Framework\Module\Declaration\FileResolver',
             array('filesystem' => $filesystem)
         );
 
-        /** @var \Magento\Module\Declaration\Reader\Filesystem $filesystemReader */
+        /** @var \Magento\Framework\Module\Declaration\Reader\Filesystem $filesystemReader */
         $filesystemReader = $objectManager->create(
-            'Magento\Module\Declaration\Reader\Filesystem',
+            'Magento\Framework\Module\Declaration\Reader\Filesystem',
             array('fileResolver' => $modulesDeclarations)
         );
 
-        /** @var \Magento\Module\ModuleList $modulesList */
-        $modulesList = $objectManager->create('Magento\Module\ModuleList', array('reader' => $filesystemReader));
+        /** @var \Magento\Framework\Module\ModuleList $modulesList */
+        $modulesList = $objectManager->create(
+            'Magento\Framework\Module\ModuleList',
+            array('reader' => $filesystemReader)
+        );
 
-        /** @var \Magento\Module\Dir\Reader $moduleReader */
+        /** @var \Magento\Framework\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader',
+            'Magento\Framework\Module\Dir\Reader',
             array('moduleList' => $modulesList, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');
@@ -122,7 +125,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/_files/widgetSecond.xml' => file_get_contents(__DIR__ . '/_files/widgetSecond.xml')
         );
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Config\FileResolverInterface'
+            'Magento\Framework\Config\FileResolverInterface'
         )->setMethods(
             array('get')
         )->disableOriginalConstructor()->getMock();

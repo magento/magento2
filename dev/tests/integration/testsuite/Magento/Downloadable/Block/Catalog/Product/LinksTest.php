@@ -38,7 +38,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Tax\Model\Calculation */
     private $taxCalculationModel;
 
-    /** @var \Magento\Registry */
+    /** @var \Magento\Framework\Registry */
     private $registry;
 
     /** @var \Magento\Downloadable\Block\Catalog\Product\Links */
@@ -47,10 +47,10 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->registry = $this->objectManager->get('Magento\Registry');
+        $this->registry = $this->objectManager->get('Magento\Framework\Registry');
         $this->taxCalculationModel = $this->objectManager->create('Magento\Tax\Model\Calculation');
 
-        $this->linksBlock = $this->objectManager->get('Magento\View\LayoutInterface')
+        $this->linksBlock = $this->objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock('Magento\Downloadable\Block\Catalog\Product\Links');
     }
 

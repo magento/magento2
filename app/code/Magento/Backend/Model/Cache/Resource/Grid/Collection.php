@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Cache\Resource\Grid;
 
-class Collection extends \Magento\Data\Collection
+class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface

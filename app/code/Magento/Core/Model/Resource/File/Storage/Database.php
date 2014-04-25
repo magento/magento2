@@ -31,15 +31,15 @@ namespace Magento\Core\Model\Resource\File\Storage;
 class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
 {
     /**
-     * @var \Magento\DB\Helper
+     * @var \Magento\Framework\DB\Helper
      */
     protected $_resourceHelper;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\DB\Helper $resourceHelper
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\DB\Helper $resourceHelper)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\DB\Helper $resourceHelper)
     {
         parent::__construct($resource);
         $this->_resourceHelper = $resourceHelper;
@@ -75,37 +75,37 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             $table
         )->addColumn(
             'file_id',
-            \Magento\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
             'File Id'
         )->addColumn(
             'content',
-            \Magento\DB\Ddl\Table::TYPE_VARBINARY,
-            \Magento\DB\Ddl\Table::MAX_VARBINARY_SIZE,
+            \Magento\Framework\DB\Ddl\Table::TYPE_VARBINARY,
+            \Magento\Framework\DB\Ddl\Table::MAX_VARBINARY_SIZE,
             array('nullable' => false),
             'File Content'
         )->addColumn(
             'upload_time',
-            \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            array('nullable' => false, 'default' => \Magento\DB\Ddl\Table::TIMESTAMP_INIT),
+            array('nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT),
             'Upload Timestamp'
         )->addColumn(
             'filename',
-            \Magento\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             100,
             array('nullable' => false),
             'Filename'
         )->addColumn(
             'directory_id',
-            \Magento\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             array('unsigned' => true, 'default' => null),
             'Identifier of Directory where File is Located'
         )->addColumn(
             'directory',
-            \Magento\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             array('default' => null),
             'Directory Path'
@@ -113,10 +113,10 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             $adapter->getIndexName(
                 $table,
                 array('filename', 'directory_id'),
-                \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
             array('filename', 'directory_id'),
-            array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+            array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
         )->addIndex(
             $adapter->getIndexName($table, array('directory_id')),
             array('directory_id')
@@ -125,8 +125,8 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             'directory_id',
             $dirStorageTable,
             'directory_id',
-            \Magento\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'File Storage'
         );
@@ -240,7 +240,7 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     {
         $adapter = $this->_getWriteAdapter();
 
-        $contentParam = new \Magento\DB\Statement\Parameter($file['content']);
+        $contentParam = new \Magento\Framework\DB\Statement\Parameter($file['content']);
         $contentParam->setIsBlob(true);
         $data = array(
             'content' => $contentParam,

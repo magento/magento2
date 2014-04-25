@@ -91,20 +91,20 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Logger $logger
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\RecurringPayment\Model\QuoteImporter $quoteImporter
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Logger $logger,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\RecurringPayment\Model\QuoteImporter $quoteImporter,
         array $data = array()
@@ -125,7 +125,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * SetExpressCheckout call
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
      * TODO: put together style and giropay settings
      */
@@ -156,7 +156,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
             foreach ($payments as $payment) {
                 $payment->setMethodCode(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS);
                 if (!$payment->isValid()) {
-                    throw new \Magento\Model\Exception($payment->getValidationErrors());
+                    throw new \Magento\Framework\Model\Exception($payment->getValidationErrors());
                 }
                 $request["L_BILLINGTYPE{$i}"] = 'RecurringPayments';
                 $request["L_BILLINGAGREEMENTDESCRIPTION{$i}"] = $payment->getScheduleDescription();
@@ -223,7 +223,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * ManageRecurringPaymentStatus call
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function callManageRecurringPaymentStatus()
     {
@@ -233,7 +233,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
         }
         try {
             $this->call('ManageRecurringPaymentsProfileStatus', $request);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             if (in_array(
                 11556,
                 $this->_callErrors
@@ -245,7 +245,7 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
                 $this->_callErrors
             ) && 'Reactivate' === $request['ACTION']
             ) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('We can\'t change the status because the current status doesn\'t match the real status.')
                 );
             }
@@ -256,10 +256,10 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * GetRecurringPaymentDetails call
      *
-     * @param \Magento\Object $result
+     * @param \Magento\Framework\Object $result
      * @return void
      */
-    public function callGetRecurringPaymentDetails(\Magento\Object $result)
+    public function callGetRecurringPaymentDetails(\Magento\Framework\Object $result)
     {
         $request = $this->_exportToRequest($this->_getRecurringPaymentDetailsRequest);
         $response = $this->call('GetRecurringPaymentsProfileDetails', $request);
@@ -291,10 +291,10 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * Check the obtained RP status in NVP format and specify the payment state
      *
      * @param string $value
-     * @param \Magento\Object $result
+     * @param \Magento\Framework\Object $result
      * @return void
      */
-    protected function _analyzeRecurringPaymentStatus($value, \Magento\Object $result)
+    protected function _analyzeRecurringPaymentStatus($value, \Magento\Framework\Object $result)
     {
         switch ($value) {
             case 'ActiveProfile':

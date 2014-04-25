@@ -28,7 +28,7 @@
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class Customergroup extends \Magento\View\Element\Html\Select
+class Customergroup extends \Magento\Framework\View\Element\Html\Select
 {
     /**
      * Customer groups cache
@@ -54,12 +54,12 @@ class Customergroup extends \Magento\View\Element\Html\Select
     /**
      * Construct
      *
-     * @param \Magento\View\Element\Context $context
+     * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
+        \Magento\Framework\View\Element\Context $context,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         array $data = array()
     ) {

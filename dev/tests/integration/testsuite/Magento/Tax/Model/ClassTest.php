@@ -48,7 +48,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
             \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
         )->getFirstItem();
 
-        $this->setExpectedException('Magento\Model\Exception');
+        $this->setExpectedException('Magento\Framework\Model\Exception');
         $model->checkClassCanBeDeleted();
     }
 
@@ -90,7 +90,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
             $model->getId()
         )->save();
 
-        $this->setExpectedException('Magento\Model\Exception');
+        $this->setExpectedException('Magento\Framework\Model\Exception');
         $model->checkClassCanBeDeleted();
     }
 
@@ -121,8 +121,8 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedCustomerClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Registry */
-        $registry = $this->_objectManager->get('Magento\Registry');
+        /** @var $registry \Magento\Framework\Registry */
+        $registry = $this->_objectManager->get('Magento\Framework\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $customerClasses = $taxRule->getCustomerTaxClasses();
@@ -130,7 +130,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Tax\Model\ClassModel */
         $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->load($customerClasses[0]);
         $this->setExpectedException(
-            'Magento\Model\Exception',
+            'Magento\Framework\Model\Exception',
             'You cannot delete this tax class because it is used in' .
             ' Tax Rules. You have to delete the rules it is used in first.'
         );
@@ -143,8 +143,8 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedProductClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Registry */
-        $registry = $this->_objectManager->get('Magento\Registry');
+        /** @var $registry \Magento\Framework\Registry */
+        $registry = $this->_objectManager->get('Magento\Framework\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $productClasses = $taxRule->getProductTaxClasses();
@@ -152,7 +152,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Tax\Model\ClassModel */
         $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->load($productClasses[0]);
         $this->setExpectedException(
-            'Magento\Model\Exception',
+            'Magento\Framework\Model\Exception',
             'You cannot delete this tax class because it is used in' .
             ' Tax Rules. You have to delete the rules it is used in first.'
         );

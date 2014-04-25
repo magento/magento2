@@ -25,14 +25,16 @@
  */
 namespace Magento\Integration\Helper\Oauth;
 
+use Magento\Framework\Oauth\OauthInterface;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Oauth\Helper\Request */
+    /** @var \Magento\Framework\Oauth\Helper\Request */
     protected $_oauthHelper;
 
     protected function setUp()
     {
-        $this->_oauthHelper = new \Magento\Oauth\Helper\Request();
+        $this->_oauthHelper = new \Magento\Framework\Oauth\Helper\Request();
     }
 
     protected function tearDown()
@@ -55,32 +57,38 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new \Magento\Oauth\Exception('msg', \Magento\Oauth\OauthInterface::ERR_VERSION_REJECTED),
+                new \Magento\Framework\Oauth\Exception('msg', OauthInterface::ERR_VERSION_REJECTED),
                 new \Zend_Controller_Response_Http(),
-                array('version_rejected&message=msg', \Magento\Oauth\Helper\Request::HTTP_BAD_REQUEST)
+                array('version_rejected&message=msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST)
             ),
             array(
-                new \Magento\Oauth\Exception('msg', 255),
+                new \Magento\Framework\Oauth\Exception('msg', 255),
                 new \Zend_Controller_Response_Http(),
-                array('unknown_problem&code=255&message=msg', \Magento\Oauth\Helper\Request::HTTP_INTERNAL_ERROR)
+                array(
+                    'unknown_problem&code=255&message=msg',
+                    \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR
+                )
             ),
             array(
-                new \Magento\Oauth\Exception('param', \Magento\Oauth\OauthInterface::ERR_PARAMETER_ABSENT),
+                new \Magento\Framework\Oauth\Exception('param', OauthInterface::ERR_PARAMETER_ABSENT),
                 new \Zend_Controller_Response_Http(),
                 array(
                     'parameter_absent&oauth_parameters_absent=param',
-                    \Magento\Oauth\Helper\Request::HTTP_BAD_REQUEST
+                    \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST
                 )
             ),
             array(
                 new \Exception('msg'),
                 new \Zend_Controller_Response_Http(),
-                array('internal_error&message=msg', \Magento\Oauth\Helper\Request::HTTP_INTERNAL_ERROR)
+                array('internal_error&message=msg', \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR)
             ),
             array(
                 new \Exception(),
                 new \Zend_Controller_Response_Http(),
-                array('internal_error&message=empty_message', \Magento\Oauth\Helper\Request::HTTP_INTERNAL_ERROR)
+                array(
+                    'internal_error&message=empty_message',
+                    \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR
+                )
             )
         );
     }

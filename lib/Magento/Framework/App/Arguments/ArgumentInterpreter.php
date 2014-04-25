@@ -23,9 +23,9 @@
  */
 namespace Magento\Framework\App\Arguments;
 
-use Magento\Data\Argument\InterpreterInterface;
-use Magento\Data\Argument\Interpreter\Constant;
-use Magento\Data\Argument\MissingOptionalValueException;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Data\Argument\Interpreter\Constant;
+use Magento\Framework\Data\Argument\MissingOptionalValueException;
 use Magento\Framework\App\Arguments;
 
 /**

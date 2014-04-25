@@ -101,7 +101,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Magento\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testSubmitOrderInvalidCustomerData()

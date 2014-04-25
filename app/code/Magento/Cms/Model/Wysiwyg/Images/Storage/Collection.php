@@ -28,7 +28,7 @@ namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 /**
  * Wysiwyg Images storage collection
  */
-class Collection extends \Magento\Data\Collection\Filesystem
+class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
      * @var \Magento\Framework\App\Filesystem

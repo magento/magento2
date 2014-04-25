@@ -37,10 +37,10 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
     /**
      * Renders column
      *
-     * @param  \Magento\Object $row
+     * @param  \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $html = '';
         $actions = $this->getColumn()->getActions();
@@ -68,10 +68,10 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
      * Render single action as link html
      *
      * @param  array $action
-     * @param  \Magento\Object $row
+     * @param  \Magento\Framework\Object $row
      * @return string|false
      */
-    protected function _toLinkHtml($action, \Magento\Object $row)
+    protected function _toLinkHtml($action, \Magento\Framework\Object $row)
     {
         $product = $row->getProduct();
 

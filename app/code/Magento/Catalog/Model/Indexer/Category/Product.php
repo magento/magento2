@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
-class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\ActionInterface
+class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * Indexer ID in configuration

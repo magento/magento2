@@ -37,7 +37,7 @@ namespace Magento\Wishlist\Model\Resource\Item\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
 
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Array of option ids grouped by item id

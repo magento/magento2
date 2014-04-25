@@ -31,7 +31,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fileResolverMock;
 
@@ -46,13 +46,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_schemaLocator;
 
     /**
-     * @var \Magento\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_validationState;
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
+        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $this->_fileResolverMock->expects(
             $this->once()
         )->method(
@@ -71,7 +71,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_converter = $this->getMock('Magento\Catalog\Model\Attribute\Config\Converter', array('convert'));
 
-        $moduleReader = $this->getMock('Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false);
+        $moduleReader = $this->getMock(
+            'Magento\Framework\Module\Dir\Reader',
+            array('getModuleDir'),
+            array(),
+            '',
+            false
+        );
         $moduleReader->expects(
             $this->once()
         )->method(
@@ -84,7 +90,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->_schemaLocator = new \Magento\Catalog\Model\Attribute\Config\SchemaLocator($moduleReader);
 
-        $this->_validationState = $this->getMock('Magento\Config\ValidationStateInterface');
+        $this->_validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $this->_validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
 
         $this->_model = new \Magento\Catalog\Model\Attribute\Config\Reader(

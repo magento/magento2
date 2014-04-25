@@ -24,12 +24,12 @@
 namespace Magento\ImportExport\Model\Export\RowCustomizer;
 
 use Magento\ImportExport\Model\Export\RowCustomizerInterface;
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 
 class Composite implements RowCustomizerInterface
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $objectManager;
 

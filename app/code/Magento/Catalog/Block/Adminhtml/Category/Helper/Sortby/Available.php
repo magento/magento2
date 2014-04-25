@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
-class Available extends \Magento\Data\Form\Element\Multiselect
+class Available extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox

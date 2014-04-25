@@ -149,7 +149,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore()->getCurrentCurrencyCode();
                 $minimumAmount = $this->_objectManager->get(
-                    'Magento\Locale\CurrencyInterface'
+                    'Magento\Framework\Locale\CurrencyInterface'
                 )->getCurrency(
                     $currencyCode
                 )->toCurrency(
@@ -176,11 +176,11 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
 
         // Compose array of messages to add
         $messages = array();
-        /** @var \Magento\Message\MessageInterface $message  */
+        /** @var \Magento\Framework\Message\MessageInterface $message  */
         foreach ($this->cart->getQuote()->getMessages() as $message) {
             if ($message) {
                 // Escape HTML entities in quote message to prevent XSS
-                $message->setText($this->_objectManager->get('Magento\Escaper')->escapeHtml($message->getText()));
+                $message->setText($this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($message->getText()));
                 $messages[] = $message;
             }
         }
@@ -192,14 +192,14 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
          */
         $this->_checkoutSession->setCartWasUpdated(true);
 
-        \Magento\Profiler::start(__METHOD__ . 'cart_display');
+        \Magento\Framework\Profiler::start(__METHOD__ . 'cart_display');
 
         $this->_view->loadLayout();
         $layout = $this->_view->getLayout();
         $layout->initMessages();
         $layout->getBlock('head')->setTitle(__('Shopping Cart'));
         $this->_view->renderLayout();
-        \Magento\Profiler::stop(__METHOD__ . 'cart_display');
+        \Magento\Framework\Profiler::stop(__METHOD__ . 'cart_display');
     }
 
     /**
@@ -213,7 +213,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    array('locale' => $this->_objectManager->get('Magento\Locale\ResolverInterface')->getLocaleCode())
+                    array('locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode())
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
@@ -250,22 +250,22 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                 if (!$this->cart->getQuote()->getHasError()) {
                     $message = __(
                         'You added %1 to your shopping cart.',
-                        $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName())
+                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName())
                     );
                     $this->messageManager->addSuccess($message);
                 }
                 $this->_goBack();
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice(
-                    $this->_objectManager->get('Magento\Escaper')->escapeHtml($e->getMessage())
+                    $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
                 );
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
                     $this->messageManager->addError(
-                        $this->_objectManager->get('Magento\Escaper')->escapeHtml($message)
+                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($message)
                     );
                 }
             }
@@ -279,7 +279,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_goBack();
         }
     }
@@ -300,7 +300,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
             foreach ($itemsCollection as $item) {
                 try {
                     $this->cart->addOrderItem($item, 1);
-                } catch (\Magento\Model\Exception $e) {
+                } catch (\Magento\Framework\Model\Exception $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
                         $this->messageManager->addNotice($e->getMessage());
                     } else {
@@ -308,7 +308,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                     }
                 } catch (\Exception $e) {
                     $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
-                    $this->_objectManager->get('Magento\Logger')->logException($e);
+                    $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                     $this->_goBack();
                 }
             }
@@ -339,7 +339,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
         }
 
         try {
-            $params = new \Magento\Object();
+            $params = new \Magento\Framework\Object();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());
@@ -353,7 +353,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
             );
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot configure the product.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_goBack();
             return;
         }
@@ -375,22 +375,22 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    array('locale' => $this->_objectManager->get('Magento\Locale\ResolverInterface')->getLocaleCode())
+                    array('locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode())
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Model\Exception(__("We can't find the quote item."));
+                throw new \Magento\Framework\Model\Exception(__("We can't find the quote item."));
             }
 
-            $item = $this->cart->updateItem($id, new \Magento\Object($params));
+            $item = $this->cart->updateItem($id, new \Magento\Framework\Object($params));
             if (is_string($item)) {
-                throw new \Magento\Model\Exception($item);
+                throw new \Magento\Framework\Model\Exception($item);
             }
             if ($item->getHasError()) {
-                throw new \Magento\Model\Exception($item->getMessage());
+                throw new \Magento\Framework\Model\Exception($item->getMessage());
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -410,13 +410,13 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                 if (!$this->cart->getQuote()->getHasError()) {
                     $message = __(
                         '%1 was updated in your shopping cart.',
-                        $this->_objectManager->get('Magento\Escaper')->escapeHtml($item->getProduct()->getName())
+                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($item->getProduct()->getName())
                     );
                     $this->messageManager->addSuccess($message);
                 }
                 $this->_goBack();
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice($e->getMessage());
             } else {
@@ -435,7 +435,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot update the item.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_goBack();
         }
         $this->_redirect('*/*');
@@ -480,7 +480,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
             $cartData = $this->getRequest()->getParam('cart');
             if (is_array($cartData)) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    array('locale' => $this->_objectManager->get('Magento\Locale\ResolverInterface')->getLocaleCode())
+                    array('locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode())
                 );
                 foreach ($cartData as $index => $data) {
                     if (isset($data['qty'])) {
@@ -495,13 +495,13 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                 $this->cart->updateItems($cartData)->save();
             }
             $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError(
-                $this->_objectManager->get('Magento\Escaper')->escapeHtml($e->getMessage())
+                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
             );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot update the shopping cart.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
     }
 
@@ -515,7 +515,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
         try {
             $this->cart->truncate()->save();
             $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Model\Exception $exception) {
+        } catch (\Magento\Framework\Model\Exception $exception) {
             $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
             $this->messageManager->addException($exception, __('We cannot update the shopping cart.'));
@@ -535,10 +535,10 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                 $this->cart->removeItem($id)->save();
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We cannot remove the item.'));
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             }
         }
-        $defaultUrl = $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*');
+        $defaultUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*');
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($defaultUrl));
     }
 
@@ -623,25 +623,25 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
                     $this->messageManager->addSuccess(
                         __(
                             'The coupon code "%1" was applied.',
-                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($couponCode)
+                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
                         )
                     );
                 } else {
                     $this->messageManager->addError(
                         __(
                             'The coupon code "%1" is not valid.',
-                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($couponCode)
+                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
                         )
                     );
                 }
             } else {
                 $this->messageManager->addSuccess(__('The coupon code was canceled.'));
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot apply the coupon code.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
 
         $this->_goBack();
@@ -665,7 +665,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements \Magento\Cata
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore();
         $unsecure = strpos($url, $store->getBaseUrl()) === 0;
-        $secure = strpos($url, $store->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)) === 0;
+        $secure = strpos($url, $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
         return $unsecure || $secure;
     }
 }

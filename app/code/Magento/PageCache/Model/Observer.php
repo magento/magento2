@@ -53,7 +53,7 @@ class Observer
     protected $_typeList;
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
@@ -69,7 +69,7 @@ class Observer
      * @param \Magento\Framework\App\PageCache\Cache $cache
      * @param \Magento\PageCache\Helper\Data $helper
      * @param \Magento\Framework\App\Cache\TypeListInterface $typeList
-     * @param \Magento\Session\Generic $session
+     * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Framework\App\PageCache\FormKey $formKey
      */
     public function __construct(
@@ -78,7 +78,7 @@ class Observer
         \Magento\PageCache\Helper\Data $helper,
         \Magento\Framework\App\Cache\TypeListInterface $typeList,
         \Magento\Framework\App\PageCache\FormKey $formKey,
-        \Magento\Session\Generic $session
+        \Magento\Framework\Session\Generic $session
     ) {
         $this->_config = $config;
         $this->_cache = $cache;
@@ -92,19 +92,19 @@ class Observer
      * Add comment cache containers to private blocks
      * Blocks are wrapped only if page is cacheable
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function processLayoutRenderElement(\Magento\Event\Observer $observer)
+    public function processLayoutRenderElement(\Magento\Framework\Event\Observer $observer)
     {
         $event = $observer->getEvent();
-        /** @var \Magento\View\Layout $layout */
+        /** @var \Magento\Framework\View\Layout $layout */
         $layout = $event->getLayout();
         if ($layout->isCacheable() && $this->_config->isEnabled()) {
             $name = $event->getElementName();
             $block = $layout->getBlock($name);
             $transport = $event->getTransport();
-            if ($block instanceof \Magento\View\Element\AbstractBlock) {
+            if ($block instanceof \Magento\Framework\View\Element\AbstractBlock) {
                 $blockTtl = $block->getTtl();
                 $varnishIsEnabledFlag = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
                 $output = $transport->getData('output');
@@ -125,10 +125,10 @@ class Observer
     /**
      * Replace the output of the block, containing ttl attribute, with ESI tag
      *
-     * @param \Magento\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return string
      */
-    protected function _wrapEsi(\Magento\View\Element\AbstractBlock $block)
+    protected function _wrapEsi(\Magento\Framework\View\Element\AbstractBlock $block)
     {
         $url = $block->getUrl(
             'page_cache/block/esi',
@@ -144,14 +144,14 @@ class Observer
      * If Built-In caching is enabled it collects array of tags
      * of incoming object and asks to clean cache.
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function flushCacheByTags(\Magento\Event\Observer $observer)
+    public function flushCacheByTags(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Object\IdentityInterface) {
+            if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
                 $tags = $object->getIdentities();
                 foreach ($tags as $tag) {
                     $tags[] = preg_replace("~_\\d+$~", '', $tag);
@@ -164,10 +164,10 @@ class Observer
     /**
      * Flash Built-In cache
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function flushAllCache(\Magento\Event\Observer $observer)
+    public function flushAllCache(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN) {
             $this->_cache->clean();
@@ -190,14 +190,14 @@ class Observer
     /**
      * Register form key in session from cookie value
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function registerFormKeyFromCookie(\Magento\Event\Observer $observer)
+    public function registerFormKeyFromCookie(\Magento\Framework\Event\Observer $observer)
     {
         $formKeyFromCookie = $this->_formKey->get();
         if ($formKeyFromCookie) {
-            $this->_session->setData(\Magento\Data\Form\FormKey::FORM_KEY, $formKeyFromCookie);
+            $this->_session->setData(\Magento\Framework\Data\Form\FormKey::FORM_KEY, $formKeyFromCookie);
         }
     }
 }

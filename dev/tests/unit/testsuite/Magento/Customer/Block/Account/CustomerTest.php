@@ -43,7 +43,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $viewHelperMock->expects($this->any())->method('getCustomerName')->will($this->returnValue($customerName));
 
-        $escaperMock = $this->getMockBuilder('Magento\Escaper')->disableOriginalConstructor()->getMock();
+        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')->disableOriginalConstructor()->getMock();
         $escaperMock->expects(
             $this->any()
         )->method(
@@ -55,7 +55,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
 
         $contextMock = $this->getMockBuilder(
-            'Magento\View\Element\Template\Context'
+            'Magento\Framework\View\Element\Template\Context'
         )->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($escaperMock));
 

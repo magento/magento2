@@ -23,7 +23,7 @@
  */ 
 namespace Magento\Newsletter\Controller;
 
-use Magento\Message\MessageInterface;
+use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 

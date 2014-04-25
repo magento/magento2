@@ -28,10 +28,9 @@ namespace Magento\Store\Model\Storage;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Group;
-use Magento\Store\Model\Group\Factory;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
-use Magento\Store\Model\Website\Factory as WebsiteFactory;
+use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
 
 class Db implements \Magento\Store\Model\StoreManagerInterface
 {
@@ -85,18 +84,11 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     protected $_groups = array();
 
     /**
-     * Config model
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_config;
-
-    /**
      * Default store code
      *
      * @var string
      */
-    protected $_currentStore = null;
+    protected $_currentStore;
 
     /**
      * Store factory
@@ -115,16 +107,9 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     /**
      * Group factory
      *
-     * @var Factory
+     * @var \Magento\Store\Model\GroupFactory
      */
     protected $_groupFactory;
-
-    /**
-     * Cookie model
-     *
-     * @var \Magento\Stdlib\Cookie
-     */
-    protected $_cookie;
 
     /**
      * Application state model
@@ -134,43 +119,37 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * Scope config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_helper;
+    protected $_scopeConfig;
 
     /**
      * @param StoreFactory $storeFactory
      * @param WebsiteFactory $websiteFactory
-     * @param Factory $groupFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\Store\Model\GroupFactory $groupFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param State $appState
-     * @param \Magento\Core\Helper\Data $helper
      * @param bool $isSingleStoreAllowed
      * @param null $currentStore
      */
     public function __construct(
         StoreFactory $storeFactory,
         WebsiteFactory $websiteFactory,
-        Factory $groupFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Stdlib\Cookie $cookie,
+        \Magento\Store\Model\GroupFactory $groupFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         State $appState,
-        \Magento\Core\Helper\Data $helper,
         $isSingleStoreAllowed,
         $currentStore = null
     ) {
         $this->_storeFactory = $storeFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_groupFactory = $groupFactory;
-        $this->_config = $config;
+        $this->_scopeConfig = $scopeConfig;
         $this->_isSingleStoreAllowed = $isSingleStoreAllowed;
         $this->_appState = $appState;
-        $this->_cookie = $cookie;
-        $this->_helper = $helper;
-        if ($currentStore) {
-            $this->_currentStore = $currentStore;
-        }
+        $this->_currentStore = $currentStore;
     }
 
     /**
@@ -188,124 +167,6 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             );
         }
         return $this->_store;
-    }
-
-    /**
-     * Check get store
-     *
-     * @param string $type
-     * @return void
-     */
-    protected function _checkGetStore($type)
-    {
-        if (empty($_POST['___store']) && empty($_GET['___store'])) {
-            return;
-        }
-        $store = empty($_POST['___store']) ? $_GET['___store'] : $_POST['___store'];
-
-        if (!isset($this->_stores[$store])) {
-            return;
-        }
-
-        $storeObj = $this->_stores[$store];
-        if (!$storeObj->getId() || !$storeObj->getIsActive()) {
-            return;
-        }
-
-        /**
-         * prevent running a store from another website or store group,
-         * if website or store group was specified explicitly
-         */
-        $curStoreObj = $this->_stores[$this->_currentStore];
-        if ($type == 'website' && $storeObj->getWebsiteId() == $curStoreObj->getWebsiteId()) {
-            $this->_currentStore = $store;
-        } elseif ($type == 'group' && $storeObj->getGroupId() == $curStoreObj->getGroupId()) {
-            $this->_currentStore = $store;
-        } elseif ($type == 'store') {
-            $this->_currentStore = $store;
-        }
-
-        if ($this->_currentStore == $store) {
-            $store = $this->getStore($store);
-            if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
-                $this->_cookie->set(Store::COOKIE_NAME, null);
-            } else {
-                $this->_cookie->set(Store::COOKIE_NAME, $this->_currentStore, true);
-                $this->_httpContext->setValue(
-                    \Magento\Core\Helper\Data::CONTEXT_STORE,
-                    $this->_currentStore,
-                    $this->_getDefaultStore()->getCode()
-                );
-            }
-        }
-        return;
-    }
-
-    /**
-     * Check cookie store
-     *
-     * @param string $type
-     * @return void
-     */
-    protected function _checkCookieStore($type)
-    {
-        if (!$this->_cookie->get()) {
-            return;
-        }
-
-        $store = $this->_cookie->get(Store::COOKIE_NAME);
-        if ($store && isset(
-            $this->_stores[$store]
-        ) && $this->_stores[$store]->getId() && $this->_stores[$store]->getIsActive()
-        ) {
-            if ($type == 'website' &&
-                $this->_stores[$store]->getWebsiteId() == $this->_stores[$this->_currentStore]->getWebsiteId()
-            ) {
-                $this->_currentStore = $store;
-            }
-            if ($type == 'group' &&
-                $this->_stores[$store]->getGroupId() == $this->_stores[$this->_currentStore]->getGroupId()
-            ) {
-                $this->_currentStore = $store;
-            }
-            if ($type == 'store') {
-                $this->_currentStore = $store;
-            }
-        }
-    }
-
-    /**
-     * Retrieve store code or null by store group
-     *
-     * @param int $group
-     * @return string|null
-     */
-    protected function _getStoreByGroup($group)
-    {
-        if (!isset($this->_groups[$group])) {
-            return null;
-        }
-        if (!$this->_groups[$group]->getDefaultStoreId()) {
-            return null;
-        }
-        return $this->_stores[$this->_groups[$group]->getDefaultStoreId()]->getCode();
-    }
-
-    /**
-     * Retrieve store code or null by website
-     *
-     * @param int|string $website
-     * @return string|null
-     */
-    protected function _getStoreByWebsite($website)
-    {
-        if (!isset($this->_websites[$website])) {
-            return null;
-        }
-        if (!$this->_websites[$website]->getDefaultGroupId()) {
-            return null;
-        }
-        return $this->_getStoreByGroup($this->_websites[$website]->getDefaultGroupId());
     }
 
     /**
@@ -330,7 +191,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
         $groupCollection = $this->_groupFactory->create()->getCollection();
         $groupCollection->setLoadDefault(true);
 
-        /** @var $storeCollection \Magento\Store\Model\Resource\Collection */
+        /** @var $storeCollection \Magento\Store\Model\Resource\Store\Collection */
         $storeCollection = $this->_storeFactory->create()->getCollection();
         $storeCollection->setLoadDefault(true);
 
@@ -418,7 +279,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      */
     public function isSingleStoreMode()
     {
-        return $this->hasSingleStore() && $this->_helper->isSingleStoreModeEnabled();
+        return $this->hasSingleStore() && $this->isSingleStoreModeEnabled();
     }
 
     /**
@@ -454,7 +315,9 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             }
 
             if (!$store->getCode()) {
-                $this->throwStoreException();
+                throw new \Magento\Store\Model\Exception(
+                    'Store Manager has been initialized not properly'
+                );
             }
             $this->_stores[$store->getStoreId()] = $store;
             $this->_stores[$store->getCode()] = $store;
@@ -571,7 +434,6 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     /**
      * Prepare array of store groups
      * can be filtered to contain default store group or not by $withDefault flag
-     * depending on flag $codeKey array keys can be group id or group code
      *
      * @param bool $withDefault
      * @param bool $codeKey
@@ -586,11 +448,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
                 if (!$withDefault && $group->getId() == 0) {
                     continue;
                 }
-                if ($codeKey) {
-                    $groups[$group->getCode()] = $group;
-                } else {
-                    $groups[$group->getId()] = $group;
-                }
+                $groups[$group->getId()] = $group;
             }
         }
         return $groups;
@@ -650,24 +508,6 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * Get either default or any store view
-     *
-     * @return Store|null
-     */
-    public function getAnyStoreView()
-    {
-        $store = $this->getDefaultStoreView();
-        if ($store) {
-            return $store;
-        }
-        foreach ($this->getStores() as $store) {
-            return $store;
-        }
-
-        return null;
-    }
-
-    /**
      * Set current default store
      *
      * @param string $store
@@ -679,21 +519,18 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * @return void
-     * @throws \Magento\Store\Model\Exception
-     */
-    public function throwStoreException()
-    {
-        throw new \Magento\Store\Model\Exception('Store Manager has been initialized not properly');
-    }
-
-    /**
-     * Get current store code
+     * Check if Single-Store mode is enabled in configuration
      *
-     * @return string
+     * This flag only shows that admin does not want to show certain UI components at backend (like store switchers etc)
+     * if Magento has only one store view but it does not check the store view collection
+     *
+     * @return bool
      */
-    public function getCurrentStore()
+    protected function isSingleStoreModeEnabled()
     {
-        return $this->_currentStore;
+        return (bool)$this->_scopeConfig->getValue(
+            \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

@@ -37,12 +37,12 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $salableItemMock;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataTimeMock;
 
@@ -57,7 +57,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfoMock;
 
@@ -82,7 +82,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     protected $coreStoreMock;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $calculator;
 
@@ -99,7 +99,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->dataTimeMock = $this->getMockForAbstractClass(
-            'Magento\Stdlib\DateTime\TimezoneInterface',
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
             [],
             '',
             false,
@@ -115,7 +115,13 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->coreStoreMock));
 
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->priceInfoMock = $this->getMock('\Magento\Pricing\PriceInfo', ['getAdjustments'], [], '', false);
+        $this->priceInfoMock = $this->getMock(
+            '\Magento\Framework\Pricing\PriceInfo',
+            ['getAdjustments'],
+            [],
+            '',
+            false
+        );
         $this->catalogRuleResourceFactoryMock = $this->getMock(
             '\Magento\CatalogRule\Model\Resource\RuleFactory',
             ['create'],
@@ -144,7 +150,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->catalogRuleResourceMock));
 
-        $this->calculator = $this->getMockBuilder('Magento\Pricing\Adjustment\Calculator')
+        $this->calculator = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Calculator')
             ->disableOriginalConstructor()
             ->getMock();
         $qty = 1;

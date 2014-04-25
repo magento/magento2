@@ -40,7 +40,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Soap\Request */
     protected $_requestMock;
 
-    /** @var \Magento\DomDocument\Factory */
+    /** @var \Magento\Framework\DomDocument\Factory */
     protected $_domDocumentFactory;
 
     /** @var \Magento\Store\Model\Store */
@@ -68,7 +68,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
 
         $this->_areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -80,7 +80,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Controller\Soap\Request'
         )->disableOriginalConstructor()->getMock();
         $this->_domDocumentFactory = $this->getMockBuilder(
-            'Magento\DomDocument\Factory'
+            'Magento\Framework\DomDocument\Factory'
         )->disableOriginalConstructor()->getMock();
         $this->_soapServerFactory = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\Server\Factory'

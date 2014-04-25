@@ -133,7 +133,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $rootCatIdExpr = $this->getWriteAdapter()->quote("{$rootId}/{$store->getRootCategoryId()}");
         $catIdExpr = $this->getWriteAdapter()->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
-        /** @var \Magento\DB\Select $select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = $this->getWriteAdapter()->select()->from(
             array('cf' => $this->getTableNameByStore($store, $useTempTable))
         )->joinLeft(

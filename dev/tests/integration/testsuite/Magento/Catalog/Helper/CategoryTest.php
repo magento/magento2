@@ -46,7 +46,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $helperClass = get_class($this->_helper);
             /** @var $objectManager \Magento\TestFramework\ObjectManager */
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $objectManager->get('Magento\Registry')->unregister('_helper/' . $helperClass);
+            $objectManager->get('Magento\Framework\Registry')->unregister('_helper/' . $helperClass);
         }
         $this->_helper = null;
     }
@@ -57,7 +57,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCategories()
     {
         $categories = $this->_helper->getStoreCategories();
-        $this->assertInstanceOf('Magento\Data\Tree\Node\Collection', $categories);
+        $this->assertInstanceOf('Magento\Framework\Data\Tree\Node\Collection', $categories);
         $index = 0;
         $expectedPaths = array(
             array(3, '1/2/3'),
@@ -69,7 +69,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             array(12, '1/2/12')
         );
         foreach ($categories as $category) {
-            $this->assertInstanceOf('Magento\Data\Tree\Node', $category);
+            $this->assertInstanceOf('Magento\Framework\Data\Tree\Node', $category);
             $this->assertEquals($expectedPaths[$index][0], $category->getId());
             $this->assertEquals($expectedPaths[$index][1], $category->getData('path'));
             $index++;
@@ -85,7 +85,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
 
-        $category = new \Magento\Object(array('url' => $url));
+        $category = new \Magento\Framework\Object(array('url' => $url));
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
     }
 

@@ -44,7 +44,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
     {
         $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
     }
 
     protected function tearDown()
@@ -69,7 +69,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $this->_request->expects($this->at(1))->method('getParam')->with('h')->will($this->returnValue($fixture));
         $tunnelResponse = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $httpClient = $this->getMock(
-            'Magento\HTTP\ZendClient',
+            'Magento\Framework\HTTP\ZendClient',
             array('setUri', 'setParameterGet', 'setConfig', 'request', 'getHeaders')
         );
         /** @var $helper \Magento\Backend\Helper\Dashboard\Data|PHPUnit_Framework_MockObject_MockObject */
@@ -97,7 +97,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\HTTP\ZendClient'
+            'Magento\Framework\HTTP\ZendClient'
         )->will(
             $this->returnValue($httpClient)
         );
@@ -195,18 +195,18 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\HTTP\ZendClient'
+            'Magento\Framework\HTTP\ZendClient'
         )->will(
             $this->throwException($exceptionMock)
         );
-        $loggerMock = $this->getMock('Magento\Logger', array('logException'), array(), '', false);
+        $loggerMock = $this->getMock('Magento\Framework\Logger', array('logException'), array(), '', false);
         $loggerMock->expects($this->once())->method('logException')->with($exceptionMock);
         $this->_objectManager->expects(
             $this->at(2)
         )->method(
             'get'
         )->with(
-            'Magento\Logger'
+            'Magento\Framework\Logger'
         )->will(
             $this->returnValue($loggerMock)
         );

@@ -35,7 +35,7 @@ class Observer
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
@@ -71,7 +71,7 @@ class Observer
     /**
      * @param \Magento\Authorizenet\Helper\Data $authorizenetData
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorizenet\Model\Directpost $payment
      * @param \Magento\Authorizenet\Model\Directpost\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -79,7 +79,7 @@ class Observer
     public function __construct(
         \Magento\Authorizenet\Helper\Data $authorizenetData,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Authorizenet\Model\Directpost $payment,
         \Magento\Authorizenet\Model\Directpost\Session $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -95,10 +95,10 @@ class Observer
     /**
      * Save order into registry to use it in the overloaded controller.
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function saveOrderAfterSubmit(\Magento\Event\Observer $observer)
+    public function saveOrderAfterSubmit(\Magento\Framework\Event\Observer $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
@@ -110,10 +110,10 @@ class Observer
     /**
      * Set data for response of frontend saveOrder action
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function addAdditionalFieldsToResponseFrontend(\Magento\Event\Observer $observer)
+    public function addAdditionalFieldsToResponseFrontend(\Magento\Framework\Event\Observer $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $this->_coreRegistry->registry('directpost_order');
@@ -151,10 +151,10 @@ class Observer
      * Update all edit increments for all orders if module is enabled.
      * Needed for correct work of edit orders in Admin area.
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function updateAllEditIncrements(\Magento\Event\Observer $observer)
+    public function updateAllEditIncrements(\Magento\Framework\Event\Observer $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');

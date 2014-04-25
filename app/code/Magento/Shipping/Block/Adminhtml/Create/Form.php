@@ -61,7 +61,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

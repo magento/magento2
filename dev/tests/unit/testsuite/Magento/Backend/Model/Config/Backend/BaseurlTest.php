@@ -27,19 +27,19 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
     {
-        $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
         $appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $cacheManager = $this->getMock('Magento\Framework\App\CacheInterface');
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $actionValidatorMock = $this->getMock(
-            'Magento\Model\ActionValidator\RemoveAction',
+            'Magento\Framework\Model\ActionValidator\RemoveAction',
             array(),
             array(),
             '',
             false
         );
 
-        $context = new \Magento\Model\Context(
+        $context = new \Magento\Framework\Model\Context(
             $logger,
             $eventDispatcher,
             $cacheManager,
@@ -49,9 +49,9 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMock('Magento\Core\Model\Resource\Config\Data', array(), array(), '', false);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
-        $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
-        $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
-        $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $resourceCollection = $this->getMock('Magento\Framework\Data\Collection\Db', array(), array(), '', false);
+        $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', array(), array(), '', false);
+        $coreRegistry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $coreConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $model = $this->getMock(

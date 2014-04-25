@@ -27,7 +27,7 @@
 <?php echo $this->getProductPriceHtml(
     $_product,
     \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
-    \Magento\Pricing\Render::ZONE_ITEM_VIEW,
+    \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
     [
         'price_id_suffix' => '_clone'
     ]

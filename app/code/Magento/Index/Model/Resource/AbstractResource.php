@@ -33,10 +33,10 @@
  */
 namespace Magento\Index\Model\Resource;
 
-use Magento\DB\Adapter\AdapterInterface;
-use Magento\DB\Select;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
-abstract class AbstractResource extends \Magento\Model\Resource\Db\AbstractDb
+abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     const IDX_SUFFIX = '_idx';
 

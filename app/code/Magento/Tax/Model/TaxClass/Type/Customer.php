@@ -29,22 +29,17 @@ namespace Magento\Tax\Model\TaxClass\Type;
 class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
-     * @var \Magento\Customer\Model\Group
-     */
-    protected $_modelCustomerGroup;
-
-    /**
      * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
     protected $groupService;
 
     /**
-     * @var \Magento\Service\V1\Data\FilterBuilder
+     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Service\V1\Data\SearchCriteriaBuilder
+     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -58,15 +53,15 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
     /**
      * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Service\V1\Data\FilterBuilder $filterBuilder
-     * @param \Magento\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Model\Calculation\Rule $calculationRule,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Service\V1\Data\FilterBuilder $filterBuilder,
-        \Magento\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder,
+        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
         array $data = array()
     ) {
         parent::__construct($calculationRule, $data);

@@ -30,7 +30,7 @@
         <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml">
             <container name="checkout.cart.items" label="invisible" as="with-items">
                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml">
-                    <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
+                    <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
                     <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
                     <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
                 </block>
@@ -55,5 +55,5 @@
             </container>
         </block>
     </referenceContainer>
-    <!-- <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/> -->
+    <!-- <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/> -->
 </layout>

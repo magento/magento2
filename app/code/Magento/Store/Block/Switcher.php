@@ -29,7 +29,7 @@ namespace Magento\Store\Block;
 
 use Magento\Store\Model\Group;
 
-class Switcher extends \Magento\View\Element\Template
+class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var bool
@@ -44,12 +44,12 @@ class Switcher extends \Magento\View\Element\Template
     /**
      * Constructs
      *
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Core\Helper\PostData $postDataHelper,
         array $data = array()
     ) {

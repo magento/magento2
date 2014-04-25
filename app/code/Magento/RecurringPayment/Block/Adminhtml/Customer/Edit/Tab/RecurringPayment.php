@@ -35,7 +35,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
     /**
      * Core registry
      *
-     * @var \Magento\Registry|null
+     * @var \Magento\Framework\Registry|null
      */
     protected $_coreRegistry = null;
 
@@ -51,7 +51,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
      * @param \Magento\RecurringPayment\Model\States $recurringStates
      * @param \Magento\RecurringPayment\Block\Fields $fields
      * @param \Magento\RecurringPayment\Model\Method\PaymentMethodsList $payments
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -61,7 +61,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
         \Magento\RecurringPayment\Model\States $recurringStates,
         \Magento\RecurringPayment\Block\Fields $fields,
         \Magento\RecurringPayment\Model\Method\PaymentMethodsList $payments,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;

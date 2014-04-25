@@ -79,14 +79,14 @@ class Iframe extends \Magento\Payment\Block\Form
     protected $_hssHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
@@ -127,7 +127,7 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get current block instance
      *
      * @return \Magento\Payment\Block\Form
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getBlock()
     {
@@ -135,12 +135,12 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_block = $this->getLayout()->createBlock(
                 'Magento\\Paypal\\Block\\' . str_replace(
                     ' ',
-                    \Magento\Autoload\IncludePath::NS_SEPARATOR,
+                    \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR,
                     ucwords(str_replace('_', ' ', $this->_paymentMethodCode))
                 ) . '\\Iframe'
             );
             if (!$this->_block instanceof \Magento\Paypal\Block\Iframe) {
-                throw new \Magento\Model\Exception('Invalid block type');
+                throw new \Magento\Framework\Model\Exception('Invalid block type');
             }
         }
 
@@ -174,7 +174,7 @@ class Iframe extends \Magento\Payment\Block\Form
     /**
      * Before rendering html, check if is block rendering needed
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {

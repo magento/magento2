@@ -32,7 +32,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('sales_order_status_state'),
     'visible_on_front',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         'length' => 1,
         'nullable' => false,
         'default' => 0,

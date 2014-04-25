@@ -33,14 +33,16 @@ class AddTest extends \PHPUnit_Framework_TestCase
 {
     public function testToHtmlFormId()
     {
-        /** @var $layout \Magento\View\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
 
         $block = $layout->addBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add', 'block');
         $block->setArea('adminhtml')->unsetChild('setForm');
 
-        $childBlock = $layout->addBlock('Magento\View\Element\Template', 'setForm', 'block');
-        $form = new \Magento\Object();
+        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Template', 'setForm', 'block');
+        $form = new \Magento\Framework\Object();
         $childBlock->setForm($form);
 
         $expectedId = '12121212';

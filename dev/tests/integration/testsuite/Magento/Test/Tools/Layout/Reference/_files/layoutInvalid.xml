@@ -25,13 +25,13 @@
 -->
 <layout>
     <handle id="test">
-        <block class="Magento\View\Element\Template" name="block"/>
+        <block class="Magento\Framework\View\Element\Template" name="block"/>
         <container name="block" label="Container"/>
         <reference name="block">
-            <block class="Magento\View\Element\Template" name="another.block"/>
+            <block class="Magento\Framework\View\Element\Template" name="another.block"/>
         </reference>
         <reference name="broken.reference">
-            <block class="Magento\View\Element\Template" name="another.block"/>
+            <block class="Magento\Framework\View\Element\Template" name="another.block"/>
         </reference>
     </handle>
 </layout>

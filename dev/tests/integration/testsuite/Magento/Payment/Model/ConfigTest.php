@@ -42,7 +42,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Config\FileResolverInterface'
+            'Magento\Framework\Config\FileResolverInterface'
         )->disableOriginalConstructor()->getMock();
         $fileList = array(
             file_get_contents(__DIR__ . '/_files/payment.xml'),

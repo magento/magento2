@@ -68,10 +68,10 @@ class CollectTotals
     /**
      * Handle customer VAT number if needed on collect_totals_before event of quote address
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function dispatch(\Magento\Event\Observer $observer)
+    public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Sales\Model\Quote\Address $quoteAddress */
         $quoteAddress = $observer->getQuoteAddress();
@@ -80,12 +80,9 @@ class CollectTotals
         $customerData = $quote->getCustomerData();
         $storeId = $customerData->getStoreId();
 
-        if ($customerData->getCustomAttribute(
-            'disable_auto_group_change'
-        ) || false == $this->vatValidator->isEnabled(
-            $quoteAddress,
-            $storeId
-        )
+        if (($customerData->getCustomAttribute('disable_auto_group_change')
+                && $customerData->getCustomAttribute('disable_auto_group_change')->getValue())
+            || false == $this->vatValidator->isEnabled($quoteAddress, $storeId)
         ) {
             return;
         }

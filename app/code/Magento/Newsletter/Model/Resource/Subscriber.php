@@ -32,7 +32,7 @@ namespace Magento\Newsletter\Model\Resource;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
+class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * DB read connection
@@ -65,12 +65,12 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Date
      *
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -78,13 +78,13 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Stdlib\DateTime\DateTime $date,
-        \Magento\Math\Random $mathRandom
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
@@ -178,7 +178,7 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @param \Magento\Newsletter\Model\Queue $queue
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)
     {
@@ -193,7 +193,7 @@ class Subscriber extends \Magento\Model\Resource\Db\AbstractDb
             $this->_write->commit();
         } catch (\Exception $e) {
             $this->_write->rollBack();
-            throw new \Magento\Model\Exception(__('We cannot mark as received subscriber.'));
+            throw new \Magento\Framework\Model\Exception(__('We cannot mark as received subscriber.'));
         }
         return $this;
     }

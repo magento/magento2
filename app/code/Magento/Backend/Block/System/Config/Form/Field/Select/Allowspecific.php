@@ -34,7 +34,7 @@
  */
 namespace Magento\Backend\Block\System\Config\Form\Field\Select;
 
-class Allowspecific extends \Magento\Data\Form\Element\Select
+class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Add additional Javascript code

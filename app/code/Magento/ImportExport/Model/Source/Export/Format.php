@@ -32,7 +32,7 @@ namespace Magento\ImportExport\Model\Source\Export;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Format implements \Magento\Option\ArrayInterface
+class Format implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface

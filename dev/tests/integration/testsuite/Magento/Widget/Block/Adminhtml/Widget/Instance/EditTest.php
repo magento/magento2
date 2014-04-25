@@ -40,7 +40,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $type = 'Magento\Catalog\Block\Product\Widget\NewWidget';
         $code = 'catalog_product_newwidget';
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDefaultDesignTheme()->getDesignTheme();
 
         /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
@@ -50,7 +50,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $widgetInstance->setType($type)->setCode($code)->setThemeId($theme->getId())->save();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_widget_instance', $widgetInstance);
+        $objectManager->get('Magento\Framework\Registry')->register('current_widget_instance', $widgetInstance);
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\RequestInterface'
@@ -59,7 +59,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $widgetInstance->getId()
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit',
             'widget'

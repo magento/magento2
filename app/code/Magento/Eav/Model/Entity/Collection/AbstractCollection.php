@@ -25,12 +25,12 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
-use Magento\DB\Select;
+use Magento\Framework\DB\Select;
 
 /**
  * Entity/Attribute/Model - collection abstract
  */
-abstract class AbstractCollection extends \Magento\Data\Collection\Db
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
 {
     /**
      * Array of items with item id key
@@ -105,7 +105,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -130,32 +130,32 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Validator\UniversalFactory
+     * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
         $connection = null
     ) {
         $this->_eventManager = $eventManager;
@@ -270,7 +270,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Get resource instance
      *
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getResource()
     {
@@ -280,7 +280,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Set template object for the collection
      *
-     * @param   \Magento\Object $object
+     * @param   \Magento\Framework\Object $object
      * @return $this
      */
     public function setObject($object = null)
@@ -296,11 +296,11 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Add an object to the collection
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      * @throws \Magento\Eav\Exception
      */
-    public function addItem(\Magento\Object $object)
+    public function addItem(\Magento\Framework\Object $object)
     {
         if (!$object instanceof $this->_itemObjectClass) {
             throw new \Magento\Eav\Exception(__('Attempt to add an invalid object'));
@@ -336,7 +336,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * @param null|string|array $condition
      * @param string $joinType
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      *
      * @see self::_getConditionSql for $condition
      */
@@ -367,9 +367,9 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         }
 
         if (!empty($conditionSql)) {
-            $this->getSelect()->where($conditionSql, null, \Magento\DB\Select::TYPE_CONDITION);
+            $this->getSelect()->where($conditionSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
         } else {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Invalid attribute identifier for filter (%1)', get_class($attribute))
             );
         }
@@ -378,11 +378,11 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     }
 
     /**
-     * Wrapper for compatibility with \Magento\Data\Collection\Db
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\Db
      *
      * @param mixed $attribute
      * @param mixed $condition
-     * @return $this|\Magento\Data\Collection\Db
+     * @return $this|\Magento\Framework\Data\Collection\Db
      */
     public function addFieldToFilter($attribute, $condition = null)
     {
@@ -892,35 +892,35 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         if ($this->isLoaded()) {
             return $this;
         }
-        \Magento\Profiler::start('EAV:load_collection');
+        \Magento\Framework\Profiler::start('EAV:load_collection');
 
-        \Magento\Profiler::start('before_load');
+        \Magento\Framework\Profiler::start('before_load');
         $this->_eventManager->dispatch('eav_collection_abstract_load_before', array('collection' => $this));
         $this->_beforeLoad();
-        \Magento\Profiler::stop('before_load');
+        \Magento\Framework\Profiler::stop('before_load');
 
         $this->_renderFilters();
         $this->_renderOrders();
 
-        \Magento\Profiler::start('load_entities');
+        \Magento\Framework\Profiler::start('load_entities');
         $this->_loadEntities($printQuery, $logQuery);
-        \Magento\Profiler::stop('load_entities');
-        \Magento\Profiler::start('load_attributes');
+        \Magento\Framework\Profiler::stop('load_entities');
+        \Magento\Framework\Profiler::start('load_attributes');
         $this->_loadAttributes($printQuery, $logQuery);
-        \Magento\Profiler::stop('load_attributes');
+        \Magento\Framework\Profiler::stop('load_attributes');
 
-        \Magento\Profiler::start('set_orig_data');
+        \Magento\Framework\Profiler::start('set_orig_data');
         foreach ($this->_items as $item) {
             $item->setOrigData();
         }
-        \Magento\Profiler::stop('set_orig_data');
+        \Magento\Framework\Profiler::stop('set_orig_data');
 
         $this->_setIsLoaded();
-        \Magento\Profiler::start('after_load');
+        \Magento\Framework\Profiler::start('after_load');
         $this->_afterLoad();
-        \Magento\Profiler::stop('after_load');
+        \Magento\Framework\Profiler::stop('after_load');
 
-        \Magento\Profiler::stop('EAV:load_collection');
+        \Magento\Framework\Profiler::stop('EAV:load_collection');
         return $this;
     }
 
@@ -1202,7 +1202,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Add select values
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param string $table
      * @param string $type
      * @return Select

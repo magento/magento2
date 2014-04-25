@@ -53,8 +53,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
-        /** @var $layout \Magento\View\Layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $customerCurrentService = $objectManager->create(
             'Magento\Customer\Service\V1\CustomerCurrentServiceInterface',
             array('customerSession' => $this->_customerSession)

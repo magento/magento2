@@ -60,7 +60,7 @@ class Tax extends \Magento\Backend\App\Action
                     'class_name' => $class->getClassName()
                 )
             );
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(
@@ -99,7 +99,7 @@ class Tax extends \Magento\Backend\App\Action
             )->jsonEncode(
                 array('success' => true, 'error_message' => '')
             );
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(
@@ -120,7 +120,7 @@ class Tax extends \Magento\Backend\App\Action
      *
      * @param string $classType
      * @return string processed class type
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _processClassType($classType)
     {
@@ -129,7 +129,7 @@ class Tax extends \Magento\Backend\App\Action
             \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
         );
         if (!in_array($classType, $validClassTypes)) {
-            throw new \Magento\Model\Exception(__('Invalid type of tax class specified.'));
+            throw new \Magento\Framework\Model\Exception(__('Invalid type of tax class specified.'));
         }
         return $classType;
     }
@@ -139,13 +139,13 @@ class Tax extends \Magento\Backend\App\Action
      *
      * @param string $className
      * @return string processed class name
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _processClassName($className)
     {
-        $className = trim($this->_objectManager->get('Magento\Escaper')->escapeHtml($className));
+        $className = trim($this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($className));
         if ($className == '') {
-            throw new \Magento\Model\Exception(__('Invalid name of tax class specified.'));
+            throw new \Magento\Framework\Model\Exception(__('Invalid name of tax class specified.'));
         }
         return $className;
     }

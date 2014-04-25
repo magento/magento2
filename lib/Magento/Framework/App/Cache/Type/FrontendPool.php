@@ -29,7 +29,7 @@ namespace Magento\Framework\App\Cache\Type;
 class FrontendPool
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     private $_objectManager;
 
@@ -49,18 +49,18 @@ class FrontendPool
     private $_typeFrontendMap;
 
     /**
-     * @var \Magento\Cache\FrontendInterface[]
+     * @var \Magento\Framework\Cache\FrontendInterface[]
      */
     private $_instances = array();
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\Arguments $arguments
      * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
      * @param array $typeFrontendMap Format: array('<cache_type_id>' => '<cache_frontend_id>', ...)
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\Arguments $arguments,
         \Magento\Framework\App\Cache\Frontend\Pool $frontendPool,
         array $typeFrontendMap = array()
@@ -75,7 +75,7 @@ class FrontendPool
      * Retrieve cache frontend instance by a cache type identifier, enforcing identifier-scoped access control
      *
      * @param string $cacheType Cache type identifier
-     * @return \Magento\Cache\FrontendInterface Cache frontend instance
+     * @return \Magento\Framework\Cache\FrontendInterface Cache frontend instance
      */
     public function get($cacheType)
     {

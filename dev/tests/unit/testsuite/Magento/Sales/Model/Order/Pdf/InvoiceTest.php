@@ -40,7 +40,14 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->_pdfConfigMock = $this->getMockBuilder('Magento\Sales\Model\Order\Pdf\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false, false);
+        $directoryMock = $this->getMock(
+            'Magento\Framework\Filesystem\Directory\Write',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will(
             $this->returnCallback(
                 function ($argument) {

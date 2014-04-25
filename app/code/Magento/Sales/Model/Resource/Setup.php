@@ -36,7 +36,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     protected $_config;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
@@ -56,7 +56,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $moduleName = 'Magento_Sales',
-        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();
@@ -194,25 +194,25 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         $length = null;
         switch ($data['type']) {
             case 'timestamp':
-                $type = \Magento\DB\Ddl\Table::TYPE_TIMESTAMP;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP;
                 break;
             case 'datetime':
-                $type = \Magento\DB\Ddl\Table::TYPE_DATETIME;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME;
                 break;
             case 'decimal':
-                $type = \Magento\DB\Ddl\Table::TYPE_DECIMAL;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL;
                 $length = '12,4';
                 break;
             case 'int':
-                $type = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
                 break;
             case 'text':
-                $type = \Magento\DB\Ddl\Table::TYPE_TEXT;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
                 $length = 65536;
                 break;
             case 'char':
             case 'varchar':
-                $type = \Magento\DB\Ddl\Table::TYPE_TEXT;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
                 $length = 255;
                 break;
         }
@@ -275,7 +275,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     }
 
     /**
-     * @return \Magento\Encryption\EncryptorInterface
+     * @return \Magento\Framework\Encryption\EncryptorInterface
      */
     public function getEncryptor()
     {

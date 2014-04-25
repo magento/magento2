@@ -26,8 +26,8 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Pricing\Adjustment\CalculatorInterface;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**
  * Final price model
@@ -72,7 +72,7 @@ class FinalPrice extends RegularPrice implements FinalPriceInterface
     /**
      * Get Minimal Price Amount
      *
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMinimalPrice()
     {
@@ -86,7 +86,7 @@ class FinalPrice extends RegularPrice implements FinalPriceInterface
     /**
      * Get Maximal Price Amount
      *
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMaximalPrice()
     {

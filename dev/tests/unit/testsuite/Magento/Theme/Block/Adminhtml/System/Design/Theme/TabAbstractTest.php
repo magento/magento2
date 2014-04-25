@@ -39,9 +39,9 @@ class TabAbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab',
             array(
                 $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false),
-                $this->getMock('Magento\Registry', array(), array(), '', false),
-                $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
-                $this->getMock('Magento\ObjectManager', array(), array(), '', false)
+                $this->getMock('Magento\Framework\Registry', array(), array(), '', false),
+                $this->getMock('Magento\Framework\Data\FormFactory', array(), array(), '', false),
+                $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false)
             ),
             '',
             true,

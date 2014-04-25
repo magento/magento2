@@ -47,9 +47,9 @@ class Option
      * @param \Magento\Sales\Model\Quote\Item $quoteItem
      * @param int $qty
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      *
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function initialize(
         \Magento\Sales\Model\Quote\Item\Option $option,
@@ -64,7 +64,7 @@ class Option
         $stockItem = $option->getProduct()->getStockItem();
 
         if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-            throw new \Magento\Model\Exception(__('The stock item for Product in option is not valid.'));
+            throw new \Magento\Framework\Model\Exception(__('The stock item for Product in option is not valid.'));
         }
 
         /**

@@ -54,7 +54,7 @@ abstract class AbstractGroupprice extends Price
     protected $_catalogProductType;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -62,7 +62,7 @@ abstract class AbstractGroupprice extends Price
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -142,7 +142,7 @@ abstract class AbstractGroupprice extends Price
      * Validate group price data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -167,7 +167,7 @@ abstract class AbstractGroupprice extends Price
                 )
             );
             if (isset($duplicates[$compare])) {
-                throw new \Magento\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
             }
             $duplicates[$compare] = true;
         }
@@ -210,7 +210,7 @@ abstract class AbstractGroupprice extends Price
             $websiteCurrency = $rates[$priceRow['website_id']]['code'];
 
             if ($baseCurrency == $websiteCurrency && isset($duplicates[$globalCompare])) {
-                throw new \Magento\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
             }
         }
 
@@ -383,7 +383,7 @@ abstract class AbstractGroupprice extends Price
 
         if (!empty($insert)) {
             foreach ($insert as $data) {
-                $price = new \Magento\Object($data);
+                $price = new \Magento\Framework\Object($data);
                 $price->setEntityId($productId);
                 $this->_getResource()->savePriceData($price);
 
@@ -394,7 +394,7 @@ abstract class AbstractGroupprice extends Price
         if (!empty($update)) {
             foreach ($update as $k => $v) {
                 if ($old[$k]['price'] != $v['value']) {
-                    $price = new \Magento\Object(array('value_id' => $old[$k]['price_id'], 'value' => $v['value']));
+                    $price = new \Magento\Framework\Object(array('value_id' => $old[$k]['price_id'], 'value' => $v['value']));
                     $this->_getResource()->savePriceData($price);
 
                     $isChanged = true;

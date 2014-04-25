@@ -29,7 +29,7 @@
     <referenceContainer name="content">
         <block class="Magento\Backend\Block\Widget\Grid" name="admin.test.grid" Output="1">
             <arguments>
-                <dataSource type="object">Magento\Data\Collection</dataSource>
+                <dataSource type="object">Magento\Framework\Data\Collection</dataSource>
             </arguments>
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="admin.test.grid.columnSet" Output="1">
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_name" Output="1">

@@ -26,12 +26,7 @@
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
 /**
- * Import behavior source model used for customers' components import entities.
- * Source model used in new import entities in Magento 2.0.
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Import behavior source model
  */
 class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {

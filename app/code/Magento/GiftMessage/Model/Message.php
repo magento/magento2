@@ -43,7 +43,7 @@ namespace Magento\GiftMessage\Model;
  * @package     Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Message extends \Magento\Model\AbstractModel
+class Message extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\GiftMessage\Model\TypeFactory
@@ -51,18 +51,18 @@ class Message extends \Magento\Model\AbstractModel
     protected $_typeFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\GiftMessage\Model\Resource\Message $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\GiftMessage\Model\TypeFactory $typeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\GiftMessage\Model\Resource\Message $resource,
-        \Magento\Data\Collection\Db $resourceCollection,
+        \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
         array $data = array()
     ) {

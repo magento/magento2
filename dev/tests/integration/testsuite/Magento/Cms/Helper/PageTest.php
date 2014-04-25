@@ -63,7 +63,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ),
             $page->getId()
         );
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface');
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        );
         $this->assertEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
         $this->assertTrue($result);
     }

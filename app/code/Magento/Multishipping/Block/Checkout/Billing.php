@@ -50,7 +50,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     protected $paymentSpecification;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
@@ -59,7 +59,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,

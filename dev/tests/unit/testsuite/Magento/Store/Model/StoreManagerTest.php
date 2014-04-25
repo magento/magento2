@@ -45,7 +45,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helperMock;
+    protected $_configMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -56,13 +56,19 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_factoryMock = $this->getMock('Magento\Store\Model\StorageFactory', array(), array(), '', false);
         $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
-        $this->_helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $this->_configMock = $this->getMock(
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_storage = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->_model = new \Magento\Store\Model\StoreManager(
             $this->_factoryMock,
             $this->_requestMock,
-            $this->_helperMock,
+            $this->_configMock,
             'scope_code',
             'scope_type'
         );
@@ -89,8 +95,6 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     public function proxyMethodDataProvider()
     {
         return array(
-            'getCurrentStore' => array('getCurrentStore', array(), 'currentStoreObject'),
-            'getAnyStoreView' => array('getAnyStoreView', array(), 'anyStoreObject'),
             'clearWebsiteCache' => array('clearWebsiteCache', array('id' => 101), null),
             'getGroups' => array('getGroups', array('withDefault' => true, 'codeKey' => true), 'groupsArray'),
             'getGroup' => array('getGroup', array('id' => 102), 'groupObject'),
@@ -101,7 +105,6 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getStores' => array('getStores', array('withDefault' => true, 'codeKey' => true), 'storesArray'),
             'getStore' => array('getStore', array('id' => 104), 'storeObject'),
             'hasSingleStore' => array('hasSingleStore', array(), 'singleStoreResult'),
-            'throwStoreException' => array('throwStoreException', array(), null)
         );
     }
 
@@ -155,10 +158,18 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSingleStoreModeWhenSingleStoreModeEnabledAndHasSingleStore()
     {
-        $this->_helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(true));
+        $this->_configMock->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->will(
+            $this->returnValue(true)
+        );
 
         $this->_storage->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
-
         $this->_factoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_storage));
 
         $this->assertTrue($this->_model->isSingleStoreMode());
@@ -166,10 +177,13 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSingleStoreModeWhenSingleStoreModeDisabledAndHasSingleStore()
     {
-        $this->_helperMock->expects(
+        $this->_configMock->expects(
             $this->once()
         )->method(
-            'isSingleStoreModeEnabled'
+            'getValue'
+        )->with(
+            \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(false)
         );

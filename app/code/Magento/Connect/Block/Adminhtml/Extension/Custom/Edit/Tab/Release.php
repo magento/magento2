@@ -44,7 +44,7 @@ class Release extends \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab
     {
         parent::_prepareForm();
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('_release');
 

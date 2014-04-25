@@ -30,7 +30,7 @@ class Proxy extends \Magento\Framework\App\AreaList
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
@@ -44,7 +44,7 @@ class Proxy extends \Magento\Framework\App\AreaList
     /**
      * Proxied instance
      *
-     * @var \Magento\Locale\Resolver
+     * @var \Magento\Framework\Locale\Resolver
      */
     protected $_subject = null;
 
@@ -58,12 +58,12 @@ class Proxy extends \Magento\Framework\App\AreaList
     /**
      * Proxy constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param string $instanceName
      * @param bool $shared
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         $instanceName = 'Magento\Framework\App\AreaList',
         $shared = true
     ) {
@@ -103,7 +103,7 @@ class Proxy extends \Magento\Framework\App\AreaList
     /**
      * Get proxied instance
      *
-     * @return \Magento\Locale\Resolver
+     * @return \Magento\Framework\Locale\Resolver
      */
     protected function _getSubject()
     {
@@ -163,7 +163,7 @@ class Proxy extends \Magento\Framework\App\AreaList
      * Retrieve application area
      *
      * @param   string $code
-     * @return  \Magento\Core\Model\App\Area
+     * @return  \Magento\Framework\App\Area
      */
     public function getArea($code)
     {

@@ -34,14 +34,14 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-class Url extends \Magento\Object
+class Url extends \Magento\Framework\Object
 {
     const CACHE_TAG = 'url_rewrite';
 
     /**
      * Static URL instance
      *
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -53,7 +53,7 @@ class Url extends \Magento\Object
     protected $_urlRewrite;
 
     /**
-     * @var \Magento\Filter\FilterManager
+     * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filter;
 
@@ -72,7 +72,7 @@ class Url extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @var \Magento\Session\SidResolverInterface
+     * @var \Magento\Framework\Session\SidResolverInterface
      */
     protected $_sidResolver;
 
@@ -80,20 +80,20 @@ class Url extends \Magento\Object
      * Construct
      *
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory
-     * @param \Magento\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Filter\FilterManager $filter
-     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Filter\FilterManager $filter
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param array $data
      */
     public function __construct(
         \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory,
-        \Magento\UrlInterface $url,
+        \Magento\Framework\UrlInterface $url,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Filter\FilterManager $filter,
-        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Filter\FilterManager $filter,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         array $data = array()
     ) {
         $this->_urlRewrite = $urlRewriteFactory->create();
@@ -108,7 +108,7 @@ class Url extends \Magento\Object
     /**
      * Retrieve URL Instance
      *
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     public function getUrlInstance()
     {
@@ -191,7 +191,7 @@ class Url extends \Magento\Object
      * @param \Magento\Catalog\Model\Category $category
      *
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getUrlPath($product, $category = null)
     {
@@ -201,7 +201,7 @@ class Url extends \Magento\Object
             /** @todo get default category */
             return $path;
         } elseif (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Model\Exception('Invalid category object supplied');
+            throw new \Magento\Framework\Model\Exception('Invalid category object supplied');
         }
 
         return $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath()) . '/' . $path;

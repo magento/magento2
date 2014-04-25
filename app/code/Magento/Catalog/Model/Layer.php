@@ -30,7 +30,7 @@ namespace Magento\Catalog\Model;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Layer extends \Magento\Object
+class Layer extends \Magento\Framework\Object
 {
     /**
      * Product collections array
@@ -49,7 +49,7 @@ class Layer extends \Magento\Object
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $registry = null;
 
@@ -110,7 +110,7 @@ class Layer extends \Magento\Object
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -120,7 +120,7 @@ class Layer extends \Magento\Object
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_layerStateFactory = $layerStateFactory;
@@ -226,7 +226,7 @@ class Layer extends \Magento\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setCurrentCategory($category)
     {
@@ -234,12 +234,12 @@ class Layer extends \Magento\Object
             $category = $this->_categoryFactory->create()->load($category);
         }
         if (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('The category must be an instance of \Magento\Catalog\Model\Category.')
             );
         }
         if (!$category->getId()) {
-            throw new \Magento\Model\Exception(__('Please correct the category.'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
         }
 
         if ($category->getId() != $this->getCurrentCategory()->getId()) {
@@ -268,10 +268,10 @@ class Layer extends \Magento\Object
     {
         $state = $this->getData('state');
         if (is_null($state)) {
-            \Magento\Profiler::start(__METHOD__);
+            \Magento\Framework\Profiler::start(__METHOD__);
             $state = $this->_layerStateFactory->create();
             $this->setData('state', $state);
-            \Magento\Profiler::stop(__METHOD__);
+            \Magento\Framework\Profiler::stop(__METHOD__);
         }
 
         return $state;

@@ -125,16 +125,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $category->setId(10);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_category', $category);
+        $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
 
         try {
             $this->assertStringEndsWith(
                 'sendfriend/product/send/id/100/cat_id/10/',
                 $this->_helper->getEmailToFriendUrl($product)
             );
-            $objectManager->get('Magento\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
             throw $e;
         }
     }
@@ -226,11 +226,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Catalog\Model\Product',
-            $objectManager->get('Magento\Registry')->registry('current_product')
+            $objectManager->get('Magento\Framework\Registry')->registry('current_product')
         );
         $this->assertInstanceOf(
             'Magento\Catalog\Model\Category',
-            $objectManager->get('Magento\Registry')->registry('current_category')
+            $objectManager->get('Magento\Framework\Registry')->registry('current_category')
         );
     }
 
@@ -240,10 +240,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $buyRequest = new \Magento\Object(array('qty' => 100, 'options' => array('option' => 'value')));
+        $buyRequest = new \Magento\Framework\Object(array('qty' => 100, 'options' => array('option' => 'value')));
         $this->_helper->prepareProductOptions($product, $buyRequest);
         $result = $product->getPreconfiguredValues();
-        $this->assertInstanceOf('Magento\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\Object', $result);
         $this->assertEquals(100, $result->getQty());
         $this->assertEquals(array('option' => 'value'), $result->getOptions());
     }

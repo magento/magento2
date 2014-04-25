@@ -24,7 +24,7 @@
 namespace Magento\RecurringPayment\Controller\Adminhtml;
 
 use Magento\Framework\App\Action\NotFoundException;
-use Magento\Model\Exception as CoreException;
+use Magento\Framework\Model\Exception as CoreException;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
@@ -59,24 +59,24 @@ class RecurringPayment extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
-        \Magento\Logger $logger
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Logger $logger
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_logger = $logger;
@@ -244,7 +244,7 @@ class RecurringPayment extends \Magento\Backend\App\Action
      * Load/set payment
      *
      * @return \Magento\RecurringPayment\Model\Payment
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _initPayment()
     {

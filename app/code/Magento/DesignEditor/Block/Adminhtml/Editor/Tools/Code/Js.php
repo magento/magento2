@@ -49,8 +49,8 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param \Magento\Core\Helper\Data $coreHelper
@@ -58,8 +58,8 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\Core\Helper\Data $coreHelper,
@@ -78,7 +78,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(array('data' => array('action' => '#', 'method' => 'post')));
         $this->setForm($form);
         $form->setUseContainer(true);
@@ -164,7 +164,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     public function getFiles()
     {
         $customization = $this->_themeContext->getStagingTheme()->getCustomization();
-        $jsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
+        $jsFiles = $customization->getFilesByType(\Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE);
         return $this->_coreHelper->jsonEncode($customization->generateFileInfo($jsFiles));
     }
 

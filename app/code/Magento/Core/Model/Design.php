@@ -18,15 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model;
 
-use Magento\Model\Resource\AbstractResource;
-use Magento\Model\AbstractModel;
+use Magento\Framework\App\DesignInterface;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Object\IdentityInterface;
 
 /**
  * Design settings change model
@@ -42,7 +42,7 @@ use Magento\Model\AbstractModel;
  * @method string getDateTo()
  * @method \Magento\Core\Model\Design setDateTo(string $value)
  */
-class Design extends AbstractModel implements \Magento\Object\IdentityInterface
+class Design extends AbstractModel implements IdentityInterface, DesignInterface
 {
     /**
      * Cache tag
@@ -66,31 +66,31 @@ class Design extends AbstractModel implements \Magento\Object\IdentityInterface
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_localeDate = $localeDate;
@@ -143,10 +143,10 @@ class Design extends AbstractModel implements \Magento\Object\IdentityInterface
     /**
      * Apply design change from self data into specified design package instance
      *
-     * @param \Magento\View\DesignInterface $packageInto
+     * @param \Magento\Framework\View\DesignInterface $packageInto
      * @return $this
      */
-    public function changeDesign(\Magento\View\DesignInterface $packageInto)
+    public function changeDesign(\Magento\Framework\View\DesignInterface $packageInto)
     {
         $design = $this->getDesign();
         if ($design) {

@@ -25,7 +25,7 @@
  */
 namespace Magento\Index\Model\Indexer;
 
-class Config extends \Magento\Config\Data\Scoped implements \Magento\Index\Model\Indexer\ConfigInterface
+class Config extends \Magento\Framework\Config\Data\Scoped implements \Magento\Index\Model\Indexer\ConfigInterface
 {
     /**
      * Scope priority loading scheme
@@ -36,14 +36,14 @@ class Config extends \Magento\Config\Data\Scoped implements \Magento\Index\Model
 
     /**
      * @param \Magento\Index\Model\Indexer\Config\Reader $reader
-     * @param \Magento\Config\ScopeInterface $configScope
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Index\Model\Indexer\Config\Reader $reader,
-        \Magento\Config\ScopeInterface $configScope,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'indexerConfigCache'
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);

@@ -37,26 +37,26 @@ namespace Magento\Backend\Model\Config\Backend\Image;
 class Adapter extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Image\AdapterFactory
+     * @var \Magento\Framework\Image\AdapterFactory
      */
     protected $_imageFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Image\AdapterFactory $imageFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Image\AdapterFactory $imageFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Image\AdapterFactory $imageFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
@@ -66,7 +66,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
     /**
      * Checks if chosen image adapter available
      *
-     * @throws \Magento\Model\Exception If some of adapter dependencies was not loaded
+     * @throws \Magento\Framework\Model\Exception If some of adapter dependencies was not loaded
      * @return \Magento\Backend\Model\Config\Backend\File
      */
     protected function _beforeSave()
@@ -75,7 +75,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
             $this->_imageFactory->create($this->getValue());
         } catch (\Exception $e) {
             $message = __('The specified image adapter cannot be used because of: ' . $e->getMessage());
-            throw new \Magento\Model\Exception($message);
+            throw new \Magento\Framework\Model\Exception($message);
         }
 
         return $this;

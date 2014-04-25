@@ -31,7 +31,7 @@ namespace Magento\Authorizenet\Model\Authorizenet\Source;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class PaymentAction implements \Magento\Option\ArrayInterface
+class PaymentAction implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

@@ -24,12 +24,12 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Pricing\Adjustment\CalculatorInterface;
-use Magento\Pricing\Object\SaleableInterface;
-use Magento\Customer\Model\Group;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Model\Session;
-use Magento\Pricing\PriceInfoInterface;
-use Magento\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Tire prices model
@@ -104,7 +104,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
             $prices = $this->getStoredTierPrices();
             $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
             $this->value = $prevPrice = $tierPrice = false;
-            $priceGroup = Group::CUST_GROUP_ALL;
+            $priceGroup = CustomerGroupServiceInterface::CUST_GROUP_ALL;
 
             foreach ($prices as $price) {
                 if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)) {
@@ -172,7 +172,9 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         $qtyCache = [];
         foreach ($priceList as $priceKey => $price) {
             /* filter price by customer group */
-            if ($price['cust_group'] !== $this->customerGroup && $price['cust_group'] !== Group::CUST_GROUP_ALL) {
+            if ($price['cust_group'] !== $this->customerGroup
+                && $price['cust_group'] !== CustomerGroupServiceInterface::CUST_GROUP_ALL
+            ) {
                 unset($priceList[$priceKey]);
                 continue;
             }
@@ -217,7 +219,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
 
     /**
      * @param float|string $price
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function applyAdjustment($price)
     {
@@ -237,7 +239,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
         if ($currentTierPrice['cust_group'] !== $this->customerGroup
-            && $currentTierPrice['cust_group'] !== Group::CUST_GROUP_ALL
+            && $currentTierPrice['cust_group'] !== CustomerGroupServiceInterface::CUST_GROUP_ALL
         ) {
             return false;
         }
@@ -251,8 +253,8 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         }
         // and found tier qty is same as previous tier qty, but current tier group isn't ALL_GROUPS
         if ($currentTierPrice['price_qty'] == $prevQty
-            && $prevPriceGroup !== Group::CUST_GROUP_ALL
-            && $currentTierPrice['cust_group'] === Group::CUST_GROUP_ALL
+            && $prevPriceGroup !== CustomerGroupServiceInterface::CUST_GROUP_ALL
+            && $currentTierPrice['cust_group'] === CustomerGroupServiceInterface::CUST_GROUP_ALL
         ) {
             return false;
         }

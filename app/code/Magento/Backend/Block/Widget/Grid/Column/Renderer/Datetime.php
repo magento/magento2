@@ -50,7 +50,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             if (is_null(self::$_format)) {
                 try {
                     self::$_format = $this->_localeDate->getDateTimeFormat(
-                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     );
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
@@ -64,24 +64,24 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         if ($data = $this->_getValue($row)) {
             $format = $this->_getFormat();
             try {
                 $data = $this->_localeDate->date(
                     $data,
-                    \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                 )->toString(
                     $format
                 );
             } catch (\Exception $e) {
                 $data = $this->_localeDate->date(
                     $data,
-                    \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                 )->toString(
                     $format
                 );

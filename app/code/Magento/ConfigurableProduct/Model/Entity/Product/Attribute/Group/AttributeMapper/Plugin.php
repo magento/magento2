@@ -25,7 +25,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
-use Magento\Registry;
+use Magento\Framework\Registry;
 use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory;
 
 class Plugin
@@ -36,7 +36,7 @@ class Plugin
     protected $attributeFactory;
 
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $registry;
 

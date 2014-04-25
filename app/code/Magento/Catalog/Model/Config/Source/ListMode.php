@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
-class ListMode implements \Magento\Option\ArrayInterface
+class ListMode implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

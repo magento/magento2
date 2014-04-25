@@ -47,7 +47,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
@@ -97,7 +97,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(

@@ -37,14 +37,14 @@ class AreaEmulatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new AreaEmulator($this->_objectManager);
     }
 
     public function testEmulateLayoutArea()
     {
         $configuration = array(
-            'Magento\View\Layout' => array(
+            'Magento\Framework\View\Layout' => array(
                 'arguments' => array(
                     'area' => 'test_area'
                 )

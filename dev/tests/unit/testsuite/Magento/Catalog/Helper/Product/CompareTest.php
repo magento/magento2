@@ -44,7 +44,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
-     * @var \Magento\Url | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlBuilder;
 
@@ -62,7 +62,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->urlBuilder = $this->getMock('Magento\Url', array('getUrl'), array(), '', false);
+        $this->urlBuilder = $this->getMock('Magento\Framework\Url', array('getUrl'), array(), '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', array('getServer'), array(), '', false);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $this->context = $this->getMock(

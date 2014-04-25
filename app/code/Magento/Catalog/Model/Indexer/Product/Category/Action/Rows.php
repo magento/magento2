@@ -68,7 +68,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Retrieve select for reindex products of non anchor categories
      *
      * @param \Magento\Store\Model\Store $store
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -80,7 +80,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Retrieve select for reindex products of non anchor categories
      *
      * @param \Magento\Store\Model\Store $store
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
@@ -92,7 +92,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Get select for all products
      *
      * @param \Magento\Store\Model\Store $store
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function getAllProducts(\Magento\Store\Model\Store $store)
     {

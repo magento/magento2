@@ -43,7 +43,7 @@ namespace Magento\Widget\Model\Widget;
  * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Instance extends \Magento\Model\AbstractModel
+class Instance extends \Magento\Framework\Model\AbstractModel
 {
     const SPECIFIC_ENTITIES = 'specific';
 
@@ -74,7 +74,7 @@ class Instance extends \Magento\Model\AbstractModel
     protected $_specificEntitiesLayoutHandles = array();
 
     /**
-     * @var \Magento\Simplexml\Element
+     * @var \Magento\Framework\Simplexml\Element
      */
     protected $_widgetConfigXml = null;
 
@@ -86,7 +86,7 @@ class Instance extends \Magento\Model\AbstractModel
     protected $_eventPrefix = 'widget_widget_instance';
 
     /**
-     * @var \Magento\View\FileSystem
+     * @var \Magento\Framework\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -111,51 +111,51 @@ class Instance extends \Magento\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_directory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\View\FileSystem $viewFileSystem
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Widget\Model\Config\Reader $reader
      * @param \Magento\Widget\Model\Widget $widgetModel
      * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param string[] $relatedCacheTypes
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Escaper $escaper,
-        \Magento\View\FileSystem $viewFileSystem,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Widget\Model\Config\Reader $reader,
         \Magento\Widget\Model\Widget $widgetModel,
         \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
-        \Magento\Math\Random $mathRandom,
+        \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = array(),
         array $data = array()
     ) {
@@ -348,7 +348,7 @@ class Instance extends \Magento\Model\AbstractModel
     {
         //TODO Shouldn't we get "area" from theme model which we can load using "theme_id"?
         if (!$this->_getData('area')) {
-            return \Magento\View\DesignInterface::DEFAULT_AREA;
+            return \Magento\Framework\View\DesignInterface::DEFAULT_AREA;
         }
         return $this->_getData('area');
     }
@@ -555,7 +555,7 @@ class Instance extends \Magento\Model\AbstractModel
             array(
                 'area' => $this->getArea(),
                 'themeId' => $this->getThemeId(),
-                'module' => \Magento\View\Element\AbstractBlock::extractModuleName($this->getType())
+                'module' => \Magento\Framework\View\Element\AbstractBlock::extractModuleName($this->getType())
             )
         );
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {

@@ -61,7 +61,7 @@ interface StockInterface
      * Retrieve Product Type Id for indexer
      *
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getTypeId();
 }

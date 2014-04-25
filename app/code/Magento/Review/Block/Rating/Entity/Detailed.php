@@ -32,7 +32,7 @@ namespace Magento\Review\Block\Rating\Entity;
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Detailed extends \Magento\View\Element\Template
+class Detailed extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
@@ -45,12 +45,12 @@ class Detailed extends \Magento\View\Element\Template
     protected $_ratingFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         array $data = array()
     ) {

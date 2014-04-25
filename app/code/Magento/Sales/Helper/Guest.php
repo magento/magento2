@@ -23,7 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Sales\Helper;
+
+use Magento\Framework\App as App;
 
 /**
  * Sales module base helper
@@ -31,21 +34,9 @@ namespace Magento\Sales\Helper;
 class Guest extends \Magento\Core\Helper\Data
 {
     /**
-     * Cookie params
-     *
-     * @var string
-     */
-    protected $_cookieName = 'guest-view';
-
-    /**
-     * @var int
-     */
-    protected $_lifeTime = 600;
-
-    /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
@@ -55,12 +46,12 @@ class Guest extends \Magento\Core\Helper\Data
     protected $_customerSession;
 
     /**
-     * @var \Magento\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\Cookie
      */
     protected $_coreCookie;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
@@ -70,29 +61,44 @@ class Guest extends \Magento\Core\Helper\Data
     protected $_orderFactory;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * Cookie key for guest view
+     */
+    const COOKIE_NAME = 'guest-view';
+
+    /**
+     * Cookie path
+     */
+    const COOKIE_PATH = '/';
+
+    /**
+     * Cookie lifetime value
+     */
+    const COOKIE_LIFETIME = 600;
+
+    /**
+     * @param App\Helper\Context $context
+     * @param App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Stdlib\Cookie $coreCookie
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Stdlib\Cookie $coreCookie
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\ViewInterface $view
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        App\Helper\Context $context,
+        App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Stdlib\Cookie $coreCookie,
-        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Stdlib\Cookie $coreCookie,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\ViewInterface $view,
         $dbCompatibleMode = true
@@ -116,11 +122,11 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * Try to load valid order by $_POST or $_COOKIE
      *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param App\RequestInterface $request
+     * @param App\ResponseInterface $response
      * @return bool
      */
-    public function loadValidOrder(\Magento\Framework\App\RequestInterface $request, \Magento\Framework\App\ResponseInterface $response)
+    public function loadValidOrder(App\RequestInterface $request, App\ResponseInterface $response)
     {
         if ($this->_customerSession->isLoggedIn()) {
             $response->setRedirect($this->_urlBuilder->getUrl('sales/order/history'));
@@ -133,7 +139,7 @@ class Guest extends \Magento\Core\Helper\Data
         /** @var $order \Magento\Sales\Model\Order */
         $order = $this->_orderFactory->create();
 
-        if (empty($post) && !$this->_coreCookie->get($this->_cookieName)) {
+        if (empty($post) && !$this->_coreCookie->get(self::COOKIE_NAME)) {
             $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
             return false;
         } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
@@ -155,42 +161,34 @@ class Guest extends \Magento\Core\Helper\Data
                 $order->loadByIncrementId($incrementId);
             }
 
+            $errors = true;
             if ($order->getId()) {
                 $billingAddress = $order->getBillingAddress();
-                if (strtolower(
-                    $lastName
-                ) != strtolower(
-                    $billingAddress->getLastname()
-                ) || $type == 'email' && strtolower(
-                    $email
-                ) != strtolower(
-                    $billingAddress->getEmail()
-                ) || $type == 'zip' && strtolower(
-                    $zip
-                ) != strtolower(
-                    $billingAddress->getPostcode()
-                )
+                if (strtolower($lastName) == strtolower($billingAddress->getLastname()) &&
+                    ($type == 'email' && strtolower($email) == strtolower($billingAddress->getEmail()) ||
+                    $type == 'zip' && strtolower($zip) == strtolower($billingAddress->getPostcode()))
                 ) {
-                    $errors = true;
+                    $errors = false;
                 }
-            } else {
-                $errors = true;
             }
 
             if (!$errors) {
-                $toCookie = base64_encode($order->getProtectCode());
-                $this->_coreCookie->set($this->_cookieName, $toCookie, $this->_lifeTime, '/');
+                $toCookie = base64_encode($order->getProtectCode() . ':' . $incrementId);
+                $this->_coreCookie->set(self::COOKIE_NAME, $toCookie, self::COOKIE_LIFETIME, self::COOKIE_PATH);
             }
-        } elseif ($this->_coreCookie->get($this->_cookieName)) {
-            $fromCookie = $this->_coreCookie->get($this->_cookieName);
-            $protectCode = base64_decode($fromCookie);
+        } elseif ($this->_coreCookie->get(self::COOKIE_NAME)) {
+            $fromCookie = $this->_coreCookie->get(self::COOKIE_NAME);
+            $cookieData = explode(':', base64_decode($fromCookie));
+            $protectCode = isset($cookieData[0]) ? $cookieData[0] : null;
+            $incrementId = isset($cookieData[1]) ? $cookieData[1] : null;
 
-            if (!empty($protectCode)) {
-                $order->loadByAttribute('protect_code', $protectCode);
-
-                $this->_coreCookie->renew($this->_cookieName, $this->_lifeTime, '/');
-            } else {
-                $errors = true;
+            $errors = true;
+            if (!empty($protectCode) && !empty($incrementId)) {
+                $order->loadByIncrementId($incrementId);
+                if ($order->getProtectCode() == $protectCode) {
+                    $this->_coreCookie->renew(self::COOKIE_NAME, self::COOKIE_LIFETIME, self::COOKIE_PATH);
+                    $errors = false;
+                }
             }
         }
 

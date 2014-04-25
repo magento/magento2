@@ -26,12 +26,12 @@ namespace Magento\Tools\View;
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Shell
+     * @var \Magento\Framework\Shell
      */
     protected $shell;
 
     /**
-     * @var \Magento\Filesystem\Driver\File
+     * @var \Magento\Framework\Filesystem\Driver\File
      */
     protected $filesystem;
 
@@ -45,8 +45,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->tmpDir = BP . '/var/static';
-        $this->shell = new \Magento\Shell(new \Magento\Shell\CommandRenderer());
-        $this->filesystem = new \Magento\Filesystem\Driver\File();
+        $this->shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
+        $this->filesystem = new \Magento\Framework\Filesystem\Driver\File();
         if (!$this->filesystem->isExists($this->tmpDir)) {
             $this->filesystem->createDirectory($this->tmpDir, 0777);
         }
@@ -69,7 +69,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'php -f %s -- --source %s --destination %s',
                 array(BP . '/dev/tools/Magento/Tools/View/generator.php', BP . '/app/design', $this->tmpDir)
             );
-        } catch (\Magento\Exception $exception) {
+        } catch (\Magento\Framework\Exception $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
     }

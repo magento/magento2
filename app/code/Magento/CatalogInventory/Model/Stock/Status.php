@@ -43,7 +43,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * @method int getStockStatus()
  * @method \Magento\CatalogInventory\Model\Stock\Status setStockStatus(int $value)
  */
-class Status extends \Magento\Model\AbstractModel
+class Status extends \Magento\Framework\Model\AbstractModel
 {
     /**#@+
      * Stock Status values
@@ -95,27 +95,27 @@ class Status extends \Magento\Model\AbstractModel
     protected $_stockItemFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param Type $productType
      * @param \Magento\Catalog\Model\Product\Website $productWebsite
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ItemFactory $stockItemFactory
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         Type $productType,
         \Magento\Catalog\Model\Product\Website $productWebsite,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         ItemFactory $stockItemFactory,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -146,7 +146,7 @@ class Status extends \Magento\Model\AbstractModel
     public function getProductTypeInstances()
     {
         if (empty($this->_productTypes)) {
-            $productEmulator = new \Magento\Object();
+            $productEmulator = new \Magento\Framework\Object();
 
             foreach (array_keys($this->_productType->getTypes()) as $typeId) {
                 $productEmulator->setTypeId($typeId);
@@ -538,7 +538,7 @@ class Status extends \Magento\Model\AbstractModel
 
         /* back compatible stock item */
         foreach ($productCollection as $product) {
-            $object = new \Magento\Object(array('is_in_stock' => $product->getData('is_salable')));
+            $object = new \Magento\Framework\Object(array('is_in_stock' => $product->getData('is_salable')));
             $product->setStockItem($object);
         }
 
@@ -548,11 +548,11 @@ class Status extends \Magento\Model\AbstractModel
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Store\Model\Website $website
      * @return $this
      */
-    public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Store\Model\Website $website)
+    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
     {
         $this->_getResource()->addStockStatusToSelect($select, $website);
         return $this;
@@ -561,12 +561,12 @@ class Status extends \Magento\Model\AbstractModel
     /**
      * Add stock status limitation to catalog product price index select object
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param string|Zend_Db_Expr $entityField
      * @param string|Zend_Db_Expr $websiteField
      * @return $this
      */
-    public function prepareCatalogProductIndexSelect(\Magento\DB\Select $select, $entityField, $websiteField)
+    public function prepareCatalogProductIndexSelect(\Magento\Framework\DB\Select $select, $entityField, $websiteField)
     {
         if ($this->_catalogInventoryData->isShowOutOfStock()) {
             return $this;

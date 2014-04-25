@@ -26,9 +26,9 @@
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\Pricing\Render\PriceBox as BasePriceBox;
+use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
 use Magento\Catalog\Pricing\Price\MsrpPrice;
-use Magento\Pricing\Render;
+use Magento\Framework\Pricing\Render;
 use Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Pricing\Price\MsrpPriceInterface;
 

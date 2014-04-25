@@ -26,7 +26,7 @@ namespace Magento\Customer\Service\V1\Data;
 /**
  * CustomerAccountService Data Object used for validateCustomerData api
  */
-class CustomerValidationResults extends \Magento\Service\Data\AbstractObject
+class CustomerValidationResults extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**#@+
      * Constants used as keys into $_data

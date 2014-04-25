@@ -33,7 +33,7 @@ class Config implements ConfigInterface
     protected $_reader;
 
     /**
-     * @var \Magento\Cache\FrontendInterface
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
@@ -43,7 +43,7 @@ class Config implements ConfigInterface
     protected $_cacheId;
 
     /**
-     * @var \Magento\Config\ScopeInterface
+     * @var \Magento\Framework\Config\ScopeInterface
      */
     protected $_configScope;
 
@@ -59,15 +59,15 @@ class Config implements ConfigInterface
 
     /**
      * @param Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\App\AreaList $areaList
      * @param string $cacheId
      */
     public function __construct(
         Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\CacheInterface $cache,
+        \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\App\AreaList $areaList,
         $cacheId = 'RoutesConfig'
     ) {

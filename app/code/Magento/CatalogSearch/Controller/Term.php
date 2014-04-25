@@ -26,7 +26,6 @@
 namespace Magento\CatalogSearch\Controller;
 
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 

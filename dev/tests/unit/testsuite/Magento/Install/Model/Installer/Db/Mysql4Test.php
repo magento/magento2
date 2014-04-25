@@ -38,18 +38,18 @@ class Mysql4Test extends \PHPUnit_Framework_TestCase
      */
     public function testSupportEngine(array $supportedEngines, $expectedResult)
     {
-        $connectionMock = $this->getMock('Magento\DB\Adapter\AdapterInterface');
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
         $connectionMock->expects($this->once())->method('fetchPairs')->will($this->returnValue($supportedEngines));
 
         $adapterFactory = $this->getMock(
-            'Magento\Model\Resource\Type\Db\Pdo\MysqlFactory',
+            'Magento\Framework\Model\Resource\Type\Db\Pdo\MysqlFactory',
             array('create'),
             array(),
             '',
             false
         );
         $adapterMock = $this->getMock(
-            'Magento\Model\Resource\Type\Db\Pdo\Mysql',
+            'Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql',
             array('getConnection'),
             array(),
             '',
@@ -88,7 +88,7 @@ class Mysql4Test extends \PHPUnit_Framework_TestCase
     public function testGetRequiredExtensions($config, $dbExtensions, $expectedResult)
     {
         $adapterFactory = $this->getMock(
-            'Magento\Model\Resource\Type\Db\Pdo\MysqlFactory',
+            'Magento\Framework\Model\Resource\Type\Db\Pdo\MysqlFactory',
             array('create'),
             array(),
             '',

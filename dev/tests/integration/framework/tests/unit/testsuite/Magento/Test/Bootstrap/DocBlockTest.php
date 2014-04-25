@@ -65,7 +65,7 @@ class DocBlockTest extends \PHPUnit_Framework_TestCase
         try {
             new $listenerClass();
             $this->fail("Inability to instantiate the event listener '{$listenerClass}' is expected.");
-        } catch (\Magento\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             $this->assertEquals($expectedExceptionMsg, $e->getMessage());
         }
     }

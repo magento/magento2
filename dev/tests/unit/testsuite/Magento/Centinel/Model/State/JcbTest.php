@@ -42,7 +42,7 @@ class JcbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\Centinel\Model\State\Jcb();
-        $this->_model->setDataStorage(new \Magento\Object());
+        $this->_model->setDataStorage(new \Magento\Framework\Object());
     }
 
     /**
@@ -53,8 +53,8 @@ class JcbTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAuthenticateAllowed($result, $lookupResults, $params)
     {
-        $this->_model->setLookupResult(new \Magento\Object($lookupResults));
-        $this->_model->setAuthenticateResult(new \Magento\Object($params));
+        $this->_model->setLookupResult(new \Magento\Framework\Object($lookupResults));
+        $this->_model->setAuthenticateResult(new \Magento\Framework\Object($params));
         $this->assertEquals($result, $this->_model->isAuthenticateAllowed());
     }
 
@@ -89,7 +89,7 @@ class JcbTest extends \PHPUnit_Framework_TestCase
     public function testIsAuthenticateSuccessfulWithSoftLookup()
     {
         $lookupResults = array('enrolled' => '', 'acs_url' => '', 'payload' => '', 'error_no' => '0');
-        $this->_model->setLookupResult(new \Magento\Object($lookupResults));
+        $this->_model->setLookupResult(new \Magento\Framework\Object($lookupResults));
 
         $this->_model->setIsModeStrict(true);
         $this->assertEquals(false, $this->_model->isAuthenticateSuccessful());
@@ -115,8 +115,8 @@ class JcbTest extends \PHPUnit_Framework_TestCase
             'payload' => 'no empty value',
             'error_no' => '0'
         );
-        $this->_model->setLookupResult(new \Magento\Object($lookupResult));
-        $this->_model->setAuthenticateResult(new \Magento\Object($params));
+        $this->_model->setLookupResult(new \Magento\Framework\Object($lookupResult));
+        $this->_model->setAuthenticateResult(new \Magento\Framework\Object($params));
 
         $this->assertEquals($result, $this->_model->isAuthenticateSuccessful());
     }
@@ -677,7 +677,7 @@ class JcbTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsLookupSuccessful($result, $strictMode, $params)
     {
-        $this->_model->setLookupResult(new \Magento\Object($params));
+        $this->_model->setLookupResult(new \Magento\Framework\Object($params));
         $this->_model->setIsModeStrict($strictMode);
         $this->assertEquals($result, $this->_model->isLookupSuccessful());
     }

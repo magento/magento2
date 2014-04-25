@@ -31,7 +31,7 @@ namespace Magento\DesignEditor\Model;
 class State
 {
     /**
-     * Url model classes that will be used instead of \Magento\UrlInterface in navigation vde modes
+     * Url model classes that will be used instead of \Magento\Framework\UrlInterface in navigation vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -77,7 +77,7 @@ class State
     protected $_dataHelper;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -99,7 +99,7 @@ class State
      * @param Url\Factory $urlModelFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param Theme\Context $themeContext
      * @param \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
@@ -110,7 +110,7 @@ class State
         \Magento\DesignEditor\Model\Url\Factory $urlModelFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
@@ -178,7 +178,7 @@ class State
     }
 
     /**
-     * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
+     * Create url model instance that will be used instead of \Magento\Framework\UrlInterface in navigation mode
      *
      * @param string $mode
      * @return void
@@ -203,11 +203,11 @@ class State
         if ($this->_themeContext->getEditableTheme()) {
             $themeId = $this->_themeContext->getVisibleTheme()->getId();
             $this->_mutableConfig->setValue(
-                \Magento\View\DesignInterface::XML_PATH_THEME_ID,
+                \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
                 $themeId,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $this->_configuration->setValue(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
+            $this->_configuration->setValue(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
         }
     }
 

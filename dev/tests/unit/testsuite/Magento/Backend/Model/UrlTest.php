@@ -86,7 +86,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected $_paramsResolverMock;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
@@ -101,7 +101,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false);
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
 
-        $this->_formKey = $this->getMock('Magento\Data\Form\FormKey', array('getFormKey'), array(), '', false);
+        $this->_formKey = $this->getMock(
+            'Magento\Framework\Data\Form\FormKey',
+            array('getFormKey'),
+            array(),
+            '', false
+        );
         $this->_formKey->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
 
         $mockItem = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
@@ -157,9 +162,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             false
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_encryptor = $this->getMock('Magento\Encryption\Encryptor', null, array(), '', false);
+        $this->_encryptor = $this->getMock('Magento\Framework\Encryption\Encryptor', null, array(), '', false);
         $this->_paramsResolverMock = $this->getMock(
-            'Magento\Url\RouteParamsResolverFactory',
+            'Magento\Framework\Url\RouteParamsResolverFactory',
             array(),
             array(),
             '',

@@ -26,7 +26,7 @@ namespace Magento\Downloadable\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Downloadable\Model\Link;
-use Magento\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\Adjustment\Calculator;
 
 /**
  * Class LinkPrice Model
@@ -41,7 +41,7 @@ interface LinkPriceInterface
 
     /**
      * @param Link $link
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getLinkAmount(Link $link);
 }

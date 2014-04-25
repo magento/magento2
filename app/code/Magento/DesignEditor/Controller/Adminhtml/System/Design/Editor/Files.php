@@ -46,7 +46,7 @@ class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Fi
                 )
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array()));
         }
     }

@@ -30,7 +30,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('integration'),
     'setup_type',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         'unsigned' => true,
         'nullable' => false,
         'default' => 0,

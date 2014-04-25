@@ -98,7 +98,7 @@ class Dashboard extends \Magento\Backend\App\Action
         $blockTab = $this->getRequest()->getParam('block');
         $blockClassSuffix = str_replace(
             ' ',
-            \Magento\Autoload\IncludePath::NS_SEPARATOR,
+            \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR,
             ucwords(str_replace('_', ' ', $blockTab))
         );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
@@ -131,8 +131,8 @@ class Dashboard extends \Magento\Backend\App\Action
                 $params = json_decode(base64_decode(urldecode($gaData)), true);
                 if ($params) {
                     try {
-                        /** @var $httpClient \Magento\HTTP\ZendClient */
-                        $httpClient = $this->_objectManager->create('Magento\HTTP\ZendClient');
+                        /** @var $httpClient \Magento\Framework\HTTP\ZendClient */
+                        $httpClient = $this->_objectManager->create('Magento\Framework\HTTP\ZendClient');
                         $response = $httpClient->setUri(
                             \Magento\Backend\Block\Dashboard\Graph::API_URL
                         )->setParameterGet(
@@ -153,7 +153,7 @@ class Dashboard extends \Magento\Backend\App\Action
                         );
                         return;
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Magento\Logger')->logException($e);
+                        $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                         $error = __('see error log for details');
                         $httpCode = 503;
                     }

@@ -35,7 +35,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
  * @method string getNote()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker setCssClass($class)
  */
-class ColorPicker extends \Magento\Data\Form\Element\AbstractElement
+class ColorPicker extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * Control type

@@ -35,13 +35,13 @@ class Initializer
     /**
      * @param \Magento\Sales\Model\Quote $quote
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Object $config
+     * @param \Magento\Framework\Object $config
      * @return \Magento\Sales\Model\Quote\Item|string
      */
     public function init(
         \Magento\Sales\Model\Quote $quote,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Object $config
+        \Magento\Framework\Object $config
     ) {
         $stockItem = $product->getStockItem();
         if ($stockItem && $stockItem->getIsQtyDecimal()) {

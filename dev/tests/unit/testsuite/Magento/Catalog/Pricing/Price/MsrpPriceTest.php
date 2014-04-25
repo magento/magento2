@@ -24,7 +24,7 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use \Magento\Pricing\PriceInfoInterface;
+use \Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Class MsrpPriceTest
@@ -51,12 +51,12 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $price;
     /**
-     * @var \Magento\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfo;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $calculator;
 
@@ -70,7 +70,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->priceInfo = $this->getMock('Magento\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $this->price = $this->getMock('Magento\Catalog\Pricing\Price\BasePrice', [], [], '', false);
 
         $this->priceInfo->expects($this->any())
@@ -86,7 +86,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('base_price'))
             ->will($this->returnValue($this->price));
 
-        $this->calculator = $this->getMockBuilder('Magento\Pricing\Adjustment\Calculator')
+        $this->calculator = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Calculator')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -35,9 +35,9 @@ $themeDirectory = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getApp
         )
     )
 );
-/** @var $objectManager \Magento\ObjectManager */
+/** @var $objectManager \Magento\Framework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-/** @var $directoryWrite \Magento\Filesystem\Directory\Write */
+/** @var $directoryWrite \Magento\Framework\Filesystem\Directory\Write */
 $directoryWrite = $objectManager->create(
     'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(

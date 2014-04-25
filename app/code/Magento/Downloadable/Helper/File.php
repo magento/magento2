@@ -51,7 +51,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Media Directory object (writable).
      *
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_mediaDirectory;
 
@@ -100,7 +100,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $basePath
      * @param string $file
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -110,7 +110,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Model\Exception(__('Something went wrong while saving the file(s).'));
+                    throw new \Magento\Framework\Model\Exception(__('Something went wrong while saving the file(s).'));
                 }
             }
             return $fileName;

@@ -135,7 +135,7 @@ $creditmemo->register();
 $creditmemo->save();
 
 $transactionSave = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\DB\Transaction'
+    'Magento\Framework\DB\Transaction'
 )->addObject(
     $creditmemo
 )->addObject(

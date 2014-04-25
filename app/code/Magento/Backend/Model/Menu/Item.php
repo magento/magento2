@@ -98,7 +98,7 @@ class Item
     /**
      * Acl
      *
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_acl;
 
@@ -153,33 +153,33 @@ class Item
     /**
      * Module list
      *
-     * @var \Magento\Module\ModuleListInterface
+     * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     private $_moduleManager;
 
     /**
      * @param Item\Validator $validator
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\UrlInterface $urlModel
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Model\Menu\Item\Validator $validator,
-        \Magento\AuthorizationInterface $authorization,
+        \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\UrlInterface $urlModel,
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleListInterface $moduleList,
+        \Magento\Framework\Module\Manager $moduleManager,
         array $data = array()
     ) {
         $this->_validator = $validator;
@@ -491,13 +491,13 @@ class Item
     public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_moduleManager = $objectManager->get('Magento\Module\Manager');
+        $this->_moduleManager = $objectManager->get('Magento\Framework\Module\Manager');
         $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
-        $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
+        $this->_acl = $objectManager->get('Magento\Framework\AuthorizationInterface');
         $this->_scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
         $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
-        $this->_moduleList = $objectManager->get('Magento\Module\ModuleListInterface');
+        $this->_moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
         if ($this->_serializedSubmenu) {
             $this->_submenu = $this->_menuFactory->create();
             $this->_submenu->unserialize($this->_serializedSubmenu);

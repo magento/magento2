@@ -24,6 +24,8 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 /**
  * Test for CustomerRegistry
  *
@@ -55,12 +57,16 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->customerFactory = $this->getMockBuilder('\Magento\Customer\Model\CustomerFactory')
-            ->disableOriginalConstructor()
+        $this->customerFactory = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRegistry = new CustomerRegistry($this->customerFactory);
-        $this->customer = $this->getMockBuilder('\Magento\Customer\Model\Customer')
+        $objectManager = new ObjectManager($this);
+        $this->customerRegistry = $objectManager->getObject(
+            'Magento\Customer\Model\CustomerRegistry',
+            ['customerFactory' => $this->customerFactory]
+        );
+        $this->customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -126,7 +132,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
@@ -144,7 +150,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveByEmailException()
     {

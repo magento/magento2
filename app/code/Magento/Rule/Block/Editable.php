@@ -25,24 +25,24 @@
  */
 namespace Magento\Rule\Block;
 
-use Magento\Data\Form\Element\Renderer\RendererInterface;
-use Magento\View\Element\AbstractBlock;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $inlineTranslate;
 
     /**
-     * @param \Magento\View\Element\Context $context
-     * @param \Magento\Translate\InlineInterface $inlineTranslate
+     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Framework\Translate\InlineInterface $inlineTranslate
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
-        \Magento\Translate\InlineInterface $inlineTranslate,
+        \Magento\Framework\View\Element\Context $context,
+        \Magento\Framework\Translate\InlineInterface $inlineTranslate,
         array $data = array()
     ) {
         $this->inlineTranslate = $inlineTranslate;
@@ -52,12 +52,12 @@ class Editable extends AbstractBlock implements RendererInterface
     /**
      * Render element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      *
      * @see RendererInterface::render()
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $element->addClass('element-value-changer');
         $valueName = $element->getValueName();

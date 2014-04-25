@@ -60,7 +60,7 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      * Decorate status column values
      *
      * @param string $value
-     * @param  \Magento\Model\AbstractModel $row
+     * @param  \Magento\Framework\Model\AbstractModel $row
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @param bool $isExport
      * @return string

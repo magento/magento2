@@ -35,15 +35,15 @@ use Magento\OfflineShipping\Model\SalesRule\Rule;
 class ActionsTab
 {
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function prepareForm($observer)
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $observer->getForm();
         foreach ($form->getElements() as $element) {
-            /** @var \Magento\Data\Form\Element\AbstractElement $element */
+            /** @var \Magento\Framework\Data\Form\Element\AbstractElement $element */
             if ($element->getId() == 'action_fieldset') {
                 $element->addField(
                     'simple_free_shipping',

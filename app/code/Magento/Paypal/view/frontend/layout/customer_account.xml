@@ -30,7 +30,7 @@
         </action>
     </referenceBlock>
     <referenceBlock name="customer_account_navigation">
-        <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-billing-agreements-link">
+        <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-billing-agreements-link">
             <arguments>
                 <argument name="path" xsi:type="string">paypal/billing_agreement</argument>
                 <argument name="label" xsi:type="string">Billing Agreements</argument>

@@ -26,7 +26,7 @@
 namespace Magento\Downloader\Model;
 
 
-include_once "Magento/Connect.php";
+include_once "Magento/Framework/Connect.php";
 /**
  * Class for initialize Magento_Connect lib
  *
@@ -396,7 +396,7 @@ class Connect extends \Magento\Downloader\Model
 
             $confFile = $configObj->downloader_path . '/' . $configTestFile;
             try {
-                $ftpObj = new \Magento\Connect\Ftp();
+                $ftpObj = new \Magento\Framework\Connect\Ftp();
                 $ftpObj->connect($p['ftp']);
                 $tempFile = tempnam(sys_get_temp_dir(), 'config');
                 $serial = md5('config test file');

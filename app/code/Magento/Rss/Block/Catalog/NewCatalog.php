@@ -46,7 +46,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_visibility;
 
     /**
-     * @var \Magento\Model\Resource\Iterator
+     * @var \Magento\Framework\Model\Resource\Iterator
      */
     protected $_resourceIterator;
 
@@ -56,24 +56,24 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_imageHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
-     * @param \Magento\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Visibility $visibility,
-        \Magento\Model\Resource\Iterator $resourceIterator,
+        \Magento\Framework\Model\Resource\Iterator $resourceIterator,
         \Magento\Catalog\Helper\Image $imageHelper,
         array $data = array()
     ) {
@@ -117,13 +117,13 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $todayStartOfDayDate = $this->_localeDate->date()->setTime(
             '00:00:00'
         )->toString(
-            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
         );
 
         $todayEndOfDayDate = $this->_localeDate->date()->setTime(
             '23:59:59'
         )->toString(
-            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
         );
 
         /** @var $products \Magento\Catalog\Model\Resource\Product\Collection */

@@ -78,7 +78,7 @@ class Actions extends Generic implements TabInterface
     {
         $model = $this->_coreRegistry->registry('current_promo_catalog_rule');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 

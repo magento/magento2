@@ -25,10 +25,10 @@
  */
 namespace Magento\Rule\Block;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class Newchild extends \Magento\View\Element\AbstractBlock implements
-    \Magento\Data\Form\Element\Renderer\RendererInterface
+class Newchild extends \Magento\Framework\View\Element\AbstractBlock implements
+    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @param AbstractElement $element

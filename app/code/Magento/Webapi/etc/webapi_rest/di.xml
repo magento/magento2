@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
     <type name="Magento\Webapi\Model\Authz\UserLocator">
         <arguments>
@@ -31,7 +31,7 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest" />
-    <preference for="Magento\Model\ActionValidator\RemoveAction" type="Magento\Model\ActionValidator\RemoveAction\Allowed" />
+    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
     <type name="Magento\Webapi\Controller\Rest\Request\Deserializer\Factory">
         <arguments>
@@ -86,7 +86,7 @@
             <argument name="request" xsi:type="object">Magento\Webapi\Controller\Rest\Request\Proxy</argument>
             <argument name="response" xsi:type="object">Magento\Webapi\Controller\Rest\Response\Proxy</argument>
             <argument name="router" xsi:type="object">Magento\Webapi\Controller\Rest\Router\Proxy</argument>
-            <argument name="oauthHelper" xsi:type="object">Magento\Oauth\Helper\Request\Proxy</argument>
+            <argument name="oauthHelper" xsi:type="object">Magento\Framework\Oauth\Helper\Request\Proxy</argument>
             <argument name="authorizationService" xsi:type="object">Magento\Authz\Service\AuthorizationV1Interface\Proxy</argument>
         </arguments>
     </type>

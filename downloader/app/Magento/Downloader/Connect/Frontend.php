@@ -32,7 +32,7 @@ namespace Magento\Downloader\Connect;
  * @package    Magento_Connect
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Frontend extends \Magento\Connect\Frontend
+class Frontend extends \Magento\Framework\Connect\Frontend
 {
     /**
      * Log stream or not

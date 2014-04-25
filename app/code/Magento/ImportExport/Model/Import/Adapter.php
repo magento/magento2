@@ -25,7 +25,7 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
-use Magento\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
@@ -44,22 +44,22 @@ class Adapter
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
      * @return AbstractSource
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public static function factory($type, $directory, $options = null)
     {
         if (!is_string($type) || !$type) {
-            throw new \Magento\Model\Exception(__('The adapter type must be a non empty string.'));
+            throw new \Magento\Framework\Model\Exception(__('The adapter type must be a non empty string.'));
         }
         $adapterClass = 'Magento\ImportExport\Model\Import\Source\\' . ucfirst(strtolower($type));
 
         if (!class_exists($adapterClass)) {
-            throw new \Magento\Model\Exception("'{$type}' file extension is not supported");
+            throw new \Magento\Framework\Model\Exception("'{$type}' file extension is not supported");
         }
         $adapter = new $adapterClass($options, $directory);
 
         if (!$adapter instanceof AbstractSource) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource')
             );
         }

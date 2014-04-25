@@ -89,8 +89,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory
      * @param \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory
      * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
@@ -102,8 +102,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\UrlRewrite\Model\UrlRewrite\TypeProviderFactory $typesFactory,
         \Magento\UrlRewrite\Model\UrlRewrite\OptionProviderFactory $optionFactory,
         \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
@@ -172,7 +172,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_initFormValues();
 
         // Prepare form
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             array('data' => array('id' => 'edit_form', 'use_container' => true, 'method' => 'post'))
         );
@@ -272,7 +272,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare store element
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
      */
     protected function _prepareStoreElement($fieldset)
@@ -312,7 +312,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Form post init
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return $this
      */
     protected function _formPostInit($form)

@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Module\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 
@@ -37,19 +37,19 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_asse
         $installer->getTable('admin_assert')
     )->addColumn(
         'assert_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
         'Assert ID'
     )->addColumn(
         'assert_type',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         20,
         array('nullable' => true, 'default' => null),
         'Assert Type'
     )->addColumn(
         'assert_data',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         '64k',
         array(),
         'Assert Data'
@@ -67,43 +67,43 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_role
         $installer->getTable('admin_role')
     )->addColumn(
         'role_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
         'Role ID'
     )->addColumn(
         'parent_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'Parent Role ID'
     )->addColumn(
         'tree_level',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'Role Tree Level'
     )->addColumn(
         'sort_order',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'Role Sort Order'
     )->addColumn(
         'role_type',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         1,
         array('nullable' => false, 'default' => '0'),
         'Role Type'
     )->addColumn(
         'user_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'User ID'
     )->addColumn(
         'role_name',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         50,
         array('nullable' => true, 'default' => null),
         'Role Name'
@@ -126,43 +126,43 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_rule
         $installer->getTable('admin_rule')
     )->addColumn(
         'rule_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
         'Rule ID'
     )->addColumn(
         'role_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'Role ID'
     )->addColumn(
         'resource_id',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         255,
         array('nullable' => true, 'default' => null),
         'Resource ID'
     )->addColumn(
         'privileges',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         20,
         array('nullable' => true),
         'Privileges'
     )->addColumn(
         'assert_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'Assert ID'
     )->addColumn(
         'role_type',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         1,
         array(),
         'Role Type'
     )->addColumn(
         'permission',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         10,
         array(),
         'Permission'
@@ -177,8 +177,8 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_rule
         'role_id',
         $installer->getTable('admin_role'),
         'role_id',
-        \Magento\DB\Ddl\Table::ACTION_CASCADE,
-        \Magento\DB\Ddl\Table::ACTION_CASCADE
+        \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+        \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
     )->setComment(
         'Admin Rule Table'
     );
@@ -193,79 +193,79 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_user
         $installer->getTable('admin_user')
     )->addColumn(
         'user_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
         'User ID'
     )->addColumn(
         'firstname',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         32,
         array('nullable' => true),
         'User First Name'
     )->addColumn(
         'lastname',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         32,
         array('nullable' => true),
         'User Last Name'
     )->addColumn(
         'email',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         128,
         array('nullable' => true),
         'User Email'
     )->addColumn(
         'username',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         40,
         array('nullable' => true),
         'User Login'
     )->addColumn(
         'password',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         40,
         array('nullable' => true),
         'User Password'
     )->addColumn(
         'created',
-        \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
         null,
-        array('nullable' => false, 'default' => \Magento\DB\Ddl\Table::TIMESTAMP_INIT),
+        array('nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT),
         'User Created Time'
     )->addColumn(
         'modified',
-        \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
         null,
         array(),
         'User Modified Time'
     )->addColumn(
         'logdate',
-        \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
         null,
         array(),
         'User Last Login Time'
     )->addColumn(
         'lognum',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         null,
         array('unsigned' => true, 'nullable' => false, 'default' => '0'),
         'User Login Number'
     )->addColumn(
         'reload_acl_flag',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         null,
         array('nullable' => false, 'default' => '0'),
         'Reload ACL'
     )->addColumn(
         'is_active',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         null,
         array('nullable' => false, 'default' => '1'),
         'User Is Active'
     )->addColumn(
         'extra',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         '64k',
         array(),
         'User Extra Data'
@@ -273,10 +273,10 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_user
         $installer->getIdxName(
             'admin_user',
             array('username'),
-            \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         ),
         array('username'),
-        array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+        array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
     )->setComment(
         'Admin User Table'
     );

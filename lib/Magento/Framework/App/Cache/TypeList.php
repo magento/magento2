@@ -28,7 +28,7 @@ class TypeList implements TypeListInterface
     const INVALIDATED_TYPES = 'core_cache_invalidate';
 
     /**
-     * @var \Magento\Cache\ConfigInterface
+     * @var \Magento\Framework\Cache\ConfigInterface
      */
     protected $_config;
 
@@ -48,13 +48,13 @@ class TypeList implements TypeListInterface
     protected $_cache;
 
     /**
-     * @param \Magento\Cache\ConfigInterface $config
+     * @param \Magento\Framework\Cache\ConfigInterface $config
      * @param StateInterface $cacheState
      * @param InstanceFactory $factory
      * @param \Magento\Framework\App\CacheInterface $cache
      */
     public function __construct(
-        \Magento\Cache\ConfigInterface $config,
+        \Magento\Framework\Cache\ConfigInterface $config,
         StateInterface $cacheState,
         InstanceFactory $factory,
         \Magento\Framework\App\CacheInterface $cache
@@ -69,7 +69,7 @@ class TypeList implements TypeListInterface
      * Get cache class by cache type from configuration
      *
      * @param string $type
-     * @return \Magento\Cache\FrontendInterface
+     * @return \Magento\Framework\Cache\FrontendInterface
      * @throws \UnexpectedValueException
      */
     protected function _getTypeInstance($type)
@@ -120,12 +120,12 @@ class TypeList implements TypeListInterface
 
         foreach ($config as $type => $node) {
             $typeInstance = $this->_getTypeInstance($type);
-            if ($typeInstance instanceof \Magento\Cache\Frontend\Decorator\TagScope) {
+            if ($typeInstance instanceof \Magento\Framework\Cache\Frontend\Decorator\TagScope) {
                 $typeTags = $typeInstance->getTag();
             } else {
                 $typeTags = '';
             }
-            $types[$type] = new \Magento\Object(
+            $types[$type] = new \Magento\Framework\Object(
                 array(
                     'id' => $type,
                     'cache_type' => $node['label'],

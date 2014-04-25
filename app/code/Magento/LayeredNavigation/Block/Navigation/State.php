@@ -33,9 +33,9 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
-class State extends \Magento\View\Element\Template
+class State extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
@@ -50,12 +50,12 @@ class State extends \Magento\View\Element\Template
     protected $_catalogLayer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array()
     ) {

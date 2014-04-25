@@ -50,7 +50,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
@@ -76,7 +76,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
-        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(

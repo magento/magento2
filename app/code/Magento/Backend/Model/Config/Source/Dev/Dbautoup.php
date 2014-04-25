@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Dev;
 
-class Dbautoup implements \Magento\Option\ArrayInterface
+class Dbautoup implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

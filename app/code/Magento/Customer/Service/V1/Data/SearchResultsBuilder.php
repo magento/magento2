@@ -24,14 +24,14 @@
 
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 
 /**
  * Builder for the SearchResults Service Data Object
  *
  * @method SearchResults create()
  */
-class SearchResultsBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class SearchResultsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * Set search criteria

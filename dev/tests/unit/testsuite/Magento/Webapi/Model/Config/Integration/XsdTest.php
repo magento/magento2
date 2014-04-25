@@ -46,7 +46,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
         $messageFormat = '%message%';
-        $dom = new \Magento\Config\Dom($fixtureXml, array(), null, null, $messageFormat);
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, array(), null, null, $messageFormat);
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");

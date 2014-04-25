@@ -25,7 +25,7 @@
  */
 namespace Magento\Directory\Model\Config\Source;
 
-class Allregion implements \Magento\Option\ArrayInterface
+class Allregion implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array

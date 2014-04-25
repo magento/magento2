@@ -48,7 +48,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'Magento\Shipping\Helper\Carrier',
             array(
                 'context' => $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
-                'locale' => $this->getMock('Magento\LocaleInterface'),
+                'locale' => $this->getMock('Magento\Framework\LocaleInterface'),
                 'scopeConfig' => $this->scopeConfig
             )
         );

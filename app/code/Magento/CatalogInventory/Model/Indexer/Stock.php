@@ -89,21 +89,21 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_indexer;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Index\Model\Indexer $indexer,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -299,7 +299,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
         // Saving stock item without product object
         // Register re-index price process if products out of stock hidden on Front-end
         if (!$this->_catalogInventoryData->isShowOutOfStock() && !$object->getProduct()) {
-            $massObject = new \Magento\Object();
+            $massObject = new \Magento\Framework\Object();
             $massObject->setAttributesData(array('force_reindex_required' => 1));
             $massObject->setProductIds(array($object->getProductId()));
             $this->_indexer->logEvent(
@@ -339,7 +339,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      */
     protected function _registerCatalogProductMassActionEvent(\Magento\Index\Model\Event $event)
     {
-        /* @var $actionObject \Magento\Object */
+        /* @var $actionObject \Magento\Framework\Object */
         $actionObject = $event->getDataObject();
         $attributes = array('status');
         $reindexStock = false;

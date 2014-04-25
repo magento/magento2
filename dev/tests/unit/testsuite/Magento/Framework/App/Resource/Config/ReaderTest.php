@@ -64,8 +64,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_filePath = __DIR__ . '/_files/';
 
-        $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
-        $this->_validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
+        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $this->_schemaLocatorMock = $this->getMock(
             'Magento\Framework\App\Resource\Config\SchemaLocator',
             array(),

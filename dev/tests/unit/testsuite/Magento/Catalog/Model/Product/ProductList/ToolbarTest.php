@@ -32,7 +32,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     protected $toolbarModel;
 
     /**
-     * @var \Magento\Stdlib\Cookie |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookie;
 
@@ -46,7 +46,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->cookie = $this->getMock('Magento\Stdlib\Cookie', array('get'), array(), '', false);
+        $this->cookie = $this->getMock('Magento\Framework\Stdlib\Cookie', array('get'), array(), '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', array('getParam'), array(), '', false);
         $this->toolbarModel = new Toolbar($this->cookie, $this->request);
     }

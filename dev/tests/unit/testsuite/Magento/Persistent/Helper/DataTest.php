@@ -26,7 +26,7 @@ namespace Magento\Persistent\Helper;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_modulesReader;
 
@@ -37,7 +37,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_modulesReader = $this->getMock('\Magento\Module\Dir\Reader', array(), array(), '', false);
+        $this->_modulesReader = $this->getMock('\Magento\Framework\Module\Dir\Reader', array(), array(), '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManager->getObject(
             '\Magento\Persistent\Helper\Data',

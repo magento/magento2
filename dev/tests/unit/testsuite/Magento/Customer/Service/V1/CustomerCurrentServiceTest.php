@@ -36,7 +36,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMock;
 
@@ -61,7 +61,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManagerMock;
 
@@ -86,7 +86,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false);
-        $this->layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false);
+        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
         $this->customerDataBuilderMock = $this->getMock(
             'Magento\Customer\Service\V1\Data\CustomerBuilder',
             array('create', 'setGroupId'),
@@ -109,7 +109,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $this->moduleManagerMock = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
+        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', array(), array(), '', false);
         $this->viewMock = $this->getMock('Magento\Framework\App\View', array(), array(), '', false);
 
         $this->customerCurrentService = new \Magento\Customer\Service\V1\CustomerCurrentService(

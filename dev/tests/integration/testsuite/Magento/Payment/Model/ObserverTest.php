@@ -32,7 +32,7 @@ namespace Magento\Payment\Model;
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Event\Observer
+     * @var \Magento\Framework\Event\Observer
      */
     protected $_eventObserver;
 
@@ -145,13 +145,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Create event observer
      *
-     * @return \Magento\Event\Observer
+     * @return \Magento\Framework\Event\Observer
      */
     protected function _createEventObserver()
     {
         $data = array('status' => 'custom_new_status', 'state' => \Magento\Sales\Model\Order::STATE_NEW);
-        $event = $this->_objectManager->create('Magento\Event', array('data' => $data));
-        return $this->_objectManager->create('Magento\Event\Observer', array('data' => array('event' => $event)));
+        $event = $this->_objectManager->create('Magento\Framework\Event', array('data' => $data));
+        return $this->_objectManager
+            ->create('Magento\Framework\Event\Observer', array('data' => array('event' => $event)));
     }
 
     /**

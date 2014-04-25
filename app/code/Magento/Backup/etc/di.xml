@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <type name="Magento\Backup\Db\BackupFactory">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Backup\Db\BackupFactory">
         <arguments>
             <argument name="backupInstanceName" xsi:type="string">Magento\Backup\Model\Backup</argument>
             <argument name="backupDbInstanceName" xsi:type="string">Magento\Backup\Model\Db</argument>

@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Config\FileResolverInterface'
+            'Magento\Framework\Config\FileResolverInterface'
         )->disableOriginalConstructor()->getMock();
         $configFile = file_get_contents(__DIR__ . '/_files/page_layouts.xml');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue(array($configFile)));

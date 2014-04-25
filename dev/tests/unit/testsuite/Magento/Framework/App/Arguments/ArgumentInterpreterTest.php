@@ -32,7 +32,13 @@ class ArgumentInterpreterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $const = $this->getMock('\Magento\Data\Argument\Interpreter\Constant', array('evaluate'), array(), '', false);
+        $const = $this->getMock(
+            '\Magento\Framework\Data\Argument\Interpreter\Constant',
+            array('evaluate'),
+            array(),
+            '',
+            false
+        );
         $const->expects(
             $this->once()
         )->method(

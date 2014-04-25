@@ -81,7 +81,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
     {
         parent::_initTotals();
         $this->addTotal(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'code' => 'adjustment_positive',
                     'value' => $this->getSource()->getAdjustmentPositive(),
@@ -91,7 +91,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
             )
         );
         $this->addTotal(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'code' => 'adjustment_negative',
                     'value' => $this->getSource()->getAdjustmentNegative(),

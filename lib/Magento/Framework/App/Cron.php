@@ -25,13 +25,12 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Event\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface;
 
 class Cron implements \Magento\Framework\AppInterface
 {
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 

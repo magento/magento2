@@ -50,7 +50,7 @@ class BeginTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLicenseHtmlWhenFileExists($fileName, $expectedTxt)
     {
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
         $directoryMock->expects(
             $this->once()
         )->method(

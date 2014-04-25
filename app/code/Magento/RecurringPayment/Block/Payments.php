@@ -27,13 +27,13 @@
  */
 namespace Magento\RecurringPayment\Block;
 
-class Payments extends \Magento\View\Element\Template
+class Payments extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      */
-    public function __construct(\Magento\View\Element\Template\Context $context, array $data = array())
+    public function __construct(\Magento\Framework\View\Element\Template\Context $context, array $data = array())
     {
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;

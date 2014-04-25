@@ -121,6 +121,18 @@
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
+    <route url="/V1/customerAccounts/details" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomerDetailsByEmail"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts/details" method="PUT">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="updateCustomerDetailsByEmail"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
     <!-- TODO: changePassword is a case of SELF. Need to revisit. For now manage is assigned -->
     <!-- TODO: createCustomer, authenticate, validateResetPasswordLinkToken, initiatePasswordReset, resetPassword, resendConfirmation apis
                can be accessed anonymously and need no resources to be assigned. Webapi framework doesn't support support that as yet.
@@ -133,12 +145,6 @@
     </route>
     <route url="/V1/customerAccounts" method="PUT">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="updateCustomer"/>
-        <resources>
-            <resource ref="Magento_Customer::manage"/>
-        </resources>
-    </route>
-    <route url="/V1/customerAccounts/customer" method="PUT">
-        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="saveCustomer"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>
         </resources>
@@ -221,6 +227,12 @@
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
+    <route url="/V1/customerAccounts" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomerByEmail"/>
+        <resources>
+            <resource ref="Magento_Customer::customer"/>
+        </resources>
+    </route>
     <route url="/V1/customerAccounts/:customerId/canDelete" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="canDelete"/>
         <resources>
@@ -229,6 +241,12 @@
     </route>
     <route url="/V1/customerAccounts/:customerId" method="DELETE">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="deleteCustomer"/>
+        <resources>
+            <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customerAccounts" method="DELETE">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="deleteCustomerByEmail"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>
         </resources>

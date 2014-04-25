@@ -52,7 +52,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_filesystem =
             $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
         $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $this->_filesystem->expects(
             $this->once()

@@ -37,12 +37,12 @@ class Quote extends AbstractResource
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Eav\Model\Config $config
     ) {
         parent::__construct($resource, $dateTime);
@@ -64,8 +64,8 @@ class Quote extends AbstractResource
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -101,7 +101,7 @@ class Quote extends AbstractResource
             'is_active = ?',
             1
         )->order(
-            'updated_at ' . \Magento\DB\Select::SQL_DESC
+            'updated_at ' . \Magento\Framework\DB\Select::SQL_DESC
         )->limit(
             1
         );

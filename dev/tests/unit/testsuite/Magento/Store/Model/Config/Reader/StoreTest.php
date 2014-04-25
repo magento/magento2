@@ -96,9 +96,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider readDataProvider
      * @param string|null $storeCode
-     * @param PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount $getStoreCount
+     * @param string $storeMethod
      */
-    public function testRead($storeCode, $getStoreExpectsCount)
+    public function testRead($storeCode, $storeMethod)
     {
         $websiteCode = 'default';
         $storeId = 1;
@@ -154,31 +154,33 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
-                    new \Magento\Object(['path' => 'config/key3', 'value' => 'store_db_value3'])
+                    new \Magento\Framework\Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
+                    new \Magento\Framework\Object(['path' => 'config/key3', 'value' => 'store_db_value3'])
                 ]
             )
         );
-        $this->_storeManagerMock->expects(
-            $getStoreExpectsCount
-        )->method(
-            'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
-        );
-        $expectedData = [
-            'config' => [
+
+        $this->_storeManagerMock
+            ->expects($this->any())
+            ->method($storeMethod)
+            ->will($this->returnValue($this->_storeMock));
+        $expectedData = array(
+            'config' => array(
                 'key0' => 'website_value0',
                 'key1' => 'store_db_value1',
                 'key2' => 'store_value2',
                 'key3' => 'store_db_value3'
-            ]
-        ];
+            )
+        );
         $this->assertEquals($expectedData, $this->_model->read($storeCode));
     }
 
     public function readDataProvider()
     {
-        return [['default', $this->never()], [null, $this->once()]];
+        return array(
+            array('default', 'getDefaultStoreView'),
+            array(null, 'getStore'),
+            array('code', '')
+        );
     }
 }

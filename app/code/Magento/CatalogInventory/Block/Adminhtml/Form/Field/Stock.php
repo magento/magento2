@@ -29,16 +29,16 @@
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-use Magento\Data\Form;
+use Magento\Framework\Data\Form;
 
-class Stock extends \Magento\Data\Form\Element\Select
+class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
     const QUANTITY_FIELD_HTML_ID = 'qty';
 
     /**
      * Quantity field element
      *
-     * @var \Magento\Data\Form\Element\Text
+     * @var \Magento\Framework\Data\Form\Element\Text
      */
     protected $_qty;
 
@@ -52,22 +52,22 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Text element factory
      *
-     * @var \Magento\Data\Form\Element\TextFactory
+     * @var \Magento\Framework\Data\Form\Element\TextFactory
      */
     protected $_factoryText;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Data\Form\Element\TextFactory $factoryText
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Data\Form\Element\TextFactory $factoryText
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\Data\Form\Element\TextFactory $factoryText,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\Data\Form\Element\TextFactory $factoryText,
         array $data = array()
     ) {
         $this->_factoryText = $factoryText;
@@ -80,11 +80,11 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Create quantity field
      *
-     * @return \Magento\Data\Form\Element\Text
+     * @return \Magento\Framework\Data\Form\Element\Text
      */
     protected function _createQtyElement()
     {
-        /** @var \Magento\Data\Form\Element\Text $element */
+        /** @var \Magento\Framework\Data\Form\Element\Text $element */
         $element = $this->_factoryText->create();
         $element->setId(self::QUANTITY_FIELD_HTML_ID)->setName('qty')->addClass('validate-number input-text');
         return $element;

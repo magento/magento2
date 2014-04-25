@@ -53,7 +53,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function noCookiesAction()
     {
-        $redirect = new \Magento\Object();
+        $redirect = new \Magento\Framework\Object();
         $this->_eventManager->dispatch(
             'controller_action_nocookies',
             array('action' => $this, 'redirect' => $redirect)

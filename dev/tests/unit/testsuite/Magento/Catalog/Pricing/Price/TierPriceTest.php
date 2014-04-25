@@ -73,7 +73,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock('Magento\Pricing\PriceInfoInterface', [], [], '', false);
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', false);
 
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -88,7 +88,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->any())->method('getCustomerGroupId')
             ->will($this->returnValue($this->customerGroup));
 
-        $this->calculator = $this->getMock('Magento\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->calculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
 
         $this->model = new TierPrice($this->product, $this->quantity, $this->calculator, $this->session);
     }
@@ -181,7 +181,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->setData(TierPrice::PRICE_TYPE_TIER, $tierPrices);
 
-        $price = $this->getMock('Magento\Pricing\Price\PriceInterface', [], [], '', false);
+        $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface', [], [], '', false);
         $price->expects($this->any())->method('getValue')->will($this->returnValue($basePrice));
 
         $this->priceInfo->expects($this->atLeastOnce())->method('getPrice')->will($this->returnValue($price));
@@ -268,7 +268,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($basePrice, $tierPrice, $savedPercent)
     {
-        $price = $this->getMock('Magento\Pricing\Price\PriceInterface');
+        $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $price->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($basePrice));
@@ -277,7 +277,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->will($this->returnValue($price));
 
-        $amount = $this->getMock('Magento\Pricing\Amount\AmountInterface');
+        $amount = $this->getMock('Magento\Framework\Pricing\Amount\AmountInterface');
         $amount->expects($this->atLeastOnce())
             ->method('getBaseAmount')
             ->will($this->returnValue($tierPrice));

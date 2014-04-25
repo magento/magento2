@@ -51,7 +51,7 @@ class Application
     protected $_db;
 
     /**
-     * @var \Magento\Simplexml\Element
+     * @var \Magento\Framework\Simplexml\Element
      */
     protected $_localXml;
 
@@ -121,7 +121,7 @@ class Application
      *
      * @param \Magento\TestFramework\Db\AbstractDb $dbInstance
      * @param string $installDir
-     * @param \Magento\Simplexml\Element $localXml
+     * @param \Magento\Framework\Simplexml\Element $localXml
      * @param $globalConfigDir
      * @param array $moduleEtcFiles
      * @param string $appMode
@@ -129,7 +129,7 @@ class Application
     public function __construct(
         \Magento\TestFramework\Db\AbstractDb $dbInstance,
         $installDir,
-        \Magento\Simplexml\Element $localXml,
+        \Magento\Framework\Simplexml\Element $localXml,
         $globalConfigDir,
         array $moduleEtcFiles,
         $appMode
@@ -222,7 +222,7 @@ class Application
         $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList(BP, $directories);
 
         $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
         $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem');
         $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem\DirectoryList\Verification');
 
@@ -237,8 +237,8 @@ class Application
         );
 
         /** Register event observer of Integration Framework */
-        /** @var \Magento\Event\Config\Data $eventConfigData */
-        $eventConfigData = $objectManager->get('Magento\Event\Config\Data');
+        /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
+        $eventConfigData = $objectManager->get('Magento\Framework\Event\Config\Data');
         $eventConfigData->merge(
             array(
                 'core_app_init_current_store_after' => array(
@@ -252,7 +252,7 @@ class Application
         );
 
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
-        \Magento\Phrase::setRenderer($objectManager->get('Magento\Phrase\RendererInterface'));
+        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
 
         /** @var \Magento\Framework\App\Filesystem\DirectoryList\Verification $verification */
         $verification = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList\Verification');
@@ -309,7 +309,7 @@ class Application
      * @param string $adminUserName
      * @param string $adminPassword
      * @param string $adminRoleName
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function install($adminUserName, $adminPassword, $adminRoleName)
     {
@@ -335,7 +335,7 @@ class Application
         /* Make sure that local.xml does not contain an invalid installation date */
         $installDate = (string)$this->_localXml->install->date;
         if ($installDate && strtotime($installDate)) {
-            throw new \Magento\Exception('Local configuration must contain an invalid installation date.');
+            throw new \Magento\Framework\Exception('Local configuration must contain an invalid installation date.');
         }
 
         /* Replace local.xml */
@@ -346,11 +346,11 @@ class Application
         $this->initialize();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
-            ->getArea('install')->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+            ->getArea('install')->load(\Magento\Framework\App\Area::PART_CONFIG);
 
         /* Run all install and data-install scripts */
-        /** @var $updater \Magento\Module\Updater */
-        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Module\Updater');
+        /** @var $updater \Magento\Framework\Module\Updater */
+        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Module\Updater');
         $updater->updateScheme();
         $updater->updateData();
 
@@ -369,7 +369,9 @@ class Application
         $localXml = file_get_contents($targetLocalXml);
         $localXml = str_replace($installDate, date('r'), $localXml, $replacementCount);
         if ($replacementCount != 1) {
-            throw new \Magento\Exception("Unable to replace installation date properly in '{$targetLocalXml}' file.");
+            throw new \Magento\Framework\Exception(
+                "Unable to replace installation date properly in '{$targetLocalXml}' file."
+            );
         }
         file_put_contents($targetLocalXml, $localXml, LOCK_EX);
 
@@ -404,16 +406,16 @@ class Application
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->clearCache();
 
-        \Magento\Data\Form::setElementRenderer(null);
-        \Magento\Data\Form::setFieldsetRenderer(null);
-        \Magento\Data\Form::setFieldsetElementRenderer(null);
+        \Magento\Framework\Data\Form::setElementRenderer(null);
+        \Magento\Framework\Data\Form::setFieldsetRenderer(null);
+        \Magento\Framework\Data\Form::setFieldsetElementRenderer(null);
         $this->_appArea = null;
     }
 
     /**
      * Create a directory with write permissions or don't touch existing one
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      * @param string $dir
      */
     protected function _ensureDirExists($dir)
@@ -423,7 +425,7 @@ class Application
             mkdir($dir, 0777);
             umask($old);
         } elseif (!is_dir($dir)) {
-            throw new \Magento\Exception("'$dir' is not a directory.");
+            throw new \Magento\Framework\Exception("'$dir' is not a directory.");
         }
     }
 
@@ -504,7 +506,7 @@ class Application
     public function loadArea($areaCode)
     {
         $this->_appArea = $areaCode;
-        $scope = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\Scope');
+        $scope = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Config\Scope');
         $scope->setCurrentScope($areaCode);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -515,7 +517,7 @@ class Application
         );
         $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList');
         if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
-            $app->getArea($areaCode)->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+            $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($areaCode);
         }

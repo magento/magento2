@@ -37,12 +37,12 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
     /**
      * Set filter on comments by their parent item
      *
-     * @param \Magento\Model\AbstractModel|int $parent
+     * @param \Magento\Framework\Model\AbstractModel|int $parent
      * @return $this
      */
     public function setParentFilter($parent)
     {
-        if ($parent instanceof \Magento\Model\AbstractModel) {
+        if ($parent instanceof \Magento\Framework\Model\AbstractModel) {
             $parent = $parent->getId();
         }
         return $this->addFieldToFilter('parent_id', $parent);

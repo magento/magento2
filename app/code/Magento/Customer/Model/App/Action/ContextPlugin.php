@@ -65,7 +65,7 @@ class ContextPlugin
         $this->httpContext->setValue(
             \Magento\Customer\Helper\Data::CONTEXT_GROUP,
             $this->customerSession->getCustomerGroupId(),
-            \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
         );
         $this->httpContext->setValue(
             \Magento\Customer\Helper\Data::CONTEXT_AUTH,

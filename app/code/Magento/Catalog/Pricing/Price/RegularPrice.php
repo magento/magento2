@@ -24,11 +24,11 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Pricing\Adjustment\CalculatorInterface;
-use Magento\Pricing\Amount\AmountInterface;
-use Magento\Pricing\Price\PriceInterface;
-use Magento\Pricing\PriceInfoInterface;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**
  * Class RegularPrice
@@ -61,7 +61,7 @@ class RegularPrice implements PriceInterface
     protected $quantity;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator
      */
     protected $calculator;
 

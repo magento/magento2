@@ -32,7 +32,7 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
-class Title extends \Magento\View\Element\Template
+class Title extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
@@ -55,13 +55,13 @@ class Title extends \Magento\View\Element\Template
     protected $_storeFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Tax\Model\Calculation\Rate $rate
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Tax\Model\Calculation\Rate $rate,
         array $data = array()

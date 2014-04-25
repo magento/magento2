@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource\Entity\Attribute;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Constants for attribute group codes
@@ -78,10 +78,10 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getSortOrder()) {
             $object->setSortOrder($this->_getMaxSortOrder($object) + 1);
@@ -92,10 +92,10 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getAttributes()) {
             foreach ($object->getAttributes() as $attribute) {
@@ -110,7 +110,7 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve max sort order
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return int
      */
     protected function _getMaxSortOrder($object)
@@ -143,7 +143,7 @@ class Group extends \Magento\Model\Resource\Db\AbstractDb
         )->where(
             'attribute_set_id = :attribute_set_id'
         )->order(
-            'default_id ' . \Magento\Data\Collection::SORT_ORDER_DESC
+            'default_id ' . \Magento\Framework\Data\Collection::SORT_ORDER_DESC
         )->limit(
             1
         );

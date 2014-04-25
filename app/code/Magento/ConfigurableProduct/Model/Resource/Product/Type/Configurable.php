@@ -25,7 +25,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Type;
 
-class Configurable extends \Magento\Model\Resource\Db\AbstractDb
+class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Catalog product relation

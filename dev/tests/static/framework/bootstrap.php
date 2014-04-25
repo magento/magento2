@@ -27,7 +27,7 @@
 
 define('BP', realpath(__DIR__ . '/../../../../'));
 require BP . '/app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(array(__DIR__, dirname(__DIR__) . '/testsuite', BP . '/lib'));
+\Magento\Framework\Autoload\IncludePath::addIncludePath(array(__DIR__, dirname(__DIR__) . '/testsuite', BP . '/lib'));
 \Magento\TestFramework\Utility\Files::setInstance(new \Magento\TestFramework\Utility\Files(BP));
 
 function tool_autoloader($className)

@@ -40,7 +40,7 @@ namespace Magento\Backend\Model\Search;
  * @method Customer setResults(array $results)
  * @method array getResults()
  */
-class Customer extends \Magento\Object
+class Customer extends \Magento\Framework\Object
 {
     /**
      * Adminhtml data
@@ -55,12 +55,12 @@ class Customer extends \Magento\Object
     protected $_customerService;
 
     /**
-     * @var \Magento\Service\V1\Data\SearchCriteriaBuilder
+     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
      */
     protected $_searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Service\V1\Data\FilterBuilder
+     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
      */
     protected $_filterBuilder;
 
@@ -74,15 +74,15 @@ class Customer extends \Magento\Object
      *
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Customer\Service\V1\CustomerAccountService $customerService
-     * @param \Magento\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Customer\Service\V1\CustomerAccountService $customerService,
-        \Magento\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Service\V1\Data\FilterBuilder $filterBuilder,
+        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder,
         \Magento\Customer\Helper\View $customerViewHelper
     ) {
         $this->_adminhtmlData = $adminhtmlData;

@@ -65,11 +65,11 @@ class RewriteService
     {
         // URL rewrite
         if (!$request->isStraight()) {
-            \Magento\Profiler::start('db_url_rewrite');
+            \Magento\Framework\Profiler::start('db_url_rewrite');
             /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
             $urlRewrite = $this->_rewriteFactory->create();
             $urlRewrite->rewrite($request);
-            \Magento\Profiler::stop('db_url_rewrite');
+            \Magento\Framework\Profiler::stop('db_url_rewrite');
         }
     }
 }

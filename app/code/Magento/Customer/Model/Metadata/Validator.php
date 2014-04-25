@@ -49,12 +49,12 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
     /**
      * Validate EAV model attributes with data models
      *
-     * @param \Magento\Object|array $entityData Data set from the Model attributes
+     * @param \Magento\Framework\Object|array $entityData Data set from the Model attributes
      * @return bool
      */
     public function isValid($entityData)
     {
-        if ($entityData instanceof \Magento\Object) {
+        if ($entityData instanceof \Magento\Framework\Object) {
             $this->_entityData = $entityData->getData();
         } else {
             $this->_entityData = $entityData;

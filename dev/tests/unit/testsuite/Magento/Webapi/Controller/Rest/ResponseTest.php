@@ -187,11 +187,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         /** Clear output buffering. */
         ob_end_clean();
         $actualResponse = $this->_responseRest->getBody();
-        $expectedResult = '{"errors":[{"message":"' .
+        $expectedResult = '{"message":"' .
             $exceptionMessage .
-            '","http_code":' .
-            $exceptionHttpCode .
-            '}]}';
+            '"}';
         $this->assertStringStartsWith($expectedResult, $actualResponse, 'Response body is invalid');
     }
 

@@ -32,7 +32,7 @@ class StateFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateState()
     {
-        $objectManager = $this->getMock('Magento\ObjectManager');
+        $objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $objectManager->expects(
             $this->at(0)
         )->method(
@@ -88,7 +88,7 @@ class StateFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateStateMapIsEmpty()
     {
-        $objectManager = $this->getMock('Magento\ObjectManager');
+        $objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $factory = new \Magento\Centinel\Model\StateFactory($objectManager);
         $this->assertFalse($factory->createState('VI'));
         $this->assertFalse($factory->createState('MC'));

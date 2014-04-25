@@ -38,6 +38,11 @@ use Magento\Framework\App\RequestInterface;
 class Add extends \Magento\Framework\App\Action\Action
 {
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $_customerSession;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -45,12 +50,15 @@ class Add extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Context $context,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_storeManager = $storeManager;
+        $this->_customerSession = $customerSession;
         parent::__construct($context);
     }
 
@@ -62,14 +70,10 @@ class Add extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_objectManager->get('Magento\Customer\Model\Session')->authenticate($this)) {
+        if (!$this->_customerSession->authenticate($this)) {
             $this->_actionFlag->set('', 'no-dispatch', true);
-            if (!$this->_objectManager->get('Magento\Customer\Model\Session')->getBeforeUrl()) {
-                $this->_objectManager->get(
-                    'Magento\Customer\Model\Session'
-                )->setBeforeUrl(
-                    $this->_redirect->getRefererUrl()
-                );
+            if (!$this->_customerSession->getBeforeUrl()) {
+                $this->_customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
             }
         }
         return parent::dispatch($request);
@@ -80,7 +84,7 @@ class Add extends \Magento\Framework\App\Action\Action
      */
     public function testObserverAction()
     {
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         $observer = $this->_objectManager->get('Magento\ProductAlert\Model\Observer');
         $observer->process($object);
     }
@@ -113,7 +117,7 @@ class Add extends \Magento\Framework\App\Action\Action
             $model = $this->_objectManager->create(
                 'Magento\ProductAlert\Model\Price'
             )->setCustomerId(
-                $this->_objectManager->get('Magento\Customer\Model\Session')->getId()
+                $this->_customerSession->getCustomerId()
             )->setProductId(
                 $product->getId()
             )->setPrice(
@@ -152,7 +156,7 @@ class Add extends \Magento\Framework\App\Action\Action
             $model = $this->_objectManager->create(
                 'Magento\ProductAlert\Model\Stock'
             )->setCustomerId(
-                $this->_objectManager->get('Magento\Customer\Model\Session')->getId()
+                $this->_customerSession->getCustomerId()
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
@@ -183,7 +187,7 @@ class Add extends \Magento\Framework\App\Action\Action
             $currentStore->getBaseUrl()
         ) === 0 || strpos(
             $url,
-            $currentStore->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
+            $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)
         ) === 0;
     }
 }

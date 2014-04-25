@@ -38,7 +38,7 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
     protected $_model = null;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_cmsPage = null;
 
@@ -52,7 +52,7 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             array('getResourceModelInstance', '__wakeup')
         )->disableOriginalConstructor()->getMock();
-        $this->_cmsPage = new \Magento\Object(array('id' => 3, 'identifier' => 'cms-page'));
+        $this->_cmsPage = new \Magento\Framework\Object(array('id' => 3, 'identifier' => 'cms-page'));
     }
 
     /**

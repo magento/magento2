@@ -41,7 +41,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout',
             '',
@@ -54,7 +54,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
         );
     }
 
@@ -66,10 +66,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\State'
         )->setAreaCode(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDefaultDesignTheme();
 
         $actualHtml = $this->_block->getLayoutsChooser();

@@ -31,7 +31,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cookieMock;
 
@@ -42,7 +42,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
+        $this->_cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
         $this->_context = new \Magento\Framework\App\Http\Context();
         $this->_model = new Http($this->_cookieMock, $this->_context);
         $this->_model->headersSentThrowsException = false;

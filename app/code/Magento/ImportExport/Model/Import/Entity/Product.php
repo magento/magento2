@@ -371,7 +371,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -396,9 +396,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_categoryColFactory;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupColFactory;
+    protected $_customerGroupService;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -431,7 +431,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_mediaDirectory;
 
@@ -446,17 +446,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_stockItemFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     private $_logger;
 
@@ -467,8 +467,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
@@ -476,7 +476,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Import\Entity\Product\OptionFactory $optionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupColFactory
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Import\Entity\Product\Type\Factory $productTypeFactory
@@ -486,9 +486,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Logger $logger
      * @param array $data
      */
     public function __construct(
@@ -498,8 +498,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Stdlib\String $string,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
@@ -507,7 +507,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\Import\Entity\Product\OptionFactory $optionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $groupColFactory,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Import\Entity\Product\Type\Factory $productTypeFactory,
@@ -517,9 +517,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Logger $logger,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -529,7 +529,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_resourceFactory = $resourceFactory;
         $this->_setColFactory = $setColFactory;
         $this->_categoryColFactory = $categoryColFactory;
-        $this->_groupColFactory = $groupColFactory;
+        $this->_customerGroupService = $customerGroupService;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->_productTypeFactory = $productTypeFactory;
@@ -686,8 +686,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _initCustomerGroups()
     {
-        foreach ($this->_groupColFactory->create() as $customerGroup) {
-            $this->_customerGroups[$customerGroup->getId()] = true;
+        foreach ($this->_customerGroupService->getGroups() as $group) {
+            $this->_customerGroups[$group->getId()] = true;
         }
         return $this;
     }
@@ -731,7 +731,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Initialize product type models.
      *
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _initTypeModels()
     {
@@ -740,12 +740,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $params = array($this, $productTypeName);
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], array('params' => $params)))
             ) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     sprintf("Entity type model '%s' is not found", $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __(
                         'Entity type model must be an instance of ' .
                         'Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType'
@@ -1415,7 +1415,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = new \DateTime('@' . strtotime($attrValue));
-                        $attrValue = $attrValue->format(\Magento\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                        $attrValue = $attrValue->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());
@@ -1549,7 +1549,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns an object for upload a media files
      *
      * @return \Magento\ImportExport\Model\Import\Uploader
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getUploader()
     {
@@ -1560,14 +1560,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
-                throw new \Magento\Model\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
+                throw new \Magento\Framework\Model\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
             }
             $destinationDir = "catalog/product";
             $destinationPath = $this->_mediaDirectory->getAbsolutePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
-                throw new \Magento\Model\Exception(sprintf("File directory '%s' is not writable.", $destinationPath));
+                throw new \Magento\Framework\Model\Exception(sprintf("File directory '%s' is not writable.", $destinationPath));
             }
         }
         return $this->_fileUploader;
@@ -1793,7 +1793,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 null,
                                 false
                             )->toString(
-                                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                             )
                         );
                     }
@@ -1825,7 +1825,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * DB connection getter.
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function getConnection()
     {

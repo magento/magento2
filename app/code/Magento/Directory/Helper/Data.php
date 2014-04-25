@@ -175,7 +175,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getRegionJson()
     {
-        \Magento\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
         if (!$this->_regionJson) {
             $cacheKey = 'DIRECTORY_REGIONS_JSON_STORE' . $this->_storeManager->getStore()->getId();
             $json = $this->_configCacheType->load($cacheKey);
@@ -209,7 +209,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_regionJson = $json;
         }
 
-        \Magento\Profiler::stop('TEST: ' . __METHOD__);
+        \Magento\Framework\Profiler::stop('TEST: ' . __METHOD__);
         return $this->_regionJson;
     }
 

@@ -29,7 +29,7 @@ require_once 'processor.php';
 
 $processor = new Error_Processor(
     new \Magento\Framework\App\Response\Http(
-        new \Magento\Stdlib\Cookie(),
+        new \Magento\Framework\Stdlib\Cookie(),
         new \Magento\Framework\App\Http\Context()
     )
 );

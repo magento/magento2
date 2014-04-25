@@ -27,11 +27,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer;
-use Magento\Customer\Service\V1\Data\CustomerDetails;
-use Magento\Exception\AuthenticationException;
-use Magento\Exception\InputException;
-use Magento\Exception\NoSuchEntityException;
-use Magento\Exception\StateException;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Exception\StateException;
 
 /**
  * Customer account controller
@@ -71,13 +72,13 @@ class Account extends \Magento\Framework\App\Action\Action
     /** @var \Magento\Customer\Helper\Data */
     protected $_customerHelperData;
 
-    /** @var \Magento\UrlFactory */
+    /** @var \Magento\Framework\UrlFactory */
     protected $_urlFactory;
 
     /** @var \Magento\Customer\Model\Metadata\FormFactory */
     protected $_formFactory;
 
-    /** @var \Magento\Stdlib\String */
+    /** @var \Magento\Framework\Stdlib\String */
     protected $string;
 
     /** @var \Magento\Core\App\Action\FormKeyValidator */
@@ -95,7 +96,7 @@ class Account extends \Magento\Framework\App\Action\Action
     /** @var \Magento\Core\Helper\Data */
     protected $coreHelperData;
 
-    /** @var \Magento\Escaper */
+    /** @var \Magento\Framework\Escaper */
     protected $escaper;
 
     /** @var \Magento\Framework\App\State */
@@ -124,15 +125,15 @@ class Account extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Customer\Helper\Data $customerHelperData
-     * @param \Magento\UrlFactory $urlFactory
+     * @param \Magento\Framework\UrlFactory $urlFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Helper\Data $coreHelperData
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
@@ -148,15 +149,15 @@ class Account extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Customer\Helper\Data $customerHelperData,
-        \Magento\UrlFactory $urlFactory,
+        \Magento\Framework\UrlFactory $urlFactory,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Helper\Data $coreHelperData,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\State $appState,
         CustomerGroupServiceInterface $customerGroupService,
         CustomerAccountServiceInterface $customerAccountService,
@@ -288,26 +289,23 @@ class Account extends \Magento\Framework\App\Action\Action
                     $customer = $this->_customerAccountService->authenticate($login['username'], $login['password']);
                     $this->_getSession()->setCustomerDataAsLoggedIn($customer);
                     $this->_getSession()->regenerateId();
-                } catch (AuthenticationException $e) {
-                    switch ($e->getCode()) {
-                        case AuthenticationException::EMAIL_NOT_CONFIRMED:
-                            $value = $this->_customerHelperData->getEmailConfirmationUrl($login['username']);
-                            $message = __(
-                                'This account is not confirmed.' .
-                                ' <a href="%1">Click here</a> to resend confirmation email.',
-                                $value
-                            );
-                            break;
-                        case AuthenticationException::INVALID_EMAIL_OR_PASSWORD:
-                        default:
-                            $message = __('Invalid login or password.');
-                            break;
-                    }
+                } catch (EmailNotConfirmedException $e) {
+                    $value = $this->_customerHelperData->getEmailConfirmationUrl($login['username']);
+                    $message = __(
+                        'This account is not confirmed.' .
+                        ' <a href="%1">Click here</a> to resend confirmation email.',
+                        $value
+                    );
+                    $this->messageManager->addError($message);
+                    $this->_getSession()->setUsername($login['username']);
+                }
+                catch (AuthenticationException $e) {
+                    $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
                     $this->_getSession()->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: this exception log can disclose customer password
-                    // $this->_objectManager->get('Magento\Logger')->logException($e);
+                    // $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                     $this->messageManager->addError(__('There was an error validating the login and password.'));
                 }
             } else {
@@ -445,7 +443,7 @@ class Account extends \Magento\Framework\App\Action\Action
                 ->setCustomer($customer)
                 ->setAddresses($addresses)
                 ->create();
-            $customer = $this->_customerAccountService->createCustomer($customerDetails, $password, null, $redirectUrl);
+            $customer = $this->_customerAccountService->createCustomer($customerDetails, $password, $redirectUrl);
 
             if ($this->getRequest()->getParam('is_subscribed', false)) {
                 $this->_subscriberFactory->create()->subscribeCustomerById($customer->getId());
@@ -485,9 +483,9 @@ class Account extends \Magento\Framework\App\Action\Action
             // @codingStandardsIgnoreEnd
             $this->messageManager->addError($message);
         } catch (InputException $e) {
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             foreach ($e->getErrors() as $error) {
-                $message = InputException::translateError($error);
-                $this->messageManager->addError($this->escaper->escapeHtml($message));
+                $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot save the customer.'));
@@ -679,19 +677,7 @@ class Account extends \Magento\Framework\App\Action\Action
             $this->getResponse()->setRedirect($this->_redirect->success($backUrl ? $backUrl : $successUrl));
             return;
         } catch (StateException $e) {
-            switch ($e->getCode()) {
-                case StateException::INVALID_STATE:
-                    return;
-                case StateException::INPUT_MISMATCH:
-                case StateException::EXPIRED:
-                    $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
-                    break;
-                default:
-                    $this->messageManager->addException($e, __('There was an error confirming the account.'));
-                    break;
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->messageManager->addException($e, __('There was an error confirming the account.'));
+            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('There was an error confirming the account'));
         }
@@ -722,7 +708,7 @@ class Account extends \Magento\Framework\App\Action\Action
                     $this->_storeManager->getStore()->getWebsiteId()
                 );
                 $this->messageManager->addSuccess(__('Please, check your email for confirmation key.'));
-            } catch (StateException $e) {
+            } catch (InvalidTransitionException $e) {
                 $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Wrong email.'));
@@ -791,6 +777,7 @@ class Account extends \Magento\Framework\App\Action\Action
                     CustomerAccountServiceInterface::EMAIL_RESET
                 );
             } catch (NoSuchEntityException $e) {
+                // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
             } catch (\Exception $exception) {
                 $this->messageManager->addException($exception, __('Unable to send password reset email.'));
                 $this->_redirect('*/*/forgotpassword');
@@ -1003,7 +990,7 @@ class Account extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     protected function _createUrl()
     {

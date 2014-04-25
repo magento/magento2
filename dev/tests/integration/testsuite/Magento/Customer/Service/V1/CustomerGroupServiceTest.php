@@ -26,16 +26,16 @@
 namespace Magento\Customer\Service\V1;
 
 use Magento\Customer\Service\V1\Data\CustomerGroup;
-use Magento\Service\V1\Data\FilterBuilder;
+use Magento\Framework\Service\V1\Data\FilterBuilder;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Service\V1\Data\Filter;
+use Magento\Framework\Service\V1\Data\Filter;
 use Magento\Customer\Model\Group;
 
 class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
@@ -217,7 +217,7 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetDefaultGroupWithInvalidStoreId()
     {
@@ -234,9 +234,9 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSearchGroups($filters, $filterGroup, $expectedResult)
     {
-        /** @var \Magento\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
+        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Service\V1\Data\SearchCriteriaBuilder');
+            ->create('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }

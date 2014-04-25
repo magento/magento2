@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 
 /**
  * Price model for external catalogs

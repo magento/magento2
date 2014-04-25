@@ -29,6 +29,9 @@
  */
 namespace Magento\Test\Integrity;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -605,6 +608,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Initialise map of dependencies
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected static function _initDependencies()
     {
@@ -627,18 +632,21 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 }
             }
 
-            foreach ($module[0]->depends->children() as $dependency) {
-                /** @var \SimpleXMLElement $dependency */
-                $type = isset(
-                    $dependency['type']
-                ) && (string)$dependency['type'] == self::TYPE_SOFT ? self::TYPE_SOFT : self::TYPE_HARD;
-                if ($dependency->getName() == 'module') {
-                    self::_addDependencies(
-                        $moduleName,
-                        $type,
-                        self::MAP_TYPE_DECLARED,
-                        str_replace('_', '\\', (string)$dependency->attributes()->name)
-                    );
+            if (isset($module[0]->depends)) {
+                foreach ($module[0]->depends->children() as $dependency) {
+                    /** @var \SimpleXMLElement $dependency */
+                    $type = self::TYPE_HARD;
+                    if (isset($dependency['type']) && (string)$dependency['type'] == self::TYPE_SOFT) {
+                        $type = self::TYPE_SOFT;
+                    }
+                    if ($dependency->getName() == 'module') {
+                        self::_addDependencies(
+                            $moduleName,
+                            $type,
+                            self::MAP_TYPE_DECLARED,
+                            str_replace('_', '\\', (string)$dependency->attributes()->name)
+                        );
+                    }
                 }
             }
         }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Reports\Model;
 
-class Item extends \Magento\Object
+class Item extends \Magento\Framework\Object
 {
     /**
      * @var bool

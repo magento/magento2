@@ -114,7 +114,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testXmlAgainstXsd($fixtureXml, $schemaFile, array $expectedErrors)
     {
-        $dom = new \Magento\Config\Dom($fixtureXml, array(), null, null, '%message%');
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, array(), null, null, '%message%');
         $actualResult = $dom->validate($schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);

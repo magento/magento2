@@ -26,7 +26,7 @@ namespace Magento\Webapi\Model\Config\Integration;
 /**
  * Converter of api.xml content into array format.
  */
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**#@+
      * Array keys for config internal representation.

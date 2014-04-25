@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceContainer name="js">
-        <block class="Magento\View\Element\Template" template="Magento_Bundle::product/stock/disabler.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Bundle::product/stock/disabler.phtml"/>
     </referenceContainer>
 </layout>

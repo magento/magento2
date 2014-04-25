@@ -25,4 +25,10 @@
 define('BP', realpath(__DIR__ . '/../../../../../../') . '/');
 
 require_once BP . 'app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(array(BP . 'dev/tests/static/framework', BP . 'dev/tools', BP . '/lib'));
+\Magento\Framework\Autoload\IncludePath::addIncludePath(
+    array(
+        BP . 'dev/tests/static/framework',
+        BP . 'dev/tools',
+        BP . '/lib'
+    )
+);

@@ -48,12 +48,12 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $registry;
 
     /**
-     * @var \Magento\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
@@ -89,8 +89,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param Product\Initialization\Helper $initializationHelper
      * @param Product\Initialization\StockDataFilter $stockFilter
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
@@ -101,8 +101,8 @@ class Product extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Copier $productCopier,
@@ -291,7 +291,7 @@ class Product extends \Magento\Backend\App\Action
         )->getStore(
             $storeId
         )->getBaseUrl(
-            \Magento\UrlInterface::URL_TYPE_MEDIA
+            \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
         );
 
         $content = $this->_view->getLayout()->createBlock(
@@ -456,7 +456,7 @@ class Product extends \Magento\Backend\App\Action
      */
     public function validateAction()
     {
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setError(false);
 
         try {
@@ -509,7 +509,7 @@ class Product extends \Magento\Backend\App\Action
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -540,7 +540,7 @@ class Product extends \Magento\Backend\App\Action
 
             try {
                 if (isset($data['product'][$product->getIdFieldName()])) {
-                    throw new \Magento\Model\Exception(__('Unable to save product'));
+                    throw new \Magento\Framework\Model\Exception(__('Unable to save product'));
                 }
 
                 $originalSku = $product->getSku();
@@ -567,8 +567,8 @@ class Product extends \Magento\Backend\App\Action
                     $this->messageManager->addNotice(
                         __(
                             'SKU for product %1 has been changed to %2.',
-                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()),
-                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getSku())
+                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName()),
+                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getSku())
                         )
                     );
                 }
@@ -582,12 +582,12 @@ class Product extends \Magento\Backend\App\Action
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
                 $redirectBack = true;
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->messageManager->addError($e->getMessage());
                 $redirectBack = true;
             }
@@ -623,7 +623,7 @@ class Product extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(__('You duplicated the product.'));
             $this->_redirect('catalog/*/edit', array('_current' => true, 'id' => $newProduct->getId()));
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('catalog/*/edit', array('_current' => true));
         }
@@ -694,7 +694,7 @@ class Product extends \Magento\Backend\App\Action
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Core\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
@@ -709,13 +709,13 @@ class Product extends \Magento\Backend\App\Action
      * @param array $productIds
      * @param int $status
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function _validateMassStatus(array $productIds, $status)
     {
         if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
             if (!$this->_objectManager->create('Magento\Catalog\Model\Product')->isProductsHasSku($productIds)) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('Please make sure to define SKU values for all processed products.')
                 );
             }
@@ -742,7 +742,7 @@ class Product extends \Magento\Backend\App\Action
     {
         $session = $this->_objectManager->get('Magento\Backend\Model\Session');
         if ($session->hasCompositeProductResult()
-            && $session->getCompositeProductResult() instanceof \Magento\Object
+            && $session->getCompositeProductResult() instanceof \Magento\Framework\Object
         ) {
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
                 ->renderUpdateResult($session->getCompositeProductResult());
@@ -846,7 +846,7 @@ class Product extends \Magento\Backend\App\Action
 
             $this->getResponse()->setBody($attribute->toJson());
         } catch (\Exception $e) {
-            $response = new \Magento\Object();
+            $response = new \Magento\Framework\Object();
             $response->setError(false);
             $response->setMessage($e->getMessage());
             $this->getResponse()->setBody($response->toJson());

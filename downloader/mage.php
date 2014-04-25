@@ -34,7 +34,7 @@ class __cli_Magento_Connect
     protected $argv;
     public static function instance()
     {
-        if(!self::$_instance) {
+        if (!self::$_instance) {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -45,7 +45,7 @@ class __cli_Magento_Connect
                 $this->argv = $argv;
         $this->setIncludes();
         require_once("Mage/Autoload/Simple.php");
-        \Magento\Autoload\Simple::register();
+        \Magento\Framework\Autoload\Simple::register();
         chdir(BP . '/downloader/');
         return $this;
     }
@@ -63,17 +63,15 @@ class __cli_Magento_Connect
         set_include_path($includePath);
     }
 
-
-
     public function getCommands()
     {
-        return \Magento\Connect\Command::getCommands();
+        return \Magento\Framework\Connect\Command::getCommands();
     }
 
     public function getFrontend()
     {
-        $frontend = \Magento\Connect\Frontend::getInstance('CLI');
-        \Magento\Connect\Command::setFrontendObject($frontend);
+        $frontend = \Magento\Framework\Connect\Frontend::getInstance('CLI');
+        \Magento\Framework\Connect\Command::setFrontendObject($frontend);
         return $frontend;
     }
 
@@ -82,11 +80,11 @@ class __cli_Magento_Connect
         if (isset($this->config)) {
             return $this->config;
         }
-        $config = new \Magento\Connect\Config($fileName);
+        $config = new \Magento\Framework\Connect\Config($fileName);
         if (empty($config->magento_root)) {
-           $config->magento_root = dirname(__DIR__);
+            $config->magento_root = dirname(__DIR__);
         }
-        \Magento\Connect\Command::setConfigObject($config);
+        \Magento\Framework\Connect\Command::setConfigObject($config);
         $this->config = $config;
         return $config;
     }
@@ -94,10 +92,10 @@ class __cli_Magento_Connect
     public function detectCommand()
     {
         $argv = $this->argv;
-        if(empty($argv[1])) {
+        if (empty($argv[1])) {
             return false;
         }
-        if(in_array($argv[1], $this->validCommands)) {
+        if (in_array($argv[1], $this->validCommands)) {
             list($options,$params) = $this->parseCommandArgs($argv);
             return array('name' => strtolower($argv[1]), 'options'=>$options, 'params'=>$params);
         }
@@ -106,7 +104,7 @@ class __cli_Magento_Connect
 
     public function parseCommandArgs($argv)
     {
-        $a = new \Magento\System\Args();
+        $a = new \Magento\Framework\System\Args();
         $args = $a->getFiltered();
         array_shift($args);
         return array($a->getFlags(), $args);
@@ -114,21 +112,21 @@ class __cli_Magento_Connect
 
     public function runCommand($cmd, $options, $params)
     {
-        $c = \Magento\Connect\Command::getInstance($cmd);
+        $c = \Magento\Framework\Connect\Command::getInstance($cmd);
         $c->run($cmd, $options, $params);
     }
 
     private $_sconfig;
     public function getSingleConfig()
     {
-        if(!$this->_sconfig) {
-            $this->_sconfig = new \Magento\Connect\Singleconfig(
+        if (!$this->_sconfig) {
+            $this->_sconfig = new \Magento\Framework\Connect\Singleconfig(
                     $this->getConfig()->magento_root . '/' .
                     $this->getConfig()->downloader_path . '/' .
-                    \Magento\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
+                    \Magento\Framework\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
             );
         }
-        \Magento\Connect\Command::setSconfig($this->_sconfig);
+        \Magento\Framework\Connect\Command::setSconfig($this->_sconfig);
         return $this->_sconfig;
     }
 
@@ -140,14 +138,12 @@ class __cli_Magento_Connect
         $this->validCommands = array_keys($this->commands);
         $this->getSingleConfig();
         $cmd = $this->detectCommand();
-        if(!$cmd) {
+        if (!$cmd) {
             $this->frontend->outputCommandList($this->commands);
         } else {
             $this->runCommand($cmd['name'], $cmd['options'], $cmd['params']);
         }
-
     }
-
 }
 
 if (defined('STDIN') && defined('STDOUT') && (defined('STDERR'))) {

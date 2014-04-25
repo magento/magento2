@@ -48,7 +48,7 @@ class MviewConfigFilesTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Filesystem'
         )->getPath(
             \Magento\Framework\App\Filesystem::LIB_DIR
-        ) . '/Magento/Mview/etc/mview.xsd';
+        ) . '/Magento/Framework/Mview/etc/mview.xsd';
     }
 
     /**
@@ -58,7 +58,7 @@ class MviewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexerConfigFile($file)
     {
-        $domConfig = new \Magento\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $domConfig->validate($this->schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {

@@ -32,7 +32,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker setOptions(array $options)
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker setCssClass($class)
  */
-class FontPicker extends \Magento\Data\Form\Element\Select
+class FontPicker extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Control type

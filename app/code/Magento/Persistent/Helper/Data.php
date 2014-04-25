@@ -29,6 +29,8 @@
  */
 namespace Magento\Persistent\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Core\Helper\Data
 {
     const XML_PATH_ENABLED = 'persistent/options/enabled';
@@ -51,19 +53,12 @@ class Data extends \Magento\Core\Helper\Data
     protected $_configFileName = 'persistent.xml';
 
     /**
-     * Persistent session
-     *
-     * @var Session
-     */
-    protected $_persistentSession;
-
-    /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_modulesReader;
 
@@ -72,10 +67,9 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param Session $persistentSession
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Module\Dir\Reader $modulesReader
+     * @param \Magento\Framework\Escaper $escaper
      * @param bool $dbCompatibleMode
      */
     public function __construct(
@@ -83,14 +77,12 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Pricing\PriceCurrencyInterface $priceCurrency,
-        Session $persistentSession,
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Module\Dir\Reader $modulesReader,
+        \Magento\Framework\Escaper $escaper,
         $dbCompatibleMode = true
     ) {
         $this->_modulesReader = $modulesReader;
-        $this->_persistentSession = $persistentSession;
         $this->_escaper = $escaper;
 
         parent::__construct(
@@ -113,7 +105,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -128,7 +120,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_REMEMBER_ME_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -143,7 +135,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_REMEMBER_ME_DEFAULT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -158,7 +150,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_PERSIST_SHOPPING_CART,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -174,7 +166,7 @@ class Data extends \Magento\Core\Helper\Data
         $lifeTime = intval(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_LIFE_TIME,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             )
         );
@@ -190,7 +182,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_LOGOUT_CLEAR,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -202,16 +194,6 @@ class Data extends \Magento\Core\Helper\Data
     public function getUnsetCookieUrl()
     {
         return $this->_getUrl('persistent/index/unsetCookie');
-    }
-
-    /**
-     * Retrieve name of persistent customer
-     *
-     * @return string
-     */
-    public function getPersistentName()
-    {
-        return __('(Not %1?)', $this->_escaper->escapeHtml($this->_persistentSession->getCustomer()->getName()));
     }
 
     /**
@@ -227,7 +209,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Check whether specified action should be processed
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return bool
      */
     public function canProcess($observer)

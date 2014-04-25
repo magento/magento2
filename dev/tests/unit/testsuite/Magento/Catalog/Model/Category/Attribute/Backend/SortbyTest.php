@@ -70,7 +70,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($data, $expected)
     {
-        $object = new \Magento\Object($data);
+        $object = new \Magento\Framework\Object($data);
         $this->_model->beforeSave($object);
         $this->assertTrue($object->hasData(self::DEFAULT_ATTRIBUTE_CODE));
         $this->assertSame($expected, $object->getData(self::DEFAULT_ATTRIBUTE_CODE));

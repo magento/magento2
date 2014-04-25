@@ -38,11 +38,13 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $taxRule = $objectManager->get('Magento\Registry')->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
+        $taxRule = $objectManager->get('Magento\Framework\Registry')
+            ->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $customerTaxClasses = $taxRule->getTaxCustomerClass();
         $productTaxClasses = $taxRule->getTaxProductClass();
-        $taxRate = $objectManager->get('Magento\Registry')->registry('_fixture/Magento_Tax_Model_Calculation_Rate');
-        $data = new \Magento\Object();
+        $taxRate = $objectManager->get('Magento\Framework\Registry')
+            ->registry('_fixture/Magento_Tax_Model_Calculation_Rate');
+        $data = new \Magento\Framework\Object();
         $data->setData(
             array(
                 'country_id' => 'US',

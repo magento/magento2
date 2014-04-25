@@ -33,7 +33,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\Framework\
     const COOKIE_VARY_STRING = 'X-Magento-Vary';
 
     /**
-     * @var \Magento\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\Cookie
      */
     protected $cookie;
 
@@ -43,10 +43,10 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\Framework\
     protected $context;
 
     /**
-     * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\Framework\Stdlib\Cookie $cookie
      * @param \Magento\Framework\App\Http\Context $context
      */
-    public function __construct(\Magento\Stdlib\Cookie $cookie, \Magento\Framework\App\Http\Context $context)
+    public function __construct(\Magento\Framework\Stdlib\Cookie $cookie, \Magento\Framework\App\Http\Context $context)
     {
         $this->cookie = $cookie;
         $this->context = $context;

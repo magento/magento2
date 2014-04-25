@@ -32,7 +32,7 @@ namespace Magento\ImportExport\Model;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractModel extends \Magento\Object
+abstract class AbstractModel extends \Magento\Framework\Object
 {
     /**
      * Enable loging
@@ -43,7 +43,7 @@ abstract class AbstractModel extends \Magento\Object
 
     /**
      * Logger instance
-     * @var \Magento\Logger\Adapter
+     * @var \Magento\Framework\Logger\Adapter
      */
     protected $_logInstance;
 
@@ -62,30 +62,30 @@ abstract class AbstractModel extends \Magento\Object
     protected $_logTrace = array();
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Logger\AdapterFactory
+     * @var \Magento\Framework\Logger\AdapterFactory
      */
     protected $_adapterFactory;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Logger\AdapterFactory $adapterFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Logger\AdapterFactory $adapterFactory,
+        \Magento\Framework\Logger\AdapterFactory $adapterFactory,
         array $data = array()
     ) {
         $this->_logger = $logger;

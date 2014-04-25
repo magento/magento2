@@ -37,7 +37,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_request;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -57,12 +57,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_storageModel;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $directoryTmp;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $directoryVar;
 
@@ -96,8 +96,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->directoryVar = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->directoryTmp = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::TMP_DIR);
 
-        /** @var $theme \Magento\View\Design\ThemeInterface */
-        $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface')
+            ->getCollection()
+            ->getFirstItem();
 
         /** @var $request \Magento\Framework\App\Request\Http */
         $request = $this->_objectManager->get('Magento\Framework\App\Request\Http');

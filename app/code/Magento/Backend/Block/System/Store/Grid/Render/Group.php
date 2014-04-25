@@ -37,7 +37,7 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * {@inheritdoc}
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;

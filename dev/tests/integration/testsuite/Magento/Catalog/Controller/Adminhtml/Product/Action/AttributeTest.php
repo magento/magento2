@@ -48,7 +48,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
-        $urlBuilder = $objectManager->get('Magento\UrlInterface');
+        $urlBuilder = $objectManager->get('Magento\Framework\UrlInterface');
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */
         $attributeHelper = $objectManager->get('Magento\Catalog\Helper\Product\Edit\Action\Attribute');

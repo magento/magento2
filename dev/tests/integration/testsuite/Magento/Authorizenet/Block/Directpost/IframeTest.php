@@ -37,7 +37,7 @@ class IframeTest extends \PHPUnit_Framework_TestCase
         $xssString = '</script><script>alert("XSS")</script>';
         /** @var $block \Magento\Authorizenet\Block\Directpost\Iframe */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Authorizenet\Block\Directpost\Iframe'
         );

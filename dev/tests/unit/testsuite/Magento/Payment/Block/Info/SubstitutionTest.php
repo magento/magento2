@@ -46,13 +46,13 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->layout = $this->getMockBuilder(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
 
         $eventManager = $this->getMockBuilder(
-            'Magento\Event\ManagerInterface'
+            'Magento\Framework\Event\ManagerInterface'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -78,7 +78,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
         );
 
         $context = $this->getMockBuilder(
-            'Magento\View\Element\Template\Context'
+            'Magento\Framework\View\Element\Template\Context'
         )->disableOriginalConstructor()->setMethods(
             ['getLayout', 'getEventManager', 'getScopeConfig']
         )->getMock();
@@ -124,7 +124,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
     public function testBeforeToHtml()
     {
         $abstractBlock = $this->getMockBuilder(
-            'Magento\View\Element\AbstractBlock'
+            'Magento\Framework\View\Element\AbstractBlock'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -154,7 +154,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\View\Element\Template',
+            'Magento\Framework\View\Element\Template',
             '',
             ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
         )->will(

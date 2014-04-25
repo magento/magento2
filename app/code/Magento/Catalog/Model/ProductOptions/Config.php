@@ -23,16 +23,16 @@
  */
 namespace Magento\Catalog\Model\ProductOptions;
 
-class Config extends \Magento\Config\Data implements \Magento\Catalog\Model\ProductOptions\ConfigInterface
+class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductOptions\ConfigInterface
 {
     /**
      * @param \Magento\Catalog\Model\ProductOptions\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'product_options_config'
     ) {
         parent::__construct($reader, $cache, $cacheId);

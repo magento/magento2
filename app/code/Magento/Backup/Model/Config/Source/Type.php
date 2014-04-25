@@ -30,7 +30,7 @@ namespace Magento\Backup\Model\Config\Source;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Type implements \Magento\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Backup data

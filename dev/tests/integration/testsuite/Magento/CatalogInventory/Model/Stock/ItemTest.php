@@ -133,11 +133,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetGetProduct()
     {
         $this->assertNull($this->_model->getProduct());
-        $productOne = new \Magento\Object();
+        $productOne = new \Magento\Framework\Object();
         $this->_model->setData('product', $productOne);
         $this->assertSame($productOne, $this->_model->getProduct());
 
-        $productTwo = new \Magento\Object();
+        $productTwo = new \Magento\Framework\Object();
         $this->_model->setProduct($productTwo);
         $this->assertSame($productTwo, $this->_model->getProduct());
     }

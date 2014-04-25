@@ -59,7 +59,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
         $this->factory = $this->getMock('Magento\Catalog\Model\ProductFactory', array('create'), array(), '', false);
-        $this->registry = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->registry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface', array(), array(), '', false);
 
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);

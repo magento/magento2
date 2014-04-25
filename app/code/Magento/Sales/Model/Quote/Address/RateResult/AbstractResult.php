@@ -23,6 +23,6 @@
  */
 namespace Magento\Sales\Model\Quote\Address\RateResult;
 
-class AbstractResult extends \Magento\Object
+class AbstractResult extends \Magento\Framework\Object
 {
 }

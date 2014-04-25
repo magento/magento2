@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,8 +50,10 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->getAttributeMetadata('customer_address', '1');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(array('entityType' => 'customer_address', 'attributeCode' => '1'), $e->getParams());
+            $this->assertEquals(
+                'No such entity with entityType = customer_address, attributeCode = 1',
+                $e->getMessage()
+            );
         }
     }
 
@@ -80,7 +82,7 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $customer = $this->_customerAccountService->getCustomer(1);
         $this->assertNotNull($customer);
 
-        $attributes = \Magento\Service\DataObjectConverter::toFlatArray($customer);
+        $attributes = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer);
         $this->assertNotEmpty($attributes);
 
         foreach ($attributes as $attributeCode => $attributeValue) {
@@ -111,8 +113,7 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->getCustomerAttributeMetadata('20');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(array('entityType' => 'customer', 'attributeCode' => '20'), $e->getParams());
+            $this->assertEquals('No such entity with entityType = customer, attributeCode = 20', $e->getMessage());
         }
     }
 
@@ -132,8 +133,10 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->getAddressAttributeMetadata('1');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
-            $this->assertEquals(array('entityType' => 'customer_address', 'attributeCode' => '1'), $e->getParams());
+            $this->assertEquals(
+                'No such entity with entityType = customer_address, attributeCode = 1',
+                $e->getMessage()
+            );
         }
     }
 }

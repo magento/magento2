@@ -164,7 +164,7 @@ class Shell extends \Magento\Framework\App\AbstractShell
             try {
                 $process->setMode($mode)->save();
                 echo $process->getIndexer()->getName() . " index was successfully changed index mode\n";
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {
@@ -197,7 +197,7 @@ class Shell extends \Magento\Framework\App\AbstractShell
                 $resultTime = microtime(true) - $startTime;
                 echo $process->getIndexer()->getName()
                     . " index was rebuilt successfully in " . gmdate('H:i:s', $resultTime) . "\n";
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {

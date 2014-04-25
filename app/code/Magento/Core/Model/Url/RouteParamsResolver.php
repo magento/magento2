@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\Url;
 
-class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteParamsResolverInterface
+class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\Framework\Url\RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -41,7 +41,7 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
     protected $_storeManager;
 
     /**
-     * @var \Magento\Url\QueryParamsResolverInterface
+     * @var \Magento\Framework\Url\QueryParamsResolverInterface
      */
     protected $_queryParamsResolver;
 
@@ -49,14 +49,14 @@ class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteP
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         array $data = array()
     ) {
         parent::__construct($data);

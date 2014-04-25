@@ -67,8 +67,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Model\Context', array(), array(), '', false);
-        $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', array(), array(), '', false);
+        $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->attrFactoryMock = $this->getMock(
             'Magento\Eav\Model\Entity\AttributeFactory',
             array(),
@@ -91,14 +91,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->universalFactoryMock = $this->getMock(
-            'Magento\Validator\UniversalFactory',
+            'Magento\Framework\Validator\UniversalFactory',
             array(),
             array(),
             '',
             false
         );
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
             array(),
             '',
             false,

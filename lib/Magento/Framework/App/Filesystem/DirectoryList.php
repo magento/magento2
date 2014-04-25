@@ -29,7 +29,7 @@ use Magento\Framework\App\Filesystem;
  * Class DirectoryList
  * @package Magento\Framework\App\Filesystem
  */
-class DirectoryList extends \Magento\Filesystem\DirectoryList
+class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {
     /**
      * Directories configurations

@@ -105,8 +105,8 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Add field to Options form based on option configuration
      *
-     * @param \Magento\Object $parameter
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @param \Magento\Framework\Object $parameter
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _addField($parameter)
     {

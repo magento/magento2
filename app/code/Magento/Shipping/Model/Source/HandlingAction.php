@@ -25,7 +25,7 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingAction implements \Magento\Option\ArrayInterface
+class HandlingAction implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

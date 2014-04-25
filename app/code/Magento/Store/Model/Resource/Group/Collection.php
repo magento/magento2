@@ -26,7 +26,7 @@ namespace Magento\Store\Model\Resource\Group;
 /**
  * Store group collection
  */
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model

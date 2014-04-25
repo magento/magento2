@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-class SimpleArrayDataObjectBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class SimpleArrayDataObjectBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * @param int[] $ids

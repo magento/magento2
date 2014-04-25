@@ -64,7 +64,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix(self::HTML_ID_PREFIX);
         $integrationData = $this->_coreRegistry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION);
@@ -118,7 +118,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Add fieldset with general integration information.
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
      * @return void
      */
@@ -188,7 +188,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Add fieldset with integration details. This fieldset is available for existing integrations only.
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
      * @return void
      */

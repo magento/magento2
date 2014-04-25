@@ -81,7 +81,7 @@ class Url
     /**
      * Current url rewrite rule
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_rewrite;
 
@@ -183,12 +183,12 @@ class Url
      * Sometimes attribute 'url_path' can be empty, because url_path hasn't been generated yet,
      * in this case category is loaded with empty url_path and we should generate it manually.
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @return void
      */
     protected function _addCategoryUrlPath($category)
     {
-        if (!$category instanceof \Magento\Object || $category->getUrlPath()) {
+        if (!$category instanceof \Magento\Framework\Object || $category->getUrlPath()) {
             return;
         }
 
@@ -246,7 +246,7 @@ class Url
      * Returns store root category, uses caching for it
      *
      * @param int $storeId
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getStoreRootCategory($storeId)
     {
@@ -316,12 +316,12 @@ class Url
     /**
      * Refresh category rewrite
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @param string $parentPath
      * @param bool $refreshProducts
      * @return $this
      */
-    protected function _refreshCategoryRewrites(\Magento\Object $category, $parentPath = null, $refreshProducts = true)
+    protected function _refreshCategoryRewrites(\Magento\Framework\Object $category, $parentPath = null, $refreshProducts = true)
     {
         if ($category->getId() != $this->getStores($category->getStoreId())->getRootCategoryId()) {
             if ($category->getUrlKey() == '') {
@@ -379,11 +379,11 @@ class Url
     /**
      * Refresh product rewrite
      *
-     * @param \Magento\Object $product
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\Object $category
      * @return $this
      */
-    protected function _refreshProductRewrite(\Magento\Object $product, \Magento\Object $category)
+    protected function _refreshProductRewrite(\Magento\Framework\Object $product, \Magento\Framework\Object $category)
     {
         if ($category->getId() == $category->getPath()) {
             return $this;
@@ -436,10 +436,10 @@ class Url
     /**
      * Refresh products for category
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @return $this
      */
-    protected function _refreshCategoryProductRewrites(\Magento\Object $category)
+    protected function _refreshCategoryProductRewrites(\Magento\Framework\Object $category)
     {
         $originalRewrites = $this->_rewrites;
         $process = true;
@@ -745,7 +745,7 @@ class Url
     /**
      * Get unique category request path
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @param string $parentPath
      * @return string
      */
@@ -809,8 +809,8 @@ class Url
     /**
      * Get unique product request path
      *
-     * @param   \Magento\Object $product
-     * @param   \Magento\Object $category
+     * @param   \Magento\Framework\Object $product
+     * @param   \Magento\Framework\Object $category
      * @return  string
      */
     public function getProductRequestPath($product, $category)
@@ -898,16 +898,16 @@ class Url
      * $parentPath used only for generating category path
      *
      * @param string $type
-     * @param \Magento\Object $product
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $product
+     * @param \Magento\Framework\Object $category
      * @param string $parentPath
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function generatePath($type = 'target', $product = null, $category = null, $parentPath = null)
     {
         if (!$product && !$category) {
-            throw new \Magento\Model\Exception(__('Please specify either a category or a product, or both.'));
+            throw new \Magento\Framework\Model\Exception(__('Please specify either a category or a product, or both.'));
         }
 
         // generate id_path
@@ -949,7 +949,7 @@ class Url
 
             // for product & category
             if (!$category) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('A category object is required for determining the product request path.')
                 );
             }
@@ -1010,12 +1010,12 @@ class Url
      * It will perform permanent redirect from old URL to new URL
      *
      * @param array $rewriteData New rewrite data
-     * @param \Magento\Object $rewrite Rewrite model
+     * @param \Magento\Framework\Object $rewrite Rewrite model
      * @return $this
      */
     protected function _saveRewriteHistory($rewriteData, $rewrite)
     {
-        if ($rewrite instanceof \Magento\Object && $rewrite->getId()) {
+        if ($rewrite instanceof \Magento\Framework\Object && $rewrite->getId()) {
             $rewriteData['target_path'] = $rewriteData['request_path'];
             $rewriteData['request_path'] = $rewrite->getRequestPath();
             $rewriteData['id_path'] = $this->generateUniqueIdPath();

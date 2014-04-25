@@ -38,10 +38,10 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
     /**
      * Render column for export
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function renderExport(\Magento\Object $row)
+    public function renderExport(\Magento\Framework\Object $row)
     {
         return $row->getData($this->getColumn()->getIndex());
     }

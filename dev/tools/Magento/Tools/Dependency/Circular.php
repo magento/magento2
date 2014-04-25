@@ -23,7 +23,7 @@
  */
 namespace Magento\Tools\Dependency;
 
-use Magento\Data\Graph;
+use Magento\Framework\Data\Graph;
 
 /**
  * Build circular dependencies by modules map
@@ -47,7 +47,7 @@ class Circular
     /**
      * Graph object
      *
-     * @var \Magento\Data\Graph
+     * @var \Magento\Framework\Data\Graph
      */
     protected $graph;
 

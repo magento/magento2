@@ -73,11 +73,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array('getQueryText'),
             array(
                 $objectManager->get('Magento\Framework\App\Helper\Context'),
-                $objectManager->get('Magento\Stdlib\String'),
+                $objectManager->get('Magento\Framework\Stdlib\String'),
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
-                $objectManager->get('Magento\Escaper'),
-                $objectManager->get('Magento\Filter\FilterManager')
+                $objectManager->get('Magento\Framework\Escaper'),
+                $objectManager->get('Magento\Framework\Filter\FilterManager')
             )
         );
         $catalogSearchHelper->expects(

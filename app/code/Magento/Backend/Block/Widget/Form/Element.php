@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Block\Widget\Form;
 
-use Magento\Data\Form;
+use Magento\Framework\Data\Form;
 
 /**
  * Form element widget block
@@ -47,7 +47,7 @@ class Element extends \Magento\Backend\Block\Template
     protected $_form;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_formBlock;
 
@@ -77,7 +77,7 @@ class Element extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param \Magento\Object $formBlock
+     * @param \Magento\Framework\Object $formBlock
      * @return $this
      */
     public function setFormBlock($formBlock)

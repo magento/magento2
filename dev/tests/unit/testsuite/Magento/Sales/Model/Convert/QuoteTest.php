@@ -73,7 +73,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $orderPaymentFactoryMock->expects($this->any())->method('create')->will($this->returnValue($orderPaymentMock));
 
-        $objectCopyServiceMock = $this->getMock('Magento\Object\Copy', array(), array(), '', false);
+        $objectCopyServiceMock = $this->getMock('Magento\Framework\Object\Copy', array(), array(), '', false);
         $objectManager = new ObjectManager($this);
         $this->quote = $objectManager->getObject(
             'Magento\Sales\Model\Convert\Quote',
@@ -87,7 +87,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testPaymentToOrderPayment()
     {
         $payment = $this->getMock('Magento\Sales\Model\Quote\Payment', array(), array(), '', false);
-        $title = new \Magento\Object(['title' => 'some title']);
+        $title = new \Magento\Framework\Object(['title' => 'some title']);
         $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($title));
         $this->assertEquals(
             ['method_title' => 'some title'],

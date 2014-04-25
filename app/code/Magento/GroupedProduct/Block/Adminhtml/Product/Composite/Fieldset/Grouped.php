@@ -59,7 +59,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Stdlib\ArrayUtils $arrayUtils
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product\Price $priceHelper
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param CustomerAccountService $customerAccountService
@@ -68,7 +68,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Stdlib\ArrayUtils $arrayUtils,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Catalog\Helper\Product\Price $priceHelper,
         \Magento\Core\Helper\Data $coreHelper,
         CustomerAccountService $customerAccountService,

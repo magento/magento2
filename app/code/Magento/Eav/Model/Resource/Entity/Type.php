@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource\Entity;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Type extends \Magento\Model\Resource\Db\AbstractDb
+class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
@@ -47,7 +47,7 @@ class Type extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load Entity Type by Code
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $code
      * @return $this
      */

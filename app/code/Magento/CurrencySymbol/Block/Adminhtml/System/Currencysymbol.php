@@ -76,7 +76,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     /**
      * Prepares layout
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

@@ -65,7 +65,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Resource\ConnectionFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_connection = $this->getMockBuilder(
-            'Magento\DB\Adapter\AdapterInterface'
+            'Magento\Framework\DB\Adapter\AdapterInterface'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -100,19 +100,19 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_connection)
         );
         $this->_connection->expects($this->once())->method('setCacheAdapter')->with(
-            $this->isInstanceOf('Magento\Cache\FrontendInterface')
+            $this->isInstanceOf('Magento\Framework\Cache\FrontendInterface')
         );
         $frontendInterface = $this->getMockBuilder(
-            'Magento\Cache\FrontendInterface'
+            'Magento\Framework\Cache\FrontendInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $this->_cache->expects($this->once())->method('getFrontend')->will($this->returnValue($frontendInterface));
 
         $this->assertInstanceOf(
-            'Magento\DB\Adapter\AdapterInterface',
+            'Magento\Framework\DB\Adapter\AdapterInterface',
             $this->_resorce->getConnection(self::RESOURCE_NAME)
         );
         $this->assertInstanceOf(
-            'Magento\DB\Adapter\AdapterInterface',
+            'Magento\Framework\DB\Adapter\AdapterInterface',
             $this->_resorce->getConnection(self::RESOURCE_NAME)
         );
     }
@@ -146,11 +146,15 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $fields = ['field'];
         $this->_connection->expects($this->once())->method('getIndexName')->with(
-            $expectedTableName, $fields, \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+            $expectedTableName, $fields, \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
         )->will($this->returnValue('idxName'));
         $this->assertEquals(
             'idxName',
-            $this->_resorce->getIdxName($modelEntity, $fields, \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX)
+            $this->_resorce->getIdxName(
+                $modelEntity,
+                $fields,
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+            )
         );
     }
 

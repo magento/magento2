@@ -132,10 +132,10 @@ class Observer
     /**
      * Checking whether the using static urls in WYSIWYG allowed event
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function catalogCheckIsUsingStaticUrlsAllowed(\Magento\Event\Observer $observer)
+    public function catalogCheckIsUsingStaticUrlsAllowed(\Magento\Framework\Event\Observer $observer)
     {
         $storeId = $observer->getEvent()->getData('store_id');
         $result = $observer->getEvent()->getData('result');
@@ -145,10 +145,10 @@ class Observer
     /**
      * Adds catalog categories to top menu
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function addCatalogToTopmenuItems(\Magento\Event\Observer $observer)
+    public function addCatalogToTopmenuItems(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getEvent()->getBlock();
         $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG);
@@ -158,8 +158,8 @@ class Observer
     /**
      * Recursively adds categories to top menu
      *
-     * @param \Magento\Data\Tree\Node\Collection|array $categories
-     * @param \Magento\Data\Tree\Node $parentCategoryNode
+     * @param \Magento\Framework\Data\Tree\Node\Collection|array $categories
+     * @param \Magento\Framework\Data\Tree\Node $parentCategoryNode
      * @param \Magento\Theme\Block\Html\Topmenu $block
      * @return void
      */
@@ -181,7 +181,7 @@ class Observer
                 'url' => $this->_catalogCategory->getCategoryUrl($category),
                 'is_active' => $this->_isActiveMenuCategory($category)
             );
-            $categoryNode = new \Magento\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
+            $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
             if ($this->categoryFlatConfig->isFlatEnabled()) {
@@ -197,7 +197,7 @@ class Observer
     /**
      * Checks whether category belongs to active category's path
      *
-     * @param \Magento\Data\Tree\Node $category
+     * @param \Magento\Framework\Data\Tree\Node $category
      * @return bool
      */
     protected function _isActiveMenuCategory($category)

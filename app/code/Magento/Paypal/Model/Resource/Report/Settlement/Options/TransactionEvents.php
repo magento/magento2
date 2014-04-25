@@ -32,7 +32,7 @@ namespace Magento\Paypal\Model\Resource\Report\Settlement\Options;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class TransactionEvents implements \Magento\Option\ArrayInterface
+class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row

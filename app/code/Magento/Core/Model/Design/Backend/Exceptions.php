@@ -30,26 +30,26 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     /**
      * Design package instance
      *
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design = null;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\View\DesignInterface $design,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_design = $design;
@@ -60,7 +60,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      * Validate value
      *
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * if there is no field value, search value is empty or regular expression is not valid
      */
     protected function _beforeSave()
@@ -76,7 +76,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
             // Validate that all values have come
             foreach (array('search', 'value') as $fieldName) {
                 if (!isset($row[$fieldName])) {
-                    throw new \Magento\Model\Exception(__("Exception does not contain field '{$fieldName}'"));
+                    throw new \Magento\Framework\Model\Exception(__("Exception does not contain field '{$fieldName}'"));
                 }
             }
 
@@ -87,7 +87,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
             }
 
             // Validate the theme value
-            $design->setDesignTheme($row['value'], \Magento\Core\Model\App\Area::AREA_FRONTEND);
+            $design->setDesignTheme($row['value'], \Magento\Framework\App\Area::AREA_FRONTEND);
 
             // Compose regular exception pattern
             $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search']);
@@ -102,7 +102,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      *
      * @param string $search
      * @return string
-     * @throws \Magento\Model\Exception on invalid regular expression
+     * @throws \Magento\Framework\Model\Exception on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
@@ -113,7 +113,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
-            throw new \Magento\Model\Exception(__('Invalid regular expression: "%1".', $search));
+            throw new \Magento\Framework\Model\Exception(__('Invalid regular expression: "%1".', $search));
         }
 
         return '/' . preg_quote($search, '/') . '/i';

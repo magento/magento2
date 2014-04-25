@@ -23,7 +23,7 @@
  */
 namespace Magento\Store\Model\Config\Reader;
 
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
@@ -100,13 +100,15 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
         if ($this->_appState->isInstalled()) {
             if (empty($code)) {
                 $store = $this->_storeManager->getStore();
+            } elseif (($code == \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT)) {
+                $store = $this->_storeManager->getDefaultStoreView();
             } else {
                 $store = $this->_storeFactory->create();
                 $store->load($code);
             }
 
             if (!$store->getCode()) {
-                throw new NoSuchEntityException('storeCode', $code);
+                throw NoSuchEntityException::singleField('storeCode', $code);
             }
             $websiteConfig = $this->_scopePool->getScope(
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,

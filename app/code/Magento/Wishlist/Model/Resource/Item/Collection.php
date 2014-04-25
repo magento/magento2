@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Model\Resource\Item;
 
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Product Visibility Filter to product collection flag
@@ -112,7 +112,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     protected $_storeManager;
 
     /**
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -158,13 +158,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\App\Resource $coreResource
@@ -180,13 +180,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Stdlib\DateTime\DateTime $date,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\App\Resource $coreResource,
@@ -274,7 +274,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     protected function _assignProducts()
     {
-        \Magento\Profiler::start('WISHLIST:' . __METHOD__, array('group' => 'WISHLIST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('WISHLIST:' . __METHOD__, array('group' => 'WISHLIST', 'method' => __METHOD__));
         $productIds = array();
 
         $isBackendArea = $this->_appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
@@ -336,7 +336,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
             }
         }
 
-        \Magento\Profiler::stop('WISHLIST:' . __METHOD__);
+        \Magento\Framework\Profiler::stop('WISHLIST:' . __METHOD__);
 
         return $this;
     }
@@ -484,13 +484,13 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         $now = $this->_date->date();
         $gmtOffset = (int)$this->_date->getGmtOffset();
         if (isset($constraints['from'])) {
-            $lastDay = new \Magento\Stdlib\DateTime\Date($now, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $lastDay = new \Magento\Framework\Stdlib\DateTime\Date($now, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             $lastDay->subSecond($gmtOffset)->subDay(intval($constraints['from']));
             $filter['to'] = $lastDay;
         }
 
         if (isset($constraints['to'])) {
-            $firstDay = new \Magento\Stdlib\DateTime\Date($now, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $firstDay = new \Magento\Framework\Stdlib\DateTime\Date($now, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             $firstDay->subSecond($gmtOffset)->subDay(intval($constraints['to']) + 1);
             $filter['from'] = $firstDay;
         }

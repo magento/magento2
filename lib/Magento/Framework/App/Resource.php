@@ -43,7 +43,7 @@ class Resource
     /**
      * Instances of actual connections
      *
-     * @var \Magento\DB\Adapter\AdapterInterface[]
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface[]
      */
     protected $_connections = array();
 
@@ -125,7 +125,7 @@ class Resource
      * Retrieve connection to resource specified by $resourceName
      *
      * @param string $resourceName
-     * @return \Magento\DB\Adapter\AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
     public function getConnection($resourceName)
     {
@@ -214,7 +214,7 @@ class Resource
     public function getIdxName(
         $tableName,
         $fields,
-        $indexType = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+        $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
         return $this->getConnection(
             self::DEFAULT_READ_RESOURCE

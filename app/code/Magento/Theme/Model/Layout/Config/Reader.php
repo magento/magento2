@@ -25,7 +25,7 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of identifier attributes for merging

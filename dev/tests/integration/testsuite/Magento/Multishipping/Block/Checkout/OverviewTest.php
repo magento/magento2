@@ -34,15 +34,15 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_block = $this->_objectManager->get('Magento\View\LayoutInterface')
+        $this->_block = $this->_objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock('Magento\Multishipping\Block\Checkout\Overview',
                 'checkout_overview',
                 array(
@@ -53,7 +53,7 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_block->addChild('renderer.list', '\Magento\View\Element\RendererList');
+        $this->_block->addChild('renderer.list', '\Magento\Framework\View\Element\RendererList');
         $this->_block->getChildBlock(
             'renderer.list'
         )->addChild(

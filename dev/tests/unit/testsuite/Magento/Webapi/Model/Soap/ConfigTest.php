@@ -64,7 +64,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_configMock = $this->getMock('Magento\Webapi\Model\Config', array(), array(), '', false);
         $servicesConfig = [
             'services' => [
-                'Magento\Module\Service\FooV1Interface' => [
+                'Magento\Framework\Module\Service\FooV1Interface' => [
                     'someMethod' => [
                         'resources' => [
                             'Magento_TestModule1::resource1' => true,
@@ -72,7 +72,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'secure' => false,
                     ],
                 ],
-                'Magento\Module\Service\BarV1Interface' => [
+                'Magento\Framework\Module\Service\BarV1Interface' => [
                     'someMethod' => [
                         'resources' => [
                             'Magento_TestModule1::resource2' => true,
@@ -91,8 +91,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    array('Magento\Module\Service\FooV1Interface', true, 'moduleFooV1'),
-                    array('Magento\Module\Service\BarV1Interface', true, 'moduleBarV1')
+                    array('Magento\Framework\Module\Service\FooV1Interface', true, 'moduleFooV1'),
+                    array('Magento\Framework\Module\Service\BarV1Interface', true, 'moduleBarV1')
                 )
             )
         );
@@ -118,7 +118,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'resources' => array('Magento_TestModule1::resource1')
                     )
                 ),
-                'class' => 'Magento\Module\Service\FooV1Interface'
+                'class' => 'Magento\Framework\Module\Service\FooV1Interface'
             )
         );
         $result = $this->_soapConfig->getRequestedSoapServices(array('moduleFooV1', 'moduleBarV2', 'moduleBazV1'));
@@ -128,7 +128,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetServiceMethodInfo()
     {
         $expectedResult = array(
-            'class' => 'Magento\Module\Service\BarV1Interface',
+            'class' => 'Magento\Framework\Module\Service\BarV1Interface',
             'method' => 'someMethod',
             'isSecure' => false,
             'resources' => array('Magento_TestModule1::resource2')
@@ -143,7 +143,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSoapOperation()
     {
         $expectedResult = 'moduleFooV1SomeMethod';
-        $soapOperation = $this->_soapConfig->getSoapOperation('Magento\Module\Service\FooV1Interface', 'someMethod');
+        $soapOperation = $this->_soapConfig
+            ->getSoapOperation('Magento\Framework\Module\Service\FooV1Interface', 'someMethod');
         $this->assertEquals($expectedResult, $soapOperation);
     }
 }

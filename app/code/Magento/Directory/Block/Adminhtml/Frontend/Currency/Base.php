@@ -32,10 +32,10 @@ namespace Magento\Directory\Block\Adminhtml\Frontend\Currency;
 class Base extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         if ($this->getRequest()->getParam('website') != '') {
             $priceScope = $this->_scopeConfig->getValue(

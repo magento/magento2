@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Module\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->getConnection()->addColumn(
     $installer->getTable('googleshopping_types'),
     'category',
-    array('TYPE' => \Magento\DB\Ddl\Table::TYPE_TEXT, 'LENGTH' => 40, 'COMMENT' => 'Google product category')
+    array('TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'LENGTH' => 40, 'COMMENT' => 'Google product category')
 );

@@ -30,8 +30,8 @@ use Magento\Backend\Block\Widget\Button;
 /**
  * Design editor theme
  *
- * @method \Magento\DesignEditor\Block\Adminhtml\Theme setTheme(\Magento\View\Design\ThemeInterface $theme)
- * @method \Magento\View\Design\ThemeInterface getTheme()
+ * @method \Magento\DesignEditor\Block\Adminhtml\Theme setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
+ * @method \Magento\Framework\View\Design\ThemeInterface getTheme()
  */
 class Theme extends \Magento\Backend\Block\Template
 {

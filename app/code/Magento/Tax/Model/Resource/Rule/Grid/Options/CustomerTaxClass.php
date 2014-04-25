@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\Resource\Rule\Grid\Options;
 
-class CustomerTaxClass implements \Magento\Option\ArrayInterface
+class CustomerTaxClass implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory

@@ -50,17 +50,17 @@ interface CustomerGroupServiceInterface
     /**
      * Search groups
      *
-     * @param \Magento\Service\V1\Data\SearchCriteria $searchCriteria
-     * @throws \Magento\Exception\InputException If there is a problem with the input
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @return \Magento\Customer\Service\V1\Data\SearchResults containing Data\CustomerGroup objects
      */
-    public function searchGroups(\Magento\Service\V1\Data\SearchCriteria $searchCriteria);
+    public function searchGroups(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
 
     /**
      * Get a customer group by group ID.
      *
      * @param int $groupId
-     * @throws \Magento\Exception\NoSuchEntityException If $groupId is not found
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
      * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
     public function getGroup($groupId);
@@ -69,7 +69,7 @@ interface CustomerGroupServiceInterface
      * Get default group
      *
      * @param int $storeId Defaults the current store
-     * @throws \Magento\Exception\NoSuchEntityException If default group for $storeId is not found
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If default group for $storeId is not found
      * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
     public function getDefaultGroup($storeId = null);
@@ -78,7 +78,7 @@ interface CustomerGroupServiceInterface
      * Check if the group can be deleted
      *
      * @param int $groupId
-     * @throws \Magento\Exception\NoSuchEntityException If group is not found
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @return bool True, if this group can be deleted
      */
     public function canDelete($groupId);
@@ -87,9 +87,11 @@ interface CustomerGroupServiceInterface
      * Save group
      *
      * @param \Magento\Customer\Service\V1\Data\CustomerGroup $group
-     * @throws \Magento\Exception\InputException If there is a problem with the input
-     * @throws \Magento\Exception\NoSuchEntityException If a group ID is sent but the group does not exist
-     * @throws \Exception If something goes wrong during save
+     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If a group ID is sent but the group does not exist
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     *      If saving customer group with customer group code that is used by an existing customer group
+     * @throws \Magento\Framework\Model\Exception If something goes wrong during save
      * @return int customer group ID
      */
     public function saveGroup(\Magento\Customer\Service\V1\Data\CustomerGroup $group);
@@ -98,8 +100,8 @@ interface CustomerGroupServiceInterface
      * Delete group
      *
      * @param int $groupId
-     * @throws \Magento\Exception\NoSuchEntityException If $groupId is not found
-     * @throws \Magento\Exception\StateException Thrown if cannot delete group
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
+     * @throws \Magento\Framework\Exception\StateException Thrown if cannot delete group
      * @throws \Exception If something goes wrong during delete
      * @return bool True if the group was deleted
      */

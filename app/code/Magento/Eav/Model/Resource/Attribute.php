@@ -34,8 +34,8 @@
  */
 namespace Magento\Eav\Model\Resource;
 
-use Magento\Model\AbstractModel;
-use Magento\DB\Select;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DB\Select;
 
 abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 {
@@ -61,7 +61,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Perform actions before object save
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _beforeSave(AbstractModel $object)
@@ -107,7 +107,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Save attribute/form relations after attribute save
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _afterSave(AbstractModel $object)
@@ -193,7 +193,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Return forms in which the attribute
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
      */
     public function getUsedInForms(AbstractModel $object)

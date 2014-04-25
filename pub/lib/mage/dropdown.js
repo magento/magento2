@@ -17,85 +17,186 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*jshint browser:true jquery:true */
-;(function($, document) {
+
+
+(function($,undefined) {
     'use strict';
-    var ESC_KEY_CODE = '27';
-
-    $(document)
-        .on('click.dropdown', function(event) {
-            if (!$(event.target).is('[data-toggle=dropdown].active, ' +
-                '[data-toggle=dropdown].active *, ' +
-                '[data-toggle=dropdown].active + .dropdown-menu, ' +
-                '[data-toggle=dropdown].active + .dropdown-menu *,' +
-                '[data-toggle=dropdown].active + [data-target="dropdown"],' +
-                '[data-toggle=dropdown].active + [data-target="dropdown"] *')
-            ) {
-                $('[data-toggle=dropdown].active').trigger('close.dropdown');
-            }
-        })
-        .on('keyup.dropdown', function(event) {
-            if (event.keyCode == ESC_KEY_CODE) {
-                $('[data-toggle=dropdown].active').trigger('close.dropdown');
-            }
-        });
-
-    $.fn.dropdown = function(options) {
-        options = $.extend({
-            parent: null,
-            btnArrow: '.arrow',
-            activeClass: 'active'
-        }, options);
-
-        return this.each(function() {
-            var elem = $(this),
-                elemParent = elem.parent(),
-                itemsClosable = elemParent.find("li:not(.disabled)");
-
-            elem.off('open.dropdown, close.dropdown, click.dropdown');
-            itemsClosable.off('click.dropdownItemsClosable');
-
-            elem.on('open.dropdown', function() {
-                elem
-                    .addClass(options.activeClass)
-                    .parent()
-                    .addClass(options.activeClass);
-                elem.find(options.btnArrow).text('\u25b2'); // arrow up
-            });
-
-            elem.on('close.dropdown', function() {
-                elem
-                    .removeClass(options.activeClass)
-                    .parent()
-                    .removeClass(options.activeClass);
-                elem.find(options.btnArrow).text('\u25bc'); // arrow down
-            });
-
-            elem.on('click.dropdown', function() {
-                var isActive = elem.hasClass('active');
-                $('[data-toggle=dropdown].active').trigger('close.dropdown');
-                elem.trigger(isActive ? 'close.dropdown' : 'open.dropdown');
-                return false;
-            });
-
-            if (elemParent.hasClass("closable")) {
-                itemsClosable.on('click.dropdownItemsClosable', function(event) {
-                    $(this)
-                        .parent("ul")
-                        .siblings("[data-toggle=dropdown]")
-                        .first()
-                        .trigger('close.dropdown');
+    var timer = null;
+    /**
+     * Dropdown Widget - this widget is a wrapper for the jQuery UI Dialog
+     */
+    $.widget('mage.dropdownDialog', $.ui.dialog, {
+        options: {
+            triggerEvent : "click",
+            triggerClass: null,
+            parentClass: null,
+            triggerTarget: null,
+            defaultDialogClass: "mage-dropdown-dialog",
+            dialogContentClass: null,
+            closeOnMouseLeave: true,
+            closeOnClickOutside: true,
+            minHeight: null,
+            minWidth: null,
+            width: null,
+            modal: false,
+            timeout: null,
+            autoOpen: false,
+            createTitleBar: false,
+            autoPosition: false,
+            autoSize: false,
+            draggable: false,
+            resizable: false,
+            buttons: [
+                {
+                    'class': "action close",
+                    text: "close",
+                    click: function () {
+                        $(this).dropdownDialog("close");
+                    }
+                }
+            ]
+        },
+        /**
+         * extend default functionality to bind the opener for dropdown
+         * @private
+         */
+        _create: function() {
+            this._super();
+            this.uiDialog.addClass(this.options.defaultDialogClass);
+            var _self = this;
+            if(_self.options.triggerTarget) {
+                $(_self.options.triggerTarget).on(_self.options.triggerEvent,function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if(!_self._isOpen) {
+                        $('.' + _self.options.defaultDialogClass + ' > .ui-dialog-content').dropdownDialog("close");
+                        _self.open();
+                    }
+                    else {
+                        _self.close(event);
+                    }
                 });
             }
-        });
-    };
 
-    $(document).ready(function() {
-        $('[data-toggle=dropdown]').dropdown();
+        },
+
+        /**
+         * extend default functionality to close the dropdown  with custom delay on mouse out and also to close when clicking outside
+         */
+        open: function () {
+            this._super();
+            var _self = this;
+            if(_self.options.dialogContentClass) {
+                _self.element.addClass(_self.options.dialogContentClass);
+            }
+            if(_self.options.closeOnMouseLeave) {
+
+                this._mouseEnter(_self.uiDialog);
+                this._mouseLeave(_self.uiDialog);
+                if(_self.options.triggerTarget) {
+                    this._mouseLeave($(_self.options.triggerTarget));
+                }
+            }
+
+            if(_self.options.closeOnClickOutside) {
+                $('body').on('click.outsideDropdown', function (event) {
+                    if(_self._isOpen && !$(event.target).closest('.ui-dialog').length) {
+                        if (timer) {
+                            clearTimeout(timer);
+                        }
+                        _self.close(event);
+                        }
+                    }
+                );
+            }
+            // adding the class on the opener and parent element for dropdown
+            if(_self.options.triggerClass) {
+                $(_self.options.triggerTarget).addClass(_self.options.triggerClass);
+            }
+            if(_self.options.parentClass) {
+                $(_self.options.appendTo).addClass(_self.options.parentClass);
+            }
+        },
+
+        /**
+         * extend default functionality to reset the timer and remove the active class for opener
+         * @param event
+         */
+        close: function(event) {
+            this._super();
+            if(this.options.dialogContentClass) {
+                this.element.removeClass(this.options.dialogContentClass);
+            }
+            if(this.options.triggerClass) {
+                $(this.options.triggerTarget).removeClass(this.options.triggerClass);
+            }
+            if(this.options.parentClass) {
+                $(this.options.appendTo).removeClass(this.options.parentClass);
+            }
+            if(timer) {
+                clearTimeout(timer);
+            }
+            if(this.options.triggerTarget) {
+                $(this.options.triggerTarget).off("mouseleave");
+            }
+            this.uiDialog.off("mouseenter");
+            this.uiDialog.off("mouseleave");
+            $('body').off('click.outsideDropdown');
+        },
+
+        _position: function() {
+            if(this.options.autoPosition) {
+                this._super();
+            }
+        },
+        _createTitlebar: function() {
+            if(this.options.createTitleBar) {
+                this._super();
+            }
+            else {
+                // the title bar close button is referenced in _focusTabbable function, so to prevent errors it must be declared
+                this.uiDialogTitlebarClose = $("<div>");
+            }
+        },
+
+        _size: function() {
+            if(this.options.autoSize) {
+                this._super();
+            }
+        },
+
+        _mouseLeave : function(handler) {
+            var _self = this;
+            handler.on("mouseleave", function (event) {
+                event.stopPropagation();
+                if (_self._isOpen) {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(function (event) {
+                        _self.close(event);
+                    }, _self.options.timeout);
+                }
+            });
+        },
+
+        _mouseEnter : function(handler){
+            handler.on("mouseenter", function (event) {
+                event.stopPropagation();
+                if (timer) {
+                    clearTimeout(timer);
+                }
+            });
+        },
+
+        _setOption: function( key, value ) {
+            this._super(key, value);
+            if ( key === "triggerTarget" ) {
+                this.options.triggerTarget = value;
+            }
+        }
     });
-})(window.jQuery, document);
+})(jQuery);

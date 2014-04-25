@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Category;
 
-class Tree extends \Magento\Data\Tree\Dbp
+class Tree extends \Magento\Framework\Data\Tree\Dbp
 {
     const ID_FIELD = 'id';
 
@@ -34,7 +34,7 @@ class Tree extends \Magento\Data\Tree\Dbp
     const LEVEL_FIELD = 'level';
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     private $_eventManager;
 
@@ -116,7 +116,7 @@ class Tree extends \Magento\Data\Tree\Dbp
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
      */
@@ -125,7 +125,7 @@ class Tree extends \Magento\Data\Tree\Dbp
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
     ) {
@@ -137,10 +137,10 @@ class Tree extends \Magento\Data\Tree\Dbp
             $resource->getConnection('catalog_write'),
             $resource->getTableName('catalog_category_entity'),
             array(
-                \Magento\Data\Tree\Dbp::ID_FIELD => 'entity_id',
-                \Magento\Data\Tree\Dbp::PATH_FIELD => 'path',
-                \Magento\Data\Tree\Dbp::ORDER_FIELD => 'position',
-                \Magento\Data\Tree\Dbp::LEVEL_FIELD => 'level'
+                \Magento\Framework\Data\Tree\Dbp::ID_FIELD => 'entity_id',
+                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD => 'path',
+                \Magento\Framework\Data\Tree\Dbp::ORDER_FIELD => 'position',
+                \Magento\Framework\Data\Tree\Dbp::LEVEL_FIELD => 'level'
             )
         );
         $this->_eventManager = $eventManager;
@@ -535,7 +535,7 @@ class Tree extends \Magento\Data\Tree\Dbp
             $select = $this->_createCollectionDataSelect();
         } else {
             $select = clone $this->_select;
-            $select->order($this->_orderField . ' ' . \Magento\DB\Select::SQL_ASC);
+            $select->order($this->_orderField . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
         }
         $select->where(implode(' OR ', $where));
 
@@ -583,7 +583,7 @@ class Tree extends \Magento\Data\Tree\Dbp
                 'e.entity_id IN(?)',
                 $pathIds
             )->order(
-                $this->_conn->getLengthSql('e.path') . ' ' . \Magento\DB\Select::SQL_ASC
+                $this->_conn->getLengthSql('e.path') . ' ' . \Magento\Framework\DB\Select::SQL_ASC
             );
             $result = $this->_conn->fetchAll($select);
             $this->_updateAnchorProductCount($result);

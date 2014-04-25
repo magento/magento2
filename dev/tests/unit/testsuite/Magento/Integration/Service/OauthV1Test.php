@@ -26,7 +26,7 @@
 namespace Magento\Integration\Service;
 
 use Magento\Integration\Model\Integration;
-use Magento\Oauth\OauthInterface;
+use Magento\Framework\Oauth\OauthInterface;
 use Magento\Integration\Model\Oauth\Token;
 
 class OauthV1Test extends \PHPUnit_Framework_TestCase
@@ -113,9 +113,9 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->getMock('Magento\Integration\Helper\Oauth\Data', array(), array(), '', false),
-            $this->getMock('Magento\HTTP\ZendClient', array(), array(), '', false),
-            $this->getMock('Magento\Logger', array(), array(), '', false),
-            $this->getMock('Magento\Oauth\Helper\Oauth', array(), array(), '', false),
+            $this->getMock('Magento\Framework\HTTP\ZendClient', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Logger', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Oauth\Helper\Oauth', array(), array(), '', false),
             $this->_tokenProviderMock
         );
         $this->_emptyConsumerMock = $this->getMockBuilder(
@@ -243,7 +243,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             'getTokenByConsumerId'
         )->will(
             $this->throwException(
-                new \Magento\Oauth\Exception(
+                new \Magento\Framework\Oauth\Exception(
                     'A token with consumer ID 0 does not exist',
                     OauthInterface::ERR_TOKEN_REJECTED
                 )
@@ -287,7 +287,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Oauth\Exception
+     * @expectedException \Magento\Framework\Oauth\Exception
      * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
     public function testLoadConsumerException()
@@ -298,7 +298,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
+                new \Magento\Framework\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
             )
         );
         $this->_service->loadConsumer(self::VALUE_CONSUMER_ID);
@@ -323,7 +323,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Oauth\Exception
+     * @expectedException \Magento\Framework\Oauth\Exception
      * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
     public function testLoadConsumerByKeyException()
@@ -334,7 +334,7 @@ class OauthV1Test extends \PHPUnit_Framework_TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
+                new \Magento\Framework\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
             )
         );
         $this->_service->loadConsumerByKey(self::VALUE_CONSUMER_KEY);

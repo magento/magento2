@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Model\Quote\Address;
 
-use \Magento\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Quote\Address\Rate _getResource()

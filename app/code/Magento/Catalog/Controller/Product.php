@@ -39,7 +39,7 @@ class Product extends \Magento\Framework\App\Action\Action implements \Magento\C
         $categoryId = (int)$this->getRequest()->getParam('category', false);
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $params = new \Magento\Object();
+        $params = new \Magento\Framework\Object();
         $params->setCategoryId($categoryId);
 
         return $this->_objectManager->get('Magento\Catalog\Helper\Product')->initProduct($productId, $this, $params);
@@ -92,7 +92,7 @@ class Product extends \Magento\Framework\App\Action\Action implements \Magento\C
         /** @var \Magento\Catalog\Helper\Product\View $viewHelper */
         $viewHelper = $this->_objectManager->get('Magento\Catalog\Helper\Product\View');
 
-        $params = new \Magento\Object();
+        $params = new \Magento\Framework\Object();
         $params->setCategoryId($categoryId);
         $params->setSpecifyOptions($specifyOptions);
 
@@ -103,7 +103,7 @@ class Product extends \Magento\Framework\App\Action\Action implements \Magento\C
             if ($e->getCode() == $viewHelper->ERR_NO_PRODUCT_LOADED) {
                 $this->noProductRedirect();
             } else {
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_forward('noroute');
             }
         }

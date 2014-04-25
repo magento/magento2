@@ -41,10 +41,10 @@
         <container name="content" as="content" label="Main Content Area"/>
     </handle>
     <handle id="fixture_handle_one">
-        <block class="Magento\View\Element\Template" template="fixture_template_one.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
     </handle>
     <handle id="fixture_handle_two">
-        <block class="Magento\View\Element\Template" template="fixture_template_two.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
     </handle>
     <handle id="not_a_page_type" label="Handle that Is Not a Page Type"/>
     <handle id="page_empty" label="All Empty Layout Pages" design_abstraction="page_layout"/>

@@ -127,6 +127,6 @@ namespace Magento\Sales\Model\Quote\Address;
  * @method \Magento\Sales\Model\Quote\Address\RateRequest setLimitMethod(string $value)
  * @method string getLimitMethod()
  */
-class RateRequest extends \Magento\Object
+class RateRequest extends \Magento\Framework\Object
 {
 }

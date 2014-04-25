@@ -38,7 +38,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Root ACL Resource
      *
-     * @var \Magento\Acl\RootResource
+     * @var \Magento\Framework\Acl\RootResource
      */
     protected $_rootResource;
 
@@ -52,14 +52,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Acl builder
      *
-     * @var \Magento\Acl\Builder
+     * @var \Magento\Framework\Acl\Builder
      */
     protected $_aclBuilder;
 
     /**
      * Acl resource provider
      *
-     * @var \Magento\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\Resource\ProviderInterface
      */
     protected $_aclResourceProvider;
 
@@ -68,19 +68,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Acl\RootResource $rootResource
+     * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
-     * @param \Magento\Acl\Builder $aclBuilder
-     * @param \Magento\Acl\Resource\ProviderInterface $aclResourceProvider
+     * @param \Magento\Framework\Acl\Builder $aclBuilder
+     * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Acl\RootResource $rootResource,
+        \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
-        \Magento\Acl\Builder $aclBuilder,
-        \Magento\Acl\Resource\ProviderInterface $aclResourceProvider,
+        \Magento\Framework\Acl\Builder $aclBuilder,
+        \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = array()
     ) {

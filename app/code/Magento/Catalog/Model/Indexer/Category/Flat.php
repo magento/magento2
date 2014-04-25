@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
-class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\ActionInterface
+class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory

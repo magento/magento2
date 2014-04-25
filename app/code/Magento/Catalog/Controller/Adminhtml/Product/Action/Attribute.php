@@ -115,9 +115,9 @@ class Attribute extends Action
         try {
             if ($attributesData) {
                 $dateFormat = $this->_objectManager->get(
-                    'Magento\Stdlib\DateTime\TimezoneInterface'
+                    'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
                 )->getDateFormat(
-                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                 );
                 $storeId = $this->_helper->getSelectedStoreId();
 
@@ -136,7 +136,7 @@ class Attribute extends Action
                         if (!empty($value)) {
                             $filterInput = new \Zend_Filter_LocalizedToNormalized(array('date_format' => $dateFormat));
                             $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-                                array('date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
+                                array('date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
                             );
                             $value = $filterInternal->filter($filterInput->filter($value));
                         } else {
@@ -232,7 +232,7 @@ class Attribute extends Action
             ) {
                 $this->_productPriceIndexerProcessor->reindexList($this->_helper->getProductIds());
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(
@@ -282,10 +282,10 @@ class Attribute extends Action
      */
     public function validateAction()
     {
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setError(false);
         $attributesData = $this->getRequest()->getParam('attributes', array());
-        $data = new \Magento\Object();
+        $data = new \Magento\Framework\Object();
 
         try {
             if ($attributesData) {
@@ -308,7 +308,7 @@ class Attribute extends Action
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {

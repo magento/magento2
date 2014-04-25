@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 class TableData implements TableDataInterface
 {
     /**
-     * @var \Magento\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 

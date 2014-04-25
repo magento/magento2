@@ -28,12 +28,12 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer;
 /**
  * Form fieldset renderer
  */
-class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element which re-rendering
      *
-     * @var \Magento\Data\Form\Element\Fieldset
+     * @var \Magento\Framework\Data\Form\Element\Fieldset
      */
     protected $_element;
 
@@ -45,7 +45,7 @@ class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Data\
     /**
      * Retrieve an element
      *
-     * @return \Magento\Data\Form\Element\Fieldset
+     * @return \Magento\Framework\Data\Form\Element\Fieldset
      */
     public function getElement()
     {
@@ -55,10 +55,10 @@ class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Data\
     /**
      * Render element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_element = $element;
         return $this->toHtml();
