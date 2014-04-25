@@ -28,7 +28,7 @@
  */
 
 require __DIR__ . '/../../../../../app/bootstrap.php';
-\Magento\Autoload\IncludePath::addIncludePath(__DIR__ . '/../../../');
+\Magento\Framework\Autoload\IncludePath::addIncludePath(__DIR__ . '/../../../');
 
 /**
  * Command line usage help
@@ -66,7 +66,7 @@ $logger->log('Deploying...', \Zend_Log::INFO);
 try {
 
     $objectManagerFactory = new \Magento\Framework\App\ObjectManagerFactory();
-    $objectManager = $objectManagerFactory->create(BP, $_SERVER);
+    $objectManager = $objectManagerFactory->create(BP, $_SERVER, false);
 
     $config = $objectManager->create(
         'Magento\Tools\View\Generator\Config',
@@ -75,7 +75,7 @@ try {
     $themes = $objectManager->create('Magento\Core\Model\Theme\Collection');
     $themes->setItemObjectClass('Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
-    $fallbackFactory = $objectManager->create('Magento\View\Design\Fallback\Factory');
+    $fallbackFactory = $objectManager->create('Magento\Framework\View\Design\Fallback\Factory');
     $generator = $objectManager->create(
         'Magento\Tools\View\Generator\CopyRule',
         array('themes' => $themes, 'fallbackRule' => $fallbackFactory->createViewFileRule())
@@ -88,7 +88,7 @@ try {
             'configPermitted' => __DIR__ . '/config/permitted.php',
             'configForbidden' => __DIR__ . '/config/forbidden.php',
             'isDryRun' => $config->isDryRun(),
-            'preProcessor' => $objectManager->create('Magento\View\Asset\PreProcessor\Composite')
+            'preProcessor' => $objectManager->create('Magento\Framework\View\Asset\PreProcessor\Composite')
         )
     );
     $deployment->run($copyRules);

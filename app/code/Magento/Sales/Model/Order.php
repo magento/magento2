@@ -526,7 +526,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @var \Magento\Mail\Template\TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
@@ -606,17 +606,17 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_trackCollectionFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Tax\Model\Calculation $taxCalculation
@@ -632,22 +632,22 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
      * @param Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
      * @param Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Tax\Model\Calculation $taxCalculation,
@@ -663,8 +663,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
         \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
@@ -1268,7 +1268,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _setState(
         $state,
@@ -1280,7 +1280,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         // attempt to set the specified state
         if ($shouldProtectState) {
             if ($this->isStateProtected($state)) {
-                throw new \Magento\Model\Exception(__('The Order State "%1" must not be set manually.', $state));
+                throw new \Magento\Framework\Model\Exception(__('The Order State "%1" must not be set manually.', $state));
             }
         }
         $this->setData('state', $state);
@@ -1390,12 +1390,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
 
     /**
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function hold()
     {
         if (!$this->canHold()) {
-            throw new \Magento\Model\Exception(__('A hold action is not available.'));
+            throw new \Magento\Framework\Model\Exception(__('A hold action is not available.'));
         }
         $this->setHoldBeforeState($this->getState());
         $this->setHoldBeforeStatus($this->getStatus());
@@ -1407,12 +1407,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Attempt to unhold the order
      *
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function unhold()
     {
         if (!$this->canUnhold()) {
-            throw new \Magento\Model\Exception(__('You cannot remove the hold.'));
+            throw new \Magento\Framework\Model\Exception(__('You cannot remove the hold.'));
         }
         $this->setState($this->getHoldBeforeState(), $this->getHoldBeforeStatus());
         $this->setHoldBeforeState(null);
@@ -1442,7 +1442,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param string $comment
      * @param bool $graceful
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
@@ -1476,7 +1476,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
 
             $this->_setState($cancelState, true, $comment);
         } elseif (!$graceful) {
-            throw new \Magento\Model\Exception(__('We cannot cancel this order.'));
+            throw new \Magento\Framework\Model\Exception(__('We cannot cancel this order.'));
         }
         return $this;
     }
@@ -1498,7 +1498,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Object
+     * @return string|\Magento\Framework\Object
      */
     public function getShippingMethod($asObject = false)
     {
@@ -1507,7 +1507,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
-            return new \Magento\Object(array('carrier_code' => $carrierCode, 'method' => $method));
+            return new \Magento\Framework\Object(array('carrier_code' => $carrierCode, 'method' => $method));
         }
     }
 
@@ -1553,7 +1553,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
-            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
         )->setTemplateVars(
             array(
                 'order' => $this,
@@ -1577,7 +1577,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
                 $this->_transportBuilder->addBcc($email);
             }
         }
-        /** @var \Magento\Mail\TransportInterface $transport */
+        /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 
@@ -1587,7 +1587,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
                 $this->_transportBuilder->setTemplateIdentifier(
                     $templateId
                 )->setTemplateOptions(
-                    array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+                    array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
                 )->setTemplateVars(
                     array(
                         'order' => $this,
@@ -1660,7 +1660,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
             $this->_transportBuilder->setTemplateIdentifier(
                 $templateId
             )->setTemplateOptions(
-                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
             )->setTemplateVars(
                 array(
                     'order' => $this,
@@ -1684,7 +1684,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
                     $this->_transportBuilder->addBcc($email);
                 }
             }
-            /** @var \Magento\Mail\TransportInterface $transport */
+            /** @var \Magento\Framework\Mail\TransportInterface $transport */
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
         }
@@ -1696,7 +1696,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
                 $this->_transportBuilder->setTemplateIdentifier(
                     $templateId
                 )->setTemplateOptions(
-                    array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+                    array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
                 )->setTemplateVars(
                     array(
                         'order' => $this,
@@ -1899,7 +1899,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
 
     /**
      * @param mixed $itemId
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getItemById($itemId)
     {
@@ -1908,7 +1908,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
 
     /**
      * @param mixed $quoteItemId
-     * @return  \Magento\Object|null
+     * @return  \Magento\Framework\Object|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
@@ -2385,10 +2385,10 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Add New object to related array
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    public function addRelatedObject(\Magento\Model\AbstractModel $object)
+    public function addRelatedObject(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->_relatedObjects[] = $object;
         return $this;

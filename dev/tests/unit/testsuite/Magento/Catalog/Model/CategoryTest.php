@@ -39,13 +39,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filter;
 
     protected function setUp()
     {
-        $this->filter = $this->getMock('Magento\Filter\FilterManager', ['translitUrl'], [], '', false);
+        $this->filter = $this->getMock('Magento\Framework\Filter\FilterManager', ['translitUrl'], [], '', false);
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject('Magento\Catalog\Model\Category', ['filter' => $this->filter]);
     }

@@ -36,13 +36,13 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
     protected $_processorMock;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);
         $this->_processorMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\Data\ProcessorInterface');
         $this->_processorMock->expects($this->any())->method('processValue')->will($this->returnArgument(0));

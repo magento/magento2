@@ -39,27 +39,37 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanJs($area, $designMode, $expectedAssets)
     {
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         /** @var $headBlock \Magento\Theme\Block\Html\Head */
         $headBlock = $layout->createBlock('Magento\Theme\Block\Html\Head', 'head');
         $headBlock->setData('vde_design_mode', $designMode);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $pageAssets \Magento\View\Asset\GroupedCollection */
-        $pageAssets = $objectManager->get('Magento\View\Asset\GroupedCollection');
+        /** @var $pageAssets \Magento\Framework\View\Asset\GroupedCollection */
+        $pageAssets = $objectManager->get('Magento\Framework\View\Asset\GroupedCollection');
 
         $fixtureAssets = array(
-            array('name' => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS, 'params' => array()),
+            array(
+                'name' => 'test_css',
+                'type' => \Magento\Framework\View\Publisher::CONTENT_TYPE_CSS,
+                'params' => array()
+            ),
             array(
                 'name' => 'test_css_vde',
-                'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
+                'type' => \Magento\Framework\View\Publisher::CONTENT_TYPE_CSS,
                 'params' => array('flag_name' => 'vde_design_mode')
             ),
-            array('name' => 'test_js', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS, 'params' => array()),
+            array(
+                'name' => 'test_js',
+                'type' => \Magento\Framework\View\Publisher::CONTENT_TYPE_JS,
+                'params' => array()
+            ),
             array(
                 'name' => 'test_js_vde',
-                'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
+                'type' => \Magento\Framework\View\Publisher::CONTENT_TYPE_JS,
                 'params' => array('flag_name' => 'vde_design_mode')
             )
         );
@@ -68,7 +78,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $pageAssets->add(
                 $asset['name'],
                 $objectManager->create(
-                    'Magento\View\Asset\ViewFile',
+                    'Magento\Framework\View\Asset\ViewFile',
                     array('file' => 'some_file', 'contentType' => $asset['type'])
                 ),
                 $asset['params']
@@ -76,12 +86,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         }
 
 
-        /** @var \Magento\Config\Scope $configScope */
-        $configScope = $objectManager->get('Magento\Config\ScopeInterface');
+        /** @var \Magento\Framework\Config\Scope $configScope */
+        $configScope = $objectManager->get('Magento\Framework\Config\ScopeInterface');
         $configScope->setCurrentScope($area);
 
-        /** @var $eventManager \Magento\Event\ManagerInterface */
-        $eventManager = $objectManager->get('Magento\Event\ManagerInterface');
+        /** @var $eventManager \Magento\Framework\Event\ManagerInterface */
+        $eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
         $eventManager->dispatch('controller_action_layout_generate_blocks_after', array('layout' => $layout));
 
         $actualAssets = array_keys($pageAssets->getAll());

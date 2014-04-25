@@ -25,7 +25,7 @@
  */
 namespace Magento\DesignEditor\Model\Config\Control;
 
-use Magento\Module\Dir\Reader;
+use Magento\Framework\Module\Dir\Reader;
 
 /**
  * Quick styles configuration

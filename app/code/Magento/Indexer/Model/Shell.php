@@ -156,7 +156,7 @@ class Shell extends \Magento\Framework\App\AbstractShell
             try {
                 $indexer->{$method}();
                 echo $indexer->getTitle() . " indexer was successfully changed index mode" . PHP_EOL;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {
@@ -189,7 +189,7 @@ class Shell extends \Magento\Framework\App\AbstractShell
                 $resultTime = microtime(true) - $startTime;
                 echo $indexer->getTitle() . ' index has been rebuilt successfully in '
                     . gmdate('H:i:s', $resultTime) . PHP_EOL;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {

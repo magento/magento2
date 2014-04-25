@@ -30,7 +30,7 @@ namespace Magento\Review\Model\Resource\Review\Summary;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Data\Collection\Db
+class Collection extends \Magento\Framework\Data\Collection\Db
 {
     /**
      * Summary table name
@@ -41,14 +41,14 @@ class Collection extends \Magento\Data\Collection\Db
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_setIdFieldName('primary_id');

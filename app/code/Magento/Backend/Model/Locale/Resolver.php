@@ -28,7 +28,7 @@ namespace Magento\Backend\Model\Locale;
 /**
  * Backend locale model
  */
-class Resolver extends \Magento\Locale\Resolver
+class Resolver extends \Magento\Framework\Locale\Resolver
 {
     /**
      * @var \Magento\Backend\Model\Session
@@ -46,32 +46,32 @@ class Resolver extends \Magento\Locale\Resolver
     protected $_request;
 
     /**
-     * @var \Magento\Locale\Validator
+     * @var \Magento\Framework\Locale\Validator
      */
     protected $_localeValidator;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\LocaleFactory $localeFactory
+     * @param \Magento\Framework\LocaleFactory $localeFactory
      * @param string $defaultLocalePath
      * @param string $scopeType
      * @param \Magento\Backend\Model\Session $session
      * @param Manager $localeManager
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Locale\Validator $localeValidator
+     * @param \Magento\Framework\Locale\Validator $localeValidator
      * @param null $locale
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\LocaleFactory $localeFactory,
+        \Magento\Framework\LocaleFactory $localeFactory,
         $defaultLocalePath,
         $scopeType,
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Locale\Manager $localeManager,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Locale\Validator $localeValidator,
+        \Magento\Framework\Locale\Validator $localeValidator,
         $locale = null
     ) {
         $this->_session = $session;

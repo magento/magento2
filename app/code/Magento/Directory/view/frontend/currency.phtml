@@ -40,8 +40,8 @@
         <strong class="language-<?php echo $this->escapeHtml($this->getCurrentCurrencyCode()) ?>">
             <span><?php echo $this->escapeHtml($currentCurrencyCode) ?> - <?php echo @$this->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
         </strong>
-        <button type="button" data-toggle="dropdown" class="action switch"><span><?php echo __('Change')?></span></button>
-        <ul data-target="dropdown">
+        <button type="button" id="currency-switcher" class="action switch"><span><?php echo __('Change')?></span></button>
+        <ul data-mage-init='{"dropdownDialog":{"appendTo":".switcher.currency > .options", "triggerTarget":"#currency-switcher", "closeOnMouseLeave": false, "triggerClass":"active", "parentClass":"active", "buttons":null}}'>
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if($_code != $currentCurrencyCode): ?>
                     <li class="currency-<?php echo $_code ?>">

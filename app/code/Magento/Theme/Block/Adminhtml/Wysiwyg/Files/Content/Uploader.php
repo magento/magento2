@@ -46,13 +46,13 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\File\Size $fileSize
+     * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\File\Size $fileSize,
+        \Magento\Framework\File\Size $fileSize,
         \Magento\Theme\Helper\Storage $storageHelper,
         array $data = array()
     ) {

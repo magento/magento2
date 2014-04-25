@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\App\Action;
 
-class Context implements \Magento\ObjectManager\ContextInterface
+class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -36,17 +36,17 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_response;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -66,31 +66,31 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_view;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\ResponseInterface $response
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\UrlInterface $url
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\App\ViewInterface $view
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\ResponseInterface $response,
-        \Magento\ObjectManager $objectManager,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\UrlInterface $url,
+        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->_request = $request;
         $this->_response = $response;
@@ -112,7 +112,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Event\ManagerInterface
+     * @return \Magento\Framework\Event\ManagerInterface
      */
     public function getEventManager()
     {
@@ -128,7 +128,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\ObjectManager
+     * @return \Magento\Framework\ObjectManager
      */
     public function getObjectManager()
     {
@@ -160,7 +160,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     public function getUrl()
     {
@@ -168,7 +168,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Message\ManagerInterface
+     * @return \Magento\Framework\Message\ManagerInterface
      */
     public function getMessageManager()
     {

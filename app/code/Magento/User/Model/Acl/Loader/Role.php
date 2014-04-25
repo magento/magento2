@@ -26,7 +26,7 @@ namespace Magento\User\Model\Acl\Loader;
 use Magento\User\Model\Acl\Role\Group as RoleGroup;
 use Magento\User\Model\Acl\Role\User as RoleUser;
 
-class Role implements \Magento\Acl\LoaderInterface
+class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
      * @var \Magento\Framework\App\Resource
@@ -61,10 +61,10 @@ class Role implements \Magento\Acl\LoaderInterface
     /**
      * Populate ACL with roles from external storage
      *
-     * @param \Magento\Acl $acl
+     * @param \Magento\Framework\Acl $acl
      * @return void
      */
-    public function populateAcl(\Magento\Acl $acl)
+    public function populateAcl(\Magento\Framework\Acl $acl)
     {
         $roleTableName = $this->_resource->getTableName('admin_role');
         $adapter = $this->_resource->getConnection('core_read');

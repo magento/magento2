@@ -36,7 +36,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Locale interface
      *
-     * @var \Magento\Locale\ResolverInterface $localeResolver
+     * @var \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     protected $localeResolver;
 
@@ -49,12 +49,12 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->localeResolver = $localeResolver;

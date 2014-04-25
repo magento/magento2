@@ -43,7 +43,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $backendQuoteSession->setCustomerId($fixtureCustomerId);
         /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form $block */
         $block = $objectManager->create('Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form');
-        $block->setEntity(new \Magento\Object());
+        $block->setEntity(new \Magento\Framework\Object());
 
         /** SUT execution and assertions */
         $this->assertEquals('Firstname Lastname', $block->getDefaultSender(), 'Sender name is invalid.');

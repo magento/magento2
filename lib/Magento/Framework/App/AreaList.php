@@ -50,18 +50,18 @@ class AreaList
     protected $_resolverFactory;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param Area\FrontNameResolverFactory $resolverFactory
      * @param array $areas
      * @param string $default
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         Area\FrontNameResolverFactory $resolverFactory,
         array $areas,
         $default
@@ -129,7 +129,7 @@ class AreaList
      * Retrieve application area
      *
      * @param   string $code
-     * @return  \Magento\Core\Model\App\Area
+     * @return  \Magento\Framework\App\Area
      */
     public function getArea($code)
     {

@@ -42,14 +42,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
         // Test protected method via reflection
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
-        $localeResolver = $this->getMock('\Magento\Locale\ResolverInterface', array(), array(), '', false);
-        $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $string = $this->getMock('\Magento\Stdlib\String', array(), array(), '', false);
+        $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface', array(), array(), '', false);
+        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $string = $this->getMock('\Magento\Framework\Stdlib\String', array(), array(), '', false);
         $config = $this->getMock('Magento\Ogone\Model\Config', array(), array(), '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $loggerFactory = $this->getMock('\Magento\Logger\AdapterFactory', array(), array(), '', false);
+        $loggerFactory = $this->getMock('\Magento\Framework\Logger\AdapterFactory', array(), array(), '', false);
         $object = new \Magento\Ogone\Model\Api(
             $eventManager,
             $paymentDataMock,

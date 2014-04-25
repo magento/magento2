@@ -49,7 +49,7 @@ class HelloTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $this->block = $objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Account\Dashboard\Hello',
             '',

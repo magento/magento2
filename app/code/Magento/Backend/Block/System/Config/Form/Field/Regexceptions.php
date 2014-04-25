@@ -31,25 +31,25 @@ namespace Magento\Backend\Block\System\Config\Form\Field;
 class Regexceptions extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
-     * @var \Magento\Data\Form\Element\Factory
+     * @var \Magento\Framework\Data\Form\Element\Factory
      */
     protected $_elementFactory;
 
     /**
-     * @var \Magento\View\Design\Theme\LabelFactory
+     * @var \Magento\Framework\View\Design\Theme\LabelFactory
      */
     protected $_labelFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Data\Form\Element\Factory $elementFactory
-     * @param \Magento\View\Design\Theme\LabelFactory $labelFactory
+     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
+     * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Data\Form\Element\Factory $elementFactory,
-        \Magento\View\Design\Theme\LabelFactory $labelFactory,
+        \Magento\Framework\Data\Form\Element\Factory $elementFactory,
+        \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory,
         array $data = array()
     ) {
         $this->_elementFactory = $elementFactory;
@@ -80,7 +80,7 @@ class Regexceptions extends \Magento\Backend\Block\System\Config\Form\Field\Fiel
     public function renderCellTemplate($columnName)
     {
         if ($columnName == 'value' && isset($this->_columns[$columnName])) {
-            /** @var $label \Magento\View\Design\Theme\Label */
+            /** @var $label \Magento\Framework\View\Design\Theme\Label */
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection(__('-- No Theme --'));
             $element = $this->_elementFactory->create('select');

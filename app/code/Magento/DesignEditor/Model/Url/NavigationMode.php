@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Model\Url;
 /**
  * Navigation mode design editor url model
  */
-class NavigationMode extends \Magento\Url
+class NavigationMode extends \Magento\Framework\Url
 {
     /**
      * VDE helper
@@ -54,12 +54,12 @@ class NavigationMode extends \Magento\Url
     /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param \Magento\Url\ScopeResolverInterface $scopeResolver
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
-     * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Framework\Url\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver
+     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\DesignEditor\Helper\Data $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
@@ -68,12 +68,12 @@ class NavigationMode extends \Magento\Url
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
-        \Magento\Url\ScopeResolverInterface $scopeResolver,
-        \Magento\Session\Generic $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
-        \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\Url\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver,
+        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\DesignEditor\Helper\Data $helper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,

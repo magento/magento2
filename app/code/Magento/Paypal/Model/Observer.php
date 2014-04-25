@@ -25,7 +25,7 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Event\Observer as EventObserver;
+use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
@@ -35,7 +35,7 @@ class Observer
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
@@ -54,7 +54,7 @@ class Observer
     protected $_coreData;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -69,7 +69,7 @@ class Observer
     protected $_view;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
@@ -86,22 +86,22 @@ class Observer
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Paypal\Helper\Hss $paypalHss
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Logger $logger
      * @param Report\SettlementFactory $settlementFactory
      * @param \Magento\Framework\App\ViewInterface $view
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Paypal\Helper\Hss $paypalHss,
-        \Magento\Registry $coreRegistry,
-        \Magento\Logger $logger,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Logger $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\AuthorizationInterface $authorization,
+        \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {

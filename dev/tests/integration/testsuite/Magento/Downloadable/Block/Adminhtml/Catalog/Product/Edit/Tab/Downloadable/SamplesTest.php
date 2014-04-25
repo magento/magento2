@@ -31,7 +31,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
     public function testGetUploadButtonsHtml()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
         );
@@ -48,13 +48,13 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Registry'
+            'Magento\Framework\Registry'
         )->register(
             'current_product',
-            new \Magento\Object(array('type_id' => 'simple'))
+            new \Magento\Framework\Object(array('type_id' => 'simple'))
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
         );
@@ -77,13 +77,19 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Registry'
+            'Magento\Framework\Registry'
         )->register(
             'current_product',
-            new \Magento\Object(array('type_id' => $productType, 'id' => '1', 'samples_title' => $samplesTitle))
+            new \Magento\Framework\Object(
+                array(
+                    'type_id' => $productType,
+                    'id' => '1',
+                    'samples_title' => $samplesTitle
+                )
+            )
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
         );

@@ -43,7 +43,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $backendQuoteSession->setCustomerId($fixtureCustomerId);
         /** @var \Magento\Backend\Model\Session\Quote $quoteSession */
         $quoteSession = $objectManager->create('Magento\Backend\Model\Session\Quote');
-        $quoteSession->setEntity(new \Magento\Object());
+        $quoteSession->setEntity(new \Magento\Framework\Object());
 
         /** SUT execution */
         $quote = $quoteSession->getQuote();

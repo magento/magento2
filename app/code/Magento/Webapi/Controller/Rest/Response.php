@@ -90,33 +90,36 @@ class Response extends \Magento\Webapi\Controller\Response
      */
     protected function _renderMessages()
     {
-        $formattedMessages = $this->getMessages();
         $responseHttpCode = null;
         /** @var \Exception $exception */
         foreach ($this->getException() as $exception) {
-            /** @var \Magento\Webapi\Exception $maskedException */
             $maskedException = $this->_errorProcessor->maskException($exception);
             $messageData = array(
                 'message' => $maskedException->getMessage(),
-                'http_code' => $maskedException->getHttpCode()
             );
+            if ($maskedException->getErrors()) {
+                $messageData['errors'] = [];
+                foreach ($maskedException->getErrors() as $errorMessage) {
+                    $errorData['message'] = $errorMessage->getRawMessage();
+                    $errorData['parameters'] = $errorMessage->getParameters();
+                    $messageData['errors'][] = $errorData;
+                }
+            }
+            if ($maskedException->getCode()) {
+                $messageData['code'] = $maskedException->getCode();
+            }
             if ($maskedException->getDetails()) {
                 $messageData['parameters'] = $maskedException->getDetails();
             }
-            if ($maskedException->getWrappedErrors()) {
-                $messageData['wrapped_errors'] = $maskedException->getWrappedErrors();
-            }
-
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $messageData['trace'] = $exception->getTraceAsString();
             }
-            $formattedMessages['errors'][] = $messageData;
             $responseHttpCode = $maskedException->getHttpCode();
         }
         // set HTTP code of the last error, Content-Type, and all rendered error messages to body
         $this->setHttpResponseCode($responseHttpCode);
         $this->setMimeType($this->_renderer->getMimeType());
-        $this->setBody($this->_renderer->render($formattedMessages));
+        $this->setBody($this->_renderer->render($messageData));
         return $this;
     }
 

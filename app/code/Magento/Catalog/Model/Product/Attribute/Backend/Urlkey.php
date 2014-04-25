@@ -35,7 +35,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)

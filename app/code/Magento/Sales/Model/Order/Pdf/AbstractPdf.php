@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Order\Pdf;
 /**
  * Sales Order PDF abstract model
  */
-abstract class AbstractPdf extends \Magento\Object
+abstract class AbstractPdf extends \Magento\Framework\Object
 {
     /**
      * Y coordinate
@@ -77,12 +77,12 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_paymentData;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
@@ -94,12 +94,12 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_mediaDirectory;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_rootDirectory;
 
@@ -119,34 +119,34 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_pdfItemsFactory;
 
     /**
-     * @var \Magento\Translate\Inline\StateInterface
+     * @var \Magento\Framework\Translate\Inline\StateInterface
      */
     protected $inlineTranslation;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Filesystem $filesystem,
         Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
@@ -699,7 +699,7 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Parse item description
      *
-     * @param  \Magento\Object $item
+     * @param  \Magento\Framework\Object $item
      * @return array
      */
     protected function _parseItemDescription($item)
@@ -778,7 +778,7 @@ abstract class AbstractPdf extends \Magento\Object
      *
      * @param  string $type
      * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getRenderer($type)
     {
@@ -787,7 +787,7 @@ abstract class AbstractPdf extends \Magento\Object
         }
 
         if (!isset($this->_renderers[$type])) {
-            throw new \Magento\Model\Exception(__('We found an invalid renderer model.'));
+            throw new \Magento\Framework\Model\Exception(__('We found an invalid renderer model.'));
         }
 
         if (is_null($this->_renderers[$type]['renderer'])) {
@@ -813,12 +813,12 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Draw Item process
      *
-     * @param  \Magento\Object $item
+     * @param  \Magento\Framework\Object $item
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
      */
-    protected function _drawItem(\Magento\Object $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
+    protected function _drawItem(\Magento\Framework\Object $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
     {
         $type = $item->getOrderItem()->getProductType();
         $renderer = $this->_getRenderer($type);
@@ -896,13 +896,13 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Retrieve PDF object
      *
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return \Zend_Pdf
      */
     protected function _getPdf()
     {
         if (!$this->_pdf instanceof \Zend_Pdf) {
-            throw new \Magento\Model\Exception(__('Please define the PDF object before using.'));
+            throw new \Magento\Framework\Model\Exception(__('Please define the PDF object before using.'));
         }
 
         return $this->_pdf;
@@ -946,14 +946,14 @@ abstract class AbstractPdf extends \Magento\Object
      * @param  \Zend_Pdf_Page $page
      * @param  array $draw
      * @param  array $pageSettings
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return \Zend_Pdf_Page
      */
     public function drawLineBlocks(\Zend_Pdf_Page $page, array $draw, array $pageSettings = array())
     {
         foreach ($draw as $itemsProp) {
             if (!isset($itemsProp['lines']) || !is_array($itemsProp['lines'])) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('We don\'t recognize the draw line data. Please define the "lines" array.')
                 );
             }

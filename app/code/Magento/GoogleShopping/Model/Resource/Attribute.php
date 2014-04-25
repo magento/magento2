@@ -33,7 +33,7 @@
  */
 namespace Magento\GoogleShopping\Model\Resource;
 
-class Attribute extends \Magento\Model\Resource\Db\AbstractDb
+class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * @return void

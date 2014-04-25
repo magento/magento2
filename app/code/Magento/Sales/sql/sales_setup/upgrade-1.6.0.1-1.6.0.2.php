@@ -30,6 +30,6 @@ $installer->startSetup();
 $installer->getConnection()->addColumn(
     $installer->getTable('sales_flat_shipment'),
     'packages',
-    array('type' => \Magento\DB\Ddl\Table::TYPE_TEXT, 'comment' => 'Packed Products in Packages', 'length' => '20000')
+    array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'comment' => 'Packed Products in Packages', 'length' => '20000')
 );
 $installer->endSetup();

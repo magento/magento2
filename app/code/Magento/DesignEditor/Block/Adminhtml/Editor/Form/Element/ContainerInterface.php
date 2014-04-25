@@ -39,7 +39,7 @@ interface ContainerInterface
      * @param array $config
      * @param boolean $after
      * @param boolean $isAdvanced
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function addField($elementId, $type, $config, $after = false, $isAdvanced = false);
 }

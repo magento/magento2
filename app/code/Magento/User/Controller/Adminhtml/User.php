@@ -28,7 +28,7 @@ class User extends \Magento\Backend\App\AbstractAction
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
@@ -41,12 +41,12 @@ class User extends \Magento\Backend\App\AbstractAction
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\User\Model\UserFactory $userFactory
     ) {
         parent::__construct($context);
@@ -112,7 +112,7 @@ class User extends \Magento\Backend\App\AbstractAction
                 return;
             }
         } else {
-            $model->setInterfaceLocale(\Magento\Locale\ResolverInterface::DEFAULT_LOCALE);
+            $model->setInterfaceLocale(\Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
         }
 
         $this->_title->add($model->getId() ? $model->getName() : __('New User'));
@@ -160,7 +160,7 @@ class User extends \Magento\Backend\App\AbstractAction
 
         $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         if ($userId == $currentUser->getId() && $this->_objectManager->get(
-            'Magento\Locale\Validator'
+            'Magento\Framework\Locale\Validator'
         )->isValid(
             $data['interface_locale']
         )
@@ -177,7 +177,7 @@ class User extends \Magento\Backend\App\AbstractAction
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());
             $this->_getSession()->setUserData($data);
             $this->_redirect('adminhtml/*/edit', array('_current' => true));

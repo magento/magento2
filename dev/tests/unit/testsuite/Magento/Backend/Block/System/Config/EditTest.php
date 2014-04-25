@@ -87,7 +87,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('test_section')
         );
 
-        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
 

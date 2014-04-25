@@ -48,11 +48,11 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Construct
      *
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
     ) {
         $this->_stockItemFactory = $stockItemFactory;
@@ -99,7 +99,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate
      *
      * @param Product $object
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -107,7 +107,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if (!empty($value['qty']) && !preg_match('/^-?\d*(\.|,)?\d{0,4}$/i', $value['qty'])) {
-            throw new \Magento\Model\Exception(__('Please enter a valid number in this field.'));
+            throw new \Magento\Framework\Model\Exception(__('Please enter a valid number in this field.'));
         }
         return true;
     }

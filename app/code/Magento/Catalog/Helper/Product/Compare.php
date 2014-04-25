@@ -99,7 +99,7 @@ class Compare extends \Magento\Core\Helper\Url
     protected $_itemCollectionFactory;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $_formKey;
 
@@ -121,7 +121,7 @@ class Compare extends \Magento\Core\Helper\Url
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Data\Form\FormKey $formKey
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Core\Helper\PostData $coreHelper
      */
@@ -133,7 +133,7 @@ class Compare extends \Magento\Core\Helper\Url
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Data\Form\FormKey $formKey,
+        \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Core\Helper\PostData $coreHelper
     ) {

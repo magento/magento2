@@ -56,9 +56,11 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             'Magento\Wishlist\Helper\Data'
         )->disableOriginalConstructor()->getMock();
         $this->_mockContext = $this->getMockBuilder(
-            'Magento\View\Element\Template\Context'
+            'Magento\Framework\View\Element\Template\Context'
         )->disableOriginalConstructor()->getMock();
-        $this->_mockRegistry = $this->getMockBuilder('Magento\Registry')->disableOriginalConstructor()->getMock();
+        $this->_mockRegistry = $this->getMockBuilder('Magento\Framework\Registry')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = new \Magento\Wishlist\Block\Item\Configure(
             $this->_mockContext,

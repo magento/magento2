@@ -23,7 +23,7 @@
  */
 namespace Magento\RecurringPayment\Model\Method;
 
-class PaymentMethodsList implements \Magento\Option\ArrayInterface
+class PaymentMethodsList implements \Magento\Framework\Option\ArrayInterface
 {
     /** @var  \Magento\Payment\Helper\Data */
     protected $paymentHelper;

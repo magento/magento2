@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp;
 
-class Enabled extends \Magento\Data\Form\Element\Select
+class Enabled extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Retrieve Element HTML fragment

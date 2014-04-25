@@ -32,7 +32,7 @@ namespace Magento\AdminNotification\Model\Config\Source;
  * @package    Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Frequency implements \Magento\Option\ArrayInterface
+class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

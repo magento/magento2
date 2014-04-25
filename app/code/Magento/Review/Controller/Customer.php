@@ -25,7 +25,6 @@
  */
 namespace Magento\Review\Controller;
 
-use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 
 /**

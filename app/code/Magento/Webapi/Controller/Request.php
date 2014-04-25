@@ -34,12 +34,12 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
      * Modify pathInfo: strip down the front name and query parameters.
      *
      * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\ScopeInterface $configScope,
         $uri = null
     ) {
         parent::__construct($uri);

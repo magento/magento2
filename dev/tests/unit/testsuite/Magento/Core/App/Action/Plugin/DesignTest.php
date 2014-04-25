@@ -28,7 +28,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatch()
     {
         $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
-        $designLoaderMock = $this->getMock('Magento\View\DesignLoader', array(), array(), '', false);
+        $designLoaderMock = $this->getMock('Magento\Framework\View\DesignLoader', array(), array(), '', false);
         $closureMock = function () {
             return 'Expected';
         };

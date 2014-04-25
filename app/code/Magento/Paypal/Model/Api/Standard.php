@@ -242,7 +242,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
             return;
         }
 
-        $request = \Magento\Object\Mapper::accumulateByMap($address, $request, array_flip($this->_addressMap));
+        $request = \Magento\Framework\Object\Mapper::accumulateByMap($address, $request, array_flip($this->_addressMap));
 
         // Address may come without email info (user is not always required to enter it), so add email from order
         if (!$request['email']) {

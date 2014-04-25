@@ -35,12 +35,12 @@ class LastUrl
     const SESSION_NAMESPACE = 'frontend';
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -52,10 +52,10 @@ class LastUrl
     protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     /**
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\UrlInterface $url
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\UrlInterface $url
      */
-    public function __construct(\Magento\Session\Generic $session, \Magento\UrlInterface $url)
+    public function __construct(\Magento\Framework\Session\Generic $session, \Magento\Framework\UrlInterface $url)
     {
         $this->_session = $session;
         $this->_url = $url;

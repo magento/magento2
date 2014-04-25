@@ -114,7 +114,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $column = array('unsigned' => false, 'default' => null, 'extra' => null);
-        $column['type'] = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT;
         $column['length'] = 1;
         $column['nullable'] = true;
         $column['comment'] = $attributeCode . ' column';
@@ -141,7 +141,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Select For Flat Attribute update
      *
      * @param int $store
-     * @return \Magento\DB\Select|null
+     * @return \Magento\Framework\DB\Select|null
      */
     public function getFlatUpdateSelect($store)
     {

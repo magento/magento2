@@ -96,7 +96,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Raw rate request data
      *
-     * @var \Magento\Object|null
+     * @var \Magento\Framework\Object|null
      */
     protected $_rawRequest = null;
 
@@ -134,14 +134,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\HTTP\ZendClientFactory
+     * @var \Magento\Framework\HTTP\ZendClientFactory
      */
     protected $_httpClientFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -154,7 +154,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\HTTP\ZendClientFactory $httpClientFactory
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -162,7 +162,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -175,7 +175,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Helper\Data $directoryData,
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\HTTP\ZendClientFactory $httpClientFactory,
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = array()
     ) {
         $this->_carrierHelper = $carrierHelper;
@@ -230,7 +230,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $this->_request = $request;
 
-        $r = new \Magento\Object();
+        $r = new \Magento\Framework\Object();
 
         if ($request->getLimitMethod()) {
             $r->setService($request->getLimitMethod());
@@ -990,7 +990,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function setTrackingReqeust()
     {
-        $r = new \Magento\Object();
+        $r = new \Magento\Framework\Object();
 
         $userId = $this->getConfigData('userid');
         $r->setUserId($userId);
@@ -1411,10 +1411,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return string
      */
-    protected function _formUsExpressShipmentRequest(\Magento\Object $request)
+    protected function _formUsExpressShipmentRequest(\Magento\Framework\Object $request)
     {
         $packageParams = $request->getPackageParams();
 
@@ -1477,12 +1477,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @param string $serviceType
      * @return string
      * @throws \Exception
      */
-    protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Object $request, $serviceType)
+    protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\Object $request, $serviceType)
     {
         switch ($serviceType) {
             case 'PRIORITY':
@@ -1578,10 +1578,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return string
      */
-    protected function _formIntlShipmentRequest(\Magento\Object $request)
+    protected function _formIntlShipmentRequest(\Magento\Framework\Object $request)
     {
         $packageParams = $request->getPackageParams();
         $height = $packageParams->getHeight();
@@ -1733,7 +1733,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $countriesOfManufacture = array();
         $productIds = array();
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Object();
+            $item = new \Magento\Framework\Object();
             $item->setData($itemShipment);
 
             $productIds[] = $item->getProductId();
@@ -1753,7 +1753,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packagePoundsWeight = $packageOuncesWeight = 0;
         // for ItemDetail
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Object();
+            $item = new \Magento\Framework\Object();
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
@@ -1829,13 +1829,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Object $request
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $request
+     * @return \Magento\Framework\Object
      */
-    protected function _doShipmentRequest(\Magento\Object $request)
+    protected function _doShipmentRequest(\Magento\Framework\Object $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         $service = $this->getCode('service_to_code', $request->getShippingMethod());
         $recipientUSCountry = $this->_isUSCountry($request->getRecipientAddressCountryCode());
 
@@ -1911,10 +1911,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array|bool
      */
-    public function getContainerTypes(\Magento\Object $params = null)
+    public function getContainerTypes(\Magento\Framework\Object $params = null)
     {
         if (is_null($params)) {
             return $this->_getAllowedContainers();
@@ -1945,10 +1945,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
     {
         if ($params == null) {
             return array();
@@ -1975,10 +1975,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return content types of package
      *
-     * @param \Magento\Object $params
+     * @param \Magento\Framework\Object $params
      * @return array
      */
-    public function getContentTypes(\Magento\Object $params)
+    public function getContentTypes(\Magento\Framework\Object $params)
     {
         $countryShipper = $params->getCountryShipper();
         $countryRecipient = $params->getCountryRecipient();

@@ -51,12 +51,12 @@ class Console implements \Magento\Framework\AppInterface
     protected $_state;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Filesystem\Directory\Read
+     * @var \Magento\Framework\Filesystem\Directory\Read
      */
     protected $rootDirectory;
 
@@ -70,7 +70,7 @@ class Console implements \Magento\Framework\AppInterface
      * @param \Magento\Install\App\Output $output
      * @param \Magento\Framework\App\State $state
      * @param \Magento\Framework\App\ObjectManager\ConfigLoader $loader
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param Response $response
      * @param array $arguments
@@ -80,7 +80,7 @@ class Console implements \Magento\Framework\AppInterface
         \Magento\Install\App\Output $output,
         \Magento\Framework\App\State $state,
         \Magento\Framework\App\ObjectManager\ConfigLoader $loader,
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\Filesystem $filesystem,
         Response $response,
         array $arguments = array()

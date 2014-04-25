@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice;
 
-abstract class AbstractGroupprice extends \Magento\Model\Resource\Db\AbstractDb
+abstract class AbstractGroupprice extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Load Tier Prices for product
@@ -86,8 +86,8 @@ abstract class AbstractGroupprice extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load specific db-select data
      *
-     * @param \Magento\DB\Select $select
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\DB\Select $select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _loadPriceDataSelect($select)
     {
@@ -124,10 +124,10 @@ abstract class AbstractGroupprice extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save tier price object
      *
-     * @param \Magento\Object $priceObject
+     * @param \Magento\Framework\Object $priceObject
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
      */
-    public function savePriceData(\Magento\Object $priceObject)
+    public function savePriceData(\Magento\Framework\Object $priceObject)
     {
         $adapter = $this->_getWriteAdapter();
         $data = $this->_prepareDataForTable($priceObject, $this->getMainTable());

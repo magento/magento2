@@ -39,10 +39,10 @@ class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
     /**
      * Renders Google Shopping Item Id
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $baseUrl = 'http://www.google.com/merchants/view?docId=';
 

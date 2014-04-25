@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="customer_account_navigation">
-        <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-downloadable-products-link">
+        <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-downloadable-products-link">
             <arguments>
                 <argument name="path" xsi:type="string">downloadable/customer/products</argument>
                 <argument name="label" xsi:type="string">My Downloadable Products</argument>

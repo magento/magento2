@@ -27,7 +27,7 @@
  */
 namespace Magento\Core\Model\Route;
 
-class Wrapper extends \PHPUnit_Framework_TestCase implements \Magento\Config\CacheInterface
+class Wrapper extends \PHPUnit_Framework_TestCase implements \Magento\Framework\Config\CacheInterface
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

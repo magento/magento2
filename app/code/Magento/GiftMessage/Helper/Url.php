@@ -37,12 +37,12 @@ class Url extends \Magento\Core\Helper\Url
     /**
      * Retrieve gift message save url
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param string $type
      * @param array $params
      * @return string
      */
-    public function getEditUrl(\Magento\Object $item, $type, $params = array())
+    public function getEditUrl(\Magento\Framework\Object $item, $type, $params = array())
     {
         if ($item->getGiftMessageId()) {
             $params = array_merge(

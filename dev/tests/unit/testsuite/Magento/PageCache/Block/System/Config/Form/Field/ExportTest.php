@@ -47,7 +47,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 'some test data';
         $elementMock = $this->getMock(
-            '\Magento\Data\Form\Element\AbstractElement',
+            '\Magento\Framework\Data\Form\Element\AbstractElement',
             array(),
             array(),
             '',
@@ -55,8 +55,8 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $form = $this->getMock('Magento\Data\Form', array('getLayout'), array(), '', false, false);
-        $layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
+        $form = $this->getMock('Magento\Framework\Data\Form', array('getLayout'), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
 
         $buttonMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false, false);
         $urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', array('getUrl'), array(), '', false, false);
@@ -75,7 +75,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false, false);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
 
-        $mockData = $this->getMock('Magento\Object', array('toHtml'));
+        $mockData = $this->getMock('Magento\Framework\Object', array('toHtml'));
         $mockData->expects($this->once())->method('toHtml')->will($this->returnValue($expected));
 
         $buttonMock->expects($this->once())->method('getRequest')->will($this->returnValue($requestMock));

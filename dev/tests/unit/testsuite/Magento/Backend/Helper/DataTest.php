@@ -50,11 +50,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_helper = new \Magento\Backend\Helper\Data(
             $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false, false),
             $this->getMock('\Magento\Framework\App\Route\Config', array(), array(), '', false),
-            $this->getMock('Magento\Locale\ResolverInterface'),
+            $this->getMock('Magento\Framework\Locale\ResolverInterface'),
             $this->getMock('\Magento\Backend\Model\Url', array(), array(), '', false),
             $this->getMock('\Magento\Backend\Model\Auth', array(), array(), '', false),
             $this->_frontResolverMock,
-            $this->getMock('\Magento\Math\Random', array(), array(), '', false),
+            $this->getMock('\Magento\Framework\Math\Random', array(), array(), '', false),
             $this->getMock('\Magento\Framework\App\RequestInterface')
         );
     }

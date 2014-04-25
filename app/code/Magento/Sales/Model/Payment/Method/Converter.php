@@ -47,14 +47,14 @@ class Converter
     );
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      */
-    public function __construct(\Magento\Encryption\EncryptorInterface $encryptor)
+    public function __construct(\Magento\Framework\Encryption\EncryptorInterface $encryptor)
     {
         $this->_encryptor = $encryptor;
     }
@@ -62,11 +62,11 @@ class Converter
     /**
      * Check if specified field is encrypted
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $filedName
      * @return bool
      */
-    protected function _shouldBeEncrypted(\Magento\Model\AbstractModel $object, $filedName)
+    protected function _shouldBeEncrypted(\Magento\Framework\Model\AbstractModel $object, $filedName)
     {
         $method = $object->getData('method');
         return isset($this->_encryptFields[$method][$filedName]) && $this->_encryptFields[$method][$filedName];
@@ -75,11 +75,11 @@ class Converter
     /**
      * Decode data
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $filedName
      * @return mixed
      */
-    public function decode(\Magento\Model\AbstractModel $object, $filedName)
+    public function decode(\Magento\Framework\Model\AbstractModel $object, $filedName)
     {
         $value = $object->getData($filedName);
 
@@ -93,11 +93,11 @@ class Converter
     /**
      * Encode data
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $filedName
      * @return mixed
      */
-    public function encode(\Magento\Model\AbstractModel $object, $filedName)
+    public function encode(\Magento\Framework\Model\AbstractModel $object, $filedName)
     {
         $value = $object->getData($filedName);
 

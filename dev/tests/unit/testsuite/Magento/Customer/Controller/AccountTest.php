@@ -53,12 +53,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -110,9 +110,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->url = $this->getMockForAbstractClass('\Magento\UrlInterface');
+        $this->url = $this->getMockForAbstractClass('\Magento\Framework\UrlInterface');
         $this->objectManager = $this->getMock(
-            '\Magento\ObjectManager\ObjectManager',
+            '\Magento\Framework\ObjectManager\ObjectManager',
             array('get'),
             array(),
             '',
@@ -165,10 +165,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    array('Magento\Customer\Helper\Data', new \Magento\Object(array('account_url' => 1))),
+                    array('Magento\Customer\Helper\Data', new \Magento\Framework\Object(array('account_url' => 1))),
                     array(
                         'Magento\Framework\App\Config\ScopeConfigInterface',
-                        new \Magento\Object(array('config_flag' => 1))
+                        new \Magento\Framework\Object(array('config_flag' => 1))
                     ),
                     array(
                         'Magento\Core\Helper\Data',

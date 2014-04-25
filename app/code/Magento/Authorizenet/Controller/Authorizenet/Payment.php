@@ -67,11 +67,11 @@ class Payment extends \Magento\Framework\App\Action\Action
             )->getPaymentMethodsHtml(
                 $this->_view
             );
-        } catch (\Magento\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+        } catch (\Magento\Framework\Model\Exception $e) {
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $result['error_message'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $result['error_message'] = __(
                 'There was an error canceling transactions. Please contact us or try again later.'
             );

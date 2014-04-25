@@ -35,11 +35,11 @@ dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input
 # Example files that are expected to fail code mess detector
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input
 # __ method for Translate cannot be in camelCase
-lib/Magento/Translate/Adapter.php
+lib/Magento/Framework/Translate/Adapter.php
 # __ method for Translate cannot be in camelCase
-lib/Magento/Translate/AdapterInterface.php
+lib/Magento/Framework/Translate/AdapterInterface.php
 # WrapperInterface methods cannot be camelCase as they follow method naming convention from framework classes
-lib/Magento/Filesystem/WrapperInterface.php
+lib/Magento/Framework/Filesystem/WrapperInterface.php
 # PSR-1 not applied to
 dev/tests/integration/testsuite/Magento
 # PSR-1 not applied to

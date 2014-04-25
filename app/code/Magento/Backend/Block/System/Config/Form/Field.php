@@ -37,15 +37,15 @@ namespace Magento\Backend\Block\System\Config\Form;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Field extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Field extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Retrieve element HTML markup
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return $element->getElementHtml();
     }
@@ -53,10 +53,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Retrieve HTML markup for given form element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $isCheckboxRequired = $this->_isInheritCheckboxRequired($element);
 
@@ -85,10 +85,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Render element value
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _renderValue(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _renderValue(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         if ($element->getTooltip()) {
             $html = '<td class="value with-tooltip">';
@@ -109,10 +109,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Render inheritance checkbox (Use Default or Use Website)
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _renderInheritCheckbox(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _renderInheritCheckbox(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $htmlId = $element->getHtmlId();
         $namePrefix = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
@@ -138,10 +138,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Check if inheritance checkbox has to be rendered
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
      */
-    protected function _isInheritCheckboxRequired(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _isInheritCheckboxRequired(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return $element->getCanUseWebsiteValue() || $element->getCanUseDefaultValue();
     }
@@ -149,10 +149,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Retrieve label for the inheritance checkbox
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getInheritCheckboxLabel(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getInheritCheckboxLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $checkboxLabel = __('Use Default');
         if ($element->getCanUseWebsiteValue()) {
@@ -164,10 +164,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Render scope label
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _renderScopeLabel(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _renderScopeLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $html = '<td class="scope-label">';
         if ($element->getScope() && false == $this->_storeManager->isSingleStoreMode()) {
@@ -180,10 +180,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Render field hint
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _renderHint(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _renderHint(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $html = '<td class="">';
         if ($element->getHint()) {
@@ -196,7 +196,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Decorate field row html
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string
      */

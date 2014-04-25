@@ -31,7 +31,7 @@ namespace Magento\Catalog\Model\Config\Source\Product;
  * @category   Magento
  * @package    Magento_Catalog
  */
-class Thumbnail implements \Magento\Option\ArrayInterface
+class Thumbnail implements \Magento\Framework\Option\ArrayInterface
 {
     const OPTION_USE_PARENT_IMAGE = 'parent';
 

@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App\Arguments;
 
-class ValidationState implements \Magento\Config\ValidationStateInterface
+class ValidationState implements \Magento\Framework\Config\ValidationStateInterface
 {
     /**
      * @var string

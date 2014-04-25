@@ -30,7 +30,13 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $interpreter = $this->getMock('Magento\View\Layout\Argument\Interpreter\Options', array(), array(), '', false);
+        $interpreter = $this->getMock(
+            'Magento\Framework\View\Layout\Argument\Interpreter\Options',
+            array(),
+            array(),
+            '',
+            false
+        );
         /**
          * @var Additional $block
          */

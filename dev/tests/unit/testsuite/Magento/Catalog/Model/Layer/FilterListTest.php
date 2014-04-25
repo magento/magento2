@@ -53,7 +53,7 @@ class FilterListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('\Magento\ObjectManager');
+        $this->objectManagerMock = $this->getMock('\Magento\Framework\ObjectManager');
         $this->attributeListMock = $this->getMock(
             'Magento\Catalog\Model\Layer\Category\FilterableAttributeList', array(), array(), '', false
         );

@@ -198,11 +198,11 @@ class Pro
     /**
      * Transfer transaction/payment information from API instance to order payment
      *
-     * @param \Magento\Object|AbstractApi $from
+     * @param \Magento\Framework\Object|AbstractApi $from
      * @param \Magento\Payment\Model\Info $to
      * @return $this
      */
-    public function importPaymentInfo(\Magento\Object $from, \Magento\Payment\Model\Info $to)
+    public function importPaymentInfo(\Magento\Framework\Object $from, \Magento\Payment\Model\Info $to)
     {
         // update PayPal-specific payment information in the payment object
         $this->getInfo()->importToPayment($from, $to);
@@ -231,11 +231,11 @@ class Pro
     /**
      * Void transaction
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function void(\Magento\Object $payment)
+    public function void(\Magento\Framework\Object $payment)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if ($authTransactionId) {
@@ -243,7 +243,7 @@ class Pro
             $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
             $this->importPaymentInfo($api, $payment);
         } else {
-            throw new \Magento\Model\Exception(__('You need an authorization transaction to void.'));
+            throw new \Magento\Framework\Model\Exception(__('You need an authorization transaction to void.'));
         }
     }
 
@@ -251,11 +251,11 @@ class Pro
      * Attempt to capture payment
      * Will return false if the payment is not supposed to be captured
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @param float $amount
      * @return false|null
      */
-    public function capture(\Magento\Object $payment, $amount)
+    public function capture(\Magento\Framework\Object $payment, $amount)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if (!$authTransactionId) {
@@ -281,12 +281,12 @@ class Pro
     /**
      * Refund a capture transaction
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @param float $amount
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function refund(\Magento\Object $payment, $amount)
+    public function refund(\Magento\Framework\Object $payment, $amount)
     {
         $captureTxnId = $this->_getParentTransactionId($payment);
         if ($captureTxnId) {
@@ -310,7 +310,7 @@ class Pro
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('We can\'t issue a refund transaction because there is no capture transaction.')
             );
         }
@@ -319,10 +319,10 @@ class Pro
     /**
      * Cancel payment
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @return void
      */
-    public function cancel(\Magento\Object $payment)
+    public function cancel(\Magento\Framework\Object $payment)
     {
         if (!$payment->getOrder()->getInvoiceCollection()->count()) {
             $this->void($payment);
@@ -431,10 +431,10 @@ class Pro
     /**
      * Parent transaction id getter
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @return string
      */
-    protected function _getParentTransactionId(\Magento\Object $payment)
+    protected function _getParentTransactionId(\Magento\Framework\Object $payment)
     {
         return $payment->getParentTransactionId();
     }

@@ -40,9 +40,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_frontendInstances = array(
-            Pool::DEFAULT_FRONTEND_ID => $this->getMock('Magento\Cache\FrontendInterface'),
-            'resource1' => $this->getMock('Magento\Cache\FrontendInterface'),
-            'resource2' => $this->getMock('Magento\Cache\FrontendInterface')
+            Pool::DEFAULT_FRONTEND_ID => $this->getMock('Magento\Framework\Cache\FrontendInterface'),
+            'resource1' => $this->getMock('Magento\Framework\Cache\FrontendInterface'),
+            'resource2' => $this->getMock('Magento\Framework\Cache\FrontendInterface')
         );
 
         $frontendFactoryMap = array(

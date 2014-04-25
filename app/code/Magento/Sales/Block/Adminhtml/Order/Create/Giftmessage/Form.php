@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage;
 
-use Magento\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
  * Adminhtml order creating gift message item form
@@ -80,8 +80,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService
@@ -90,8 +90,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService,
@@ -108,10 +108,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Set entity for form
      *
-     * @param \Magento\Object $entity
+     * @param \Magento\Framework\Object $entity
      * @return $this
      */
-    public function setEntity(\Magento\Object $entity)
+    public function setEntity(\Magento\Framework\Object $entity)
     {
         $this->_entity = $entity;
         return $this;
@@ -120,7 +120,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve entity for form
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getEntity()
     {

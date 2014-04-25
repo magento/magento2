@@ -34,7 +34,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         /** Prepare mocks for SUT constructor. */
         $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
-        $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('soap'));
 
         /** Initialize SUT. */

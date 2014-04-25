@@ -23,7 +23,7 @@
  */
 ?>
 <?php
-/** @var $this \Magento\View\Element\Template */
+/** @var $this \Magento\Framework\View\Element\Template */
 /** @var $helper \Magento\CatalogSearch\Helper\Data */
 $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
 ?>
@@ -59,6 +59,7 @@ $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
             <script type="text/javascript">
             //<![CDATA[
             (function($) {
+                head.js("<?php echo $this->getViewFileUrl('jquery/handlebars/handlebars-v1.3.0.js')?>");
                 head.js("<?php echo $this->getViewFileUrl('Magento_CatalogSearch::form-mini.js')?>", function() {
                     $('#search').catalogSearch({
                         formSelector: '#search_mini_form',

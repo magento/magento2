@@ -40,7 +40,7 @@
                     <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="Magento_Shipping::view/items/renderer/default.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
                     <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
-                    <block class="Magento\View\Element\Text\ListText" name="order_item_extra_info"/>
+                    <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml"/>
                 <block class="Magento\Shipping\Block\Adminhtml\Order\Tracking\View" name="shipment_tracking" template="order/tracking/view.phtml"/>

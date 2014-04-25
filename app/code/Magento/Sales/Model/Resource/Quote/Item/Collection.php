@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource\Quote\Item;
 /**
  * Quote item resource collection
  */
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Collection quote instance
@@ -61,25 +61,25 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Sales\Model\Quote\Config $quoteConfig
      * @param \Zend_Db_Adapter_Abstract $connection
-     * @param \Magento\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Sales\Model\Quote\Config $quoteConfig,
         $connection = null,
-        \Magento\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
@@ -206,7 +206,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     protected function _assignProducts()
     {
-        \Magento\Profiler::start('QUOTE:' . __METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
         $productIds = array();
         foreach ($this as $item) {
             $productIds[] = (int)$item->getProductId();
@@ -272,7 +272,7 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
         if ($recollectQuote && $this->_quote) {
             $this->_quote->collectTotals();
         }
-        \Magento\Profiler::stop('QUOTE:' . __METHOD__);
+        \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
         return $this;
     }

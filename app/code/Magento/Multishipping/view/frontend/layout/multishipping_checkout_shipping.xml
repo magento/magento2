@@ -36,7 +36,7 @@
             <arguments>
                 <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
             </arguments>
-            <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
+            <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
             <block class="Magento\Multishipping\Block\Checkout\Billing\Items" name="checkout_billing_items" template="Magento_Multishipping::checkout/billing/items.phtml" cacheable="false">
                 <arguments>
                     <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
@@ -45,5 +45,5 @@
             </block>
         </block>
     </referenceContainer>
-    <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+    <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
 </layout>

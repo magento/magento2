@@ -57,10 +57,10 @@ class Synchronize extends \Magento\Backend\Block\System\Config\Form\Field
     /**
      * Remove scope label
      *
-     * @param  \Magento\Data\Form\Element\AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         return parent::render($element);
@@ -69,10 +69,10 @@ class Synchronize extends \Magento\Backend\Block\System\Config\Form\Field
     /**
      * Return element html
      *
-     * @param  \Magento\Data\Form\Element\AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return $this->_toHtml();
     }

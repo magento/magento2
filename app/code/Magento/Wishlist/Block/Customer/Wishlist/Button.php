@@ -33,7 +33,7 @@
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist;
 
-class Button extends \Magento\View\Element\Template
+class Button extends \Magento\Framework\View\Element\Template
 {
     /**
      * Wishlist config
@@ -50,13 +50,13 @@ class Button extends \Magento\View\Element\Template
     protected $_wishlistData = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         array $data = array()

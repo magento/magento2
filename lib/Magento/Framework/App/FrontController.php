@@ -49,7 +49,7 @@ class FrontController implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request)
     {
-        \Magento\Profiler::start('routers_match');
+        \Magento\Framework\Profiler::start('routers_match');
         $routingCycleCounter = 0;
         $response = null;
         while (!$request->isDispatched() && $routingCycleCounter++ < 100) {
@@ -70,7 +70,7 @@ class FrontController implements FrontControllerInterface
                 }
             }
         }
-        \Magento\Profiler::stop('routers_match');
+        \Magento\Framework\Profiler::stop('routers_match');
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }

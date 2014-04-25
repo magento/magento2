@@ -81,8 +81,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\Config\Source\Country $country
      * @param \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory $fieldsetFactory
@@ -93,8 +93,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\Config\Source\Country $country,
         \Magento\Tax\Block\Adminhtml\Rate\Title\FieldsetFactory $fieldsetFactory,
@@ -126,8 +126,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        $rateObject = new \Magento\Object($this->_rate->getData());
-        /** @var \Magento\Data\Form $form */
+        $rateObject = new \Magento\Framework\Object($this->_rate->getData());
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
         $countries = $this->_country->toOptionArray(false, 'US');
@@ -281,7 +281,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\View\Element\Template')->setTemplate('Magento_Tax::rate/js.phtml')
+            $this->getLayout()->createBlock('Magento\Framework\View\Element\Template')->setTemplate('Magento_Tax::rate/js.phtml')
         );
 
         return parent::_prepareForm();

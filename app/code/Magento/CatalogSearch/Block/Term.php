@@ -34,10 +34,10 @@
 namespace Magento\CatalogSearch\Block;
 
 use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory;
-use Magento\UrlFactory;
-use Magento\UrlInterface;
-use Magento\View\Element\Template;
-use Magento\View\Element\Template\Context;
+use Magento\Framework\UrlFactory;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
 class Term extends Template
 {
@@ -138,7 +138,7 @@ class Term extends Template
     }
 
     /**
-     * @param /Magento/Object $obj
+     * @param \Magento\Framework\Object $obj
      * @return string
      */
     public function getSearchUrl($obj)

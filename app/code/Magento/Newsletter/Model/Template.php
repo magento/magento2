@@ -107,34 +107,34 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     protected $_templateFactory;
 
     /**
-     * @var \Magento\Filter\FilterManager
+     * @var \Magento\Framework\Filter\FilterManager
      */
     protected $_filterManager;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
-     * @param \Magento\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\View\DesignInterface $design,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
-        \Magento\Filter\FilterManager $filterManager,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         array $data = array()
     ) {
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
@@ -160,7 +160,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Validate Newsletter template
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function validate()
     {
@@ -188,7 +188,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
                 }
             }
 
-            throw new \Magento\Model\Exception(join("\n", $errorMessages));
+            throw new \Magento\Framework\Model\Exception(join("\n", $errorMessages));
         }
     }
 

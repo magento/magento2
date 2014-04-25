@@ -63,7 +63,7 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/user/save');
         $this->assertSessionMessages(
             $this->equalTo(array('This user no longer exists.')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }
@@ -76,7 +76,7 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $this->_createNew();
         $this->assertSessionMessages(
             $this->equalTo(array('You saved the user.')),
-            \Magento\Message\MessageInterface::TYPE_SUCCESS
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }

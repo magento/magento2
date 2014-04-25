@@ -26,7 +26,7 @@ namespace Magento\Sales\Model;
 class Download
 {
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_rootDir;
 

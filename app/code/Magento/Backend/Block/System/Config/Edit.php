@@ -78,7 +78,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Prepare layout object
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

@@ -34,7 +34,7 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-class Flag extends \Magento\Flag
+class Flag extends \Magento\Framework\Flag
 {
     /**
      * There was no synchronization

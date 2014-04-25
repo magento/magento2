@@ -32,7 +32,7 @@ namespace Magento\Review\Model\Resource\Rating;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Entity extends \Magento\Model\Resource\Db\AbstractDb
+class Entity extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Rating entity resource initialization

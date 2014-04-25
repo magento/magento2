@@ -34,7 +34,7 @@ class StateFactory
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -46,10 +46,10 @@ class StateFactory
     protected $_stateClassMap;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $stateClassMap - key stands for card type, value define the validator class
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $stateClassMap = array())
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $stateClassMap = array())
     {
         $this->_objectManager = $objectManager;
         $this->_stateClassMap = $stateClassMap;

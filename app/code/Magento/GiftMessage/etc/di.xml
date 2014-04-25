@@ -23,15 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <type name="Magento\Module\Updater\SetupFactory">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="giftmessage_setup" xsi:type="string">Magento\GiftMessage\Model\Resource\Setup</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Setup\Migration">
+    <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="giftmessage" xsi:type="string">Magento_GiftMessage</item>

@@ -26,7 +26,7 @@ namespace Magento\Dhl\Model\Source;
 /**
  * Source model for DHL Content Type
  */
-class Contenttype implements \Magento\Option\ArrayInterface
+class Contenttype implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

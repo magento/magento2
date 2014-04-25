@@ -40,7 +40,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $calculationModel;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
@@ -57,7 +57,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Tax\Model\Calculation $calculationModel
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
      * @param array $data
@@ -66,7 +66,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Tax\Model\Calculation $calculationModel,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService,
         array $data = array(),
@@ -263,7 +263,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @param Link $link
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function getLinkAmount($link)
     {
@@ -286,7 +286,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get LinkPrice Type
      *
-     * @return \Magento\Pricing\Price\PriceInterface
+     * @return \Magento\Framework\Pricing\Price\PriceInterface
      */
     protected function getPriceType()
     {

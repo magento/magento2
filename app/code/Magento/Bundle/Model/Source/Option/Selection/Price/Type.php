@@ -32,7 +32,7 @@ namespace Magento\Bundle\Model\Source\Option\Selection\Price;
  * @package    Magento_Bundle
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Type implements \Magento\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

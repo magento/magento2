@@ -33,12 +33,12 @@
  */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
+class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -55,16 +55,16 @@ class View extends \Magento\View\Element\Template implements \Magento\View\Block
     protected $_categoryHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer\Category $catalogLayer,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
         array $data = array()
     ) {

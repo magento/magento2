@@ -48,7 +48,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         $moduleName = 'Magento_Customer',
-        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_eavConfig = $eavConfig;
         parent::__construct(

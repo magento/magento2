@@ -38,7 +38,7 @@ class AuthorizationV1Test extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $loggerMock = $this->getMockBuilder('Magento\\Logger')->disableOriginalConstructor()->getMock();
+        $loggerMock = $this->getMockBuilder('Magento\\Framework\\Logger')->disableOriginalConstructor()->getMock();
         $loggerMock->expects($this->any())->method('logException')->will($this->returnSelf());
         $this->_service = $objectManager->create(
             'Magento\\Authz\\Service\\AuthorizationV1',

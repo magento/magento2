@@ -61,12 +61,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         )->with(
             Configuration::XML_FILESYSTEM_WRAPPER_PATH
         )->will(
-            $this->returnValue(array(\Magento\Filesystem::HTTP => array('protocol' => 'http')))
+            $this->returnValue(array(\Magento\Framework\Filesystem::HTTP => array('protocol' => 'http')))
         );
 
         /* Mock DirectoryList model */
         $directoryList = $this->getMockBuilder(
-            'Magento\Filesystem\DirectoryList'
+            'Magento\Framework\Filesystem\DirectoryList'
         )->disableOriginalConstructor()->setMethods(
             array('addDirectory', 'isConfigured', 'addProtocol')
         )->getMock();
@@ -76,7 +76,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addProtocol'
         )->with(
-            \Magento\Filesystem::HTTP,
+            \Magento\Framework\Filesystem::HTTP,
             array('protocol' => 'http')
         );
 

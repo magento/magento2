@@ -23,7 +23,7 @@
  */
 namespace Magento\Checkout\Block;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
 {

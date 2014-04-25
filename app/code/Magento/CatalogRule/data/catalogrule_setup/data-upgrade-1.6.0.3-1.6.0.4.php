@@ -24,22 +24,22 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Module\Setup */
+/** @var $this \Magento\Framework\Module\Setup */
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 
 $installer->appendClassAliasReplace(
     'catalogrule',
     'conditions_serialized',
-    \Magento\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
     array('rule_id')
 );
 $installer->appendClassAliasReplace(
     'catalogrule',
     'actions_serialized',
-    \Magento\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
     array('rule_id')
 );
 

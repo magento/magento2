@@ -33,11 +33,11 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number
 {
     /**
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      *
      * @return string
      */
-    protected function _getValue(\Magento\Object $row)
+    protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
         if (!is_null($data)) {

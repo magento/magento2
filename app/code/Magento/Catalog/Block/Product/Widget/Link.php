@@ -36,13 +36,13 @@ namespace Magento\Catalog\Block\Product\Widget;
 class Link extends \Magento\Catalog\Block\Widget\Link
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\UrlRewrite\Model\Resource\UrlRewrite $urlRewrite
      * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\UrlRewrite\Model\Resource\UrlRewrite $urlRewrite,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         array $data = array()

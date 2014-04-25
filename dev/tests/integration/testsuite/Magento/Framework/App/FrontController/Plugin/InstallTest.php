@@ -26,12 +26,12 @@ namespace Magento\Framework\App\FrontController\Plugin;
 class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Module\Setup
+     * @var \Magento\Framework\Module\Setup
      */
     protected $_model;
 
@@ -39,7 +39,7 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Module\Setup',
+            'Magento\Framework\Module\Setup',
             array('resourceName' => 'default_setup', 'moduleName' => 'Magento_Core')
         );
     }
@@ -48,13 +48,13 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /*reset versions*/
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Module\ResourceInterface'
+            'Magento\Framework\Module\ResourceInterface'
         )->setDbVersion(
             'adminnotification_setup',
             false
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Module\ResourceInterface'
+            'Magento\Framework\Module\ResourceInterface'
         )->setDataVersion(
             'adminnotification_setup',
             false
@@ -62,7 +62,7 @@ class InstallTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_model->deleteTableRow('core_resource', 'code', 'adminnotification_setup');
         $this->_model->getConnection()->dropTable($this->_model->getTable('adminnotification_inbox'));
         $this->_model->getConnection()->dropTable($this->_model->getTable('admin_system_messages'));
-        /** @var \Magento\Cache\FrontendInterface $cache */
+        /** @var \Magento\Framework\Cache\FrontendInterface $cache */
         $cache = $this->_objectManager->get('Magento\Framework\App\Cache\Type\Config');
         $cache->clean();
 

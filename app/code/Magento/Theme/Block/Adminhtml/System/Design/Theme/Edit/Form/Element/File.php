@@ -29,7 +29,7 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-class File extends \Magento\Data\Form\Element\File
+class File extends \Magento\Framework\Data\Form\Element\File
 {
     /**
      * Additional html attributes

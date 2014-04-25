@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Url extends \Magento\Model\Resource\Db\AbstractDb
+class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Stores configuration array
@@ -70,7 +70,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     protected $_rootChildrenIds = array();
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -113,7 +113,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -121,7 +121,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
-        \Magento\Logger $logger
+        \Magento\Framework\Logger $logger
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -173,7 +173,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param string $idPath
      * @param int $storeId
-     * @return \Magento\Object|false
+     * @return \Magento\Framework\Object|false
      */
     public function getRewriteByIdPath($idPath, $storeId)
     {
@@ -191,7 +191,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
         if (!$row) {
             return false;
         }
-        $rewrite = new \Magento\Object($row);
+        $rewrite = new \Magento\Framework\Object($row);
         $rewrite->setIdFieldName($this->getIdFieldName());
 
         return $rewrite;
@@ -202,7 +202,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param string $requestPath
      * @param int $storeId
-     * @return \Magento\Object|false
+     * @return \Magento\Framework\Object|false
      */
     public function getRewriteByRequestPath($requestPath, $storeId)
     {
@@ -220,7 +220,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
         if (!$row) {
             return false;
         }
-        $rewrite = new \Magento\Object($row);
+        $rewrite = new \Magento\Framework\Object($row);
         $rewrite->setIdFieldName($this->getIdFieldName());
 
         return $rewrite;
@@ -344,7 +344,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
         $rowSet = $adapter->fetchAll($select, $bind);
 
         foreach ($rowSet as $row) {
-            $rewrite = new \Magento\Object($row);
+            $rewrite = new \Magento\Framework\Object($row);
             $rewrite->setIdFieldName($this->getIdFieldName());
             $rewrites[$rewrite->getIdPath()] = $rewrite;
         }
@@ -356,9 +356,9 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      * Save rewrite URL
      *
      * @param array $rewriteData
-     * @param int|\Magento\Object $rewrite
+     * @param int|\Magento\Framework\Object $rewrite
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function saveRewrite($rewriteData, $rewrite)
     {
@@ -367,7 +367,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
             $adapter->insertOnDuplicate($this->getMainTable(), $rewriteData);
         } catch (\Exception $e) {
             $this->_logger->logException($e);
-            throw new \Magento\Model\Exception(__('Something went wrong saving the URL rewite.'));
+            throw new \Magento\Framework\Model\Exception(__('Something went wrong saving the URL rewite.'));
         }
 
         if ($rewrite && $rewrite->getId()) {
@@ -393,7 +393,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      */
     public function saveRewriteHistory($rewriteData)
     {
-        $rewriteData = new \Magento\Object($rewriteData);
+        $rewriteData = new \Magento\Framework\Object($rewriteData);
         // check if rewrite exists with save request_path
         $rewrite = $this->getRewriteByRequestPath($rewriteData->getRequestPath(), $rewriteData->getStoreId());
         if ($rewrite === false) {
@@ -407,11 +407,11 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save category attribute
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @param string $attributeCode
      * @return $this
      */
-    public function saveCategoryAttribute(\Magento\Object $category, $attributeCode)
+    public function saveCategoryAttribute(\Magento\Framework\Object $category, $attributeCode)
     {
         $adapter = $this->_getWriteAdapter();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
@@ -590,11 +590,11 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save product attribute
      *
-     * @param \Magento\Object $product
+     * @param \Magento\Framework\Object $product
      * @param string $attributeCode
      * @return $this
      */
-    public function saveProductAttribute(\Magento\Object $product, $attributeCode)
+    public function saveProductAttribute(\Magento\Framework\Object $product, $attributeCode)
     {
         $adapter = $this->_getWriteAdapter();
         if (!isset($this->_productAttributes[$attributeCode])) {
@@ -760,10 +760,10 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Prepare category parentId
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @return $this
      */
-    protected function _prepareCategoryParentId(\Magento\Object $category)
+    protected function _prepareCategoryParentId(\Magento\Framework\Object $category)
     {
         if ($category->getPath() != $category->getId()) {
             $split = explode('/', $category->getPath());
@@ -875,7 +875,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
                 }
             }
 
-            $category = new \Magento\Object($row);
+            $category = new \Magento\Framework\Object($row);
             $category->setIdFieldName('entity_id');
             $category->setStoreId($storeId);
             $this->_prepareCategoryParentId($category);
@@ -905,7 +905,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param int $categoryId
      * @param int $storeId
-     * @return \Magento\Object|false
+     * @return \Magento\Framework\Object|false
      */
     public function getCategory($categoryId, $storeId)
     {
@@ -939,10 +939,10 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve category child data objects
      *
-     * @param \Magento\Object $category
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $category
+     * @return \Magento\Framework\Object
      */
-    public function loadCategoryChilds(\Magento\Object $category)
+    public function loadCategoryChilds(\Magento\Framework\Object $category)
     {
         if ($category->getId() === null || $category->getStoreId() === null) {
             return $category;
@@ -980,7 +980,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      * @param string $categoryId
      * @param string $categoryPath
      * @param bool $includeStart
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getRootChildrenIds($categoryId, $categoryPath, $includeStart = true)
     {
@@ -1013,10 +1013,10 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve category parent path
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @return string
      */
-    public function getCategoryParentPath(\Magento\Object $category)
+    public function getCategoryParentPath(\Magento\Framework\Object $category)
     {
         $store = $this->_storeManager->getStore($category->getStoreId());
 
@@ -1033,12 +1033,12 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve product ids by category
      *
-     * @param \Magento\Object|int $category
+     * @param \Magento\Framework\Object|int $category
      * @return array
      */
     public function getProductIdsByCategory($category)
     {
-        if ($category instanceof \Magento\Object) {
+        if ($category instanceof \Magento\Framework\Object) {
             $categoryId = $category->getId();
         } else {
             $categoryId = $category;
@@ -1099,7 +1099,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
 
         $rowSet = $adapter->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
-            $product = new \Magento\Object($row);
+            $product = new \Magento\Framework\Object($row);
             $product->setIdFieldName('entity_id');
             $product->setCategoryIds(array());
             $product->setStoreId($storeId);
@@ -1141,7 +1141,7 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param int $storeId
-     * @return \Magento\Object|false
+     * @return \Magento\Framework\Object|false
      */
     public function getProduct($productId, $storeId)
     {
@@ -1168,11 +1168,11 @@ class Url extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Retrieve Product data objects in category
      *
-     * @param \Magento\Object $category
+     * @param \Magento\Framework\Object $category
      * @param int &$lastEntityId
      * @return array
      */
-    public function getProductsByCategory(\Magento\Object $category, &$lastEntityId)
+    public function getProductsByCategory(\Magento\Framework\Object $category, &$lastEntityId)
     {
         $productIds = $this->getProductIdsByCategory($category);
         if (!$productIds) {

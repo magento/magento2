@@ -38,9 +38,9 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindCustomerLogin()
     {
-        $customer = new \Magento\Object(['id' => '1']);
-        $observer = new \Magento\Object([
-            'event' => new \Magento\Object(['customer' => $customer])
+        $customer = new \Magento\Framework\Object(['id' => '1']);
+        $observer = new \Magento\Framework\Object([
+            'event' => new \Magento\Framework\Object(['customer' => $customer])
         ]);
 
         $this->_model->bindCustomerLogin($observer);
@@ -56,7 +56,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindCustomerLogout()
     {
-        $observer = new \Magento\Object();
+        $observer = new \Magento\Framework\Object();
 
         $this->_model->setCustomerId('1');
         $this->_model->bindCustomerLogout($observer);

@@ -35,7 +35,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor($className)
     {
-        $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
+        $frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
 
         $poolMock = $this->getMock('Magento\Framework\App\Cache\Type\FrontendPool', array(), array(), '', false);
         $poolMock->expects(

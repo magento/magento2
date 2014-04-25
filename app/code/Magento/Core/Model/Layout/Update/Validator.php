@@ -51,7 +51,7 @@ class Validator extends \Zend_Validate_Abstract
     /**
      * The Magento SimpleXml object
      *
-     * @var \Magento\Simplexml\Element
+     * @var \Magento\Framework\Simplexml\Element
      */
     protected $_value;
 
@@ -73,22 +73,22 @@ class Validator extends \Zend_Validate_Abstract
     protected $_xsdSchemas;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_modulesReader;
 
     /**
-     * @var \Magento\Config\DomFactory
+     * @var \Magento\Framework\Config\DomFactory
      */
     protected $_domConfigFactory;
 
     /**
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Config\DomFactory $domConfigFactory
+     * @param \Magento\Framework\Module\Dir\Reader $modulesReader
+     * @param \Magento\Framework\Config\DomFactory $domConfigFactory
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Config\DomFactory $domConfigFactory
+        \Magento\Framework\Module\Dir\Reader $modulesReader,
+        \Magento\Framework\Config\DomFactory $domConfigFactory
     ) {
         $this->_modulesReader = $modulesReader;
         $this->_domConfigFactory = $domConfigFactory;
@@ -142,7 +142,7 @@ class Validator extends \Zend_Validate_Abstract
             $this->_domConfigFactory->createDom(array('xml' => $value, 'schemaFile' => $this->_xsdSchemas[$schema]));
 
             if ($isSecurityCheck) {
-                $value = new \Magento\Simplexml\Element($value);
+                $value = new \Magento\Framework\Simplexml\Element($value);
                 $value->registerXPathNamespace('xsi', self::XML_NAMESPACE_XSI);
                 foreach ($this->_protectedExpressions as $key => $xpr) {
                     if ($value->xpath($xpr)) {
@@ -154,7 +154,7 @@ class Validator extends \Zend_Validate_Abstract
                     return false;
                 }
             }
-        } catch (\Magento\Config\Dom\ValidationException $e) {
+        } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
             $this->_error(self::XML_INVALID, $e->getMessage());
             return false;
         } catch (\Exception $e) {

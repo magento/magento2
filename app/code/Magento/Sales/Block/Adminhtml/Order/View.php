@@ -44,7 +44,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -64,14 +64,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Helper\Reorder $reorderHelper,
         array $data = array()

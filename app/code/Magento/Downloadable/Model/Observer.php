@@ -74,7 +74,7 @@ class Observer
     protected $_itemsFactory;
 
     /**
-     * @var \Magento\Object\Copy
+     * @var \Magento\Framework\Object\Copy
      */
     protected $_objectCopyService;
 
@@ -86,7 +86,7 @@ class Observer
      * @param \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
-     * @param \Magento\Object\Copy $objectCopyService
+     * @param \Magento\Framework\Object\Copy $objectCopyService
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -96,7 +96,7 @@ class Observer
         \Magento\Downloadable\Model\Link\Purchased\ItemFactory $itemFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
-        \Magento\Object\Copy $objectCopyService
+        \Magento\Framework\Object\Copy $objectCopyService
     ) {
         $this->_helper = $coreData;
         $this->_scopeConfig = $scopeConfig;
@@ -111,7 +111,7 @@ class Observer
     /**
      * Prepare product to save
      *
-     * @param   \Magento\Object $observer
+     * @param   \Magento\Framework\Object $observer
      * @return  $this
      */
     public function prepareProductSave($observer)
@@ -129,7 +129,7 @@ class Observer
     /**
      * Save data from order to purchased links
      *
-     * @param \Magento\Object $observer
+     * @param \Magento\Framework\Object $observer
      * @return $this
      */
     public function saveDownloadableOrderItem($observer)
@@ -222,7 +222,7 @@ class Observer
     /**
      * Set checkout session flag if order has downloadable product(s)
      *
-     * @param \Magento\Object $observer
+     * @param \Magento\Framework\Object $observer
      * @return $this
      */
     public function setHasDownloadableProducts($observer)
@@ -248,7 +248,7 @@ class Observer
     /**
      * Set status of link
      *
-     * @param \Magento\Object $observer
+     * @param \Magento\Framework\Object $observer
      * @return $this
      */
     public function setLinkStatus($observer)
@@ -354,10 +354,10 @@ class Observer
     /**
      * Check is allowed guest checkout if quote contain downloadable product(s)
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function isAllowedGuestCheckout(\Magento\Event\Observer $observer)
+    public function isAllowedGuestCheckout(\Magento\Framework\Event\Observer $observer)
     {
         $quote = $observer->getEvent()->getQuote();
         /* @var $quote \Magento\Sales\Model\Quote */
@@ -390,10 +390,10 @@ class Observer
     /**
      * Initialize product options renderer with downloadable specific params
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function initOptionRenderer(\Magento\Event\Observer $observer)
+    public function initOptionRenderer(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getBlock();
         $block->addOptionsRenderCfg('downloadable', 'Magento\Downloadable\Helper\Catalog\Product\Configuration');

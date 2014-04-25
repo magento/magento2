@@ -127,9 +127,9 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testAttributeOptions)
         );
 
-        /** @var $item \Magento\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $item = $this->getMockForAbstractClass(
-            'Magento\Model\AbstractModel',
+            'Magento\Framework\Model\AbstractModel',
             array(),
             '',
             false,

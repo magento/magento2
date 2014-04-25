@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Tax\Pricing\Render;
 
-use Magento\View\Element\Template;
-use Magento\Pricing\Render\AbstractAdjustment;
-use Magento\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Pricing\Render\AbstractAdjustment;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @method string getIdSuffix()
@@ -64,7 +62,7 @@ class Adjustment extends AbstractAdjustment
     {
         $html = $this->toHtml();
         if ($this->displayBothPrices()) {
-            if ($this->getZone() !== \Magento\Pricing\Render::ZONE_ITEM_OPTION) {
+            if ($this->getZone() !== \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION) {
                 $this->amountRender->setPriceDisplayLabel(__('Excl. Tax:'));
             }
             $this->amountRender->setPriceId(

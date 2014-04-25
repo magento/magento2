@@ -34,7 +34,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class ListProducts extends \Magento\View\Element\Template
+class ListProducts extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Service\V1\CustomerCurrentService
@@ -52,14 +52,14 @@ class ListProducts extends \Magento\View\Element\Template
     protected $_itemsFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\CollectionFactory $linksFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         \Magento\Downloadable\Model\Resource\Link\Purchased\CollectionFactory $linksFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,

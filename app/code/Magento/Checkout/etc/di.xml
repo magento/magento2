@@ -23,15 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <type name="Magento\Module\Updater\SetupFactory">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="checkout_setup" xsi:type="string">Magento\Checkout\Model\Resource\Setup</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">checkout</argument>
         </arguments>

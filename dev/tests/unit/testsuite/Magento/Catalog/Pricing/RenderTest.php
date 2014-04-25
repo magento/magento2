@@ -35,12 +35,12 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $layout;
 
@@ -51,16 +51,16 @@ class RenderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Magento\Registry', ['registry'], [], '', false);
+        $this->registry = $this->getMock('Magento\Framework\Registry', ['registry'], [], '', false);
 
-        $this->pricingRenderBlock = $this->getMock('Magento\Pricing\Render', [], [], '', false);
+        $this->pricingRenderBlock = $this->getMock('Magento\Framework\Pricing\Render', [], [], '', false);
 
-        $this->layout = $this->getMock('Magento\View\Layout', [], [], '', false);
+        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
 
-        $eventManager = $this->getMock('Magento\Event\ManagerStub', [], [], '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerStub', [], [], '', false);
         $config = $this->getMock('Magento\Store\Model\Store\Config', [], [], '', false);
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $context = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
+        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManager));
@@ -125,7 +125,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->never())
             ->method('registry');
 
-        $block = $this->getMock('Magento\Pricing\Render', ['getProductItem', 'render'], [], '', false);
+        $block = $this->getMock('Magento\Framework\Pricing\Render', ['getProductItem', 'render'], [], '', false);
 
         $block->expects($this->any())
             ->method('render')

@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Block\Widget\Guest;
 
-class Form extends \Magento\View\Element\Template implements \Magento\Widget\Block\BlockInterface
+class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -37,12 +37,12 @@ class Form extends \Magento\View\Element\Template implements \Magento\Widget\Blo
     protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
@@ -69,7 +69,7 @@ class Form extends \Magento\View\Element\Template implements \Magento\Widget\Blo
     public function getTypeSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\View\Element\Html\Select'
+            'Magento\Framework\View\Element\Html\Select'
         )->setData(
             array('id' => 'quick_search_type_id', 'class' => 'select guest-select')
         )->setName(

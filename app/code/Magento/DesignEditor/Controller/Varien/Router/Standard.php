@@ -30,7 +30,7 @@ namespace Magento\DesignEditor\Controller\Varien\Router;
 class Standard extends \Magento\Core\App\Router\Base
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -74,14 +74,14 @@ class Standard extends \Magento\Core\App\Router\Base
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\Code\NameBuilder $nameBuilder
+     * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Framework\App\RouterListInterface $routerList
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\UrlRewrite\App\Request\RewriteService $urlRewriteService
      * @param \Magento\DesignEditor\Helper\Data $designEditorHelper
      * @param \Magento\DesignEditor\Model\State $designEditorState
@@ -95,14 +95,14 @@ class Standard extends \Magento\Core\App\Router\Base
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\Config $routeConfig,
         \Magento\Framework\App\State $appState,
-        \Magento\UrlInterface $url,
+        \Magento\Framework\UrlInterface $url,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
-        \Magento\Code\NameBuilder $nameBuilder,
+        \Magento\Framework\Code\NameBuilder $nameBuilder,
         \Magento\Framework\App\RouterListInterface $routerList,
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\UrlRewrite\App\Request\RewriteService $urlRewriteService,
         \Magento\DesignEditor\Helper\Data $designEditorHelper,
         \Magento\DesignEditor\Model\State $designEditorState,
@@ -160,7 +160,7 @@ class Standard extends \Magento\Core\App\Router\Base
             /** @var $controller \Magento\Framework\App\Action\AbstractAction */
             $controller = $router->match($request);
             if ($controller) {
-                $this->_state->update(\Magento\Core\Model\App\Area::AREA_FRONTEND, $request);
+                $this->_state->update(\Magento\Framework\App\Area::AREA_FRONTEND, $request);
                 break;
             }
         }

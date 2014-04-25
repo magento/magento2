@@ -26,7 +26,7 @@
 
 $rootDir = realpath(__DIR__ . '/../../../..');
 require $rootDir . '/app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
+\Magento\Framework\Autoload\IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
 $defaultReportFile = 'report.log';
 
 try {
@@ -36,7 +36,7 @@ try {
             'mode|w' => "Application mode.  Preview mode is default. If set to 'write' - database is updated.",
             'output|f-w' => "Report output type. Report is flushed to console by default." .
             "If set to 'file', report is written to file /log/report.log",
-            'dbprovider=w' => "Database adapter class name. Default: \Magento\Db\Adapter\Pdo\Mysql",
+            'dbprovider=w' => "Database adapter class name. Default: \Magento\Framework\DB\Adapter\Pdo\Mysql",
             'dbhost=s' => "Database server host",
             'dbuser=s' => "Database server user",
             'dbpassword=s' => "Database server password",

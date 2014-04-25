@@ -40,11 +40,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
     /**
-     * @var array|null
-     */
-    protected $_agreements = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -62,22 +57,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
-     */
-    protected $_agreementCollectionFactory;
-
-    /**
-     * @var \Magento\Mail\Template\TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Translate\Inline\StateInterface
+     * @var \Magento\Framework\Translate\Inline\StateInterface
      */
     protected $inlineTranslation;
 
@@ -86,26 +76,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
-     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_localeDate = $localeDate;
-        $this->_agreementCollectionFactory = $agreementCollectionFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         parent::__construct($context);
@@ -151,30 +138,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @return array
-     */
-    public function getRequiredAgreementIds()
-    {
-        if (is_null($this->_agreements)) {
-            if (!$this->_scopeConfig->isSetFlag(
-                'checkout/options/enable_agreements',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-            ) {
-                $this->_agreements = array();
-            } else {
-                $this->_agreements = $this->_agreementCollectionFactory->create()->addStoreFilter(
-                    $this->_storeManager->getStore()->getId()
-                )->addFieldToFilter(
-                    'is_active',
-                    1
-                )->getAllIds();
-            }
-        }
-        return $this->_agreements;
-    }
-
-    /**
      * Get onepage checkout availability
      *
      * @return bool
@@ -190,7 +153,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get sales item (quote item, order item etc) price including tax based on row total and tax amount
      *
-     * @param   \Magento\Object $item
+     * @param   \Magento\Framework\Object $item
      * @return  float
      */
     public function getPriceInclTax($item)
@@ -207,7 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get sales item (quote item, order item etc) row total price including tax
      *
-     * @param   \Magento\Object $item
+     * @param   \Magento\Framework\Object $item
      * @return  float
      */
     public function getSubtotalInclTax($item)
@@ -321,7 +284,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $template
             )->setTemplateOptions(
-                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $checkout->getStoreId())
+                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $checkout->getStoreId())
             )->setTemplateVars(
                 array(
                     'reason' => $message,
@@ -397,7 +360,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
 
         if ($guestCheckout == true) {
-            $result = new \Magento\Object();
+            $result = new \Magento\Framework\Object();
             $result->setIsAllowed($guestCheckout);
             $this->_eventManager->dispatch(
                 'checkout_allow_guest',

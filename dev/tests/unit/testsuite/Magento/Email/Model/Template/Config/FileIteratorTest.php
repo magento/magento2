@@ -25,7 +25,7 @@ namespace Magento\Email\Model\Template\Config;
 
 /**
  * Class FileIteratorTest
- * @package Magento\Config
+ * @package Magento\Framework\Config
  */
 class FileIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,12 +35,12 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Filesystem\Directory\Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleDirResolverMock;
 
@@ -54,8 +54,14 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['/file1', '/file2'];
-        $this->directoryMock = $this->getMock('Magento\Filesystem\Directory\Read', [], [], '', false);
-        $this->moduleDirResolverMock = $this->getMock('Magento\Module\Dir\ReverseResolver', [], [], '', false);
+        $this->directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $this->moduleDirResolverMock = $this->getMock(
+            'Magento\Framework\Module\Dir\ReverseResolver',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->fileIterator = new FileIterator(
             $this->directoryMock,

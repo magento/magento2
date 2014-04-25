@@ -34,7 +34,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Constructor
      *
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerAccountServiceInterface $customerAccountService
@@ -42,7 +42,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerAccountServiceInterface $customerAccountService,

@@ -70,7 +70,7 @@ class Items extends \Magento\Backend\App\Action
                 array(
                     'store' => $this->_objectManager->get(
                         'Magento\Store\Model\StoreManagerInterface'
-                    )->getAnyStoreView()->getId(),
+                    )->getStore()->getId(),
                     '_current' => true
                 )
             );
@@ -195,7 +195,7 @@ class Items extends \Magento\Backend\App\Action
                 __('An error has occurred while adding products to google shopping account.'),
                 $e->getMessage()
             );
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             return;
         }
 
@@ -245,7 +245,7 @@ class Items extends \Magento\Backend\App\Action
                     'One or more products were not deleted from google shopping account. Refer to the log file for details.'
                 )
             );
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             return;
         }
 
@@ -295,7 +295,7 @@ class Items extends \Magento\Backend\App\Action
                     'One or more products were not deleted from google shopping account. Refer to the log file for details.'
                 )
             );
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             return;
         }
 
@@ -337,7 +337,7 @@ class Items extends \Magento\Backend\App\Action
                 )
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->messageManager->addError(__('Something went wrong during Captcha confirmation.'));
         }
 
@@ -396,7 +396,7 @@ class Items extends \Magento\Backend\App\Action
      * Get store object, basing on request
      *
      * @return \Magento\Store\Model\Store
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function _getStore()
     {
@@ -406,7 +406,7 @@ class Items extends \Magento\Backend\App\Action
             (int)$this->getRequest()->getParam('store', 0)
         );
         if (!$store || 0 == $store->getId()) {
-            throw new \Magento\Model\Exception(__('Unable to select a Store View'));
+            throw new \Magento\Framework\Model\Exception(__('Unable to select a Store View'));
         }
         return $store;
     }

@@ -37,15 +37,15 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -201,7 +201,7 @@ class Template extends \Magento\Backend\App\Action
             )->setTemplateStyles(
                 $request->getParam('styles')
             )->setModifiedAt(
-                $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
             );
 
             if (!$template->getId()) {
@@ -222,7 +222,7 @@ class Template extends \Magento\Backend\App\Action
 
             $this->_redirect('*/template');
             return;
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {
@@ -250,7 +250,7 @@ class Template extends \Magento\Backend\App\Action
                 $template->delete();
                 $this->messageManager->addSuccess(__('The newsletter template has been deleted.'));
                 $this->_getSession()->setFormData(false);
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while deleting this template.'));

@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogInventory\Block\Stockqty;
 
-class DefaultStockqty extends AbstractStockqty implements \Magento\View\Block\IdentityInterface
+class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Render block HTML

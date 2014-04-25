@@ -25,8 +25,6 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
-use Magento\Model\Resource\Db\Collection\AbstractCollection;
-
 /**
  * Adminhtml dashboard tab abstract
  *
@@ -61,7 +59,7 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return array|AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
+     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
      */
     public function getCollection()
     {

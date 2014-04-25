@@ -26,7 +26,7 @@ namespace Magento\Core\Model\Resource;
 /**
  * Core resource setup
  */
-class Setup extends \Magento\Module\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
@@ -39,7 +39,7 @@ class Setup extends \Magento\Module\Setup
     protected $_themeFactory;
 
     /**
-     * @param \Magento\Module\Setup\Context $context
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
@@ -47,12 +47,12 @@ class Setup extends \Magento\Module\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Module\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Core\Model\Theme\CollectionFactory $themeFactory,
         $moduleName = 'Magento_Core',
-        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_themeResourceFactory = $themeResourceFactory;
         $this->_themeFactory = $themeFactory;

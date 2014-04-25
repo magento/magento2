@@ -43,7 +43,7 @@ namespace Magento\Authorizenet\Model\Authorizenet;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Debug extends \Magento\Model\AbstractModel
+class Debug extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void

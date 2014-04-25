@@ -67,7 +67,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_session;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
@@ -82,7 +82,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
@@ -137,7 +137,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return \Magento\Message\ManagerInterface
+     * @return \Magento\Framework\Message\ManagerInterface
      */
     protected function getMessageManager()
     {
@@ -177,28 +177,28 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @param \Magento\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
-    protected function _addContent(\Magento\View\Element\AbstractBlock $block)
+    protected function _addContent(\Magento\Framework\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'content');
     }
 
     /**
-     * @param \Magento\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
-    protected function _addLeft(\Magento\View\Element\AbstractBlock $block)
+    protected function _addLeft(\Magento\Framework\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'left');
     }
 
     /**
-     * @param \Magento\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
-    protected function _addJs(\Magento\View\Element\AbstractBlock $block)
+    protected function _addJs(\Magento\Framework\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'js');
     }
@@ -208,11 +208,11 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      *
      * The block will be moved to the container from previous parent after all other elements
      *
-     * @param \Magento\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @param string $containerName
      * @return $this
      */
-    private function _moveBlockToContainer(\Magento\View\Element\AbstractBlock $block, $containerName)
+    private function _moveBlockToContainer(\Magento\Framework\View\Element\AbstractBlock $block, $containerName)
     {
         $this->_view->getLayout()->setChild($containerName, $block->getNameInLayout(), '');
         return $this;
@@ -306,7 +306,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Locale\Validator')->isValid($forceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 

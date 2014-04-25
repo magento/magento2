@@ -25,6 +25,6 @@
  */
 namespace Magento\Shipping\Model\Tracking\Result;
 
-class AbstractResult extends \Magento\Object
+class AbstractResult extends \Magento\Framework\Object
 {
 }

@@ -25,10 +25,10 @@
 -->
 <layout>
     <handle id="test">
-        <block class="Magento\View\Element\Template" name="block"/>
+        <block class="Magento\Framework\View\Element\Template" name="block"/>
         <container name="container" label="Container"/>
         <reference name="block">
-            <block class="Magento\View\Element\Template" name="another.block"/>
+            <block class="Magento\Framework\View\Element\Template" name="another.block"/>
         </reference>
         <reference name="container">
             <container name="another.container" label="Container"/>

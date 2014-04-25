@@ -26,7 +26,7 @@ namespace Magento\Paypal\Block\Billing\Agreement;
 /**
  * Customer account billing agreement view block
  */
-class View extends \Magento\View\Element\Template
+class View extends \Magento\Framework\View\Element\Template
 {
     /**
      * Payment methods array
@@ -52,7 +52,7 @@ class View extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -82,8 +82,8 @@ class View extends \Magento\View\Element\Template
     protected $_agreementResource;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
@@ -92,8 +92,8 @@ class View extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,

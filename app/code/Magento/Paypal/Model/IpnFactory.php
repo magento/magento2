@@ -28,7 +28,7 @@ class IpnFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
@@ -40,10 +40,10 @@ class IpnFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $mapping
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $mapping = array())
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $mapping = array())
     {
         $this->_objectManager = $objectManager;
         $this->mapping = $mapping;

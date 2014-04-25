@@ -1,0 +1,102 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\Framework\Translate\Inline;
+
+class State implements StateInterface
+{
+    /**
+     * Flag to enable/disable inine translation
+     *
+     * @var bool
+     */
+    protected $isEnabled = true;
+
+    /**
+     * @var bool
+     */
+    protected $storedStatus;
+
+    /**
+     * Disable inline translation
+     *
+     * @return void
+     */
+    public function disable()
+    {
+        $this->isEnabled = false;
+    }
+
+    /**
+     * Enable inline translation
+     *
+     * @return void
+     */
+    public function enable()
+    {
+        $this->isEnabled = true;
+    }
+
+    /**
+     * Check if inline translation enabled/disabled
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * Suspend inline translation
+     *
+     * Store current inline translation status
+     * and apply new status or disable inline translation.
+     *
+     * @param bool $status
+     * @return void
+     */
+    public function suspend($status = false)
+    {
+        if ($this->storedStatus === null) {
+            $this->storedStatus = $this->isEnabled;
+            $this->isEnabled = $status;
+        }
+    }
+
+    /**
+     * Disable inline translation
+     *
+     * Restore inline translation status
+     * or apply new status.
+     *
+     * @param bool $status
+     * @return void
+     */
+    public function resume($status = true)
+    {
+        $this->isEnabled = !$status ? $status : $this->storedStatus;
+        $this->storedStatus = null;
+    }
+}

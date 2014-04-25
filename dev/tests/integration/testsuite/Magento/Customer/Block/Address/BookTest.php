@@ -43,7 +43,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $blockMock */
         $blockMock = $this->getMockBuilder(
-            '\Magento\View\Element\BlockInterface'
+            '\Magento\Framework\View\Element\BlockInterface'
         )->disableOriginalConstructor()->setMethods(
             array('setTitle', 'toHtml')
         )->getMock();
@@ -51,8 +51,8 @@ class BookTest extends \PHPUnit_Framework_TestCase
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Customer\Service\V1\CustomerCurrentService');
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
         $layout->setBlock('head', $blockMock);
         $this->_block = $layout
             ->createBlock(

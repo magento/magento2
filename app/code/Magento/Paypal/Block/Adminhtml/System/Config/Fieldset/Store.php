@@ -29,7 +29,7 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
  * Renderer for service JavaScript code that disables corresponding paypal methods on page load
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Store extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Path to template file
@@ -52,10 +52,10 @@ class Store extends \Magento\Backend\Block\Template implements \Magento\Data\For
     /**
      * Render service JavaScript code
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $html = $this->_storeManager->isSingleStoreMode() ? '' : $this->toHtml();
         return $html;

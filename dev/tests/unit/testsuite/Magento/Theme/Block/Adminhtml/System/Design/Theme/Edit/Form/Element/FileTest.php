@@ -33,7 +33,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         /** @var $fileBlock \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File */
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $collectionFactory = $this->getMock(
-            'Magento\Data\Form\Element\CollectionFactory',
+            'Magento\Framework\Data\Form\Element\CollectionFactory',
             array(),
             array(),
             '',

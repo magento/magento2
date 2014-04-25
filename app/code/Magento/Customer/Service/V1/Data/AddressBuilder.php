@@ -23,14 +23,17 @@
  */
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Service\Data\EAV\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\Eav\AbstractObject;
+use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
 
 /**
  * Builder for the Address Service Data Object
  *
  * @method Address create()
- * @method Address mergeDataObjectWithArray(AbstractObjectBuilder $dataObject, array $data)
+ * @method Address mergeDataObjectWithArray(AbstractObject $dataObject, array $data)
+ * @method Address mergeDataObjects(AbstractObject $firstDataObject, AbstractObject $secondDataObject)
  */
 class AddressBuilder extends AbstractObjectBuilder
 {
@@ -47,12 +50,16 @@ class AddressBuilder extends AbstractObjectBuilder
     /**
      * Initialize dependencies.
      *
+     * @param AttributeValueBuilder $valueBuilder
      * @param RegionBuilder $regionBuilder
      * @param CustomerMetadataServiceInterface $metadataService
      */
-    public function __construct(RegionBuilder $regionBuilder, CustomerMetadataServiceInterface $metadataService)
-    {
-        parent::__construct();
+    public function __construct(
+        AttributeValueBuilder $valueBuilder,
+        RegionBuilder $regionBuilder,
+        CustomerMetadataServiceInterface $metadataService
+    ) {
+        parent::__construct($valueBuilder);
         $this->_metadataService = $metadataService;
         $this->_regionBuilder = $regionBuilder;
         $this->_data[Address::KEY_REGION] = $regionBuilder->create();

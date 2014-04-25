@@ -26,11 +26,11 @@
 
 namespace Magento\GroupedProduct\Pricing\Price;
 
-use Magento\Pricing\Adjustment\Calculator;
-use Magento\Pricing\Amount\AmountInterface;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Pricing\Price\FinalPriceInterface;
-use Magento\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Catalog\Model\ProductFactory;
 
@@ -45,12 +45,12 @@ class FinalPrice implements FinalPriceInterface, PriceInterface
     protected $priceType = self::PRICE_TYPE_FINAL;
 
     /**
-     * @var \Magento\Pricing\Object\SaleableInterface
+     * @var \Magento\Framework\Pricing\Object\SaleableInterface
      */
     protected $salableItem;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator
      */
     protected $calculator;
 
@@ -122,7 +122,7 @@ class FinalPrice implements FinalPriceInterface, PriceInterface
             $minPrice = null;
             foreach ($products as $item) {
                 $product = clone $item;
-                $product->setQty(\Magento\Pricing\PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT);
+                $product->setQty(\Magento\Framework\Pricing\PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT);
                 $price = $product->getPriceInfo()
                     ->getPrice(FinalPriceInterface::PRICE_TYPE_FINAL)
                     ->getValue();

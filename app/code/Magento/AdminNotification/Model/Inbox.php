@@ -49,7 +49,7 @@ namespace Magento\AdminNotification\Model;
  * @package     Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Inbox extends \Magento\Model\AbstractModel
+class Inbox extends \Magento\Framework\Model\AbstractModel
 {
     const SEVERITY_CRITICAL = 1;
 
@@ -133,13 +133,13 @@ class Inbox extends \Magento\Model\AbstractModel
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return $this
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true)
     {
         if (!$this->getSeverities($severity)) {
-            throw new \Magento\Model\Exception(__('Wrong message type'));
+            throw new \Magento\Framework\Model\Exception(__('Wrong message type'));
         }
         if (is_array($description)) {
             $description = '<ul><li>' . implode('</li><li>', $description) . '</li></ul>';

@@ -27,7 +27,7 @@ namespace Magento\Shipping\Model\Simplexml;
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
  */
-class Element extends \Magento\Simplexml\Element
+class Element extends \Magento\Framework\Simplexml\Element
 {
     /**
      * Adds an attribute to the SimpleXML element

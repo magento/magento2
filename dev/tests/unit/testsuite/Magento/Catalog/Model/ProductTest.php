@@ -59,7 +59,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $productTypeMock;
 
     /**
-     * @var \Magento\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_priceInfoMock;
 
@@ -81,7 +81,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_priceInfoMock = $this->getMock('Magento\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->_priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $this->productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $this->productPriceProcessor = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Price\Processor',
@@ -96,13 +96,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
-        $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $actionValidatorMock = $this->getMock('\Magento\Model\ActionValidator\RemoveAction', [], [], '', false);
+        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $actionValidatorMock = $this->getMock(
+            '\Magento\Framework\Model\ActionValidator\RemoveAction', 
+            [], 
+            [], 
+            '', 
+            false
+        );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
         $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface', array(), array(), '', false);
 
         $contextMock = $this->getMock(
-            '\Magento\Model\Context',
+            '\Magento\Framework\Model\Context',
             array('getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'), array(), '', false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));

@@ -37,7 +37,7 @@ namespace Magento\Review\Model\Rating;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Entity extends \Magento\Model\AbstractModel
+class Entity extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void

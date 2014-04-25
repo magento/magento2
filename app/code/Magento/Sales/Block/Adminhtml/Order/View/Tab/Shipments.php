@@ -28,26 +28,26 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order Shipments grid
  */
-class Shipments extends \Magento\View\Element\Text\ListText implements
+class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Collection factory
      *
-     * @param \Magento\View\Element\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\View\Element\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
          $this->_coreRegistry = $coreRegistry;

@@ -43,7 +43,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleManagerMock = $this->getMock('\Magento\Module\Manager', array(), array(), '', false);
+        $this->moduleManagerMock = $this->getMock('\Magento\Framework\Module\Manager', array(), array(), '', false);
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product\Type', array(), array(), '', false);
         $this->object = new \Magento\GroupedProduct\Model\Product\Type\Plugin($this->moduleManagerMock);
     }

@@ -36,7 +36,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_resource;
 
     /**
-     * @var \Magento\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cacheFrontend;
 
@@ -114,7 +114,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $appInstalled = true,
         $banAll = false
     ) {
-        $this->_cacheFrontend = $this->getMock('Magento\Cache\FrontendInterface');
+        $this->_cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
         $this->_cacheFrontend->expects(
             $this->any()
         )->method(

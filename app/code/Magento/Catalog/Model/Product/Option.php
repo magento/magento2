@@ -28,8 +28,8 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Model\Exception;
-use Magento\Model\AbstractModel;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Catalog product option model
@@ -118,28 +118,28 @@ class Option extends AbstractModel
     protected $_optionFactory;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param Option\Value $productOptionValue
      * @param \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
-        \Magento\Stdlib\String $string,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productOptionValue = $productOptionValue;
@@ -151,7 +151,7 @@ class Option extends AbstractModel
     /**
      * Get resource instance
      *
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getResource()
     {
@@ -403,7 +403,7 @@ class Option extends AbstractModel
 
     /**
      * @return AbstractModel
-     * @throws Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _afterSave()
     {

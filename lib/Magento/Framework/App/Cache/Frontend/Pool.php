@@ -44,7 +44,7 @@ class Pool implements \Iterator
     private $_factory;
 
     /**
-     * @var \Magento\Cache\FrontendInterface[]
+     * @var \Magento\Framework\Cache\FrontendInterface[]
      */
     private $_instances;
 
@@ -101,7 +101,7 @@ class Pool implements \Iterator
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Cache\FrontendInterface
+     * @return \Magento\Framework\Cache\FrontendInterface
      */
     public function current()
     {
@@ -149,7 +149,7 @@ class Pool implements \Iterator
      * Retrieve frontend instance by its unique identifier
      *
      * @param string $identifier Cache frontend identifier
-     * @return \Magento\Cache\FrontendInterface Cache frontend instance
+     * @return \Magento\Framework\Cache\FrontendInterface Cache frontend instance
      * @throws \InvalidArgumentException
      */
     public function get($identifier)

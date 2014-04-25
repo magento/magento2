@@ -31,7 +31,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Theme Test
  *
- * @package Magento\View
+ * @package Magento\Framework\View
  */
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {

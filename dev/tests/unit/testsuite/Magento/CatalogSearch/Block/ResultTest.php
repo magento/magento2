@@ -31,7 +31,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogSearch\Block\Result */
     protected $model;
 
-    /** @var \Magento\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
     /** @var \Magento\Catalog\Model\Layer|\PHPUnit_Framework_MockObject_MockObject */
@@ -47,7 +47,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->layerMock = $this->getMock('Magento\Catalog\Model\Layer\Search', [], [], '', false);
         $this->dataMock = $this->getMock('Magento\CatalogSearch\Helper\Data', [], [], '', false);
         $this->model = new Result($this->contextMock, $this->layerMock, $this->dataMock);

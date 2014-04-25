@@ -26,8 +26,8 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 
 use Magento\Backend\Block\AbstractBlock;
-use Magento\Data\Form\Element\AbstractElement;
-use Magento\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Customer new password field renderer

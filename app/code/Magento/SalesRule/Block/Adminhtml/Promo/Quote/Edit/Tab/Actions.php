@@ -47,8 +47,8 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Config\Source\Yesno $sourceYesno
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
@@ -56,8 +56,8 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
@@ -110,7 +110,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 

@@ -25,7 +25,7 @@ namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
-class Hello extends \Magento\View\Element\Template
+class Hello extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -45,14 +45,14 @@ class Hello extends \Magento\View\Element\Template
     /**
      * Constructor
      *
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\View $viewHelper
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\View $viewHelper,
         CustomerAccountServiceInterface $customerAccountService,

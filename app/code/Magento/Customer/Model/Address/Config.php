@@ -32,7 +32,7 @@ namespace Magento\Customer\Model\Address;
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Config\Data
+class Config extends \Magento\Framework\Config\Data
 {
     const DEFAULT_ADDRESS_RENDERER = 'Magento\Customer\Block\Address\Renderer\DefaultRenderer';
 
@@ -79,7 +79,7 @@ class Config extends \Magento\Config\Data
 
     /**
      * @param \Magento\Customer\Model\Address\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -87,7 +87,7 @@ class Config extends \Magento\Config\Data
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -137,7 +137,7 @@ class Config extends \Magento\Config\Data
             $this->_types[$storeId] = array();
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new \Magento\Object();
+                $type = new \Magento\Framework\Object();
                 if (isset(
                     $typeConfig['escapeHtml']
                 ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
@@ -174,14 +174,14 @@ class Config extends \Magento\Config\Data
     /**
      * Retrieve default address format
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new \Magento\Object();
+            $this->_defaultTypes[$storeId] = new \Magento\Framework\Object();
             $this->_defaultTypes[$storeId]->setCode(
                 'default'
             )->setDefaultFormat(
@@ -205,7 +205,7 @@ class Config extends \Magento\Config\Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormatByCode($typeCode)
     {

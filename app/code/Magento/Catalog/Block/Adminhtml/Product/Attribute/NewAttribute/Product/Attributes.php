@@ -42,7 +42,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         /**
          * Initialize product object as form property
@@ -85,7 +85,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean'
         );
 
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setTypes(array());
         $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', array('response' => $response));
 

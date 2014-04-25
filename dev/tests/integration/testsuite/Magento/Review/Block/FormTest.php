@@ -39,9 +39,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $session->setCustomerDataAsLoggedIn($customer);
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Review\Block\Form');
-        /** @var \Magento\Escaper $escaper */
+        /** @var \Magento\Framework\Escaper $escaper */
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Escaper');
+            ->get('Magento\Framework\Escaper');
         $this->assertStringMatchesFormat(
             '%A<input type="text" name="nickname" id="nickname_field" class="input-text"'
                 . ' data-validate="{required:true}" value="'

@@ -35,12 +35,12 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_blockDependencies = array(
         'request' => 'Magento\Framework\App\RequestInterface',
-        'layout' => 'Magento\View\LayoutInterface',
-        'eventManager' => 'Magento\Event\ManagerInterface',
-        'translator' => 'Magento\TranslateInterface',
+        'layout' => 'Magento\Framework\View\LayoutInterface',
+        'eventManager' => 'Magento\Framework\Event\ManagerInterface',
+        'translator' => 'Magento\Framework\TranslateInterface',
         'cache' => 'Magento\Framework\App\CacheInterface',
-        'design' => 'Magento\View\DesignInterface',
-        'session' => 'Magento\Session\SessionManagerInterface',
+        'design' => 'Magento\Framework\View\DesignInterface',
+        'session' => 'Magento\Framework\Session\SessionManagerInterface',
         'scopeConfig' => 'Magento\Framework\App\Config\ScopeConfigInterface'
     );
 
@@ -50,10 +50,10 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_modelDependencies = array(
-        'eventManager' => 'Magento\Event\ManagerInterface',
+        'eventManager' => 'Magento\Framework\Event\ManagerInterface',
         'cacheManager' => 'Magento\Framework\App\CacheInterface',
-        'resource' => 'Magento\Model\Resource\AbstractResource',
-        'resourceCollection' => 'Magento\Data\Collection\Db'
+        'resource' => 'Magento\Framework\Model\Resource\AbstractResource',
+        'resourceCollection' => 'Magento\Framework\Data\Collection\Db'
     );
 
     /**
@@ -62,9 +62,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetBlock()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $template \Magento\View\Element\Template */
-        $template = $objectManager->getObject('Magento\View\Element\Template');
-        $this->assertInstanceOf('Magento\View\Element\Template', $template);
+        /** @var $template \Magento\Framework\View\Element\Template */
+        $template = $objectManager->getObject('Magento\Framework\View\Element\Template');
+        $this->assertInstanceOf('Magento\Framework\View\Element\Template', $template);
         foreach ($this->_blockDependencies as $propertyName => $propertyType) {
             $this->assertAttributeInstanceOf($propertyType, '_' . $propertyName, $template);
         }
@@ -74,13 +74,13 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $appStateMock = $this->getMock('Magento\Framework\App\State', array('getAreaCode'), array(), '', false);
         $appStateMock->expects($this->once())->method('getAreaCode')->will($this->returnValue($area));
 
-        $context = $objectManager->getObject('Magento\View\Element\Template\Context');
-        $appStateProperty = new \ReflectionProperty('Magento\View\Element\Template\Context', '_appState');
+        $context = $objectManager->getObject('Magento\Framework\View\Element\Template\Context');
+        $appStateProperty = new \ReflectionProperty('Magento\Framework\View\Element\Template\Context', '_appState');
         $appStateProperty->setAccessible(true);
         $appStateProperty->setValue($context, $appStateMock);
 
-        /** @var $template \Magento\View\Element\Template */
-        $template = $objectManager->getObject('Magento\View\Element\Template', array('context' => $context));
+        /** @var $template \Magento\Framework\View\Element\Template */
+        $template = $objectManager->getObject('Magento\Framework\View\Element\Template', array('context' => $context));
         $this->assertEquals($area, $template->getArea());
     }
 

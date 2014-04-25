@@ -28,7 +28,7 @@ use Magento\Integration\Model\Manager;
 /**
  * Resource Setup Model
  */
-class Setup extends \Magento\Module\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * @var  Manager
@@ -38,7 +38,7 @@ class Setup extends \Magento\Module\Setup
     /**
      * Construct resource Setup Model
      *
-     * @param \Magento\Module\Setup\Context $context
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
      * @param Manager $integrationManager
      * @param string $moduleName
@@ -46,11 +46,11 @@ class Setup extends \Magento\Module\Setup
      *
      */
     public function __construct(
-        \Magento\Module\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         Manager $integrationManager,
         $moduleName = 'Magento_Integration',
-        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_integrationManager = $integrationManager;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);

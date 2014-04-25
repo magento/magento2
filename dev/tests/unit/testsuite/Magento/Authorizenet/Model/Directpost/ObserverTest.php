@@ -31,7 +31,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
 
@@ -44,7 +44,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $this->coreRegistry = $this->getMock('Magento\Registry', array());
+        $this->coreRegistry = $this->getMock('Magento\Framework\Registry', array());
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $payment = $this->getMock('Magento\Authorizenet\Model\Directpost', null, array(), '', false);
@@ -100,7 +100,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($order)
         );
 
-        $request = new \Magento\Object();
+        $request = new \Magento\Framework\Object();
         $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $controller = $this->getMock(
             'Magento\Checkout\Controller\Action',
@@ -111,8 +111,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $controller->expects($this->once())->method('getRequest')->will($this->returnValue($request));
         $controller->expects($this->once())->method('getResponse')->will($this->returnValue($response));
-        $observer = new \Magento\Event\Observer(
-            array('event' => new \Magento\Object(array('controller_action' => $controller)))
+        $observer = new \Magento\Framework\Event\Observer(
+            array('event' => new \Magento\Framework\Object(array('controller_action' => $controller)))
         );
 
         $this->coreData->expects(

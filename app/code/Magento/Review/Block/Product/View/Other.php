@@ -28,21 +28,21 @@ namespace Magento\Review\Block\Product\View;
 /**
  * Product view other block
  */
-class Other extends \Magento\View\Element\Template
+class Other extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_registry;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_registry = $registry;

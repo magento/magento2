@@ -60,10 +60,10 @@ class CustomerQuote
     /**
      * Set new customer group to all his quotes
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function dispatch(\Magento\Event\Observer $observer)
+    public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
         /** @var CustomerData $customerDataObject */
         $customerDataObject = $observer->getEvent()->getCustomerDataObject();

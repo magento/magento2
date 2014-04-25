@@ -28,11 +28,13 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Get object manager mock
      *
-     * @return \Magento\ObjectManager
+     * @return \Magento\Framework\ObjectManager
      */
     protected function _createObjectManager()
     {
-        return $this->getMockBuilder('Magento\ObjectManager')->setMethods(array('create'))->getMockForAbstractClass();
+        return $this->getMockBuilder('Magento\Framework\ObjectManager')
+            ->setMethods(array('create'))
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -83,7 +85,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
         $attributeFactory = new \Magento\GoogleShopping\Model\AttributeFactory(
             $objectManager,
             $this->_createGsData(),
-            new \Magento\Stdlib\String()
+            new \Magento\Framework\Stdlib\String()
         );
         $attribute = $attributeFactory->createAttribute($name);
         $this->assertEquals($name, $attribute->getName());
@@ -126,7 +128,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
         $attributeFactory = new \Magento\GoogleShopping\Model\AttributeFactory(
             $objectManager,
             $this->_createGsData(),
-            new \Magento\Stdlib\String()
+            new \Magento\Framework\Stdlib\String()
         );
         $attribute = $attributeFactory->createAttribute('name');
         $this->assertEquals('name', $attribute->getName());
@@ -152,7 +154,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
         $attributeFactory = new \Magento\GoogleShopping\Model\AttributeFactory(
             $objectManager,
             $this->_createGsData(),
-            new \Magento\Stdlib\String()
+            new \Magento\Framework\Stdlib\String()
         );
         $attribute = $attributeFactory->create();
         $this->assertEquals('some value', $attribute);

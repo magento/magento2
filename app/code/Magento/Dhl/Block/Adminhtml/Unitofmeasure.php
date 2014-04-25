@@ -112,10 +112,10 @@ class Unitofmeasure extends \Magento\Backend\Block\System\Config\Form\Field
     /**
      * Retrieve Element HTML fragment
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return parent::_getElementHtml($element) . $this->_toHtml();
     }

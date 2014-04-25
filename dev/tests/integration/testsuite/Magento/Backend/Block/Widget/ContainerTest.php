@@ -32,7 +32,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block \Magento\Backend\Block\Widget\Container */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\Widget\Container',
             '',
@@ -89,9 +89,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _buildBlock($titles)
     {
-        /** @var $layout \Magento\View\LayoutInterface */
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\Layout',
+            'Magento\Framework\View\Layout',
             array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
         /** @var $block \Magento\Backend\Block\Widget\Container */

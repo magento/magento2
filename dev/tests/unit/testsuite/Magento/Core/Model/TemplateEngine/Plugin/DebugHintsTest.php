@@ -52,10 +52,16 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->subjectMock = $this->getMock('Magento\View\TemplateEngineFactory', array(), array(), '', false);
+        $this->subjectMock = $this->getMock(
+            'Magento\Framework\View\TemplateEngineFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_model = new DebugHints($this->_objectManager, $this->_scopeConfig, $this->_coreData);
     }
 
@@ -67,8 +73,8 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_coreData->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
         $this->_setupConfigFixture(true, $showBlockHints);
-        $engine = $this->getMock('Magento\View\TemplateEngineInterface');
-        $engineDecorated = $this->getMock('Magento\View\TemplateEngineInterface');
+        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $engineDecorated = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
         $this->_objectManager->expects(
             $this->once()
         )->method(
@@ -97,7 +103,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         $this->_coreData->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
         $this->_setupConfigFixture($showTemplateHints, true);
         $this->_objectManager->expects($this->never())->method('create');
-        $engine = $this->getMock('Magento\View\TemplateEngineInterface', array(), array(), '', false);
+        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface', array(), array(), '', false);
         $this->assertSame($engine, $this->_model->afterCreate($this->subjectMock, $engine));
     }
 

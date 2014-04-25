@@ -38,7 +38,7 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Option setType(string $value)
  * @method \Magento\Catalog\Model\Product[] getSelections()
  */
-class Option extends \Magento\Model\AbstractModel
+class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Default selection object

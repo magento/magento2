@@ -43,7 +43,7 @@
  */
 namespace Magento\Directory\Model;
 
-class Region extends \Magento\Model\AbstractModel
+class Region extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @return void

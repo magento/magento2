@@ -46,4 +46,4 @@ $category->setName(
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Registry')->register('_fixture/Magento\Catalog\Model\Category', $category);
+$objectManager->get('Magento\Framework\Registry')->register('_fixture/Magento\Catalog\Model\Category', $category);

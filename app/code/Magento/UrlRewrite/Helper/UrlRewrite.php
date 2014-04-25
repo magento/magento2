@@ -36,7 +36,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
     // Anchor is not supported in request path, e.g. 'foo#bar'
 
     /**
-     * @var \Magento\UrlRewrite\Model\Source\Urlrewrite\Options
+     * @var \Magento\UrlRewrite\Model\UrlRewrite\OptionProvider
      */
     protected $_urlrewrite;
 
@@ -80,7 +80,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * Either returns TRUE (success) or throws error (validation failed)
      *
      * @param string $requestPath
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validateRequestPath($requestPath)
@@ -88,7 +88,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         try {
             $this->_validateRequestPath($requestPath);
         } catch (\Exception $e) {
-            throw new \Magento\Model\Exception($e->getMessage());
+            throw new \Magento\Framework\Model\Exception($e->getMessage());
         }
         return true;
     }
@@ -98,7 +98,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * Either returns TRUE (success) or throws error (validation failed)
      *
      * @param string $suffix
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validateSuffix($suffix)
@@ -110,11 +110,11 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
             // Make message saying about suffix, not request path
             switch ($e->getCode()) {
                 case self::VERR_MANYSLASHES:
-                    throw new \Magento\Model\Exception(
+                    throw new \Magento\Framework\Model\Exception(
                         __('Two and more slashes together are not permitted in url rewrite suffix')
                     );
                 case self::VERR_ANCHOR:
-                    throw new \Magento\Model\Exception(__('Anchor symbol (#) is not supported in url rewrite suffix'));
+                    throw new \Magento\Framework\Model\Exception(__('Anchor symbol (#) is not supported in url rewrite suffix'));
             }
         }
         return true;

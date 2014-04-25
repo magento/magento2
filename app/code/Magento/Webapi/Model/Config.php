@@ -53,7 +53,7 @@ class Config
     /**
      * Module configuration reader
      *
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 

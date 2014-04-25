@@ -146,7 +146,7 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
                 $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($invoices);
                 $pdf->pages = array_merge($pdf->pages, $pages->pages);
             }
-            $date = $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
 
             return $this->_fileFactory->create(
                 'creditmemo' . $date . '.pdf',
@@ -173,7 +173,7 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
                 )->getPdf(
                     array($creditmemo)
                 );
-                $date = $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+                $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
                 return $this->_fileFactory->create(
                     'creditmemo' . $date . '.pdf',
                     $pdf->render(),

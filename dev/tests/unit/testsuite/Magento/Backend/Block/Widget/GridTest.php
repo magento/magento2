@@ -50,7 +50,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddGetClearRss($isUseStoreInUrl)
     {
-        $urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
+        $urlMock = $this->getMock('Magento\Framework\Url', array(), array(), '', false);
 
         $storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));

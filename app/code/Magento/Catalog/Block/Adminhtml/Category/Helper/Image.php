@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 
-class Image extends \Magento\Data\Form\Element\Image
+class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -41,18 +41,18 @@ class Image extends \Magento\Data\Form\Element\Image
     protected $_storeManager;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\UrlInterface $urlBuilder,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = array()
     ) {
@@ -68,7 +68,7 @@ class Image extends \Magento\Data\Form\Element\Image
         $url = false;
         if ($this->getValue()) {
             $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\UrlInterface::URL_TYPE_MEDIA
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             ) . 'catalog/category/' . $this->getValue();
         }
         return $url;

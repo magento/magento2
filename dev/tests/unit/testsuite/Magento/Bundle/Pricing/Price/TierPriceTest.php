@@ -54,7 +54,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock('Magento\Pricing\PriceInfoInterface');
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface');
 
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
@@ -65,7 +65,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock('Magento\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->calculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
 
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\TierPrice', [
@@ -82,7 +82,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->setData(TierPrice::PRICE_TYPE_TIER, $tierPrices);
 
-        $price = $this->getMock('Magento\Pricing\Price\PriceInterface');
+        $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $price->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($basePrice));

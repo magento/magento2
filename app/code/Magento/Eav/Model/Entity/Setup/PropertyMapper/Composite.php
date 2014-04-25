@@ -26,12 +26,12 @@
 namespace Magento\Eav\Model\Entity\Setup\PropertyMapper;
 
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 
 class Composite implements PropertyMapperInterface
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $objectManager;
 

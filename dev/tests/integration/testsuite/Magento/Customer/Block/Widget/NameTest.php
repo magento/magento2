@@ -38,7 +38,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $this->_block = $objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Widget\Name'
         );

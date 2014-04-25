@@ -47,11 +47,11 @@ class Server
     protected $_areaList;
 
     /**
-     * @var \Magento\Config\ScopeInterface
+     * @var \Magento\Framework\Config\ScopeInterface
      */
     protected $_configScope;
 
-    /** @var \Magento\DomDocument\Factory */
+    /** @var \Magento\Framework\DomDocument\Factory */
     protected $_domDocumentFactory;
 
     /** @var \Magento\Webapi\Controller\Soap\Request */
@@ -75,9 +75,9 @@ class Server
      * Initialize dependencies, initialize WSDL cache.
      *
      * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Soap\Request $request
-     * @param \Magento\DomDocument\Factory $domDocumentFactory
+     * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
      * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
@@ -86,9 +86,9 @@ class Server
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Soap\Request $request,
-        \Magento\DomDocument\Factory $domDocumentFactory,
+        \Magento\Framework\DomDocument\Factory $domDocumentFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
         \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor,

@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var \Magento\Filesystem\Directory\Write $rootDirectory */
+/** @var \Magento\Framework\Filesystem\Directory\Write $rootDirectory */
 $rootDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(

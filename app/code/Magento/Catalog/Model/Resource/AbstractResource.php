@@ -59,9 +59,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
@@ -70,9 +70,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         $data = array()
@@ -113,7 +113,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check whether the attribute is Applicable to the object
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return boolean
      */
@@ -138,7 +138,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             && ($method == 'beforeSave' || $method = 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
-            if (isset($args[0]) && $args[0] instanceof \Magento\Object && $args[0]->getData($attributeCode) === false) {
+            if (isset($args[0]) && $args[0] instanceof \Magento\Framework\Object && $args[0]->getData($attributeCode) === false) {
                 return false;
             }
         }
@@ -150,9 +150,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Retrieve select object for loading entity attributes values
      * Join attribute store value
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param string $table
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadAttributesSelect($object, $table)
     {
@@ -196,7 +196,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Prepare select object for loading entity attributes values
      *
      * @param array $selects
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _prepareLoadSelect(array $selects)
     {
@@ -275,7 +275,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             );
         }
 
-        $data = new \Magento\Object(
+        $data = new \Magento\Framework\Object(
             array(
                 'entity_type_id' => $attribute->getEntityTypeId(),
                 'attribute_id' => $attribute->getAttributeId(),
@@ -314,7 +314,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Insert entity attribute value
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return $this
@@ -337,7 +337,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $row = $this->_getReadAdapter()->fetchOne($select);
 
             if (!$row) {
-                $data = new \Magento\Object(
+                $data = new \Magento\Framework\Object(
                     array(
                         'entity_type_id' => $attribute->getEntityTypeId(),
                         'attribute_id' => $attribute->getAttributeId(),
@@ -357,7 +357,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Update entity attribute value
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param AbstractAttribute $attribute
      * @param mixed $valueId
      * @param mixed $value
@@ -421,7 +421,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Delete entity attribute values
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param string $table
      * @param array $info
      * @return $this
@@ -491,8 +491,8 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Retrieve Object instance with original data
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $object
+     * @return \Magento\Framework\Object
      */
     protected function _getOrigObject($object)
     {
@@ -662,7 +662,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this

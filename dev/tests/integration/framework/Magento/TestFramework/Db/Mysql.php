@@ -45,10 +45,10 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      * @param string $password
      * @param string $schema
      * @param string $varPath
-     * @param \Magento\Shell $shell
-     * @throws \Magento\Exception
+     * @param \Magento\Framework\Shell $shell
+     * @throws \Magento\Framework\Exception
      */
-    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Shell $shell)
+    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
         parent::__construct($host, $user, $password, $schema, $varPath, $shell);
         $this->_createDefaultsExtra();

@@ -51,7 +51,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
         $resultItems = array();
 
         foreach ($this->_salesModel->getAllItems() as $item) {
-            $resultItems[] = new \Magento\Object(
+            $resultItems[] = new \Magento\Framework\Object(
                 array(
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),

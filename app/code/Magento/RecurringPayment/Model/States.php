@@ -23,7 +23,7 @@
  */
 namespace Magento\RecurringPayment\Model;
 
-class States implements \Magento\Option\ArrayInterface
+class States implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var string

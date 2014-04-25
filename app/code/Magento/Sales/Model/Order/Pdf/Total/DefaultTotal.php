@@ -30,7 +30,7 @@ namespace Magento\Sales\Model\Order\Pdf\Total;
  *
  * @method \Magento\Sales\Model\Order getOrder()
  */
-class DefaultTotal extends \Magento\Object
+class DefaultTotal extends \Magento\Framework\Object
 {
     /**
      * @var \Magento\Tax\Helper\Data

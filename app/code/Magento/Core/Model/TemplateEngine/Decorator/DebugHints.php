@@ -25,10 +25,10 @@
  */
 namespace Magento\Core\Model\TemplateEngine\Decorator;
 
-class DebugHints implements \Magento\View\TemplateEngineInterface
+class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {
     /**
-     * @var \Magento\View\TemplateEngineInterface
+     * @var \Magento\Framework\View\TemplateEngineInterface
      */
     private $_subject;
 
@@ -38,10 +38,10 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
     private $_showBlockHints;
 
     /**
-     * @param \Magento\View\TemplateEngineInterface $subject
+     * @param \Magento\Framework\View\TemplateEngineInterface $subject
      * @param bool $showBlockHints Whether to include block into the debugging information or not
      */
-    public function __construct(\Magento\View\TemplateEngineInterface $subject, $showBlockHints)
+    public function __construct(\Magento\Framework\View\TemplateEngineInterface $subject, $showBlockHints)
     {
         $this->_subject = $subject;
         $this->_showBlockHints = $showBlockHints;
@@ -52,7 +52,7 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
      *
      * {@inheritdoc}
      */
-    public function render(\Magento\View\Element\BlockInterface $block, $templateFile, array $dictionary = array())
+    public function render(\Magento\Framework\View\Element\BlockInterface $block, $templateFile, array $dictionary = array())
     {
         $result = $this->_subject->render($block, $templateFile, $dictionary);
         if ($this->_showBlockHints) {
@@ -85,10 +85,10 @@ HTML;
      * Insert block debugging hints into the rendered block contents
      *
      * @param string $blockHtml
-     * @param \Magento\View\Element\BlockInterface $block
+     * @param \Magento\Framework\View\Element\BlockInterface $block
      * @return string
      */
-    protected function _renderBlockHints($blockHtml, \Magento\View\Element\BlockInterface $block)
+    protected function _renderBlockHints($blockHtml, \Magento\Framework\View\Element\BlockInterface $block)
     {
         $blockClass = get_class($block);
         return <<<HTML

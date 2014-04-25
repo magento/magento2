@@ -72,7 +72,7 @@ interface IndexerInterface
     /**
      * Return related view object
      *
-     * @return \Magento\Mview\ViewInterface
+     * @return \Magento\Framework\Mview\ViewInterface
      */
     public function getView();
 

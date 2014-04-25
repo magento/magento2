@@ -31,7 +31,7 @@ $this->getConnection()->changeColumn(
     'qty',
     'qty',
     array(
-        'TYPE' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+        'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         'LENGTH' => '12,4',
         'UNSIGNED' => false,
         'NULLABLE' => true,

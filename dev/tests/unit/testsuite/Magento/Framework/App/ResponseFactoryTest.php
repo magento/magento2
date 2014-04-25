@@ -42,7 +42,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Framework\App\ResponseFactory($this->_objectManagerMock);
     }
 

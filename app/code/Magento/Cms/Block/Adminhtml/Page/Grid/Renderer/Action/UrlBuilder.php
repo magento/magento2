@@ -26,14 +26,14 @@ namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 class UrlBuilder
 {
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $frontendUrlBuilder;
 
     /**
-     * @param \Magento\UrlInterface $frontendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
      */
-    public function __construct(\Magento\UrlInterface $frontendUrlBuilder)
+    public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
     {
         $this->frontendUrlBuilder = $frontendUrlBuilder;
     }

@@ -47,20 +47,23 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_modelParams = array(
-            'context' => $objectManager->get('Magento\Model\Context'),
-            'registry' => $objectManager->get('Magento\Registry'),
+            'context' => $objectManager->get('Magento\Framework\Model\Context'),
+            'registry' => $objectManager->get('Magento\Framework\Registry'),
             'resource' => $objectManager->get('Magento\Store\Model\Resource\Store'),
             'coreFileStorageDatabase' => $objectManager->get('Magento\Core\Helper\File\Storage\Database'),
             'configCacheType' => $objectManager->get('Magento\Framework\App\Cache\Type\Config'),
-            'url' => $objectManager->get('Magento\Url'),
+            'url' => $objectManager->get('Magento\Framework\Url'),
             'request' => $objectManager->get('Magento\Framework\App\RequestInterface'),
             'configDataResource' => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
             'filesystem' => $objectManager->get('Magento\Framework\App\Filesystem'),
             'config' => $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface'),
             'storeManager' => $objectManager->get('Magento\Store\Model\StoreManager'),
-            'sidResolver' => $objectManager->get('Magento\Session\SidResolverInterface'),
-            'cookie' => $objectManager->get('Magento\Stdlib\Cookie'),
-            'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context')
+            'sidResolver' => $objectManager->get('Magento\Framework\Session\SidResolverInterface'),
+            'cookie' => $objectManager->get('Magento\Framework\Stdlib\Cookie'),
+            'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context'),
+            'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
+            'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),
+            'currencyInstalled' => 'system/currency/installed',
         );
 
         return $this->getMock('Magento\Store\Model\Store', array('getUrl'), $this->_modelParams);
@@ -149,34 +152,34 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getBaseUrlDataProvider()
     {
         return array(
-            array(\Magento\UrlInterface::URL_TYPE_WEB, false, false, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_WEB, false, true, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_WEB, true, false, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_WEB, true, true, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/index.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, false, true, 'http://localhost/index.php/default/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/default/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, false, false, 'http://localhost/index.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/index.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/'),
-            array(\Magento\UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/pub/static/'),
-            array(\Magento\UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/pub/static/'),
-            array(\Magento\UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/pub/static/'),
-            array(\Magento\UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/pub/static/'),
-            array(\Magento\UrlInterface::URL_TYPE_CACHE, false, false, 'http://localhost/pub/cache/'),
-            array(\Magento\UrlInterface::URL_TYPE_CACHE, false, true, 'http://localhost/pub/cache/'),
-            array(\Magento\UrlInterface::URL_TYPE_CACHE, true, false, 'http://localhost/pub/cache/'),
-            array(\Magento\UrlInterface::URL_TYPE_CACHE, true, true, 'http://localhost/pub/cache/'),
-            array(\Magento\UrlInterface::URL_TYPE_LIB, false, false, 'http://localhost/pub/lib/'),
-            array(\Magento\UrlInterface::URL_TYPE_LIB, false, true, 'http://localhost/pub/lib/'),
-            array(\Magento\UrlInterface::URL_TYPE_LIB, true, false, 'http://localhost/pub/lib/'),
-            array(\Magento\UrlInterface::URL_TYPE_LIB, true, true, 'http://localhost/pub/lib/'),
-            array(\Magento\UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'),
-            array(\Magento\UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/pub/media/'),
-            array(\Magento\UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/pub/media/'),
-            array(\Magento\UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/pub/media/')
+            array(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false, false, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false, true, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true, false, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true, true, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/index.php/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, true, 'http://localhost/index.php/default/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/default/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, false, false, 'http://localhost/index.php/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/index.php/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/pub/static/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/pub/static/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/pub/static/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/pub/static/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_CACHE, false, false, 'http://localhost/pub/cache/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_CACHE, false, true, 'http://localhost/pub/cache/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_CACHE, true, false, 'http://localhost/pub/cache/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_CACHE, true, true, 'http://localhost/pub/cache/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LIB, false, false, 'http://localhost/pub/lib/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LIB, false, true, 'http://localhost/pub/lib/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LIB, true, false, 'http://localhost/pub/lib/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LIB, true, true, 'http://localhost/pub/lib/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/pub/media/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/pub/media/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/pub/media/')
         );
     }
 
@@ -197,15 +200,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'http://localhost/pub/static/',
-            $this->_model->getBaseUrl(\Magento\UrlInterface::URL_TYPE_STATIC)
+            $this->_model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC)
         );
         $this->assertEquals(
             'http://localhost/pub/lib/',
-            $this->_model->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LIB)
+            $this->_model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LIB)
         );
         $this->assertEquals(
             'http://localhost/pub/media/',
-            $this->_model->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA)
+            $this->_model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
         );
     }
 
@@ -255,14 +258,29 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getBaseUrlForCustomEntryPointDataProvider()
     {
         return array(
-            array(\Magento\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/custom_entry.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, false, true, 'http://localhost/custom_entry.php/default/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/index.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/index.php/default/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, false, false, 'http://localhost/custom_entry.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/custom_entry.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/index.php/'),
-            array(\Magento\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/index.php/')
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/custom_entry.php/'),
+            array(
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                false,
+                true,
+                'http://localhost/custom_entry.php/default/'
+            ),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, false, 'http://localhost/index.php/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, true, 'http://localhost/index.php/default/'),
+            array(
+                \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
+                false,
+                false,
+                'http://localhost/custom_entry.php/'
+            ),
+            array(
+                \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK,
+                false,
+                true,
+                'http://localhost/custom_entry.php/'
+            ),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/index.php/'),
+            array(\Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/index.php/')
         );
     }
 
@@ -327,7 +345,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @dataProvider saveValidationDataProvider
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testSaveValidation($badStoreData)
     {
@@ -371,7 +389,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $params = $this->_modelParams;
         $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Model\Context',
+            'Magento\Framework\Model\Context',
             array('appState' => $appStateMock)
         );
 

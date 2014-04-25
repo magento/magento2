@@ -118,8 +118,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetRegionJson()
     {
         $countries = array(
-            new \Magento\Object(array('country_id' => 'Country1')),
-            new \Magento\Object(array('country_id' => 'Country2'))
+            new \Magento\Framework\Object(array('country_id' => 'Country1')),
+            new \Magento\Framework\Object(array('country_id' => 'Country2'))
         );
         $countryIterator = new \ArrayIterator($countries);
         $this->_countryCollection->expects(
@@ -131,13 +131,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $regions = array(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array('country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name')
             ),
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array('country_id' => 'Country1', 'region_id' => 'r2', 'code' => 'r2-code', 'name' => 'r2-name')
             ),
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array('country_id' => 'Country2', 'region_id' => 'r3', 'code' => 'r3-code', 'name' => 'r3-name')
             )
         );

@@ -25,7 +25,7 @@
  */
 namespace Magento\DesignEditor\Model\Theme;
 
-use Magento\Model\Exception as CoreException;
+use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Design editor theme context
@@ -90,7 +90,7 @@ class Context
         if (!$this->_theme->load($themeId)->getId()) {
             throw new CoreException(__('We can\'t find theme "%1".', $themeId));
         }
-        if ($this->_theme->getType() === \Magento\View\Design\ThemeInterface::TYPE_STAGING) {
+        if ($this->_theme->getType() === \Magento\Framework\View\Design\ThemeInterface::TYPE_STAGING) {
             throw new CoreException(__('Wrong theme type set as editable'));
         }
         return $this;
@@ -124,7 +124,7 @@ class Context
                 throw new CoreException(__('Theme "%1" is not editable.', $editableTheme->getThemeTitle()));
             }
             $this->_stagingTheme = $editableTheme->getDomainModel(
-                \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+                \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
             )->getStagingTheme();
         }
         return $this->_stagingTheme;

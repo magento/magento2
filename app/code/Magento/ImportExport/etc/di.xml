@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\ImportExport\Model\Import\ConfigInterface" type="Magento\ImportExport\Model\Import\Config" />
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
     <preference for="Magento\ImportExport\Model\Export\RowCustomizerInterface" type="Magento\ImportExport\Model\Export\RowCustomizer\Composite" />
-    <type name="Magento\Module\Setup\Migration">
+    <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="importexport" xsi:type="string">Magento_ImportExport</item>

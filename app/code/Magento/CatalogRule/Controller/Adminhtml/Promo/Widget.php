@@ -28,7 +28,7 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
-use Magento\Registry;
+use Magento\Framework\Registry;
 
 class Widget extends Action
 {

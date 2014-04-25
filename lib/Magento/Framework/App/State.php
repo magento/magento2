@@ -63,7 +63,7 @@ class State
     /**
      * Config scope model
      *
-     * @var \Magento\Config\ScopeInterface
+     * @var \Magento\Framework\Config\ScopeInterface
      */
     protected $_configScope;
 
@@ -87,13 +87,16 @@ class State
     const PARAM_INSTALL_DATE = 'install.date';
 
     /**
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param string $installDate
      * @param string $mode
      * @throws \LogicException
      */
-    public function __construct(\Magento\Config\ScopeInterface $configScope, $installDate, $mode = self::MODE_DEFAULT)
-    {
+    public function __construct(
+        \Magento\Framework\Config\ScopeInterface $configScope,
+        $installDate,
+        $mode = self::MODE_DEFAULT
+    ) {
         $this->_installDate = strtotime((string)$installDate);
         $this->_configScope = $configScope;
         switch ($mode) {
@@ -176,12 +179,12 @@ class State
      *
      * @param string $code
      * @return void
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function setAreaCode($code)
     {
         if (isset($this->_areaCode)) {
-            throw new \Magento\Exception('Area code is already set');
+            throw new \Magento\Framework\Exception('Area code is already set');
         }
         $this->_configScope->setCurrentScope($code);
         $this->_areaCode = $code;
@@ -191,12 +194,12 @@ class State
      * Get area code
      *
      * @return string
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getAreaCode()
     {
         if (!isset($this->_areaCode)) {
-            throw new \Magento\Exception('Area code is not set');
+            throw new \Magento\Framework\Exception('Area code is not set');
         }
         return $this->_areaCode;
     }

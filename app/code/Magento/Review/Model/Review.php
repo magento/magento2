@@ -46,7 +46,7 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\Model\AbstractModel
+class Review extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Event prefix for observer
@@ -115,36 +115,36 @@ class Review extends \Magento\Model\AbstractModel
     /**
      * Url interface
      *
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlModel;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productFactory
      * @param \Magento\Review\Model\Resource\Review\Status\CollectionFactory $statusFactory
      * @param \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory
      * @param \Magento\Review\Model\Review\SummaryFactory $summaryModFactory
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\UrlInterface $urlModel
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productFactory,
         \Magento\Review\Model\Resource\Review\Status\CollectionFactory $statusFactory,
         \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\UrlInterface $urlModel,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\UrlInterface $urlModel,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
@@ -221,7 +221,7 @@ class Review extends \Magento\Model\AbstractModel
     public function getEntitySummary($product, $storeId = 0)
     {
         $summaryData = $this->_summaryModFactory->create()->setStoreId($storeId)->load($product->getId());
-        $summary = new \Magento\Object();
+        $summary = new \Magento\Framework\Object();
         $summary->setData($summaryData->getData());
         $product->setRatingSummary($summary);
     }
@@ -276,7 +276,7 @@ class Review extends \Magento\Model\AbstractModel
     /**
      * Perform actions after object delete
      *
-     * @return \Magento\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _afterDeleteCommit()
     {

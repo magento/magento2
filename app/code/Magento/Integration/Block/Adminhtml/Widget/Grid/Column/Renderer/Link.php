@@ -26,11 +26,11 @@
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
-use Magento\Object;
+use Magento\Framework\Object;
 
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Object */
+    /** @var \Magento\Framework\Object */
     protected $_row;
 
     /**
@@ -55,7 +55,7 @@ class Link extends AbstractRenderer
     /**
      * Render grid row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function render(Object $row)
@@ -175,7 +175,7 @@ class Link extends AbstractRenderer
     /**
      * Render URL for current item.
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getUrl(Object $row)

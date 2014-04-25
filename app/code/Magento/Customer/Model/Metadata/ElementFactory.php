@@ -44,20 +44,20 @@ class ElementFactory
     // available only for multiply attributes
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $_string;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\Stdlib\String $string
      */
-    public function __construct(\Magento\ObjectManager $objectManager, \Magento\Stdlib\String $string)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, \Magento\Framework\Stdlib\String $string)
     {
         $this->_objectManager = $objectManager;
         $this->_string = $string;

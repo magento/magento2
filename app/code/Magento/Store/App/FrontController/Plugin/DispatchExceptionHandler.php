@@ -69,7 +69,7 @@ class DispatchExceptionHandler
     ) {
         try {
             return $proceed($request);
-        } catch (\Magento\Session\Exception $e) {
+        } catch (\Magento\Framework\Session\Exception $e) {
             header('Location: ' . $this->_storeManager->getStore()->getBaseUrl());
             exit;
         } catch (\Magento\Store\Model\Exception $e) {

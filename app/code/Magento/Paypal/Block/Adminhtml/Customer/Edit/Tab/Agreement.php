@@ -39,7 +39,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -49,7 +49,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * @param \Magento\Paypal\Helper\Data $helper
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory
      * @param \Magento\Paypal\Model\Billing\Agreement $agreementModel
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -58,7 +58,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
         \Magento\Paypal\Helper\Data $helper,
         \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory,
         \Magento\Paypal\Model\Billing\Agreement $agreementModel,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;

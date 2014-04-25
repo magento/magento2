@@ -90,10 +90,10 @@ class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $values = $this->_getValues();
         $value = $row->getData($this->getColumn()->getIndex());

@@ -76,7 +76,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->setData(array('something'));
         $this->assertTrue($this->validator->isValid(array('entity')));
         $this->validator->setData(array());
-        $this->assertTrue($this->validator->isValid(new \Magento\Object(array())));
+        $this->assertTrue($this->validator->isValid(new \Magento\Framework\Object(array())));
     }
 
     /**
@@ -93,7 +93,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->setData($data);
         $this->assertEquals($isValid, $this->validator->isValid(array('ENTITY')));
         $this->validator->setData(array());
-        $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Object($data)));
+        $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Framework\Object($data)));
     }
 
     public function trueFalseDataProvider()

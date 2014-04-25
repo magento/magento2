@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\Url;
 
-class ScopeResolver implements \Magento\Url\ScopeResolverInterface
+class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -51,8 +51,8 @@ class ScopeResolver implements \Magento\Url\ScopeResolverInterface
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
-        if (!$scope instanceof \Magento\Url\ScopeInterface) {
-            throw new \Magento\Exception('Invalid scope object');
+        if (!$scope instanceof \Magento\Framework\Url\ScopeInterface) {
+            throw new \Magento\Framework\Exception('Invalid scope object');
         }
 
         return $scope;

@@ -27,7 +27,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
  * Customer address region field renderer
  */
 class Region extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Data\Form\Element\Renderer\RendererInterface
+    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Directory\Helper\Data
@@ -51,12 +51,12 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * Output the region element and javasctipt that makes it dependent from country element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         if ($country = $element->getForm()->getElement('country_id')) {
             $countryId = $country->getValue();

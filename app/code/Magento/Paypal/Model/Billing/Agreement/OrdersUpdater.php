@@ -26,10 +26,10 @@ namespace Magento\Paypal\Model\Billing\Agreement;
 /**
  * Orders grid massaction items updater
  */
-class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
+class OrdersUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_registryManager;
 
@@ -39,21 +39,21 @@ class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
     protected $_agreementResource;
 
     /**
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource
      * @param array $data
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource,
         array $data = array()
     ) {
         $this->_registryManager = isset($data['registry']) ? $data['registry'] : $coreRegistry;
         $this->_agreementResource = $agreementResource;
 
-        if (false === $this->_registryManager instanceof \Magento\Registry) {
-            throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Registry');
+        if (false === $this->_registryManager instanceof \Magento\Framework\Registry) {
+            throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Framework\Registry');
         }
     }
 

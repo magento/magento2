@@ -48,7 +48,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->block = Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Account\Dashboard',
             '',

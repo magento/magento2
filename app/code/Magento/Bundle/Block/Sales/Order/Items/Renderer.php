@@ -174,7 +174,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * Getting all available childs for Invoice, Shipmen or Creditmemo item
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return array
      */
     public function getChilds($item)

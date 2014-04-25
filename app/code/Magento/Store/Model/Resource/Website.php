@@ -26,7 +26,7 @@ namespace Magento\Store\Model\Resource;
 /**
  * Website Resource Model
  */
-class Website extends \Magento\Model\Resource\Db\AbstractDb
+class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
@@ -52,14 +52,14 @@ class Website extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Validate website code before object save
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $object->getCode())) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'
                 )
@@ -72,10 +72,10 @@ class Website extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getIsDefault()) {
             $this->_getWriteAdapter()->update($this->getMainTable(), array('is_default' => 0));
@@ -88,10 +88,10 @@ class Website extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Remove configuration data after delete website
      *
-     * @param \Magento\Model\AbstractModel $model
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _afterDelete(\Magento\Model\AbstractModel $model)
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
         $where = array(
             'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
@@ -108,7 +108,7 @@ class Website extends \Magento\Model\Resource\Db\AbstractDb
      * Select fields website_id, store_id
      *
      * @param bool $includeDefault include/exclude default admin website
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getDefaultStoresSelect($includeDefault = false)
     {

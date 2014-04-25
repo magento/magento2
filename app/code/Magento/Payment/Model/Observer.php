@@ -65,7 +65,7 @@ class Observer
     /**
      * Set forced canCreditmemo flag
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function salesOrderBeforeSave($observer)
@@ -93,10 +93,10 @@ class Observer
     }
 
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function updateOrderStatusForPaymentMethods(\Magento\Event\Observer $observer)
+    public function updateOrderStatusForPaymentMethods(\Magento\Framework\Event\Observer $observer)
     {
         if ($observer->getEvent()->getState() !== \Magento\Sales\Model\Order::STATE_NEW) {
             return;

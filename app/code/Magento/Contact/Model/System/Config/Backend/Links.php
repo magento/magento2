@@ -26,7 +26,7 @@ namespace Magento\Contact\Model\System\Config\Backend;
 /**
  * Cache cleaner backend model
  */
-class Links extends \Magento\Backend\Model\Config\Backend\Cache implements \Magento\Object\IdentityInterface
+class Links extends \Magento\Backend\Model\Config\Backend\Cache implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * Cache tags to clean

@@ -56,7 +56,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_converterMock = $this->getMock('Magento\Customer\Model\Converter', [], [], '', false);
         $this->_storageMock = $this->getMock('Magento\Customer\Model\Session\Storage', [], [], '', false);
-        $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', [], [], '', false);
+        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->_httpContextMock = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject('Magento\Customer\Model\Session',

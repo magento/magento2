@@ -34,7 +34,7 @@
  */
 namespace Magento\Core\Model\File;
 
-class Uploader extends \Magento\File\Uploader
+class Uploader extends \Magento\Framework\File\Uploader
 {
     /**
      * Flag, that defines should DB processing be skipped

@@ -80,7 +80,7 @@ class Loader
      */
     public function load()
     {
-        $localConfig = new \Magento\Config\Dom('<config/>', $this->_idAttributes);
+        $localConfig = new \Magento\Framework\Config\Dom('<config/>', $this->_idAttributes);
 
         $localConfigFile = $this->_dir . '/' . self::LOCAL_CONFIG_FILE;
         if (file_exists($localConfigFile)) {
@@ -94,11 +94,11 @@ class Loader
             }
         }
 
-        $arrayNodeConfig = new \Magento\Config\Dom\ArrayNodeConfig(
-            new \Magento\Config\Dom\NodePathMatcher(),
+        $arrayNodeConfig = new \Magento\Framework\Config\Dom\ArrayNodeConfig(
+            new \Magento\Framework\Config\Dom\NodePathMatcher(),
             $this->_idAttributes
         );
-        $converter = new \Magento\Config\Converter\Dom\Flat($arrayNodeConfig);
+        $converter = new \Magento\Framework\Config\Converter\Dom\Flat($arrayNodeConfig);
 
         $result = $converter->convert($localConfig->getDom());
         return !empty($result['config']) ? $result['config'] : array();

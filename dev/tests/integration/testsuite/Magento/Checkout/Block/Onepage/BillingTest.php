@@ -83,7 +83,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->get('Magento\Framework\App\Http\Context')
             ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
-        $this->_block = $objectManager->get('Magento\View\LayoutInterface')
+        $this->_block = $objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock(
                 'Magento\Checkout\Block\Onepage\Billing',
                 '',

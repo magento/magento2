@@ -32,7 +32,7 @@ namespace Magento\SalesRule\Model\Resource\Coupon;
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Usage extends \Magento\Model\Resource\Db\AbstractDb
+class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Constructor
@@ -83,12 +83,12 @@ class Usage extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load an object by customer_id & coupon_id
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
      */
-    public function loadByCustomerCoupon(\Magento\Object $object, $customerId, $couponId)
+    public function loadByCustomerCoupon(\Magento\Framework\Object $object, $customerId, $couponId)
     {
         $read = $this->_getReadAdapter();
         if ($read && $couponId && $customerId) {
@@ -104,7 +104,7 @@ class Usage extends \Magento\Model\Resource\Db\AbstractDb
                 $object->setData($data);
             }
         }
-        if ($object instanceof \Magento\Model\AbstractModel) {
+        if ($object instanceof \Magento\Framework\Model\AbstractModel) {
             $this->_afterLoad($object);
         }
         return $this;

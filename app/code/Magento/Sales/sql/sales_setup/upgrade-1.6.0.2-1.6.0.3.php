@@ -29,5 +29,5 @@ $installer = $this;
 $installer->getConnection()->addColumn(
     $installer->getTable('sales_flat_shipment'),
     'shipping_label',
-    array('type' => \Magento\DB\Ddl\Table::TYPE_VARBINARY, 'comment' => 'Shipping Label Content', 'length' => '2m')
+    array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_VARBINARY, 'comment' => 'Shipping Label Content', 'length' => '2m')
 );

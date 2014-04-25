@@ -47,7 +47,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory($typeId, $expectedClass)
     {
-        $product = new \Magento\Object();
+        $product = new \Magento\Framework\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -78,7 +78,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryReturnsSingleton($typeId)
     {
-        $product = new \Magento\Object();
+        $product = new \Magento\Framework\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }

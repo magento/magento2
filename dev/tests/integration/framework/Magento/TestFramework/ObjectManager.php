@@ -32,20 +32,20 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      *
      * @var array
      */
-    protected $_classesToDestruct = array('Magento\View\Layout', 'Magento\Registry');
+    protected $_classesToDestruct = array('Magento\Framework\View\Layout', 'Magento\Framework\Registry');
 
     /**
      * @var array
      */
     protected $persistedInstances = array(
         'Magento\Framework\App\Resource',
-        'Magento\Config\Scope',
-        'Magento\ObjectManager\Relations',
-        'Magento\ObjectManager\Config',
-        'Magento\Interception\Definition',
-        'Magento\ObjectManager\Definition',
-        'Magento\Session\Config',
-        'Magento\ObjectManager\Config\Mapper\Dom'
+        'Magento\Framework\Config\Scope',
+        'Magento\Framework\ObjectManager\Relations',
+        'Magento\Framework\ObjectManager\Config',
+        'Magento\Framework\Interception\Definition',
+        'Magento\Framework\ObjectManager\Definition',
+        'Magento\Framework\Session\Config',
+        'Magento\Framework\ObjectManager\Config\Mapper\Dom'
     );
 
     /**
@@ -62,7 +62,10 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
         }
 
         \Magento\Framework\App\Config\Base::destroy();
-        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\Framework\App\ObjectManager' => $this);
+        $sharedInstances = array(
+            'Magento\Framework\ObjectManager' => $this,
+            'Magento\Framework\App\ObjectManager' => $this
+        );
         foreach ($this->persistedInstances as $persistedClass) {
             if (isset($this->_sharedInstances[$persistedClass])) {
                 $sharedInstances[$persistedClass] = $this->_sharedInstances[$persistedClass];
@@ -98,16 +101,16 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     /**
      * Set objectManager
      *
-     * @param \Magento\ObjectManager $objectManager
-     * @return \Magento\ObjectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @return \Magento\Framework\ObjectManager
      */
-    public static function setInstance(\Magento\ObjectManager $objectManager)
+    public static function setInstance(\Magento\Framework\ObjectManager $objectManager)
     {
         return self::$_instance = $objectManager;
     }
 
     /**
-     * @return \Magento\ObjectManager\Factory|\Magento\ObjectManager\Factory\Factory
+     * @return \Magento\Framework\ObjectManager\Factory|\Magento\Framework\ObjectManager\Factory\Factory
      */
     public function getFactory()
     {

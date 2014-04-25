@@ -32,7 +32,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Messages extends \Magento\View\Element\Messages
+class Messages extends \Magento\Framework\View\Element\Messages
 {
     /**
      * Preparing global layout

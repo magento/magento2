@@ -120,7 +120,7 @@
                 </arguments>
             </block>
         </block>
-        <block class="Magento\View\Element\Template" as="grid.js">
+        <block class="Magento\Framework\View\Element\Template" as="grid.js">
             <arguments>
                 <argument name="js_object_name" xsi:type="string">wishlistGridJsObject</argument>
                 <argument name="template" xsi:type="string">Magento_Wishlist::customer/edit/tab/wishlist.phtml</argument>

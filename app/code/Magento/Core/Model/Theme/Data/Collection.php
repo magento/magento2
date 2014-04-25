@@ -23,10 +23,12 @@
  */
 namespace Magento\Core\Model\Theme\Data;
 
+use Magento\Framework\View\Design\Theme\ListInterface;
+
 /**
  * Theme filesystem data collection
  */
-class Collection extends \Magento\Core\Model\Theme\Collection implements \Magento\View\Design\Theme\ListInterface
+class Collection extends \Magento\Core\Model\Theme\Collection implements ListInterface
 {
     /**
      * Model of collection item

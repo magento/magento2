@@ -57,7 +57,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface');
+        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->_stateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_request = $this->getMock('Magento\Framework\App\Console\Request', array(), array(), '', false);
         $this->_responseMock = $this->getMock('Magento\Framework\App\Console\Response', array(), array(), '', false);

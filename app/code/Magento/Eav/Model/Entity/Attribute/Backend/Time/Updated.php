@@ -31,15 +31,15 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend\Time;
 class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\Logger $logger, \Magento\Stdlib\DateTime $dateTime)
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
         parent::__construct($logger);
@@ -48,7 +48,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * Set modified date
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)

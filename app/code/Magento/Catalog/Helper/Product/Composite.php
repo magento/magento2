@@ -32,7 +32,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Converter;
-use Magento\Registry;
+use Magento\Framework\Registry;
 
 /**
  * Adminhtml catalog product composite helper
@@ -122,10 +122,10 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * Prepares and render result of composite product configuration update for a case
      * when single configuration submitted
      *
-     * @param \Magento\Object $updateResult
+     * @param \Magento\Framework\Object $updateResult
      * @return void
      */
-    public function renderUpdateResult(\Magento\Object $updateResult)
+    public function renderUpdateResult(\Magento\Framework\Object $updateResult)
     {
         $this->_coreRegistry->register('composite_update_result', $updateResult);
 
@@ -168,14 +168,14 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *  - 'ok' = true, and 'product_id', 'buy_request', 'current_store_id', 'current_customer_id'
      *  - 'error' = true, and 'message' to show
      *
-     * @param \Magento\Object $configureResult
+     * @param \Magento\Framework\Object $configureResult
      * @return void
      */
-    public function renderConfigureResult(\Magento\Object $configureResult)
+    public function renderConfigureResult(\Magento\Framework\Object $configureResult)
     {
         try {
             if (!$configureResult->getOk()) {
-                throw new \Magento\Model\Exception($configureResult->getMessage());
+                throw new \Magento\Framework\Model\Exception($configureResult->getMessage());
             }
 
             $currentStoreId = (int)$configureResult->getCurrentStoreId();
@@ -189,7 +189,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
                 $configureResult->getProductId()
             );
             if (!$product->getId()) {
-                throw new \Magento\Model\Exception(__('The product is not loaded.'));
+                throw new \Magento\Framework\Model\Exception(__('The product is not loaded.'));
             }
             $this->_coreRegistry->register('current_product', $product);
             $this->_coreRegistry->register('product', $product);

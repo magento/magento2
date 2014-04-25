@@ -101,7 +101,13 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         return array(
             array($data, 'existing key', $data, true, false),
             array($data, 'existing key', $data, false, true),
-            array(new \Magento\Object($data), 'existing key', new \Magento\Object($data), true, false),
+            array(
+                new \Magento\Framework\Object($data),
+                'existing key',
+                new \Magento\Framework\Object($data),
+                true,
+                false
+            ),
             array(false, 'existing key', $data, false, false),
             array(false, 'non existing key', false, true, false),
             array(false, 'non existing key', false, false, false)

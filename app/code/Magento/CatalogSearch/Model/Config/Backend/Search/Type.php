@@ -37,10 +37,10 @@ namespace Magento\CatalogSearch\Model\Config\Backend\Search;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogSearch\Model\Fulltext;
 use Magento\Framework\App\Config\Value;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Model\Resource\AbstractResource;
-use Magento\Data\Collection\Db;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Data\Collection\Db;
 
 class Type extends Value
 {
@@ -52,11 +52,11 @@ class Type extends Value
     protected $_catalogSearchFulltext;
 
     /**
-     * @param Context $context
+     * @param \Magento\Framework\Model\Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
      * @param Fulltext $catalogSearchFulltext
-     * @param AbstractResource $resource
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param Db $resourceCollection
      * @param array $data
      */

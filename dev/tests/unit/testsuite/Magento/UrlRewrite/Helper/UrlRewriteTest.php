@@ -46,7 +46,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false, false),
             $optionsMock
         );
-        $mockObject = new \Magento\Object();
+        $mockObject = new \Magento\Framework\Object();
         $mockObject->setOptions($option);
         $this->assertEquals($expected, $helper->hasRedirectOptions($mockObject));
     }

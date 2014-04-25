@@ -50,19 +50,19 @@ class CleanMergedJsCss
     /**
      * Clean files in database on cleaning merged assets
      *
-     * @param \Magento\View\Asset\MergeService $subject
+     * @param \Magento\Framework\View\Asset\MergeService $subject
      * @param callable $proceed
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCleanMergedJsCss(\Magento\View\Asset\MergeService $subject, \Closure $proceed)
+    public function aroundCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, \Closure $proceed)
     {
         $proceed();
 
-        /** @var \Magento\Filesystem\Directory\ReadInterface $pubCacheDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $pubCacheDirectory */
         $pubCacheDirectory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR);
-        $mergedDir = $pubCacheDirectory->getAbsolutePath() . '/' . \Magento\View\Asset\Merged::PUBLIC_MERGE_DIR;
+        $mergedDir = $pubCacheDirectory->getAbsolutePath() . '/' . \Magento\Framework\View\Asset\Merged::PUBLIC_MERGE_DIR;
         $this->database->deleteFolder($mergedDir);
     }
 }

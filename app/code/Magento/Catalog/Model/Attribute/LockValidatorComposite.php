@@ -33,11 +33,11 @@ class LockValidatorComposite implements LockValidatorInterface
     protected $validators = array();
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $validators
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $validators = array())
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $validators = array())
     {
         foreach ($validators as $validator) {
             if (!is_subclass_of($validator, 'Magento\Catalog\Model\Attribute\LockValidatorInterface')) {
@@ -50,13 +50,13 @@ class LockValidatorComposite implements LockValidatorInterface
     /**
      * Check attribute lock state
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param null $attributeSet
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      *
      * @return void
      */
-    public function validate(\Magento\Model\AbstractModel $object, $attributeSet = null)
+    public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
         foreach ($this->validators as $validator) {
             $validator->validate($object, $attributeSet);

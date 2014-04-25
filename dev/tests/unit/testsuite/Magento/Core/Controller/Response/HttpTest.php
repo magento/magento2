@@ -41,7 +41,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaderExists($header)
     {
-        $cookieMock = $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false);
+        $cookieMock = $this->getMock('\Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
         $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
         $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
         $response->headersSentThrowsException = false;
@@ -69,7 +69,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaderNotExists()
     {
-        $cookieMock = $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false);
+        $cookieMock = $this->getMock('\Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
         $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
         $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
         $response->headersSentThrowsException = false;

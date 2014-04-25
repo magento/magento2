@@ -36,7 +36,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
         $downloadableFile = $this->getMockBuilder(
             'Magento\Downloadable\Helper\File'
         )->disableOriginalConstructor()->getMock();
@@ -47,8 +47,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
-        $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $coreRegistry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
         $sampleResFactory = $this->getMock(
             'Magento\Downloadable\Model\Resource\SampleFactory',

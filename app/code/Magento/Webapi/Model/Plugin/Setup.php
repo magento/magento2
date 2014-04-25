@@ -28,7 +28,7 @@ use Magento\Integration\Model\Integration;
 use Magento\Webapi\Model\IntegrationConfig;
 
 /**
- * Plugin for Magento\Module\Setup model to manage resource permissions of
+ * Plugin for Magento\Framework\Module\Setup model to manage resource permissions of
  * integration installed from config file
  */
 class Setup

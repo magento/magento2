@@ -51,10 +51,10 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     {
         $theme = $this->getTheme();
         $themeType = $theme->getType();
-        if ($themeType == \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL) {
+        if ($themeType == \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL) {
             $this->_initPhysical();
-        } else if ($themeType == \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL) {
-            if ($theme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->isAssigned()) {
+        } else if ($themeType == \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL) {
+            if ($theme->getDomainModel(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL)->isAssigned()) {
                 $this->_initAssigned();
             } else {
                 $this->_initUnAssigned();
@@ -85,7 +85,7 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     /**
      * Set current theme
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return $this
      */
     public function setTheme($theme)

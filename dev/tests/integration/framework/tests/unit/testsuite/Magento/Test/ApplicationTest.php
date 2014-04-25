@@ -43,16 +43,20 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
         $filesystem = new \Magento\Framework\App\Filesystem(
             $directoryList,
-            new \Magento\Filesystem\Directory\ReadFactory(),
-            new \Magento\Filesystem\Directory\WriteFactory(),
-            new \Magento\Filesystem\File\ReadFactory(new \Magento\Filesystem\DriverFactory($directoryList)),
-            new \Magento\Filesystem\File\WriteFactory(new \Magento\Filesystem\DriverFactory($directoryList))
+            new \Magento\Framework\Filesystem\Directory\ReadFactory(),
+            new \Magento\Framework\Filesystem\Directory\WriteFactory(),
+            new \Magento\Framework\Filesystem\File\ReadFactory(
+                new \Magento\Framework\Filesystem\DriverFactory($directoryList)
+            ),
+            new \Magento\Framework\Filesystem\File\WriteFactory(
+                new \Magento\Framework\Filesystem\DriverFactory($directoryList)
+            )
         );
 
         $object = new \Magento\TestFramework\Application(
             $dbInstance,
             $installDir,
-            new \Magento\Simplexml\Element('<data/>'),
+            new \Magento\Framework\Simplexml\Element('<data/>'),
             '',
             array(),
             $appMode,

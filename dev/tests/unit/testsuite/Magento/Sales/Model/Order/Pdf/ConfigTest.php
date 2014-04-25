@@ -31,13 +31,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_dataStorage;
 
     protected function setUp()
     {
-        $this->_dataStorage = $this->getMock('Magento\Config\Data', array(), array(), '', false);
+        $this->_dataStorage = $this->getMock('Magento\Framework\Config\Data', array(), array(), '', false);
         $this->_model = new \Magento\Sales\Model\Order\Pdf\Config($this->_dataStorage);
     }
 

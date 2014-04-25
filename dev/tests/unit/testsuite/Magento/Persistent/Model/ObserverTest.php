@@ -31,12 +31,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Event
+     * @var \Magento\Framework\Event
      */
     protected $_event;
 
     /**
-     * @var \Magento\Event\Observer
+     * @var \Magento\Framework\Event\Observer
      */
     protected $_observer;
 
@@ -76,8 +76,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_event = new \Magento\Event();
-        $this->_observer = new \Magento\Event\Observer();
+        $this->_event = new \Magento\Framework\Event();
+        $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
         $this->_customerSession = $this->getMockBuilder(
@@ -93,13 +93,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->_messageManager = $this->getMockBuilder(
-            'Magento\Message\ManagerInterface'
+            'Magento\Framework\Message\ManagerInterface'
         )->disableOriginalConstructor()->setMethods(
             array()
         )->getMock();
 
         $this->_url = $this->getMockBuilder(
-            'Magento\UrlInterface'
+            'Magento\Framework\UrlInterface'
         )->disableOriginalConstructor()->setMethods(
             array()
         )->getMock();
@@ -142,7 +142,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $expectedActionName = 'realAction';
         $unexpectedActionName = 'notAction';
-        $request = new \Magento\Object();
+        $request = new \Magento\Framework\Object();
         $request->setActionName($unexpectedActionName);
         $expressRedirectMock = $this->getMockBuilder(
             'Magento\Checkout\Controller\Express\RedirectLoginInterface'

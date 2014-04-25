@@ -33,7 +33,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare object for SUT constructor. */
-        $xmlGenerator = new \Magento\Xml\Generator();
+        $xmlGenerator = new \Magento\Framework\Xml\Generator();
         /** Initialize SUT. */
         $this->_restXmlRenderer = new \Magento\Webapi\Controller\Rest\Response\Renderer\Xml($xmlGenerator);
         parent::setUp();
@@ -115,9 +115,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'Invalid XML render with simple data.'
             ),
             array(
-                new \Magento\Object(array('key' => 'value')),
+                new \Magento\Framework\Object(array('key' => 'value')),
                 '<?xml version="1.0"?><response><key>value</key></response>',
-                'Invalid XML render with \Magento\Object data.'
+                'Invalid XML render with \Magento\Framework\Object data.'
             )
         );
     }

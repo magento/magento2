@@ -41,7 +41,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains(
             'catalog_product_view_type_downloadable',
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\View\LayoutInterface'
+                'Magento\Framework\View\LayoutInterface'
             )->getUpdate()->getHandles()
         );
         $responseBody = $this->getResponse()->getBody();

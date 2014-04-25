@@ -76,7 +76,7 @@ class FormStub extends \Magento\Backend\Block\System\Config\Form
             $this->_configRoot = $this->_configRootStub;
         }
         $this->_fieldRenderer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\System\Config\Form\Field'
         );

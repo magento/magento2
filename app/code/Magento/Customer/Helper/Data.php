@@ -151,12 +151,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_formFactory;
 
     /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -168,8 +168,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Math\Random $mathRandom
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -181,8 +181,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Escaper $escaper,
-        \Magento\Math\Random $mathRandom
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_coreData = $coreData;
@@ -494,7 +494,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve customer group ID based on his VAT number
      *
      * @param string $customerCountryCode
-     * @param \Magento\Object $vatValidationResult
+     * @param \Magento\Framework\Object $vatValidationResult
      * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
      */
@@ -530,17 +530,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $requesterCountryCode
      * @param string $requesterVatNumber
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Object(
+        $gatewayResponse = new \Magento\Framework\Object(
             array('is_valid' => false, 'request_date' => '', 'request_identifier' => '', 'request_success' => false)
         );
 
         if (!extension_loaded('soap')) {
-            $this->_logger->logException(new \Magento\Model\Exception(__('PHP SOAP extension is required.')));
+            $this->_logger->logException(new \Magento\Framework\Model\Exception(__('PHP SOAP extension is required.')));
             return $gatewayResponse;
         }
 
@@ -614,7 +614,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get VAT class
      *
      * @param string $customerCountryCode
-     * @param \Magento\Object $vatValidationResult
+     * @param \Magento\Framework\Object $vatValidationResult
      * @param \Magento\Store\Model\Store|string|int|null $store
      * @return null|string
      */

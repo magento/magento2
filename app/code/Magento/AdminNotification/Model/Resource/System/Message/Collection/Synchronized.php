@@ -35,7 +35,7 @@ class Synchronized extends \Magento\AdminNotification\Model\Resource\System\Mess
     /**
      * Store new messages in database and remove outdated messages
      *
-     * @return $this|\Magento\Model\Resource\Db\AbstractDb
+     * @return $this|\Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _afterLoad()
     {

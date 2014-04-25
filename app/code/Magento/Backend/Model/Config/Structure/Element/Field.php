@@ -64,7 +64,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
     /**
      * Block factory
      *
-     * @var \Magento\View\Element\BlockFactory
+     * @var \Magento\Framework\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
@@ -73,7 +73,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      * @param \Magento\Backend\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Backend\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Backend\Model\Config\CommentFactory $commentFactory
-     * @param \Magento\View\Element\BlockFactory $blockFactory
+     * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
@@ -81,7 +81,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
         \Magento\Backend\Model\Config\BackendFactory $backendFactory,
         \Magento\Backend\Model\Config\SourceFactory $sourceFactory,
         \Magento\Backend\Model\Config\CommentFactory $commentFactory,
-        \Magento\View\Element\BlockFactory $blockFactory,
+        \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {
         parent::__construct($storeManager);
@@ -303,7 +303,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
     /**
      * Populate form element with field data
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $formField
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $formField
      * @return void
      */
     public function populateInput($formField)
@@ -441,7 +441,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
         }
 
         $sourceModel = $this->_sourceFactory->create($sourceModel);
-        if ($sourceModel instanceof \Magento\Object) {
+        if ($sourceModel instanceof \Magento\Framework\Object) {
             $sourceModel->setPath($this->getPath());
         }
         if ($method) {

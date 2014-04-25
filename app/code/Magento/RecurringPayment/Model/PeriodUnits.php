@@ -23,7 +23,7 @@
  */
 namespace Magento\RecurringPayment\Model;
 
-class PeriodUnits implements \Magento\Option\ArrayInterface
+class PeriodUnits implements \Magento\Framework\Option\ArrayInterface
 {
     const DAY = 'day';
 

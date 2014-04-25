@@ -37,7 +37,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('current_index_process');
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('index_process_');
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('General'), 'class' => 'fieldset-wide'));

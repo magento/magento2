@@ -38,10 +38,10 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * Renderer for "Action" column in Newsletter templates grid
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $str = '';
         if ($row->getTemplateSenderName()) {

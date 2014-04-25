@@ -59,12 +59,12 @@ class View extends \Magento\Backend\Block\Template
      * Retrieve required options from parent
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Model\Exception(__('Please correct the parent block for this block.'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct the parent block for this block.'));
         }
         $this->setEntity($this->getParentBlock()->getSource());
         parent::_beforeToHtml();

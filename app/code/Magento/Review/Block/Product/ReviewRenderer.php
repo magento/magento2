@@ -28,7 +28,7 @@ namespace Magento\Review\Block\Product;
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
 
-class ReviewRenderer extends \Magento\View\Element\Template implements ReviewRendererInterface
+class ReviewRenderer extends \Magento\Framework\View\Element\Template implements ReviewRendererInterface
 {
     /**
      * Array of available template name
@@ -48,12 +48,12 @@ class ReviewRenderer extends \Magento\View\Element\Template implements ReviewRen
     protected $_reviewFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         array $data = array()
     ) {

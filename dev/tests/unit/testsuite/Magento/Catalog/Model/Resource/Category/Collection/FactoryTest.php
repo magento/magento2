@@ -37,7 +37,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Catalog\Model\Resource\Category\Collection\Factory($this->_objectManager);
     }
 

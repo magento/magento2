@@ -34,7 +34,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     protected $objectManager;
 
     /**
-     * @var \Magento\View\FileSystem
+     * @var \Magento\Framework\View\FileSystem
      */
     protected $viewFileSystem;
 
@@ -46,7 +46,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager();
-        $this->viewFileSystem = $this->objectManager->get('Magento\View\FileSystem');
+        $this->viewFileSystem = $this->objectManager->get('Magento\Framework\View\FileSystem');
         $this->filesystem = $this->objectManager->get('Magento\Framework\App\Filesystem');
         $this->objectManager->configure(
             array('preferences' => array('Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'))
@@ -59,10 +59,10 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     public function testViewLessFilesPreProcessing()
     {
         $errorHandlerMock = $this->getMock(
-            'Magento\Less\PreProcessor\ErrorHandlerInterface',
+            'Magento\Framework\Less\PreProcessor\ErrorHandlerInterface',
             array('processException')
         );
-        $this->objectManager->addSharedInstance($errorHandlerMock, 'Magento\Less\PreProcessor\ErrorHandler');
+        $this->objectManager->addSharedInstance($errorHandlerMock, 'Magento\Framework\Less\PreProcessor\ErrorHandler');
         $errorHandlerMock->expects($this->any())->method('processException')->will(
             $this->returnCallback(
                 function ($exception) {
@@ -71,13 +71,13 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                 }
             )
         );
-        /** @var $lessPreProcessor \Magento\Less\PreProcessor */
-        $lessPreProcessor = $this->objectManager->create('Magento\Less\PreProcessor');
+        /** @var $lessPreProcessor \Magento\Framework\Less\PreProcessor */
+        $lessPreProcessor = $this->objectManager->create('Magento\Framework\Less\PreProcessor');
         $directoryRead = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         /**
-         * Solution for \Magento\View\Layout\File\Source\Base aggregator, it depends on theme and area
+         * Solution for \Magento\Framework\View\Layout\File\Source\Base aggregator, it depends on theme and area
          */
-        $theme = $this->objectManager->create('Magento\View\Design\ThemeInterface');
+        $theme = $this->objectManager->create('Magento\Framework\View\Design\ThemeInterface');
         $theme->setArea('frontend');
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
@@ -115,8 +115,8 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     public function testViewFilesFromThemes()
     {
         $directoryRead = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
-        /** @var $viewService \Magento\View\Service */
-        $viewService = $this->objectManager->get('Magento\View\Service');
+        /** @var $viewService \Magento\Framework\View\Service */
+        $viewService = $this->objectManager->get('Magento\Framework\View\Service');
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**
@@ -160,7 +160,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $files = array();
         $content = file_get_contents($viewFile);
-        preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
+        preg_match_all(\Magento\Framework\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
         foreach ($matches[1] as $relativePath) {
             $path = $this->_addCssDirectory($relativePath, $file);
             $pathFile = $this->viewFileSystem->getViewFile($path, $params);
@@ -267,9 +267,9 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     protected function _collectViewLayoutDeclarations($theme, &$files)
     {
         // Collect "addCss" and "addJs" from theme layout
-        /** @var \Magento\View\Layout\ProcessorInterface $layoutUpdate */
+        /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutUpdate */
         $layoutUpdate = $this->objectManager->create(
-            'Magento\View\Layout\ProcessorInterface',
+            'Magento\Framework\View\Layout\ProcessorInterface',
             array('theme' => $theme)
         );
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();

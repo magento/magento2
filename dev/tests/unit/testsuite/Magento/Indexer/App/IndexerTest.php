@@ -36,14 +36,20 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $processorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $this->filesystemMock = $this->getMock(
+            'Magento\Framework\Filesystem',
+            array('getDirectoryWrite'),
+            array(),
+            '',
+            false
+        );
+        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
         $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $this->filesystemMock->expects(
             $this->once()

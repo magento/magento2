@@ -40,8 +40,8 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $this->_block = $layout->createBlock('Magento\Backend\Block\Dashboard\Graph');
         $this->_block->setDataHelper($objectManager->get('Magento\Backend\Helper\Dashboard\Order'));
     }

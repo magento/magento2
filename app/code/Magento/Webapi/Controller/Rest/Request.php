@@ -51,13 +51,13 @@ class Request extends \Magento\Webapi\Controller\Request
      * Initialize dependencies
      *
      * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory
      * @param null|string $uri
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory,
         $uri = null
     ) {

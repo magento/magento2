@@ -35,8 +35,8 @@ namespace Magento\CatalogSearch\Controller;
 
 use Magento\Framework\App\Action\Context;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
-use Magento\Session\Generic;
-use Magento\UrlFactory;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\UrlFactory;
 
 class Advanced extends \Magento\Framework\App\Action\Action
 {
@@ -99,7 +99,7 @@ class Advanced extends \Magento\Framework\App\Action\Action
         $this->_view->loadLayout();
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()->addQueryParams(
                 $this->getRequest()->getQuery()

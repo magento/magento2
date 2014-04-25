@@ -73,10 +73,10 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     /**
      * Validate
      *
-     * @param \Magento\Object $object Quote
+     * @param \Magento\Framework\Object $object Quote
      * @return bool
      */
-    public function validate(\Magento\Object $object)
+    public function validate(\Magento\Framework\Object $object)
     {
         $all = $this->getAggregator() === 'all';
         $true = (bool)$this->getValue();

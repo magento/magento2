@@ -44,7 +44,7 @@ class Currency extends \Magento\Backend\Block\Template
     /**
      * Prepare layout
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

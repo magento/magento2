@@ -25,7 +25,7 @@
  */
 namespace Magento\Index\Model;
 
-use Magento\Event\Observer as EventObserver;
+use Magento\Framework\Event\Observer as EventObserver;
 
 class Observer
 {

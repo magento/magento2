@@ -25,14 +25,14 @@
  */
 namespace Magento\Review\Model\Resource\Review;
 
-use Magento\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Review summary resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Summary extends \Magento\Model\Resource\Db\AbstractDb
+class Summary extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Define module

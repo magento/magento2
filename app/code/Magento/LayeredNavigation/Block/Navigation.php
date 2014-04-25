@@ -33,9 +33,9 @@
  */
 namespace Magento\LayeredNavigation\Block;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
-class Navigation extends \Magento\View\Element\Template
+class Navigation extends \Magento\Framework\View\Element\Template
 {
     /**
      * Catalog layer
@@ -62,7 +62,7 @@ class Navigation extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\Layer\FilterList $filterList,
         \Magento\Catalog\Model\Layer\AvailabilityFlagInterface $visibilityFlag,

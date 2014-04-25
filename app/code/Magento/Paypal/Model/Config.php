@@ -1109,10 +1109,10 @@ class Config
      * Get "What Is PayPal" localized URL
      * Supposed to be used with "mark" as popup window
      *
-     * @param \Magento\Locale\ResolverInterface $locale
+     * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return string
      */
-    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Locale\ResolverInterface $locale = null)
+    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Framework\Locale\ResolverInterface $locale = null)
     {
         $countryCode = 'US';
         if (null !== $locale) {
@@ -1487,10 +1487,10 @@ class Config
     /**
      * Export page style current settings to specified object
      *
-     * @param \Magento\Object $to
+     * @param \Magento\Framework\Object $to
      * @return void
      */
-    public function exportExpressCheckoutStyleSettings(\Magento\Object $to)
+    public function exportExpressCheckoutStyleSettings(\Magento\Framework\Object $to)
     {
         foreach ($this->_ecStyleConfigMap as $key => $exportKey) {
             if ($this->{$key}) {

@@ -23,9 +23,9 @@
  */
 namespace Magento\Integration\Model\Oauth;
 
-use Magento\Oauth\Helper\Oauth as OauthHelper;
+use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Integration\Model\Resource\Oauth\Token\Collection as TokenCollection;
-use Magento\Oauth\Exception as OauthException;
+use Magento\Framework\Oauth\Exception as OauthException;
 
 /**
  * oAuth token model
@@ -57,7 +57,7 @@ use Magento\Oauth\Exception as OauthException;
  * @method Token setAuthorized() setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Token extends \Magento\Model\AbstractModel
+class Token extends \Magento\Framework\Model\AbstractModel
 {
     /**#@+
      * Token types
@@ -95,7 +95,7 @@ class Token extends \Magento\Model\AbstractModel
     protected $_consumerFactory;
 
     /**
-     * @var \Magento\Url\Validator
+     * @var \Magento\Framework\Url\Validator
      */
     protected $_urlValidator;
 
@@ -105,37 +105,37 @@ class Token extends \Magento\Model\AbstractModel
     protected $_keyLengthFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
-     * @param \Magento\Url\Validator $urlValidator
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Url\Validator $urlValidator
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Helper\Oauth\Data $oauthData
      * @param OauthHelper $oauthHelper
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
-        \Magento\Url\Validator $urlValidator,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Url\Validator $urlValidator,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

@@ -38,13 +38,13 @@ use Magento\Catalog\Model\Resource\Eav\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Fulltext as ModelFulltext;
 use Magento\CatalogSearch\Model\Resource\Indexer\Fulltext as IndexerFulltext;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Model\Resource\AbstractResource;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db;
+use Magento\Framework\Data\Collection\Db;
 use Magento\Index\Model\Event;
 use Magento\Index\Model\Indexer\AbstractIndexer;
 use Magento\Index\Model\Process;
@@ -347,7 +347,7 @@ class Fulltext extends AbstractIndexer
                 $event->addNewData('catalogsearch_delete_product_id', $product->getId());
                 break;
             case Event::TYPE_MASS_ACTION:
-                /* @var $actionObject \Magento\Object */
+                /* @var $actionObject \Magento\Framework\Object */
                 $actionObject = $event->getDataObject();
 
                 $reindexData = array();

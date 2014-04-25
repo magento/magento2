@@ -24,7 +24,7 @@
 
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
-use Magento\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 
 /**
  * Unit test for \Magento\Customer\Model\Resource\Group\Grid\ServiceCollection
@@ -34,10 +34,10 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\TestFramework\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Service\V1\Data\FilterBuilder */
+    /** @var \Magento\Framework\Service\V1\Data\FilterBuilder */
     protected $filterBuilder;
 
-    /** @var \Magento\Service\V1\Data\SearchCriteriaBuilder */
+    /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder */
     protected $searchCriteriaBuilder;
 
     /** @var \Magento\Customer\Service\V1\Data\SearchResults */
@@ -52,12 +52,12 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filterBuilder = new \Magento\Service\V1\Data\FilterBuilder();
+        $this->filterBuilder = new \Magento\Framework\Service\V1\Data\FilterBuilder();
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Service\V1\Data\Search\FilterGroupBuilder');
-        /** @var \Magento\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
+            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
@@ -192,7 +192,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
      * @param string[] $fields
      * @param array $conditions
      *
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage When passing in a field array there must be a matching condition array
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */

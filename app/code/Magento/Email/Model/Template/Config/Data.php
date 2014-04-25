@@ -25,15 +25,15 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-class Data extends \Magento\Config\Data
+class Data extends \Magento\Framework\Config\Data
 {
     /**
      * @param \Magento\Email\Model\Template\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache
+        \Magento\Framework\Config\CacheInterface $cache
     ) {
         parent::__construct($reader, $cache, 'email_templates');
     }

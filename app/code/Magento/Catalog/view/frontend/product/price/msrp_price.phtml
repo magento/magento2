@@ -33,7 +33,7 @@
 /** @var Magento\Catalog\Pricing\Price\MsrpPriceInterface $priceType */
 $priceType = $this->getPrice();
 
-/** @var $product \Magento\Catalog\Model\Product|\Magento\Pricing\Object\SaleableInterface */
+/** @var $product \Magento\Catalog\Model\Product|\Magento\Framework\Pricing\Object\SaleableInterface */
 $product = $this->getSaleableItem();
 $productId = $product->getId();
 // @todo: msrp works totally wrong, any excuses not accepted. will be refactored ASAP
@@ -67,7 +67,7 @@ if ($product->isSaleable()) {
     </span>
 <?php endif; ?>
 
-<?php if ($this->getZone() == \Magento\Pricing\Render::ZONE_ITEM_VIEW): ?>
+<?php if ($this->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $this->getRandomString(20); ?>
     <a href="#" id="<?php echo $helpLinkId;?>" class="action show map">
         <span><?php echo __("What's this?"); ?></span>
@@ -92,7 +92,7 @@ if ($product->isSaleable()) {
                     addToCartUrl: '<?php echo $addToCartUrl; ?>'
                 });
                 <?php endif; ?>
-                <?php if ($this->getZone() == \Magento\Pricing\Render::ZONE_ITEM_VIEW): ?>
+                <?php if ($this->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
                 $("#<?php echo $helpLinkId;?>").addToCart({
                     helpLinkId: "#<?php echo $helpLinkId;?>",
                     productName: '<?php echo $product->getName() ?>',

@@ -200,33 +200,33 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory
      * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
      * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
      * @param \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
         \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_couponFactory = $couponFactory;
@@ -445,7 +445,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon')
             );
-            $transport = new \Magento\Object(
+            $transport = new \Magento\Framework\Object(
                 array('coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false)
             );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', array('transport' => $transport));
@@ -463,7 +463,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param bool $saveNewlyCreated Whether or not to save newly created coupon
      * @param int $saveAttemptCount Number of attempts to save newly created coupon
      * @return \Magento\SalesRule\Model\Coupon|null
-     * @throws \Exception|\Magento\Model\Exception
+     * @throws \Exception|\Magento\Framework\Model\Exception
      */
     public function acquireCoupon($saveNewlyCreated = true, $saveAttemptCount = 10)
     {
@@ -499,7 +499,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                     try {
                         $coupon->save();
                     } catch (\Exception $e) {
-                        if ($e instanceof \Magento\Model\Exception || $coupon->getId()) {
+                        if ($e instanceof \Magento\Framework\Model\Exception || $coupon->getId()) {
                             throw $e;
                         }
                         $coupon->setCode(
@@ -516,7 +516,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             }
         }
         if (!$ok) {
-            throw new \Magento\Model\Exception(__('Can\'t acquire coupon.'));
+            throw new \Magento\Framework\Model\Exception(__('Can\'t acquire coupon.'));
         }
 
         return $coupon;

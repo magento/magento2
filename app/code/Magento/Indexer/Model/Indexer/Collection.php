@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\Model\Indexer;
 
-class Collection extends \Magento\Data\Collection
+class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * Item object class name
@@ -43,12 +43,12 @@ class Collection extends \Magento\Data\Collection
     protected $statesFactory;
 
     /**
-     * @param \Magento\Data\Collection\EntityFactoryInterface $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Indexer\Model\ConfigInterface $config
      * @param \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
      */
     public function __construct(
-        \Magento\Data\Collection\EntityFactoryInterface $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Magento\Indexer\Model\ConfigInterface $config,
         \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
     ) {

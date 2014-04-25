@@ -29,27 +29,27 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-class Image extends \Magento\Data\Form\Element\Image
+class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
-     * @var \Magento\View\Design\Theme\Image\PathInterface
+     * @var \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     protected $_imagePath;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\View\Design\Theme\Image\PathInterface $imagePath
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\View\Design\Theme\Image\PathInterface $imagePath
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\UrlInterface $urlBuilder,
-        \Magento\View\Design\Theme\Image\PathInterface $imagePath,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\View\Design\Theme\Image\PathInterface $imagePath,
         $data = array()
     ) {
         $this->_imagePath = $imagePath;

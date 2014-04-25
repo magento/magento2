@@ -41,7 +41,7 @@ class Action extends AbstractAction
     const PARAM_NAME_URL_ENCODED = 'uenc';
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -54,7 +54,7 @@ class Action extends AbstractAction
     protected $_sessionNamespace;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -74,12 +74,12 @@ class Action extends AbstractAction
     protected $_view;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
@@ -116,13 +116,13 @@ class Action extends AbstractAction
             'controller_action_predispatch_' . $request->getFullActionName(),
             $eventParameters
         );
-        \Magento\Profiler::start($profilerKey);
+        \Magento\Framework\Profiler::start($profilerKey);
 
         if ($request->isDispatched() && !$this->_actionFlag->get('', self::FLAG_NO_DISPATCH)) {
-            \Magento\Profiler::start('action_body');
+            \Magento\Framework\Profiler::start('action_body');
             $actionMethodName = $request->getActionName() . 'Action';
             $this->{$actionMethodName}();
-            \Magento\Profiler::start('postdispatch');
+            \Magento\Framework\Profiler::start('postdispatch');
             if (!$this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
                 $this->_eventManager->dispatch(
                     'controller_action_postdispatch_' . $request->getFullActionName(),
@@ -134,10 +134,10 @@ class Action extends AbstractAction
                 );
                 $this->_eventManager->dispatch('controller_action_postdispatch', $eventParameters);
             }
-            \Magento\Profiler::stop('postdispatch');
-            \Magento\Profiler::stop('action_body');
+            \Magento\Framework\Profiler::stop('postdispatch');
+            \Magento\Framework\Profiler::stop('action_body');
         }
-        \Magento\Profiler::stop($profilerKey);
+        \Magento\Framework\Profiler::stop($profilerKey);
         return $this->_response;
     }
 

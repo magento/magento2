@@ -34,7 +34,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
-class Boolean extends \Magento\Data\Form\Element\Select
+class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Prepare default SELECT values

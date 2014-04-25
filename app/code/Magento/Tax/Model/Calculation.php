@@ -30,12 +30,12 @@ use Magento\Customer\Service\V1\Data\Region as RegionDataObject;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface as AddressServiceInterface;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface as GroupServiceInterface;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Tax Calculation Model
  */
-class Calculation extends \Magento\Model\AbstractModel
+class Calculation extends \Magento\Framework\Model\AbstractModel
 {
     const CALC_TAX_BEFORE_DISCOUNT_ON_EXCL = '0_0';
 
@@ -99,11 +99,6 @@ class Calculation extends \Magento\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Customer\Model\GroupFactory
-     */
-    protected $_groupFactory;
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -134,11 +129,10 @@ class Calculation extends \Magento\Model\AbstractModel
     protected $customerBuilder;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
@@ -147,16 +141,15 @@ class Calculation extends \Magento\Model\AbstractModel
      * @param GroupServiceInterface $groupService
      * @param CustomerAccountServiceInterface $customerAccount
      * @param CustomerBuilder $customerBuilder
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      * @internal param \Magento\Customer\Model\Converter $converter
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
@@ -165,12 +158,11 @@ class Calculation extends \Magento\Model\AbstractModel
         GroupServiceInterface $groupService,
         CustomerAccountServiceInterface $customerAccount,
         CustomerBuilder $customerBuilder,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
-        $this->_groupFactory = $groupFactory;
         $this->_customerSession = $customerSession;
         $this->_customerFactory = $customerFactory;
         $this->_classesFactory = $classesFactory;
@@ -315,7 +307,7 @@ class Calculation extends \Magento\Model\AbstractModel
     /**
      * Get calculation tax rate by specific request
      *
-     * @param   \Magento\Object $request
+     * @param   \Magento\Framework\Object $request
      * @return  float
      */
     public function getRate($request)
@@ -346,7 +338,7 @@ class Calculation extends \Magento\Model\AbstractModel
     /**
      * Get cache key value for specific tax rate request
      *
-     * @param   \Magento\Object $request
+     * @param   \Magento\Framework\Object $request
      * @return  string
      */
     protected function _getRequestCacheKey($request)
@@ -365,7 +357,7 @@ class Calculation extends \Magento\Model\AbstractModel
      * This rate can be used for conversion store price including tax to
      * store price excluding tax
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @param null|string|bool|int|Store $store
      * @return float
      */
@@ -379,11 +371,11 @@ class Calculation extends \Magento\Model\AbstractModel
      * Get request object for getting tax rate based on store shipping original address
      *
      * @param   null|string|bool|int|Store $store
-     * @return  \Magento\Object
+     * @return  \Magento\Framework\Object
      */
     public function getRateOriginRequest($store = null)
     {
-        $request = new \Magento\Object();
+        $request = new \Magento\Framework\Object();
         $request->setCountryId(
             $this->_scopeConfig->getValue(
                 \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
@@ -420,11 +412,11 @@ class Calculation extends \Magento\Model\AbstractModel
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @param   null|bool|\Magento\Object $shippingAddress
-     * @param   null|bool||\Magento\Object $billingAddress
+     * @param   null|bool|\Magento\Framework\Object $shippingAddress
+     * @param   null|bool||\Magento\Framework\Object $billingAddress
      * @param   null|int $customerTaxClass
      * @param   null|int|\Magento\Store\Model\Store $store
-     * @return  \Magento\Object
+     * @return  \Magento\Framework\Object
      */
     public function getRateRequest(
         $shippingAddress = null,
@@ -435,7 +427,7 @@ class Calculation extends \Magento\Model\AbstractModel
         if ($shippingAddress === false && $billingAddress === false && $customerTaxClass === false) {
             return $this->getRateOriginRequest($store);
         }
-        $address = new \Magento\Object();
+        $address = new \Magento\Framework\Object();
         $customerData = $this->getCustomerData();
         $basedOn = $this->_scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON,
@@ -518,7 +510,7 @@ class Calculation extends \Magento\Model\AbstractModel
             $customerTaxClass = $this->getDefaultCustomerTaxClass($store);
         }
 
-        $request = new \Magento\Object();
+        $request = new \Magento\Framework\Object();
         //TODO: Address is not completely refactored to use Data objects
         if ($address->getRegion() instanceof RegionDataObject) {
             $regionId = $address->getRegion()->getRegionId();
@@ -547,8 +539,8 @@ class Calculation extends \Magento\Model\AbstractModel
      * a) productClassId MUST be identical for both requests, because we intend to check selling SAME products to DIFFERENT locations
      * b) due to optimization productClassId can be array of ids, not only single id
      *
-     * @param   \Magento\Object $first
-     * @param   \Magento\Object $second
+     * @param   \Magento\Framework\Object $first
+     * @param   \Magento\Framework\Object $second
      * @return  bool
      */
     public function compareRequests($first, $second)
@@ -603,7 +595,7 @@ class Calculation extends \Magento\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @param string|array $fieldName
      * @param string|array $type
      * @return array
@@ -622,7 +614,7 @@ class Calculation extends \Magento\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return array
      */
     public function getRatesForAllProductTaxClasses($request)
@@ -631,7 +623,7 @@ class Calculation extends \Magento\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return array
      */
     public function getRatesForAllCustomerTaxClasses($request)
@@ -642,7 +634,7 @@ class Calculation extends \Magento\Model\AbstractModel
     /**
      * Get information about tax rates applied to request
      *
-     * @param   \Magento\Object $request
+     * @param   \Magento\Framework\Object $request
      * @return  array
      */
     public function getAppliedRates($request)

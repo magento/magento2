@@ -26,7 +26,7 @@ namespace Magento\Paypal\Block\Billing;
 /**
  * Customer account billing agreements block
  */
-class Agreements extends \Magento\View\Element\Template
+class Agreements extends \Magento\Framework\View\Element\Template
 {
     /**
      * Payment methods array
@@ -58,14 +58,14 @@ class Agreements extends \Magento\View\Element\Template
     protected $_helper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection
      * @param \Magento\Paypal\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection,
         \Magento\Paypal\Helper\Data $helper,
@@ -120,7 +120,7 @@ class Agreements extends \Magento\View\Element\Template
     /**
      * Retrieve item value by key
      *
-     * @param \Magento\Object|\Magento\Paypal\Model\Billing\Agreement $item
+     * @param \Magento\Framework\Object|\Magento\Paypal\Model\Billing\Agreement $item
      * @param string $key
      * @return string
      */

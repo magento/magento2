@@ -27,7 +27,7 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer;
-use Magento\View\Element\Template\Context;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Helper\Data as CustomerHelper;
 
@@ -219,7 +219,7 @@ class Name extends AbstractWidget
 
         try {
             $attribute = $this->_attributeMetadata->getAddressAttributeMetadata($attributeCode);
-        } catch (\Magento\Exception\NoSuchEntityException $e) {
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }
 

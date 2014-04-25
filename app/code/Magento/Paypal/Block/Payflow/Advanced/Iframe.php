@@ -35,7 +35,7 @@ namespace Magento\Paypal\Block\Payflow\Advanced;
 class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
@@ -43,7 +43,7 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,

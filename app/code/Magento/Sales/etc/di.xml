@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Sales\Model\Resource\Report" shared="false" />
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
@@ -32,7 +32,7 @@
             <argument name="schemaLocator" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\SchemaLocator</argument>
         </arguments>
     </type>
-    <virtualType name="pdfConfigDataStorage" type="Magento\Config\Data">
+    <virtualType name="pdfConfigDataStorage" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">sales_pdf_config</argument>
@@ -50,7 +50,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="sales_setup" xsi:type="string">Magento\Sales\Model\Resource\Setup</item>
@@ -69,7 +69,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Model\ActionValidator\RemoveAction">
+    <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
             <argument name="protectedModels" xsi:type="array">
                 <item name="salesOrder" xsi:type="string">Magento\Sales\Model\Order</item>

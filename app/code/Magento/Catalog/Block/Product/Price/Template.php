@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\Price;
 
-class Template extends \Magento\View\Element\AbstractBlock
+class Template extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * Product Price block types cache
@@ -44,12 +44,12 @@ class Template extends \Magento\View\Element\AbstractBlock
     protected $_priceBlockTypes = array();
 
     /**
-     * @param \Magento\View\Element\Context $context
+     * @param \Magento\Framework\View\Element\Context $context
      * @param array $priceBlockTypes
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
+        \Magento\Framework\View\Element\Context $context,
         array $priceBlockTypes = array(),
         array $data = array()
     ) {

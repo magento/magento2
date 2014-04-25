@@ -26,7 +26,7 @@ namespace Magento\Paypal\Model\Billing;
 /**
  * Billing Agreement abstaract class
  */
-abstract class AbstractAgreement extends \Magento\Model\AbstractModel
+abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Payment method instance
@@ -78,19 +78,19 @@ abstract class AbstractAgreement extends \Magento\Model\AbstractModel
     protected $_paymentData = null;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
@@ -133,8 +133,8 @@ abstract class AbstractAgreement extends \Magento\Model\AbstractModel
     /**
      * Before save, it's overridden just to make data validation on before save event
      *
-     * @throws \Magento\Model\Exception
-     * @return \Magento\Model\AbstractModel
+     * @throws \Magento\Framework\Model\Exception
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _beforeSave()
     {
@@ -142,6 +142,6 @@ abstract class AbstractAgreement extends \Magento\Model\AbstractModel
             return parent::_beforeSave();
         }
         array_unshift($this->_errors, __('Unable to save Billing Agreement:'));
-        throw new \Magento\Model\Exception(implode(' ', $this->_errors));
+        throw new \Magento\Framework\Model\Exception(implode(' ', $this->_errors));
     }
 }

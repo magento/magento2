@@ -33,12 +33,12 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
-class Item extends \Magento\Object
+class Item extends \Magento\Framework\Object
 {
     /**
      * Url
      *
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -52,12 +52,12 @@ class Item extends \Magento\Object
     /**
      * Construct
      *
-     * @param \Magento\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Theme\Block\Html\Pager $htmlPagerBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\UrlInterface $url,
+        \Magento\Framework\UrlInterface $url,
         \Magento\Theme\Block\Html\Pager $htmlPagerBlock,
         array $data = array()
     ) {
@@ -70,13 +70,13 @@ class Item extends \Magento\Object
      * Get filter instance
      *
      * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getFilter()
     {
         $filter = $this->getData('filter');
         if (!is_object($filter)) {
-            throw new \Magento\Model\Exception(__('The filter must be an object. Please set correct filter.'));
+            throw new \Magento\Framework\Model\Exception(__('The filter must be an object. Please set correct filter.'));
         }
         return $filter;
     }

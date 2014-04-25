@@ -27,10 +27,10 @@
  */
 namespace Magento\Framework\App\Error;
 
-class Handler extends \Magento\Error\Handler
+class Handler extends \Magento\Framework\Error\Handler
 {
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -45,12 +45,12 @@ class Handler extends \Magento\Error\Handler
     protected $_appState;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Framework\App\State $appState
     ) {

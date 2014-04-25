@@ -26,7 +26,7 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 /**
  * Adminhtml billing agreement related orders tab
  */
-class Orders extends \Magento\View\Element\Text\ListText implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Orders extends \Magento\Framework\View\Element\Text\ListText implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Initialize grid params

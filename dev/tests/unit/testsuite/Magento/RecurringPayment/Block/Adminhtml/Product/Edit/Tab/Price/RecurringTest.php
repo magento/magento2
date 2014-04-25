@@ -26,12 +26,12 @@ namespace Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price;
 class RecurringTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\View\Element\BlockFactory
+     * @var \Magento\Framework\View\Element\BlockFactory
      */
     protected $_blockFactory;
 
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_registry;
 
@@ -46,7 +46,7 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
     protected $_context;
 
     /**
-     * @var \Magento\Event\Manager
+     * @var \Magento\Framework\Event\Manager
      */
     protected $_eventManager;
 
@@ -60,16 +60,16 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_blockFactory = $this->getMock(
-            'Magento\View\Element\BlockFactory',
+            'Magento\Framework\View\Element\BlockFactory',
             array('createBlock'),
             array(),
             '',
             false
         );
 
-        $this->_registry = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->_registry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
 
-        $this->_eventManager = $this->getMock('Magento\Event\Manager', array(), array(), '', false);
+        $this->_eventManager = $this->getMock('Magento\Framework\Event\Manager', array(), array(), '', false);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_context = $helper->getObject(
             'Magento\Backend\Block\Template\Context',
@@ -85,7 +85,7 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
     public function testRenderRecurringPaymentForm()
     {
         $blockMock = $this->getMock(
-            'Magento\View\Element\BlockInterface',
+            'Magento\Framework\View\Element\BlockInterface',
             array(
                 'setNameInLayout',
                 'setParentElement',
@@ -100,7 +100,13 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
             array('Magento\RecurringPayment\Block\Adminhtml\Payment\Edit\Form', array(), $blockMock),
             array('Magento\Backend\Block\Widget\Form\Element\Dependence', array(), $blockMock)
         );
-        $paymentElement = $this->getMock('Magento\Data\Form\Element\AbstractElement', array(), array(), '', false);
+        $paymentElement = $this->getMock(
+            'Magento\Framework\Data\Form\Element\AbstractElement',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(true));
 
         $this->_testModel->render($paymentElement);

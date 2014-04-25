@@ -36,10 +36,10 @@ class Location extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Render fieldset html
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->setElement($element);
         $js = '

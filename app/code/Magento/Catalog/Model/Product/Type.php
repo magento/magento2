@@ -30,7 +30,7 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 
 class Type
 {
@@ -107,7 +107,7 @@ class Type
     protected $_priceFactory;
 
     /**
-     * @var \Magento\Pricing\PriceInfo\Factory
+     * @var \Magento\Framework\Pricing\PriceInfo\Factory
      */
     protected $_priceInfoFactory;
 
@@ -117,13 +117,13 @@ class Type
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type\Pool $productTypePool
      * @param \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
-     * @param \Magento\Pricing\PriceInfo\Factory $priceInfoFactory
+     * @param \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Catalog\Model\Product\Type\Pool $productTypePool,
         \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory,
-        \Magento\Pricing\PriceInfo\Factory $priceInfoFactory
+        \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
     ) {
         $this->_config = $config;
         $this->_productTypePool = $productTypePool;
@@ -182,7 +182,7 @@ class Type
      * Get Product Price Info object
      *
      * @param SaleableInterface $product
-     * @return \Magento\Pricing\PriceInfoInterface
+     * @return \Magento\Framework\Pricing\PriceInfoInterface
      */
     public function getPriceInfo(SaleableInterface $product)
     {

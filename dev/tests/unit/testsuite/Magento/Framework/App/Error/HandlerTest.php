@@ -30,7 +30,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Logger mock
      *
-     * @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logger;
 
@@ -57,7 +57,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $this->filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->handler = new \Magento\Framework\App\Error\Handler($this->logger, $this->filesystem, $this->appState);
@@ -66,7 +66,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for processException method print
      *
-     * @covers \Magento\Error\Handler::processException
+     * @covers \Magento\Framework\Error\Handler::processException
      */
     public function testProcessExceptionPrint()
     {
@@ -89,7 +89,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for processException method report
      *
-     * @covers \Magento\Error\Handler::processException
+     * @covers \Magento\Framework\Error\Handler::processException
      * @runInSeparateProcess
      */
     public function testProcessExceptionReport()
@@ -118,7 +118,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for setting error handler and logging
      *
-     * @covers \Magento\Error\Handler::handler
+     * @covers \Magento\Framework\Error\Handler::handler
      * @throws \Exception
      */
     public function testErrorHandlerLogging()
@@ -151,7 +151,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for setting error handler and printing
      *
-     * @covers \Magento\Error\Handler::handler
+     * @covers \Magento\Framework\Error\Handler::handler
      * @expectedException \Exception
      * @throws \Exception
      */

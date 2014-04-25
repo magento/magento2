@@ -47,7 +47,7 @@ class RecurringPaymentTest extends \Magento\TestFramework\TestCase\AbstractContr
         $customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $customerId = 1;
         $customerSession->setCustomerId($customerId);
-        $coreRegistry = $objectManager->get('Magento\Registry');
+        $coreRegistry = $objectManager->get('Magento\Framework\Registry');
         $this->assertNotEquals(
             $customerId,
             $coreRegistry->registry(\Magento\Customer\Controller\RegistryConstants::CURRENT_CUSTOMER_ID),

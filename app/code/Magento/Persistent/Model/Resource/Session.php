@@ -28,7 +28,7 @@ namespace Magento\Persistent\Model\Resource;
 /**
  * Persistent Session Resource Model
  */
-class Session extends \Magento\Model\Resource\Db\AbstractDb
+class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Use is object new method for object saving

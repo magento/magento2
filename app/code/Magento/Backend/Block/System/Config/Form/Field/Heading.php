@@ -33,15 +33,15 @@
 namespace Magento\Backend\Block\System\Config\Form\Field;
 
 class Heading extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Data\Form\Element\Renderer\RendererInterface
+    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Render element html
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return sprintf(
             '<tr class="system-fieldset-sub-head" id="row_%s"><td colspan="5"><h4 id="%s">%s</h4></td></tr>',

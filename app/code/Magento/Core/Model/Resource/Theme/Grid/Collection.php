@@ -38,7 +38,7 @@ class Collection extends \Magento\Core\Model\Resource\Theme\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->filterVisibleThemes()->addAreaFilter(\Magento\Core\Model\App\Area::AREA_FRONTEND)->addParentTitle();
+        $this->filterVisibleThemes()->addAreaFilter(\Magento\Framework\App\Area::AREA_FRONTEND)->addParentTitle();
         return $this;
     }
 }

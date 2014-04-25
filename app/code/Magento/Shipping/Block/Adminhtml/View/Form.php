@@ -42,14 +42,14 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Admin $adminHelper,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()

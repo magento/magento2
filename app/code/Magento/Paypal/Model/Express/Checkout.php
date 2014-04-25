@@ -172,12 +172,12 @@ class Checkout
     protected $_customerData;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
@@ -192,7 +192,7 @@ class Checkout
     protected $_storeManager;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_coreUrl;
 
@@ -202,7 +202,7 @@ class Checkout
     protected $_cartFactory;
 
     /**
-     * @var \Magento\Logger\AdapterFactory
+     * @var \Magento\Framework\Logger\AdapterFactory
      */
     protected $_logFactory;
 
@@ -227,7 +227,7 @@ class Checkout
     protected $_apiTypeFactory;
 
     /**
-     * @var \Magento\Object\Copy
+     * @var \Magento\Framework\Object\Copy
      */
     protected $_objectCopyService;
 
@@ -257,70 +257,70 @@ class Checkout
     protected $_customerDetailsBuilder;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $_messageManager;
 
     /**
      * Set config, session and quote instances
      *
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Paypal\Model\Info $paypalInfo
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\UrlInterface $coreUrl
+     * @param \Magento\Framework\UrlInterface $coreUrl
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
-     * @param \Magento\Logger\AdapterFactory $logFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logFactory
      * @param \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory
      * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
-     * @param \Magento\Object\Copy $objectCopyService
+     * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Service\V1\Data\AddressBuilderFactory $addressBuilder
      * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
      * @param \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param array $params
      * @throws \Exception
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Paypal\Model\Info $paypalInfo,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\UrlInterface $coreUrl,
+        \Magento\Framework\UrlInterface $coreUrl,
         \Magento\Paypal\Model\CartFactory $cartFactory,
-        \Magento\Logger\AdapterFactory $logFactory,
+        \Magento\Framework\Logger\AdapterFactory $logFactory,
         \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory,
         \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory,
-        \Magento\Object\Copy $objectCopyService,
+        \Magento\Framework\Object\Copy $objectCopyService,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Service\V1\Data\AddressBuilderFactory $addressBuilder,
         \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
         \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         $params = array()
     ) {
         $this->_customerData = $customerData;
@@ -460,14 +460,14 @@ class Checkout
      * @param string $returnUrl
      * @param string $cancelUrl
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function start($returnUrl, $cancelUrl)
     {
         $this->_quote->collectTotals();
 
         if (!$this->_quote->getGrandTotal() && !$this->_quote->hasNominalItems()) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __(
                     'PayPal can\'t process orders with a zero balance due. '
                     . 'To finish your purchase, please go through the standard checkout process.'
@@ -629,13 +629,13 @@ class Checkout
      *
      * @param string|null $token
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function prepareOrderReview($token = null)
     {
         $payment = $this->_quote->getPayment();
         if (!$payment || !$payment->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID)) {
-            throw new \Magento\Model\Exception(__('Payer is not identified.'));
+            throw new \Magento\Framework\Model\Exception(__('Payer is not identified.'));
         }
         $this->_quote->setMayEditShippingAddress(
             1 != $this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDDEN)
@@ -965,7 +965,7 @@ class Checkout
                 $amountExclTax = $this->_taxData->getShippingPrice($amount, false, $address);
                 $amountInclTax = $this->_taxData->getShippingPrice($amount, true, $address);
 
-                $options[$i] = new \Magento\Object(
+                $options[$i] = new \Magento\Framework\Object(
                     [
                         'is_default' => $isDefault,
                         'name' => trim("{$rate->getCarrierTitle()} - {$rate->getMethodTitle()}", ' -'),
@@ -990,7 +990,7 @@ class Checkout
         }
 
         if ($mayReturnEmpty && is_null($userSelectedOption)) {
-            $options[] = new \Magento\Object(
+            $options[] = new \Magento\Framework\Object(
                 [
                     'is_default' => true,
                     'name'       => __('N/A'),
@@ -1024,11 +1024,11 @@ class Checkout
      * This function is used as a callback comparison function in shipping options sorting process
      * @see self::_prepareShippingOptions()
      *
-     * @param \Magento\Object $option1
-     * @param \Magento\Object $option2
+     * @param \Magento\Framework\Object $option1
+     * @param \Magento\Framework\Object $option2
      * @return int
      */
-    protected static function cmpShippingOptions(\Magento\Object $option1, \Magento\Object $option2)
+    protected static function cmpShippingOptions(\Magento\Framework\Object $option1, \Magento\Framework\Object $option2)
     {
         if ($option1->getAmount() == $option2->getAmount()) {
             return 0;
@@ -1072,7 +1072,7 @@ class Checkout
         $quote->setCustomerId(null)
             ->setCustomerEmail($quote->getBillingAddress()->getEmail())
             ->setCustomerIsGuest(true)
-            ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
+            ->setCustomerGroupId(\Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID);
         return $this;
     }
 

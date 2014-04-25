@@ -92,7 +92,7 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
     /**
      * Get item id
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return int
      */
     public function getItemId($item)

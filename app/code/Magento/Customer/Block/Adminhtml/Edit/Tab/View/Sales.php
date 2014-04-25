@@ -59,7 +59,7 @@ class Sales extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -79,14 +79,14 @@ class Sales extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -177,7 +177,7 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getTotals()
     {

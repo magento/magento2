@@ -32,7 +32,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block \Magento\Backend\Block\Widget\Grid\Container */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\Widget\Grid\Container',
             '',

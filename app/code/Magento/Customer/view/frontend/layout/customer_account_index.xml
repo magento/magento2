@@ -32,7 +32,7 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Account\Dashboard\Hello" name="customer_account_dashboard_hello" as="hello" template="account/dashboard/hello.phtml"/>
-        <block class="Magento\View\Element\Template" name="customer_account_dashboard_top" as="top"/>
+        <block class="Magento\Framework\View\Element\Template" name="customer_account_dashboard_top" as="top"/>
         <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="account/dashboard/info.phtml"/>
         <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="account/dashboard/address.phtml"/>
     </referenceContainer>

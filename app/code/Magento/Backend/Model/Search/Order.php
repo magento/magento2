@@ -32,7 +32,7 @@ namespace Magento\Backend\Model\Search;
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order extends \Magento\Object
+class Order extends \Magento\Framework\Object
 {
     /**
      * Adminhtml data

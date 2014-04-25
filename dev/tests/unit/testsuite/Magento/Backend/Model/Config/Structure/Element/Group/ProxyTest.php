@@ -40,7 +40,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Group\Proxy($this->_objectManagerMock);
     }
 

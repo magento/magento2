@@ -24,6 +24,6 @@
 
 namespace Magento\Weee\Block\Element\Weee;
 
-class Tax extends \Magento\Data\Form\Element\AbstractElement
+class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
 }

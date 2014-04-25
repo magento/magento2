@@ -61,7 +61,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
      */
     public function updateAttributes($entityIds, $attrData, $storeId)
     {
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         $object->setIdFieldName('entity_id')->setStoreId($storeId);
 
         $this->_getWriteAdapter()->beginTransaction();

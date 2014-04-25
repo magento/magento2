@@ -34,10 +34,10 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     public function testGetLogoSrc()
     {
         $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
-        $mediaDirectory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $mediaDirectory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $urlBuilder = $this->getMock('Magento\UrlInterface');
+        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
 
         $scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('default/image.gif'));
         $urlBuilder->expects(

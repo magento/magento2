@@ -23,23 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="reports_setup" xsi:type="string">Magento\Reports\Model\Resource\Setup</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">reports</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Reports\Model\Session" type="Magento\Session\Generic">
+    <virtualType name="Magento\Reports\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Reports\Model\Session\Storage</argument>
         </arguments>

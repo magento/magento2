@@ -51,21 +51,21 @@ class Connect
     /**
      * Object of config
      *
-     * @var \Magento\Connect\Config
+     * @var \Magento\Framework\Connect\Config
      */
     protected $_config;
 
     /**
      * Object of single config
      *
-     * @var \Magento\Connect\Singleconfig
+     * @var \Magento\Framework\Connect\Singleconfig
      */
     protected $_sconfig;
 
     /**
      * Object of frontend
      *
-     * @var \Magento\Connect\Frontend
+     * @var \Magento\Framework\Connect\Frontend
      */
     protected $_frontend;
 
@@ -124,50 +124,50 @@ class Connect
     }
 
     /**
-     * Retrieve object of config and set it to \Magento\Connect\Command
+     * Retrieve object of config and set it to \Magento\Framework\Connect\Command
      *
-     * @return \Magento\Connect\Config
+     * @return \Magento\Framework\Connect\Config
      */
     public function getConfig()
     {
         if (!$this->_config) {
-            $this->_config = new \Magento\Connect\Config();
+            $this->_config = new \Magento\Framework\Connect\Config();
             $ftp = $this->_config->__get('remote_config');
             if (!empty($ftp)) {
-                $packager = new \Magento\Connect\Packager();
+                $packager = new \Magento\Framework\Connect\Packager();
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
                 $this->_config = $config;
                 $this->_sconfig = $cache;
             }
             $this->_config->magento_root = dirname(__DIR__) . '/..';
-            \Magento\Connect\Command::setConfigObject($this->_config);
+            \Magento\Framework\Connect\Command::setConfigObject($this->_config);
         }
         return $this->_config;
     }
 
     /**
-     * Retrieve object of single config and set it to \Magento\Connect\Command
+     * Retrieve object of single config and set it to \Magento\Framework\Connect\Command
      *
      * @param bool $reload
-     * @return \Magento\Connect\Singleconfig
+     * @return \Magento\Framework\Connect\Singleconfig
      */
     public function getSingleConfig($reload = false)
     {
         if (!$this->_sconfig || $reload) {
-            $this->_sconfig = new \Magento\Connect\Singleconfig(
+            $this->_sconfig = new \Magento\Framework\Connect\Singleconfig(
                 $this->getConfig()->magento_root .
                 '/' .
                 $this->getConfig()->downloader_path .
                 '/' .
-                \Magento\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
+                \Magento\Framework\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
             );
         }
-        \Magento\Connect\Command::setSconfig($this->_sconfig);
+        \Magento\Framework\Connect\Command::setSconfig($this->_sconfig);
         return $this->_sconfig;
     }
 
     /**
-     * Retrieve object of frontend and set it to \Magento\Connect\Command
+     * Retrieve object of frontend and set it to \Magento\Framework\Connect\Command
      *
      * @return \Magento\Downloader\Connect\Frontend
      */
@@ -175,7 +175,7 @@ class Connect
     {
         if (!$this->_frontend) {
             $this->_frontend = new \Magento\Downloader\Connect\Frontend();
-            \Magento\Connect\Command::setFrontendObject($this->_frontend);
+            \Magento\Framework\Connect\Command::setFrontendObject($this->_frontend);
         }
         return $this->_frontend;
     }
@@ -234,12 +234,12 @@ class Connect
     }
 
     /**
-     * Run commands from \Magento\Connect\Command
+     * Run commands from \Magento\Framework\Connect\Command
      *
      * @param string $command
      * @param array $options
      * @param array $params
-     * @return boolean|\Magento\Connect\Error
+     * @return boolean|\Magento\Framework\Connect\Error
      */
     public function run($command, $options = array(), $params = array())
     {
@@ -247,18 +247,18 @@ class Connect
         @ini_set('memory_limit', '256M');
 
         if (empty($this->_cmdCache[$command])) {
-            \Magento\Connect\Command::getCommands();
+            \Magento\Framework\Connect\Command::getCommands();
             /**
-             * @var $cmd \Magento\Connect\Command
+             * @var $cmd \Magento\Framework\Connect\Command
              */
-            $cmd = \Magento\Connect\Command::getInstance($command);
-            if ($cmd instanceof \Magento\Connect\Error) {
+            $cmd = \Magento\Framework\Connect\Command::getInstance($command);
+            if ($cmd instanceof \Magento\Framework\Connect\Error) {
                 return $cmd;
             }
             $this->_cmdCache[$command] = $cmd;
         } else {
             /**
-             * @var $cmd \Magento\Connect\Command
+             * @var $cmd \Magento\Framework\Connect\Command
              */
             $cmd = $this->_cmdCache[$command];
         }
@@ -309,11 +309,12 @@ class Connect
     }
 
     /**
-     * Run \Magento\Connect\Command with html output console style
+     * Run \Magento\Framework\Connect\Command with html output console style
      *
      * @throws \Magento\Downloader\Exception
-     * @param array|string|\Magento\Downloader\Model $runParams command, options, params, comment, success_callback, failure_callback
-     * @return bool|\Magento\Connect\Error
+     * @param array|string|\Magento\Downloader\Model $runParams
+     *   command, options, params, comment, success_callback, failure_callback
+     * @return bool|\Magento\Framework\Connect\Error
      */
     public function runHtmlConsole($runParams)
     {
@@ -338,7 +339,7 @@ class Connect
         } elseif (is_string($runParams)) {
             $run = new \Magento\Downloader\Model\Connect\Request(array('comment' => $runParams));
         } else {
-            throw \Magento\Downloader\Exception("Invalid run parameters");
+            throw new \Magento\Downloader\Exception("Invalid run parameters");
         }
 
         if (!$run->get('no-header')) {

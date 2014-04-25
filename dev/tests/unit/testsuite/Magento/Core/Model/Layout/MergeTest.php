@@ -28,7 +28,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
-    const FIXTURE_LAYOUT_XML = '<block class="Magento\View\Element\Template" template="fixture.phtml"/>';
+    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
 
     /**
      * @var \Magento\Core\Model\Layout\Merge
@@ -74,12 +74,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     {
         $files = array();
         foreach (glob(__DIR__ . '/_files/layout/*.xml') as $filename) {
-            $files[] = new \Magento\View\Layout\File($filename, 'Magento_Core');
+            $files[] = new \Magento\Framework\View\Layout\File($filename, 'Magento_Core');
         }
-        $fileSource = $this->getMockForAbstractClass('Magento\View\Layout\File\SourceInterface');
+        $fileSource = $this->getMockForAbstractClass('Magento\Framework\View\Layout\File\SourceInterface');
         $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
-        $design = $this->getMockForAbstractClass('Magento\View\DesignInterface');
+        $design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue(20));
@@ -90,7 +90,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
 
-        $this->_logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->_logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
 
         $this->_layoutValidator = $this->getMock(
             'Magento\Core\Model\Layout\Update\Validator',
@@ -100,7 +100,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_cache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
+        $this->_cache = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
 
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false, false);
         $this->_theme->expects($this->any())->method('isPhysical')->will($this->returnValue(true));
@@ -110,10 +110,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false, false);
-        $directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false, false);
+        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false, false);
         $directory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
 
-        $fileDriver = $objectHelper->getObject('Magento\Filesystem\Driver\File');
+        $fileDriver = $objectHelper->getObject('Magento\Framework\Filesystem\Driver\File');
         $directory->expects($this->any())->method('readFile')->will(
             $this->returnCallback(
                 function ($filename) use ($fileDriver) {
@@ -225,8 +225,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($handles, $this->_model->getHandles());
         $expectedResult = '
             <root>
-                <block class="Magento\View\Element\Template" template="fixture_template_one.phtml"/>
-                <block class="Magento\View\Element\Template" template="fixture_template_two.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
             </root>
         ';
         $actualResult = '<root>' . $this->_model->asString() . '</root>';
@@ -296,7 +296,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->stringStartsWith($errorString),
             \Zend_Log::ERR,
-            \Magento\Logger::LOGGER_SYSTEM
+            \Magento\Framework\Logger::LOGGER_SYSTEM
         );
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
@@ -377,7 +377,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Magento\Exception
+     * @expectedException        \Magento\Framework\Exception
      * @expectedExceptionMessage Invalid layout update handle
      */
     public function testLoadWithInvalidArgumentThrowsException()

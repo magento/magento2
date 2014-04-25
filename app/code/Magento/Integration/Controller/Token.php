@@ -32,7 +32,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  */
 class Token extends \Magento\Framework\App\Action\Action
 {
-    /** @var  \Magento\Oauth\OauthInterface */
+    /** @var  \Magento\Framework\Oauth\OauthInterface */
     protected $_oauthService;
 
     /** @var  IntegrationOauthService */
@@ -41,22 +41,22 @@ class Token extends \Magento\Framework\App\Action\Action
     /** @var  IntegrationService */
     protected $_integrationService;
 
-    /** @var  \Magento\Oauth\Helper\Request */
+    /** @var  \Magento\Framework\Oauth\Helper\Request */
     protected $_helper;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Oauth\OauthInterface $oauthService
+     * @param \Magento\Framework\Oauth\OauthInterface $oauthService
      * @param IntegrationOauthService $intOauthService
      * @param IntegrationService $integrationService
-     * @param \Magento\Oauth\Helper\Request $helper
+     * @param \Magento\Framework\Oauth\Helper\Request $helper
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Oauth\OauthInterface $oauthService,
+        \Magento\Framework\Oauth\OauthInterface $oauthService,
         IntegrationOauthService $intOauthService,
         IntegrationService $integrationService,
-        \Magento\Oauth\Helper\Request $helper
+        \Magento\Framework\Oauth\Helper\Request $helper
     ) {
         parent::__construct($context);
         $this->_oauthService = $oauthService;

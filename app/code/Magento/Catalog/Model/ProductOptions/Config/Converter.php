@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\ProductOptions\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert dom node tree to array

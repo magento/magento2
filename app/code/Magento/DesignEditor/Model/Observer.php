@@ -25,7 +25,7 @@
  */
 namespace Magento\DesignEditor\Model;
 
-use Magento\Event\Observer as EventObserver;
+use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Observer for design editor module
@@ -33,7 +33,7 @@ use Magento\Event\Observer as EventObserver;
 class Observer
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -43,10 +43,10 @@ class Observer
     protected $_helper;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\DesignEditor\Helper\Data $helper
      */
-    public function __construct(\Magento\ObjectManager $objectManager, \Magento\DesignEditor\Helper\Data $helper)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, \Magento\DesignEditor\Helper\Data $helper)
     {
         $this->_objectManager = $objectManager;
         $this->_helper = $helper;
@@ -61,15 +61,15 @@ class Observer
      */
     public function clearJs(EventObserver $event)
     {
-        /** @var $layout \Magento\View\LayoutInterface */
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $event->getEvent()->getLayout();
         $blockHead = $layout->getBlock('head');
         if (!$blockHead || !$blockHead->getData('vde_design_mode')) {
             return;
         }
 
-        /** @var $pageAssets \Magento\View\Asset\GroupedCollection */
-        $pageAssets = $this->_objectManager->get('Magento\View\Asset\GroupedCollection');
+        /** @var $pageAssets \Magento\Framework\View\Asset\GroupedCollection */
+        $pageAssets = $this->_objectManager->get('Magento\Framework\View\Asset\GroupedCollection');
 
         $vdeAssets = array();
         foreach ($pageAssets->getGroups() as $group) {
@@ -78,11 +78,11 @@ class Observer
             }
         }
 
-        /** @var $nonVdeAssets \Magento\View\Asset\AssetInterface[] */
+        /** @var $nonVdeAssets \Magento\Framework\View\Asset\AssetInterface[] */
         $nonVdeAssets = array_diff_key($pageAssets->getAll(), $vdeAssets);
 
         foreach ($nonVdeAssets as $assetId => $asset) {
-            if ($asset->getContentType() == \Magento\View\Publisher::CONTENT_TYPE_JS) {
+            if ($asset->getContentType() == \Magento\Framework\View\Publisher::CONTENT_TYPE_JS) {
                 $pageAssets->remove($assetId);
             }
         }
@@ -98,7 +98,7 @@ class Observer
     {
         /** @var $configuration \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration */
         $configuration = $event->getData('configuration');
-        /** @var $theme \Magento\View\Design\ThemeInterface */
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = $event->getData('theme');
         if ($configuration->getControlConfig() instanceof \Magento\DesignEditor\Model\Config\Control\QuickStyles) {
             /** @var $renderer \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer */

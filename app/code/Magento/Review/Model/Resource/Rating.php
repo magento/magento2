@@ -32,7 +32,7 @@ namespace Magento\Review\Model\Resource;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Model\Resource\Db\AbstractDb
+class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     const RATING_STATUS_APPROVED = 'Approved';
 
@@ -51,20 +51,20 @@ class Rating extends \Magento\Model\Resource\Db\AbstractDb
     protected $_ratingData = null;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Review\Helper\Data $ratingData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Review\Helper\Data $ratingData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Review\Summary $reviewSummary
@@ -103,7 +103,7 @@ class Rating extends \Magento\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Review\Model\Rating $object
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -126,10 +126,10 @@ class Rating extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Actions after load
      *
-     * @param \Magento\Model\AbstractModel|\Magento\Review\Model\Rating $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
      */
-    protected function _afterLoad(\Magento\Model\AbstractModel $object)
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterLoad($object);
 
@@ -179,10 +179,10 @@ class Rating extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Actions after save
      *
-     * @param \Magento\Model\AbstractModel|\Magento\Review\Model\Rating $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
 
@@ -268,10 +268,10 @@ class Rating extends \Magento\Model\Resource\Db\AbstractDb
      * Perform actions after object delete
      * Prepare rating data for reaggregate all data for reviews
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterDelete(\Magento\Model\AbstractModel $object)
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
         if (!$this->_ratingData->isModuleEnabled('Magento_Review')) {

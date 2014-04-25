@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Module\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -45,7 +45,7 @@ $connection->dropIndex(
     $installer->getIdxName(
         'core_layout_link',
         array('store_id', 'package', 'theme', 'layout_update_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     )
 );
 
@@ -58,7 +58,7 @@ $connection->changeColumn(
     'theme',
     'theme_id',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         'unsigned' => true,
         'nullable' => false,
         'comment' => 'Theme id'
@@ -70,10 +70,10 @@ $connection->addIndex(
     $installer->getIdxName(
         'core_layout_link',
         array('store_id', 'theme_id', 'layout_update_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('store_id', 'theme_id', 'layout_update_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
 );
 
 $connection->addForeignKey(
@@ -82,8 +82,8 @@ $connection->addForeignKey(
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 );
 
 $connection->addForeignKey(
@@ -92,8 +92,8 @@ $connection->addForeignKey(
     'theme_id',
     $installer->getTable('core_theme'),
     'theme_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 );
 
 /**
@@ -103,7 +103,7 @@ $connection->addColumn(
     $installer->getTable('core_theme'),
     'area',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         'length' => '255',
         'nullable' => false,
         'comment' => 'Theme Area'

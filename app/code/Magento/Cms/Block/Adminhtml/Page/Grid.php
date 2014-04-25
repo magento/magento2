@@ -199,11 +199,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Filter store condition
      *
-     * @param \Magento\Data\Collection $collection
-     * @param \Magento\Object $column
+     * @param \Magento\Framework\Data\Collection $collection
+     * @param \Magento\Framework\Object $column
      * @return void
      */
-    protected function _filterStoreCondition($collection, \Magento\Object $column)
+    protected function _filterStoreCondition($collection, \Magento\Framework\Object $column)
     {
         if (!($value = $column->getFilter()->getValue())) {
             return;
@@ -215,7 +215,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row click url
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

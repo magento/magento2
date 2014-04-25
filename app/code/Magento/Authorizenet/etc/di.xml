@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Authorizenet\Model\Directpost\Observer">
         <arguments>
             <argument name="authorizenetData" xsi:type="object">Magento\Authorizenet\Helper\Data\Proxy</argument>
             <argument name="coreData" xsi:type="object">Magento\Core\Helper\Data\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Authorizenet\Model\Directpost\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Authorizenet\Model\Directpost\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">authorizenet_directpost</argument>
         </arguments>

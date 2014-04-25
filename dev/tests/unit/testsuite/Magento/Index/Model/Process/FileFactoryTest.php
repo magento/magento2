@@ -49,7 +49,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $objectManagerMock->expects(
             $this->once()
         )->method(

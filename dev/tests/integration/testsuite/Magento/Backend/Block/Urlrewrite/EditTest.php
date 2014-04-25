@@ -43,9 +43,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testPrepareLayout($blockAttributes, $expected)
     {
 
-        /** @var $layout \Magento\View\LayoutInterface */
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\Layout',
+            'Magento\Framework\View\Layout',
             array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
 

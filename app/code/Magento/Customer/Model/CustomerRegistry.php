@@ -25,7 +25,8 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\CustomerFactory;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
@@ -47,14 +48,23 @@ class CustomerRegistry
      */
     private $customerRegistryByEmail = [];
 
+    const REGISTRY_SEPARATOR = ':';
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     /**
      * Constructor
      *
      * @param CustomerFactory $customerFactory
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(CustomerFactory $customerFactory)
+    public function __construct(CustomerFactory $customerFactory, StoreManagerInterface $storeManager)
     {
         $this->customerFactory = $customerFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -73,10 +83,11 @@ class CustomerRegistry
         $customer = $this->customerFactory->create()->load($customerId);
         if (!$customer->getId()) {
             // customer does not exist
-            throw new NoSuchEntityException('customerId', $customerId);
+            throw NoSuchEntityException::singleField('customerId', $customerId);
         } else {
+            $emailKey = $this->getEmailKey($customer->getEmail(), $customer->getWebsiteId());
             $this->customerRegistryById[$customerId] = $customer;
-            $this->customerRegistryByEmail[$customer->getEmail() . $customer->getWebsiteId()] = $customer;
+            $this->customerRegistryByEmail[$emailKey] = $customer;
             return $customer;
         }
     }
@@ -84,14 +95,17 @@ class CustomerRegistry
     /**
      * Retrieve Customer Model from registry given an email
      *
-     * @param string $customerEmail
-     * @param string $websiteId
+     * @param string $customerEmail Customers email address
+     * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return Customer
      * @throws NoSuchEntityException
      */
-    public function retrieveByEmail($customerEmail, $websiteId)
+    public function retrieveByEmail($customerEmail, $websiteId = null)
     {
-        $emailKey = $customerEmail . $websiteId;
+        if (is_null($websiteId)) {
+            $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        }
+        $emailKey = $this->getEmailKey($customerEmail, $websiteId);
         if (isset($this->customerRegistryByEmail[$emailKey])) {
             return $this->customerRegistryByEmail[$emailKey];
         }
@@ -106,7 +120,15 @@ class CustomerRegistry
         $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {
             // customer does not exist
-            throw (new NoSuchEntityException('email', $customerEmail))->addField('websiteId', $websiteId);
+            throw new NoSuchEntityException(
+                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                [
+                    'fieldName' => 'email',
+                    'fieldValue' => $customerEmail,
+                    'field2Name' => 'websiteId',
+                    'field2Value' => $websiteId,
+                ]
+            );
         } else {
             $this->customerRegistryById[$customer->getId()] = $customer;
             $this->customerRegistryByEmail[$emailKey] = $customer;
@@ -125,7 +147,8 @@ class CustomerRegistry
         if (isset($this->customerRegistryById[$customerId])) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryById[$customerId];
-            unset($this->customerRegistryByEmail[$customer->getEmail() . $customer->getWebsiteId()]);
+            $emailKey = $this->getEmailKey($customer->getEmail(), $customer->getWebsiteId());
+            unset($this->customerRegistryByEmail[$emailKey]);
             unset($this->customerRegistryById[$customerId]);
         }
     }
@@ -133,18 +156,33 @@ class CustomerRegistry
     /**
      * Remove instance of the Customer Model from registry given an email
      *
-     * @param string $customerEmail
-     * @param string $websiteId
+     * @param string $customerEmail Customers email address
+     * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return void
      */
-    public function removeByEmail($customerEmail, $websiteId)
+    public function removeByEmail($customerEmail, $websiteId = null)
     {
-        $emailKey = $customerEmail . $websiteId;
+        if (is_null($websiteId)) {
+            $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        }
+        $emailKey = $this->getEmailKey($customerEmail, $websiteId);
         if ($emailKey) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryByEmail[$emailKey];
             unset($this->customerRegistryByEmail[$emailKey]);
             unset($this->customerRegistryById[$customer->getId()]);
         }
+    }
+
+    /**
+     * Create registry key
+     *
+     * @param string $customerEmail
+     * @param string $websiteId
+     * @return string
+     */
+    protected function getEmailKey($customerEmail, $websiteId)
+    {
+        return $customerEmail . self::REGISTRY_SEPARATOR . $websiteId;
     }
 }

@@ -23,15 +23,15 @@
  */
 namespace Magento\Theme\Block;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Html page block
  */
-class Html extends \Magento\View\Element\Template
+class Html extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
@@ -49,12 +49,12 @@ class Html extends \Magento\View\Element\Template
 
     /**
      * @param Template\Context $context
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -146,7 +146,8 @@ class Html extends \Magento\View\Element\Template
 
         // buld url
         if (!empty($logo)) {
-            $logo = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\UrlInterface::URL_TYPE_MEDIA)) . $logo;
+            $logo = $this->_urlBuilder
+                    ->getBaseUrl(array('_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA)) . $logo;
         } else {
             $logo = '';
         }
@@ -248,9 +249,9 @@ class Html extends \Magento\View\Element\Template
     {
         if ($this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             $this->_sidResolver->setUseSessionVar(false);
-            \Magento\Profiler::start('CACHE_URL');
+            \Magento\Framework\Profiler::start('CACHE_URL');
             $html = $this->_urlBuilder->sessionUrlVar($html);
-            \Magento\Profiler::stop('CACHE_URL');
+            \Magento\Framework\Profiler::stop('CACHE_URL');
         }
         return $html;
     }

@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
-use Magento\Service\DataObjectConverter;
+use Magento\Framework\Service\DataObjectConverter;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 
 /**
@@ -34,7 +34,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Soap\Request\Handler */
     protected $_handler;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     protected $_objectManagerMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -61,10 +61,10 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->_apiConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
             ->setMethods(array('getServiceMethodInfo'))->disableOriginalConstructor()->getMock();
         $this->_requestMock = $this->getMock('Magento\Webapi\Controller\Soap\Request', [], [], '', false);
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', [], [], '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
         $this->_authzServiceMock = $this->getMock('Magento\Authz\Service\AuthorizationV1Interface', [], [], '', false);
         $this->_dataObjectConverter = $this->getMock(
-            'Magento\Service\DataObjectConverter',
+            'Magento\Framework\Service\DataObjectConverter',
             ['convertStdObjectToArray'],
             [],
             '',
@@ -93,7 +93,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->method('convertStdObjectToArray')
             ->will($this->returnValue(['field' => 1]));
         $operationName = 'soapOperation';
-        $className = 'Magento\Object';
+        $className = 'Magento\Framework\Object';
         $methodName = 'testMethod';
         $isSecure = false;
         $aclResources = array('Magento_TestModule::resourceA');

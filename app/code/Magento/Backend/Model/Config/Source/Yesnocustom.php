@@ -30,7 +30,7 @@
  */
 namespace Magento\Backend\Model\Config\Source;
 
-class Yesnocustom implements \Magento\Option\ArrayInterface
+class Yesnocustom implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Options getter

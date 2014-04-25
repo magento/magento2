@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
-class DefaultSortby extends \Magento\Data\Form\Element\Select
+class DefaultSortby extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox

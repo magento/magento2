@@ -63,14 +63,14 @@ class Services extends \Magento\Backend\Block\Template
     /**
      * Create import services form select element
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
         $this->setChild(
             'import_services',
             $this->getLayout()->createBlock(
-                'Magento\View\Element\Html\Select'
+                'Magento\Framework\View\Element\Html\Select'
             )->setOptions(
                 $this->_srcCurrencyFactory->create()->toOptionArray()
             )->setId(

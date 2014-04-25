@@ -28,7 +28,7 @@ namespace Magento\Webapi\Controller;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 

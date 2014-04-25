@@ -37,12 +37,12 @@ class DepersonalizePlugin
     protected $request;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
-     * @var \Magento\Event\Manager
+     * @var \Magento\Framework\Event\Manager
      */
     protected $eventManager;
 
@@ -52,23 +52,23 @@ class DepersonalizePlugin
     protected $cacheConfig;
 
     /**
-     * @var \Magento\Message\Session
+     * @var \Magento\Framework\Message\Session
      */
     protected $messageSession;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Module\Manager $moduleManager
-     * @param \Magento\Event\Manager $eventManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Event\Manager $eventManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
-     * @param \Magento\Message\Session $messageSession
+     * @param \Magento\Framework\Message\Session $messageSession
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Module\Manager $moduleManager,
-        \Magento\Event\Manager $eventManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Event\Manager $eventManager,
         \Magento\PageCache\Model\Config $cacheConfig,
-        \Magento\Message\Session $messageSession
+        \Magento\Framework\Message\Session $messageSession
     ) {
         $this->request = $request;
         $this->moduleManager = $moduleManager;
@@ -80,11 +80,11 @@ class DepersonalizePlugin
     /**
      * After generate Xml
      *
-     * @param \Magento\View\LayoutInterface $subject
-     * @param \Magento\View\LayoutInterface $result
-     * @return \Magento\View\LayoutInterface
+     * @param \Magento\Framework\View\LayoutInterface $subject
+     * @param \Magento\Framework\View\LayoutInterface $result
+     * @return \Magento\Framework\View\LayoutInterface
      */
-    public function afterGenerateXml(\Magento\View\LayoutInterface $subject, $result)
+    public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
     {
         if ($this->moduleManager->isEnabled('Magento_PageCache')
             && $this->cacheConfig->isEnabled()

@@ -58,6 +58,6 @@ $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $product->load(1);
 $optionId = key($product->getOptions());
 
-$requestInfo = new \Magento\Object(array('qty' => 1, 'options' => array($optionId => 'test')));
+$requestInfo = new \Magento\Framework\Object(array('qty' => 1, 'options' => array($optionId => 'test')));
 
 require __DIR__ . '/../../Checkout/_files/cart.php';

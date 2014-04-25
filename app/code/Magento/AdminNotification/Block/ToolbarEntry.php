@@ -86,10 +86,10 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
         if (date('Ymd') == date('Ymd', strtotime($dateString))) {
             return $this->formatTime(
                 $dateString,
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                 false
             );
         }
-        return $this->formatDate($dateString, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        return $this->formatDate($dateString, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
     }
 }

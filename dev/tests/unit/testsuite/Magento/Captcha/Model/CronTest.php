@@ -45,12 +45,12 @@ class CronTest extends \PHPUnit_Framework_TestCase
     protected $_adminHelper;
 
     /**
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Filesystem\DirectoryWriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DirectoryWriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_directory;
 
@@ -77,7 +77,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
-        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
 
         $this->_filesystem->expects(

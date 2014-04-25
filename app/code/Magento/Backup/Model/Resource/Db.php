@@ -31,7 +31,7 @@ class Db
     /**
      * Database connection adapter
      *
-     * @var \Magento\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $_write;
 
@@ -134,14 +134,14 @@ class Db
      * Retrieve table status
      *
      * @param string $tableName
-     * @return \Magento\Object|bool
+     * @return \Magento\Framework\Object|bool
      */
     public function getTableStatus($tableName)
     {
         $row = $this->_write->showTableStatus($tableName);
 
         if ($row) {
-            $statusObject = new \Magento\Object();
+            $statusObject = new \Magento\Framework\Object();
             $statusObject->setIdFieldName('name');
             foreach ($row as $field => $value) {
                 $statusObject->setData(strtolower($field), $value);

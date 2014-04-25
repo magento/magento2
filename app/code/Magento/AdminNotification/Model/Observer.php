@@ -59,10 +59,10 @@ class Observer
     /**
      * Predispath admin action controller
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function preDispatch(\Magento\Event\Observer $observer)
+    public function preDispatch(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_backendAuthSession->isLoggedIn()) {
             $feedModel = $this->_feedFactory->create();

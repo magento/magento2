@@ -160,7 +160,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_exportConfig;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -217,11 +217,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $rowCustomizer;
 
     /**
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
@@ -235,11 +235,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
      */
     public function __construct(
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Catalog\Model\Resource\Product\Collection $collection,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
@@ -319,7 +319,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Initialize product type models.
      *
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return $this
      */
     protected function _initTypeModels()
@@ -327,10 +327,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $productTypes = $this->_exportConfig->getProductTypes();
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
-                throw new \Magento\Model\Exception("Entity type model '{$productTypeConfig['model']}' is not found");
+                throw new \Magento\Framework\Model\Exception("Entity type model '{$productTypeConfig['model']}' is not found");
             }
             if (!$model instanceof \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __(
                         'Entity type model must be an instance of'
                         . ' \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType'
@@ -347,7 +347,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         if (!$this->_productTypeModels) {
-            throw new \Magento\Model\Exception(__('There are no product types available for export'));
+            throw new \Magento\Framework\Model\Exception(__('There are no product types available for export'));
         }
         $this->_disabledAttrs = array_unique($this->_disabledAttrs);
 

@@ -30,7 +30,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('sales_flat_order_item'),
     'base_tax_refunded',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         'comment' => 'Base Tax Refunded',
         'scale' => 4,
         'precision' => 12
@@ -40,7 +40,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('sales_flat_order_item'),
     'discount_refunded',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         'comment' => 'Discount Refunded',
         'scale' => 4,
         'precision' => 12
@@ -50,7 +50,7 @@ $installer->getConnection()->addColumn(
     $installer->getTable('sales_flat_order_item'),
     'base_discount_refunded',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         'comment' => 'Base Discount Refunded',
         'scale' => 4,
         'precision' => 12

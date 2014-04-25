@@ -32,7 +32,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Creditmemos extends \Magento\View\Element\Text\ListText implements
+class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**

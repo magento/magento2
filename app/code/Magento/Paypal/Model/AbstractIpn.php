@@ -55,20 +55,20 @@ class AbstractIpn
     protected $_configFactory;
 
     /**
-     * @var \Magento\HTTP\Adapter\CurlFactory
+     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
      */
     protected $_curlFactory;
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\HTTP\Adapter\CurlFactory $curlFactory,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         array $data = array()
     ) {
         $this->_configFactory = $configFactory;

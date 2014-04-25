@@ -94,7 +94,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
@@ -113,7 +113,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_catalogCategory;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
@@ -165,7 +165,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_templateFilterFactory;
 
     /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
@@ -176,13 +176,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
      * @param Category $catalogCategory
      * @param Product $catalogProduct
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Escaper $escaper
      * @param string $templateFilterModel
      */
     public function __construct(
@@ -192,13 +192,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
         Category $catalogCategory,
         Product $catalogProduct,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Escaper $escaper,
         $templateFilterModel
     ) {
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -427,7 +427,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve template processor for catalog content
      *
-     * @return \Magento\Filter\Template
+     * @return \Magento\Framework\Filter\Template
      */
     public function getPageTemplateProcessor()
     {

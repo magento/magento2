@@ -27,7 +27,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:redefine schemaLocation="../../../../../lib/Magento/Data/etc/argument/types.xsd">
+    <xs:redefine schemaLocation="../../../../../lib/Magento/Framework/Data/etc/argument/types.xsd">
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
                 <xs:extension base="argumentType">

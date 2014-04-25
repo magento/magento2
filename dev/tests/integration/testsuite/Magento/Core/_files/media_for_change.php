@@ -26,7 +26,7 @@
  */
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
     ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-    ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+    ->load(\Magento\Framework\App\Area::PART_CONFIG);
 $designDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir() . '/media_for_change';
 $themeDir = $designDir . '/frontend/test_default';
 $sourcePath = dirname(__DIR__) . '/Model/_files/design/frontend/test_publication/';

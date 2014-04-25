@@ -131,15 +131,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $objectManager->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
-            \Magento\View\DesignInterface::XML_PATH_THEME_ID,
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $themeId,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        /** @var $layout \Magento\View\LayoutInterface */
-        $layout = $objectManager->create('Magento\View\Layout');
-        $objectManager->addSharedInstance($layout, 'Magento\View\Layout');
-        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('test_default');
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
+        $layout = $objectManager->create('Magento\Framework\View\Layout');
+        $objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('test_default');
 
         $actualOutput = $this->_model->layoutDirective(
             array('{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams)

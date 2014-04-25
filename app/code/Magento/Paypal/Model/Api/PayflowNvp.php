@@ -437,28 +437,28 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     );
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Logger $logger
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Math\Random $mathRandom
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Logger $logger,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Math\Random $mathRandom,
+        \Magento\Framework\Math\Random $mathRandom,
         array $data = array()
     ) {
         $this->mathRandom = $mathRandom;
@@ -632,7 +632,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @param array $response
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _handleCallErrors($response)
     {
@@ -640,7 +640,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             $message = $response['RESPMSG'];
             $e = new \Exception(sprintf('PayPal gateway errors: %s.', $message));
             $this->_logger->logException($e);
-            throw new \Magento\Model\Exception(__('PayPal gateway rejected the request. %1', $message));
+            throw new \Magento\Framework\Model\Exception(__('PayPal gateway rejected the request. %1', $message));
         }
     }
 

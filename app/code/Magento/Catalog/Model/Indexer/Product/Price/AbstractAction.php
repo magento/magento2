@@ -47,7 +47,7 @@ abstract class AbstractAction
     protected $_resource;
 
     /**
-     * @var \Magento\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -71,12 +71,12 @@ abstract class AbstractAction
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
@@ -109,8 +109,8 @@ abstract class AbstractAction
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param string $defaultPriceIndexer
@@ -120,8 +120,8 @@ abstract class AbstractAction
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory,
         $defaultPriceIndexer
@@ -140,7 +140,7 @@ abstract class AbstractAction
     /**
      * Retrieve connection instance
      *
-     * @return bool|\Magento\DB\Adapter\AdapterInterface
+     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getConnection()
     {
@@ -418,7 +418,7 @@ abstract class AbstractAction
             $select,
             $destTable,
             $targetColumns,
-            \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
         );
         $connection->query($query);
     }

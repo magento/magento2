@@ -23,15 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <preference for="Magento\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
-    <preference for="Magento\Module\ResourceInterface" type="Magento\Install\Model\Resource\Resource" />
-    <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
+    <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Install\Model\Resource\Resource" />
+    <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">install</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Install\Model\Session" type="Magento\Session\Generic">
+    <virtualType name="Magento\Install\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Install\Model\Session\Storage</argument>
         </arguments>
@@ -44,7 +44,7 @@
     </type>
     <type name="Magento\Install\Block\End">
         <arguments>
-            <argument name="cryptKey" xsi:type="init_parameter">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</argument>
+            <argument name="cryptKey" xsi:type="init_parameter">Magento\Framework\Encryption\Encryptor::PARAM_CRYPT_KEY</argument>
             <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
         </arguments>
     </type>

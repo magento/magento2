@@ -37,14 +37,14 @@ class Service
     protected $_filePath;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_tmpDirectory;
 
     /**
      * File size
      *
-     * @var \Magento\File\Size
+     * @var \Magento\Framework\File\Size
      */
     protected $_fileSize;
 
@@ -74,13 +74,13 @@ class Service
      * Constructor
      *
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\File\Size $fileSize
+     * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param array $uploadLimits keys are 'css' and 'js' for file type, values defines maximum file size, example: 2M
      */
     public function __construct(
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\File\Size $fileSize,
+        \Magento\Framework\File\Size $fileSize,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         array $uploadLimits = array()
     ) {
@@ -100,7 +100,7 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function uploadCssFile($file)
     {
@@ -112,7 +112,7 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb())
             );
         }
@@ -126,7 +126,7 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function uploadJsFile($file)
     {
@@ -138,7 +138,7 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb())
             );
         }

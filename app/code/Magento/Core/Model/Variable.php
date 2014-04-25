@@ -39,7 +39,7 @@ namespace Magento\Core\Model;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Variable extends \Magento\Model\AbstractModel
+class Variable extends \Magento\Framework\Model\AbstractModel
 {
     const TYPE_TEXT = 'text';
 
@@ -51,24 +51,24 @@ class Variable extends \Magento\Model\AbstractModel
     protected $_storeId = 0;
 
     /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper = null;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Core\Model\Resource\Variable $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Core\Model\Resource\Variable $resource,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_escaper = $escaper;

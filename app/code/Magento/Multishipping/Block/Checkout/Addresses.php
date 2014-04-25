@@ -31,7 +31,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * @var \Magento\Filter\Object\GridFactory
+     * @var \Magento\Framework\Filter\Object\GridFactory
      */
     protected $_filterGridFactory;
 
@@ -51,16 +51,16 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     private $_addressConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Filter\Object\GridFactory $filterGridFactory
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService
      * @param AddressConfig $addressConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Filter\Object\GridFactory $filterGridFactory,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService,
         AddressConfig $addressConfig,
@@ -102,9 +102,9 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     public function getItems()
     {
         $items = $this->getCheckout()->getQuoteShippingAddressesItems();
-        /** @var \Magento\Filter\Object\Grid $itemsFilter */
+        /** @var \Magento\Framework\Filter\Object\Grid $itemsFilter */
         $itemsFilter = $this->_filterGridFactory->create();
-        $itemsFilter->addFilter(new \Magento\Filter\Sprintf('%d'), 'qty');
+        $itemsFilter->addFilter(new \Magento\Framework\Filter\Sprintf('%d'), 'qty');
         return $itemsFilter->filter($items);
     }
 
@@ -117,7 +117,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressesHtmlSelect($item, $index)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
             ->setName('ship['.$index.']['.$item->getQuoteItemId().'][address]')
             ->setId('ship_'.$index.'_'.$item->getQuoteItemId().'_address')
             ->setValue($item->getCustomerAddressId())
@@ -140,7 +140,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 
             try {
                 $addresses = $this->_customerAddressService->getAddresses($this->getCustomerId());
-            } catch (\Magento\Exception\NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 /** Customer does not exist */
             }
             /** @var \Magento\Customer\Service\V1\Data\Address $address */

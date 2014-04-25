@@ -55,11 +55,11 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $path = $basePath . '/V1/customerAccounts/createCustomer';
         $resultPath = $this->pathProcessor->process($path);
         $this->assertEquals(str_replace($basePath, "", $path), $resultPath);
-        $this->assertEquals($storeCode, $this->storeManager->getCurrentStore());
+        $this->assertEquals($storeCode, $this->storeManager->getStore()->getCode());
     }
 
     /**
-     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with storeCode = InvalidStorecode
      */
     public function testProcessWithInValidStoreCode()

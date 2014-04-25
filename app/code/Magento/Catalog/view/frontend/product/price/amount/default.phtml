@@ -23,7 +23,7 @@
  */
 ?>
 
-<?php /** @var \Magento\Pricing\Render\Amount $this */ ?>
+<?php /** @var \Magento\Framework\Pricing\Render\Amount $this */ ?>
 
 <?php if ($this->getDisplayLabel()): ?>
     <span class="price-label"><?php echo $this->getDisplayLabel(); ?></span>
@@ -37,7 +37,7 @@
     </span>
 </span>
 <?php if ($this->hasAdjustmentsHtml()): ?>
-<?php if ($this->getZone() == \Magento\Pricing\Render::ZONE_ITEM_OPTION): ?>
+<?php if ($this->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION): ?>
     (<small>
         <?php echo $this->getAdjustmentsHtml() ?>
     </small>)

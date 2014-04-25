@@ -34,9 +34,9 @@
  */
 namespace Magento\Widget\Model\Resource\Widget;
 
-use Magento\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
-class Instance extends \Magento\Model\Resource\Db\AbstractDb
+class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
@@ -187,7 +187,7 @@ class Instance extends \Magento\Model\Resource\Db\AbstractDb
      * Perform actions before object delete.
      * Collect page ids and layout update ids and set to object for further delete
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _beforeDelete(AbstractModel $object)

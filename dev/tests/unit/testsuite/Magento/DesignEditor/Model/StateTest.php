@@ -31,10 +31,10 @@ class StateTest extends \PHPUnit_Framework_TestCase
     /**
      * Name of layout classes that will be used as main layout
      */
-    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\View\Layout';
+    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Framework\View\Layout';
 
     /**
-     * Url model classes that will be used instead of \Magento\UrlInterface in different vde modes
+     * Url model classes that will be used instead of \Magento\Framework\UrlInterface in different vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -160,7 +160,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
 
         $mutableConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\MutableScopeConfigInterface');
         $mutableConfig->expects(
@@ -168,7 +168,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setValue'
         )->with(
-            $this->equalTo(\Magento\View\DesignInterface::XML_PATH_THEME_ID),
+            $this->equalTo(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
             $this->equalTo(self::THEME_ID),
             $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         )->will(
@@ -181,7 +181,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setNode'
         )->with(
-            $this->equalTo('default/' . \Magento\View\DesignInterface::XML_PATH_THEME_ID),
+            $this->equalTo('default/' . \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
             $this->equalTo(self::THEME_ID)
         )->will(
             $this->returnSelf()

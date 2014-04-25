@@ -29,7 +29,7 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-class AccessProxy extends \Magento\Cache\Frontend\Decorator\Bare
+class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
     /**
      * Cache types manager
@@ -46,12 +46,12 @@ class AccessProxy extends \Magento\Cache\Frontend\Decorator\Bare
     private $_identifier;
 
     /**
-     * @param \Magento\Cache\FrontendInterface $frontend
+     * @param \Magento\Framework\Cache\FrontendInterface $frontend
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param string $identifier Cache type identifier
      */
     public function __construct(
-        \Magento\Cache\FrontendInterface $frontend,
+        \Magento\Framework\Cache\FrontendInterface $frontend,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         $identifier
     ) {

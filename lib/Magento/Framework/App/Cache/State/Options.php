@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App\Cache\State;
 
-use Magento\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Model\Resource\Db\AbstractDb;
 
 class Options extends AbstractDb implements OptionsInterface
 {

@@ -69,7 +69,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $object->setData(array('test_attr' => 'test_attr', 'attribute_set_id' => $set));
 
-        $entityType = new \Magento\Object();
+        $entityType = new \Magento\Framework\Object();
         $entityType->setEntityTypeCode('test');
         $entityType->setEntityTypeId(0);
         $entityType->setEntityTable('table');
@@ -106,9 +106,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false),
                 $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false, false),
                 $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false, false),
-                $this->getMock('Magento\Locale\FormatInterface'),
+                $this->getMock('Magento\Framework\Locale\FormatInterface'),
                 $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false, false),
-                $this->getMock('Magento\Validator\UniversalFactory', array(), array(), '', false, false),
+                $this->getMock('Magento\Framework\Validator\UniversalFactory', array(), array(), '', false, false),
                 $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
                 $this->getMock('Magento\Catalog\Model\Factory', array(), array(), '', false),
                 array()

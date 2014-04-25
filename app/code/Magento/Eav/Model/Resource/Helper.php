@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Helper extends \Magento\DB\Helper
+class Helper extends \Magento\Framework\DB\Helper
 {
     /**
      * Construct
@@ -51,19 +51,19 @@ class Helper extends \Magento\DB\Helper
      * @var array
      */
     protected $_ddlColumnTypes = array(
-        \Magento\DB\Ddl\Table::TYPE_BOOLEAN => 'bool',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT => 'smallint',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER => 'int',
-        \Magento\DB\Ddl\Table::TYPE_BIGINT => 'bigint',
-        \Magento\DB\Ddl\Table::TYPE_FLOAT => 'float',
-        \Magento\DB\Ddl\Table::TYPE_DECIMAL => 'decimal',
-        \Magento\DB\Ddl\Table::TYPE_NUMERIC => 'decimal',
-        \Magento\DB\Ddl\Table::TYPE_DATE => 'date',
-        \Magento\DB\Ddl\Table::TYPE_TIMESTAMP => 'timestamp',
-        \Magento\DB\Ddl\Table::TYPE_DATETIME => 'datetime',
-        \Magento\DB\Ddl\Table::TYPE_TEXT => 'text',
-        \Magento\DB\Ddl\Table::TYPE_BLOB => 'blob',
-        \Magento\DB\Ddl\Table::TYPE_VARBINARY => 'blob'
+        \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN => 'bool',
+        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT => 'smallint',
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER => 'int',
+        \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT => 'bigint',
+        \Magento\Framework\DB\Ddl\Table::TYPE_FLOAT => 'float',
+        \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL => 'decimal',
+        \Magento\Framework\DB\Ddl\Table::TYPE_NUMERIC => 'decimal',
+        \Magento\Framework\DB\Ddl\Table::TYPE_DATE => 'date',
+        \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP => 'timestamp',
+        \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME => 'datetime',
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT => 'text',
+        \Magento\Framework\DB\Ddl\Table::TYPE_BLOB => 'blob',
+        \Magento\Framework\DB\Ddl\Table::TYPE_VARBINARY => 'blob'
     );
 
     /**

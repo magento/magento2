@@ -46,22 +46,22 @@ class Cron extends \Magento\Framework\App\Config\Value
     protected $_runModelPath = '';
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param string $runModelPath
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         $runModelPath = '',
         array $data = array()
     ) {
@@ -74,7 +74,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * Cron settings after save
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _afterSave()
     {
@@ -109,7 +109,7 @@ class Cron extends \Magento\Framework\App\Config\Value
             $configValue->load(self::CRON_MODEL_PATH, 'path');
             $configValue->setValue($this->_runModelPath)->setPath(self::CRON_MODEL_PATH)->save();
         } catch (\Exception $e) {
-            throw new \Magento\Model\Exception(__('We can\'t save the Cron expression.'));
+            throw new \Magento\Framework\Model\Exception(__('We can\'t save the Cron expression.'));
         }
     }
 }

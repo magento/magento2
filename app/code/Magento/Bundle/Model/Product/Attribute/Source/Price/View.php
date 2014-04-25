@@ -101,7 +101,7 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
         $column['nullable'] = true;
         $column['comment'] = 'Bundle Price View ' . $attributeCode . ' column';
 
@@ -112,7 +112,7 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Select for update Attribute value in flat table
      *
      * @param   int $store
-     * @return  \Magento\DB\Select|null
+     * @return  \Magento\Framework\DB\Select|null
      */
     public function getFlatUpdateSelect($store)
     {

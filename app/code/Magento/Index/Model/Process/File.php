@@ -25,8 +25,8 @@
  */
 namespace Magento\Index\Model\Process;
 
-use Magento\Filesystem\FilesystemException;
-use Magento\Filesystem\File\WriteInterface;
+use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Filesystem\File\WriteInterface;
 
 /**
  * Process file entity

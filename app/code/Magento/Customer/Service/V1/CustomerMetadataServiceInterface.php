@@ -42,7 +42,7 @@ interface CustomerMetadataServiceInterface
      * @param   string $entityType
      * @param   string $attributeCode
      * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
-     * @throws \Magento\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getAttributeMetadata($entityType, $attributeCode);
 
@@ -70,7 +70,7 @@ interface CustomerMetadataServiceInterface
      *
      * @param string $attributeCode
      * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
-     * @throws \Magento\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCustomerAttributeMetadata($attributeCode);
 
@@ -93,7 +93,7 @@ interface CustomerMetadataServiceInterface
      *
      * @param string $attributeCode
      * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
-     * @throws \Magento\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getAddressAttributeMetadata($attributeCode);
 

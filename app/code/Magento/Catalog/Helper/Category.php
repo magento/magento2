@@ -80,7 +80,7 @@ class Category extends AbstractHelper
     /**
      * Lib data collection factory
      *
-     * @var \Magento\Data\CollectionFactory
+     * @var \Magento\Framework\Data\CollectionFactory
      */
     protected $_dataCollectionFactory;
 
@@ -89,14 +89,14 @@ class Category extends AbstractHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Data\CollectionFactory $dataCollectionFactory
+     * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Data\CollectionFactory $dataCollectionFactory
+        \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_storeManager = $storeManager;
@@ -111,7 +111,7 @@ class Category extends AbstractHelper
      * @param bool|string $sorted
      * @param bool $asCollection
      * @param bool $toLoad
-     * @return \Magento\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
+     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
      */
     public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {

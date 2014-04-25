@@ -29,14 +29,14 @@ namespace Magento\RecurringPayment\Block\Payment\View;
 class Address extends \Magento\RecurringPayment\Block\Payment\View
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Order\AddressFactory $addressFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Order\AddressFactory $addressFactory,
         array $data = array()
     ) {

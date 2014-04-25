@@ -40,21 +40,21 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Module\Manager $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory,
         array $data = array()
     ) {

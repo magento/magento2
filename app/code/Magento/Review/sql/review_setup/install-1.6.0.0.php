@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 $installer = $this;
-/* @var $installer \Magento\Module\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 /**
@@ -42,13 +42,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review_entity')
 )->addColumn(
     'entity_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Review entity id'
 )->addColumn(
     'entity_code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     32,
     array('nullable' => false),
     'Review entity code'
@@ -64,13 +64,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review_status')
 )->addColumn(
     'status_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Status id'
 )->addColumn(
     'status_code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     32,
     array('nullable' => false),
     'Status code'
@@ -86,31 +86,31 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review')
 )->addColumn(
     'review_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Review id'
 )->addColumn(
     'created_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Review create date'
 )->addColumn(
     'entity_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Entity id'
 )->addColumn(
     'entity_pk_value',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Product id'
 )->addColumn(
     'status_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Status code'
@@ -128,15 +128,15 @@ $table = $installer->getConnection()->newTable(
     'entity_id',
     $installer->getTable('review_entity'),
     'entity_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('review', 'status_id', 'review_status', 'status_id'),
     'status_id',
     $installer->getTable('review_status'),
     'status_id',
-    \Magento\DB\Ddl\Table::ACTION_NO_ACTION,
-    \Magento\DB\Ddl\Table::ACTION_NO_ACTION
+    \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION,
+    \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
 )->setComment(
     'Review base information'
 );
@@ -149,43 +149,43 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review_detail')
 )->addColumn(
     'detail_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Review detail id'
 )->addColumn(
     'review_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Review id'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'default' => '0'),
     'Store id'
 )->addColumn(
     'title',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Title'
 )->addColumn(
     'detail',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array('nullable' => false),
     'Detail description'
 )->addColumn(
     'nickname',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     128,
     array('nullable' => false),
     'User nickname'
 )->addColumn(
     'customer_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true),
     'Customer Id'
@@ -203,22 +203,22 @@ $table = $installer->getConnection()->newTable(
     'customer_id',
     $installer->getTable('customer_entity'),
     'entity_id',
-    \Magento\DB\Ddl\Table::ACTION_SET_NULL,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('review_detail', 'review_id', 'review', 'review_id'),
     'review_id',
     $installer->getTable('review'),
     'review_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('review_detail', 'store_id', 'store', 'store_id'),
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_SET_NULL,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Review detail information'
 );
@@ -231,37 +231,37 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review_entity_summary')
 )->addColumn(
     'primary_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'nullable' => false, 'primary' => true),
     'Summary review entity id'
 )->addColumn(
     'entity_pk_value',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('nullable' => false, 'default' => '0'),
     'Product id'
 )->addColumn(
     'entity_type',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '0'),
     'Entity type id'
 )->addColumn(
     'reviews_count',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '0'),
     'Qty of reviews'
 )->addColumn(
     'rating_summary',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '0'),
     'Summarized rating'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Store id'
@@ -273,8 +273,8 @@ $table = $installer->getConnection()->newTable(
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Review aggregates'
 );
@@ -287,13 +287,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('review_store')
 )->addColumn(
     'review_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Review Id'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Store Id'
@@ -305,15 +305,15 @@ $table = $installer->getConnection()->newTable(
     'review_id',
     $installer->getTable('review'),
     'review_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('review_store', 'store_id', 'store', 'store_id'),
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Review Store'
 );
@@ -326,13 +326,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_entity')
 )->addColumn(
     'entity_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Entity Id'
 )->addColumn(
     'entity_code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     64,
     array('nullable' => false),
     'Entity Code'
@@ -340,10 +340,10 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName(
         'rating_entity',
         array('entity_code'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('entity_code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->setComment(
     'Rating entities'
 );
@@ -356,38 +356,38 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating')
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Rating Id'
 )->addColumn(
     'entity_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Entity Id'
 )->addColumn(
     'rating_code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     64,
     array('nullable' => false),
     'Rating Code'
 )->addColumn(
     'position',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Rating Position On Frontend'
 )->addColumn(
     'is_active',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => 1),
     'Rating is active.'
 )->addIndex(
-    $installer->getIdxName('rating', array('rating_code'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName('rating', array('rating_code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
     array('rating_code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
     $installer->getIdxName('rating', array('entity_id')),
     array('entity_id')
@@ -396,8 +396,8 @@ $table = $installer->getConnection()->newTable(
     'entity_id',
     $installer->getTable('rating_entity'),
     'entity_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Ratings'
 );
@@ -410,31 +410,31 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_option')
 )->addColumn(
     'option_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Rating Option Id'
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Rating Id'
 )->addColumn(
     'code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     32,
     array('nullable' => false),
     'Rating Option Code'
 )->addColumn(
     'value',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Rating Option Value'
 )->addColumn(
     'position',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Ration option position on frontend'
@@ -446,8 +446,8 @@ $table = $installer->getConnection()->newTable(
     'rating_id',
     $installer->getTable('rating'),
     'rating_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Rating options'
 );
@@ -460,61 +460,61 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_option_vote')
 )->addColumn(
     'vote_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Vote id'
 )->addColumn(
     'option_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Vote option id'
 )->addColumn(
     'remote_ip',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     16,
     array('nullable' => false),
     'Customer IP'
 )->addColumn(
     'remote_ip_long',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('nullable' => false, 'default' => 0),
     'Customer IP converted to long integer format'
 )->addColumn(
     'customer_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'default' => 0),
     'Customer Id'
 )->addColumn(
     'entity_pk_value',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Product id'
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Rating id'
 )->addColumn(
     'review_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true),
     'Review id'
 )->addColumn(
     'percent',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => 0),
     'Percent amount'
 )->addColumn(
     'value',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => 0),
     'Vote option value'
@@ -526,8 +526,8 @@ $table = $installer->getConnection()->newTable(
     'option_id',
     $installer->getTable('rating_option'),
     'option_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Rating option values'
 );
@@ -540,49 +540,49 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_option_vote_aggregated')
 )->addColumn(
     'primary_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'nullable' => false, 'primary' => true),
     'Vote aggregation id'
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Rating id'
 )->addColumn(
     'entity_pk_value',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Product id'
 )->addColumn(
     'vote_count',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Vote dty'
 )->addColumn(
     'vote_value_sum',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'General vote sum'
 )->addColumn(
     'percent',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => 0),
     'Vote percent'
 )->addColumn(
     'percent_approved',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('default' => '0'),
     'Vote percent approved by admin'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0),
     'Store Id'
@@ -597,15 +597,15 @@ $table = $installer->getConnection()->newTable(
     'rating_id',
     $installer->getTable('rating'),
     'rating_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('rating_option_vote_aggregated', 'store_id', 'core_store', 'store_id'),
     'store_id',
     $installer->getTable('core_store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Rating vote aggregated'
 );
@@ -618,13 +618,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_store')
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0, 'primary' => true),
     'Rating id'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0, 'primary' => true),
     'Store id'
@@ -636,15 +636,15 @@ $table = $installer->getConnection()->newTable(
     'store_id',
     $installer->getTable('core_store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('rating_store', 'rating_id', 'rating', 'rating_id'),
     'rating_id',
     $installer->getTable('rating'),
     'rating_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_NO_ACTION
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
 )->setComment(
     'Rating Store'
 );
@@ -657,19 +657,19 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('rating_title')
 )->addColumn(
     'rating_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0, 'primary' => true),
     'Rating Id'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => 0, 'primary' => true),
     'Store Id'
 )->addColumn(
     'value',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Rating Label'
@@ -681,15 +681,15 @@ $table = $installer->getConnection()->newTable(
     'rating_id',
     $installer->getTable('rating'),
     'rating_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('rating_title', 'store_id', 'core_store', 'store_id'),
     'store_id',
     $installer->getTable('core_store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Rating Title'
 );
@@ -705,8 +705,8 @@ $table = $installer->getConnection()->addForeignKey(
     'review_id',
     $installer->getTable('review'),
     'review_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 );
 
 $this->endSetup();

@@ -31,15 +31,15 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -132,11 +132,11 @@ class Agreement extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('You canceled the billing agreement.'));
                 $this->_redirect('paypal/*/view', array('_current' => true));
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We could not cancel the billing agreement.'));
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             }
             $this->_redirect('paypal/*/view', array('_current' => true));
         }
@@ -158,11 +158,11 @@ class Agreement extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('You deleted the billing agreement.'));
                 $this->_redirect('paypal/*/');
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We could not delete the billing agreement.'));
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             }
             $this->_redirect('paypal/*/view', array('_current' => true));
         }

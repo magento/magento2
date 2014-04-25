@@ -26,10 +26,10 @@
 namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\AddressConverter;
 
-class Address extends \Magento\View\Element\Template
+class Address extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Model\Address\Config
@@ -47,14 +47,14 @@ class Address extends \Magento\View\Element\Template
     protected $customerAddressCurrentService;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService
      * @param \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface $customerAddressCurrentService
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService,
         \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface $customerAddressCurrentService,
         \Magento\Customer\Model\Address\Config $addressConfig,

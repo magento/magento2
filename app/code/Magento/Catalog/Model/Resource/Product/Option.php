@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Store manager
@@ -88,10 +88,10 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save options store data
      *
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->_saveValuePrices($object);
         $this->_saveValueTitles($object);
@@ -102,10 +102,10 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save value prices
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _saveValuePrices(\Magento\Model\AbstractModel $object)
+    protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
         $priceTable = $this->getTable('catalog_product_option_price');
         $readAdapter = $this->_getReadAdapter();
@@ -140,7 +140,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 if ($optionId) {
                     if ($object->getStoreId() == '0') {
                         $data = $this->_prepareDataForTable(
-                            new \Magento\Object(
+                            new \Magento\Framework\Object(
                                 array('price' => $object->getPrice(), 'price_type' => $object->getPriceType())
                             ),
                             $priceTable
@@ -157,7 +157,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                     }
                 } else {
                     $data = $this->_prepareDataForTable(
-                        new \Magento\Object(
+                        new \Magento\Framework\Object(
                             array(
                                 'option_id' => $object->getId(),
                                 'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
@@ -209,7 +209,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
 
                         if ($readAdapter->fetchOne($statement)) {
                             $data = $this->_prepareDataForTable(
-                                new \Magento\Object(
+                                new \Magento\Framework\Object(
                                     array('price' => $newPrice, 'price_type' => $object->getPriceType())
                                 ),
                                 $priceTable
@@ -222,7 +222,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                             );
                         } else {
                             $data = $this->_prepareDataForTable(
-                                new \Magento\Object(
+                                new \Magento\Framework\Object(
                                     array(
                                         'option_id' => $object->getId(),
                                         'store_id' => $storeId,
@@ -251,10 +251,10 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save titles
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      */
-    protected function _saveValueTitles(\Magento\Model\AbstractModel $object)
+    protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
     {
         $readAdapter = $this->_getReadAdapter();
         $writeAdapter = $this->_getWriteAdapter();
@@ -275,7 +275,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
             if ($readAdapter->fetchOne($statement)) {
                 if ($object->getStoreId() == '0') {
                     $data = $this->_prepareDataForTable(
-                        new \Magento\Object(array('title' => $object->getTitle())),
+                        new \Magento\Framework\Object(array('title' => $object->getTitle())),
                         $titleTable
                     );
 
@@ -290,7 +290,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 }
             } else {
                 $data = $this->_prepareDataForTable(
-                    new \Magento\Object(
+                    new \Magento\Framework\Object(
                         array(
                             'option_id' => $object->getId(),
                             'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
@@ -317,7 +317,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
 
             if ($readAdapter->fetchOne($statement)) {
                 $data = $this->_prepareDataForTable(
-                    new \Magento\Object(array('title' => $object->getTitle())),
+                    new \Magento\Framework\Object(array('title' => $object->getTitle())),
                     $titleTable
                 );
 
@@ -328,7 +328,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 );
             } else {
                 $data = $this->_prepareDataForTable(
-                    new \Magento\Object(
+                    new \Magento\Framework\Object(
                         array(
                             'option_id' => $object->getId(),
                             'store_id' => $object->getStoreId(),
@@ -434,7 +434,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 $select,
                 $table,
                 array('option_id', 'store_id', 'title'),
-                \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
             );
             $write->query($insertSelect);
 
@@ -453,7 +453,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
                 $select,
                 $table,
                 array('option_id', 'store_id', 'price', 'price_type'),
-                \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
             );
             $write->query($insertSelect);
 

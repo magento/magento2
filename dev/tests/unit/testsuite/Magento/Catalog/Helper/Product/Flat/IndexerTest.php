@@ -46,12 +46,12 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $_resourceMock;
 
     /**
-     * @var \Magento\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_changelogMock;
 
@@ -94,17 +94,20 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->_connectionMock = $this->getMock(
-            'Magento\DB\Adapter\Pdo\Mysql',
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             array('getTables', 'dropTable'),
             array(),
             '',
             false
         );
 
-        $this->_changelogMock = $this->getMock('Magento\Mview\View\Changelog', array('getName'), array(), '', false);
-
-
-
+        $this->_changelogMock = $this->getMock(
+            'Magento\Framework\Mview\View\Changelog',
+            array('getName'),
+            array(),
+            '',
+            false
+        );
 
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $this->_objectManager->getObject(

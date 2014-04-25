@@ -45,12 +45,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $objectManager->get('Magento\View\DesignInterface')->setDefaultDesignTheme();
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDefaultDesignTheme();
         $arguments = array(
             $objectManager->get('Magento\Backend\Block\Template\Context'),
             $objectManager->get('Magento\Backend\Model\Session\Quote'),
             $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
-            $objectManager->get('Magento\Data\FormFactory')
+            $objectManager->get('Magento\Framework\Data\FormFactory')
         );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */
@@ -58,7 +58,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
             $arguments
         );
-        $block->setLayout($objectManager->create('Magento\View\Layout'));
+        $block->setLayout($objectManager->create('Magento\Framework\View\Layout'));
 
         $method = new \ReflectionMethod(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
@@ -66,8 +66,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
         $method->setAccessible(true);
 
-        /** @var $formFactory \Magento\Data\FormFactory */
-        $formFactory = $objectManager->get('Magento\Data\FormFactory');
+        /** @var $formFactory \Magento\Framework\Data\FormFactory */
+        $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
         $form = $formFactory->create();
         $fieldset = $form->addFieldset('test_fieldset', array());
         $dateAttribute = (new AttributeMetadataBuilder(

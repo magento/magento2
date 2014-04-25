@@ -30,14 +30,14 @@ class Reader
     /**
      * File locator
      *
-     * @var \Magento\Config\FileResolverInterface
+     * @var \Magento\Framework\Config\FileResolverInterface
      */
     protected $_fileResolver;
 
     /**
      * Config converter
      *
-     * @var  \Magento\Config\ConverterInterface
+     * @var  \Magento\Framework\Config\ConverterInterface
      */
     protected $_converter;
 
@@ -70,20 +70,20 @@ class Reader
     protected $_schemaFile;
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Config\ConverterInterface $converter
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * @param \Magento\Framework\Config\ConverterInterface $converter
      * @param SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param string $domDocumentClass
      */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Config\ConverterInterface $converter,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        \Magento\Framework\Config\ConverterInterface $converter,
         SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'config.xml',
-        $domDocumentClass = 'Magento\Config\Dom'
+        $domDocumentClass = 'Magento\Framework\Config\Dom'
     ) {
         $this->_schemaFile = $validationState->isValidated() ? $schemaLocator->getSchema() : null;
         $this->_fileResolver = $fileResolver;
@@ -97,7 +97,7 @@ class Reader
      *
      * @return array
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function read()
     {
@@ -113,7 +113,7 @@ class Reader
             return array();
         }
 
-        /** @var \Magento\Config\Dom $domDocument */
+        /** @var \Magento\Framework\Config\Dom $domDocument */
         $domDocument = null;
         foreach ($fileList as $file) {
             try {
@@ -123,8 +123,8 @@ class Reader
                 } else {
                     $domDocument->merge($file);
                 }
-            } catch (\Magento\Config\Dom\ValidationException $e) {
-                throw new \Magento\Exception("Invalid XML in file " . $file . ":\n" . $e->getMessage());
+            } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
+                throw new \Magento\Framework\Exception("Invalid XML in file " . $file . ":\n" . $e->getMessage());
             }
         }
 

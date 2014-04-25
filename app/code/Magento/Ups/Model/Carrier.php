@@ -66,7 +66,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * Raw rate request data
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_rawRequest;
 
@@ -126,12 +126,12 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_customizableContainerTypes = array('CP', 'CSP');
 
     /**
-     * @var \Magento\Locale\FormatInterface
+     * @var \Magento\Framework\Locale\FormatInterface
      */
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -143,7 +143,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -154,8 +154,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\Logger $logger
-     * @param \Magento\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
      * @param array $data
      *
@@ -164,7 +164,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -175,8 +175,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\Logger $logger,
-        \Magento\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
         array $data = array()
     ) {
@@ -231,7 +231,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $this->_request = $request;
 
-        $rowRequest = new \Magento\Object();
+        $rowRequest = new \Magento\Framework\Object();
 
         if ($request->getLimitMethod()) {
             $rowRequest->setAction($this->configHelper->getCode('action', 'single'));
@@ -780,7 +780,7 @@ XMLRequest;
         $costArr = array();
         $priceArr = array();
         if (strlen(trim($xmlResponse)) > 0) {
-            $xml = new \Magento\Simplexml\Config();
+            $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
             $success = (int)$arr[0];
@@ -1008,7 +1008,7 @@ XMLAuth;
         $packageProgress = array();
 
         if ($xmlResponse) {
-            $xml = new \Magento\Simplexml\Config();
+            $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//TrackResponse/Response/ResponseStatusCode/text()");
             $success = (int)$arr[0][0];
@@ -1159,10 +1159,10 @@ XMLAuth;
     /**
      * Form XML for shipment request
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return string
      */
-    protected function _formShipmentRequest(\Magento\Object $request)
+    protected function _formShipmentRequest(\Magento\Framework\Object $request)
     {
         $packageParams = $request->getPackageParams();
         $height = $packageParams->getHeight();
@@ -1174,7 +1174,7 @@ XMLAuth;
         $itemsDesc = array();
         $itemsShipment = $request->getPackageItems();
         foreach ($itemsShipment as $itemShipment) {
-            $item = new \Magento\Object();
+            $item = new \Magento\Framework\Object();
             $item->setData($itemShipment);
             $itemsDesc[] = $item->getName();
         }
@@ -1382,7 +1382,7 @@ XMLAuth;
      * Send and process shipment accept request
      *
      * @param Element $shipmentConfirmResponse
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
     {
@@ -1417,7 +1417,7 @@ XMLAuth;
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
         }
 
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         if (isset($response->Error)) {
             $result->setErrors((string)$response->Error->ErrorDescription);
         } else {
@@ -1450,14 +1450,14 @@ XMLAuth;
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Object $request
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $request
+     * @return \Magento\Framework\Object
      * @throws \Exception
      */
-    protected function _doShipmentRequest(\Magento\Object $request)
+    protected function _doShipmentRequest(\Magento\Framework\Object $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         $xmlRequest = $this->_formShipmentRequest($request);
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
 
@@ -1531,10 +1531,10 @@ XMLAuth;
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array|bool
      */
-    public function getContainerTypes(\Magento\Object $params = null)
+    public function getContainerTypes(\Magento\Framework\Object $params = null)
     {
         if ($params === null) {
             return $this->_getAllowedContainers($params);
@@ -1610,10 +1610,10 @@ XMLAuth;
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array|bool
      */
-    public function getDeliveryConfirmationTypes(\Magento\Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
     {
         $countryRecipient = $params != null ? $params->getCountryRecipient() : null;
         $deliveryConfirmationTypes = array();

@@ -32,17 +32,17 @@ use Magento\Backend\App\AbstractAction;
 class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
     /**
-     * @var \Magento\HTTP\Authentication
+     * @var \Magento\Framework\HTTP\Authentication
      */
     protected $_httpAuthentication;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
@@ -60,20 +60,20 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\HTTP\Authentication $httpAuthentication
-     * @param \Magento\Logger $logger
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $url,
         ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\HTTP\Authentication $httpAuthentication,
-        \Magento\Logger $logger,
-        \Magento\AuthorizationInterface $authorization
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\HTTP\Authentication $httpAuthentication,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\AuthorizationInterface $authorization
     ) {
         $this->_httpAuthentication = $httpAuthentication;
         $this->_logger = $logger;

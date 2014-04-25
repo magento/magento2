@@ -76,7 +76,8 @@ class AccountTest extends \Magento\Backend\Utility\Controller
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->assertTrue(
-            $objectManager->get('Magento\Encryption\EncryptorInterface')->validateHash($password, $user->getPassword())
+            $objectManager->get('Magento\Framework\Encryption\EncryptorInterface')
+                ->validateHash($password, $user->getPassword())
         );
     }
 }

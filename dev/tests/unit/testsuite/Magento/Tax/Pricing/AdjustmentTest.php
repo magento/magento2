@@ -25,7 +25,7 @@
 namespace Magento\Tax\Pricing;
 
 use Magento\Tax\Helper\Data as TaxHelper;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,7 +130,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('priceIncludesTax', 'getPrice'))
             ->getMock();
         /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $object = $this->getMockBuilder('Magento\Pricing\Object\SaleableInterface')->getMock();
+        $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
         $model = new Adjustment($taxHelper);
 
                 // Avoid execution of irrelevant functionality
@@ -175,7 +175,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('priceIncludesTax', 'getPrice'))
             ->getMock();
         /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $object = $this->getMockBuilder('Magento\Pricing\Object\SaleableInterface')->getMock();
+        $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
         $model = new Adjustment($taxHelper);
 
         // Avoid execution of irrelevant functionality

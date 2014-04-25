@@ -133,16 +133,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /* Category in registry */
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_category', $existingCategory);
+        $objectManager->get('Magento\Framework\Registry')->register('current_category', $existingCategory);
         try {
             $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\Catalog\Model\Layer\Category'
             );
             $this->assertSame($existingCategory, $model->getCurrentCategory());
-            $objectManager->get('Magento\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
             throw $e;
         }
 
@@ -151,9 +151,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\Catalog\Model\Layer\Category'
             );
-            $model->setCurrentCategory(new \Magento\Object());
+            $model->setCurrentCategory(new \Magento\Framework\Object());
             $this->fail('Assign category of invalid class.');
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
         }
 
         try {
@@ -164,7 +164,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category')
             );
             $this->fail('Assign category with invalid id.');
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
         }
     }
 

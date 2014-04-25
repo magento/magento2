@@ -45,8 +45,8 @@ class StoreTest extends \Magento\Backend\Utility\Controller
 
     public function testSaveActionWithExistCode()
     {
-        /** @var $formKey \Magento\Data\Form\FormKey */
-        $formKey = $this->_objectManager->get('Magento\Data\Form\FormKey');
+        /** @var $formKey \Magento\Framework\Data\Form\FormKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $post = array(
             'form_key' => $formKey->getFormKey(),
             'website' => array(
@@ -65,8 +65,8 @@ class StoreTest extends \Magento\Backend\Utility\Controller
         //Check that errors was generated and set to session
         $this->assertSessionMessages(
             $this->contains("Website with the same code already exists."),
-            \Magento\Message\MessageInterface::TYPE_ERROR,
-            'Magento\Message\ManagerInterface'
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR,
+            'Magento\Framework\Message\ManagerInterface'
         );
     }
 }

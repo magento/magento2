@@ -61,12 +61,12 @@ class Payment extends \Magento\Backend\Block\Template
      * Retrieve required options from parent
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Model\Exception(__('Invalid parent block for this block'));
+            throw new \Magento\Framework\Model\Exception(__('Invalid parent block for this block'));
         }
         $this->setPayment($this->getParentBlock()->getOrder()->getPayment());
         parent::_beforeToHtml();

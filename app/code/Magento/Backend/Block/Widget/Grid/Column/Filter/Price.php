@@ -53,14 +53,14 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\DB\Helper $resourceHelper
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Directory\Model\Currency $currencyModel
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\DB\Helper $resourceHelper,
+        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Directory\Model\Currency $currencyModel,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         array $data = array()

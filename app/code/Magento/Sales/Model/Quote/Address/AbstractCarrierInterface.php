@@ -37,7 +37,7 @@ interface AbstractCarrierInterface
      * Collect and get rates
      *
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return \Magento\Object|bool|null
+     * @return \Magento\Framework\Object|bool|null
      */
     public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request);
 
@@ -45,8 +45,8 @@ interface AbstractCarrierInterface
      * Do request to shipment
      * Implementation must be in overridden method
      *
-     * @param \Magento\Object $request
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $request
+     * @return \Magento\Framework\Object
      */
     public function requestToShipment($request);
 
@@ -54,18 +54,18 @@ interface AbstractCarrierInterface
      * Do return of shipment
      * Implementation must be in overridden method
      *
-     * @param \Magento\Object $request
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $request
+     * @return \Magento\Framework\Object
      */
     public function returnOfShipment($request);
 
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array
      */
-    public function getContainerTypes(\Magento\Object $params = null);
+    public function getContainerTypes(\Magento\Framework\Object $params = null);
 
     /**
      * Get Container Types, that could be customized
@@ -77,14 +77,14 @@ interface AbstractCarrierInterface
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param \Magento\Framework\Object|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Object $params = null);
+    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null);
 
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return $this|bool|false|\Magento\Model\AbstractModel
+     * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      */
     public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request);
 
@@ -204,8 +204,8 @@ interface AbstractCarrierInterface
     /**
      * Return content types of package
      *
-     * @param \Magento\Object $params
+     * @param \Magento\Framework\Object $params
      * @return array
      */
-    public function getContentTypes(\Magento\Object $params);
+    public function getContentTypes(\Magento\Framework\Object $params);
 }

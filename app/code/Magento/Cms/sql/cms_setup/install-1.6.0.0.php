@@ -25,7 +25,7 @@
  */
 
 
-/* @var $installer \Magento\Module\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -37,43 +37,43 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('cms_block')
 )->addColumn(
     'block_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'nullable' => false, 'primary' => true),
     'Block ID'
 )->addColumn(
     'title',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Block Title'
 )->addColumn(
     'identifier',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Block String Identifier'
 )->addColumn(
     'content',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '2M',
     array(),
     'Block Content'
 )->addColumn(
     'creation_time',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Block Creation Time'
 )->addColumn(
     'update_time',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Block Modification Time'
 )->addColumn(
     'is_active',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '1'),
     'Is Block Active'
@@ -89,13 +89,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('cms_block_store')
 )->addColumn(
     'block_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'primary' => true),
     'Block ID'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Store ID'
@@ -107,15 +107,15 @@ $table = $installer->getConnection()->newTable(
     'block_id',
     $installer->getTable('cms_block'),
     'block_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('cms_block_store', 'store_id', 'store', 'store_id'),
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'CMS Block To Store Linkage Table'
 );
@@ -128,109 +128,109 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('cms_page')
 )->addColumn(
     'page_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'nullable' => false, 'primary' => true),
     'Page ID'
 )->addColumn(
     'title',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => true),
     'Page Title'
 )->addColumn(
     'root_template',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => true),
     'Page Template'
 )->addColumn(
     'meta_keywords',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array('nullable' => true),
     'Page Meta Keywords'
 )->addColumn(
     'meta_description',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array('nullable' => true),
     'Page Meta Description'
 )->addColumn(
     'identifier',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     100,
     array('nullable' => true, 'default' => null),
     'Page String Identifier'
 )->addColumn(
     'content_heading',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => true),
     'Page Content Heading'
 )->addColumn(
     'content',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '2M',
     array(),
     'Page Content'
 )->addColumn(
     'creation_time',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Page Creation Time'
 )->addColumn(
     'update_time',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Page Modification Time'
 )->addColumn(
     'is_active',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '1'),
     'Is Page Active'
 )->addColumn(
     'sort_order',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'default' => '0'),
     'Page Sort Order'
 )->addColumn(
     'layout_update_xml',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array('nullable' => true),
     'Page Layout Update Content'
 )->addColumn(
     'custom_theme',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     100,
     array('nullable' => true),
     'Page Custom Theme'
 )->addColumn(
     'custom_root_template',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => true),
     'Page Custom Template'
 )->addColumn(
     'custom_layout_update_xml',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array('nullable' => true),
     'Page Custom Layout Update Content'
 )->addColumn(
     'custom_theme_from',
-    \Magento\DB\Ddl\Table::TYPE_DATE,
+    \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
     null,
     array('nullable' => true),
     'Page Custom Theme Active From Date'
 )->addColumn(
     'custom_theme_to',
-    \Magento\DB\Ddl\Table::TYPE_DATE,
+    \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
     null,
     array('nullable' => true),
     'Page Custom Theme Active To Date'
@@ -249,13 +249,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('cms_page_store')
 )->addColumn(
     'page_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'primary' => true),
     'Page ID'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Store ID'
@@ -267,15 +267,15 @@ $table = $installer->getConnection()->newTable(
     'page_id',
     $installer->getTable('cms_page'),
     'page_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('cms_page_store', 'store_id', 'store', 'store_id'),
     'store_id',
     $installer->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'CMS Page To Store Linkage Table'
 );

@@ -36,16 +36,18 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_order', $order);
+        $objectManager->get('Magento\Framework\Registry')->register('current_order', $order);
         $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Order\Payment'
         );
         $payment->setMethod('checkmo');
         $order->setPayment($payment);
 
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $block = $layout->createBlock('Magento\Sales\Block\Order\PrintOrder\Creditmemo', 'block');
-        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'creditmemo_totals', 'block');
+        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'creditmemo_totals', 'block');
 
         $expectedHtml = '<b>Any html</b>';
         $creditmemo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

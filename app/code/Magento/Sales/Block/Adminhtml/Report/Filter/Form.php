@@ -43,15 +43,15 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
         array $data = array()
     ) {
@@ -69,10 +69,10 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
         parent::_prepareForm();
         $form = $this->getForm();
         $htmlIdPrefix = $form->getHtmlIdPrefix();
-        /** @var \Magento\Data\Form\Element\Fieldset $fieldset */
+        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof \Magento\Data\Form\Element\Fieldset) {
+        if (is_object($fieldset) && $fieldset instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
 
             $statuses = $this->_orderConfig->create()->getStatuses();
             $values = array();

@@ -34,29 +34,29 @@ use Magento\Sales\Model\Order;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Messages extends \Magento\View\Element\Messages
+class Messages extends \Magento\Framework\View\Element\Messages
 {
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $coreRegistry = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Message\Factory $messageFactory
-     * @param \Magento\Message\CollectionFactory $collectionFactory
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Message\Factory $messageFactory
+     * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Message\Factory $messageFactory,
-        \Magento\Message\CollectionFactory $collectionFactory,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Message\Factory $messageFactory,
+        \Magento\Framework\Message\CollectionFactory $collectionFactory,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->coreRegistry = $registry;

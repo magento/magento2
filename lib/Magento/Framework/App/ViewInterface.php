@@ -84,7 +84,7 @@ interface ViewInterface
     /**
      * Retrieve current layout object
      *
-     * @return \Magento\View\LayoutInterface
+     * @return \Magento\Framework\View\LayoutInterface
      */
     public function getLayout();
 

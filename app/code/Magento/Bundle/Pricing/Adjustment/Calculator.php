@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Bundle\Pricing\Adjustment;
 
-use Magento\Pricing\Object\SaleableInterface;
-use Magento\Pricing\Amount\AmountFactory;
-use Magento\Pricing\Adjustment\Calculator as CalculatorBase;
+use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Amount\AmountFactory;
+use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPriceInterface;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
@@ -75,7 +73,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
      * @param null|string $exclude
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null)
     {
@@ -88,7 +86,7 @@ class Calculator implements BundleCalculatorInterface
      * @param float $amount
      * @param SaleableInterface $saleableItem
      * @param null $exclude
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getMaxAmount($amount, SaleableInterface $saleableItem, $exclude = null)
     {
@@ -102,7 +100,7 @@ class Calculator implements BundleCalculatorInterface
      * @param SaleableInterface $saleableItem
      * @param null|string $exclude
      * @param bool $searchMin
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function getOptionsAmount($amount, SaleableInterface $saleableItem, $exclude = null, $searchMin = true)
     {
@@ -132,7 +130,7 @@ class Calculator implements BundleCalculatorInterface
             $amountList[] = $minOptionAmount;
         }
 
-        /** @var \Magento\Pricing\Amount\AmountInterface $itemAmount */
+        /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
         foreach ($amountList as $itemAmount) {
             $fullAmount += $itemAmount->getValue();
             foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
@@ -157,7 +155,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Model\Option $option
      * @param SaleableInterface $saleableItem
      * @param bool $searchMin
-     * @return \Magento\Pricing\Amount\AmountInterface[]
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface[]
      */
     protected function processOptions($option, $saleableItem, $searchMin = true)
     {
@@ -187,7 +185,7 @@ class Calculator implements BundleCalculatorInterface
     /**
      * @param \Magento\Bundle\Model\Selection $selection
      * @param SaleableInterface $saleableItem
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function getSelection($selection, $saleableItem)
     {
@@ -201,7 +199,7 @@ class Calculator implements BundleCalculatorInterface
     /**
      * @param \Magento\Bundle\Model\Selection $selection
      * @param SaleableInterface $saleableItem
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function createDynamicAmount($selection, $saleableItem)
     {
@@ -213,7 +211,7 @@ class Calculator implements BundleCalculatorInterface
     /**
      * @param \Magento\Bundle\Model\Selection $selection
      * @param SaleableInterface $saleableItem
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function createFixedAmount($selection, $saleableItem)
     {

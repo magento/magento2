@@ -29,7 +29,6 @@
  * @method \Magento\Store\Model\Resource\Group getResource()
  * @method \Magento\Store\Model\Store setWebsiteId(int $value)
  * @method string getName()
- * @method string getCode()
  * @method \Magento\Store\Model\Store setName(string $value)
  * @method \Magento\Store\Model\Store setRootCategoryId(int $value)
  * @method \Magento\Store\Model\Store setDefaultStoreId(int $value)
@@ -38,7 +37,7 @@ namespace Magento\Store\Model;
 
 use Magento\Store\Model\Website;
 
-class Group extends \Magento\Model\AbstractModel implements \Magento\Object\IdentityInterface
+class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
 {
     const ENTITY = 'store_group';
 
@@ -115,23 +114,23 @@ class Group extends \Magento\Model\AbstractModel implements \Magento\Object\Iden
     protected $_storeManager;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Store\Model\Store $store,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_configDataResource = $configDataResource;

@@ -28,7 +28,7 @@ namespace Magento\Cron\Model\Groups\Config\Converter;
 /**
  * Converts cron parameters from XML files
  */
-class Xml implements \Magento\Config\ConverterInterface
+class Xml implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Converting data to array type

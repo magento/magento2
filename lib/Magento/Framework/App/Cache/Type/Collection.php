@@ -26,7 +26,7 @@ namespace Magento\Framework\App\Cache\Type;
 /**
  * System / Cache Management / Cache type "Collections Data"
  */
-class Collection extends \Magento\Cache\Frontend\Decorator\TagScope
+class Collection extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types

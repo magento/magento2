@@ -29,13 +29,13 @@ use Magento\CatalogSearch\Model\Resource\Query\Collection as QueryCollection;
 use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\CatalogSearch\Model\Resource\Search\Collection;
 use Magento\CatalogSearch\Model\Resource\Search\CollectionFactory;
-use Magento\Model\AbstractModel;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Model\Resource\AbstractResource;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db;
+use Magento\Framework\Data\Collection\Db;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
@@ -117,18 +117,18 @@ class Query extends AbstractModel
     /**
      * Construct
      *
-     * @param Context $context
+     * @param \Magento\Framework\Model\Context $context
      * @param Registry $registry
      * @param QueryCollectionFactory $queryCollectionFactory
      * @param CollectionFactory $searchCollectionFactory
      * @param StoreManagerInterface $storeManager
      * @param Config $scopeConfig
-     * @param AbstractResource $resource
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        Context $context,
+        \Magento\Framework\Model\Context $context,
         Registry $registry,
         QueryCollectionFactory $queryCollectionFactory,
         CollectionFactory $searchCollectionFactory,

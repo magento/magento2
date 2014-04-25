@@ -25,7 +25,7 @@
  */
 namespace Magento\UrlRewrite\Model\UrlRewrite;
 
-use Magento\Option\ArrayInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 class OptionProvider implements ArrayInterface
 {

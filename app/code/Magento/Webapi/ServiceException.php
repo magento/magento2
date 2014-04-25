@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi;
 
-class ServiceException extends \Magento\Model\Exception
+class ServiceException extends \Magento\Framework\Model\Exception
 {
     /** @var array */
     protected $_parameters;

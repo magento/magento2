@@ -26,22 +26,22 @@ namespace Magento\Framework\App;
 class View implements ViewInterface
 {
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @var \Magento\Config\ScopeInterface
+     * @var \Magento\Framework\Config\ScopeInterface
      */
     protected $_configScope;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $_translateInline;
 
@@ -66,21 +66,21 @@ class View implements ViewInterface
     protected $_isLayoutLoaded = false;
 
     /**
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @param \Magento\Config\ScopeInterface $configScope
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param ActionFlag $actionFlag
      */
     public function __construct(
-        \Magento\View\LayoutInterface $layout,
+        \Magento\Framework\View\LayoutInterface $layout,
         RequestInterface $request,
         ResponseInterface $response,
-        \Magento\Config\ScopeInterface $configScope,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Translate\InlineInterface $translateInline,
+        \Magento\Framework\Config\ScopeInterface $configScope,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
         ActionFlag $actionFlag
     ) {
         $this->_layout = $layout;
@@ -95,7 +95,7 @@ class View implements ViewInterface
     /**
      * Retrieve current layout object
      *
-     * @return \Magento\View\LayoutInterface
+     * @return \Magento\Framework\View\LayoutInterface
      */
     public function getLayout()
     {
@@ -188,7 +188,7 @@ class View implements ViewInterface
      */
     public function loadLayoutUpdates()
     {
-        \Magento\Profiler::start('LAYOUT');
+        \Magento\Framework\Profiler::start('LAYOUT');
 
         // dispatch event for adding handles to layout update
         $this->_eventManager->dispatch(
@@ -197,11 +197,11 @@ class View implements ViewInterface
         );
 
         // load layout updates by specified handles
-        \Magento\Profiler::start('layout_load');
+        \Magento\Framework\Profiler::start('layout_load');
         $this->getLayout()->getUpdate()->load();
-        \Magento\Profiler::stop('layout_load');
+        \Magento\Framework\Profiler::stop('layout_load');
 
-        \Magento\Profiler::stop('LAYOUT');
+        \Magento\Framework\Profiler::stop('LAYOUT');
         return $this;
     }
 
@@ -212,13 +212,13 @@ class View implements ViewInterface
      */
     public function generateLayoutXml()
     {
-        \Magento\Profiler::start('LAYOUT');
+        \Magento\Framework\Profiler::start('LAYOUT');
         // generate xml from collected text updates
-        \Magento\Profiler::start('layout_generate_xml');
+        \Magento\Framework\Profiler::start('layout_generate_xml');
         $this->getLayout()->generateXml();
-        \Magento\Profiler::stop('layout_generate_xml');
+        \Magento\Framework\Profiler::stop('layout_generate_xml');
 
-        \Magento\Profiler::stop('LAYOUT');
+        \Magento\Framework\Profiler::stop('LAYOUT');
         return $this;
     }
 
@@ -229,7 +229,7 @@ class View implements ViewInterface
      */
     public function generateLayoutBlocks()
     {
-        \Magento\Profiler::start('LAYOUT');
+        \Magento\Framework\Profiler::start('LAYOUT');
 
         // dispatch event for adding xml layout elements
         if (!$this->_actionFlag->get('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
@@ -240,9 +240,9 @@ class View implements ViewInterface
         }
 
         // generate blocks from xml layout
-        \Magento\Profiler::start('layout_generate_blocks');
+        \Magento\Framework\Profiler::start('layout_generate_blocks');
         $this->getLayout()->generateElements();
-        \Magento\Profiler::stop('layout_generate_blocks');
+        \Magento\Framework\Profiler::stop('layout_generate_blocks');
 
         if (!$this->_actionFlag->get('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
             $this->_eventManager->dispatch(
@@ -251,7 +251,7 @@ class View implements ViewInterface
             );
         }
 
-        \Magento\Profiler::stop('LAYOUT');
+        \Magento\Framework\Profiler::stop('LAYOUT');
         return $this;
     }
 
@@ -267,9 +267,9 @@ class View implements ViewInterface
             return $this;
         }
 
-        \Magento\Profiler::start('LAYOUT');
+        \Magento\Framework\Profiler::start('LAYOUT');
 
-        \Magento\Profiler::start('layout_render');
+        \Magento\Framework\Profiler::start('layout_render');
 
         if ('' !== $output) {
             $this->getLayout()->addOutputElement($output);
@@ -283,9 +283,9 @@ class View implements ViewInterface
         $output = $this->getLayout()->getOutput();
         $this->_translateInline->processResponseBody($output);
         $this->_response->appendBody($output);
-        \Magento\Profiler::stop('layout_render');
+        \Magento\Framework\Profiler::stop('layout_render');
 
-        \Magento\Profiler::stop('LAYOUT');
+        \Magento\Framework\Profiler::stop('LAYOUT');
         return $this;
     }
 

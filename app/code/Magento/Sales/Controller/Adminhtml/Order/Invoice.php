@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Model\Exception;
+use Magento\Framework\Model\Exception;
 use Magento\Framework\App\ResponseInterface;
 
 /**
@@ -40,7 +40,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -52,12 +52,12 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context, $fileFactory);
@@ -83,7 +83,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
      * Initialize invoice model instance
      *
      * @return \Magento\Sales\Model\Order\Invoice
-     * @throws Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _initInvoice()
     {
@@ -140,7 +140,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     {
         $invoice->getOrder()->setIsInProcess(true);
         $this->_objectManager->create(
-            'Magento\DB\Transaction'
+            'Magento\Framework\DB\Transaction'
         )->addObject(
             $invoice
         )->addObject(
@@ -310,7 +310,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $invoice->getOrder()->setIsInProcess(true);
 
                 $transactionSave = $this->_objectManager->create(
-                    'Magento\DB\Transaction'
+                    'Magento\Framework\DB\Transaction'
                 )->addObject(
                     $invoice
                 )->addObject(
@@ -347,14 +347,14 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 try {
                     $invoice->sendEmail(!empty($data['send_email']), $comment);
                 } catch (\Exception $e) {
-                    $this->_objectManager->get('Magento\Logger')->logException($e);
+                    $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                     $this->messageManager->addError(__('We can\'t send the invoice email.'));
                 }
                 if ($shipment) {
                     try {
                         $shipment->sendEmail(!empty($data['send_email']));
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Magento\Logger')->logException($e);
+                        $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                         $this->messageManager->addError(__('We can\'t send the shipment.'));
                     }
                 }
@@ -368,7 +368,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
         $this->_redirect('sales/*/new', array('order_id' => $orderId));
     }

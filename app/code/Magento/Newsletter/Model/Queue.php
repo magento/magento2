@@ -102,12 +102,12 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
     /**
      * Date
      *
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
@@ -131,14 +131,14 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
     protected $_transportBuilder;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\ProblemFactory $problemFactory
      * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
@@ -146,14 +146,14 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\View\DesignInterface $design,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime\DateTime $date,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory,
@@ -203,7 +203,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
             $this->setQueueStartAt(null);
         } else {
             $format = $this->_localeDate->getDateTimeFormat(
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
             );
             $time = $this->_localeDate->date($startAt, $format)->getTimestamp();
             $this->setQueueStartAt($this->_date->gmtDate(null, $time));
@@ -254,7 +254,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         /** @var \Magento\Newsletter\Model\Subscriber $item */
         foreach ($collection->getItems() as $item) {
             $transport = $this->_transportBuilder->setTemplateOptions(
-                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId())
+                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId())
             )->setTemplateVars(
                 array('subscriber' => $item)
             )->setFrom(
@@ -266,7 +266,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
 
             try {
                 $transport->sendMessage();
-            } catch (\Magento\Mail\Exception $e) {
+            } catch (\Magento\Framework\Mail\Exception $e) {
                 /** @var \Magento\Newsletter\Model\Problem $problem */
                 $problem = $this->_problemFactory->create();
                 $problem->addSubscriberData($item);

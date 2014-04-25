@@ -32,7 +32,7 @@ namespace Magento\Backend\Block\Widget\Grid;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ColumnSet extends \Magento\View\Element\Template
+class ColumnSet extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
@@ -118,14 +118,14 @@ class ColumnSet extends \Magento\View\Element\Template
     protected $_totals = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory
      * @param \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory,
         \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals,
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
@@ -259,7 +259,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
     public function getRowUrl($item)
@@ -274,7 +274,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Get children of specified item
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return array
      */
     public function getMultipleRows($item)
@@ -285,7 +285,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Has children of specified item
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return bool
      */
     public function hasMultipleRows($item)
@@ -309,7 +309,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Check whether subtotal should be rendered
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return boolean
      */
     public function shouldRenderSubTotal($item)
@@ -330,7 +330,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Retrieve rowspan number
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
      */
@@ -370,7 +370,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Check whether should render empty cell
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -392,7 +392,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Check whether should render cell
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -528,7 +528,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Return collection of current grid
      *
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
     {
@@ -582,8 +582,8 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Retrieve subtotal for item
      *
-     * @param \Magento\Object $item
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $item
+     * @return \Magento\Framework\Object
      */
     public function getSubTotals($item)
     {
@@ -595,7 +595,7 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Retrieve subtotal items
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getTotals()
     {
@@ -607,14 +607,14 @@ class ColumnSet extends \Magento\View\Element\Template
     /**
      * Update item with first sub-item data
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return void
      */
-    public function updateItemByFirstMultiRow(\Magento\Object $item)
+    public function updateItemByFirstMultiRow(\Magento\Framework\Object $item)
     {
         $multiRows = $this->getMultipleRows($item);
-        if (is_object($multiRows) && $multiRows instanceof \Magento\Data\Collection) {
-            /** @var $multiRows \Magento\Data\Collection */
+        if (is_object($multiRows) && $multiRows instanceof \Magento\Framework\Data\Collection) {
+            /** @var $multiRows \Magento\Framework\Data\Collection */
             $item->addData($multiRows->getFirstItem()->getData());
         } elseif (is_array($multiRows)) {
             $firstItem = $multiRows[0];

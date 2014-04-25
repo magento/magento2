@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Url;
 
-class SecurityInfo implements \Magento\Url\SecurityInfoInterface
+class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

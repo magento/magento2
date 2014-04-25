@@ -25,7 +25,7 @@
  */
 namespace Magento\Wishlist\Model\Config\Source;
 
-class Summary implements \Magento\Option\ArrayInterface
+class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

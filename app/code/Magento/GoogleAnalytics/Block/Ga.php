@@ -28,7 +28,7 @@ namespace Magento\GoogleAnalytics\Block;
 /**
  * GoogleAnalitics Page Block
  */
-class Ga extends \Magento\View\Element\Template
+class Ga extends \Magento\Framework\View\Element\Template
 {
     /**
      * Google analytics data
@@ -43,13 +43,13 @@ class Ga extends \Magento\View\Element\Template
     protected $_salesOrderCollection;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData,
         array $data = array()

@@ -52,14 +52,14 @@ class NotificationService
      *
      * @param int $notificationId
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function markAsRead($notificationId)
     {
         $notification = $this->_notificationFactory->create();
         $notification->load($notificationId);
         if (!$notification->getId()) {
-            throw new \Magento\Model\Exception('Wrong notification ID specified.');
+            throw new \Magento\Framework\Model\Exception('Wrong notification ID specified.');
         }
         $notification->setIsRead(1);
         $notification->save();

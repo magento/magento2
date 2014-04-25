@@ -27,7 +27,7 @@
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
             <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon.js</argument>
+                <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon-1.0.1.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-calendar-js">
@@ -37,6 +37,6 @@
         </block>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
+        <block class="Magento\Framework\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
     </referenceContainer>
 </layout>

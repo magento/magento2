@@ -50,7 +50,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $this->customerAccount->expects($this->once())
             ->method('getCustomer')
             ->with('customer id')
-            ->will($this->returnValue(new \Magento\Object()));
+            ->will($this->returnValue(new \Magento\Framework\Object()));
         $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
         $this->request->expects($this->at(0))
             ->method('getParam')

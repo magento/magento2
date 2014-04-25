@@ -26,7 +26,7 @@ namespace Magento\RecurringPayment\Block\Checkout\Onepage;
 /**
  * Recurring Payment information on Order success page
  */
-class Success extends \Magento\View\Element\Template
+class Success extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -44,14 +44,14 @@ class Success extends \Magento\View\Element\Template
     protected $_recurringPaymentCollectionFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\RecurringPayment\Model\Resource\Payment\CollectionFactory $recurringPaymentCollectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\RecurringPayment\Model\Resource\Payment\CollectionFactory $recurringPaymentCollectionFactory,
@@ -66,10 +66,10 @@ class Success extends \Magento\View\Element\Template
     /**
      * Getter for recurring payment view page
      *
-     * @param \Magento\Object $payment
+     * @param \Magento\Framework\Object $payment
      * @return string
      */
-    public function getPaymentUrl(\Magento\Object $payment)
+    public function getPaymentUrl(\Magento\Framework\Object $payment)
     {
         return $this->getUrl('sales/recurringPayment/view', array('payment' => $payment->getId()));
     }

@@ -32,7 +32,7 @@ namespace Magento\Log\Model\Resource;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Aggregation extends \Magento\Model\Resource\Db\AbstractDb
+class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

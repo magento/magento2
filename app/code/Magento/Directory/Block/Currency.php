@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Block;
 
-class Currency extends \Magento\View\Element\Template
+class Currency extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
@@ -42,22 +42,22 @@ class Currency extends \Magento\View\Element\Template
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\LocaleInterface
+     * @var \Magento\Framework\LocaleInterface
      */
     protected $_locale;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Helper\PostData $postDataHelper
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Helper\PostData $postDataHelper,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_currencyFactory = $currencyFactory;

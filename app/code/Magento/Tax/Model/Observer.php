@@ -54,7 +54,7 @@ class Observer
     protected $_calculation;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
@@ -64,7 +64,7 @@ class Observer
     protected $_reportTaxFactory;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
@@ -73,18 +73,18 @@ class Observer
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
      * @param \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory
      * @param \Magento\Tax\Model\Calculation $calculation
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
         \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory,
-        \Magento\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->_taxData = $taxData;
         $this->_orderTaxFactory = $orderTaxFactory;
@@ -98,10 +98,10 @@ class Observer
     /**
      * Put quote address tax information into order
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function salesEventConvertQuoteAddressToOrder(\Magento\Event\Observer $observer)
+    public function salesEventConvertQuoteAddressToOrder(\Magento\Framework\Event\Observer $observer)
     {
         $address = $observer->getEvent()->getAddress();
         $order = $observer->getEvent()->getOrder();
@@ -119,10 +119,10 @@ class Observer
     /**
      * Save order tax information
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function salesEventOrderAfterSave(\Magento\Event\Observer $observer)
+    public function salesEventOrderAfterSave(\Magento\Framework\Event\Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
 
@@ -224,7 +224,7 @@ class Observer
     /**
      * Add tax percent values to product collection items
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this
      */
     public function addTaxPercentToProductCollection($observer)
@@ -273,10 +273,10 @@ class Observer
     /**
      * Reset extra tax amounts on quote addresses before recollecting totals
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function quoteCollectTotalsBefore(\Magento\Event\Observer $observer)
+    public function quoteCollectTotalsBefore(\Magento\Framework\Event\Observer $observer)
     {
         /* @var $quote \Magento\Sales\Model\Quote */
         $quote = $observer->getEvent()->getQuote();

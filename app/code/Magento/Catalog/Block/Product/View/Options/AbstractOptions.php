@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View\Options;
 
-abstract class AbstractOptions extends \Magento\View\Element\Template
+abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 {
     /**
      * Product object
@@ -63,13 +63,13 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
     protected $_coreHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Helper\Data $coreHelper,
         array $data = array()

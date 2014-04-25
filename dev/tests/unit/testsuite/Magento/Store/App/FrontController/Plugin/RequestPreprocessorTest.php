@@ -79,7 +79,7 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
         };
         $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
-        $this->_urlMock = $this->getMock('\Magento\Url', array(), array(), '', false);
+        $this->_urlMock = $this->getMock('\Magento\Framework\Url', array(), array(), '', false);
         $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', array(), array(), '', false);
         $this->_model = new \Magento\Store\App\FrontController\Plugin\RequestPreprocessor(

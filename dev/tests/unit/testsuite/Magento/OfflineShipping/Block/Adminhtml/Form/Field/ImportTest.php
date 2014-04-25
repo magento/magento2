@@ -47,7 +47,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_formMock = $this->getMock(
-            'Magento\Data\Form',
+            'Magento\Framework\Data\Form',
             array('getFieldNameSuffix', 'addSuffixToName'),
             array(),
             '',

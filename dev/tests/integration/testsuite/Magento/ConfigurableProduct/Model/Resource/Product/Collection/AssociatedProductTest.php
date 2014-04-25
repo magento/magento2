@@ -39,7 +39,7 @@ class AssociatedProductTest extends \PHPUnit_Framework_TestCase
         $product->setId(10);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'
         );
@@ -65,7 +65,7 @@ class AssociatedProductTest extends \PHPUnit_Framework_TestCase
         // fixture
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'
         );

@@ -26,14 +26,14 @@ namespace Magento\Core\App\Action\Plugin;
 class Design
 {
     /**
-     * @var \Magento\View\DesignLoader
+     * @var \Magento\Framework\View\DesignLoader
      */
     protected $_designLoader;
 
     /**
-     * @param \Magento\View\DesignLoader $designLoader
+     * @param \Magento\Framework\View\DesignLoader $designLoader
      */
-    public function __construct(\Magento\View\DesignLoader $designLoader)
+    public function __construct(\Magento\Framework\View\DesignLoader $designLoader)
     {
         $this->_designLoader = $designLoader;
     }

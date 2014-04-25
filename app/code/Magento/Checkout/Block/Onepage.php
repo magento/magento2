@@ -33,7 +33,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
@@ -47,7 +47,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,

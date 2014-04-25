@@ -89,7 +89,7 @@ class Shipping implements RateCollectorInterface
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Math\Division
+     * @var \Magento\Framework\Math\Division
      */
     protected $mathDivision;
 
@@ -101,7 +101,7 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Math\Division $mathDivision
+     * @param \Magento\Framework\Math\Division $mathDivision
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -111,7 +111,7 @@ class Shipping implements RateCollectorInterface
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Math\Division $mathDivision
+        \Magento\Framework\Math\Division $mathDivision
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
@@ -456,11 +456,11 @@ class Shipping implements RateCollectorInterface
     /**
      * Collect rates by address
      *
-     * @param \Magento\Object $address
+     * @param \Magento\Framework\Object $address
      * @param null|bool|array $limitCarrier
      * @return $this
      */
-    public function collectRatesByAddress(\Magento\Object $address, $limitCarrier = null)
+    public function collectRatesByAddress(\Magento\Framework\Object $address, $limitCarrier = null)
     {
         /** @var $request \Magento\Sales\Model\Quote\Address\RateRequest */
         $request = $this->_shipmentRequestFactory->create();

@@ -31,7 +31,7 @@ interface AssetBlockInterface
     /**
      * Get block asset
      *
-     * @return \Magento\View\Asset\AssetInterface
+     * @return \Magento\Framework\View\Asset\AssetInterface
      */
     public function getAsset();
 }

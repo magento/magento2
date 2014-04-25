@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\DesignEditor\Controller\Varien\Router\Standard">
         <arguments>
             <argument name="routerId" xsi:type="string">vde</argument>
@@ -44,10 +44,10 @@
     <type name="Magento\DesignEditor\Model\Translate\Inline\Provider">
         <arguments>
             <argument name="vdeInlineTranslate" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Proxy</argument>
-            <argument name="inlineTranslate" xsi:type="object">\Magento\Translate\Inline\Proxy</argument>
+            <argument name="inlineTranslate" xsi:type="object">\Magento\Framework\Translate\Inline\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Phrase\Renderer\Inline">
+    <type name="Magento\Framework\Phrase\Renderer\Inline">
         <arguments>
             <argument name="inlineProvider" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Provider</argument>
         </arguments>

@@ -40,12 +40,6 @@
                 <bunch_size>100</bunch_size>
             </file>
         </general>
-        <export>
-            <customer_page_size>
-                <customer>10000</customer>
-                <address>5000</address>
-            </customer_page_size>
-        </export>
         <import>
             <format_v1>
                 <page_size>5000</page_size>

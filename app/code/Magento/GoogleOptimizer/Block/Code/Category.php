@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleOptimizer\Block\Code;
 
-class Category extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\View\Block\IdentityInterface
+class Category extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * @var string Entity name in registry

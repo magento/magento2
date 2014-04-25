@@ -40,15 +40,15 @@ class FormKey
     /**
      * Cookie
      *
-     * @var \Magento\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\Cookie
      */
     protected $cookie;
 
     /**
-     * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\Framework\Stdlib\Cookie $cookie
      */
     public function __construct(
-        \Magento\Stdlib\Cookie $cookie
+        \Magento\Framework\Stdlib\Cookie $cookie
     ) {
         $this->cookie = $cookie;
     }

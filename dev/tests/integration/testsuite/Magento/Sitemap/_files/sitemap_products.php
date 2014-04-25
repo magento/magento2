@@ -30,7 +30,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
-/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+/** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
 $filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
 $mediaPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR);
 $mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);

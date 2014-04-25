@@ -25,6 +25,6 @@
  */
 namespace Magento\Eav;
 
-class Exception extends \Magento\Model\Exception
+class Exception extends \Magento\Framework\Model\Exception
 {
 }

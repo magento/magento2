@@ -31,7 +31,7 @@ namespace Magento\Sales\Block\Reorder;
  * @method Sidebar setOrders(\Magento\Sales\Model\Resource\Order\Collection $ordersCollection)
  * @method \Magento\Sales\Model\Resource\Order\Collection|null getOrders()
  */
-class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
+class Sidebar extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * @var string
@@ -59,7 +59,7 @@ class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Bl
     protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
@@ -67,7 +67,7 @@ class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Bl
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,

@@ -25,7 +25,7 @@
  */
 namespace Magento\Rss\Block\Order;
 
-class Details extends \Magento\View\Element\Template
+class Details extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string

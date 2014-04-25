@@ -30,7 +30,7 @@ interface ConnectionAdapterInterface
     /**
      * Get connection
      *
-     * @return \Magento\DB\Adapter\AdapterInterface|null
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|null
      */
     public function getConnection();
 }

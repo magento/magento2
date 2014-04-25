@@ -40,7 +40,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,7 +56,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory
      * @param \Magento\Sales\Helper\Reorder $salesReorder
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -64,7 +64,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory,
         \Magento\Sales\Helper\Reorder $salesReorder,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -172,7 +172,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Retrieve the Url for a specified sales order row.
      *
-     * @param \Magento\Sales\Model\Order|\Magento\Object $row
+     * @param \Magento\Sales\Model\Order|\Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

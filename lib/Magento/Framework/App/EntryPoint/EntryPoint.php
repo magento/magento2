@@ -27,7 +27,7 @@ namespace Magento\Framework\App\EntryPoint;
 
 use Magento\Framework\App\State;
 use Magento\Framework\App\EntryPointInterface;
-use Magento\ObjectManager;
+use Magento\Framework\ObjectManager;
 
 class EntryPoint implements EntryPointInterface
 {
@@ -71,14 +71,14 @@ class EntryPoint implements EntryPointInterface
     public function run($applicationName, array $arguments = array())
     {
         try {
-            \Magento\Profiler::start('magento');
+            \Magento\Framework\Profiler::start('magento');
             if (!$this->_locator) {
                 $locatorFactory = new \Magento\Framework\App\ObjectManagerFactory();
                 $this->_locator = $locatorFactory->create($this->_rootDir, $this->_parameters);
             }
             $application = $this->_locator->create($applicationName, $arguments);
             $response = $application->launch();
-            \Magento\Profiler::stop('magento');
+            \Magento\Framework\Profiler::stop('magento');
             $response->sendResponse();
         } catch (\Exception $exception) {
             if (isset(
@@ -93,7 +93,7 @@ class EntryPoint implements EntryPointInterface
                     if (!$this->_locator) {
                         throw new \DomainException();
                     }
-                    $this->_locator->get('Magento\Logger')->logException($exception);
+                    $this->_locator->get('Magento\Framework\Logger')->logException($exception);
                 } catch (\Exception $e) {
                     $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
                 }

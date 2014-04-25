@@ -28,7 +28,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 /**
  * Source model for available settlement report fetching intervals
  */
-class FetchingSchedule implements \Magento\Option\ArrayInterface
+class FetchingSchedule implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

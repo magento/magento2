@@ -36,14 +36,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $result = $model->create(array('backend' => 'Zend_Cache_Backend_BlackHole'));
 
         $this->assertInstanceOf(
-            'Magento\Cache\FrontendInterface',
+            'Magento\Framework\Cache\FrontendInterface',
             $result,
-            'Created object must implement \Magento\Cache\FrontendInterface'
+            'Created object must implement \Magento\Framework\Cache\FrontendInterface'
         );
         $this->assertInstanceOf(
-            'Magento\Cache\Core',
+            'Magento\Framework\Cache\Core',
             $result->getLowLevelFrontend(),
-            'Created object must have \Magento\Cache\Core frontend by default'
+            'Created object must have \Magento\Framework\Cache\Core frontend by default'
         );
         $this->assertInstanceOf(
             'Zend_Cache_Backend_BlackHole',
@@ -142,7 +142,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $processFrontendFunc = function ($class, $params) {
             switch ($class) {
-                case 'Magento\Cache\Frontend\Adapter\Zend':
+                case 'Magento\Framework\Cache\Frontend\Adapter\Zend':
                     return new $class($params['frontend']);
                 case 'Magento\Framework\App\Cache\Frontend\FactoryTest\CacheDecoratorDummy':
                     $frontend = $params['frontend'];
@@ -154,7 +154,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             }
         };
         /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
-        $objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
         $map = array(

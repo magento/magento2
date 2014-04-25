@@ -26,7 +26,7 @@ namespace Magento\Integration\Model\Integration\Source;
 /**
  * Integration status options.
  */
-class Status implements \Magento\Option\ArrayInterface
+class Status implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Retrieve status options array.

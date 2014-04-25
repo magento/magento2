@@ -36,7 +36,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layout;
 
@@ -47,7 +47,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getPriceInfo', 'hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'])
             ->getMock();
 
-        $registry = $this->getMockBuilder('Magento\Registry')
+        $registry = $this->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -57,9 +57,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->product));
 
 
-        $this->layout = $this->getMock('Magento\View\LayoutInterface');
+        $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
 
-        $context = $this->getMockBuilder('Magento\View\Element\Template\Context')
+        $context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->atLeastOnce())
@@ -81,7 +81,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->product->expects($this->atLeastOnce())
             ->method('getPreconfiguredValues')
-            ->will($this->returnValue(new \Magento\Object(array('bundle_option' => array(15 => 315, 16 => 316)))));
+            ->will($this->returnValue(
+                new \Magento\Framework\Object(array('bundle_option' => array(15 => 315, 16 => 316))))
+            );
 
         $option = $this->getMock('\Magento\Bundle\Model\Option', array(), array(), '', false);
         $option->expects($this->any())->method('getId')->will($this->returnValue(15));
@@ -120,10 +122,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $priceInfo = $this->getMock('Magento\Pricing\PriceInfoInterface');
-        $amount = $this->getMock('Magento\Pricing\Amount\AmountInterface');
+        $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface');
+        $amount = $this->getMock('Magento\Framework\Pricing\Amount\AmountInterface');
 
-        $priceRenderBlock = $this->getMockBuilder('Magento\Pricing\Render')
+        $priceRenderBlock = $this->getMockBuilder('Magento\Framework\Pricing\Render')
             ->disableOriginalConstructor()
             ->setMethods(['renderAmount'])
             ->getMock();

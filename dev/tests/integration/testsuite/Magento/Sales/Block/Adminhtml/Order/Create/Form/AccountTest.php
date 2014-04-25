@@ -47,8 +47,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $sessionQuoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
         $sessionQuoteMock->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
         $this->_accountBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\Account',
             'address_block' . rand(),

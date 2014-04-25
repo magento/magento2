@@ -548,7 +548,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             array(
                 $objectManager->create('Magento\Core\Helper\File\Storage\Database'),
                 $objectManager->create('Magento\Core\Helper\File\Storage'),
-                $objectManager->create('Magento\Image\AdapterFactory'),
+                $objectManager->create('Magento\Framework\Image\AdapterFactory'),
                 $objectManager->create('Magento\Core\Model\File\Validator\NotProtectedExtension')
             )
         );
@@ -569,11 +569,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
         $product->load($productId);
         $gallery = $product->getMediaGalleryImages();
-        $this->assertInstanceOf('Magento\Data\Collection', $gallery);
+        $this->assertInstanceOf('Magento\Framework\Data\Collection', $gallery);
         $items = $gallery->getItems();
         $this->assertCount(1, $items);
         $item = array_pop($items);
-        $this->assertInstanceOf('Magento\Object', $item);
+        $this->assertInstanceOf('Magento\Framework\Object', $item);
         $this->assertEquals('magento_image.jpg', $item->getFile());
         $this->assertEquals('Image Label', $item->getLabel());
     }
@@ -583,7 +583,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public static function mediaImportImageFixture()
     {
-        /** @var \Magento\Filesystem\Directory\Write $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(
@@ -599,7 +599,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public static function mediaImportImageFixtureRollback()
     {
-        /** @var \Magento\Filesystem\Directory\Write $mediaDirectory */
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Filesystem'
         )->getDirectoryWrite(

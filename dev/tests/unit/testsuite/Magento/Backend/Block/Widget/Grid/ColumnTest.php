@@ -49,9 +49,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\View\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
         $this->_blockMock = $this->getMock(
-            'Magento\View\Element\Template',
+            'Magento\Framework\View\Element\Template',
             array('setColumn', 'getHtml'),
             array(),
             '',

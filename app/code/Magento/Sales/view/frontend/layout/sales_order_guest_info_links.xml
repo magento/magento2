@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="sales.order.info">
-        <block class="Magento\View\Element\Html\Links" as="links" name="sales.order.info.links">
+        <block class="Magento\Framework\View\Element\Html\Links" as="links" name="sales.order.info.links">
             <arguments>
                 <argument name="css_class" xsi:type="string">items</argument>
             </arguments>

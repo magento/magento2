@@ -33,9 +33,9 @@
  */
 namespace Magento\Core\Model\App;
 
-use Magento\Translate\Inline\ConfigInterface;
+use Magento\Framework\Translate\Inline\ConfigInterface;
 
-class Emulation extends \Magento\Object
+class Emulation extends \Magento\Framework\Object
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -43,7 +43,7 @@ class Emulation extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @var \Magento\TranslateInterface
+     * @var \Magento\Framework\TranslateInterface
      */
     protected $_translate;
 
@@ -55,12 +55,12 @@ class Emulation extends \Magento\Object
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Core\Model\Design
+     * @var \Magento\Framework\App\DesignInterface
      */
     protected $_design;
 
@@ -70,30 +70,30 @@ class Emulation extends \Magento\Object
     protected $inlineConfig;
 
     /**
-     * @var \Magento\Translate\Inline\StateInterface
+     * @var \Magento\Framework\Translate\Inline\StateInterface
      */
     protected $inlineTranslation;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\View\DesignInterface $viewDesign
-     * @param \Magento\Core\Model\Design $design
-     * @param \Magento\TranslateInterface $translate
+     * @param \Magento\Framework\View\DesignInterface $viewDesign
+     * @param \Magento\Framework\App\DesignInterface $design
+     * @param \Magento\Framework\TranslateInterface $translate
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $inlineConfig
-     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\View\DesignInterface $viewDesign,
-        \Magento\Core\Model\Design $design,
-        \Magento\TranslateInterface $translate,
+        \Magento\Framework\View\DesignInterface $viewDesign,
+        \Magento\Framework\App\DesignInterface $design,
+        \Magento\Framework\TranslateInterface $translate,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         ConfigInterface $inlineConfig,
-        \Magento\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_localeResolver = $localeResolver;
@@ -115,15 +115,15 @@ class Emulation extends \Magento\Object
      * @param integer $storeId
      * @param string $area
      * @param bool $emulateStoreInlineTranslation emulate inline translation of the specified store or just disable it
-     * @return \Magento\Object information about environment of the initial store
+     * @return \Magento\Framework\Object information about environment of the initial store
      */
     public function startEnvironmentEmulation(
         $storeId,
-        $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,
+        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $emulateStoreInlineTranslation = false
     ) {
         if ($area === null) {
-            $area = \Magento\Core\Model\App\Area::AREA_FRONTEND;
+            $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         }
         $initialTranslateInline = $emulateStoreInlineTranslation ? $this->_emulateInlineTranslation(
             $storeId
@@ -133,7 +133,7 @@ class Emulation extends \Magento\Object
         $this->_storeManager->setCurrentStore($storeId);
         $initialLocaleCode = $this->_emulateLocale($storeId, $area);
 
-        $initialEnvironmentInfo = new \Magento\Object();
+        $initialEnvironmentInfo = new \Magento\Framework\Object();
         $initialEnvironmentInfo->setInitialTranslateInline(
             $initialTranslateInline
         )->setInitialDesign(
@@ -150,10 +150,10 @@ class Emulation extends \Magento\Object
      *
      * Function restores initial store environment
      *
-     * @param \Magento\Object $initialEnvironmentInfo information about environment of the initial store
+     * @param \Magento\Framework\Object $initialEnvironmentInfo information about environment of the initial store
      * @return \Magento\Core\Model\App\Emulation
      */
-    public function stopEnvironmentEmulation(\Magento\Object $initialEnvironmentInfo)
+    public function stopEnvironmentEmulation(\Magento\Framework\Object $initialEnvironmentInfo)
     {
         $this->_restoreInitialInlineTranslation($initialEnvironmentInfo->getInitialTranslateInline());
         $initialDesign = $initialEnvironmentInfo->getInitialDesign();
@@ -192,7 +192,7 @@ class Emulation extends \Magento\Object
      * @param string $area
      * @return array initial design parameters(package, store, area)
      */
-    protected function _emulateDesign($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
+    protected function _emulateDesign($storeId, $area = \Magento\Framework\App\Area::AREA_FRONTEND)
     {
         $store = $this->_storeManager->getStore();
         $initialDesign = array(
@@ -204,7 +204,7 @@ class Emulation extends \Magento\Object
         $storeTheme = $this->_viewDesign->getConfigurationDesignTheme($area, array('store' => $storeId));
         $this->_viewDesign->setDesignTheme($storeTheme, $area);
 
-        if ($area == \Magento\Core\Model\App\Area::AREA_FRONTEND) {
+        if ($area == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $designChange = $this->_design->loadChange($storeId);
             if ($designChange->getData()) {
                 $this->_viewDesign->setDesignTheme($designChange->getDesign(), $area);
@@ -221,7 +221,7 @@ class Emulation extends \Magento\Object
      * @param string $area
      * @return string initial locale code
      */
-    protected function _emulateLocale($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
+    protected function _emulateLocale($storeId, $area = \Magento\Framework\App\Area::AREA_FRONTEND)
     {
         $initialLocaleCode = $this->_localeResolver->getLocaleCode();
         $newLocaleCode = $this->_scopeConfig->getValue(
@@ -268,7 +268,7 @@ class Emulation extends \Magento\Object
      */
     protected function _restoreInitialLocale(
         $initialLocaleCode,
-        $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN
+        $initialArea = \Magento\Framework\App\Area::AREA_ADMIN
     ) {
         $this->_localeResolver->setLocaleCode($initialLocaleCode);
         $this->_translate->setLocale($initialLocaleCode)->loadData($initialArea, true);

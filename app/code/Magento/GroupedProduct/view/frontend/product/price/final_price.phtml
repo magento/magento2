@@ -40,7 +40,7 @@ $amountRender = $this->getRendererPool()
     );
 ?>
 <div class="price-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-    <?php if (\Magento\Pricing\Render::ZONE_ITEM_VIEW != $this->getZone()): ?>
+    <?php if (\Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW != $this->getZone()): ?>
     <p class="minimal-price">
         <span class="price-label"><?php echo __('Starting at:') . $amountRender->toHtml();?></span>
     </p>

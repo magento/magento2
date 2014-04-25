@@ -26,7 +26,7 @@ namespace Magento\Cms\Model\Resource;
 /**
  * Cms resource setup
  */
-class Setup extends \Magento\Module\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * Block factory
@@ -43,7 +43,7 @@ class Setup extends \Magento\Module\Setup
     protected $_pageFactory;
 
     /**
-     * @param \Magento\Module\Setup\Context $context
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param \Magento\Cms\Model\PageFactory $pageFactory
@@ -51,12 +51,12 @@ class Setup extends \Magento\Module\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Module\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         \Magento\Cms\Model\PageFactory $pageFactory,
         $moduleName = 'Magento_Cms',
-        $connectionName = \Magento\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_pageFactory = $pageFactory;

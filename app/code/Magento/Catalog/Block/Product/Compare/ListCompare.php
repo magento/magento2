@@ -273,7 +273,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     public function getProductPrice(\Magento\Catalog\Model\Product $product, $idSuffix = '')
     {
-        /** @var \Magento\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
@@ -284,7 +284,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
                 [
                     'price_id' => 'product-price-' . $product->getId() . $idSuffix,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Pricing\Render::ZONE_ITEM_LIST
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                 ]
             );
         }

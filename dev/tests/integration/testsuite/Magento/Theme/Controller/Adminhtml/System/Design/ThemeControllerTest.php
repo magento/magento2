@@ -62,7 +62,9 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
         /** @var $directoryList \Magento\Framework\App\Filesystem\DirectoryList */
         $directoryList->addDirectory(\Magento\Framework\App\Filesystem::SYS_TMP_DIR, array('path' => '/'));
 
-        $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
+        $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface')
+            ->getCollection()
+            ->getFirstItem();
 
         $this->getRequest()->setPost('id', $theme->getId());
         $this->dispatch('backend/admin/system_design_theme/uploadjs');

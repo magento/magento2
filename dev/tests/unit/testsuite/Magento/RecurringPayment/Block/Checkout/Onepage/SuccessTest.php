@@ -42,7 +42,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     {
         $checkoutSessionArgs = $this->objectManager->getConstructArguments(
             'Magento\Checkout\Model\Session',
-            array('storage' => new \Magento\Session\Storage('checkout'))
+            array('storage' => new \Magento\Framework\Session\Storage('checkout'))
         );
         $checkoutSession = $this->getMock(
             'Magento\Checkout\Model\Session',

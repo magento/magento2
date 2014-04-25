@@ -68,7 +68,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerMock->expects($this->any())->method('generateUri')->will($this->returnValue(self::WSDL_URL));
 
         $this->_localeResolverMock = $this->getMockBuilder(
-            'Magento\Locale\Resolver'
+            'Magento\Framework\Locale\Resolver'
         )->disableOriginalConstructor()->getMock();
         $this->_localeResolverMock->expects(
             $this->any()

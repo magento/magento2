@@ -27,7 +27,7 @@ namespace Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Resource;
-use Magento\Object;
+use Magento\Framework\Object;
 
 class Search extends \Magento\Catalog\Model\Layer
 {
@@ -38,7 +38,7 @@ class Search extends \Magento\Catalog\Model\Layer
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -48,7 +48,7 @@ class Search extends \Magento\Catalog\Model\Layer
         Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         parent::__construct(

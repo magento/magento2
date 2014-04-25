@@ -33,7 +33,7 @@
  */
 namespace Magento\Downloadable\Block\Checkout;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
@@ -53,7 +53,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,

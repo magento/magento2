@@ -81,7 +81,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * @param string $mode
      * @param array $expectedDirs
      * @dataProvider notWritableDataProvider
-     * @expectedException \Magento\BootstrapException
+     * @expectedException \Magento\Framework\BootstrapException
      */
     public function testNotWritable($mode, $expectedDirs)
     {
@@ -114,7 +114,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * @param string $mode
      * @param array $expectedDirs
      * @dataProvider createExceptionDataProvider
-     * @expectedException \Magento\BootstrapException
+     * @expectedException \Magento\Framework\BootstrapException
      */
     public function testCreateException($mode, $expectedDirs)
     {
@@ -160,7 +160,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * Get filesystem mock
      *
      * @param array $dirsToVerify
-     * @return \Magento\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFilesystemMock(array $dirsToVerify)
     {
@@ -195,12 +195,12 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * @param bool $writable
      * @param string $absolutePath
      * @param bool $createException
-     * @return \Magento\Filesystem\Directory\Write | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Filesystem\Directory\Write | \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getDirectoryMock($existing, $writable, $absolutePath, $createException)
     {
         $directory = $this->getMock(
-            'Magento\Filesystem\Directory\Write',
+            'Magento\Framework\Filesystem\Directory\Write',
             array('isExist', 'isWritable', 'getAbsolutePath', 'create'),
             array(),
             '',
@@ -217,7 +217,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
                 )->method(
                     'create'
                 )->will(
-                    $this->throwException(new \Magento\Filesystem\FilesystemException(''))
+                    $this->throwException(new \Magento\Framework\Filesystem\FilesystemException(''))
                 );
             }
             return $directory;

@@ -26,7 +26,7 @@ namespace Magento\Store\Model\System;
 /**
  * Core System Store Model
  */
-class Store extends \Magento\Object
+class Store extends \Magento\Framework\Object
 {
     /**
      * Website collection

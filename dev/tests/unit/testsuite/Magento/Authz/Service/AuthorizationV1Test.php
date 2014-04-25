@@ -43,14 +43,14 @@ class AuthorizationV1Test extends \PHPUnit_Framework_TestCase
         $roleFactoryMock->expects($this->any())->method('create')->will($this->returnValue($roleMock));
 
         $this->_authzService = new AuthorizationV1(
-            $this->getMock('Magento\Acl\Builder', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Acl\Builder', array(), array(), '', false),
             $this->getMock('Magento\Authz\Model\UserIdentifier', array(), array(), '', false),
             $roleFactoryMock,
             $this->getMock('Magento\User\Model\Resource\Role\CollectionFactory', array(), array(), '', false),
             $this->getMock('Magento\User\Model\RulesFactory', array(), array(), '', false),
             $this->getMock('Magento\User\Model\Resource\Rules\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\Logger', array(), array(), '', false),
-            $this->getMock('Magento\Acl\RootResource', array(), array(), '', false)
+            $this->getMock('Magento\Framework\Logger', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Acl\RootResource', array(), array(), '', false)
         );
     }
 

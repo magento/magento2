@@ -28,7 +28,7 @@ use Magento\Framework\App\Response\Http;
 class Response extends Http
 {
     /**
-     * @var \Magento\File\Transfer\Adapter\Http
+     * @var \Magento\Framework\File\Transfer\Adapter\Http
      */
     protected $_transferAdapter;
 
@@ -42,14 +42,14 @@ class Response extends Http
     /**
      * Constructor
      *
-     * @param \Magento\Stdlib\Cookie              $cookie
+     * @param \Magento\Framework\Stdlib\Cookie              $cookie
      * @param \Magento\Framework\App\Http\Context           $context
-     * @param \Magento\File\Transfer\Adapter\Http $transferAdapter
+     * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
      */
     public function __construct(
-        \Magento\Stdlib\Cookie $cookie,
+        \Magento\Framework\Stdlib\Cookie $cookie,
         \Magento\Framework\App\Http\Context $context,
-        \Magento\File\Transfer\Adapter\Http $transferAdapter
+        \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
     ) {
         parent::__construct($cookie, $context);
         $this->_transferAdapter = $transferAdapter;

@@ -107,7 +107,7 @@ abstract class AbstractType
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param array $params
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -126,7 +126,7 @@ abstract class AbstractType
                 $params[0]
             ) || !$params[0] instanceof \Magento\ImportExport\Model\Import\Entity\Product
             ) {
-                throw new \Magento\Model\Exception(__('Please correct the parameters.'));
+                throw new \Magento\Framework\Model\Exception(__('Please correct the parameters.'));
             }
             $this->_entityModel = $params[0];
             $this->_type = $params[1];

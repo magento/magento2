@@ -35,14 +35,16 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Resource\Quote\Collection'
         )->getFirstItem();
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = $this->getMockBuilder('Magento\View\LayoutInterface')->disableOriginalConstructor()->getMock();
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $layout->expects(
             $this->once()
         )->method(
             'getBlock'
         )->will(
-            $this->returnValue(new \Magento\Object(array('quote' => $quote)))
+            $this->returnValue(new \Magento\Framework\Object(array('quote' => $quote)))
         );
         $layout->expects($this->once())->method('getParentName')->will($this->returnValue('billing_agreement_form'));
 

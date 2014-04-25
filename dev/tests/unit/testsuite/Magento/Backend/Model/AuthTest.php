@@ -53,7 +53,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock('\Magento\Event\ManagerInterface');
+        $this->_eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
         $this->_credentialStorage = $this->getMock('\Magento\Backend\Model\Auth\Credential\StorageInterface');
         $this->_modelFactoryMock = $this->getMock('\Magento\Core\Model\Factory', array(), array(), '', false);
         $objectManager= new ObjectManager($this);
@@ -78,7 +78,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Backend\Model\Auth\Credential\StorageInterface')
             ->will($this->returnValue($this->_credentialStorage));
-        $exceptionMock = new \Magento\Model\Exception;
+        $exceptionMock = new \Magento\Framework\Model\Exception;
         $this->_credentialStorage
             ->expects($this->once())
             ->method('login')

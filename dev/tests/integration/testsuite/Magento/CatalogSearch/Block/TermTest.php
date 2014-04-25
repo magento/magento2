@@ -36,7 +36,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\CatalogSearch\Block\Term'
         );
@@ -45,7 +45,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
     public function testGetSearchUrl()
     {
         $query = uniqid();
-        $obj = new \Magento\Object(array('name' => $query));
+        $obj = new \Magento\Framework\Object(array('name' => $query));
         $this->assertStringEndsWith("/catalogsearch/result/?q={$query}", $this->_block->getSearchUrl($obj));
     }
 }

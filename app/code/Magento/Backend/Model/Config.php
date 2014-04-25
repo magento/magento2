@@ -33,7 +33,7 @@ namespace Magento\Backend\Model;
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Object
+class Config extends \Magento\Framework\Object
 {
     /**
      * Config data for sections
@@ -45,7 +45,7 @@ class Config extends \Magento\Object
     /**
      * Event dispatcher
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -73,7 +73,7 @@ class Config extends \Magento\Object
     /**
      * TransactionFactory
      *
-     * @var \Magento\DB\TransactionFactory
+     * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
 
@@ -98,9 +98,9 @@ class Config extends \Magento\Object
 
     /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Config\Structure $configStructure
-     * @param \Magento\DB\TransactionFactory $transactionFactory
+     * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -108,9 +108,9 @@ class Config extends \Magento\Object
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Config\Structure $configStructure,
-        \Magento\DB\TransactionFactory $transactionFactory,
+        \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -146,9 +146,9 @@ class Config extends \Magento\Object
         $oldConfig = $this->_getConfig(true);
 
         $deleteTransaction = $this->_transactionFactory->create();
-        /* @var $deleteTransaction \Magento\DB\Transaction */
+        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
         $saveTransaction = $this->_transactionFactory->create();
-        /* @var $saveTransaction \Magento\DB\Transaction */
+        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
 
         // Extends for old config data
         $extraOldGroups = array();
@@ -198,8 +198,8 @@ class Config extends \Magento\Object
      * @param string $sectionPath
      * @param array &$extraOldGroups
      * @param array &$oldConfig
-     * @param \Magento\DB\Transaction $saveTransaction
-     * @param \Magento\DB\Transaction $deleteTransaction
+     * @param \Magento\Framework\DB\Transaction $saveTransaction
+     * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
      */
     protected function _processGroup(
@@ -209,8 +209,8 @@ class Config extends \Magento\Object
         $sectionPath,
         array &$extraOldGroups,
         array &$oldConfig,
-        \Magento\DB\Transaction $saveTransaction,
-        \Magento\DB\Transaction $deleteTransaction
+        \Magento\Framework\DB\Transaction $saveTransaction,
+        \Magento\Framework\DB\Transaction $deleteTransaction
     ) {
         $groupPath = $sectionPath . '/' . $groupId;
         $scope = $this->getScope();
@@ -450,7 +450,7 @@ class Config extends \Magento\Object
      * @param string $path
      * @param null|bool &$inherit
      * @param null|array $configData
-     * @return \Magento\Simplexml\Element
+     * @return \Magento\Framework\Simplexml\Element
      */
     public function getConfigDataValue($path, &$inherit = null, $configData = null)
     {

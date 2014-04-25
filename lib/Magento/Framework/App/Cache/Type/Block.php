@@ -29,7 +29,7 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-class Block extends \Magento\Cache\Frontend\Decorator\TagScope
+class Block extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types

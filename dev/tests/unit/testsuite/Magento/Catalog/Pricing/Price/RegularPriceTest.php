@@ -35,12 +35,12 @@ class RegularPriceTest extends \PHPUnit_Framework_TestCase
     protected $regularPrice;
 
     /**
-     * @var \Magento\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $amountMock;
 
@@ -50,7 +50,7 @@ class RegularPriceTest extends \PHPUnit_Framework_TestCase
     protected $salableItemMock;
 
     /**
-     * @var \Magento\Pricing\Adjustment\Calculator
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator
      */
     protected $calculatorMock;
 
@@ -61,9 +61,9 @@ class RegularPriceTest extends \PHPUnit_Framework_TestCase
     {
         $qty = 1;
         $this->salableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->priceInfoMock = $this->getMock('Magento\Pricing\PriceInfo\Base', [], [], '', false);
-        $this->amountMock = $this->getMock('Magento\Pricing\Amount', [], [], '', false);
-        $this->calculatorMock = $this->getMock('Magento\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->amountMock = $this->getMock('Magento\Framework\Pricing\Amount', [], [], '', false);
+        $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
 
         $this->salableItemMock->expects($this->once())
             ->method('getPriceInfo')

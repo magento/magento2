@@ -39,16 +39,16 @@ class Memory
     const MEMORY_UNITS = 'BKMGTPE';
 
     /**
-     * @var \Magento\Shell
+     * @var \Magento\Framework\Shell
      */
     private $_shell;
 
     /**
      * Inject dependencies
      *
-     * @param \Magento\Shell $shell
+     * @param \Magento\Framework\Shell $shell
      */
-    public function __construct(\Magento\Shell $shell)
+    public function __construct(\Magento\Framework\Shell $shell)
     {
         $this->_shell = $shell;
     }
@@ -68,7 +68,7 @@ class Memory
             // try to use the Windows command line
             // some ports of Unix commands on Windows, such as MinGW, have limited capabilities and cannot be used
             $result = $this->_getWinProcessMemoryUsage($pid);
-        } catch (\Magento\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             // fall back to the Unix command line
             $result = $this->_getUnixProcessMemoryUsage($pid);
         }

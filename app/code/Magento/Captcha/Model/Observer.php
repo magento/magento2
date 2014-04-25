@@ -42,7 +42,7 @@ class Observer
     /**
      * URL manager
      *
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlManager;
 
@@ -71,7 +71,7 @@ class Observer
     protected $_typeOnepage;
 
     /**
-     * @var \Magento\Session\SessionManagerInterface
+     * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -86,7 +86,7 @@ class Observer
     protected $_actionFlag;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
@@ -97,30 +97,30 @@ class Observer
 
     /**
      * @param Resource\LogFactory $resLogFactory
-     * @param \Magento\Session\SessionManagerInterface $session
+     * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Captcha\Helper\Data $helper
-     * @param \Magento\UrlInterface $urlManager
+     * @param \Magento\Framework\UrlInterface $urlManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Resource\LogFactory $resLogFactory,
-        \Magento\Session\SessionManagerInterface $session,
+        \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Checkout\Model\Type\Onepage $typeOnepage,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Captcha\Helper\Data $helper,
-        \Magento\UrlInterface $urlManager,
+        \Magento\Framework\UrlInterface $urlManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Response\RedirectInterface $redirect
     ) {
         $this->_resLogFactory = $resLogFactory;
@@ -139,7 +139,7 @@ class Observer
     /**
      * Check Captcha On Forgot Password Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkForgotpassword($observer)
@@ -161,7 +161,7 @@ class Observer
     /**
      * Check CAPTCHA on Contact Us page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function checkContactUsForm($observer)
@@ -182,7 +182,7 @@ class Observer
     /**
      * Check Captcha On User Login Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkUserLogin($observer)
@@ -210,7 +210,7 @@ class Observer
     /**
      * Check Captcha On Register User Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkUserCreate($observer)
@@ -234,7 +234,7 @@ class Observer
     /**
      * Check Captcha On Checkout as Guest Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkGuestCheckout($observer)
@@ -258,7 +258,7 @@ class Observer
     /**
      * Check Captcha On Checkout Register Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkRegisterCheckout($observer)
@@ -282,7 +282,7 @@ class Observer
     /**
      * Check Captcha On User Login Backend Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
      * @return $this
      */
@@ -304,7 +304,7 @@ class Observer
     /**
      * Check Captcha On User Login Backend Page
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function checkUserForgotPasswordBackend($observer)
@@ -333,7 +333,7 @@ class Observer
     /**
      * Reset Attempts For Frontend
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return \Magento\Captcha\Model\Observer
      */
     public function resetAttemptForFrontend($observer)
@@ -344,7 +344,7 @@ class Observer
     /**
      * Reset Attempts For Backend
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return \Magento\Captcha\Model\Observer
      */
     public function resetAttemptForBackend($observer)

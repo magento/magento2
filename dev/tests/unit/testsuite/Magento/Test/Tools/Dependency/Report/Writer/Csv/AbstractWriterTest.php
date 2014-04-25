@@ -31,13 +31,13 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
     protected $writer;
 
     /**
-     * @var \Magento\File\Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $csvMock;
 
     protected function setUp()
     {
-        $this->csvMock = $this->getMock('Magento\File\Csv');
+        $this->csvMock = $this->getMock('Magento\Framework\File\Csv');
 
         $this->writer = $this->getMockForAbstractClass(
             'Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter',

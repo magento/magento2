@@ -33,7 +33,7 @@ use Magento\Backend\Model\Menu;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
+class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlInterface
 {
     /**
      * Authentication session
@@ -72,7 +72,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_cache;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
@@ -82,7 +82,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_storeFactory;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $formKey;
 
@@ -94,20 +94,20 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Backend\Model\Url\ScopeResolver $scopeResolver
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
-     * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver
+     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param Menu\Config $menuConfig
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Auth\Session $authSession
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Store\Model\StoreFactory $storeFactory
-     * @param \Magento\Data\Form\FormKey $formKey
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param string $scopeType
      * @param array $data
      *
@@ -116,20 +116,20 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Backend\Model\Url\ScopeResolver $scopeResolver,
-        \Magento\Session\Generic $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
-        \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver,
+        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreFactory $storeFactory,
-        \Magento\Data\Form\FormKey $formKey,
+        \Magento\Framework\Data\Form\FormKey $formKey,
         $scopeType,
         array $data = array()
     ) {

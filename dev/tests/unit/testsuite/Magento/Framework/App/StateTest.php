@@ -31,14 +31,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeMock;
 
     protected function setUp()
     {
         $this->_scopeMock = $this->getMockForAbstractClass(
-            'Magento\Config\ScopeInterface',
+            'Magento\Framework\Config\ScopeInterface',
             array('setCurrentScope'),
             '',
             false
@@ -51,14 +51,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $areaCode = 'some code';
         $this->_scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->_model->setAreaCode($areaCode);
-        $this->setExpectedException('Magento\Exception');
+        $this->setExpectedException('Magento\Framework\Exception');
         $this->_model->setAreaCode('any code');
     }
 
     public function testGetAreaCodeException()
     {
         $this->_scopeMock->expects($this->never())->method('setCurrentScope');
-        $this->setExpectedException('Magento\Exception');
+        $this->setExpectedException('Magento\Framework\Exception');
         $this->_model->getAreaCode();
     }
 

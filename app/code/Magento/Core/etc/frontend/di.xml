@@ -23,13 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <type name="Magento\Session\Generic">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="sessionName" xsi:type="string">frontend</argument>
         </arguments>
     </type>
-    <type name="Magento\View\Layout">
+    <type name="Magento\Framework\View\Layout">
         <plugin name="core-session-depersonalize"
                 type="Magento\Core\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
     </type>
@@ -37,7 +37,6 @@
         <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>
     <type name="Magento\Framework\App\Action\Action">
-        <plugin name="core-app-action-dispatchController-context-plugin" type="Magento\Core\Model\App\Action\ContextPlugin" sortOrder="10"/>
         <plugin name="lastUrl" type="Magento\Core\App\Action\Plugin\LastUrl" sortOrder="70"/>
     </type>
     <type name="Magento\Framework\App\RouterList" shared="true">

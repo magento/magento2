@@ -38,10 +38,10 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders grid column
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return mixed
      */
-    public function _getValue(\Magento\Object $row)
+    public function _getValue(\Magento\Framework\Object $row)
     {
         $url7zip = __(
             'The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.',

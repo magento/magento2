@@ -93,7 +93,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance is not defined yet.
      */
     public function testGetInstanceEmptyProhibited()
@@ -117,7 +117,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetInstanceFirstAllowed
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance cannot be redefined.
      */
     public function testSetInstanceChangeProhibited()

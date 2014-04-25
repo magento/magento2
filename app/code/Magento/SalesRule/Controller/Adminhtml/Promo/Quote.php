@@ -30,7 +30,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -40,21 +40,21 @@ class Quote extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
@@ -186,13 +186,13 @@ class Quote extends \Magento\Backend\App\Action
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {
-                        throw new \Magento\Model\Exception(__('The wrong rule is specified.'));
+                        throw new \Magento\Framework\Model\Exception(__('The wrong rule is specified.'));
                     }
                 }
 
                 $session = $this->_objectManager->get('Magento\Backend\Model\Session');
 
-                $validateResult = $model->validateData(new \Magento\Object($data));
+                $validateResult = $model->validateData(new \Magento\Framework\Object($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
                         $this->messageManager->addError($errorMessage);
@@ -233,7 +233,7 @@ class Quote extends \Magento\Backend\App\Action
                 }
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
@@ -246,7 +246,7 @@ class Quote extends \Magento\Backend\App\Action
                 $this->messageManager->addError(
                     __('An error occurred while saving the rule data. Please review the log and try again.')
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
                 $this->_redirect('sales_rule/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
                 return;
@@ -271,13 +271,13 @@ class Quote extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('An error occurred while deleting the rule. Please review the log and try again.')
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_redirect('sales_rule/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }
@@ -492,13 +492,13 @@ class Quote extends \Magento\Backend\App\Action
                     $this->_view->getLayout()->initMessages();
                     $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $result['error'] = $e->getMessage();
             } catch (\Exception $e) {
                 $result['error'] = __(
                     'Something went wrong while generating coupons. Please review the log and try again.'
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             }
         }
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));

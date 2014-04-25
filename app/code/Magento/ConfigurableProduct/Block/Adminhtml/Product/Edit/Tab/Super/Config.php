@@ -50,7 +50,7 @@ class Config extends Widget implements TabInterface
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -60,31 +60,31 @@ class Config extends Widget implements TabInterface
     protected $_configurableType;
 
     /**
-     * @var \Magento\Locale\CurrencyInterface
+     * @var \Magento\Framework\Locale\CurrencyInterface
      */
     protected $_localeCurrency;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param Configurable $configurableType
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Locale\CurrencyInterface $localeCurrency
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         Configurable $configurableType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Registry $coreRegistry,
-        \Magento\Locale\CurrencyInterface $localeCurrency,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         $this->_configurableType = $configurableType;

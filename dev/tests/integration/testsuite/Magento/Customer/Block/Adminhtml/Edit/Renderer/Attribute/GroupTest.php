@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

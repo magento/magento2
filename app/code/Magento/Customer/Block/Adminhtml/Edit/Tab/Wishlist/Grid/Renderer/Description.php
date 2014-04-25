@@ -31,10 +31,10 @@ class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
     /**
      * Render the description of given row.
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         return nl2br(htmlspecialchars($row->getData($this->getColumn()->getIndex())));
     }

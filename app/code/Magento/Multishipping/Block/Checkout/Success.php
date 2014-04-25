@@ -36,12 +36,12 @@ namespace Magento\Multishipping\Block\Checkout;
 class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         array $data = array()
     ) {

@@ -35,7 +35,7 @@ class IframeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckIsScopePrivate()
     {
-        $contextMock = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
+        $contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
         $orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['getQuote'], [], '', false);
         $hssHelperMock = $this->getMock('Magento\Paypal\Helper\Hss', [], [], '', false);

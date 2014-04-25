@@ -48,7 +48,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->_initCacheTypeMocks();
 
         $this->_cacheFrontendMock = $this->getMockForAbstractClass(
-            'Magento\Cache\FrontendInterface',
+            'Magento\Framework\Cache\FrontendInterface',
             array(),
             '',
             true,
@@ -85,12 +85,15 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     protected function _initCacheTypeMocks()
     {
-        $cacheTypes = array('Magento\Cache\Frontend\Decorator\TagScope', 'Magento\Cache\Frontend\Decorator\Bare');
+        $cacheTypes = array(
+            'Magento\Framework\Cache\Frontend\Decorator\TagScope',
+            'Magento\Framework\Cache\Frontend\Decorator\Bare'
+        );
         foreach ($cacheTypes as $type) {
             $this->_cacheTypeMocks[$type] = $this->getMock(
                 $type,
                 array('clean'),
-                array($this->getMockForAbstractClass('Magento\Cache\FrontendInterface'), 'FIXTURE_TAG')
+                array($this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface'), 'FIXTURE_TAG')
             );
         }
     }

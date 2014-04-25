@@ -34,7 +34,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $customerSession;
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $coreSession;
 
@@ -44,7 +44,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $this->customerSession->setCustomerId(1);
-        $this->coreSession = $objectManager->get('Magento\Session\Generic');
+        $this->coreSession = $objectManager->get('Magento\Framework\Session\Generic');
         $this->coreSession->setData('_form_key', 'formKey');
     }
 
@@ -69,14 +69,14 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * Check that errors
          */
-        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         /**
          * Check that success message
          */
         $this->assertSessionMessages(
             $this->equalTo(['We saved the subscription.']),
-            \Magento\Message\MessageInterface::TYPE_SUCCESS
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -95,14 +95,14 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * Check that errors
          */
-        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         /**
          * Check that success message
          */
         $this->assertSessionMessages(
             $this->equalTo(['We removed the subscription.']),
-            \Magento\Message\MessageInterface::TYPE_SUCCESS
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
 }

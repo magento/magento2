@@ -28,7 +28,7 @@ namespace Magento\Cms\Block;
 /**
  * Cms page content block
  */
-class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\Block\IdentityInterface
+class Page extends \Magento\Framework\View\Element\AbstractBlock implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
@@ -57,7 +57,7 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
     /**
      * Construct
      *
-     * @param \Magento\View\Element\Context $context
+     * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -65,7 +65,7 @@ class Page extends \Magento\View\Element\AbstractBlock implements \Magento\View\
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
+        \Magento\Framework\View\Element\Context $context,
         \Magento\Cms\Model\Page $page,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

@@ -26,7 +26,7 @@ namespace Magento\Install\Model\Resource;
 /**
  * Resource Resource Model
  */
-class Resource extends \Magento\Model\Resource\Db\AbstractDb implements \Magento\Module\ResourceInterface
+class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \Magento\Framework\Module\ResourceInterface
 {
     /**
      * Database versions

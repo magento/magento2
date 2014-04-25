@@ -32,7 +32,7 @@ namespace Magento\Review\Model\Resource\Rating\Option;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Vote extends \Magento\Model\Resource\Db\AbstractDb
+class Vote extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

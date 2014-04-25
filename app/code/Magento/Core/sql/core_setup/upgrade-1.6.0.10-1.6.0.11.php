@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Module\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -37,7 +37,7 @@ $connection->addColumn(
     $installer->getTable('core_theme'),
     'type',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
         'nullable' => false,
         'comment' => 'Theme type: 0:physical, 1:virtual, 2:staging'
     )

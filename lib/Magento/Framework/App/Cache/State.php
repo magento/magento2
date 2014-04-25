@@ -47,7 +47,7 @@ class State implements StateInterface
     /**
      * Cache frontend to delegate actual cache operations to
      *
-     * @var \Magento\Cache\FrontendInterface
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     private $_cacheFrontend;
 

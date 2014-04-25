@@ -183,7 +183,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

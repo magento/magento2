@@ -66,28 +66,28 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     protected $_billingAgreementFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\DateTimeFactory
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
      */
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory
-     * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory,
-        \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $paymentData, $resource, $resourceCollection, $data);
@@ -108,7 +108,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     /**
      * Set created_at parameter
      *
-     * @return \Magento\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _beforeSave()
     {
@@ -124,7 +124,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     /**
      * Save agreement order relations
      *
-     * @return \Magento\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _afterSave()
     {

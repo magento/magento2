@@ -30,10 +30,10 @@ use Magento\User\Model\User as ModelUser;
 /**
  * ACL user resource
  */
-class User extends \Magento\Model\Resource\Db\AbstractDb
+class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Acl\CacheInterface
+     * @var \Magento\Framework\Acl\CacheInterface
      */
     protected $_aclCache;
 
@@ -45,7 +45,7 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
@@ -53,15 +53,15 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Acl\CacheInterface $aclCache
+     * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param \Magento\User\Model\RoleFactory $roleFactory
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Acl\CacheInterface $aclCache,
+        \Magento\Framework\Acl\CacheInterface $aclCache,
         \Magento\User\Model\RoleFactory $roleFactory,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_aclCache = $aclCache;
@@ -139,7 +139,7 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     {
         if (is_numeric($user)) {
             $userId = $user;
-        } elseif ($user instanceof \Magento\Model\AbstractModel) {
+        } elseif ($user instanceof \Magento\Framework\Model\AbstractModel) {
             $userId = $user->getUserId();
         } else {
             return null;
@@ -162,10 +162,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Set created/modified values before user save
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $user)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $user)
     {
         if ($user->isObjectNew()) {
             $user->setCreated($this->dateTime->formatDate(true));
@@ -178,10 +178,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Unserialize user extra data after user save
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
      */
-    protected function _afterSave(\Magento\Model\AbstractModel $user)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
     {
         $user->setExtra(unserialize($user->getExtra()));
         if ($user->hasRoleId()) {
@@ -216,12 +216,12 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
             /** @var \Magento\User\Model\Role $parentRole */
             $parentRole = $this->_roleFactory->create()->load($parentId);
         } else {
-            $role = new \Magento\Object();
+            $role = new \Magento\Framework\Object();
             $role->setTreeLevel(0);
         }
 
         if ($parentRole->getId()) {
-            $data = new \Magento\Object(
+            $data = new \Magento\Framework\Object(
                 array(
                     'parent_id' => $parentRole->getId(),
                     'tree_level' => $parentRole->getTreeLevel() + 1,
@@ -241,10 +241,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Unserialize user extra data after user load
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
      */
-    protected function _afterLoad(\Magento\Model\AbstractModel $user)
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
     {
         if (is_string($user->getExtra())) {
             $user->setExtra(unserialize($user->getExtra()));
@@ -255,11 +255,11 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Delete user role record with user
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function delete(\Magento\Model\AbstractModel $user)
+    public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
         $this->_beforeDelete($user);
         $adapter = $this->_getWriteAdapter();
@@ -271,7 +271,7 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
 
             $adapter->delete($this->getMainTable(), $conditions);
             $adapter->delete($this->getTable('admin_role'), $conditions);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             throw $e;
             return false;
         } catch (\Exception $e) {
@@ -286,10 +286,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Get user roles
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
      */
-    public function getRoles(\Magento\Model\AbstractModel $user)
+    public function getRoles(\Magento\Framework\Model\AbstractModel $user)
     {
         if (!$user->getId()) {
             return array();
@@ -323,10 +323,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Delete user role
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return $this
      */
-    public function deleteFromRole(\Magento\Model\AbstractModel $user)
+    public function deleteFromRole(\Magento\Framework\Model\AbstractModel $user)
     {
         if ($user->getUserId() <= 0) {
             return $this;
@@ -346,10 +346,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Check if role user exists
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
      */
-    public function roleUserExists(\Magento\Model\AbstractModel $user)
+    public function roleUserExists(\Magento\Framework\Model\AbstractModel $user)
     {
         if ($user->getUserId() > 0) {
             $roleTable = $this->getTable('admin_role');
@@ -369,10 +369,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Check if user exists
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return array
      */
-    public function userExists(\Magento\Model\AbstractModel $user)
+    public function userExists(\Magento\Framework\Model\AbstractModel $user)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select();
@@ -397,10 +397,10 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Whether a user's identity is confirmed
      *
-     * @param \Magento\Model\AbstractModel $user
+     * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
      */
-    public function isUserUnique(\Magento\Model\AbstractModel $user)
+    public function isUserUnique(\Magento\Framework\Model\AbstractModel $user)
     {
         return !$this->userExists($user);
     }
@@ -408,7 +408,7 @@ class User extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save user extra data
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $data
      * @return $this
      */

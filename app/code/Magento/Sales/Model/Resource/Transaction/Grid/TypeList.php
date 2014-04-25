@@ -26,7 +26,7 @@ namespace Magento\Sales\Model\Resource\Transaction\Grid;
 /**
  * Sales transaction types option array
  */
-class TypeList implements \Magento\Option\ArrayInterface
+class TypeList implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Sales\Model\Order\Payment\TransactionFactory

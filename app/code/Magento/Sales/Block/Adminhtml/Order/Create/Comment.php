@@ -35,7 +35,7 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Data Form object
      *
-     * @var \Magento\Data\Form
+     * @var \Magento\Framework\Data\Form
      */
     protected $_form;
 

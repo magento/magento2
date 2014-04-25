@@ -82,17 +82,17 @@ class Form
     protected $_httpRequest;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_modulesReader;
 
     /**
-     * @var \Magento\Validator\ConfigFactory
+     * @var \Magento\Framework\Validator\ConfigFactory
      */
     protected $_validatorConfigFactory;
 
     /**
-     * @var \Magento\Validator
+     * @var \Magento\Framework\Validator
      */
     protected $_validator;
 
@@ -105,8 +105,8 @@ class Form
      * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService
      * @param ElementFactory $elementFactory
      * @param \Magento\Framework\App\RequestInterface $httpRequest
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Validator\ConfigFactory $validatorConfigFactory
+     * @param \Magento\Framework\Module\Dir\Reader $modulesReader
+     * @param \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
      * @param string $entityType
      * @param string $formCode
      * @param array $attributeValues
@@ -120,8 +120,8 @@ class Form
         \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService,
         ElementFactory $elementFactory,
         \Magento\Framework\App\RequestInterface $httpRequest,
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Validator\ConfigFactory $validatorConfigFactory,
+        \Magento\Framework\Module\Dir\Reader $modulesReader,
+        \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory,
         $entityType,
         $formCode,
         array $attributeValues = array(),
@@ -322,7 +322,7 @@ class Form
      * Get validator
      *
      * @param array $data
-     * @return \Magento\Validator
+     * @return \Magento\Framework\Validator
      */
     protected function _getValidator(array $data)
     {

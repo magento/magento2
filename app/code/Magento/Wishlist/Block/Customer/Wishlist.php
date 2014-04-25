@@ -49,7 +49,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_helperPool;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $_formKey;
 
@@ -58,7 +58,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
-     * @param \Magento\Data\Form\FormKey $formKey
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
      * @param array $priceBlockTypes
      */
@@ -67,7 +67,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        \Magento\Data\Form\FormKey $formKey,
+        \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {

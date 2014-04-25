@@ -46,7 +46,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManager = $this->getMock('Magento\Object', array('get', 'toCss'), array(), '', false);
+        $objectManager = $this->getMock('Magento\Framework\Object', array('get', 'toCss'), array(), '', false);
 
         $objectManager->expects($this->exactly(4))->method('get')->will($this->returnValue($objectManager));
 

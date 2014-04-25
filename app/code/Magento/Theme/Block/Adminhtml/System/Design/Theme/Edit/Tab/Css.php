@@ -57,18 +57,18 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Theme\Model\Uploader\Service $uploaderService
      * @param \Magento\Theme\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Theme\Model\Uploader\Service $uploaderService,
         \Magento\Theme\Helper\Data $helper,
         array $data = array()
@@ -85,7 +85,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $this->setForm($form);
         $this->_addThemeCssFieldset();
@@ -277,7 +277,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             __('Allowed file types *.css.'),
             __('This file will replace the current custom.css file and can\'t be more than 2 MB.')
         );
-        $maxFileSize = $this->_objectManager->get('Magento\File\Size')->getMaxFileSizeInMb();
+        $maxFileSize = $this->_objectManager->get('Magento\Framework\File\Size')->getMaxFileSizeInMb();
         if ($maxFileSize) {
             $messages[] = __('Max file size to upload %1M', $maxFileSize);
         } else {

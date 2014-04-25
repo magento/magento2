@@ -61,7 +61,7 @@ class Observer
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -76,7 +76,7 @@ class Observer
     protected $_quoteCollectionFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
@@ -101,37 +101,37 @@ class Observer
     protected $_bestsellersFactory;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Helper\Address $customerAddressHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Store\Model\StoresConfig $storesConfig
      * @param \Magento\Sales\Model\Resource\Quote\CollectionFactory $quoteFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param Resource\Report\OrderFactory $orderFactory
      * @param Resource\Report\InvoicedFactory $invoicedFactory
      * @param Resource\Report\RefundedFactory $refundedFactory
      * @param Resource\Report\BestsellersFactory $bestsellersFactory
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Helper\Address $customerAddressHelper,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Store\Model\StoresConfig $storesConfig,
         \Magento\Sales\Model\Resource\Quote\CollectionFactory $quoteFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Resource\Report\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Report\InvoicedFactory $invoicedFactory,
         \Magento\Sales\Model\Resource\Report\RefundedFactory $refundedFactory,
         \Magento\Sales\Model\Resource\Report\BestsellersFactory $bestsellersFactory,
-        \Magento\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerData = $customerData;
@@ -266,10 +266,10 @@ class Observer
     /**
      * Set Quote information about MSRP price enabled
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function setQuoteCanApplyMsrp(\Magento\Event\Observer $observer)
+    public function setQuoteCanApplyMsrp(\Magento\Framework\Event\Observer $observer)
     {
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
@@ -290,10 +290,10 @@ class Observer
     /**
      * Add VAT validation request date and identifier to order comments
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function addVatRequestParamsOrderComment(\Magento\Event\Observer $observer)
+    public function addVatRequestParamsOrderComment(\Magento\Framework\Event\Observer $observer)
     {
         /** @var $orderInstance \Magento\Sales\Model\Order */
         $orderInstance = $observer->getOrder();
@@ -341,7 +341,7 @@ class Observer
     /**
      * Restore initial customer group ID in quote if needed on collect_totals_after event of quote address
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function restoreQuoteCustomerGroupId($observer)

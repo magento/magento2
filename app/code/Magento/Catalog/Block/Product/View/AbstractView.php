@@ -36,19 +36,19 @@ namespace Magento\Catalog\Block\Product\View;
 abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
-     * @var \Magento\Stdlib\ArrayUtils
+     * @var \Magento\Framework\Stdlib\ArrayUtils
      */
     protected $arrayUtils;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Stdlib\ArrayUtils $arrayUtils
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
      * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Stdlib\ArrayUtils $arrayUtils,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {

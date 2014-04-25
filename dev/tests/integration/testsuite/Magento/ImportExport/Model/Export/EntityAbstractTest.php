@@ -86,7 +86,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Check that method throw exception when writer was not defined
      *
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testGetWriterThrowsException()
     {

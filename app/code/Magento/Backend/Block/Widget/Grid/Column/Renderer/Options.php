@@ -47,10 +47,10 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Render a grid cell as options
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string|void
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $options = $this->_getOptions();
 

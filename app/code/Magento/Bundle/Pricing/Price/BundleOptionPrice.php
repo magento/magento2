@@ -24,7 +24,7 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 
 /**
@@ -105,7 +105,7 @@ class BundleOptionPrice extends RegularPrice implements BundleOptionPriceInterfa
 
     /**
      * @param \Magento\Bundle\Model\Selection $selection
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getOptionSelectionAmount($selection)
     {
@@ -148,7 +148,7 @@ class BundleOptionPrice extends RegularPrice implements BundleOptionPriceInterfa
     /**
      * @param \Magento\Bundle\Model\Option $option
      * @param bool $searchMin
-     * @return \Magento\Pricing\Amount\AmountInterface[]
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface[]
      */
     protected function processOptions($option, $searchMin = true)
     {
@@ -189,7 +189,7 @@ class BundleOptionPrice extends RegularPrice implements BundleOptionPriceInterfa
     }
 
     /**
-     * @return \Magento\Pricing\Amount\AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getAmount()
     {

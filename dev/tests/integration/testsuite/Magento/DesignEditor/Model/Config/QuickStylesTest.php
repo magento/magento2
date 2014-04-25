@@ -34,12 +34,12 @@ class QuickStylesTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
     /**
-     * @var \Magento\View\FileSystem
+     * @var \Magento\Framework\View\FileSystem
      */
     protected $_viewFileSystem;
 
@@ -53,10 +53,11 @@ class QuickStylesTest extends \PHPUnit_Framework_TestCase
         $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
         $path = str_replace($directoryList->getRoot(), '', str_replace('\\', '/', __DIR__) . '/../_files/design');
         $directoryList->addDirectory(\Magento\Framework\App\Filesystem::THEMES_DIR, array('path' => ltrim($path, '/')));
-        $this->_design = $objectManager->get('Magento\View\DesignInterface');
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode(\Magento\View\DesignInterface::DEFAULT_AREA);
+        $this->_design = $objectManager->get('Magento\Framework\View\DesignInterface');
+        $objectManager->get('Magento\Framework\App\State')
+            ->setAreaCode(\Magento\Framework\View\DesignInterface::DEFAULT_AREA);
         $this->_design->setDesignTheme('vendor_test');
-        $this->_viewFileSystem = $objectManager->get('Magento\View\FileSystem');
+        $this->_viewFileSystem = $objectManager->get('Magento\Framework\View\FileSystem');
         $quickStylesPath = $this->_viewFileSystem->getFilename('Magento_DesignEditor::controls/quick_styles.xml');
         $this->assertFileExists($quickStylesPath);
         $this->_model = $objectManager->create(

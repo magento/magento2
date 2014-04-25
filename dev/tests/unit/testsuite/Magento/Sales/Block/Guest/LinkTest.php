@@ -35,7 +35,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $context = $objectManagerHelper->getObject('Magento\View\Element\Template\Context');
+        $context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
         $httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
             ->setMethods(array('getValue'))

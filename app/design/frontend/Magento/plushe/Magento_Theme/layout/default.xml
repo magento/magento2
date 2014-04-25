@@ -30,7 +30,7 @@
         </arguments>
     </referenceBlock>
     <referenceContainer name="header-wrapper">
-        <block class="Magento\View\Element\Html\Links" name="header.links" after="minicart">
+        <block class="Magento\Framework\View\Element\Html\Links" name="header.links" after="minicart">
             <arguments>
                 <argument name="css_class" xsi:type="string">links</argument>
             </arguments>

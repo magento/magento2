@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
-class Basedon implements \Magento\Option\ArrayInterface
+class Basedon implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

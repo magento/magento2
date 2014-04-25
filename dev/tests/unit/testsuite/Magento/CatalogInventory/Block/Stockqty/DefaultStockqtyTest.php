@@ -31,14 +31,14 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
 
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
 
         $this->block = $objectManager->getObject(
             'Magento\CatalogInventory\Block\Stockqty\DefaultStockqty',

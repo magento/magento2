@@ -37,13 +37,13 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\DB\Helper $resourceHelper
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\DB\Helper $resourceHelper,
+        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory,
         array $data = array()
     ) {

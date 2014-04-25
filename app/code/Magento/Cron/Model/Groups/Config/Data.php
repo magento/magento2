@@ -29,16 +29,16 @@
  */
 namespace Magento\Cron\Model\Groups\Config;
 
-class Data extends \Magento\Config\Data
+class Data extends \Magento\Framework\Config\Data
 {
     /**
      * @param \Magento\Cron\Model\Groups\Config\Reader\Xml $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Cron\Model\Groups\Config\Reader\Xml $reader,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'cron_groups_config_cache'
     ) {
         parent::__construct($reader, $cache, $cacheId);

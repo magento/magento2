@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Service\V1\Data\Eav;
 
-class ValidationRule extends \Magento\Service\Data\AbstractObject
+class ValidationRule extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**
      * Constants used as keys into $_data

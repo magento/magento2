@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class Image extends \Magento\Data\Form\Element\Image
+class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * @return bool|string
@@ -43,7 +43,7 @@ class Image extends \Magento\Data\Form\Element\Image
         $url = false;
         if ($this->getValue()) {
             $url = $this->_urlBuilder->getBaseUrl(
-                \Magento\UrlInterface::URL_TYPE_MEDIA
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             ) . 'catalog/product/' . $this->getValue();
         }
         return $url;

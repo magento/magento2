@@ -29,7 +29,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Store\Model\Website;
 use Magento\Customer\Model\Converter as CustomerConverter;
 
-class Tax extends \Magento\Model\AbstractModel
+class Tax extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Including FPT only
@@ -101,8 +101,8 @@ class Tax extends \Magento\Model\AbstractModel
     protected $customerConverter;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\CalculationFactory $calculationFactory
@@ -111,12 +111,12 @@ class Tax extends \Magento\Model\AbstractModel
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Weee\Model\Resource\Tax $resource
      * @param CustomerConverter $customerConverter
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\CalculationFactory $calculationFactory,
@@ -125,7 +125,7 @@ class Tax extends \Magento\Model\AbstractModel
         \Magento\Weee\Helper\Data $weeeData,
         \Magento\Weee\Model\Resource\Tax $resource,
         CustomerConverter $customerConverter,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_attributeFactory = $attributeFactory;
@@ -150,8 +150,8 @@ class Tax extends \Magento\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Object $shipping
-     * @param null|false|\Magento\Object $billing
+     * @param null|false|\Magento\Framework\Object $shipping
+     * @param null|false|\Magento\Framework\Object $billing
      * @param Website $website
      * @param bool $calculateTax
      * @param bool $ignoreDiscount
@@ -214,7 +214,7 @@ class Tax extends \Magento\Model\AbstractModel
      * @param Website $website
      * @param bool $calculateTax
      * @param bool $ignoreDiscount
-     * @return \Magento\Object[]
+     * @return \Magento\Framework\Object[]
      */
     public function getProductWeeeAttributes(
         $product,
@@ -278,7 +278,7 @@ class Tax extends \Magento\Model\AbstractModel
                     1
                 );
 
-                $order = array('state ' . \Magento\DB\Select::SQL_DESC, 'website_id ' . \Magento\DB\Select::SQL_DESC);
+                $order = array('state ' . \Magento\Framework\DB\Select::SQL_DESC, 'website_id ' . \Magento\Framework\DB\Select::SQL_DESC);
                 $attributeSelect->order($order);
 
                 $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
@@ -306,7 +306,7 @@ class Tax extends \Magento\Model\AbstractModel
                         }
                     }
 
-                    $one = new \Magento\Object();
+                    $one = new \Magento\Framework\Object();
                     $one->setName(__($attribute->getFrontend()->getLabel()))
                         ->setAmount($amount)
                         ->setTaxAmount($taxAmount)

@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App\Route\Config;
 
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Get path to merged config schema

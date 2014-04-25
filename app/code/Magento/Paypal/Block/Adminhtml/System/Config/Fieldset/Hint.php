@@ -29,7 +29,7 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
  * Renderer for PayPal banner in System Configuration
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Hint extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Hint extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var string
@@ -37,18 +37,18 @@ class Hint extends \Magento\Backend\Block\Template implements \Magento\Data\Form
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 
     /**
-     * @var \Magento\View\Helper\Js
+     * @var \Magento\Framework\View\Helper\Js
      */
     protected $_jsHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\View\Helper\Js $jsHelper
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\View\Helper\Js $jsHelper,
+        \Magento\Framework\View\Helper\Js $jsHelper,
         array $data = array()
     ) {
         $this->_jsHelper = $jsHelper;
@@ -58,10 +58,10 @@ class Hint extends \Magento\Backend\Block\Template implements \Magento\Data\Form
     /**
      * Render fieldset html
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $elementOriginalData = $element->getOriginalData();
         if (isset($elementOriginalData['help_link'])) {

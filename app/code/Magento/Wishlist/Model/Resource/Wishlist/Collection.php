@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Model\Resource\Wishlist;
 
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize resource

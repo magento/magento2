@@ -40,10 +40,10 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_regionFactory;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      */
-    public function __construct(\Magento\Logger $logger, \Magento\Directory\Model\RegionFactory $regionFactory)
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Directory\Model\RegionFactory $regionFactory)
     {
         $this->_regionFactory = $regionFactory;
         parent::__construct($logger);
@@ -52,7 +52,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Prepare object for save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)

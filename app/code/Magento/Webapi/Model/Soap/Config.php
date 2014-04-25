@@ -24,7 +24,7 @@
 namespace Magento\Webapi\Model\Soap;
 
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Webapi Config Model for Soap.
@@ -54,7 +54,7 @@ class Config
     /** @var \Magento\Webapi\Model\Config */
     protected $_config;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     protected $_objectManager;
 
     /**
@@ -81,14 +81,14 @@ class Config
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Webapi\Model\Config $config
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Webapi\Helper\Data $helper
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Webapi\Model\Config $config,
         \Magento\Webapi\Model\Config\ClassReflector $classReflector,

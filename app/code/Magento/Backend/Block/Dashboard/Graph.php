@@ -122,7 +122,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_dashboardData = null;
 
     /**
-     * @var \Magento\Locale\ListsInterface
+     * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_localeLists = null;
 
@@ -130,14 +130,14 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
-     * @param \Magento\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
-        \Magento\Locale\ListsInterface $localeLists,
+        \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = array()
     ) {
         $this->_dashboardData = $dashboardData;
@@ -414,7 +414,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
                                     $this->_axisLabels[$idx][$_index] = $this->formatTime(
-                                        new \Magento\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd HH:00'),
+                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd HH:00'),
                                         'short',
                                         false
                                     );
@@ -422,7 +422,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                                 case '7d':
                                 case '1m':
                                     $this->_axisLabels[$idx][$_index] = $this->formatDate(
-                                        new \Magento\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd')
+                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd')
                                     );
                                     break;
                                 case '1y':

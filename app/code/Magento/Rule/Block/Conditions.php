@@ -25,9 +25,9 @@
  */
 namespace Magento\Rule\Block;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class Conditions implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Conditions implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @param AbstractElement $element

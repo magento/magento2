@@ -28,10 +28,10 @@
 $filesystemCollection = $this->createThemeFactory();
 $filesystemCollection->addDefaultPattern('*');
 
-/** @var $theme \Magento\View\Design\ThemeInterface */
+/** @var $theme \Magento\Framework\View\Design\ThemeInterface */
 foreach ($this->createThemeResourceFactory() as $theme) {
-    $themeType = $filesystemCollection->hasTheme(
-        $theme
-    ) ? \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL : \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL;
+    $themeType = $filesystemCollection->hasTheme($theme)
+        ? \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
+        : \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL;
     $theme->setType($themeType)->save();
 }

@@ -26,19 +26,19 @@ namespace Magento\Test\Integrity\Modular;
 class LayoutFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\View\Layout\Argument\Parser
+     * @var \Magento\Framework\View\Layout\Argument\Parser
      */
     protected $_argParser;
 
     /**
-     * @var \Magento\Data\Argument\InterpreterInterface
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface
      */
     protected $_argInterpreter;
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_argParser = $objectManager->get('Magento\View\Layout\Argument\Parser');
+        $this->_argParser = $objectManager->get('Magento\Framework\View\Layout\Argument\Parser');
         $this->_argInterpreter = $objectManager->get('layoutArgumentInterpreter');
     }
 
@@ -62,7 +62,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
                     continue;
                 }
                 $this->_argInterpreter->evaluate($argumentData);
-            } catch (\Magento\Data\Argument\MissingOptionalValueException $e) {
+            } catch (\Magento\Framework\Data\Argument\MissingOptionalValueException $e) {
                 // Argument value is missing in the testing environment, but it's optional, so no big deal
             } catch (\Exception $e) {
                 $this->fail($e->getMessage());

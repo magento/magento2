@@ -58,7 +58,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -70,13 +70,13 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
@@ -106,14 +106,14 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve item renderer block
      *
      * @param string $type
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
      */
     public function getItemRenderer($type)
     {
         /** @var $renderer \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
-        if (!$renderer instanceof \Magento\View\Element\BlockInterface) {
+        if (!$renderer instanceof \Magento\Framework\View\Element\BlockInterface) {
             throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
         }
         $renderer->setColumnRenders($this->getLayout()->getGroupChildNames($this->getNameInLayout(), 'column'));
@@ -126,7 +126,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param string $column
      * @param string $compositePart
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getColumnRenderer($column, $compositePart = '')
     {
@@ -143,10 +143,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered item html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function getItemHtml(\Magento\Object $item)
+    public function getItemHtml(\Magento\Framework\Object $item)
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
@@ -160,10 +160,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered item extra info html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function getItemExtraInfoHtml(\Magento\Object $item)
+    public function getItemExtraInfoHtml(\Magento\Framework\Object $item)
     {
         $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
@@ -175,12 +175,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered column html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param string $column the column key
      * @param string $field the custom item field
      * @return string
      */
-    public function getColumnHtml(\Magento\Object $item, $column, $field = null)
+    public function getColumnHtml(\Magento\Framework\Object $item, $column, $field = null)
     {
         if ($item->getOrderItem()) {
             $block = $this->getColumnRenderer($column, $item->getOrderItem()->getProductType());
@@ -215,7 +215,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve available order
      *
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return Order
      */
     public function getOrder()
@@ -239,7 +239,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
             return $this->getItem()->getOrder();
         }
 
-        throw new \Magento\Model\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Model\Exception(__('We cannot get the order instance.'));
     }
 
     /**
@@ -327,10 +327,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve include tax html formatted content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function displayPriceInclTax(\Magento\Object $item)
+    public function displayPriceInclTax(\Magento\Framework\Object $item)
     {
         $qty = $item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1);
         $baseTax = $item->getTaxBeforeDiscount() ? $item
@@ -359,7 +359,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve subtotal price include tax html formated content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
     public function displaySubtotalInclTax($item)
@@ -379,10 +379,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve tax calculation html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function displayTaxCalculation(\Magento\Object $item)
+    public function displayTaxCalculation(\Magento\Framework\Object $item)
     {
         if ($item->getTaxPercent() && $item->getTaxString() == '') {
             $percents = array($item->getTaxPercent());
@@ -401,10 +401,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve tax with persent html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function displayTaxPercent(\Magento\Object $item)
+    public function displayTaxPercent(\Magento\Framework\Object $item)
     {
         if ($item->getTaxPercent()) {
             return sprintf('%s%%', $item->getTaxPercent() + 0);

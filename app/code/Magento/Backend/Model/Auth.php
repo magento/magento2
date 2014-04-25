@@ -50,7 +50,7 @@ class Auth
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -65,7 +65,7 @@ class Auth
     protected $_modelFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Backend\Model\Auth\StorageInterface $authStorage
      * @param \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage
@@ -73,7 +73,7 @@ class Auth
      * @param \Magento\Core\Model\Factory $modelFactory
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Backend\Model\Auth\StorageInterface $authStorage,
         \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage,
@@ -185,7 +185,7 @@ class Auth
                 array('user_name' => $username, 'exception' => $e)
             );
             throw $e;
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 array('user_name' => $username, 'exception' => $e)

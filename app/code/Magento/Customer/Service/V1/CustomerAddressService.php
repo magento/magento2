@@ -26,8 +26,8 @@ namespace Magento\Customer\Service\V1;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Address\Converter as AddressConverter;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Exception\NoSuchEntityException;
-use Magento\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Service related to Customer Address related functions
@@ -189,8 +189,8 @@ class CustomerAddressService implements CustomerAddressServiceInterface
         }
 
         $this->customerRegistry->remove($customerId);
-
-        if ($inputException->getErrors()) {
+        
+        if ($inputException->wasErrorAdded()) {
             throw $inputException;
         }
         $addressIds = array();
@@ -215,7 +215,7 @@ class CustomerAddressService implements CustomerAddressServiceInterface
             $addressModel = $this->addressConverter->createAddressModel($address);
             $inputException = $this->_validate($addressModel, $inputException, $key);
         }
-        if ($inputException->getErrors()) {
+        if ($inputException->wasErrorAdded()) {
             throw $inputException;
         }
         return true;
@@ -239,49 +239,41 @@ class CustomerAddressService implements CustomerAddressServiceInterface
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getFirstname(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'firstname', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname', 'index' => $index]);
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getLastname(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'lastname', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname', 'index' => $index]);
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getStreet(1), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'street', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'street', 'index' => $index]);
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getCity(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'city', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'city', 'index' => $index]);
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getTelephone(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'telephone', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'telephone', 'index' => $index]);
         }
 
-        $_havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
-        if (!in_array(
-            $customerAddressModel->getCountryId(),
-            $_havingOptionalZip
-        ) && !\Zend_Validate::is(
-            $customerAddressModel->getPostcode(),
-            'NotEmpty'
-        )
+        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
+        if (!in_array($customerAddressModel->getCountryId(), $havingOptionalZip)
+            && !\Zend_Validate::is($customerAddressModel->getPostcode(), 'NotEmpty')
         ) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'postcode', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode', 'index' => $index]);
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getCountryId(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'countryId', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId', 'index' => $index]);
         }
 
-        if ($customerAddressModel->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
-            $customerAddressModel->getRegionId(),
-            'NotEmpty'
-        ) && $this->directoryData->isRegionRequired(
-            $customerAddressModel->getCountryId()
-        )
+        if ($customerAddressModel->getCountryModel()->getRegionCollection()->getSize()
+            && !\Zend_Validate::is($customerAddressModel->getRegionId(), 'NotEmpty')
+            && $this->directoryData->isRegionRequired($customerAddressModel->getCountryId())
         ) {
-            $exception->addError(InputException::REQUIRED_FIELD, 'regionId', null, array('index' => $index));
+            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId', 'index' => $index]);
         }
 
         return $exception;

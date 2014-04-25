@@ -30,15 +30,15 @@ namespace Magento\Backend\Block;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Template extends \Magento\View\Element\Template
+class Template extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -48,12 +48,12 @@ class Template extends \Magento\View\Element\Template
     protected $_backendSession;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $formKey;
 
     /**
-     * @var \Magento\Code\NameBuilder
+     * @var \Magento\Framework\Code\NameBuilder
      */
     protected $nameBuilder;
 
@@ -106,7 +106,7 @@ class Template extends \Magento\View\Element\Template
     /**
      * Make this public so that templates can use it properly with template engine
      *
-     * @return \Magento\AuthorizationInterface
+     * @return \Magento\Framework\AuthorizationInterface
      */
     public function getAuthorization()
     {
@@ -127,7 +127,7 @@ class Template extends \Magento\View\Element\Template
     /**
      * Return toolbar block instance
      *
-     * @return bool|\Magento\View\Element\BlockInterface
+     * @return bool|\Magento\Framework\View\Element\BlockInterface
      */
     public function getToolbar()
     {

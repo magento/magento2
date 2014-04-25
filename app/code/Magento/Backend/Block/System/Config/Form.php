@@ -89,9 +89,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configFactory;
 
     /**
-     * Magento\Data\FormFactory
+     * Magento\Framework\Data\FormFactory
      *
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -118,8 +118,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
@@ -128,8 +128,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
@@ -181,7 +181,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $this->_initObjects();
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         /** @var $section \Magento\Backend\Model\Config\Structure\Element\Section */
         $section = $this->_configStructure->getElement($this->getSectionCode());
@@ -200,13 +200,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Group $group
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
-     * @param \Magento\Data\Form\AbstractForm $form
+     * @param \Magento\Framework\Data\Form\AbstractForm $form
      * @return void
      */
     protected function _initGroup(
         \Magento\Backend\Model\Config\Structure\Element\Group $group,
         \Magento\Backend\Model\Config\Structure\Element\Section $section,
-        \Magento\Data\Form\AbstractForm $form
+        \Magento\Framework\Data\Form\AbstractForm $form
     ) {
         $frontendModelClass = $group->getFrontendModel();
         $fieldsetRenderer = $frontendModelClass ? $this->_layout->getBlockSingleton(
@@ -263,7 +263,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize config group fields
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param \Magento\Backend\Model\Config\Structure\Element\Group $group
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
      * @param string $fieldPrefix
@@ -271,7 +271,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @return $this
      */
     public function initFields(
-        \Magento\Data\Form\Element\Fieldset $fieldset,
+        \Magento\Framework\Data\Form\Element\Fieldset $fieldset,
         \Magento\Backend\Model\Config\Structure\Element\Group $group,
         \Magento\Backend\Model\Config\Structure\Element\Section $section,
         $fieldPrefix = '',
@@ -311,7 +311,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize form element
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $field
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param string $path
      * @param string $fieldPrefix
      * @param string $labelPrefix
@@ -319,7 +319,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _initElement(
         \Magento\Backend\Model\Config\Structure\Element\Field $field,
-        \Magento\Data\Form\Element\Fieldset $fieldset,
+        \Magento\Framework\Data\Form\Element\Fieldset $fieldset,
         $path,
         $fieldPrefix = '',
         $labelPrefix = ''
@@ -471,7 +471,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Element\AbstractBlock
+     * @return \Magento\Backend\Block\Widget\Form|\Magento\Framework\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {

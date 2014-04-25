@@ -25,8 +25,8 @@
  */
 namespace Magento\Catalog\Model\Product\Condition;
 
-use Magento\DB\Adapter\AdapterInterface;
-use Magento\DB\Select;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 interface ConditionInterface

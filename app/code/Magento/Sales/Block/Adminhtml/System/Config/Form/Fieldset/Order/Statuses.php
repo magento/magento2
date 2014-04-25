@@ -30,7 +30,7 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Dummy element
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_dummyElement;
 
@@ -56,14 +56,14 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\View\Helper\Js $jsHelper
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\View\Helper\Js $jsHelper,
+        \Magento\Framework\View\Helper\Js $jsHelper,
         \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection,
         array $data = array()
     ) {
@@ -74,10 +74,10 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Render elemnt
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $html = '';
 
@@ -92,12 +92,12 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Get dummy element
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getDummyElement()
     {
         if (empty($this->_dummyElement)) {
-            $this->_dummyElement = new \Magento\Object(array('showInDefault' => 1, 'showInWebsite' => 1));
+            $this->_dummyElement = new \Magento\Framework\Object(array('showInDefault' => 1, 'showInWebsite' => 1));
         }
         return $this->_dummyElement;
     }
@@ -120,7 +120,7 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Get field html
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param string $id
      * @param string $status
      * @return string

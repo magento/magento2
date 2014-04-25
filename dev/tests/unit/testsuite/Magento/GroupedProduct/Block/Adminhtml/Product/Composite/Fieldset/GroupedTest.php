@@ -52,7 +52,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock('\Magento\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('\Magento\Framework\Registry', array(), array(), '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock(
@@ -197,7 +197,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 2;
 
-        $objectMock = $this->getMock('\Magento\Object', array('getSuperGroup'), array(), '', false);
+        $objectMock = $this->getMock('\Magento\Framework\Object', array('getSuperGroup'), array(), '', false);
         $instanceMock = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
             array(),

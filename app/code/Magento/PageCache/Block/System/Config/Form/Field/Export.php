@@ -33,10 +33,10 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
     /**
      * Retrieve element HTML markup
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
         $buttonBlock = $this->getForm()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');

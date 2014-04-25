@@ -36,15 +36,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Layout factory
      *
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutInterface $layout
      */
-    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\View\LayoutInterface $layout)
+    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\View\LayoutInterface $layout)
     {
         $this->_layout = $layout;
         parent::__construct($context);

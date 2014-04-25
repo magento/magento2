@@ -45,7 +45,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
-        $modulesReader = $this->getMockBuilder('Magento\Module\Dir\Reader')->disableOriginalConstructor()->getMock();
+        $modulesReader = $this->getMockBuilder('Magento\Framework\Module\Dir\Reader')
+            ->disableOriginalConstructor()
+            ->getMock();
         $modulesReader->expects(
             $this->exactly(2)
         )->method(
@@ -58,7 +60,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $domConfigFactory = $this->getMockBuilder(
-            'Magento\Config\DomFactory'
+            'Magento\Framework\Config\DomFactory'
         )->disableOriginalConstructor()->getMock();
 
         $params = array(
@@ -77,7 +79,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->equalTo($params)
         )->will(
             $isSchemaValid ? $this->returnSelf() : $this->throwException(
-                new \Magento\Config\Dom\ValidationException($exceptionMessage)
+                new \Magento\Framework\Config\Dom\ValidationException($exceptionMessage)
             )
         );
 

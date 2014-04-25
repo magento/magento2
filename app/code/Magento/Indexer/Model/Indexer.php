@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class Indexer extends \Magento\Object implements IndexerInterface
+class Indexer extends \Magento\Framework\Object implements IndexerInterface
 {
     /**
      * @var string
@@ -41,7 +41,7 @@ class Indexer extends \Magento\Object implements IndexerInterface
     protected $actionFactory;
 
     /**
-     * @var \Magento\Mview\ViewInterface
+     * @var \Magento\Framework\Mview\ViewInterface
      */
     protected $view;
 
@@ -63,7 +63,7 @@ class Indexer extends \Magento\Object implements IndexerInterface
     /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
-     * @param \Magento\Mview\ViewInterface $view
+     * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param array $data
@@ -71,7 +71,7 @@ class Indexer extends \Magento\Object implements IndexerInterface
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
-        \Magento\Mview\ViewInterface $view,
+        \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
         array $data = array()
@@ -147,7 +147,7 @@ class Indexer extends \Magento\Object implements IndexerInterface
     /**
      * Return related view object
      *
-     * @return \Magento\Mview\ViewInterface
+     * @return \Magento\Framework\Mview\ViewInterface
      */
     public function getView()
     {
@@ -272,8 +272,8 @@ class Indexer extends \Magento\Object implements IndexerInterface
             if (!$this->getState()->getUpdated()) {
                 return $this->getView()->getUpdated();
             }
-            $indexerUpdatedDate = new \Magento\Stdlib\DateTime\Date($this->getState()->getUpdated());
-            $viewUpdatedDate = new \Magento\Stdlib\DateTime\Date($this->getView()->getUpdated());
+            $indexerUpdatedDate = new \Magento\Framework\Stdlib\DateTime\Date($this->getState()->getUpdated());
+            $viewUpdatedDate = new \Magento\Framework\Stdlib\DateTime\Date($this->getView()->getUpdated());
             if ($viewUpdatedDate->compare($indexerUpdatedDate) == 1) {
                 return $this->getView()->getUpdated();
             }

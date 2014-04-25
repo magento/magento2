@@ -26,7 +26,7 @@ namespace Magento\CatalogInventory\Model\Resource\Stock;
 /**
  * CatalogInventory Stock Status per website Resource Model
  */
-class Status extends \Magento\Model\Resource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Store model manager
@@ -255,11 +255,11 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Store\Model\Website $website
      * @return Status
      */
-    public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Store\Model\Website $website)
+    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
     {
         $websiteId = $website->getId();
         $select->joinLeft(
@@ -274,12 +274,12 @@ class Status extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Add stock status limitation to catalog product price index select object
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param string|\Zend_Db_Expr $entityField
      * @param string|\Zend_Db_Expr $websiteField
      * @return $this
      */
-    public function prepareCatalogProductIndexSelect(\Magento\DB\Select $select, $entityField, $websiteField)
+    public function prepareCatalogProductIndexSelect(\Magento\Framework\DB\Select $select, $entityField, $websiteField)
     {
         $select->join(
             array('ciss' => $this->getMainTable()),

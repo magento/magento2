@@ -102,7 +102,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_eventManagerMock = $this->getMock(
-            'Magento\Event\ManagerInterface',
+            'Magento\Framework\Event\ManagerInterface',
             array(),
             array(),
             '',
@@ -113,7 +113,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
 
         $this->messageManagerMock = $this->getMock(
-            'Magento\Message\Manager',
+            'Magento\Framework\Message\Manager',
             array('addSuccess', 'addException'),
             array(),
             '',
@@ -163,7 +163,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $configStructureMock,
                 $this->_configFactoryMock,
                 $this->_cacheMock,
-                new \Magento\Stdlib\String()
+                new \Magento\Framework\Stdlib\String()
             )
         );
     }

@@ -28,7 +28,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Product View block
  */
-class View extends AbstractProduct implements \Magento\View\Block\IdentityInterface
+class View extends AbstractProduct implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Default MAP renderer type
@@ -41,7 +41,7 @@ class View extends AbstractProduct implements \Magento\View\Block\IdentityInterf
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
@@ -60,7 +60,7 @@ class View extends AbstractProduct implements \Magento\View\Block\IdentityInterf
     protected $_productFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -80,33 +80,33 @@ class View extends AbstractProduct implements \Magento\View\Block\IdentityInterf
     protected $productTypeConfig;
 
     /**
-     * @var \Magento\Locale\FormatInterface
+     * @var \Magento\Framework\Locale\FormatInterface
      */
     protected $_localeFormat;
 
     /**
      * @param Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
-     * @param \Magento\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
      * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
-        \Magento\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
@@ -297,7 +297,7 @@ class View extends AbstractProduct implements \Magento\View\Block\IdentityInterf
             'tierPricesInclTax' => $_tierPricesInclTax
         );
 
-        $responseObject = new \Magento\Object();
+        $responseObject = new \Magento\Framework\Object();
         $this->_eventManager->dispatch('catalog_product_view_config', array('response_object' => $responseObject));
         if (is_array($responseObject->getAdditionalOptions())) {
             foreach ($responseObject->getAdditionalOptions() as $option => $value) {

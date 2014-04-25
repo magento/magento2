@@ -27,7 +27,7 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\View\Block\IdentityInterface;
+use Magento\Framework\View\Block\IdentityInterface;
 
 /**
  * Product list
@@ -364,7 +364,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 [
                     'include_container' => true,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Pricing\Render::ZONE_ITEM_LIST
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                 ]
             );
         }
@@ -373,7 +373,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @return \Magento\Pricing\Render
+     * @return \Magento\Framework\Pricing\Render
      */
     protected function getPriceRender()
     {

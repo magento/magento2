@@ -30,7 +30,7 @@
 $obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
-/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+/** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
 $mediaDirectory = $obectManager->get('Magento\Framework\App\Filesystem')
     ->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
 

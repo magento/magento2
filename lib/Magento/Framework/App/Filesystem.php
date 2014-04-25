@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App;
 
-class Filesystem extends \Magento\Filesystem
+class Filesystem extends \Magento\Framework\Filesystem
 {
     /**
      * Custom application dirs

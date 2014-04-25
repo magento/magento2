@@ -45,19 +45,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_config;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Math\Random $mathRandom
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->_config = $config;
         $this->mathRandom = $mathRandom;

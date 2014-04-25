@@ -21,7 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-use Magento\DB\Ddl\Table;
+use Magento\Framework\DB\Ddl\Table;
 
 /* @var $installer \Magento\Core\Model\Resource\Setup */
 $installer = $this;
@@ -71,9 +71,9 @@ $table = $connection->newTable(
     array('unsigned' => true, 'default' => '0'),
     'Defines Is Website Default'
 )->addIndex(
-    $installer->getIdxName('store_website', array('code'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName('store_website', array('code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
     array('code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
     $installer->getIdxName('store_website', array('sort_order')),
     array('sort_order')
@@ -186,9 +186,9 @@ $table = $connection->newTable(
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Store Activity'
 )->addIndex(
-    $installer->getIdxName('store', array('code'), \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName('store', array('code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
     array('code'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
     $installer->getIdxName('store', array('website_id')),
     array('website_id')

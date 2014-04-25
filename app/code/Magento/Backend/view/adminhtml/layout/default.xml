@@ -203,7 +203,7 @@
             </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
                 <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon.js</argument>
+                    <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon-1.0.1.js</argument>
                 </arguments>
             </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="magento-calendar-js">
@@ -271,8 +271,8 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
-            <block class="Magento\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
+            <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
+            <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
         </block>
         <block class="Magento\Backend\Block\Menu" name="menu" as="menu" template="Magento_Backend::menu.phtml"/>
         <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
@@ -292,19 +292,19 @@
         </container>
         <container name="notifications" as="notifications" label="Notifications"/>
         <block class="Magento\Backend\Block\Widget\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
-        <!--<update handle="formkey"/> this won't work, see the try/catch and a jammed exception in \Magento\View\Layout::createBlock() -->
+        <!--<update handle="formkey"/> this won't work, see the try/catch and a jammed exception in \Magento\Framework\View\Layout::createBlock() -->
         <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
         <!-- deprecated since 1.7.0.0 see \Magento\Theme\Block\Js\Translate -->
-        <block class="Magento\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
         <container name="main-top" label="main-top" as="main-top">
             <block class="Magento\Theme\Block\Html\Title" name="page-title" template="title.phtml"/>
         </container>
         <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions">
-            <block class="Magento\View\Element\Template" name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml" after="-"/>
+            <block class="Magento\Framework\View\Element\Template" name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml" after="-"/>
         </container>
         <container name="left" as="left" label="Left Column"/>
         <container name="content" as="content" label="Content"/>
-        <block class="Magento\View\Element\Messages" name="messages" as="messages"/>
+        <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
         <container name="js" as="js" label="JavaScript"/>
         <container name="footer" htmlTag="footer" htmlClass="page-footer">
             <block class="Magento\Backend\Block\Page\Locale" name="locale.switcher" template="Magento_Backend::page/locale.phtml"/>

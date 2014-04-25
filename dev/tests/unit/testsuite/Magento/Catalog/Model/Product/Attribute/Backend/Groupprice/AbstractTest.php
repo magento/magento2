@@ -45,7 +45,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_helper = $this->getMock('Magento\Catalog\Helper\Data', array('isPriceGlobal'), array(), '', false);
         $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
 
-        $loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', array(), array(), '', false);
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', array(), array(), '', false);
@@ -90,7 +90,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setAttribute($attribute);
 
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         $object->setGroupPrice(array(array('price_id' => 10)));
         $object->setId(555);
 

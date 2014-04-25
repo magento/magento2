@@ -48,7 +48,7 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
      *
      * @param string $table
      * @param string $alias
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @return \Zend_Db_Expr
      */
     public function chooseFulltext($table, $alias, $select)

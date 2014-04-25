@@ -25,6 +25,6 @@
  */
 namespace Magento\Authorizenet\Model\Authorizenet;
 
-class Result extends \Magento\Object
+class Result extends \Magento\Framework\Object
 {
 }

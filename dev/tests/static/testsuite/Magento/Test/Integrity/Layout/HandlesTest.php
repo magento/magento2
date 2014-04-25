@@ -103,7 +103,7 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
              */
             function ($layoutFile) {
                 $schemaFile = BP . '/app/code/Magento/Core/etc/layout_single.xsd';
-                $domLayout = new \Magento\Config\Dom(file_get_contents($layoutFile));
+                $domLayout = new \Magento\Framework\Config\Dom(file_get_contents($layoutFile));
                 $result = $domLayout->validate($schemaFile, $errors);
                 $this->assertTrue($result, print_r($errors, true));
             },

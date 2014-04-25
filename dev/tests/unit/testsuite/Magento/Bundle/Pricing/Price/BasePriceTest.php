@@ -34,12 +34,12 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleable;
 
     /**
-     * @var \Magento\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfo;
 
@@ -56,7 +56,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->priceInfo = $this->getMock('Magento\Pricing\PriceInfoInterface');
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface');
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
@@ -83,7 +83,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
 
         $pricesIncludedInBase = [];
         foreach ($priceValues as $priceValue) {
-            $price = $this->getMock('Magento\Pricing\Price\PriceInterface');
+            $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
             $price->expects($this->atLeastOnce())
                 ->method('getValue')
                 ->will($this->returnValue($priceValue));
@@ -94,17 +94,17 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPricesIncludedInBase')
             ->will($this->returnValue($pricesIncludedInBase));
 
-        $tearPrice = $this->getMock('Magento\Pricing\Price\PriceInterface');
+        $tearPrice = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $tearPrice->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnValue($tearPriceValue));
 
-        $groupPrice = $this->getMock('Magento\Pricing\Price\PriceInterface');
+        $groupPrice = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $groupPrice->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnValue($groupPriceValue));
 
-        $specialPrice = $this->getMock('Magento\Pricing\Price\PriceInterface');
+        $specialPrice = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $specialPrice->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnValue($specialPriceValue));

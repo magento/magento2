@@ -29,7 +29,7 @@ namespace Magento\Wishlist\Model\Item;
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
 
-class Option extends \Magento\Model\AbstractModel implements
+class Option extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
     /**

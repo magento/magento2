@@ -40,11 +40,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $path = 'checkout';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass('Magento\UrlInterface');
+        $urlBuilder = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
 
         $context = $this->_objectManagerHelper->getObject(
-            'Magento\View\Element\Template\Context',
+            'Magento\Framework\View\Element\Template\Context',
             array('urlBuilder' => $urlBuilder)
         );
         $link = $this->_objectManagerHelper->getObject('Magento\Checkout\Block\Link', array('context' => $context));
@@ -63,7 +63,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $moduleManager = $this->getMockBuilder(
-            'Magento\Module\Manager'
+            'Magento\Framework\Module\Manager'
         )->disableOriginalConstructor()->setMethods(
             array('isOutputEnabled')
         )->getMock();

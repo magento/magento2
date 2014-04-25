@@ -29,9 +29,9 @@
  */
 namespace Magento\Rule\Model;
 
-use Magento\Model\Exception;
+use Magento\Framework\Model\Exception;
 
-abstract class AbstractModel extends \Magento\Model\AbstractModel
+abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Store rule combine conditions model
@@ -50,7 +50,7 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
     /**
      * Store rule form instance
      *
-     * @var \Magento\Data\Form
+     * @var \Magento\Framework\Data\Form
      */
     protected $_form;
 
@@ -83,31 +83,31 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
     abstract public function getActionsInstance();
 
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_formFactory = $formFactory;
@@ -119,14 +119,14 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
      * Prepare data before saving
      *
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new Exception(__('Invalid discount amount.'));
+                throw new \Magento\Framework\Model\Exception(__('Invalid discount amount.'));
             }
         }
 
@@ -281,7 +281,7 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
     /**
      * Rule form getter
      *
-     * @return \Magento\Data\Form
+     * @return \Magento\Framework\Data\Form
      */
     public function getForm()
     {
@@ -343,7 +343,7 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
                 if (in_array($key, array('from_date', 'to_date')) && $value) {
                     $value = $this->_localeDate->date(
                         $value,
-                        \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                        \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                         null,
                         false
                     );
@@ -358,10 +358,10 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
     /**
      * Validate rule conditions to determine if rule can run
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return bool
      */
-    public function validate(\Magento\Object $object)
+    public function validate(\Magento\Framework\Object $object)
     {
         return $this->getConditions()->validate($object);
     }
@@ -369,10 +369,10 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
     /**
      * Validate rule data
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      */
-    public function validateData(\Magento\Object $object)
+    public function validateData(\Magento\Framework\Object $object)
     {
         $result = array();
         $fromDate = $toDate = null;
@@ -383,8 +383,8 @@ abstract class AbstractModel extends \Magento\Model\AbstractModel
         }
 
         if ($fromDate && $toDate) {
-            $fromDate = new \Magento\Stdlib\DateTime\Date($fromDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-            $toDate = new \Magento\Stdlib\DateTime\Date($toDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $fromDate = new \Magento\Framework\Stdlib\DateTime\Date($fromDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $toDate = new \Magento\Framework\Stdlib\DateTime\Date($toDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
 
             if ($fromDate->compare($toDate) === 1) {
                 $result[] = __('End Date must follow Start Date.');

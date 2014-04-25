@@ -38,21 +38,21 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
     /**
      * Date model
      *
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
      * Constructor
      *
-     * @param \Magento\Logger $logger
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Stdlib\DateTime\DateTime $date
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_date = $date;
         parent::__construct($logger, $localeDate);
@@ -61,7 +61,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
     /**
      * Get attribute value for save.
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return string|bool
      */
     protected function _getValueForSave($object)
@@ -82,7 +82,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * Before save hook.
      * Prepare attribute value for save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)
@@ -101,7 +101,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * Product from date attribute validate function.
      * In case invalid data throws exception.
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return bool
      */

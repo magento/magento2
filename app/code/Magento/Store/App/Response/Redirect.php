@@ -38,17 +38,17 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Encryption\UrlCoder
+     * @var \Magento\Framework\Encryption\UrlCoder
      */
     protected $_urlCoder;
 
     /**
-     * @var \Magento\Session\SessionManagerInterface
+     * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * @var \Magento\Session\SidResolverInterface
+     * @var \Magento\Framework\Session\SidResolverInterface
      */
     protected $_sidResolver;
 
@@ -58,26 +58,26 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_canUseSessionIdInParam;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Encryption\UrlCoder $urlCoder
-     * @param \Magento\Session\SessionManagerInterface $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
+     * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Encryption\UrlCoder $urlCoder,
-        \Magento\Session\SessionManagerInterface $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\UrlInterface $urlBuilder,
+        \Magento\Framework\Encryption\UrlCoder $urlCoder,
+        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\UrlInterface $urlBuilder,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -210,7 +210,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $unsecure = strpos($url, $this->_storeManager->getStore()->getBaseUrl()) === 0;
             $secure = strpos(
                 $url,
-                $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
+                $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)
             ) === 0;
             return $unsecure || $secure;
         }
