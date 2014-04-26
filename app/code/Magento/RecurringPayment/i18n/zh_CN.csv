@@ -1,15 +1,33 @@
+"An internal reference ID is required to save the payment.",要求一个内部参考ID来存储支付.
+"Back to Recurring Billing Payments",回到循环账单支付
 "Billing Period",账期
 "Billing Period Unit",账期单位
 "Customer Name",顾客名字
 "Invalid parent block for this block",该块的父块无效
 Operations,操作
+"Orders Based on This Payment",基于该支付的订单
+"Payment # %1: ""%2"".","支付# %1： ""%2""."
+"Payment #%1",支付#%1
+"Payment Schedule",支付计划
+Payments,支付
 "Recurring Billing",周期账单
+"Recurring Billing Payments",循环账单支付
+"Recurring Billing Payments (beta)",循环账单支付（beta）
+"Recurring Payment",循环支付
+"Recurring Payment # %1","循环支付# %1"
+"Recurring Payment View",循环支付视图
 Reference,参考
 "Repeats %1 time(s)",重复%1次
+"Select whether buyer can define the date when billing for the payment begins.",选择是否买家能定义支付开始的账单日期
 "The billing period unit is not defined or wrong.",账期单位未定义或定义错误。
 "The currency code is undefined.",货币码未定义。
+"The payment has been updated.",该支付已经被更新.
+"The payment has no changes.",该支付没有变化.
 "The payment method code is undefined.",支付方法未定义。
+"The payment state has been updated.",该支付状态已经被更新.
+"The payment you specified does not exist.",您指定的支付不存在.
 "The period frequency is wrong.",周期频率错误。
+"The recurring payment start date has invalid format.",该循环支付开始日期格式无效.
 "The schedule description must be provided.",必须提供日程描述。
 "The start date has an invalid format.",开始日期格式无效。
 "The start date is undefined.",开始日期未定义。
@@ -19,10 +37,15 @@ Reference,参考
 "The trial period max cycles is wrong.",试用期最大周期错误。
 "The wrong %1 is specified.",指定了错误的%1。
 "There are no orders yet.",还没有订单。
+"There are no recurring payments yet.",还没有循环支付.
 "This is the number of billing cycles for the payment period.",这是支付期间的账单周期数。
 "This is the number of billing periods that make up one billing cycle.",这是用来完成一个账单周期的账期数。
 "This is the unit for billing during the subscription period.",这是账单订阅期间的单位。
+"This payment state cannot be changed to ""%1"".","该支付状态不能被改变为""%1""."
 "Trial Billing Period Unit",试用账期单位
+"We can't find the payment you specified.",我们不能找到你指定的支付.
+"We could not update the payment.",我们不能更新该支付.
 "We couldn't update the payment.",不能更新该支付。
 "We found a wrong or empty billing amount specified.",未指定或指定错误的账单额。
 "Wrong state: ""%1""","错误状态： ""%1"""
+"You updated the payment.",你更新了支付.

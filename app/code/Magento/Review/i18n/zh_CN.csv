@@ -8,6 +8,7 @@
 "4 stars","4 星"
 "5 stars","5 星"
 "<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">(%4$s)</a>","<a href=""%1$s"" onclick=""this.target='blank'"">%2$s %3$s</a> <a href=""mailto:%4$s"">（%4$s）</a>"
+"Add New Rating",添加新评级
 "Add New Review",添加新评测
 "Add Your Review",添加您的评测
 Administrator,管理员
@@ -20,6 +21,7 @@ Administrator,管理员
 "An error occurred while saving this review.",保存该评论时出错。
 "Are you sure you want to do this?",您是否确认要这样做？
 "Are you sure?",您是否确认？
+"Assigned Options",分配的选项
 "Average Customer Rating",客户平均分
 "Average Customer Rating:",客户平均分：
 Back,返回
@@ -35,30 +37,40 @@ Customer,客户
 "Customer My Account Review Details",客户我的账户评价详情
 "Customer Reviews",顾客评测
 "Customers Reviews",客户评测
+"Default Value",默认值
 Delete,删除
+"Delete Rating",删除评级
 "Delete Review",删除评价
 "Detailed Rating",详细评级
+"Edit Rating",编辑评级
 "Edit Review '%s'",编辑评价“%s”
 Guest,来宾
 "How do you rate this product?",您如何评价该产品？
 ID,ID
+"If you do not specify a rating title for a store, the default value will be used.",如果您不为商店指定评级标题，则将使用默认值。
+"Is Active",活动的
 "Manage Ratings",管理评级
 "My Product Reviews",我的产品评价
 "My Recent Reviews",我的最近评价
 Name,姓名
 "Name in Store",商店名称
+"New Rating",新评级
 "New Review",新评测
 Nickname,昵称
 "Nickname can't be empty",昵称不能为空
 "Not Approved",未批准
 "Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","只有注册用户能发表评论，<a href=""%1"">登录</a>或者<a href=""%2"">注册</a>"
 "Only registered users can write reviews. Please, <a href=""%s"">log in</a> or <a href=""%s"">register</a>","仅注册用户可撰写评论。请<a href=""%s"">登录</a>或<a href=""%s"">注册</a>"
+"Option Label",选项标签
+"Option Title",选项标题
+"Option Title:",选项标题：
 "Pending Reviews",挂起的评测
 "Pending Reviews RSS",挂起评测RSS
 "Pending Reviews of Customer `%1`",来自顾客“%1”未决的评论
 "Pending Reviews of Customer `%s`",来自客户“%s”未决的评论
 "Please select a product",请选择产品
 "Please select one of each of the ratings above",请在上方选择每个评级
+"Please select one of each ratings above",请选择上述评级
 "Posted By",发布者
 "Posted on",张贴于
 Price,价格
@@ -72,7 +84,15 @@ Product,产品名
 "Product Store Name",产品店铺名
 "Products Reviews",产品评论
 Quantity,数量
+Rating,评级名称
+"Rating Information",评级信息
+"Rating Options",评级选项
+"Rating Title",评级标题
+"Rating Visibility",评级能见度
+"Rating isn't Available",评级不可用
+"Rating with the same title",对同一名称打分
 Rating:,评分：
+Ratings,评级
 Review,评测
 "Review (submitted on %1):",评论（提交于%1）
 "Review (submitted on %s):","评测（提交于 %s）："
@@ -86,9 +106,11 @@ Review(s),评论（s）
 Reviews,评测
 "Reviews and Ratings",评测与评级
 SKU,SKU
+"Save Rating",保存评分
 "Save Review",保存评测
 "Save and Next",存储并继续
 "Save and Previous",存储并回退
+"Sort Order",排序顺序
 Status,状态
 "Storage key was not set",存储键未设置
 "Submit Review",提交评测
@@ -109,53 +131,17 @@ Type,类型
 "View All Reviews",查看所有评测
 "View Details",查看详情
 Visibility,可见性
+"Visible In",可见在
 "We can't get the product ID.",得不到产品ID。
 "We cannot post the review.",不能发表评论。
 Websites,网站
 "Write Your Own Review",撰写您自己的评测
+"You deleted the rating.",已删除评级。
 "You have submitted no reviews.",您尚未提交评测。
+"You saved the rating.",已存储评级。
 "You saved the review.",您已经存储了该评论。
 "You're reviewing:",您正在评测：
 "Your Rating:",您的评分：
 "Your Review (submitted on %1):",你的评论（提交于%1）
 "Your Review (submitted on %s):","您的评测（提交于 %s）："
-"Your review has been accepted for moderation.","您的评测已被管理员批准。"
-"An error occurred while deleting this review.","删除该评论时出错。"
-"An error occurred while saving this review.","保存该评论时出错。"
-"The review has been deleted","评论已被删除"
-"The review has been saved.","评论已保存。"
-"The review was removed by another user or does not exist.","评论已被另一用户删除，或评论不存在。"
-"Customers Reviews","客户评测"
-"Pending Reviews RSS","挂起评测RSS"
-"Product Reviews","产品评测"
-"Products Reviews","产品评论"
-"Reviews","评测"
-"1 star","1 星"
-"2 stars","2 星"
-"3 stars","3 星"
-"4 stars","4 星"
-"5 stars","5 星"
-"Add New Rating","添加新评级"
-"Assigned Options","分配的选项"
-"Be the first to review this product","作为评论该产品的第一人"
-"Default Value","默认值"
-"Delete Rating","删除评级"
-"Edit Rating","编辑评级"
-"ID","ID"
-"If you do not specify a rating title for a store, the default value will be used.","如果您不为商店指定评级标题，则将使用默认值。"
-"Manage Ratings","管理评级"
-"New Rating","新评级"
-"Option Label","选项标签"
-"Option Title","选项标题"
-"Option Title:","选项标题："
-"Please select one of each ratings above","请选择上述评级"
-"Rating Information","评级信息"
-"Rating","评级名称"
-"Rating Options","评级选项"
-"Rating Title","评级标题"
-"Rating Visibility","评级能见度"
-"Rating isn't Available","评级不可用"
-"Rating with the same title","对同一名称打分"
-"Save Rating","保存评分"
-"Sort Order","排序顺序"
-"Visibility","可见性"
+"Your review has been accepted for moderation.",您的评测已被管理员批准。

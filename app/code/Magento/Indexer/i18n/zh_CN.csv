@@ -7,4 +7,5 @@ Indexer,索引器
 "Please select indexers.",请选择索引器。
 "Reindex required",要求重新索引
 "State for the same indexer",说明为同样的索引器
+"State for the same view",同一个视图的状态
 "Update by Schedule",按计划更新

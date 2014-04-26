@@ -15,10 +15,12 @@
 """%1"" is not a valid file extension.","""%1""不是一个有效的文件扩展名。"
 """%1"" is not a valid file.","""%1""不是一个有效的文件。"
 """%1"" is not a valid hostname.","""%1""不是一个有效的主机名。"
+"""%1"" is not a valid image format.","""%1""不是一个有效的图片格式."
 """%1"" length must be equal or greater than %2 characters.","""%1""长度必须大于等于%2。"
 """%1"" length must be equal or less than %2 characters.","""%1""长度必须小于等于%2。"
 """%1"" width exceeds allowed value of %2 px.","""%1""宽度超过%2 px允许值。"
 "* Required Fields",*必要字段
+"A problem was encountered trying to change password.",尝试修改密码时遇到错误.
 "A total of %1 record(s) were deleted.",共%1条记录被删除。
 "A total of %1 record(s) were updated.",共%1条记录被更新。
 "ALL GROUPS",所有组
@@ -49,11 +51,13 @@ All,全部
 "Always optional.",总是可选。
 Amount,数量
 "An error occurred while deleting the address.",删除该地址时遇到了错误。
+"An error occurred while editing the customer.",编辑客户时发生错误。
 "An error occurred while resetting customer password.",当重置顾客密码时发生错误。
 "An error occurred while saving the customer.",保存顾客时发生错误。
 Approved,已批准
 "Are you sure that you want to remove this item?",您是否确认要删除该内容？
 "Are you sure you want to delete this address?",您是否确认要删除该地址？
+"Are you sure you want to delete?",你确信要删除吗？
 "Are you sure?",您是否确认？
 "Assign a Customer Group",分配顾客组
 "Associate to Website",关联到站点
@@ -77,7 +81,10 @@ Company,公司
 Configure,配置
 "Confirm New Password",确认新密码
 "Confirm Password",确认密码
+"Confirm your new password",确认新密码
 "Confirmation Link Email",确认链接邮件
+"Confirmation Not Required",不要求确认
+"Confirmation Required",确认请求
 Confirmed,已确认
 "Confirmed email:",确认邮件：
 "Contact Information",联系信息
@@ -88,12 +95,14 @@ Create,创建
 "Create New Customer Account",创建新顾客账户
 "Create Order",创建订单
 "Create a new password",创建新密码
+"Create account",创建账户
 "Create an Account",创建账户
 "Current Password",当前密码
 Customer,顾客
 "Customer Addresses",顾客地址
 "Customer Configuration",顾客配置
 "Customer Group",顾客组
+"Customer Group already exists.",客户组已经存在.
 "Customer Group:",顾客组：
 "Customer Groups",顾客组
 "Customer Information",顾客信息
@@ -181,6 +190,7 @@ ID,ID
 "If you have an account with us, log in using your email address.",如果您已经有了一个账户，请使用您的邮件地址登录。
 "If you have an account with us, please log in.",如果您拥有账户，请登录。
 "Invalid current password",当前密码无效
+"Invalid input",无效的输入
 "Invalid login or password.",无效的登录名或密码。
 "Invalid password reset token.",无效的密码重设令牌。
 "Last Activity",上次活动
@@ -407,13 +417,18 @@ Text,文字
 "There are no items in customer's shopping cart at the moment",客户的购物车中目前没内容
 "There are no items in customer's wishlist at the moment",客户的愿望清单中目前没内容
 "There is already an account with this email address. If you are sure that it is your email address, <a href=""%s"">click here</a> to get your password and access your account.","已有帐户使用该电子邮件地址。如果您确认这是您自己的电子邮件地址，请 <a href=""%s"">点击这里</a> 获取您的密码并访问帐户。"
+"There was an error confirming the account",确认账户时发生错误
+"There was an error saving the new password.",存储密码时发生错误.
 "There was an error validating the VAT ID.","验证 VAT ID 时出错。"
+"There was an error validating the login and password.",用户名或密码校验发生错误.
 "This account is not confirmed.",该账户尚未确认。
+"This confirmation key is invalid or has expired.",确认键是无效的或者已经过期。
 "This email does not require confirmation.",该电子邮件不需要确认。
 "This email will be sent instead of default welcome email, after account confirmation.",在确认账户后，该邮件将代替默认欢迎邮件发送。
 "To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.",为了在前端显示VAT号，设置在前端显示VAT号选项为是。
 Total,总数
 Type,类型
+"Unable to send password reset email.",不能发送密码重置邮件.
 Unknown,未知
 "Unsubscribe from Newsletter",退订新闻邮件
 Update,更新

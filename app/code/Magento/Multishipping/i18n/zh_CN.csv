@@ -1,3 +1,6 @@
 "Invalid checkout type",无效的结账类型
 "Maximum qty allowed for Shipping to multiple addresses is %1",最多允许多地址运送的数量为%1
+"Multishipping Settings",多地址设置
+"Multishipping Settings Section",多地址设置区
+"The requested Payment Method is not available for multishipping.",请求的支付方法对于多地址无效.
 "We cannot open the overview page.",不能打开概览页。

@@ -1,4 +1,5 @@
 "Cron (Scheduled Tasks) - all the times are in minutes","Cron（计划任务）= 所有时间均以分钟为单位"
+"Cron configuration options for group: ","Cron配置组选项： "
 Daily,每天
 "Failure History Lifetime",失败历史生命期
 "For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set.","为了纠正在cron运行时产生的URLs，请确保Web > 安全和非安全基础URLs被明确设置。"
@@ -9,5 +10,6 @@ Hourly,每小时
 Monthly,每月
 "Schedule Ahead for",提前计划，为
 "Success History Lifetime",成功历史生命期
+"Use Separate Process",使用分离进程
 "We can't save the cron expression.",不能存储cron表达式。
 Weekly,每周

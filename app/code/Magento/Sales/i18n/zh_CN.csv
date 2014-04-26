@@ -223,6 +223,7 @@ Customer,客户
 "Customer My Account Order Shipment View",客户我的帐户订单发货视图
 "Customer My Account Order View",客户我的帐户订单视图
 "Customer Name",顾客名字
+"Customer's Activities",客户活动
 "Customer's Current Activities",客户的当前活动
 "Customs Value",自定义值
 Date,日期
@@ -774,6 +775,7 @@ Sku,Sku
 "Something went wrong updating the order address.",更新订单订单地址时发生错误。
 "Something went wrong while saving the gift message.",存储礼物留言时。
 "Something went wrong while we were unassigning the order.",当接触订单分配时发生错误。
+"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","很抱歉， 有支付协议的条目必须被一次订购。为了继续，请移除或购买其他条目， 然后单独订购该条目。"
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
 "Source object is not specified.",源对象未指定。
 "Specified profile does not exist.",指定的配置文件不存在。

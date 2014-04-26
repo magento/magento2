@@ -97,6 +97,7 @@ Email,电子邮件
 "Invalid EAV attribute",无效的EAV属性
 "Invalid EAV attribute.",无效的EAV属性。
 "Invalid alias, already exists in joint attributes",无效的别名、已经存在于联合属性中。
+"Invalid attribute identifier for filter (%1)",无效的过滤器（%1）标识符
 "Invalid attribute name: %1",无效的属性名：%1
 "Invalid attribute name: %s",无效的属性名：%s
 "Invalid attribute requested: %1",无效的属性请求：%1

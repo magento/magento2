@@ -18,7 +18,7 @@
 "<label class=""label""><span>from</span></label>","<label class=""label""><span>从</span></label>"
 "<label class=""label""><span>to</span></label>","<label class=""label""><span>到</span></label>"
 "<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the front end.","<strong style=""：red"">警告！</strong>应用MAP默认将在前端隐藏所有产品价格。"
-"<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the frontend.","<strong style="":red"">警告！</strong> 默认应用 MAP 将在前端隐藏所有产品的价格。"
+"<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the frontend.","<strong style=""：red"">警告！</strong> 默认应用 MAP 将在前端隐藏所有产品的价格。"
 "A group with the same name already exists.",以同样名称命名的群组已存在。
 "A name is required",需要设置名称
 "A name is required.",名字是必输项。
@@ -142,6 +142,7 @@ Back,返回
 "Backend Table Title",后端表格标题
 Backorders,缺货
 "Bad controller interface for showing product",错误的显示产品的控制器接口
+"Bad value was supplied.",给了错误的值。
 "Based On",基于
 "Basic Settings",基础设置
 "Before Order Confirmation",在订单确认之前
@@ -157,6 +158,7 @@ Bottom/Right,底部/右侧
 "Buy %1 for %2",以%2买%1
 "Buy %1 for %2 (%3 incl. tax) each",每以%2%1（%3含税）
 "Buy %1 for %2 each",每以%2买%1
+"Buy %1 for: ","买%1得： "
 "Buy %1$s","购买 %1$s"
 "Buy %1$s for","购买 %1$s："
 "Buy %1$s for %2$s","为 %2$s 购买 %1$s"
@@ -235,6 +237,7 @@ Compare,比较
 "Compare Products",比较产品
 "Conditions Combination",条件组合
 Continue,继续
+"Could not rebuild index for undefined product",不能为未定义的产品重建索引
 Country/State,国家/州
 Create,创建
 "Create (Upload)",创建（上传）
@@ -393,6 +396,7 @@ Image,图案
 "Index product attributes for layered navigation building",为分层导航建筑索引产品属性
 "Index product prices",索引产品价格
 "Indexed category/products association",已索引的分类/产品关联
+"Indexed product/categories association",索引产品/分类关联
 Info,信息
 "Info Column Options Wrapper",信息栏选项包装
 "Input Type",输入类型
@@ -416,6 +420,7 @@ Integer,整数
 Inventory,盘点
 "Is Default",为默认值
 "Is Required",为必须
+"Item Price",条目价格
 "Items %1-%2 of %3",第%1-%2个，共%3个条目
 "Items %s to %s of %s total","项目 %s 到 %s 共 %s个"
 "Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.",您不希望显示在分类或搜索结果中的内容应在目标店铺中设置'Disabled'状态。
@@ -456,6 +461,7 @@ Manual,手工
 "Mask for Meta Keywords",为元数据关键字的伪装
 "Mask for Meta Title",为元数据标题的伪装
 "Mask for SKU",
+"Mass Actions",批量操作
 "Max Characters",字符数上限
 "Maximal Depth",最大深度
 "Maximum Image Size",最大图像大小
@@ -603,6 +609,7 @@ Product,产品名
 "Product Link Block Template",产品链接区块模板
 "Product Link Inline Template",产品链接内联模板
 "Product Listing Sort by",产品列表排列顺序
+"Product Price",产品价格
 "Product Prices",产品价格
 "Product Tags",产品标签
 "Product Template",产品模板

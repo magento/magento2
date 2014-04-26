@@ -324,6 +324,7 @@ Partner,合作伙伴
 Password,密码
 "Pay Now",立刻支付
 PayPal,PayPal
+"PayPal All-in-One Payment Solutions  <i>Accept and process credit cards and PayPal payments.</i>","PayPal All-in-One支付方案<i>接受并处理信用卡和PayPal支付.</i>"
 "PayPal Balance Manager function of PayPal account",PayPal帐户的PayPal余额管理器功能
 "PayPal Billing Agreement Settings",PayPal记账协议设置
 "PayPal Buyer Warranty Bonus",PayPal买家担保津贴
@@ -389,7 +390,7 @@ PayPal,PayPal
 "Payments Standard",支付标准
 "Payments by PayPal (150 X 40)",用PayPal付款（150X40）
 "Payments by PayPal (150 X 60)",用PayPal付款（150X60）
-"Payments by cards + seller protection - <strong style=""color:red"">Contact PayPal before activating</strong>","通过卡片支付 + 卖家保护 - <strong style="":red"">激活前联系PayPal</strong>"
+"Payments by cards + seller protection - <strong style=""color:red"">Contact PayPal before activating</strong>","通过卡片支付 + 卖家保护 - <strong style=""：red"">激活前联系PayPal</strong>"
 "Paypal Billing Agreement Settings",PayPal记账协议设置
 "Pending PayPal",挂起的PayPal
 Phone,电话
@@ -487,7 +488,7 @@ Switch/Maestro,Switch/Maestro
 "The customer ID is not set.",顾客ID未设置。
 "The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase.",您PayPal帐户中授权子帐户的默认数量为1。如果要获得更多授权，请联系PayPal增加数量。
 "The following error(s) occured:",下列错误发生：
-"The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.","付款页面左上角的图像，最大尺寸为750x90像素。 强烈建议使用<strong style="":red"">https</strong>地址。"
+"The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.","付款页面左上角的图像，最大尺寸为750x90像素。 强烈建议使用<strong style=""：red"">https</strong>地址。"
 "The maximum number of child authorizations is reached.",授权子帐户的最大数量已达到。
 "The merchant account is not yet verified.",银行帐户尚未验证。
 "The merchant holds a non-U.S. account and does not have a withdrawal mechanism.",该商家持有一个非美国账户并且没有取款功能。

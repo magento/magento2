@@ -1,12 +1,28 @@
+"Access list",存取列表
+"Backend host",后台主机
+"Backend port",后台端口
+"Built-in Application",內建应用
+"Caching Application",缓存应用
 "Cookie Lifetime (seconds)",Cookie生命周期（秒）
 "Enable External Cache",启用外部缓存
+"Export VCL",导出VCL
+"Export Varnish Configuration",导出Varnish配置
 "External Cache Control",外部缓存控制
 "External Full Page Cache Settings",外部全页面缓存设置
 "External Page Cache",外部页缓存
 "External full page cache.",外部全页面缓存。
 "Failed to load external cache control",加载外部缓存控制出错
 "Flush External Page Cache",清除外部页面缓存
+"Full Page Cache",全页缓存
 "If you leave this empty, we'll use the default value.",如果这里留空将使用默认值。
+"Page Cache",页缓存
+"Public content cache lifetime in seconds. If field is empty default value 120 will be saved. ","公共内容缓存生命周期秒数。如果字段为空默认值设置为120秒. "
 "Something went wrong while clearing the external full page cache.",当清除外部全页缓存时候发生错误。
+"Specify backend host for config file generation. If field is empty default value localhost will be saved.",说明产生配置文件的后台主机。如果字段为空默认值设为localhost.
+"Specify backend port for config file generation. If field is empty default value 8080 will be saved.","说明产生配置文件的后台端口。如果字段为空默认值设为8080.
+TTL for public content"""
 "The external full page cache has been cleaned.",外部全页面缓存已被清除。
+"Ttl value ""%1"" is not valid. Please use only numbers equal or greater than zero.","Ttl值 ""%1""无效. 请仅仅使用大于零的数字."
+"Varnish Caching",Varnish缓存
+"Varnish Configuration",Varnish配置
 "Zend Full Page Cache","Zend 全页面缓存"

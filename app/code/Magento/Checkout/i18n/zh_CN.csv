@@ -102,6 +102,7 @@ Edit,编辑
 "Enable Terms and Conditions",启用条款和条件
 Enabled,已启用
 "Enter a New Address",输入新地址
+"Enter your code",输入你的代码
 "Enter your coupon code if you have one.",如果您有优惠代码，请输入。
 "Enter your destination to get a shipping estimate.",输入您的目的地来获得预计运送信息。
 "Estimate Shipping and Tax",预计运费和税费
@@ -180,6 +181,7 @@ Move,移动
 "Other Items in Your Order",您订单中的其它条目
 "Other items in your order",您订单里的其他条目
 Password,密码
+"Password and password confirmation are not equal.",密码和确认密码不一致。
 "Payment Failed Email Receiver",支付失败邮件接收者
 "Payment Failed Email Sender",支付失败电子邮件发送者
 "Payment Failed Emails",支付失败电子邮件
@@ -249,6 +251,7 @@ Sales,销售
 "Shipping method has not been selected yet",运送方式尚未被选择
 "Shipping selection is not applicable.",运送选择不适用。
 "Shopping Cart",购物车
+"Shopping Cart Items",购物车条目
 "Shopping Cart Sidebar",购物车侧边栏
 "Shopping Cart is Empty",购物车为空
 "Show Content as",显示内容为
@@ -268,6 +271,8 @@ Status,状态
 "Street Address %1","街道地址 %1"
 "Submitting order information...",正在提交订单信息...
 Subtotal,小计
+"Subtotal Excl. Tax",不含税小计
+"Subtotal Incl. Tax",含税小计
 "Subtotal must exceed minimum order amount",总数必须超出允许订购的最小数量
 Telephone,电话
 "Terms & Conditions",条款和协议
@@ -285,6 +290,7 @@ Text,文字
 "The onepage checkout is disabled.",单页面结账已被禁用。
 "The product does not exist.",产品不存在。
 "There are <a href=""%1"">%2 items</a> in your cart.","您的购物车里有<a href=""%1"">%2个条目"
+"There are more than one shipping address.",货运地址多于一个。
 "There is <a href=""%1"">1 item</a> in your cart.","您的购物车里有<a href=""%1"">1个条目"
 "There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.",该邮件地址已经被注册。请直接登录或者输入其他的邮件地址注册。
 "This condition no longer exists.",该条件已不存在。
@@ -294,6 +300,8 @@ Total,总数
 Total:,总计：
 "Unable to set Payment Method",不能设置支付方法
 "Unit Price",单价
+"Unit Price Excl. Tax",不含税单位价
+"Unit Price Incl. Tax",含税单位价
 "Update Cart",更新购物车
 "Update Qty & Addresses",更新数量与地址
 "Update Shopping Cart",更新购物车

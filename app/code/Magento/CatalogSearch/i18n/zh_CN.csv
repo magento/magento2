@@ -3,6 +3,7 @@
 "<strong>%1 item(s)</strong> were found using the following search criteria.",<strong>%1个条目</strong>被发现使用下面的搜索条件。
 "<strong>%1 item</strong> were found using the following search criteria",使用下面的搜索关键词找到<strong>%1个条目</strong>
 "<strong>%1 items</strong> were found using the following search criteria",使用下面的搜索关键词找到<strong>%1个条目</strong>
+"Advanced Search",高级搜索
 All,全部
 "Applies for ""Like"" search type only","仅应用""喜欢""搜索类型"
 "Apply Layered Navigation if Search Results are Less Than",如果搜索结果少于该数量，应用分层式导航

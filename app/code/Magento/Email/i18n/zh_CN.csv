@@ -8,6 +8,7 @@ Communications,通讯
 "Failed to load template. See error log for details.",不能加载模板，打开错误日志查看详细描述。
 GLOBAL,全局
 "Insert Variable...",插入变量...
+"Invalid sender data",无效的发送者数据
 "Invalid transactional email code: %1","无效的交易邮件代码： %1"
 "Load Template",加载模板
 "Load default template",加载默认模板

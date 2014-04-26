@@ -14,6 +14,7 @@
 "2 columns with left bar",2栏带左边栏
 "2 columns with right bar",2栏带右边栏
 "3 columns",3栏
+"<a href=""%1"">Learn more</a>.","<a href=""%1"">学习更多</a>."
 "About the calendar",关于日历
 "Add New Theme",添加新的主题
 "All Empty Layout Pages",所有空的布局页面
@@ -51,6 +52,7 @@ Copyright,版权所有
 "Edit custom.css",编辑custom.css
 Empty,空
 "Enable JavaScript in your browser to get the best experience on our website!",启用浏览器的JavaScript以便获得网站最好的体验!
+"Enable Local Storage in your browser to get the best experience on our website!",在你的浏览器允许本地存储来获得我们站点的最佳体验!
 "Example: 0.0.0.1 or 123.1.0.25-alpha1",例：0.0.0.1或123.1.0.25-alpha1
 "Favicon Icon",Favicon图标
 Footer,脚注
@@ -64,6 +66,7 @@ Hour,时
 "JS Editor",JS编辑器
 "JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
 "Left Column",左栏
+"Local Storage seems to be disabled in your browser.",你的浏览器的本地存储好像被禁止了.
 "Main Content Area",主内容区域
 "Max file size to upload %1M",上传文件的最大尺寸%1M
 "Max image size %1M",最大图片尺寸%1M
@@ -94,7 +97,10 @@ Redirecting...,正在重定向...
 "Select Store:",选择店铺：
 "Select date",选择日期
 Show,显示
+"Skip to content",跳过内容
 "Something is wrong with the file upload settings.",文件上传设置出错。
+"The CSS file must be less than %1M.",CSS文件尺寸必须小于%1M.
+"The JS file must be less than %1M.",JS文件尺寸必须小于%1M.
 Theme,主题
 "Theme CSS",主题CSS
 "Theme Java Script","主题 Java Script"
@@ -108,6 +114,7 @@ Theme,主题
 "This action will delete your custom instructions and reset robots.txt file to system's default settings.",该操作将删除您的的定制指令并重置robots.txt文件到系统默认设置。
 "This file will replace the current custom.css file and can't be more than 2 MB.",该文件将替换当前custom。css文件并且大小不能超过2MB。
 "This is a demo store. Any orders placed through this store will not be honored or fulfilled.",这是一个演示商店。任何在此商店下的订单将无法被兑现或履行。
+"This is demo store. All orders will not be transferred.",这是演示店铺。所有订单将不会被执行。
 "This is just a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
 "This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便。在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie。"
 "This website requires cookies provide all of its features.  For more information on what data is contained in the cookies, please see our <a href=""%1"">privacy policy page</a> To accept cookies from this site, please click accept below.","该网站需要 Cookie 才能提供完整功能。要了解 Cookie 中保存了哪些数据，请参考我们的<a href=""%1"">隐私策略页面</a>。要接受该站点的 Cookie，请点击下方的接受。"
@@ -117,6 +124,7 @@ Theme,主题
 Time:,时间：
 "Title Prefix",标题前缀
 "Title Suffix",标题后缀
+"To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.","为了遵从新的的e-Privacy指令， 我们需要你的同意来来设置cookie."
 "Upload CSS File",上传CSS文件
 "Upload Fonts",上传字体
 "Upload Images",上传图片
@@ -133,11 +141,13 @@ WK,WK
 "We cannot find theme ""%1"".","找不到主题""%1""。"
 "We found a directory with the same name.",发现同名目录。
 "We found no files.",找不到文件。
+"We use cookies to make your experience better.",我们使用cookies来使你的购物体验更佳.
 "Welcome Text",欢迎信息
 "Welcome, %1!",欢迎，%1！
 "You deleted the theme.",成功删除了该主题。
 "You must have JavaScript enabled in your browser to utilize the functionality of this website.",您必须在浏览器中启用JavaScript才能使用本网站的功能。
 "You saved the theme.",成功存储了该主题。
+"You're currently reading page",你正在阅读页面
 "Your Language",您的语言
 "Your Language:",您的语言：
 "per page",每页

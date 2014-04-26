@@ -53,4 +53,6 @@ Packaging,打包
 Station,站台
 "The field is applicable if the Smart Post method is selected.","如果Smart Post方法被选择该字段是可接受的。"
 "Unable to retrieve tracking",无法获取追踪
+"Web-Services URL (Production)","Web-Services URL （产品）"
+"Web-Services URL (Sandbox)","Web-Services URL （沙箱）"
 "Your Packaging",您的包裹

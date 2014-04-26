@@ -1,4 +1,5 @@
 "%1 %2 cycle.","%1 %2 周期。"
+"%1 is not available. You still can process offline actions.",%1不可用.你仍然能处理离线操作。
 "--Please Select--","-- 请选择 --"
 "3D Secure Card Validation","3D 安全信用卡验证"
 "<label>Make Check payable to:</label> %1","<label>用支票付款给：</label> %1"

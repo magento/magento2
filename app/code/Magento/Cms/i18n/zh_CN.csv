@@ -87,6 +87,7 @@ Pages,页面
 "Save Process",保存过程
 "Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
 "Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
+"Show Notice if Local Storage is Disabled",如果本地存储禁止显示提示
 "Something went wrong connecting to the host. Error#%1 - %2.","连接主机时发生错误。 错误#%1 - %2。""Static Blocks"
 "Something went wrong while saving the page.",当存储页面时发生错误。
 "Static Blocks",静态块
