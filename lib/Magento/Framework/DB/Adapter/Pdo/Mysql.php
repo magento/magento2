@@ -1141,7 +1141,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
             // collect CONSTRAINT
             $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) '
-                . 'REFERENCES (`[^`]*\.)?`([^`]*)` \(`([^`]*)`\)'
+                . 'REFERENCES (`[^`]*`\.)?`([^`]*)` \(`([^`]*)`\)'
                 . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
                 . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
             $matches = array();
