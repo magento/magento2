@@ -58,19 +58,21 @@ class Config
 
     const KEY_ACL_RESOURCES = 'resources';
 
+    const KEY_PARAMETERS = 'parameters';
+
     /*#@-*/
 
     /** @var ModelConfig */
     protected $_config;
 
-    /** @var \Magento\Controller\Router\Route\Factory */
+    /** @var \Magento\Framework\Controller\Router\Route\Factory */
     protected $_routeFactory;
 
     /**
      * @param ModelConfig $config
-     * @param \Magento\Controller\Router\Route\Factory $routeFactory
+     * @param \Magento\Framework\Controller\Router\Route\Factory $routeFactory
      */
-    public function __construct(ModelConfig $config, \Magento\Controller\Router\Route\Factory $routeFactory)
+    public function __construct(ModelConfig $config, \Magento\Framework\Controller\Router\Route\Factory $routeFactory)
     {
         $this->_config = $config;
         $this->_routeFactory = $routeFactory;
@@ -104,6 +106,8 @@ class Config
             $routeData[self::KEY_IS_SECURE]
         )->setAclResources(
             $routeData[self::KEY_ACL_RESOURCES]
+        )->setParameters(
+            $routeData[self::KEY_PARAMETERS]
         );
         return $route;
     }
@@ -150,33 +154,26 @@ class Config
     public function getRestRoutes(\Magento\Webapi\Controller\Rest\Request $request)
     {
         $serviceBaseUrl = $this->_getServiceBaseUrl($request);
-        $httpMethod = $request->getHttpMethod();
+        $requestHttpMethod = $request->getHttpMethod();
         $routes = array();
-        foreach ($this->_config->getServices() as $serviceName => $serviceData) {
+        foreach ($this->_config->getServices()[Converter::KEY_ROUTES] as $url => $httpMethods) {
             // skip if baseurl is not null and does not match
-            if (!isset(
-                $serviceData[Converter::KEY_BASE_URL]
-            ) || !$serviceBaseUrl || strcasecmp(
-                trim($serviceBaseUrl, '/'),
-                trim($serviceData[Converter::KEY_BASE_URL], '/')
-            ) !== 0
-            ) {
-                // baseurl does not match, just skip this service
+            if (!$serviceBaseUrl || strpos(trim($url, '/'), trim($serviceBaseUrl, '/')) !== 0) {
+                // base url does not match, just skip this service
                 continue;
             }
-            foreach ($serviceData[Converter::KEY_SERVICE_METHODS] as $methodName => $methodInfo) {
-                if (strtoupper($methodInfo[Converter::KEY_HTTP_METHOD]) == strtoupper($httpMethod)) {
-                    $secure = $methodInfo[Converter::KEY_IS_SECURE];
-                    $methodRoute = $methodInfo[Converter::KEY_METHOD_ROUTE];
-                    $aclResources = $methodInfo[Converter::KEY_ACL_RESOURCES];
+            foreach ($httpMethods as $httpMethod => $methodInfo) {
+                if (strtoupper($httpMethod) == strtoupper($requestHttpMethod)) {
+                    $aclResources = array_keys($methodInfo[Converter::KEY_ACL_RESOURCES]);
                     $routes[] = $this->_createRoute(
-                        array(
-                            self::KEY_ROUTE_PATH => $serviceData[Converter::KEY_BASE_URL] . $methodRoute,
-                            self::KEY_CLASS => $serviceName,
-                            self::KEY_METHOD => $methodName,
-                            self::KEY_IS_SECURE => $secure,
-                            self::KEY_ACL_RESOURCES => $aclResources
-                        )
+                        [
+                            self::KEY_ROUTE_PATH => $url,
+                            self::KEY_CLASS => $methodInfo[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS],
+                            self::KEY_METHOD => $methodInfo[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD],
+                            self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
+                            self::KEY_ACL_RESOURCES => $aclResources,
+                            self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                        ]
                     );
                 }
             }

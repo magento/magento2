@@ -62,9 +62,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array('create'));
-        $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->wysiwygConfigMock = $this->getMock(
             'Magento\Cms\Model\Wysiwyg\Config',
             array('setStoreId'),
@@ -72,7 +72,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $methods = array('setStoreId', 'setData', 'load', '__wakeup', 'setAttributeSetId', 'setTypeId');
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
 

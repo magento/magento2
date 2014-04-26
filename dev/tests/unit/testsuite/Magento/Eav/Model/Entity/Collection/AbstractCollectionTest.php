@@ -36,17 +36,17 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $coreEntityFactoryMock;
 
     /**
-     * @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManagerMock;
 
@@ -56,7 +56,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreResourceMock;
 
@@ -71,35 +71,47 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceHelperMock;
 
     /**
-     * @var \Magento\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorFactoryMock;
 
     public function setUp()
     {
         $this->coreEntityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $this->fetchStrategyMock = $this->getMock(
-            'Magento\Data\Collection\Db\FetchStrategyInterface',
+            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
             array(),
             array(),
             '',
             false
         );
-        $this->eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $this->eventManagerMock = $this->getMock(
+            'Magento\Framework\Event\ManagerInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
-        $this->coreResourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false);
+        $this->coreResourceMock = $this->getMock(
+            'Magento\Framework\App\Resource',
+            array('getConnection'),
+            array(),
+            '',
+            false
+        );
         $this->resourceHelperMock = $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false);
         $this->validatorFactoryMock = $this->getMock(
-            'Magento\Validator\UniversalFactory',
+            'Magento\Framework\Validator\UniversalFactory',
             array(),
             array(),
             '',
             false
         );
         $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', array(), array(), '', false);
-        /** @var \Magento\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
-        $connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
         /** @var $selectMock \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject */
         $selectMock = $this->getMock('Zend_Db_Select', array(), array(), '', false);
         $this->coreEntityFactoryMock->expects(
@@ -205,6 +217,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function getMagentoObject()
     {
-        return new \Magento\Object();
+        return new \Magento\Framework\Object();
     }
 }

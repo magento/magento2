@@ -29,7 +29,7 @@
  */
 namespace Magento\TestFramework\Performance\Scenario;
 
-class FailureException extends \Magento\Exception
+class FailureException extends \Magento\Framework\Exception
 {
     /**
      * @var \Magento\TestFramework\Performance\Scenario

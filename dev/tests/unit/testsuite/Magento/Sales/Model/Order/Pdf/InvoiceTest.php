@@ -37,11 +37,17 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
-        $stringMock = $this->getMock('Magento\Stdlib\String', array(), array(), '', false, false);
-        $storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
-        $translateMock = $this->getMock('Magento\Translate\Inline\StateInterface', array(), array(), '', false, false);
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false, false);
+        $this->_pdfConfigMock = $this->getMockBuilder('Magento\Sales\Model\Order\Pdf\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directoryMock = $this->getMock(
+            'Magento\Framework\Filesystem\Directory\Write',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will(
             $this->returnCallback(
                 function ($argument) {
@@ -49,65 +55,17 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false, false);
+        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false, false);
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryMock));
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
-        $this->_pdfConfigMock = $this->getMock(
-            'Magento\Sales\Model\Order\Pdf\Config',
-            array(),
-            array(),
-            '',
-            false,
-            false
-        );
-        $totalFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\Pdf\Total\Factory',
-            array(),
-            array(),
-            '',
-            false,
-            false
-        );
-        $pdfItemsFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\Pdf\ItemsFactory',
-            array(),
-            array(),
-            '',
-            false,
-            false
-        );
-        $localeDateMock = $this->getMock(
-            'Magento\Stdlib\DateTime\TimezoneInterface',
-            array(),
-            array(),
-            '',
-            false,
-            false
-        );
-        $storeManagerMock = $this->getMock(
-            'Magento\Core\Model\StoreManagerInterface',
-            array(),
-            array(),
-            '',
-            false,
-            false
-        );
-        $localeResolverMock = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false, false);
-
-        $this->_model = new \Magento\Sales\Model\Order\Pdf\Invoice(
-            $paymentDataMock,
-            $stringMock,
-            $storeConfigMock,
-            $filesystemMock,
-            $this->_pdfConfigMock,
-            $totalFactoryMock,
-            $pdfItemsFactoryMock,
-            $localeDateMock,
-            $translateMock,
-            $storeManagerMock,
-            $localeResolverMock,
-            array()
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_model = $helper->getObject(
+            'Magento\Sales\Model\Order\Pdf\Invoice',
+            [
+                'filesystem' => $filesystemMock,
+                'pdfConfig' => $this->_pdfConfigMock,
+            ]
         );
     }
 

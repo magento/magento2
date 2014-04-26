@@ -49,7 +49,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
+        $this->responseMock = $this->getMock('Magento\Framework\App\Console\Response', array(), array(), '', false);
         $this->entryPoint = new \Magento\Indexer\App\Shell(
             'indexer.php',
             $this->shellFactoryMock,

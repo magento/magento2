@@ -40,12 +40,19 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         // Setup most constructor dependencies
         $paymentData = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
-        $string = $this->getMock('Magento\Stdlib\String', array(), array(), '', false);
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $translate = $this->getMock('Magento\Translate\Inline\StateInterface', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $string = $this->getMock('Magento\Framework\Stdlib\String', array(), array(), '', false);
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $translate = $this->getMock('Magento\Framework\Translate\Inline\StateInterface', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
-        $localeMock = $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false, false);
+        $localeMock = $this->getMock(
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
         // Setup config file totals
         $configTotals = array('item1' => array(''), 'item2' => array('model' => 'custom_class'));
@@ -63,13 +70,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $total1->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
         $total1->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
         $total1->expects($this->once())->method('canDisplay')->will($this->returnValue(true));
-        $total1->expects(
-            $this->once()
-        )->method(
-            'getTotalsForDisplay'
-        )->will(
-            $this->returnValue(array(array('label' => 'label1', 'font_size' => 1, 'amount' => '$1')))
-        );
+        $total1->expects($this->once())
+            ->method('getTotalsForDisplay')
+            ->will($this->returnValue(array(array('label' => 'label1', 'font_size' => 1, 'amount' => '$1'))));
 
         $total2 = $this->getMock(
             'Magento\Sales\Model\Order\Pdf\Total\DefaultTotal',
@@ -81,13 +84,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $total2->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
         $total2->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
         $total2->expects($this->once())->method('canDisplay')->will($this->returnValue(true));
-        $total2->expects(
-            $this->once()
-        )->method(
-            'getTotalsForDisplay'
-        )->will(
-            $this->returnValue(array(array('label' => 'label2', 'font_size' => 2, 'amount' => '$2')))
-        );
+        $total2->expects($this->once())
+            ->method('getTotalsForDisplay')
+            ->will($this->returnValue(array(array('label' => 'label2', 'font_size' => 2, 'amount' => '$2'))));
 
         $valueMap = array(array(null, array(), $total1), array('custom_class', array(), $total2));
         $pdfTotalFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\Total\Factory', array(), array(), '', false);
@@ -98,20 +97,20 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMockForAbstractClass(
             'Magento\Sales\Model\Order\Pdf\AbstractPdf',
             array(
-                $paymentData, 
-                $string, 
-                $coreStoreConfig, 
+                $paymentData,
+                $string,
+                $scopeConfig,
                 $filesystem,
-                $pdfConfig, 
-                $pdfTotalFactory, 
-                $pdfItemsFactory, 
-                $localeMock, 
+                $pdfConfig,
+                $pdfTotalFactory,
+                $pdfItemsFactory,
+                $localeMock,
                 $translate
             ),
-            '', 
-            true, 
-            false, 
-            true, 
+            '',
+            true,
+            false,
+            true,
             array('drawLineBlocks')
         );
         $model->expects($this->once())->method('drawLineBlocks')->will($this->returnValue($page));

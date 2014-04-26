@@ -23,18 +23,18 @@
  */
 namespace Magento\Integration\Model\Resource\Oauth;
 
-class Consumer extends \Magento\Model\Resource\Db\AbstractDb
+class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime $dateTime)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime $dateTime)
     {
         $this->_dateTime = $dateTime;
         parent::__construct($resource);
@@ -53,10 +53,10 @@ class Consumer extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Set updated_at automatically before saving
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    public function _beforeSave(\Magento\Model\AbstractModel $object)
+    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $object->setUpdatedAt($this->_dateTime->formatDate(time()));
         return parent::_beforeSave($object);
@@ -65,10 +65,10 @@ class Consumer extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Delete all Nonce entries associated with the consumer
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    public function _afterDelete(\Magento\Model\AbstractModel $object)
+    public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         $adapter = $this->_getWriteAdapter();
         $adapter->delete($this->getTable('oauth_nonce'), array('consumer_id' => $object->getId()));

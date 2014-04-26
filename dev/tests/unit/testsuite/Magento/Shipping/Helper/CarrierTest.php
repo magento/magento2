@@ -38,18 +38,18 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeConfig;
+    protected $scopeConfig;
 
     public function setUp()
     {
-        $this->storeConfig = $this->getMock('Magento\Core\Model\Store\ConfigInterface');
+        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->helper = $objectManagerHelper->getObject(
             'Magento\Shipping\Helper\Carrier',
             array(
-                'context' => $this->getMock('Magento\App\Helper\Context', array(), array(), '', false),
-                'locale' => $this->getMock('Magento\LocaleInterface'),
-                'storeConfig' => $this->storeConfig
+                'context' => $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
+                'locale' => $this->getMock('Magento\Framework\LocaleInterface'),
+                'scopeConfig' => $this->scopeConfig
             )
         );
     }
@@ -61,12 +61,13 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOnlineCarrierCodes($result, $carriers)
     {
-        $this->storeConfig->expects(
+        $this->scopeConfig->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
-            'carriers'
+            'carriers',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($carriers)
         );
@@ -95,12 +96,13 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $carrierCode = 'carrier1';
         $configPath = 'title';
         $configValue = 'some title';
-        $this->storeConfig->expects(
+        $this->scopeConfig->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
-            sprintf('carriers/%s/%s', $carrierCode, $configPath)
+            sprintf('carriers/%s/%s', $carrierCode, $configPath),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($configValue)
         );

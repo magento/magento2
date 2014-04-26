@@ -24,12 +24,12 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
-use Magento\Module\Manager;
+use Magento\Framework\Module\Manager;
 
 class Plugin
 {
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 

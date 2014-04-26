@@ -28,7 +28,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 /**
  * Source model for available logo types
  */
-class Logo implements \Magento\Option\ArrayInterface
+class Logo implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory

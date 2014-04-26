@@ -101,7 +101,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Magento\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testSubmitOrderInvalidCustomerData()
@@ -123,7 +123,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->setAddresses(
             $this->getSampleAddressEntity()
         )->create();
-        $customerData = $this->_customerAccountService->createAccount($customerDetails, 'password');
+        $customerData = $this->_customerAccountService->createCustomer($customerDetails, 'password');
 
         $existingCustomerId = $customerData->getId();
         $customerData = $this->_customerBuilder->mergeDataObjectWithArray(

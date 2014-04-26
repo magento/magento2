@@ -32,28 +32,26 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Transactions extends \Magento\Sales\Block\Adminhtml\Transactions\Grid implements
+class Transactions extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Retrieve grid url
-     *
-     * @return string
+     * @var \Magento\Framework\AuthorizationInterface
      */
-    public function getGridUrl()
-    {
-        return $this->getUrl('sales/order/transactions', array('_current' => true));
-    }
+    protected $_authorization;
 
     /**
-     * Retrieve grid row url
-     *
-     * @param \Magento\Object $item
-     * @return string
+     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param array $data
      */
-    public function getRowUrl($item)
-    {
-        return $this->getUrl('sales/transactions/view', array('_current' => true, 'txn_id' => $item->getId()));
+    public function __construct(
+        \Magento\Framework\View\Element\Context $context,
+        \Magento\Framework\AuthorizationInterface $authorization,
+        array $data = array()
+    ) {
+         $this->_authorization = $authorization;
+         parent::__construct($context, $data);
     }
 
     /**

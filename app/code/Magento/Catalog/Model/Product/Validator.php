@@ -24,7 +24,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product;
 
 class Validator
@@ -34,10 +34,10 @@ class Validator
      *
      * @param Product $product
      * @param RequestInterface $request
-     * @param \Magento\Object $response
+     * @param \Magento\Framework\Object $response
      * @return array
      */
-    public function validate(Product $product, RequestInterface $request, \Magento\Object $response)
+    public function validate(Product $product, RequestInterface $request, \Magento\Framework\Object $response)
     {
         return $product->validate();
     }

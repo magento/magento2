@@ -43,12 +43,12 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
         $viewMode ='grid';
         $image = 'category_page_grid';
         $showDescription = false;
-        $rating = 'short';
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
     } else {
         $viewMode ='list';
         $image = 'category_page_list';
         $showDescription = true;
-        $rating = 'full';
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
     /**
      * Position for actions regarding image size changing in vde if needed
@@ -63,6 +63,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
     <div class="products wrapper <?php echo $viewMode; ?>">
         <?php $iterator = 1; ?>
         <ol class="products list items">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
                 <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
                 <div class="product">
@@ -77,28 +78,15 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                 <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
                             </a>
                         </strong>
-                        <?php if ($_product->getRatingSummary()): ?>
-                            <?php echo $this->getReviewsSummaryHtml($_product,$rating) ?>
-                        <?php endif; ?>
-                        <?php echo $this->getPriceHtml($_product, true) ?>
+                        <?php echo $this->getReviewsSummaryHtml($_product, $templateType); ?>
+                        <?php echo $this->getProductPrice($_product) ?>
                         <div class="product actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
                             <div class="primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position: ''; ?>>
                                 <?php if ($_product->isSaleable()): ?>
-                                    <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                                         <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
-                                                data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_product) ?>"}}'>
+                                                data-post='<?php echo $this->getAddToCartPostParams($_product); ?>'>
                                             <span><?php echo __('Add to Cart') ?></span>
                                         </button>
-                                    <?php else: ?>
-                                        <?php
-                                        $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                        $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
-                                        ?>
-                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
-                                                data-post='<?php echo $postData; ?>'>
-                                            <span><?php echo __('Add to Cart') ?></span>
-                                        </button>
-                                    <?php endif; ?>
                                 <?php else: ?>
                                     <?php if ($_product->getIsSalable()): ?>
                                         <p class="stock available"><span><?php echo __('In stock') ?></span></p>

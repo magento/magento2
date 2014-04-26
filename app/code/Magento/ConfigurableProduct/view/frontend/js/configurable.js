@@ -426,15 +426,27 @@
                 return true;
             }
             var price = 0,
-                oldPrice = 0;
+                oldPrice = 0,
+                    inclTaxPrice = 0,
+                        exclTaxPrice = 0;
             for (var i = this.options.settings.length - 1; i >= 0; i--) {
                 var selected = this.options.settings[i].options[this.options.settings[i].selectedIndex];
                 if (selected && selected.config) {
                     price += parseFloat(selected.config.price);
                     oldPrice += parseFloat(selected.config.oldPrice);
+                    inclTaxPrice += parseFloat(selected.config.inclTaxPrice);
+                    exclTaxPrice += parseFloat(selected.config.exclTaxPrice);
                 }
             }
-            this.element.trigger('changePrice', {'config': 'config', 'price': {'price': price, 'oldPrice': oldPrice} }).trigger('reloadPrice');
+            this.element.trigger('changePrice', {
+                'config': 'config',
+                'price': {
+                    'price': price,
+                    'oldPrice': oldPrice,
+                    'inclTaxPrice': inclTaxPrice,
+                    'exclTaxPrice': exclTaxPrice
+                }
+            }).trigger('reloadPrice');
             return price;
         }
     });

@@ -25,32 +25,32 @@
  */
 namespace Magento\Rule\Model\Action;
 
-use Magento\Data\Form;
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Quote rule action abstract
  */
-abstract class AbstractAction extends \Magento\Object implements ActionInterface
+abstract class AbstractAction extends \Magento\Framework\Object implements ActionInterface
 {
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Url
      */
     protected $_viewUrl;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Url $viewUrl,
-        \Magento\View\LayoutInterface $layout,
+        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\LayoutInterface $layout,
         array $data = array()
     ) {
         $this->_viewUrl = $viewUrl;

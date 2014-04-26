@@ -23,7 +23,7 @@
  */
 namespace Magento\Shipping\Model\Config\Source\Online;
 
-use Magento\Data\OptionSourceInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Shippers Modesource model

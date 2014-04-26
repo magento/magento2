@@ -32,7 +32,7 @@ namespace Magento\Customer\Controller;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\App\Action\Action
+class Review extends \Magento\Framework\App\Action\Action
 {
     /**
      * @return void

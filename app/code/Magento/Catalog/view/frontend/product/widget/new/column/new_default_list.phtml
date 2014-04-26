@@ -47,7 +47,7 @@
                                     <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                                 </a>
                             </strong>
-                            <?php echo $this->getPriceHtml($_product, true, '-widget-new-'.$suffix) ?>
+                            <?php echo $this->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
                             <div class="product actions">
                                 <div class="primary">
                                     <?php if($_product->isSaleable()): ?>

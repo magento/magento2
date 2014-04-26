@@ -29,36 +29,36 @@ namespace Magento\PageCache\Model\App\FrontController;
 class BuiltinPlugin
 {
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $config;
 
     /**
-     * @var \Magento\App\PageCache\Version
+     * @var \Magento\Framework\App\PageCache\Version
      */
     protected $version;
 
     /**
-     * @var \Magento\App\PageCache\Kernel
+     * @var \Magento\Framework\App\PageCache\Kernel
      */
     protected $kernel;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $state;
 
     /**
      * @param \Magento\PageCache\Model\Config $config
-     * @param \Magento\App\PageCache\Version $version
-     * @param \Magento\App\PageCache\Kernel $kernel
-     * @param \Magento\App\State $state
+     * @param \Magento\Framework\App\PageCache\Version $version
+     * @param \Magento\Framework\App\PageCache\Kernel $kernel
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        \Magento\App\PageCache\Version $version,
-        \Magento\App\PageCache\Kernel $kernel,
-        \Magento\App\State $state
+        \Magento\Framework\App\PageCache\Version $version,
+        \Magento\Framework\App\PageCache\Kernel $kernel,
+        \Magento\Framework\App\State $state
     ) {
         $this->config = $config;
         $this->version = $version;
@@ -67,15 +67,15 @@ class BuiltinPlugin
     }
 
     /**
-     * @param \Magento\App\FrontControllerInterface $subject
+     * @param \Magento\Framework\App\FrontControllerInterface $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
-     * @return false|\Magento\App\Response\Http
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return false|\Magento\Framework\App\Response\Http
      */
     public function aroundDispatch(
-        \Magento\App\FrontControllerInterface $subject,
+        \Magento\Framework\App\FrontControllerInterface $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
             $this->version->process();
@@ -98,14 +98,14 @@ class BuiltinPlugin
     /**
      * Add additional header for debug purpose
      *
-     * @param \Magento\App\Response\Http $response
+     * @param \Magento\Framework\App\Response\Http $response
      * @param string $name
      * @param string $value
      * @return void
      */
-    protected function addDebugHeader(\Magento\App\Response\Http $response, $name, $value)
+    protected function addDebugHeader(\Magento\Framework\App\Response\Http $response, $name, $value)
     {
-        if ($this->state->getMode() == \Magento\App\State::MODE_DEVELOPER) {
+        if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
             $response->setHeader($name, $value);
         }
     }

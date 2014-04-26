@@ -41,7 +41,7 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
      * Return path to directory for upload file
      *
      * @return string
-     * @throw \Magento\Model\Exception
+     * @throw \Magento\Framework\Model\Exception
      */
     protected function _getUploadDir()
     {

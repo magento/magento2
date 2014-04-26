@@ -25,7 +25,7 @@
  */
 namespace Magento\GoogleOptimizer\Model\Observer\Product;
 
-use Magento\Event\Observer;
+use Magento\Framework\Event\Observer;
 
 class Save extends \Magento\GoogleOptimizer\Model\Observer\AbstractSave
 {

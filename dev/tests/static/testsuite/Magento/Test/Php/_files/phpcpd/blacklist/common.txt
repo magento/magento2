@@ -12,7 +12,7 @@ Zend
 downloader
 dev
 Mysql
-lib/Magento/DB
+lib/Magento/Framework/DB
 sql
 data
 Magento/Paypal
@@ -49,6 +49,7 @@ Magento/Cms/Block/Adminhtml/Page/Edit
 Magento/Core/Model/Design/Backend
 Magento/Core/Model/Layout/File/Source/Override
 Magento/Core/Model/Store
+Magento/Store/Model
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
 Magento/Customer/Model/Config/Backend/Show
@@ -56,6 +57,7 @@ Magento/Customer/Model/Metadata
 Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
 Magento/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
 Magento/DesignEditor/Model/Url
+Magento/Directory/Model
 Magento/GiftMessage/Block/Adminhtml/Sales/Order
 Magento/ImportExport/Model
 Magento/Index/Model/Process
@@ -84,6 +86,7 @@ Magento/Sales/Model/Resource/Report/Order
 Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
 Magento/Shipping/Model/Carrier
 Magento/Sitemap/Block/Adminhtml/Edit
+Magento/Sitemap/Model/
 Magento/CatalogRule/Model
 Magento/Tax/Block/Checkout
 Magento/Tax/Model/Sales/Pdf
@@ -94,14 +97,14 @@ Magento/Webapi/Model
 Magento/Widget/Model/Widget/Instance
 Magento/Wishlist/Block
 Magento/Wishlist/Model
-lib/Magento/Archive
-lib/Magento/Connect/Channel
-lib/Magento/HTTP/Client
-lib/Magento/Acl
+lib/Magento/Framework/Archive
+lib/Magento/Framework/Connect/Channel
+lib/Magento/Framework/HTTP/Client
+lib/Magento/Framework/Acl
 lib/PEAR
 lib/phpseclib
-lib/Magento/Convert
-lib/Magento/App/Config
+lib/Magento/Framework/Convert
+lib/Magento/Framework/App/Config
 Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
@@ -115,7 +118,7 @@ Magento/Newsletter/Block/Adminhtml/Template/Grid/Renderer
 Magento/Newsletter/Model/Template/Filter
 Magento/Newsletter/Model/Resource/Subscriber
 Magento/CatalogInventory/Model/Resource/Stock/Item
-lib/Magento/Filesystem/Driver
+lib/Magento/Framework/Filesystem/Driver
 Magento/OfflineShipping/Model/Carrier
 Magento/Usps/Model/Carrier
 Magento/Dhl/Model

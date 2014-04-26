@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Theme\Model\Config">
         <arguments>
-            <argument name="configCache" xsi:type="object">Magento\App\Cache\Type\Config</argument>
-            <argument name="layoutCache" xsi:type="object">Magento\App\Cache\Type\Layout</argument>
+            <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="layoutCache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Uploader\Service">
@@ -45,7 +45,7 @@
             <argument name="schemaLocator" xsi:type="object">Magento\Theme\Model\Layout\Config\SchemaLocator</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Theme\Model\Layout\Config\Data" type="Magento\Config\Data">
+    <virtualType name="Magento\Theme\Model\Layout\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Theme\Model\Layout\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">page_layouts_config</argument>

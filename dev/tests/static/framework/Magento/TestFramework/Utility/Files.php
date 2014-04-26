@@ -121,7 +121,8 @@ class Files
     {
         $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$otherCode}/{$templates}";
         if (!isset(self::$_cache[$key])) {
-            $namespace = $module = $area = $theme = '*';
+            $namespace = $module = $area = '*';
+            $themePath = '*/*';
 
             $files = array();
             if ($appCode) {
@@ -136,7 +137,7 @@ class Files
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
                     self::getFiles(array("{$this->_path}/downloader"), '*.php'),
-                    self::getFiles(array("{$this->_path}/lib/{Mage,Magento,Varien}"), '*.php')
+                    self::getFiles(array("{$this->_path}/lib/Magento"), '*.php')
                 );
             }
             if ($templates) {
@@ -144,7 +145,7 @@ class Files
                     $files,
                     self::getFiles(array("{$this->_path}/app/code/{$namespace}/{$module}"), '*.phtml'),
                     self::getFiles(
-                        array("{$this->_path}/app/design/{$area}/{$theme}/{$namespace}_{$module}"),
+                        array("{$this->_path}/app/design/{$area}/{$themePath}/{$namespace}_{$module}"),
                         '*.phtml'
                     )
                 );
@@ -326,7 +327,7 @@ class Files
             'namespace' => '*',
             'module' => '*',
             'area' => '*',
-            'theme' => '*',
+            'theme_path' => '*/*',
             'include_code' => true,
             'include_design' => true
         );
@@ -349,7 +350,7 @@ class Files
                 );
             }
             if ($params['include_design']) {
-                $themeLayoutDir = "{$this->_path}/app/design/{$params['area']}/{$params['theme']}" .
+                $themeLayoutDir = "{$this->_path}/app/design/{$params['area']}/{$params['theme_path']}" .
                     "/{$params['namespace']}_{$params['module']}/layout";
                 $dirPatterns = array(
                     $themeLayoutDir,
@@ -384,7 +385,7 @@ class Files
      */
     public function getPageTypeFiles($incomingParams = array(), $asDataSet = true)
     {
-        $params = array('namespace' => '*', 'module' => '*', 'area' => '*', 'theme' => '*');
+        $params = array('namespace' => '*', 'module' => '*', 'area' => '*', 'theme_path' => '*/*');
         foreach (array_keys($params) as $key) {
             if (isset($incomingParams[$key])) {
                 $params[$key] = $incomingParams[$key];
@@ -419,11 +420,12 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $namespace = $module = $area = $theme = $skin = '*';
+        $namespace = $module = $area = $skin = '*';
+        $themePath = '*/*';
         $files = self::getFiles(
             array(
                 "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}",
-                "{$this->_path}/app/design/{$area}/{$theme}/skin/{$skin}",
+                "{$this->_path}/app/design/{$area}/{$themePath}/skin/{$skin}",
                 "{$this->_path}/pub/lib/{mage,varien}"
             ),
             '*.js'
@@ -444,10 +446,11 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $namespace = $module = $theme = '*';
+        $namespace = $module =  '*';
+        $themePath = '*/*';
         $paths = array(
             "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}",
-            "{$this->_path}/app/design/{$area}/{$theme}",
+            "{$this->_path}/app/design/{$area}/{$themePath}",
             "{$this->_path}/pub/lib/varien"
         );
         $files = self::getFiles($paths, '*.js');
@@ -599,6 +602,7 @@ class Files
             '/downloader/app/',
             '/downloader/lib/',
             '/dev/tools/',
+            '/dev/tools/performance_toolkit/framework/',
             '/dev/tests/api-functional/framework/',
             '/dev/tests/integration/framework/',
             '/dev/tests/integration/framework/tests/unit/testsuite/',
@@ -619,7 +623,7 @@ class Files
              * of file names
              * Note that realpath() automatically changes directory separator to the OS-native
              */
-            if (realpath($fullPath) == str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fullPath)) {
+            if (realpath($fullPath) == str_replace(array('/', '\\'), '/', $fullPath)) {
                 $fileContent = file_get_contents($fullPath);
                 if (strpos(
                     $fileContent,
@@ -683,7 +687,8 @@ class Files
      */
     protected function _getConfigFilesList($fileNamePattern, $appDir)
     {
-        return glob($this->_path . '/app/' . $appDir . "/*/*/etc/{$fileNamePattern}", GLOB_NOSORT | GLOB_BRACE);
+        $pathPattern = $appDir == 'design' ? "/*/*/*/etc/{$fileNamePattern}" : "/*/*/etc/{$fileNamePattern}";
+        return glob($this->_path . '/app/' . $appDir . $pathPattern, GLOB_NOSORT | GLOB_BRACE);
     }
 
     /**

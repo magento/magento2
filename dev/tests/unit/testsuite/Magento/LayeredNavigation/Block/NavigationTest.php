@@ -68,7 +68,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                 'visibilityFlag' => $this->visibilityFlagMock
             )
         );
-        $this->layoutMock = $this->getMock('\Magento\View\LayoutInterface', array(), array(), '', false);
+        $this->layoutMock = $this->getMock('\Magento\Framework\View\LayoutInterface', array(), array(), '', false);
     }
 
     public function testGetStateHtml()
@@ -121,7 +121,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock->expects($this->once())->method('getChildName')->will($this->returnValue('sample block'));
 
         $blockMock = $this->getMockForAbstractClass(
-            '\Magento\View\Element\AbstractBlock',
+            '\Magento\Framework\View\Element\AbstractBlock',
             array(), '', false
         );
         $clearUrl = 'very clear URL';

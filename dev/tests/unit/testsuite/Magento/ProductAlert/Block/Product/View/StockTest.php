@@ -32,27 +32,27 @@ namespace Magento\ProductAlert\Block\Product\View;
 class StockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
      */
     protected $_product;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Registry
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry
      */
     protected $_registry;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Stock
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Stock
      */
     protected $_block;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Layout
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
      */
     protected $_layout;
 
@@ -75,7 +75,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         );
         $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->_registry = $this->getMockBuilder(
-            'Magento\Registry'
+            'Magento\Framework\Registry'
         )->disableOriginalConstructor()->setMethods(
             array('registry')
         )->getMock();
@@ -83,7 +83,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             'Magento\ProductAlert\Block\Product\View\Stock',
             array('helper' => $this->_helper, 'registry' => $this->_registry)
         );
-        $this->_layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layout = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
     }
 
     public function testSetTemplateStockUrlAllowed()

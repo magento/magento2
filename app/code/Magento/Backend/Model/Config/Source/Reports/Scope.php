@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Reports;
 
-class Scope implements \Magento\Option\ArrayInterface
+class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Scope filter

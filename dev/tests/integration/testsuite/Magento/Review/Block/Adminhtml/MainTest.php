@@ -36,15 +36,15 @@ class MainTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Service\V1\CustomerAccountService $service */
         $service = $objectManager->create('Magento\Customer\Service\V1\CustomerAccountService');
         $customer = $service->authenticate('customer@example.com', 'password');
-        $request = $objectManager->get('Magento\App\RequestInterface');
+        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
         $request->setParam('customerId', $customer->getId());
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Review\Block\Adminhtml\Main');
         $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
-        /** @var \Magento\Escaper $escaper */
+        /** @var \Magento\Framework\Escaper $escaper */
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Escaper');
+            ->get('Magento\Framework\Escaper');
         $this->assertStringMatchesFormat(
             '%A' . __('All Reviews of Customer `%1`', $escaper->escapeHtml($customerName)) . '%A',
             $block->getHeaderHtml()

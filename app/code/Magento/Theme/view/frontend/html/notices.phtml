@@ -70,7 +70,7 @@
         </div>
     </div>
 <?php endif; ?>
-<?php if ($this->helper('Magento\Core\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if ($this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
     <div class="message global cookie" id="notice-cookie-block" style="display: none">
         <div class="content">
             <p>
@@ -91,9 +91,9 @@
                 "<?php echo $this->getViewFileUrl('Magento_Theme::js/notices.js')?>", function() {
                     $('#notice-cookie-block').cookieBlock({
                         cookieAllowButtonSelector: '#btn-cookie-allow',
-                        cookieName: '<?php echo \Magento\Core\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-                        cookieValue: '<?php echo $this->helper('Magento\Core\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-                        cookieLifetime: <?php echo $this->helper('Magento\Core\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+                        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+                        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+                        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
                         noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
                     });
                 });

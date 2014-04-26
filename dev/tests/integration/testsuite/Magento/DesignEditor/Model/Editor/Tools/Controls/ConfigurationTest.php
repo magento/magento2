@@ -34,7 +34,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     protected $_configFactory;
 
     /**
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
@@ -44,8 +44,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode(\Magento\View\DesignInterface::DEFAULT_AREA);
-        $this->_design = $objectManager->get('Magento\View\DesignInterface');
+        $objectManager->get('Magento\Framework\App\State')
+            ->setAreaCode(\Magento\Framework\View\DesignInterface::DEFAULT_AREA);
+        $this->_design = $objectManager->get('Magento\Framework\View\DesignInterface');
         $this->_design->setDesignTheme('vendor_test_child');
         $this->_configFactory = $objectManager->create('Magento\DesignEditor\Model\Editor\Tools\Controls\Factory');
     }
@@ -60,20 +61,20 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testLoadConfigurations($type, $controlName, $controlData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
         $relativePath = $objectManager->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getDirectoryRead(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->getRelativePath(
             __DIR__ . '/../../../_files/design'
         );
-        /** @var \Magento\App\Filesystem\DirectoryList $directoryList */
-        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
-        $directoryList->addDirectory(\Magento\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
+        /** @var \Magento\Framework\App\Filesystem\DirectoryList $directoryList */
+        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
         $designTheme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->getDesignTheme();
         $configuration = $this->_configFactory->create($type, $designTheme);
         $this->assertEquals($controlData, $configuration->getControlData($controlName));
@@ -155,7 +156,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $type = \Magento\DesignEditor\Model\Editor\Tools\Controls\Factory::TYPE_QUICK_STYLES;
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->getDesignTheme();
         $configuration = $this->_configFactory->create($type, $theme);
         $configuration->saveData($saveData);

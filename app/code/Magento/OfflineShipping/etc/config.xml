@@ -27,7 +27,7 @@
     <default>
         <carriers>
             <flatrate>
-                <active>0</active>
+                <active>1</active>
                 <sallowspecific>0</sallowspecific>
                 <model>Magento\OfflineShipping\Model\Carrier\Flatrate</model>
                 <name>Fixed</name>

@@ -53,17 +53,17 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Mail\Template\TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -73,28 +73,29 @@ class Observer
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Translate\Inline\StateInterface
+     * @var \Magento\Framework\Translate\Inline\StateInterface
      */
     protected $inlineTranslation;
 
     /**
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_importFactory = $importFactory;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
+        $this->_importFactory = $importFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
@@ -108,10 +109,12 @@ class Observer
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = array();
-        if (!$this->_coreStoreConfig->getConfig(
-            self::IMPORT_ENABLE
-        ) || !$this->_coreStoreConfig->getConfig(
-            self::CRON_STRING_PATH
+        if (!$this->_scopeConfig->getValue(
+            self::IMPORT_ENABLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) || !$this->_scopeConfig->getValue(
+            self::CRON_STRING_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return;
@@ -119,7 +122,10 @@ class Observer
 
         $errors = array();
         $rates = array();
-        $service = $this->_coreStoreConfig->getConfig(self::IMPORT_SERVICE);
+        $service = $this->_scopeConfig->getValue(
+            self::IMPORT_SERVICE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if ($service) {
             try {
                 $importModel = $this->_importFactory->create($service);
@@ -144,18 +150,27 @@ class Observer
             $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_TEMPLATE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             )->setTemplateOptions(
                 array(
-                    'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $this->_storeManager->getStore()->getId()
                 )
             )->setTemplateVars(
                 array('warnings' => join("\n", $importWarnings))
             )->setFrom(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             )->addTo(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_RECIPIENT,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
             );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();

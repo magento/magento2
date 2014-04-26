@@ -37,15 +37,15 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -150,7 +150,7 @@ class Template extends \Magento\Backend\App\Action
             )->setTemplateStyles(
                 $request->getParam('template_styles')
             )->setModifiedAt(
-                $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
             )->setOrigTemplateCode(
                 $request->getParam('orig_template_code')
             )->setOrigTemplateVariables(
@@ -162,7 +162,7 @@ class Template extends \Magento\Backend\App\Action
             }
 
             if ($request->getParam('_change_type_flag')) {
-                $template->setTemplateType(\Magento\App\TemplateTypesInterface::TYPE_TEXT);
+                $template->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
                 $template->setTemplateStyles('');
             }
 
@@ -198,13 +198,13 @@ class Template extends \Magento\Backend\App\Action
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('An error occurred while deleting email template data. Please review log and try again.')
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 // save data in session
                 $this->_objectManager->get(
                     'Magento\Backend\Model\Session'
@@ -254,7 +254,7 @@ class Template extends \Magento\Backend\App\Action
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($template->getData())
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
     }
 

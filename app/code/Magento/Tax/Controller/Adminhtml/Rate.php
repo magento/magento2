@@ -33,22 +33,22 @@
  */
 namespace Magento\Tax\Controller\Adminhtml;
 
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Rate extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\App\Response\Http\FileFactory
+     * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -132,7 +132,7 @@ class Rate extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('The tax rate has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                 return true;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -166,7 +166,7 @@ class Rate extends \Magento\Backend\App\Action
                     'code' => $rate->getCode()
                 )
             );
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(
@@ -275,7 +275,7 @@ class Rate extends \Magento\Backend\App\Action
                     $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
                     $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                     return true;
-                } catch (\Magento\Model\Exception $e) {
+                } catch (\Magento\Framework\Model\Exception $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
                     $this->messageManager->addError(__('Something went wrong deleting this rate.'));
@@ -312,7 +312,7 @@ class Rate extends \Magento\Backend\App\Action
             )->jsonEncode(
                 array('success' => true, 'error_message' => '')
             );
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(
@@ -337,7 +337,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -349,7 +349,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -408,7 +408,7 @@ class Rate extends \Magento\Backend\App\Action
                 $importHandler->importFromCsvFile($this->getRequest()->getFiles('import_rates_file'));
 
                 $this->messageManager->addSuccess(__('The tax rate has been imported.'));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Invalid file upload attempt'));
@@ -427,7 +427,7 @@ class Rate extends \Magento\Backend\App\Action
     public function exportPostAction()
     {
         /** start csv content and set template */
-        $headers = new \Magento\Object(
+        $headers = new \Magento\Framework\Object(
             array(
                 'code' => __('Code'),
                 'country_name' => __('Country'),
@@ -447,7 +447,7 @@ class Rate extends \Magento\Backend\App\Action
         $taxCalculationRateTitleDict = array();
 
         foreach ($this->_objectManager->create(
-            'Magento\Core\Model\Store'
+            'Magento\Store\Model\Store'
         )->getCollection()->setLoadDefault(
             false
         ) as $store) {
@@ -491,7 +491,7 @@ class Rate extends \Magento\Backend\App\Action
             $content .= $rate->toString($template) . "\n";
         }
         $this->_view->loadLayout();
-        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

@@ -36,10 +36,10 @@ class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Text will be truncated as specified in string_limit, truncate or 250 by default
      * Also it can be html-escaped and nl2br()
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $truncateLength = 250;
         // stringLength() is for legacy purposes

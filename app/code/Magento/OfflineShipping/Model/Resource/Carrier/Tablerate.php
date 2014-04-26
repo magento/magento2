@@ -31,7 +31,7 @@
  */
 namespace Magento\OfflineShipping\Model\Resource\Carrier;
 
-class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
+class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Import table rates website ID
@@ -98,17 +98,17 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
     protected $_conditionFullNames = array();
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -130,29 +130,29 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Filesystem instance
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Logger $logger
-     * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Logger $logger,
-        \Magento\App\ConfigInterface $coreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         parent::__construct($resource);
         $this->_coreConfig = $coreConfig;
@@ -253,13 +253,13 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Upload table rate file and import data from it
      *
-     * @param \Magento\Object $object
-     * @throws \Magento\Model\Exception
+     * @param \Magento\Framework\Object $object
+     * @throws \Magento\Framework\Model\Exception
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      */
-    public function uploadAndImport(\Magento\Object $object)
+    public function uploadAndImport(\Magento\Framework\Object $object)
     {
         if (empty($_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'])) {
             return $this;
@@ -273,7 +273,7 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
         $this->_importErrors = array();
         $this->_importedRows = 0;
 
-        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         $path = $tmpDirectory->getRelativePath($csvFile);
         $stream = $tmpDirectory->openFile($path);
 
@@ -281,7 +281,7 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
         $headers = $stream->readCsv();
         if ($headers === false || count($headers) < 5) {
             $stream->close();
-            throw new \Magento\Model\Exception(__('Please correct Table Rates File Format.'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct Table Rates File Format.'));
         }
 
         if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
@@ -327,15 +327,15 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
             }
             $this->_saveImportData($importData);
             $stream->close();
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $adapter->rollback();
             $stream->close();
-            throw new \Magento\Model\Exception($e->getMessage());
+            throw new \Magento\Framework\Model\Exception($e->getMessage());
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
             $this->_logger->logException($e);
-            throw new \Magento\Model\Exception(__('Something went wrong while importing table rates.'));
+            throw new \Magento\Framework\Model\Exception(__('Something went wrong while importing table rates.'));
         }
 
         $adapter->commit();
@@ -345,7 +345,7 @@ class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
                 'We couldn\'t import this file because of these errors: %1',
                 implode(" \n", $this->_importErrors)
             );
-            throw new \Magento\Model\Exception($error);
+            throw new \Magento\Framework\Model\Exception($error);
         }
 
         return $this;

@@ -69,8 +69,8 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                                     </a>
                                 </strong>
                                 <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
-                                <?php if ($_item->getRatingSummary() && $rating): ?>
-                                    <?php echo $this->getReviewsSummaryHtml($_item,$rating) ?>
+                                <?php if ($rating): ?>
+                                    <?php echo $this->getReviewsSummaryHtml($_item, $rating) ?>
                                 <?php endif; ?>
                                 <?php if($showWishlist || $showCompare || $showCart): ?>
                                     <div class="product actions">

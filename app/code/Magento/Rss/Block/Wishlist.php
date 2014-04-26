@@ -63,7 +63,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
@@ -74,7 +74,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
@@ -87,13 +87,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         $this->_coreData = $coreData;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_rssFactory = $rssFactory;
-        parent::__construct(
-            $context,
-            $httpContext,
-            $productFactory,
-            $data,
-            $priceBlockTypes
-        );
+        parent::__construct($context, $httpContext, $productFactory, $data, $priceBlockTypes);
     }
 
     /**
@@ -138,7 +132,10 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
                 array('code' => $this->_getWishlist()->getSharingCode())
             );
             $title = $this->_getTitle();
-            $lang = $this->_storeConfig->getConfig('general/locale/code');
+            $lang = $this->_scopeConfig->getValue(
+                'general/locale/code',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             $rssObj->_addHeader(
                 array(
                     'title' => $title,
@@ -149,7 +146,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
                 )
             );
 
-            /** @var $wishlistItem \Magento\Wishlist\Model\Item*/
+            /** @var $wishlistItem \Magento\Wishlist\Model\Item */
             foreach ($this->getWishlistItems() as $wishlistItem) {
                 /* @var $product \Magento\Catalog\Model\Product */
                 $product = $wishlistItem->getProduct();

@@ -30,7 +30,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\App\Config\ValueInterface;
+use Magento\Framework\App\Config\ValueInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
@@ -38,13 +38,13 @@ use Magento\Catalog\Model\Resource\Eav\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Fulltext as ModelFulltext;
 use Magento\CatalogSearch\Model\Resource\Indexer\Fulltext as IndexerFulltext;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Model\Resource\AbstractResource;
-use Magento\Core\Model\Store;
-use Magento\Core\Model\Store\Group;
-use Magento\Core\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Data\Collection\Db;
 use Magento\Index\Model\Event;
 use Magento\Index\Model\Indexer\AbstractIndexer;
 use Magento\Index\Model\Process;
@@ -222,35 +222,41 @@ class Fulltext extends AbstractIndexer
             } else {
                 $result = false;
             }
-        } else if ($entity == Store::ENTITY) {
-            if ($event->getType() == Event::TYPE_DELETE) {
-                $result = true;
-            } else {
-                /* @var $store Store */
-                $store = $event->getDataObject();
-                if ($store && $store->isObjectNew()) {
+        } else {
+            if ($entity == Store::ENTITY) {
+                if ($event->getType() == Event::TYPE_DELETE) {
                     $result = true;
                 } else {
-                    $result = false;
+                    /* @var $store Store */
+                    $store = $event->getDataObject();
+                    if ($store && $store->isObjectNew()) {
+                        $result = true;
+                    } else {
+                        $result = false;
+                    }
+                }
+            } else {
+                if ($entity == Group::ENTITY) {
+                    /* @var $storeGroup Group */
+                    $storeGroup = $event->getDataObject();
+                    if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
+                        $result = true;
+                    } else {
+                        $result = false;
+                    }
+                } else {
+                    if ($entity == ValueInterface::ENTITY) {
+                        $data = $event->getDataObject();
+                        if ($data && in_array($data->getPath(), $this->_relatedConfigSettings)) {
+                            $result = $data->isValueChanged();
+                        } else {
+                            $result = false;
+                        }
+                    } else {
+                        $result = parent::matchEvent($event);
+                    }
                 }
             }
-        } else if ($entity == Group::ENTITY) {
-            /* @var $storeGroup Group */
-            $storeGroup = $event->getDataObject();
-            if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
-                $result = true;
-            } else {
-                $result = false;
-            }
-        } else if ($entity == ValueInterface::ENTITY) {
-            $data = $event->getDataObject();
-            if ($data && in_array($data->getPath(), $this->_relatedConfigSettings)) {
-                $result = $data->isValueChanged();
-            } else {
-                $result = false;
-            }
-        } else {
-            $result = parent::matchEvent($event);
         }
 
         $event->addNewData(self::EVENT_MATCH_RESULT_KEY, $result);
@@ -341,7 +347,7 @@ class Fulltext extends AbstractIndexer
                 $event->addNewData('catalogsearch_delete_product_id', $product->getId());
                 break;
             case Event::TYPE_MASS_ACTION:
-                /* @var $actionObject \Magento\Object */
+                /* @var $actionObject \Magento\Framework\Object */
                 $actionObject = $event->getDataObject();
 
                 $reindexData = array();
@@ -430,72 +436,87 @@ class Fulltext extends AbstractIndexer
 
         if (!empty($data['catalogsearch_fulltext_reindex_all'])) {
             $this->reindexAll();
-        } else if (!empty($data['catalogsearch_delete_product_id'])) {
-            $productId = $data['catalogsearch_delete_product_id'];
+        } else {
+            if (!empty($data['catalogsearch_delete_product_id'])) {
+                $productId = $data['catalogsearch_delete_product_id'];
 
-            if (!$this->_isProductComposite($productId)) {
-                $parentIds = $this->_getResource()->getRelationsByChild($productId);
-                if (!empty($parentIds)) {
-                    $this->_getIndexer()->rebuildIndex(null, $parentIds);
+                if (!$this->_isProductComposite($productId)) {
+                    $parentIds = $this->_getResource()->getRelationsByChild($productId);
+                    if (!empty($parentIds)) {
+                        $this->_getIndexer()->rebuildIndex(null, $parentIds);
+                    }
                 }
-            }
 
-            $this->_getIndexer()->cleanIndex(null, $productId)->getResource()->resetSearchResults(null, $productId);
-        } elseif (!empty($data['catalogsearch_update_product_id'])) {
-            $productId = $data['catalogsearch_update_product_id'];
-            $productIds = array($productId);
+                $this->_getIndexer()->cleanIndex(
+                    null,
+                    $productId
+                )->getResource()->resetSearchResults(
+                    null,
+                    $productId
+                );
+            } elseif (!empty($data['catalogsearch_update_product_id'])) {
+                $productId = $data['catalogsearch_update_product_id'];
+                $productIds = array($productId);
 
-            if (!$this->_isProductComposite($productId)) {
-                $parentIds = $this->_getResource()->getRelationsByChild($productId);
-                if (!empty($parentIds)) {
-                    $productIds = array_merge($productIds, $parentIds);
+                if (!$this->_isProductComposite($productId)) {
+                    $parentIds = $this->_getResource()->getRelationsByChild($productId);
+                    if (!empty($parentIds)) {
+                        $productIds = array_merge($productIds, $parentIds);
+                    }
                 }
-            }
 
-            $this->_getIndexer()->rebuildIndex(null, $productIds);
-        } else if (!empty($data['catalogsearch_product_ids'])) {
-            // mass action
-            $productIds = $data['catalogsearch_product_ids'];
+                $this->_getIndexer()->rebuildIndex(null, $productIds);
+            } else {
+                if (!empty($data['catalogsearch_product_ids'])) {
+                    // mass action
+                    $productIds = $data['catalogsearch_product_ids'];
 
-            if (!empty($data['catalogsearch_website_ids'])) {
-                $websiteIds = $data['catalogsearch_website_ids'];
-                $actionType = $data['catalogsearch_action_type'];
+                    if (!empty($data['catalogsearch_website_ids'])) {
+                        $websiteIds = $data['catalogsearch_website_ids'];
+                        $actionType = $data['catalogsearch_action_type'];
 
-                foreach ($websiteIds as $websiteId) {
-                    foreach ($this->_storeManager->getWebsite($websiteId)->getStoreIds() as $storeId) {
-                        if ($actionType == 'remove') {
-                            $this->_getIndexer()
-                                ->cleanIndex($storeId, $productIds)
-                                ->getResource()->resetSearchResults($storeId, $productIds);
-                        } elseif ($actionType == 'add') {
-                            $this->_getIndexer()
-                                ->rebuildIndex($storeId, $productIds);
+                        foreach ($websiteIds as $websiteId) {
+                            foreach ($this->_storeManager->getWebsite($websiteId)->getStoreIds() as $storeId) {
+                                if ($actionType == 'remove') {
+                                    $this->_getIndexer()->cleanIndex(
+                                        $storeId,
+                                        $productIds
+                                    )->getResource()->resetSearchResults(
+                                        $storeId,
+                                        $productIds
+                                    );
+                                } elseif ($actionType == 'add') {
+                                    $this->_getIndexer()->rebuildIndex($storeId, $productIds);
+                                }
+                            }
                         }
+                    }
+                    if (isset($data['catalogsearch_status'])) {
+                        $status = $data['catalogsearch_status'];
+                        if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+                            $this->_getIndexer()->rebuildIndex(null, $productIds);
+                        } else {
+                            $this->_getIndexer()->cleanIndex(
+                                null,
+                                $productIds
+                            )->getResource()->resetSearchResults(
+                                null,
+                                $productIds
+                            );
+                        }
+                    }
+                    if (isset($data['catalogsearch_force_reindex'])) {
+                        $this->_getIndexer()->rebuildIndex(null, $productIds)->resetSearchResults();
+                    }
+                } else {
+                    if (isset($data['catalogsearch_category_update_product_ids'])) {
+                        $productIds = $data['catalogsearch_category_update_product_ids'];
+                        $categoryIds = $data['catalogsearch_category_update_category_ids'];
+
+                        $this->_getIndexer()->updateCategoryIndex($productIds, $categoryIds);
                     }
                 }
             }
-            if (isset($data['catalogsearch_status'])) {
-                $status = $data['catalogsearch_status'];
-                if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
-                    $this->_getIndexer()->rebuildIndex(null, $productIds);
-                } else {
-                    $this->_getIndexer()->cleanIndex(
-                        null,
-                        $productIds
-                    )->getResource()->resetSearchResults(
-                        null,
-                        $productIds
-                    );
-                }
-            }
-            if (isset($data['catalogsearch_force_reindex'])) {
-                $this->_getIndexer()->rebuildIndex(null, $productIds)->resetSearchResults();
-            }
-        } else if (isset($data['catalogsearch_category_update_product_ids'])) {
-            $productIds = $data['catalogsearch_category_update_product_ids'];
-            $categoryIds = $data['catalogsearch_category_update_category_ids'];
-
-            $this->_getIndexer()->updateCategoryIndex($productIds, $categoryIds);
         }
     }
 

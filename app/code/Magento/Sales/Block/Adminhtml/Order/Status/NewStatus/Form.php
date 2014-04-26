@@ -50,7 +50,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $model = $this->_coreRegistry->registry('current_status');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
@@ -94,7 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add Fieldset with Store labels
      *
      * @param \Magento\Sales\Model\Order\Status $model
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return void
      */
     protected function _addStoresFieldset($model, $form)

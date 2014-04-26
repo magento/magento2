@@ -38,7 +38,7 @@ class Bootstrap
     private static $_instance;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     private static $_objectManager;
 
@@ -51,12 +51,12 @@ class Bootstrap
      * Set self instance for static access
      *
      * @param \Magento\TestFramework\Helper\Bootstrap $instance
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public static function setInstance(\Magento\TestFramework\Helper\Bootstrap $instance)
     {
         if (self::$_instance) {
-            throw new \Magento\Exception('Helper instance cannot be redefined.');
+            throw new \Magento\Framework\Exception('Helper instance cannot be redefined.');
         }
         self::$_instance = $instance;
     }
@@ -65,12 +65,12 @@ class Bootstrap
      * Self instance getter
      *
      * @return \Magento\TestFramework\Helper\Bootstrap
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public static function getInstance()
     {
         if (!self::$_instance) {
-            throw new \Magento\Exception('Helper instance is not defined yet.');
+            throw new \Magento\Framework\Exception('Helper instance is not defined yet.');
         }
         return self::$_instance;
     }
@@ -151,7 +151,7 @@ class Bootstrap
     /**
      * Retrieve object manager
      *
-     * @return \Magento\ObjectManager
+     * @return \Magento\Framework\ObjectManager
      */
     public static function getObjectManager()
     {
@@ -161,9 +161,9 @@ class Bootstrap
     /**
      * Set object manager
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public static function setObjectManager(\Magento\ObjectManager $objectManager)
+    public static function setObjectManager(\Magento\Framework\ObjectManager $objectManager)
     {
         self::$_objectManager = $objectManager;
     }
@@ -184,7 +184,7 @@ class Bootstrap
      */
     public function loadArea($areaCode)
     {
-        self::$_objectManager->get('Magento\App\State')->setAreaCode($areaCode);
-        self::$_objectManager->get('Magento\App\AreaList')->getArea($areaCode)->load();
+        self::$_objectManager->get('Magento\Framework\App\State')->setAreaCode($areaCode);
+        self::$_objectManager->get('Magento\Framework\App\AreaList')->getArea($areaCode)->load();
     }
 }

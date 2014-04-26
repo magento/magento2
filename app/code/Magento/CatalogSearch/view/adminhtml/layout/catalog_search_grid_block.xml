@@ -90,16 +90,12 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Synonym</argument>
                         <argument name="index" xsi:type="string">synonym_for</argument>
-                        <argument name="align" xsi:type="string">left</argument>
-                        <argument name="width" xsi:type="string">160px</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">redirect</argument>
-                        <argument name="width" xsi:type="string">200px</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="display_in_terms">
@@ -107,8 +103,6 @@
                         <argument name="header" xsi:type="string" translate="true">Suggested Terms</argument>
                         <argument name="sortable" xsi:type="string">1</argument>
                         <argument name="index" xsi:type="string">display_in_terms</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="array">
                             <item name="yes" xsi:type="array">
@@ -126,7 +120,6 @@
                     <arguments>
                         <argument name="type" xsi:type="string">action</argument>
                         <argument name="header" xsi:type="string" translate="true">Action</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="filter" xsi:type="string">0</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="index" xsi:type="string">query_id</argument>

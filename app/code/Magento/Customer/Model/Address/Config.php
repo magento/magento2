@@ -32,7 +32,7 @@ namespace Magento\Customer\Model\Address;
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Config\Data
+class Config extends \Magento\Framework\Config\Data
 {
     const DEFAULT_ADDRESS_RENDERER = 'Magento\Customer\Block\Address\Renderer\DefaultRenderer';
 
@@ -50,7 +50,7 @@ class Config extends \Magento\Config\Data
     /**
      * Current store instance
      *
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store = null;
 
@@ -63,7 +63,7 @@ class Config extends \Magento\Config\Data
     protected $_defaultTypes = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -73,28 +73,36 @@ class Config extends \Magento\Config\Data
     protected $_addressHelper;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\Customer\Model\Address\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Config\CacheInterface $cache,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $cacheId = 'address_format'
     ) {
         parent::__construct($reader, $cache, $cacheId);
         $this->_storeManager = $storeManager;
         $this->_addressHelper = $addressHelper;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
      * Set store
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return $this
      */
     public function setStore($store)
@@ -106,7 +114,7 @@ class Config extends \Magento\Config\Data
     /**
      * Retrieve store
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -129,7 +137,7 @@ class Config extends \Magento\Config\Data
             $this->_types[$storeId] = array();
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new \Magento\Object();
+                $type = new \Magento\Framework\Object();
                 if (isset(
                     $typeConfig['escapeHtml']
                 ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
@@ -144,7 +152,7 @@ class Config extends \Magento\Config\Data
                 )->setTitle(
                     (string)$typeConfig['title']
                 )->setDefaultFormat(
-                    $store->getConfig($path)
+                    $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
                 )->setEscapeHtml(
                     $escapeHtml
                 );
@@ -166,14 +174,14 @@ class Config extends \Magento\Config\Data
     /**
      * Retrieve default address format
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new \Magento\Object();
+            $this->_defaultTypes[$storeId] = new \Magento\Framework\Object();
             $this->_defaultTypes[$storeId]->setCode(
                 'default'
             )->setDefaultFormat(
@@ -197,7 +205,7 @@ class Config extends \Magento\Config\Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormatByCode($typeCode)
     {

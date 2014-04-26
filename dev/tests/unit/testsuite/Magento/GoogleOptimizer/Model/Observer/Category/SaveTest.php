@@ -72,12 +72,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeId)
         );
-        $event = $this->getMock('Magento\Event', array('getCategory'), array(), '', false);
+        $event = $this->getMock('Magento\Framework\Event', array('getCategory'), array(), '', false);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_categoryMock));
-        $this->_eventObserverMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
+        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', array(), array(), '', false);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
         $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', array(), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(

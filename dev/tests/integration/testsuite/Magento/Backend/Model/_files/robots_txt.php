@@ -24,10 +24,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-/** @var \Magento\Filesystem\Directory\Write $rootDirectory */
+/** @var \Magento\Framework\Filesystem\Directory\Write $rootDirectory */
 $rootDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\App\Filesystem'
+    'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(
-    \Magento\App\Filesystem::ROOT_DIR
+    \Magento\Framework\App\Filesystem::ROOT_DIR
 );
 $rootDirectory->copyFile($rootDirectory->getRelativePath(__DIR__ . '/robots.txt'), 'robots.txt');

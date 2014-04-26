@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shipping\Packaging">
         <arguments>
             <argument name="sourceSizeModel" xsi:type="object">Magento\Usps\Model\Source\Size</argument>
@@ -35,12 +35,5 @@
             <argument name="sourceSizeModel" xsi:type="object">Magento\Usps\Model\Source\Size</argument>
         </arguments>
         <plugin name="usps" type="Magento\Usps\Block\Adminhtml\Order\Packaging\Plugin\DisplayGirth"/>
-    </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="usps_setup" xsi:type="string">Magento\Core\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
     </type>
 </config>

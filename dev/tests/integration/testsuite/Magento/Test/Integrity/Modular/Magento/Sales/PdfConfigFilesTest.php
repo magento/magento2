@@ -37,7 +37,7 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
         );
         $schemaFile = $schemaLocator->getPerFileSchema();
 
-        $dom = new \Magento\Config\Dom(file_get_contents($file));
+        $dom = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $dom->validate($schemaFile, $errors);
         $this->assertTrue($result, print_r($errors, true));
     }
@@ -52,7 +52,7 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     public function testMergedFormat()
     {
-        $validationState = $this->getMock('Magento\Config\ValidationStateInterface');
+        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $validationState->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 
         /** @var \Magento\Sales\Model\Order\Pdf\Config\Reader $reader */

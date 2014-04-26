@@ -52,12 +52,12 @@ abstract class AbstractAction
     /**
      * Resource instance
      *
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -71,9 +71,9 @@ abstract class AbstractAction
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Suffix for drop table (uses on flat table rename)
@@ -95,7 +95,7 @@ abstract class AbstractAction
     protected $_coreData;
 
     /**
-     * @var \Magento\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -134,10 +134,10 @@ abstract class AbstractAction
     protected $_flatTableBuilder;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param Processor $flatProductProcessor
@@ -145,10 +145,10 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $flatProductProcessor,
@@ -158,7 +158,7 @@ abstract class AbstractAction
         $this->_resource = $resource;
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_productIndexerHelper = $productHelper;
         $this->_productType = $productType;
         $this->_connection = $resource->getConnection('default');
@@ -281,7 +281,7 @@ abstract class AbstractAction
     {
         if ($this->_productTypes === null) {
             $this->_productTypes = array();
-            $productEmulator = new \Magento\Object();
+            $productEmulator = new \Magento\Framework\Object();
             foreach (array_keys($this->_productType->getTypes()) as $typeId) {
                 $productEmulator->setTypeId($typeId);
                 $this->_productTypes[$typeId] = $this->_productType->factory($productEmulator);
@@ -316,7 +316,7 @@ abstract class AbstractAction
                 unset($columns['entity_id']);
                 unset($columns['child_id']);
                 unset($columns['is_child']);
-                /** @var $select \Magento\DB\Select */
+                /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     array('t' => $this->_productIndexerHelper->getTable($relation->getTable())),
                     array($relation->getParentFieldName(), $relation->getChildFieldName(), new \Zend_Db_Expr('1'))
@@ -380,7 +380,7 @@ abstract class AbstractAction
                 }
 
                 $entitySelect = new \Zend_Db_Expr($select->__toString());
-                /** @var $select \Magento\DB\Select */
+                /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     array('e' => $this->_productIndexerHelper->getFlatTableName($storeId)),
                     null

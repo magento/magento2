@@ -28,10 +28,10 @@ namespace Magento\Authorizenet\Helper;
 /**
  * Authorize.net Data Helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
+class Data extends \Magento\Framework\App\Helper\AbstractHelper implements HelperInterface
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -41,13 +41,13 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
     protected $_orderFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         parent::__construct($context);
@@ -64,7 +64,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      */
     protected function _getUrl($route, $params = array())
     {
-        $params['_type'] = \Magento\UrlInterface::URL_TYPE_LINK;
+        $params['_type'] = \Magento\Framework\UrlInterface::URL_TYPE_LINK;
         if (isset($params['is_secure'])) {
             $params['_secure'] = (bool)$params['is_secure'];
         } elseif ($this->_storeManager->getStore()->isCurrentlySecure()) {
@@ -196,7 +196,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      * @param \Magento\Payment\Model\Info $payment
      * @param string $requestType
      * @param string $lastTransactionId
-     * @param \Magento\Object $card
+     * @param \Magento\Framework\Object $card
      * @param bool|float $amount
      * @param bool|string $exception
      * @return bool|string
@@ -225,7 +225,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      * @param \Magento\Payment\Model\Info $payment
      * @param string $requestType
      * @param string $lastTransactionId
-     * @param \Magento\Object $card
+     * @param \Magento\Framework\Object $card
      * @param bool|float $amount
      * @param bool|string $exception
      * @param bool|string $additionalMessage
@@ -314,10 +314,10 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
     /**
      * Get payment method step html
      *
-     * @param \Magento\App\ViewInterface $view
+     * @param \Magento\Framework\App\ViewInterface $view
      * @return string
      */
-    public function getPaymentMethodsHtml(\Magento\App\ViewInterface $view)
+    public function getPaymentMethodsHtml(\Magento\Framework\App\ViewInterface $view)
     {
         $layout = $view->getLayout();
         $update = $layout->getUpdate();
@@ -339,7 +339,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
         return $this->_storeManager->getStore(
             $storeId
         )->getBaseUrl(
-            \Magento\UrlInterface::URL_TYPE_LINK
+            \Magento\Framework\UrlInterface::URL_TYPE_LINK
         ) . 'authorizenet/directpost_payment/response';
     }
 }

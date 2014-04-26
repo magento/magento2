@@ -33,7 +33,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $reader = $this->getMockBuilder(
             'Magento\Cron\Model\Config\Reader\Xml'
         )->disableOriginalConstructor()->getMock();
-        $cache = $this->getMock('Magento\Config\CacheInterface');
+        $cache = $this->getMock('Magento\Framework\Config\CacheInterface');
         $dbReader = $this->getMockBuilder(
             'Magento\Cron\Model\Config\Reader\Db'
         )->disableOriginalConstructor()->getMock();

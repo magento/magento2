@@ -93,7 +93,7 @@ $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
                                 <?php endforeach; ?>
                             </select>
                         </td>
-                        <?php if ($girthEnabled == 1): ?>
+                        <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
                         <td>
                             <select name="package_size" onchange="packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);">
                                 <?php foreach ($sizeSource as $key => $value): ?>

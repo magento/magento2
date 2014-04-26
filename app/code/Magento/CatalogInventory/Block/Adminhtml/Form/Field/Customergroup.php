@@ -28,7 +28,7 @@
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class Customergroup extends \Magento\View\Element\Html\Select
+class Customergroup extends \Magento\Framework\View\Element\Html\Select
 {
     /**
      * Customer groups cache
@@ -45,27 +45,27 @@ class Customergroup extends \Magento\View\Element\Html\Select
     protected $_addGroupAllOption = true;
 
     /**
-     * Customer group collection factory
+     * Customer group service
      *
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupCollectionFactory;
+    protected $_groupService;
 
     /**
      * Construct
      *
-     * @param \Magento\View\Element\Context $context
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $groupCollectionFactory,
+        \Magento\Framework\View\Element\Context $context,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         array $data = array()
     ) {
         parent::__construct($context, $data);
 
-        $this->_groupCollectionFactory = $groupCollectionFactory;
+        $this->_groupService = $groupService;
     }
 
     /**
@@ -78,9 +78,9 @@ class Customergroup extends \Magento\View\Element\Html\Select
     {
         if (is_null($this->_customerGroups)) {
             $this->_customerGroups = array();
-            foreach ($this->_groupCollectionFactory->create() as $item) {
-                /* @var $item \Magento\Customer\Model\Group */
-                $this->_customerGroups[$item->getId()] = $item->getCustomerGroupCode();
+            foreach ($this->_groupService->getGroups() as $item) {
+                /* @var $item \Magento\Customer\Service\V1\Data\CustomerGroup */
+                $this->_customerGroups[$item->getId()] = $item->getCode();
             }
         }
         if (!is_null($groupId)) {
@@ -107,7 +107,10 @@ class Customergroup extends \Magento\View\Element\Html\Select
     {
         if (!$this->getOptions()) {
             if ($this->_addGroupAllOption) {
-                $this->addOption(\Magento\Customer\Model\Group::CUST_GROUP_ALL, __('ALL GROUPS'));
+                $this->addOption(
+                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL,
+                    __('ALL GROUPS')
+                );
             }
             foreach ($this->_getCustomerGroups() as $groupId => $groupLabel) {
                 $this->addOption($groupId, addslashes($groupLabel));

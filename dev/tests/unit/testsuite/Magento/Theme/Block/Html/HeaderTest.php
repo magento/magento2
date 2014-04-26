@@ -33,13 +33,13 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLogoSrc()
     {
-        $filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
-        $mediaDirectory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array('getConfig'), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $mediaDirectory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $urlBuilder = $this->getMock('Magento\UrlInterface');
+        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
 
-        $storeConfig->expects($this->once())->method('getConfig')->will($this->returnValue('default/image.gif'));
+        $scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('default/image.gif'));
         $urlBuilder->expects(
             $this->once()
         )->method(
@@ -63,7 +63,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $arguments = array(
-            'storeConfig' => $storeConfig,
+            'scopeConfig' => $scopeConfig,
             'urlBuilder' => $urlBuilder,
             'fileStorageHelper' => $helper,
             'filesystem' => $filesystem

@@ -30,15 +30,15 @@ namespace Magento\Backend\Block;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Template extends \Magento\View\Element\Template
+class Template extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -48,12 +48,12 @@ class Template extends \Magento\View\Element\Template
     protected $_backendSession;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $formKey;
 
     /**
-     * @var \Magento\Code\NameBuilder
+     * @var \Magento\Framework\Code\NameBuilder
      */
     protected $nameBuilder;
 
@@ -96,13 +96,17 @@ class Template extends \Magento\View\Element\Template
         if ($moduleName === null) {
             $moduleName = $this->getModuleName();
         }
-        return !$this->_storeConfig->getConfigFlag('advanced/modules_disable_output/' . $moduleName);
+
+        return !$this->_scopeConfig->isSetFlag(
+            'advanced/modules_disable_output/' . $moduleName,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Make this public so that templates can use it properly with template engine
      *
-     * @return \Magento\AuthorizationInterface
+     * @return \Magento\Framework\AuthorizationInterface
      */
     public function getAuthorization()
     {
@@ -118,5 +122,15 @@ class Template extends \Magento\View\Element\Template
     {
         $this->_eventManager->dispatch('adminhtml_block_html_before', array('block' => $this));
         return parent::_toHtml();
+    }
+
+    /**
+     * Return toolbar block instance
+     *
+     * @return bool|\Magento\Framework\View\Element\BlockInterface
+     */
+    public function getToolbar()
+    {
+        return $this->getLayout()->getBlock('page.actions.toolbar');
     }
 }

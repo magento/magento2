@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <block class="Magento\View\Element\Template" name="root" output="1" template="Magento_Newsletter::template/preview.phtml">
+    <block class="Magento\Framework\View\Element\Template" name="root" output="1" template="Magento_Newsletter::template/preview.phtml">
         <block class="Magento\Newsletter\Block\Adminhtml\Template\Preview" name="content" as="content"/>
     </block>
 </layout>

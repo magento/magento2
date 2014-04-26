@@ -29,7 +29,7 @@ use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 /**
  * Customer dashboard block
  */
-class Dashboard extends \Magento\View\Element\Template
+class Dashboard extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Newsletter\Model\Subscriber
@@ -59,7 +59,7 @@ class Dashboard extends \Magento\View\Element\Template
     /**
      * Constructor
      *
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerAccountServiceInterface $customerService
@@ -67,7 +67,7 @@ class Dashboard extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerAccountServiceInterface $customerAccountService,
@@ -164,9 +164,8 @@ class Dashboard extends \Magento\View\Element\Template
     public function getSubscriptionObject()
     {
         if (is_null($this->_subscription)) {
-            $this->_subscription = $this->_createSubscriber()->loadByCustomer(
-                $this->_customerSession->getCustomerId()
-            );
+            $this->_subscription =
+                $this->_createSubscriber()->loadByCustomerId($this->_customerSession->getCustomerId());
         }
 
         return $this->_subscription;

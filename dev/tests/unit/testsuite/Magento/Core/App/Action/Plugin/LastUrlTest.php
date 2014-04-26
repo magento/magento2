@@ -27,13 +27,13 @@ class LastUrlTest extends \PHPUnit_Framework_TestCase
 {
     public function testAfterDispatch()
     {
-        $session = $this->getMock('\Magento\Core\Model\Session', array('setLastUrl'), array(), '', false);
-        $subjectMock = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
+        $session = $this->getMock('\Magento\Framework\Session\Generic', array('setLastUrl'), array(), '', false);
+        $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
         $closureMock = function () {
             return 'result';
         };
-        $requestMock = $this->getMock('Magento\App\RequestInterface');
-        $url = $this->getMock('\Magento\Url', array(), array(), '', false);
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $url = $this->getMock('\Magento\Framework\Url', array(), array(), '', false);
         $plugin = new \Magento\Core\App\Action\Plugin\LastUrl($session, $url);
         $session->expects($this->once())->method('setLastUrl')->with('http://example.com');
         $url->expects(

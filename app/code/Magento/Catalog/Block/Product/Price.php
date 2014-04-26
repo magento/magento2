@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-class Price extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
+class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * @var null
@@ -48,7 +48,7 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -67,17 +67,17 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -87,24 +87,24 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
     protected $_cartHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Registry $registry
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Registry $registry,
-        \Magento\Stdlib\String $string,
-        \Magento\Math\Random $mathRandom,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = array()
     ) {
@@ -163,6 +163,7 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @deprecated
      */
     public function getTierPrices($product = null)
     {

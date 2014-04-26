@@ -56,7 +56,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerMetadataService = Bootstrap::getObjectManager()->create(
             'Magento\Customer\Service\V1\CustomerMetadataService'
         );
-        $customerBuilder = new CustomerBuilder($customerMetadataService);
+        $customerBuilder = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            [
+                'metadataService' => $customerMetadataService
+            ]
+        );
         $expected = $this->_getCustomerDataArray();
         $customerBuilder->populateWithArray($expected);
 
@@ -76,7 +81,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerMetadataService = Bootstrap::getObjectManager()->create(
             'Magento\Customer\Service\V1\CustomerMetadataService'
         );
-        $customerBuilder = new CustomerBuilder($customerMetadataService);
+        $customerBuilder = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            [
+                'metadataService' => $customerMetadataService
+            ]
+        );
         $expected = $this->_getCustomerDataArray();
 
         $customerBuilder->populateWithArray($expected);
@@ -311,7 +321,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             Customer::EMAIL => 'qa@example.com',
             Customer::FIRSTNAME => 'Joe',
             Customer::GENDER => 'Male',
-            Customer::GROUP_ID => \Magento\Customer\Service\V1\CustomerGroupService::NOT_LOGGED_IN_ID,
+            Customer::GROUP_ID => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
             Customer::LASTNAME => 'Dou',
             Customer::MIDDLENAME => 'Ivan',
             Customer::PREFIX => 'Dr.',

@@ -40,7 +40,7 @@ use Magento\Sales\Model\Quote\Address;
  * @method mixed getCustomerGroupId()
  * @method \Magento\SalesRule\Model\Validator setCustomerGroupId($id)
  */
-class Validator extends \Magento\Model\AbstractModel
+class Validator extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Rule source collection
@@ -121,29 +121,29 @@ class Validator extends \Magento\Model\AbstractModel
     protected $_stopFurtherRules = false;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_usageFactory = $usageFactory;
@@ -222,7 +222,7 @@ class Validator extends \Magento\Model\AbstractModel
                     // check per customer usage limit
                     $customerId = $address->getQuote()->getCustomerId();
                     if ($customerId && $coupon->getUsagePerCustomer()) {
-                        $couponUsage = new \Magento\Object();
+                        $couponUsage = new \Magento\Framework\Object();
                         $this->_usageFactory->create()->loadByCustomerCoupon(
                             $couponUsage,
                             $customerId,
@@ -773,12 +773,12 @@ class Validator extends \Magento\Model\AbstractModel
     /**
      * @param int $key
      * @return array
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getRuleItemTotalsInfo($key)
     {
         if (empty($this->_rulesItemTotals[$key])) {
-            throw new \Magento\Model\Exception(__('Item totals are not set for the rule.'));
+            throw new \Magento\Framework\Model\Exception(__('Item totals are not set for the rule.'));
         }
 
         return $this->_rulesItemTotals[$key];

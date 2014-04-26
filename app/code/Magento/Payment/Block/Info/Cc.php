@@ -38,12 +38,12 @@ class Cc extends \Magento\Payment\Block\Info
     protected $_paymentConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
         array $data = array()
     ) {
@@ -93,7 +93,7 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Retrieve CC expiration date
      *
-     * @return \Magento\Stdlib\DateTime\Date
+     * @return \Magento\Framework\Stdlib\DateTime\Date
      */
     public function getCcExpDate()
     {
@@ -106,8 +106,8 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Prepare credit card related payment info
      *
-     * @param \Magento\Object|array $transport
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object|array $transport
+     * @return \Magento\Framework\Object
      */
     protected function _prepareSpecificInformation($transport = null)
     {

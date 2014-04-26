@@ -73,12 +73,12 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -103,14 +103,14 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_configFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Session\Generic $paypalSession
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\Api\StandardFactory $apiStandardFactory
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
@@ -120,14 +120,14 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Session\Generic $paypalSession,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\Api\StandardFactory $apiStandardFactory,
         \Magento\Paypal\Model\CartFactory $cartFactory,
@@ -142,7 +142,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_apiStandardFactory = $apiStandardFactory;
         $this->_cartFactory = $cartFactory;
         $this->_configFactory = $configFactory;
-        parent::__construct($eventManager, $paymentData, $coreStoreConfig, $logAdapterFactory, $data);
+        parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
     }
 
     /**
@@ -159,7 +159,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Get paypal session namespace
      *
-     * @return \Magento\Session\Generic
+     * @return \Magento\Framework\Session\Generic
      */
     public function getSession()
     {
@@ -190,7 +190,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      * Create main block for standard form
      *
      * @param string $name
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function createFormBlock($name)
     {

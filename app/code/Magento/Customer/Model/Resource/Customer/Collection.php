@@ -40,7 +40,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
     const CUSTOMER_MODEL_NAME = 'Magento\Customer\Model\Customer';
 
     /**
-     * @var \Magento\Object\Copy\Config
+     * @var \Magento\Framework\Object\Copy\Config
      */
     protected $_fieldsetConfig;
 
@@ -51,15 +51,15 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Object\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param string $modelName
      * 
@@ -67,15 +67,15 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Object\Copy\Config $fieldsetConfig,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
@@ -176,7 +176,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {

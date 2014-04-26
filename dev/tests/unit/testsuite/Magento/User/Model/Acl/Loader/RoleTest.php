@@ -55,7 +55,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false, false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false);
         $this->_groupFactoryMock = $this->getMock(
             'Magento\User\Model\Acl\Role\GroupFactory',
             array('create'),
@@ -82,10 +82,10 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         );
 
 
-        $selectMock = $this->getMock('Magento\DB\Select', array(), array(), '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', array(), array(), '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
 
-        $this->_adapterMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $this->_adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
         $this->_adapterMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
 
         $this->_resourceMock->expects(
@@ -122,7 +122,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->_groupFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '1'));
         $this->_roleFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '2'));
 
-        $aclMock = $this->getMock('Magento\Acl');
+        $aclMock = $this->getMock('Magento\Framework\Acl');
         $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);
         $aclMock->expects($this->at(2))->method('addRole')->with($this->anything(), '1');
 
@@ -142,7 +142,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->_roleFactoryMock->expects($this->never())->method('getModelInstance');
         $this->_groupFactoryMock->expects($this->never())->method('getModelInstance');
 
-        $aclMock = $this->getMock('Magento\Acl');
+        $aclMock = $this->getMock('Magento\Framework\Acl');
         $aclMock->expects($this->at(0))->method('hasRole')->with('1')->will($this->returnValue(true));
         $aclMock->expects($this->at(1))->method('addRoleParent')->with('1', '2');
 

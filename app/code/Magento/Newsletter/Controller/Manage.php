@@ -25,13 +25,12 @@
  */
 namespace Magento\Newsletter\Controller;
 
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Customers newsletter subscription controller
  */
-class Manage extends \Magento\App\Action\Action
+class Manage extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer session
@@ -46,33 +45,65 @@ class Manage extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     */
+    protected $_customerAccountService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder
+     */
+    protected $_customerDetailsBuilder;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     */
+    protected $_customerBuilder;
+
+    /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     */
+    protected $_subscriberFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder
+     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder,
+        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct($context);
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_customerDetailsBuilder = $customerDetailsBuilder;
+        $this->_customerBuilder = $customerBuilder;
+        $this->_subscriberFactory = $subscriberFactory;
     }
 
     /**
      * Check customer authentication for some actions
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -109,19 +140,29 @@ class Manage extends \Magento\App\Action\Action
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->_redirect('customer/account/');
         }
-        try {
-            $this->_customerSession->getCustomer()->setStoreId(
-                $this->_storeManager->getStore()->getId()
-            )->setIsSubscribed(
-                (bool)$this->getRequest()->getParam('is_subscribed', false)
-            )->save();
-            if ((bool)$this->getRequest()->getParam('is_subscribed', false)) {
-                $this->messageManager->addSuccess(__('We saved the subscription.'));
-            } else {
-                $this->messageManager->addSuccess(__('We removed the subscription.'));
-            }
-        } catch (\Exception $e) {
+
+        $customerId = $this->_customerSession->getCustomerId();
+        if (is_null($customerId)) {
             $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+        } else {
+            try {
+                $customer = $this->_customerAccountService->getCustomer($customerId);
+                $storeId = $this->_storeManager->getStore()->getId();
+                $customerDetails = $this->_customerDetailsBuilder->setAddresses(null)
+                    ->setCustomer($this->_customerBuilder->populate($customer)->setStoreId($storeId)->create())
+                    ->create();
+                $this->_customerAccountService->updateCustomer($customerDetails);
+
+                if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
+                    $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
+                    $this->messageManager->addSuccess(__('We saved the subscription.'));
+                } else {
+                    $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
+                    $this->messageManager->addSuccess(__('We removed the subscription.'));
+                }
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+            }
         }
         $this->_redirect('customer/account/');
     }

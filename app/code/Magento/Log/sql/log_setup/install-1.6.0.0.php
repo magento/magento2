@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 
@@ -36,37 +36,37 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_customer')
 )->addColumn(
     'log_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Log ID'
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true),
     'Visitor ID'
 )->addColumn(
     'customer_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'default' => '0'),
     'Customer ID'
 )->addColumn(
     'login_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Login Time'
 )->addColumn(
     'logout_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Logout Time'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false),
     'Store ID'
@@ -85,25 +85,25 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_quote')
 )->addColumn(
     'quote_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'),
     'Quote ID'
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true),
     'Visitor ID'
 )->addColumn(
     'created_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Creation Time'
 )->addColumn(
     'deleted_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Deletion Time'
@@ -119,37 +119,37 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_summary')
 )->addColumn(
     'summary_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Summary ID'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false),
     'Store ID'
 )->addColumn(
     'type_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true),
     'Type ID'
 )->addColumn(
     'visitor_count',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'default' => '0'),
     'Visitor Count'
 )->addColumn(
     'customer_count',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'default' => '0'),
     'Customer Count'
 )->addColumn(
     'add_date',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Date'
@@ -165,25 +165,25 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_summary_type')
 )->addColumn(
     'type_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Type ID'
 )->addColumn(
     'type_code',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     64,
     array('nullable' => true, 'default' => null),
     'Type Code'
 )->addColumn(
     'period',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Period'
 )->addColumn(
     'period_type',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     6,
     array('nullable' => false, 'default' => 'MINUTE'),
     'Period Type'
@@ -199,19 +199,19 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_url')
 )->addColumn(
     'url_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'),
     'URL ID'
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true),
     'Visitor ID'
 )->addColumn(
     'visit_time',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Visit Time'
@@ -230,19 +230,19 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_url_info')
 )->addColumn(
     'url_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'URL ID'
 )->addColumn(
     'url',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => true, 'default' => null),
     'URL'
 )->addColumn(
     'referer',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Referrer'
@@ -258,37 +258,37 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_visitor')
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Visitor ID'
 )->addColumn(
     'session_id',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     64,
     array('nullable' => true, 'default' => null),
     'Session ID'
 )->addColumn(
     'first_visit_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'First Visit Time'
 )->addColumn(
     'last_visit_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array('nullable' => false),
     'Last Visit Time'
 )->addColumn(
     'last_url_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Last URL ID'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false),
     'Store ID'
@@ -304,43 +304,43 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_visitor_info')
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'),
     'Visitor ID'
 )->addColumn(
     'http_referer',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'HTTP Referrer'
 )->addColumn(
     'http_user_agent',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'HTTP User-Agent'
 )->addColumn(
     'http_accept_charset',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'HTTP Accept-Charset'
 )->addColumn(
     'http_accept_language',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'HTTP Accept-Language'
 )->addColumn(
     'server_addr',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array(),
     'Server Address'
 )->addColumn(
     'remote_addr',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array(),
     'Remote Address'
@@ -356,43 +356,43 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('log_visitor_online')
 )->addColumn(
     'visitor_id',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Visitor ID'
 )->addColumn(
     'visitor_type',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     1,
     array('nullable' => false),
     'Visitor Type'
 )->addColumn(
     'remote_addr',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     null,
     array('nullable' => false),
     'Remote Address'
 )->addColumn(
     'first_visit_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'First Visit Time'
 )->addColumn(
     'last_visit_at',
-    \Magento\DB\Ddl\Table::TYPE_TIMESTAMP,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
     array(),
     'Last Visit Time'
 )->addColumn(
     'customer_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true),
     'Customer ID'
 )->addColumn(
     'last_url',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Last URL'

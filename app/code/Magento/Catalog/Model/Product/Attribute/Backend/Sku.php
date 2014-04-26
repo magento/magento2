@@ -47,15 +47,15 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\String $string
      */
-    public function __construct(\Magento\Logger $logger, \Magento\Stdlib\String $string)
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\String $string)
     {
         $this->string = $string;
         parent::__construct($logger);
@@ -65,7 +65,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate SKU
      *
      * @param Product $object
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -77,7 +77,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
-            throw new \Magento\Model\Exception(__('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH));
+            throw new \Magento\Framework\Model\Exception(__('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH));
         }
         return true;
     }

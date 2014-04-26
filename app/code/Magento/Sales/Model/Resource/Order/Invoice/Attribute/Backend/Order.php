@@ -37,7 +37,7 @@ class Order extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Method is invoked before save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)

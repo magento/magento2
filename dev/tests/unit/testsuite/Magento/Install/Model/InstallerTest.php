@@ -38,29 +38,29 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     /**
      * Application chache model
      *
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
     /**
      * Application config model
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -75,11 +75,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_cache = $this->getMock('\Magento\App\CacheInterface', array(), array(), '', false);
-        $this->_config = $this->getMock('\Magento\App\ReinitableConfigInterface', array(), array(), '', false);
-        $this->_cacheState = $this->getMock('\Magento\App\Cache\StateInterface', array(), array(), '', false);
-        $this->_cacheTypeList = $this->getMock('\Magento\App\Cache\TypeListInterface', array(), array(), '', false);
-        $this->_appState = $this->getMock('\Magento\App\State', array(), array(), '', false);
+        $this->_cache = $this->getMock('\Magento\Framework\App\CacheInterface', array(), array(), '', false);
+        $this->_config =
+            $this->getMock('\Magento\Framework\App\Config\ReinitableConfigInterface', array(), array(), '', false);
+        $this->_cacheState = $this->getMock('\Magento\Framework\App\Cache\StateInterface', array(), array(), '', false);
+        $this->_cacheTypeList =
+            $this->getMock('\Magento\Framework\App\Cache\TypeListInterface', array(), array(), '', false);
+        $this->_appState = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $this->_installerConfig = $this->getMock(
             '\Magento\Install\Model\Installer\Config',
             array(),

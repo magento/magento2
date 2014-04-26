@@ -56,7 +56,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
         $this->visibilityMock = $this->getMock('Magento\Catalog\Model\Product\Visibility', array(), array(), '', false);
         $this->catalogConfigMock = $this->getMock('\Magento\Catalog\Model\Config', array(), array(), '', false);
         $this->helperMock = $this->getMock('\Magento\CatalogSearch\Helper\Data', array(), array(), '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
 
         $this->model = new CollectionFilter(
             $this->catalogConfigMock, $this->helperMock, $this->storeManagerMock, $this->visibilityMock

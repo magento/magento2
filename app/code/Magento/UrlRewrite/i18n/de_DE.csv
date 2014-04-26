@@ -1,0 +1,2 @@
+"Anchor symbol (#) is not supported in url rewrite suffix","Das Doppelkreuz (#) wird beim URL-Überschreiben-Suffix nicht unterstützt"
+"Two and more slashes together are not permitted in url rewrite suffix","Zwei und mehr zusammenhängende Schrägstriche sind im URL-Rewrite-Suffix nicht zulässig"

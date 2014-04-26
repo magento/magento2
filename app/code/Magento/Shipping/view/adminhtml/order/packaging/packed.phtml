@@ -34,8 +34,8 @@
             <div class="popup-window-content">
             <?php foreach ($this->getPackages() as $packageId => $package): ?>
                 <div class="package">
-                    <?php $package = new \Magento\Object($package) ?>
-                    <?php $params = new \Magento\Object($package->getParams()) ?>
+                    <?php $package = new \Magento\Framework\Object($package) ?>
+                    <?php $params = new \Magento\Framework\Object($package->getParams()) ?>
                     <div class="package-number popup-fieldset-title">
                         <div class="title"><?php echo __('Package') . ' ' . $packageId ?></div>
                     </div>
@@ -147,7 +147,7 @@
                             </thead>
                             <tbody id="">
                             <?php foreach($package->getItems() as $itemId => $item) : ?>
-                                <?php $item = new \Magento\Object($item) ?>
+                                <?php $item = new \Magento\Framework\Object($item) ?>
                                 <tr title="#" id="" class="">
                                     <td class="col-product name">
                                         <?php echo $item->getName(); ?>

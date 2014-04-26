@@ -34,7 +34,7 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartInterface
+class Cart extends \Magento\Framework\Object implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
      * Shopping cart items summary quantity(s)
@@ -53,19 +53,19 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -90,34 +90,34 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     protected $_customerSession;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->_resourceCart = $resourceCart;
@@ -255,7 +255,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             }
 
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
-            $info = new \Magento\Object($info);
+            $info = new \Magento\Framework\Object($info);
             if (is_null($qtyFlag)) {
                 $info->setQty($orderItem->getQtyOrdered());
             } else {
@@ -272,7 +272,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      *
      * @param   Product|int|string $productInfo
      * @return  Product
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getProduct($productInfo)
     {
@@ -294,7 +294,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             $product->getWebsiteIds()
         )
         ) {
-            throw new \Magento\Model\Exception(__('We can\'t find the product.'));
+            throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
         }
         return $product;
     }
@@ -302,17 +302,17 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     /**
      * Get request for product add to cart procedure
      *
-     * @param   \Magento\Object|int|array $requestInfo
-     * @return  \Magento\Object
+     * @param   \Magento\Framework\Object|int|array $requestInfo
+     * @return  \Magento\Framework\Object
      */
     protected function _getProductRequest($requestInfo)
     {
-        if ($requestInfo instanceof \Magento\Object) {
+        if ($requestInfo instanceof \Magento\Framework\Object) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new \Magento\Object(array('qty' => $requestInfo));
+            $request = new \Magento\Framework\Object(array('qty' => $requestInfo));
         } else {
-            $request = new \Magento\Object($requestInfo);
+            $request = new \Magento\Framework\Object($requestInfo);
         }
 
         if (!$request->hasQty()) {
@@ -326,9 +326,9 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      * Add product to shopping cart (quote)
      *
      * @param int|Product $productInfo
-     * @param \Magento\Object|int|array $requestInfo
+     * @param \Magento\Framework\Object|int|array $requestInfo
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function addProduct($productInfo, $requestInfo = null)
     {
@@ -351,7 +351,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         if ($productId) {
             try {
                 $result = $this->getQuote()->addProduct($product, $request);
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->_checkoutSession->setUseNotice(false);
                 $result = $e->getMessage();
             }
@@ -367,10 +367,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
                 if ($this->_checkoutSession->getUseNotice() === null) {
                     $this->_checkoutSession->setUseNotice(true);
                 }
-                throw new \Magento\Model\Exception($result);
+                throw new \Magento\Framework\Model\Exception($result);
             }
         } else {
-            throw new \Magento\Model\Exception(__('The product does not exist.'));
+            throw new \Magento\Framework\Model\Exception(__('The product does not exist.'));
         }
 
         $this->_eventManager->dispatch(
@@ -469,7 +469,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      *
      * @param  array $data
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function updateItems($data)
     {
@@ -494,7 +494,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
                 $itemInQuote = $this->getQuote()->getItemById($item->getId());
 
                 if (!$itemInQuote && $item->getHasError()) {
-                    throw new \Magento\Model\Exception($item->getMessage());
+                    throw new \Magento\Framework\Model\Exception($item->getMessage());
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -606,7 +606,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         }
 
         if ($quoteId && $this->_summaryQty === null) {
-            if ($this->_coreStoreConfig->getConfig('checkout/cart_link/use_qty')) {
+            if ($this->_scopeConfig->getValue('checkout/cart_link/use_qty', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
                 $this->_summaryQty = $this->getItemsQty();
             } else {
                 $this->_summaryQty = $this->getItemsCount();
@@ -637,14 +637,14 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
 
     /**
      * Update item in shopping cart (quote)
-     * $requestInfo - either qty (int) or buyRequest in form of array or \Magento\Object
+     * $requestInfo - either qty (int) or buyRequest in form of array or \Magento\Framework\Object
      * $updatingParams - information on how to perform update, passed to Quote->updateItem() method
      *
      * @param int $itemId
-     * @param int|array|\Magento\Object $requestInfo
-     * @param null|array|\Magento\Object $updatingParams
+     * @param int|array|\Magento\Framework\Object $requestInfo
+     * @param null|array|\Magento\Framework\Object $updatingParams
      * @return \Magento\Sales\Model\Quote\Item|string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      *
      * @see \Magento\Sales\Model\Quote::updateItem()
      */
@@ -653,7 +653,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         try {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
-                throw new \Magento\Model\Exception(__('This quote item does not exist.'));
+                throw new \Magento\Framework\Model\Exception(__('This quote item does not exist.'));
             }
             $productId = $item->getProduct()->getId();
             $product = $this->_getProduct($productId);
@@ -672,7 +672,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             }
 
             $result = $this->getQuote()->updateItem($itemId, $request, $updatingParams);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->_checkoutSession->setUseNotice(false);
             $result = $e->getMessage();
         }
@@ -684,7 +684,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             if ($this->_checkoutSession->getUseNotice() === null) {
                 $this->_checkoutSession->setUseNotice(true);
             }
-            throw new \Magento\Model\Exception($result);
+            throw new \Magento\Framework\Model\Exception($result);
         }
 
         $this->_eventManager->dispatch(

@@ -32,13 +32,14 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Checkout\Block\Cart\Sidebar'
         );
-        $this->_block->addChild('renderer.list', '\Magento\View\Element\RendererList');
+        $this->_block->addChild('renderer.list', '\Magento\Framework\View\Element\RendererList');
         $this->_block->getChildBlock(
             'renderer.list'
         )->addChild(

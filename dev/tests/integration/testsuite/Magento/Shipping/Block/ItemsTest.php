@@ -30,9 +30,11 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetCommentsHtml()
     {
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $block = $layout->createBlock('Magento\Shipping\Block\Items', 'block');
-        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'shipment_comments', 'block');
+        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'shipment_comments', 'block');
         $shipment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Order\Shipment'
         );

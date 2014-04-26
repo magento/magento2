@@ -24,23 +24,23 @@
 namespace Magento\TestFramework\App\Arguments;
 
 /**
- * Proxy class for \Magento\App\Arguments
+ * Proxy class for \Magento\Framework\App\Arguments
  */
-class Proxy extends \Magento\App\Arguments
+class Proxy extends \Magento\Framework\App\Arguments
 {
     /**
      * Proxied instance
      *
-     * @var \Magento\App\Arguments
+     * @var \Magento\Framework\App\Arguments
      */
     protected $subject;
 
     /**
      * Proxy constructor
      *
-     * @param \Magento\App\Arguments $subject
+     * @param \Magento\Framework\App\Arguments $subject
      */
-    public function __construct(\Magento\App\Arguments $subject)
+    public function __construct(\Magento\Framework\App\Arguments $subject)
     {
         $this->setSubject($subject);
     }
@@ -48,9 +48,9 @@ class Proxy extends \Magento\App\Arguments
     /**
      * Set new subject to be proxied
      *
-     * @param \Magento\App\Arguments $subject
+     * @param \Magento\Framework\App\Arguments $subject
      */
-    public function setSubject(\Magento\App\Arguments $subject)
+    public function setSubject(\Magento\Framework\App\Arguments $subject)
     {
         $this->subject = $subject;
     }

@@ -1,0 +1,65 @@
+///**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+// ==============================================
+// Typography related mixins
+// ==============================================
+
+.font-size-rems(@px-size) {
+    @rem-size: @px-size / @base-font-size;
+    font-size: ~"@{px-size}px";
+    font-size: ~"@{rem-size}rem";
+}
+
+.font-size-ems(@target-px-size, @context-px-size:@base-font-size) {
+    font-size: (@target-px-size / @context-px-size) * 1em;
+}
+
+.font-face( @family-name, @font-path, @font-weight:normal, @font-style:normal, @include-svg:false ) when not (@include-svg) {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.eot');
+        src: url('@{font-path}.eot?#iefix') format('embedded-opentype'), url('@{font-path}.woff') format('woff'), url('@{font-path}.ttf') format('truetype');
+        font-weight: @font-weight;
+        font-style: @font-style;
+    }
+}
+
+.font-face( @family-name, @font-path, @font-weight:normal, @font-style:normal, @include-svg:false ) when (@include-svg) {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.eot');
+        src: url('@{font-path}.eot?#iefix') format('embedded-opentype'), url('@{font-path}.woff') format('woff'), url('@{font-path}.ttf') format('truetype'), url('@{font-path}.svg#@{family-name}') format('svg');
+        font-weight: @font-weight;
+        font-style: @font-style;
+    }
+}
+
+.wrap-words() {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}

@@ -33,7 +33,7 @@ namespace Magento\Backend\Model;
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Object
+class Config extends \Magento\Framework\Object
 {
     /**
      * Config data for sections
@@ -45,7 +45,7 @@ class Config extends \Magento\Object
     /**
      * Event dispatcher
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
@@ -59,21 +59,21 @@ class Config extends \Magento\Object
     /**
      * Application config
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_appConfig;
 
     /**
      * Global factory
      *
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_objectFactory;
 
     /**
      * TransactionFactory
      *
-     * @var \Magento\DB\TransactionFactory
+     * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
 
@@ -87,33 +87,33 @@ class Config extends \Magento\Object
     /**
      * Config data factory
      *
-     * @var \Magento\Core\Model\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Config\Structure $configStructure
-     * @param \Magento\DB\TransactionFactory $transactionFactory
+     * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
-     * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\App\ConfigInterface $config,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Config\Structure $configStructure,
-        \Magento\DB\TransactionFactory $transactionFactory,
+        \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,
-        \Magento\Core\Model\Config\ValueFactory $configValueFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         parent::__construct($data);
@@ -135,8 +135,7 @@ class Config extends \Magento\Object
      */
     public function save()
     {
-        $this->_validate();
-        $this->_getScope();
+        $this->initScope();
 
         $sectionId = $this->getSection();
         $groups = $this->getGroups();
@@ -147,9 +146,9 @@ class Config extends \Magento\Object
         $oldConfig = $this->_getConfig(true);
 
         $deleteTransaction = $this->_transactionFactory->create();
-        /* @var $deleteTransaction \Magento\DB\Transaction */
+        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
         $saveTransaction = $this->_transactionFactory->create();
-        /* @var $saveTransaction \Magento\DB\Transaction */
+        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
 
         // Extends for old config data
         $extraOldGroups = array();
@@ -172,7 +171,7 @@ class Config extends \Magento\Object
             $saveTransaction->save();
 
             // re-init configuration
-            $this->_eventManager->dispatch('application_process_reinit_config');
+            $this->_appConfig->reinit();
             $this->_storeManager->reinitStores();
 
             // website and store codes can be used in event implementation, so set them as well
@@ -182,7 +181,7 @@ class Config extends \Magento\Object
             );
         } catch (\Exception $e) {
             // re-init configuration
-            $this->_eventManager->dispatch('application_process_reinit_config');
+            $this->_appConfig->reinit();
             $this->_storeManager->reinitStores();
             throw $e;
         }
@@ -199,8 +198,8 @@ class Config extends \Magento\Object
      * @param string $sectionPath
      * @param array &$extraOldGroups
      * @param array &$oldConfig
-     * @param \Magento\DB\Transaction $saveTransaction
-     * @param \Magento\DB\Transaction $deleteTransaction
+     * @param \Magento\Framework\DB\Transaction $saveTransaction
+     * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
      */
     protected function _processGroup(
@@ -210,14 +209,13 @@ class Config extends \Magento\Object
         $sectionPath,
         array &$extraOldGroups,
         array &$oldConfig,
-        \Magento\DB\Transaction $saveTransaction,
-        \Magento\DB\Transaction $deleteTransaction
+        \Magento\Framework\DB\Transaction $saveTransaction,
+        \Magento\Framework\DB\Transaction $deleteTransaction
     ) {
         $groupPath = $sectionPath . '/' . $groupId;
-        $website = $this->getWebsite();
-        $store = $this->getStore();
         $scope = $this->getScope();
         $scopeId = $this->getScopeId();
+        $scopeCode = $this->getScopeCode();
         /**
          *
          * Map field names if they were cloned
@@ -257,7 +255,7 @@ class Config extends \Magento\Object
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Field */
                 $field = $this->_configStructure->getElement($groupPath . '/' . $originalFieldId);
 
-                /** @var \Magento\App\Config\ValueInterface $backendModel */
+                /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
                 $backendModel = $field->hasBackendModel() ? $field
                     ->getBackendModel() : $this
                     ->_configValueFactory
@@ -267,10 +265,9 @@ class Config extends \Magento\Object
                     'field' => $fieldId,
                     'groups' => $groups,
                     'group_id' => $group->getId(),
-                    'store_code' => $store,
-                    'website_code' => $website,
                     'scope' => $scope,
                     'scope_id' => $scopeId,
+                    'scope_code' => $scopeCode,
                     'field_config' => $field->getData(),
                     'fieldset_data' => $fieldsetData
                 );
@@ -345,8 +342,7 @@ class Config extends \Magento\Object
     public function load()
     {
         if (is_null($this->_configData)) {
-            $this->_validate();
-            $this->_getScope();
+            $this->initScope();
             $this->_configData = $this->_getConfig(false);
         }
         return $this->_configData;
@@ -370,11 +366,11 @@ class Config extends \Magento\Object
     }
 
     /**
-     * Validate isset required parameters
-     *
+     * Get scope name and scopeId
+     * @todo refactor to scope resolver
      * @return void
      */
-    protected function _validate()
+    private function initScope()
     {
         if (is_null($this->getSection())) {
             $this->setSection('');
@@ -385,15 +381,8 @@ class Config extends \Magento\Object
         if (is_null($this->getStore())) {
             $this->setStore('');
         }
-    }
 
-    /**
-     * Get scope name and scopeId
-     *
-     * @return void
-     */
-    protected function _getScope()
-    {
+
         if ($this->getStore()) {
             $scope = 'stores';
             $store = $this->_storeManager->getStore($this->getStore());
@@ -434,7 +423,7 @@ class Config extends \Magento\Object
      * Set correct scope if isSingleStoreMode = true
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $fieldConfig
-     * @param \Magento\App\Config\ValueInterface $dataObject
+     * @param \Magento\Framework\App\Config\ValueInterface $dataObject
      * @return void
      */
     protected function _checkSingleStoreMode(
@@ -450,6 +439,7 @@ class Config extends \Magento\Object
             $singleStoreWebsite = array_shift($websites);
             $dataObject->setScope('websites');
             $dataObject->setWebsiteCode($singleStoreWebsite->getCode());
+            $dataObject->setScopeCode($singleStoreWebsite->getCode());
             $dataObject->setScopeId($singleStoreWebsite->getId());
         }
     }
@@ -460,7 +450,7 @@ class Config extends \Magento\Object
      * @param string $path
      * @param null|bool &$inherit
      * @param null|array $configData
-     * @return \Magento\Simplexml\Element
+     * @return \Magento\Framework\Simplexml\Element
      */
     public function getConfigDataValue($path, &$inherit = null, $configData = null)
     {

@@ -37,7 +37,7 @@ class ContextPlugin
     protected $toolbarModel;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -48,12 +48,12 @@ class ContextPlugin
     
     /**
      * @param \Magento\Catalog\Model\Product\ProductList\Toolbar $toolbarModel
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
      */
     public function __construct(
         \Magento\Catalog\Model\Product\ProductList\Toolbar $toolbarModel,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Product\ProductList $productListHelper
     ) {
         $this->toolbarModel = $toolbarModel;
@@ -62,15 +62,15 @@ class ContextPlugin
     }
 
     /**
-     * @param \Magento\App\Action\Action $subject
+     * @param \Magento\Framework\App\Action\Action $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      */
     public function aroundDispatch(
-        \Magento\App\Action\Action $subject,
+        \Magento\Framework\App\Action\Action $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->httpContext->setValue(
             Data::CONTEXT_CATALOG_SORT_DIRECTION,

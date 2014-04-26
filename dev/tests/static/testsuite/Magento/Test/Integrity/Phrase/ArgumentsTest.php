@@ -55,7 +55,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
         $rootDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         $this->blackList = array(
             // the file below is the only file where strings are translated without corresponding arguments
-            $rootDir . str_replace('/', DIRECTORY_SEPARATOR, '/app/code/Magento/Core/Helper/Js.php')
+            $rootDir . '/app/code/Magento/Translation/Model/Js/DataProvider.php'
         );
     }
 

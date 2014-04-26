@@ -34,10 +34,10 @@
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
             <?php if (!$this->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init='{"truncateOptions":[]}'<?php endif; ?>>
+                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip box"<?php endif; ?>>
                     <?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                    <div class="truncated_full_value">
+                    <div class="tooltip content">
                         <dl class="item options">
                             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
                             <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>

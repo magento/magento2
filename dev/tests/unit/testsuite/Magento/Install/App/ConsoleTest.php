@@ -36,7 +36,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     protected $_installerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Filesystem\DirectoryList\Verification
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList\Verification
      */
     protected $_dirVerifierMock;
 
@@ -79,16 +79,16 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         );
         $this->_installerMock = $this->getMock('Magento\Install\Model\Installer\Console', array(), array(), '', false);
         $this->_dirVerifierMock = $this->getMock(
-            'Magento\App\Filesystem\DirectoryList\Verification',
+            'Magento\Framework\App\Filesystem\DirectoryList\Verification',
             array(),
             array(),
             '',
             false
         );
         $this->_outputMock = $this->getMock('Magento\Install\App\Output', array(), array(), '', false);
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMockBuilder(
-            'Magento\App\ObjectManager\ConfigLoader'
+            'Magento\Framework\App\ObjectManager\ConfigLoader'
         )->disableOriginalConstructor()->getMock();
         $this->_instFactoryMock->expects(
             $this->any()
@@ -108,21 +108,21 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(array('di' => 'config'))
         );
 
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $this->_objectManagerMock->expects($this->once())->method('configure')->with(array('di' => 'config'));
     }
 
     protected function _createModel($params = array())
     {
         $directory = $this->getMock(
-            'Magento\Filesystem\Directory\Read',
+            'Magento\Framework\Filesystem\Directory\Read',
             array('isExist', 'getRelativePath'),
             array(),
             '',
             false
         );
         $filesystem = $this->getMock(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array('getDirectoryRead', '__wakeup'),
             array(),
             '',
@@ -133,7 +133,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            \Magento\App\Filesystem::ROOT_DIR
+            \Magento\Framework\App\Filesystem::ROOT_DIR
         )->will(
             $this->returnValue($directory)
         );
@@ -157,7 +157,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue(true)
             );
         }
-        $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
+        $this->_responseMock = $this->getMock('Magento\Framework\App\Console\Response', array(), array(), '', false);
         return new \Magento\Install\App\Console(
             $this->_instFactoryMock,
             $this->_outputMock,

@@ -128,6 +128,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                     'type',
                     Wsdl::TYPES_NS . ':' . $this->_typeProcessor->translateArrayTypeName($parameterType)
                 );
+                if (!$isRequired) {
+                    $element->setAttribute('minOccurs', 0);
+                }
             } else {
                 $this->_processParameter($element, $isRequired, $parameterData, $parameterType, $callInfo);
             }

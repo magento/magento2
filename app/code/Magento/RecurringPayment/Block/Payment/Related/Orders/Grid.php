@@ -23,8 +23,13 @@
  */
 namespace Magento\RecurringPayment\Block\Payment\Related\Orders;
 
+use Magento\Customer\Controller\RegistryConstants;
+
 /**
  * Recurring payment related orders grid
+ *
+ * @method \Magento\Framework\Object[] getGridElements()
+ * @method Grid setGridElements($orders)
  */
 class Grid extends \Magento\RecurringPayment\Block\Payment\View
 {
@@ -49,8 +54,8 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
     protected $_recurringCollectionFilter;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Resource\Order\Collection $collection
      * @param \Magento\Sales\Model\Order\Config $config
      * @param \Magento\Core\Helper\Data $coreHelper
@@ -58,8 +63,8 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Resource\Order\Collection $collection,
         \Magento\Sales\Model\Order\Config $config,
         \Magento\Core\Helper\Data $coreHelper,
@@ -83,15 +88,10 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
     protected function _prepareRelatedOrders($fieldsToSelect = '*')
     {
         if (null === $this->_relatedOrders) {
-            $this->_orderCollection->addFieldToSelect(
-                $fieldsToSelect
-            )->addFieldToFilter(
-                'customer_id',
-                $this->_registry->registry('current_customer')->getId()
-            )->setOrder(
-                'entity_id',
-                'desc'
-            );
+            $this->_orderCollection
+                ->addFieldToSelect($fieldsToSelect)
+                ->addFieldToFilter('customer_id', $this->_registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID))
+                ->setOrder('entity_id', 'desc');
             $this->_relatedOrders = $this->_recurringCollectionFilter->byIds(
                 $this->_orderCollection,
                 $this->_recurringPayment->getId()
@@ -131,14 +131,14 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
 
         $this->setGridColumns(
             array(
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array('index' => 'increment_id', 'title' => __('Order #'), 'is_nobr' => true, 'width' => 1)
                 ),
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array('index' => 'created_at', 'title' => __('Date'), 'is_nobr' => true, 'width' => 1)
                 ),
-                new \Magento\Object(array('index' => 'customer_name', 'title' => __('Customer Name'))),
-                new \Magento\Object(
+                new \Magento\Framework\Object(array('index' => 'customer_name', 'title' => __('Customer Name'))),
+                new \Magento\Framework\Object(
                     array(
                         'index' => 'base_grand_total',
                         'title' => __('Order Total'),
@@ -147,7 +147,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
                         'is_amount' => true
                     )
                 ),
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array('index' => 'status', 'title' => __('Order Status'), 'is_nobr' => true, 'width' => 1)
                 )
             )
@@ -155,7 +155,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
 
         $orders = array();
         foreach ($this->_relatedOrders as $order) {
-            $orders[] = new \Magento\Object(
+            $orders[] = new \Magento\Framework\Object(
                 array(
                     'increment_id' => $order->getIncrementId(),
                     'created_at' => $this->formatDate($order->getCreatedAt()),

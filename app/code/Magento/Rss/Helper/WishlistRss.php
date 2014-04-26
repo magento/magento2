@@ -37,54 +37,41 @@ class WishlistRss extends \Magento\Wishlist\Helper\Data
     protected $_customerBuilder;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
-     */
-    protected $_customerAccountService;
-
-    /**
-     * @var \Magento\Customer\Helper\View
-     */
-    protected $_customerViewHelper;
-
-    /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Registry $coreRegistry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
-        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
     ) {
-        $this->_customerViewHelper = $customerViewHelper;
         $this->_customerBuilder = $customerBuilder;
-        $this->_customerAccountService = $customerAccountService;
 
         parent::__construct(
             $context,
             $coreData,
             $coreRegistry,
-            $coreStoreConfig,
+            $scopeConfig,
             $customerSession,
             $wishlistFactory,
             $storeManager,
-            $postDataHelper
+            $postDataHelper,
+            $customerViewHelper
         );
     }
 
@@ -129,30 +116,5 @@ class WishlistRss extends \Magento\Wishlist\Helper\Data
         }
 
         return $this->_customer;
-    }
-
-    /**
-     * Set current customer
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return void
-     */
-    public function setCustomer(\Magento\Customer\Model\Customer $customer)
-    {
-        /* TODO this method must be eliminated after refactoring of Magento\Wishlist\Helper\Data */
-        $this->_customer = $this->_customerAccountService->getCustomer($customer->getId());
-    }
-
-    /**
-     * Retrieve customer name
-     *
-     * @return string|void
-     */
-    public function getCustomerName()
-    {
-        /* TODO this method must be eliminated after refactoring of Magento\Wishlist\Helper\Data */
-        return $this->getCustomer()
-            ? $this->_customerViewHelper->getCustomerName($this->getCustomer())
-            : null;
     }
 }

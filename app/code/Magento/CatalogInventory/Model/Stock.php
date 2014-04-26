@@ -35,7 +35,7 @@ use Magento\CatalogInventory\Model\Stock\Item;
  * @method string getStockName()
  * @method \Magento\CatalogInventory\Model\Stock setStockName(string $value)
  */
-class Stock extends \Magento\Model\AbstractModel
+class Stock extends \Magento\Framework\Model\AbstractModel
 {
     const BACKORDERS_NO = 0;
 
@@ -59,7 +59,7 @@ class Stock extends \Magento\Model\AbstractModel
     /**
      * Store model manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -76,25 +76,25 @@ class Stock extends \Magento\Model\AbstractModel
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\CatalogInventory\Model\Resource\Stock\Item\CollectionFactory $collectionFactory
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\CatalogInventory\Model\Resource\Stock\Item\CollectionFactory $collectionFactory,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -187,7 +187,7 @@ class Stock extends \Magento\Model\AbstractModel
      *
      * @param array $items
      * @return Item[]
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function registerProductsSale($items)
     {
@@ -201,7 +201,7 @@ class Stock extends \Magento\Model\AbstractModel
             $item->setData($itemInfo);
             if (!$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('Not all of your products are available in the requested quantity.')
                 );
             }
@@ -229,11 +229,11 @@ class Stock extends \Magento\Model\AbstractModel
     /**
      * Subtract ordered qty for product
      *
-     * @param  \Magento\Object $item
+     * @param  \Magento\Framework\Object $item
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function registerItemSale(\Magento\Object $item)
+    public function registerItemSale(\Magento\Framework\Object $item)
     {
         $productId = $item->getProductId();
         if ($productId) {
@@ -249,7 +249,7 @@ class Stock extends \Magento\Model\AbstractModel
                 }
             }
         } else {
-            throw new \Magento\Model\Exception(__('We cannot specify a product identifier for the order item.'));
+            throw new \Magento\Framework\Model\Exception(__('We cannot specify a product identifier for the order item.'));
         }
         return $this;
     }

@@ -61,16 +61,16 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Tax Identifier</argument>
                         <argument name="header_export" xsi:type="string" translate="true">Code</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="filter_index" xsi:type="string">main_table.code</argument>
                         <argument name="index" xsi:type="string">code</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_country_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Country</argument>
                         <argument name="type" xsi:type="string">country</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="filter_index" xsi:type="string">main_table.tax_country_id</argument>
                         <argument name="index" xsi:type="string">tax_country_id</argument>
                         <argument name="renderer" xsi:type="string">Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Country</argument>
@@ -81,7 +81,6 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">State/Region</argument>
                         <argument name="header_export" xsi:type="string" translate="true">State</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="filter_index" xsi:type="string">region_table.code</argument>
                         <argument name="index" xsi:type="string">region_name</argument>
                         <argument name="default" xsi:type="string">*</argument>
@@ -90,7 +89,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_postcode">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Zip/Post Code</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">tax_postcode</argument>
                         <argument name="default" xsi:type="string">*</argument>
                     </arguments>
@@ -98,11 +96,12 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="rate">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Rate</argument>
-                        <argument name="align" xsi:type="string">right</argument>
                         <argument name="index" xsi:type="string">rate</argument>
                         <argument name="type" xsi:type="string">number</argument>
                         <argument name="default" xsi:type="string">0.00</argument>
                         <argument name="renderer" xsi:type="string">Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Data</argument>
+                        <argument name="column_css_class" xsi:type="string">col-price</argument>
+                        <argument name="header_css_class" xsi:type="string">col-price</argument>
                     </arguments>
                 </block>
             </block>

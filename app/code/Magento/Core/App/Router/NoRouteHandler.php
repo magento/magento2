@@ -25,17 +25,17 @@
  */
 namespace Magento\Core\App\Router;
 
-class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\App\ConfigInterface $config)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
         $this->_config = $config;
     }
@@ -43,11 +43,11 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
     /**
      * Check and process no route request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function process(\Magento\App\RequestInterface $request)
+    public function process(\Magento\Framework\App\RequestInterface $request)
     {
         $noRoutePath = $this->_config->getValue('web/default/no_route', 'default');
 

@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource;
 /**
  * Sales Mysql resource helper model
  */
-class Helper extends \Magento\DB\Helper implements HelperInterface
+class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
 {
     /**
      * @var \Magento\Reports\Model\Resource\Helper
@@ -36,12 +36,12 @@ class Helper extends \Magento\DB\Helper implements HelperInterface
     protected $_reportsResourceHelper;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Reports\Model\Resource\Helper $reportsResourceHelper
      * @param string $modulePrefix
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Reports\Model\Resource\Helper $reportsResourceHelper,
         $modulePrefix = 'sales'
     ) {

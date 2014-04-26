@@ -26,7 +26,7 @@ namespace Magento\Payment\Model\Method;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManagerMock;
 
@@ -39,7 +39,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $this->_factory = $objectManagerHelper->getObject(
             'Magento\Payment\Model\Method\Factory',
             array('objectManager' => $this->_objectManagerMock)
@@ -84,7 +84,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage WrongClass class doesn't implement \Magento\Payment\Model\MethodInterface
      */
     public function testWrongTypeException()

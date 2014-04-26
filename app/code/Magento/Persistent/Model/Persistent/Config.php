@@ -38,12 +38,12 @@ class Config
     protected $_configFilePath;
 
     /**
-     * @var \Magento\Config\DomFactory
+     * @var \Magento\Framework\Config\DomFactory
      */
     protected $_domFactory;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
@@ -55,14 +55,14 @@ class Config
     /**
      * Layout model
      *
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
      * App state model
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -76,32 +76,32 @@ class Config
     /**
      * Filesystem
      *
-     * @var \Magento\Filesystem\Directory\Read;
+     * @var \Magento\Framework\Filesystem\Directory\Read;
      */
     protected $_modulesDirectory;
 
     /**
-     * @param \Magento\Config\DomFactory $domFactory
-     * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\Config\DomFactory $domFactory
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Config\DomFactory $domFactory,
-        \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\App\State $appState,
+        \Magento\Framework\Config\DomFactory $domFactory,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
     }
 
     /**
@@ -120,7 +120,7 @@ class Config
      * Get persistent XML config xpath
      *
      * @return \DOMXPath
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getConfigDomXPath()
     {
@@ -129,12 +129,12 @@ class Config
             $isFile = $this->_modulesDirectory->isFile($filePath);
             $isReadable = $this->_modulesDirectory->isReadable($filePath);
             if (!$isFile || !$isReadable) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
             $xml = $this->_modulesDirectory->readFile($filePath);
-            /** @var \Magento\Config\Dom $configDom */
+            /** @var \Magento\Framework\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
                 array(
                     'xml' => $xml,
@@ -230,7 +230,7 @@ class Config
      * @param array $info
      * @param bool $instance
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function fireOne($info, $instance = false)
     {
@@ -249,8 +249,8 @@ class Config
 
         if (method_exists($object, $method)) {
             $object->{$method}($instance);
-        } elseif ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Model\Exception(
+        } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            throw new \Magento\Framework\Model\Exception(
                 'Method "' . $method . '" is not defined in "' . get_class($object) . '"'
             );
         }

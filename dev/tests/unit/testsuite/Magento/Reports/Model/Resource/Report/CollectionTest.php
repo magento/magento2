@@ -55,8 +55,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $endDate = date('m/d/Y', strtotime('+3 day'));
         $this->_model->setInterval($startDate, $endDate);
 
-        $startDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
-        $endDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
+        $startDateMock = $this->getMock('Magento\Framework\Stdlib\DateTime\DateInterface', array(), array(), '', false);
+        $endDateMock = $this->getMock('Magento\Framework\Stdlib\DateTime\DateInterface', array(), array(), '', false);
         $map = array(array($startDate, null, null, $startDateMock), array($endDate, null, null, $endDateMock));
         $this->_factoryMock->expects($this->exactly(2))->method('create')->will($this->returnValueMap($map));
         $startDateMock->expects($this->once())->method('compare')->with($endDateMock)->will($this->returnValue(true));

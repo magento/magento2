@@ -32,7 +32,7 @@ namespace Magento\Index\Model;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Shell extends \Magento\App\AbstractShell
+class Shell extends \Magento\Framework\App\AbstractShell
 {
     /**
      * Error status - whether errors have happened
@@ -47,11 +47,11 @@ class Shell extends \Magento\App\AbstractShell
     protected $_indexer;
 
     /**
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string $entryPoint
      * @param Indexer $indexer
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, $entryPoint, Indexer $indexer)
+    public function __construct(\Magento\Framework\App\Filesystem $filesystem, $entryPoint, Indexer $indexer)
     {
         $this->_indexer = $indexer;
         parent::__construct($filesystem, $entryPoint);
@@ -164,7 +164,7 @@ class Shell extends \Magento\App\AbstractShell
             try {
                 $process->setMode($mode)->save();
                 echo $process->getIndexer()->getName() . " index was successfully changed index mode\n";
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {
@@ -192,9 +192,12 @@ class Shell extends \Magento\App\AbstractShell
         foreach ($processes as $process) {
             /* @var $process \Magento\Index\Model\Process */
             try {
+                $startTime = microtime(true);
                 $process->reindexEverything();
-                echo $process->getIndexer()->getName() . " index was rebuilt successfully\n";
-            } catch (\Magento\Model\Exception $e) {
+                $resultTime = microtime(true) - $startTime;
+                echo $process->getIndexer()->getName()
+                    . " index was rebuilt successfully in " . gmdate('H:i:s', $resultTime) . "\n";
+            } catch (\Magento\Framework\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {

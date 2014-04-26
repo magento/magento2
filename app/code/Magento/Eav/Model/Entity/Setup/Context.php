@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
-class Context extends \Magento\Core\Model\Resource\Setup\Context
+class Context extends \Magento\Framework\Module\Setup\Context
 {
     /**
      * @var PropertyMapperInterface
@@ -33,31 +33,27 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
     protected $attributeMapper;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\Resource\Resource $resourceResource
-     * @param \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
-     * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Module\Dir\Reader $modulesReader
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Framework\Module\ResourceInterface $resourceResource
+     * @param \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Resource $resource,
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\Resource\Resource $resourceResource,
-        \Magento\Core\Model\Resource\Setup\MigrationFactory $migrationFactory,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
-        \Magento\Core\Model\Theme\CollectionFactory $themeFactory,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Module\Dir\Reader $modulesReader,
+        \Magento\Framework\Module\ModuleListInterface $moduleList,
+        \Magento\Framework\Module\ResourceInterface $resourceResource,
+        \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\App\Filesystem $filesystem,
         PropertyMapperInterface $attributeMapper
     ) {
         $this->attributeMapper = $attributeMapper;
@@ -69,8 +65,6 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
             $moduleList,
             $resourceResource,
             $migrationFactory,
-            $themeResourceFactory,
-            $themeFactory,
             $encryptor,
             $filesystem
         );

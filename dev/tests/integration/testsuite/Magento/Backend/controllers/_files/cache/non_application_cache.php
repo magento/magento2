@@ -22,9 +22,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $cachePool \Magento\App\Cache\Frontend\Pool */
-$cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Cache\Frontend\Pool');
-/** @var $cacheFrontend \Magento\Cache\FrontendInterface */
+/** @var $cachePool \Magento\Framework\App\Cache\Frontend\Pool */
+$cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Framework\App\Cache\Frontend\Pool');
+/** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
 foreach ($cachePool as $cacheFrontend) {
     $cacheFrontend->getBackend()->save('non-application cache data', 'NON_APPLICATION_FIXTURE', array('SOME_TAG'));
 }

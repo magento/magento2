@@ -27,9 +27,9 @@
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
 /**
- * Extend \Magento\DB\Adapter\Pdo\Mysql and stub needed methods
+ * Extend \Magento\Framework\DB\Adapter\Pdo\Mysql and stub needed methods
  */
-class MysqlStub extends \Magento\DB\Adapter\Pdo\Mysql
+class MysqlStub extends \Magento\Framework\DB\Adapter\Pdo\Mysql
 {
     /**
      * Disable parent constructor

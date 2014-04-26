@@ -46,14 +46,14 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
     protected $_config;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\App\ConfigInterface $config,

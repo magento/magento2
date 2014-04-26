@@ -32,7 +32,7 @@ namespace Magento\CatalogSearch\Model\Resource\Indexer;
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
+class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define catalog product table as main table

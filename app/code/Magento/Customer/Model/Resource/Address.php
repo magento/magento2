@@ -38,23 +38,23 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_customerFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\Validator\Factory $validatorFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         $data = array()
@@ -91,10 +91,10 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Set default shipping to address
      *
-     * @param \Magento\Object $address
+     * @param \Magento\Framework\Object $address
      * @return $this
      */
-    protected function _afterSave(\Magento\Object $address)
+    protected function _afterSave(\Magento\Framework\Object $address)
     {
         if ($address->getIsCustomerSaveTransaction()) {
             return $this;
@@ -116,10 +116,10 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check customer address before saving
      *
-     * @param \Magento\Object $address
+     * @param \Magento\Framework\Object $address
      * @return $this
      */
-    protected function _beforeSave(\Magento\Object $address)
+    protected function _beforeSave(\Magento\Framework\Object $address)
     {
         parent::_beforeSave($address);
 
@@ -131,16 +131,16 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Validate customer address entity
      *
-     * @param \Magento\Object $address
+     * @param \Magento\Framework\Object $address
      * @return void
-     * @throws \Magento\Validator\ValidatorException When validation failed
+     * @throws \Magento\Framework\Validator\ValidatorException When validation failed
      */
     protected function _validate($address)
     {
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {
-            throw new \Magento\Validator\ValidatorException($validator->getMessages());
+            throw new \Magento\Framework\Validator\ValidatorException($validator->getMessages());
         }
     }
 

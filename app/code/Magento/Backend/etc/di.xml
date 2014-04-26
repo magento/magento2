@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
-    <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Db" />
-    <preference for="Magento\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
@@ -33,7 +33,7 @@
     <preference for="Magento\Adminhtml\Helper\Data" type="Magento\Backend\Helper\Data" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Backend\Model\UrlInterface" type="Magento\Backend\Model\Url" />
-    <type name="Magento\App\AreaList">
+    <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="adminhtml" xsi:type="array">
@@ -50,7 +50,7 @@
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\System\Config\Save">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Layout</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">
@@ -70,11 +70,11 @@
             <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\App\Router\NoRouteHandlerList">
+    <type name="Magento\Framework\App\Router\NoRouteHandlerList">
         <arguments>
             <argument name="handlerClassesList" xsi:type="array">
                 <item name="backend" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Backend\App\Router\NoRouteHandler</item>
+                    <item name="class" xsi:type="string">Magento\Backend\App\Router\NoRouteHandler</item>
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
             </argument>
@@ -98,38 +98,39 @@
     <type name="Magento\Backend\Model\Url">
         <arguments>
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
-            <argument name="formKey" xsi:type="object">Magento\Data\Form\FormKey\Proxy</argument>
+            <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">
         <arguments>
-            <argument name="installDate" xsi:type="init_parameter">Magento\App\State::PARAM_INSTALL_DATE</argument>
+            <argument name="installDate" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_INSTALL_DATE</argument>
         </arguments>
     </type>
-    <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
-    <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\Acl"/>
-    <preference for="Magento\Acl\Resource\ProviderInterface" type="Magento\Acl\Resource\Provider"/>
-    <type name="Magento\Acl\Resource\Config\Reader\Filesystem">
+    <preference for="Magento\Framework\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
+    <preference for="Magento\Framework\Authorization\Policy" type="Magento\Framework\Authorization\Policy\Acl"/>
+    <preference for="Magento\Framework\Acl\Resource\ProviderInterface" type="Magento\Framework\Acl\Resource\Provider"/>
+    <type name="Magento\Framework\Acl\Resource\Config\Reader\Filesystem">
         <arguments>
-            <argument name="converter" xsi:type="object">Magento\Acl\Resource\Config\Converter\Dom</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Acl\Resource\Config\Converter\Dom</argument>
         </arguments>
     </type>
-    <type name="Magento\Acl\Resource\Provider">
+    <type name="Magento\Framework\Acl\Resource\Provider">
         <arguments>
-            <argument name="configReader" xsi:type="object">Magento\Acl\Resource\Config\Reader\Filesystem</argument>
+            <argument name="configReader" xsi:type="object">Magento\Framework\Acl\Resource\Config\Reader\Filesystem</argument>
         </arguments>
     </type>
-    <type name="Magento\Acl\Builder">
+    <type name="Magento\Framework\Acl\Builder">
         <arguments>
-            <argument name="resourceLoader" xsi:type="object">Magento\Acl\Loader\Resource</argument>
+            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\Resource</argument>
         </arguments>
     </type>
-    <type name="Magento\Acl\Cache">
+    <type name="Magento\Framework\Acl\Cache">
         <arguments>
             <argument name="cacheKey" xsi:type="string">backend_acl_resources</argument>
         </arguments>
     </type>
-    <type name="Magento\Acl\RootResource">
+    <type name="Magento\Framework\Acl\RootResource">
         <arguments>
             <argument name="identifier" xsi:type="string">Magento_Adminhtml::all</argument>
         </arguments>
@@ -152,7 +153,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">admin</argument>
         </arguments>
@@ -162,7 +163,7 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Auth\Session\Storage</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Backend\Model\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Backend\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml</argument>
         </arguments>
@@ -172,7 +173,7 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml_quote</argument>
         </arguments>

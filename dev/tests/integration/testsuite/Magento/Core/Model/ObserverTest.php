@@ -33,7 +33,7 @@ namespace Magento\Core\Model;
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Event\Observer
+     * @var \Magento\Framework\Event\Observer
      */
     protected $_eventObserver;
 
@@ -66,7 +66,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array(
                 $this->_objectManager->create('Magento\Core\Model\Resource\Theme\Data\CollectionFactory'),
                 $this->_objectManager->create('Magento\Core\Model\Theme\Data\Collection'),
-                $this->_objectManager->create('Magento\App\Filesystem')
+                $this->_objectManager->create('Magento\Framework\App\Filesystem')
             )
         );
         $themeRegistration->expects($this->once())->method('register')->with($this->equalTo($pattern));
@@ -80,18 +80,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Create event observer for theme registration
      *
-     * @return \Magento\Event\Observer
+     * @return \Magento\Framework\Event\Observer
      */
     protected function _createEventObserverForThemeRegistration()
     {
         $response = $this->_objectManager->create(
-            'Magento\Object',
+            'Magento\Framework\Object',
             array('data' => array('additional_options' => array()))
         );
         $event = $this->_objectManager->create(
-            'Magento\Event',
+            'Magento\Framework\Event',
             array('data' => array('response_object' => $response))
         );
-        return $this->_objectManager->create('Magento\Event\Observer', array('data' => array('event' => $event)));
+        return $this->_objectManager->create(
+            'Magento\Framework\Event\Observer',
+            array('data' => array('event' => $event))
+        );
     }
 }

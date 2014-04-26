@@ -26,13 +26,15 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="catalog_product_new"/>
     <referenceBlock name="page-title">
+        <action method="setTitleClass">
+            <argument name="class" xsi:type="string">complex</argument>
+        </action>
+    </referenceBlock>
+    <referenceContainer name="page.main.actions">
         <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
             <action method="setUseConfirm">
                 <argument name="params" xsi:type="string">1</argument>
             </action>
         </block>
-        <action method="setTitleClass">
-            <argument name="class" xsi:type="string">complex</argument>
-        </action>
-    </referenceBlock>
+    </referenceContainer>
 </layout>

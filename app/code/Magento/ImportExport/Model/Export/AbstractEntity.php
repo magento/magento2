@@ -39,7 +39,7 @@ abstract class AbstractEntity
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Data\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Framework\Data\Collection';
 
     /**#@-*/
 
@@ -53,7 +53,7 @@ abstract class AbstractEntity
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -151,7 +151,7 @@ abstract class AbstractEntity
     /**
      * Address attributes collection
      *
-     * @var \Magento\Data\Collection
+     * @var \Magento\Framework\Data\Collection
      */
     protected $_attributeCollection;
 
@@ -172,25 +172,25 @@ abstract class AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_attributeCollection = isset(
             $data['attribute_collection']
@@ -199,8 +199,9 @@ abstract class AbstractEntity
         );
         $this->_pageSize = isset(
             $data['page_size']
-        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(
-            static::XML_PATH_PAGE_SIZE
+        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
+            static::XML_PATH_PAGE_SIZE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : 0);
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
@@ -214,7 +215,7 @@ abstract class AbstractEntity
      */
     protected function _initStores()
     {
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($this->_storeManager->getStores(true) as $store) {
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
@@ -232,7 +233,7 @@ abstract class AbstractEntity
      */
     protected function _initWebsites($withDefault = false)
     {
-        /** @var $website \Magento\Core\Model\Website */
+        /** @var $website \Magento\Store\Model\Website */
         foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }
@@ -281,7 +282,7 @@ abstract class AbstractEntity
     /**
      * Export one item
      *
-     * @param \Magento\Model\AbstractModel $item
+     * @param \Magento\Framework\Model\AbstractModel $item
      * @return void
      */
     abstract public function exportItem($item);
@@ -289,10 +290,10 @@ abstract class AbstractEntity
     /**
      * Iterate through given collection page by page and export items
      *
-     * @param \Magento\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\Db $collection
      * @return void
      */
-    protected function _exportCollectionByPages(\Magento\Data\Collection\Db $collection)
+    protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\Db $collection)
     {
         $this->_byPagesIterator->iterate($collection, $this->_pageSize, array(array($this, 'exportItem')));
     }
@@ -315,14 +316,14 @@ abstract class AbstractEntity
     /**
      * Get entity collection
      *
-     * @return \Magento\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\Db
      */
     abstract protected function _getEntityCollection();
 
     /**
      * Entity attributes collection getter
      *
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getAttributeCollection()
     {
@@ -332,10 +333,10 @@ abstract class AbstractEntity
     /**
      * Clean up attribute collection
      *
-     * @param \Magento\Data\Collection $collection
-     * @return \Magento\Data\Collection
+     * @param \Magento\Framework\Data\Collection $collection
+     * @return \Magento\Framework\Data\Collection
      */
-    public function filterAttributeCollection(\Magento\Data\Collection $collection)
+    public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
         /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
         foreach ($collection as $attribute) {
@@ -415,12 +416,12 @@ abstract class AbstractEntity
      * Inner writer object getter
      *
      * @return AbstractAdapter
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getWriter()
     {
         if (!$this->_writer) {
-            throw new \Magento\Model\Exception(__('Please specify writer.'));
+            throw new \Magento\Framework\Model\Exception(__('Please specify writer.'));
         }
 
         return $this->_writer;

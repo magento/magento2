@@ -45,7 +45,7 @@ class Admin extends \Magento\Install\Block\AbstractBlock
     }
 
     /**
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormData()
     {
@@ -53,7 +53,7 @@ class Admin extends \Magento\Install\Block\AbstractBlock
         if (null === $data) {
             $data = $this->_session->getAdminData(true);
             $data = is_array($data) ? $data : array();
-            $data = new \Magento\Object($data);
+            $data = new \Magento\Framework\Object($data);
             $this->setData('form_data', $data);
         }
         return $data;

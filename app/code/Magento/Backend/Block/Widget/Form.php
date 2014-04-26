@@ -35,7 +35,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Form Object
      *
-     * @var \Magento\Data\Form
+     * @var \Magento\Framework\Data\Form
      */
     protected $_form;
 
@@ -75,19 +75,19 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        \Magento\Data\Form::setElementRenderer(
+        \Magento\Framework\Data\Form::setElementRenderer(
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Form\Renderer\Element',
                 $this->getNameInLayout() . '_element'
             )
         );
-        \Magento\Data\Form::setFieldsetRenderer(
+        \Magento\Framework\Data\Form::setFieldsetRenderer(
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Form\Renderer\Fieldset',
                 $this->getNameInLayout() . '_fieldset'
             )
         );
-        \Magento\Data\Form::setFieldsetElementRenderer(
+        \Magento\Framework\Data\Form::setFieldsetElementRenderer(
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element',
                 $this->getNameInLayout() . '_fieldset_element'
@@ -100,7 +100,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Get form object
      *
-     * @return \Magento\Data\Form
+     * @return \Magento\Framework\Data\Form
      */
     public function getForm()
     {
@@ -123,10 +123,10 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Set form object
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return $this
      */
-    public function setForm(\Magento\Data\Form $form)
+    public function setForm(\Magento\Framework\Data\Form $form)
     {
         $this->_form = $form;
         $this->_form->setParent($this);
@@ -171,7 +171,7 @@ class Form extends \Magento\Backend\Block\Widget
      * Set Fieldset to Form
      *
      * @param array $attributes attributes that are to be added
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param array $exclude attributes that should be skipped
      * @return void
      */
@@ -232,7 +232,7 @@ class Form extends \Magento\Backend\Block\Widget
      * Apply configuration specific for different element type
      *
      * @param string $inputType
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return void
      */
@@ -261,10 +261,10 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Add new element type
      *
-     * @param \Magento\Data\Form\AbstractForm $baseElement
+     * @param \Magento\Framework\Data\Form\AbstractForm $baseElement
      * @return void
      */
-    protected function _addElementTypes(\Magento\Data\Form\AbstractForm $baseElement)
+    protected function _addElementTypes(\Magento\Framework\Data\Form\AbstractForm $baseElement)
     {
         $types = $this->_getAdditionalElementTypes();
         foreach ($types as $code => $className) {
@@ -285,7 +285,7 @@ class Form extends \Magento\Backend\Block\Widget
     /**
      * Render additional element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

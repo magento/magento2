@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure;
 
-use Magento\Core\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 abstract class AbstractElement implements ElementInterface
 {
@@ -154,9 +154,9 @@ abstract class AbstractElement implements ElementInterface
     public function isVisible()
     {
         $showInScope = array(
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault')
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault')
         );
 
         if ($this->_storeManager->isSingleStoreMode()) {

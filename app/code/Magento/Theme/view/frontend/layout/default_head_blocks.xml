@@ -38,6 +38,11 @@
                 <argument name="file" xsi:type="string">jquery/jquery.js</argument>
             </arguments>
         </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-migrate-js">
+            <arguments>
+                <argument name="file" xsi:type="string">jquery/jquery-migrate.js</argument>
+            </arguments>
+        </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-jquery-no-conflict-js">
             <arguments>
                 <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
@@ -105,7 +110,7 @@
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-loader-js">
             <arguments>
-                <argument name="file" xsi:type="string">mage/loader.js</argument>
+                <argument name="file" xsi:type="string">mage/loader_old.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-dataPost-js">
@@ -113,6 +118,6 @@
                 <argument name="file" xsi:type="string">mage/dataPost.js</argument>
             </arguments>
         </block>
-        <block class="Magento\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml"/>
+        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml"/>
     </referenceBlock>
 </layout>

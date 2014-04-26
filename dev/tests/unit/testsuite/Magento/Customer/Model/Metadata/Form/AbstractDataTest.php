@@ -32,13 +32,13 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\Form\ExtendsAbstractData */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Stdlib\DateTime\TimezoneInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $_localeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Locale\ResolverInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
     protected $_localeResolverMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Logger */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Logger */
     protected $_loggerMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
@@ -56,12 +56,12 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_localeMock = $this->getMockBuilder(
-            'Magento\Stdlib\DateTime\TimezoneInterface'
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_localeResolverMock = $this->getMockBuilder(
-            'Magento\Locale\ResolverInterface'
+            'Magento\Framework\Locale\ResolverInterface'
         )->disableOriginalConstructor()->getMock();
-        $this->_loggerMock = $this->getMockBuilder('Magento\Logger')->disableOriginalConstructor()->getMock();
+        $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
         $this->_attributeMock = $this->getMockBuilder(
             'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
         )->disableOriginalConstructor()->getMock();
@@ -86,7 +86,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Attribute object is undefined
      */
     public function testGetAttributeException()
@@ -168,7 +168,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             )->method(
                 'getDateFormat'
             )->with(
-                $this->equalTo(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+                $this->equalTo(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
             )->will(
                 $this->returnValue($output)
             );
@@ -302,7 +302,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string                        $attributeCode
      * @param bool|string                   $requestScope
      * @param bool                          $requestScopeOnly
@@ -326,7 +326,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     public function getRequestValueDataProvider()
     {
         $expectedValue = 'EXPECTED_VALUE';
-        $requestMockOne = $this->getMockBuilder('\Magento\App\RequestInterface')->getMock();
+        $requestMockOne = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')->getMock();
         $requestMockOne->expects(
             $this->any()
         )->method(
@@ -337,7 +337,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($expectedValue)
         );
 
-        $requestMockTwo = $this->getMockBuilder('\Magento\App\RequestInterface')->getMock();
+        $requestMockTwo = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')->getMock();
         $requestMockTwo->expects(
             $this->at(0)
         )->method(
@@ -358,7 +358,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         );
 
         $requestMockThree = $this->getMockBuilder(
-            '\Magento\App\Request\Http'
+            '\Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->getMock();
         $requestMockThree->expects(
             $this->once()

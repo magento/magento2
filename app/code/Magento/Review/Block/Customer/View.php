@@ -26,7 +26,7 @@
 namespace Magento\Review\Block\Customer;
 
 use Magento\Catalog\Model\Product;
-use Magento\Rating\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
+use Magento\Review\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
 use Magento\Review\Model\Review;
 
 /**
@@ -62,14 +62,14 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Rating option model
      *
-     * @var \Magento\Rating\Model\Rating\Option\VoteFactory
+     * @var \Magento\Review\Model\Rating\Option\VoteFactory
      */
     protected $_voteFactory;
 
     /**
      * Rating model
      *
-     * @var \Magento\Rating\Model\RatingFactory
+     * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
 
@@ -82,8 +82,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory
-     * @param \Magento\Rating\Model\RatingFactory $ratingFactory
+     * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      * @param array $priceBlockTypes
@@ -92,8 +92,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Rating\Model\RatingFactory $ratingFactory,
+        \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
+        \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array(),
         array $priceBlockTypes = array()
@@ -226,7 +226,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG);
+        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG);
     }
 
     /**
@@ -237,5 +237,25 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function isReviewOwner()
     {
         return ($this->getReviewData()->getCustomerId() == $this->currentCustomer->getCustomerId());
+    }
+
+
+    /**
+     * Get product reviews summary
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param bool $templateType
+     * @param bool $displayIfNoReviews
+     * @return string
+     */
+    public function getReviewsSummaryHtml(
+        \Magento\Catalog\Model\Product $product,
+        $templateType = false,
+        $displayIfNoReviews = false
+    ) {
+        if (!$product->getRatingSummary()) {
+            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
+        }
+        return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
 }

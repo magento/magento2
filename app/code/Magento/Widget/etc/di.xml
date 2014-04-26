@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Widget\Model\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">widget.xml</argument>
@@ -41,13 +41,6 @@
         <arguments>
             <argument name="pageFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
             <argument name="blockFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="widget_setup" xsi:type="string">Magento\Core\Model\Resource\Setup\Generic</item>
-            </argument>
         </arguments>
     </type>
 </config>

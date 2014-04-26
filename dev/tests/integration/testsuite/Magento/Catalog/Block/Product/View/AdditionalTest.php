@@ -30,18 +30,20 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetChildHtmlList()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         /** @var $block \Magento\Catalog\Block\Product\View\Additional */
         $block = $layout->createBlock('Magento\Catalog\Block\Product\View\Additional', 'block');
 
-        /** @var $childFirst \Magento\View\Element\Text */
-        $childFirst = $layout->addBlock('Magento\View\Element\Text', 'child1', 'block');
+        /** @var $childFirst \Magento\Framework\View\Element\Text */
+        $childFirst = $layout->addBlock('Magento\Framework\View\Element\Text', 'child1', 'block');
         $htmlFirst = '<b>Any html of child1</b>';
         $childFirst->setText($htmlFirst);
 
-        /** @var $childSecond \Magento\View\Element\Text */
-        $childSecond = $layout->addBlock('Magento\View\Element\Text', 'child2', 'block');
+        /** @var $childSecond \Magento\Framework\View\Element\Text */
+        $childSecond = $layout->addBlock('Magento\Framework\View\Element\Text', 'child2', 'block');
         $htmlSecond = '<b>Any html of child2</b>';
         $childSecond->setText($htmlSecond);
 

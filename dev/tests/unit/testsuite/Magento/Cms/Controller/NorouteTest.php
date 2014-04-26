@@ -43,8 +43,8 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $responseMock->expects(
             $this->at(0)
         )->method(
@@ -66,18 +66,22 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($responseMock)
         );
 
-        $storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', array(), array(), '', false);
         $valueMap = array(
-            array('Magento\Core\Model\Store\Config', $storeConfigMock),
+            array(
+                'Magento\Framework\App\Config\ScopeConfigInterface',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $scopeConfigMock
+            ),
             array('Magento\Cms\Helper\Page', $this->_cmsHelperMock)
         );
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
-        $storeConfigMock->expects(
+        $scopeConfigMock->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE
         )->will(

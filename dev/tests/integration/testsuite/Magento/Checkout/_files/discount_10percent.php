@@ -32,10 +32,10 @@ $data = array(
     'is_active' => true,
     'website_ids' => array(
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getWebsiteId()
     ),
-    'customer_group_ids' => array(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID),
+    'customer_group_ids' => array(\Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID),
     'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC,
     'coupon_code' => uniqid(),
     'simple_action' => \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION,

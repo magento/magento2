@@ -28,10 +28,10 @@ namespace Magento\Reports\Model\Resource\Product\Index;
 /**
  * Reports Product Index Abstract Resource Model
  */
-abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
+abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
@@ -41,14 +41,14 @@ abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_resourceHelper = $resourceHelper;
@@ -141,10 +141,10 @@ abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save Product Index data (forced save)
      *
-     * @param \Magento\Model\AbstractModel $object
-     * @return $this|\Magento\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this|\Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    public function save(\Magento\Model\AbstractModel $object)
+    public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->isDeleted()) {
             return $this->delete($object);
@@ -207,11 +207,11 @@ abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Add information about product ids to visitor/customer
      *
-     * @param \Magento\Object|\Magento\Reports\Model\Product\Index\AbstractIndex $object
+     * @param \Magento\Framework\Object|\Magento\Reports\Model\Product\Index\AbstractIndex $object
      * @param array $productIds
      * @return $this
      */
-    public function registerIds(\Magento\Object $object, $productIds)
+    public function registerIds(\Magento\Framework\Object $object, $productIds)
     {
         $row = array(
             'visitor_id' => $object->getVisitorId(),

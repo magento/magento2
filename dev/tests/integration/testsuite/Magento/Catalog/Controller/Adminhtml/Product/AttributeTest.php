@@ -100,12 +100,12 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
     {
         // emulate admin store and design
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDesignTheme(
             1
         );
-        /** @var \Magento\TranslateInterface $translate */
-        $translate = $this->_objectManager->get('Magento\TranslateInterface');
+        /** @var \Magento\Framework\TranslateInterface $translate */
+        $translate = $this->_objectManager->get('Magento\Framework\TranslateInterface');
         $translate->loadData(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, true);
         return __($string);
     }
@@ -136,7 +136,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
             'apply_to' => array('simple'),
-            'frontend_label' => array(\Magento\Core\Model\Store::DEFAULT_STORE_ID => 'string to translate')
+            'frontend_label' => array(\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate')
         );
     }
 }

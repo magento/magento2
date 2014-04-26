@@ -48,24 +48,24 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Website\Factory $websiteFactory
-     * @param \Magento\Core\Model\Store\Group\Factory $storeGroupFactory
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Website\Factory $websiteFactory,
-        \Magento\Core\Model\Store\Group\Factory $storeGroupFactory,
-        \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\Registry $coreRegistry,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\GroupFactory $storeGroupFactory,
+        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -147,7 +147,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     /**
      * Get HTML of store chooser
      *
-     * @param \Magento\Core\Model\Store $storeTo
+     * @param \Magento\Store\Model\Store $storeTo
      * @return string
      */
     public function getChooseFromStoreHtml($storeTo)

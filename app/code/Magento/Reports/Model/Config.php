@@ -28,26 +28,26 @@ namespace Magento\Reports\Model;
 /**
  * Configuration for reports
  */
-class Config extends \Magento\Object
+class Config extends \Magento\Framework\Object
 {
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         parent::__construct($data);

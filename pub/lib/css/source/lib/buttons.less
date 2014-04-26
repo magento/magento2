@@ -76,7 +76,7 @@
     );
     .add-padding(@_button-padding);
     .add-width(@_button-width);
-    color: @_button-color;
+    .css(color, @_button-color);
     .add-border(@_button-border);
     cursor: @_button-cursor;
     display: @_button-display;
@@ -113,7 +113,7 @@
         );
         .add-border(@_button-border-active);
         .tab-focus();
-        color: @_button-color-active;
+        .css(color, @_button-color-active);
     }
     &:hover {
         .add-background(@_button-background-hover);
@@ -124,7 +124,7 @@
             @_button-gradient
         );
         .add-border(@_button-border-hover);
-        color: @_button-color-hover;
+        .css(color, @_button-color-hover);
     }
     &.disabled,
     &[disabled],
@@ -309,6 +309,38 @@
         @_button-gradient-start-color-active: @_button-gradient-start-color-active,
         @_button-gradient-end-color-active: @_button-gradient-end-color-active
      );
+}
+
+//
+//    Button revert secondary color
+//-------------------------------------- */
+.button-revert-secondary-color(
+    @_button-color: @button-color,
+    @_button-background: @button-background,
+    @_button-border: @button-border,
+
+    @_button-color-hover: @button-color-hover,
+    @_button-background-hover: @button-background-hover,
+    @_button-border-hover: @button-border-hover,
+
+    @_button-color-active: @button-color-active,
+    @_button-background-active: @button-background-active,
+    @_button-border-active: @button-border-active
+) {
+    .css(background, @_button-background);
+    .css(color, @_button-color);
+    .css(border, @_button-border);
+    &:focus,
+    &:active {
+        .css(background, @_button-background-active);
+        .css(color, @_button-color-active);
+        .css(border, @_button-border-active);
+    }
+    &:hover {
+        .css(background, @_button-background-hover);
+        .css(color, @_button-color-hover);
+        .css(border, @_button-border-hover);
+    }
 }
 
 //

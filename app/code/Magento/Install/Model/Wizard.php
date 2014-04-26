@@ -29,7 +29,7 @@
  */
 namespace Magento\Install\Model;
 
-use Magento\UrlInterface;
+use Magento\Framework\UrlInterface;
 
 class Wizard
 {
@@ -97,10 +97,10 @@ class Wizard
     /**
      * Get wizard step by request
      *
-     * @param   \Magento\App\RequestInterface $request
-     * @return  \Magento\Object|bool
+     * @param   \Magento\Framework\App\RequestInterface $request
+     * @return  \Magento\Framework\Object|bool
      */
-    public function getStepByRequest(\Magento\App\RequestInterface $request)
+    public function getStepByRequest(\Magento\Framework\App\RequestInterface $request)
     {
         foreach ($this->_steps as $step) {
             if ($step->getController() == $request->getControllerName() &&
@@ -116,7 +116,7 @@ class Wizard
      * Get wizard step by name
      *
      * @param   string $name
-     * @return  \Magento\Object|bool
+     * @return  \Magento\Framework\Object|bool
      */
     public function getStepByName($name)
     {

@@ -24,22 +24,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="store-switcher">
-    <label for="currency_switcher"><?php echo __('Order Currency:') ?></label>
-    <select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
-        <?php foreach ($this->getAvailableCurrencies() as $_code): ?>
-            <option value="<?php echo $_code ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>">
-                <?php echo $this->getCurrencyName($_code) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
-
 <div class="page-create-order">
     <script type="text/javascript">order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')</script>
     <?php if($this->getCustomerId()): ?>
-    <div class="customer-current-activity" id="order-sidebar">
-        <?php echo $this->getChildHtml('sidebar') ?>
+    <div class="order-sidebar">
+        <div class="store-switcher order-currency">
+            <label for="currency_switcher"><?php echo __('Order Currency:') ?></label>
+            <select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
+                <?php foreach ($this->getAvailableCurrencies() as $_code): ?>
+                    <option value="<?php echo $_code ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>">
+                        <?php echo $this->getCurrencyName($_code) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="customer-current-activity" id="order-sidebar">
+            <?php echo $this->getChildHtml('sidebar') ?>
+        </div>
     </div>
     <?php endif; ?>
     <div class="order-details<?php if($this->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
@@ -69,7 +70,9 @@
             </div>
 
             <?php if($this->getChildBlock('card_validation')): ?>
-                <div id="order-card_validation" class="order-card-validation"><?php echo $this->getChildHtml('card_validation') ?></div>
+                <div class="order-card-validation" id="order-card_validation">
+                    <?php echo $this->getChildHtml('card_validation') ?>
+                </div>
             <?php endif; ?>
 
             <?php echo $this->getChildHtml('gift_options') ?>

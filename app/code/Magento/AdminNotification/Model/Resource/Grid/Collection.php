@@ -38,7 +38,7 @@ class Collection extends \Magento\AdminNotification\Model\Resource\Inbox\Collect
     /**
      * Add remove filter
      *
-     * @return \Magento\AdminNotification\Model\Resource\Grid\Collection|\Magento\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\AdminNotification\Model\Resource\Grid\Collection|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     protected function _initSelect()
     {

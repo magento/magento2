@@ -608,12 +608,12 @@ class Config
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -629,21 +629,21 @@ class Config
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param array $params
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
         $params = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_coreData = $coreData;
         $this->_storeManager = $storeManager;
         $this->_cctypeFactory = $cctypeFactory;
@@ -706,8 +706,9 @@ class Config
     {
         return $this->isMethodSupportedForCountry(
             $method
-        ) && $this->_coreStoreConfig->getConfigFlag(
+        ) && $this->_scopeConfig->isSetFlag(
             "payment/{$method}/active",
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -795,7 +796,11 @@ class Config
         $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
         $path = $this->_getSpecificConfigPath($underscored);
         if ($path !== null) {
-            $value = $this->_coreStoreConfig->getConfig($path, $this->_storeId);
+            $value = $this->_scopeConfig->getValue(
+                $path,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->_storeId
+            );
             $value = $this->_prepareValue($underscored, $value);
             $this->{$key} = $value;
             $this->{$underscored} = $value;
@@ -851,9 +856,12 @@ class Config
      */
     public function getMerchantCountry()
     {
-        $countryCode = $this->_coreStoreConfig->getConfig(
-            $this->_mapGeneralFieldset('merchant_country'),
-            $this->_storeId
+        $countryCode = $this->_scopeConfig->getValue(
+            $this->_mapGeneralFieldset(
+                'merchant_country',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->_storeId
+            )
         );
         if (!$countryCode) {
             $countryCode = $this->_coreData->getDefaultCountry($this->_storeId);
@@ -1101,10 +1109,10 @@ class Config
      * Get "What Is PayPal" localized URL
      * Supposed to be used with "mark" as popup window
      *
-     * @param \Magento\Locale\ResolverInterface $locale
+     * @param \Magento\Framework\Locale\ResolverInterface $locale
      * @return string
      */
-    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Locale\ResolverInterface $locale = null)
+    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Framework\Locale\ResolverInterface $locale = null)
     {
         $countryCode = 'US';
         if (null !== $locale) {
@@ -1212,7 +1220,11 @@ class Config
      */
     public function getAdditionalOptionsLogoUrl($localeCode, $type = false)
     {
-        $configType = $this->_coreStoreConfig->getConfig($this->_mapGenericStyleFieldset('logo'), $this->_storeId);
+        $configType = $this->_scopeConfig->getValue(
+            $this->_mapGenericStyleFieldset('logo'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
         if (!$configType) {
             return false;
         }
@@ -1392,12 +1404,7 @@ class Config
      */
     public function getWpsPaymentDeliveryMethods()
     {
-        return array(
-            self::WPS_TRANSPORT_IPN => __('IPN (Instant Payment Notification) Only')
-            // not supported yet:
-            //            self::WPS_TRANSPORT_PDT      => __('PDT (Payment Data Transfer) Only'),
-            //            self::WPS_TRANSPORT_IPN_PDT  => __('Both IPN and PDT'),
-        );
+        return array(self::WPS_TRANSPORT_IPN => __('IPN (Instant Payment Notification) Only'));
     }
 
     /**
@@ -1480,10 +1487,10 @@ class Config
     /**
      * Export page style current settings to specified object
      *
-     * @param \Magento\Object $to
+     * @param \Magento\Framework\Object $to
      * @return void
      */
-    public function exportExpressCheckoutStyleSettings(\Magento\Object $to)
+    public function exportExpressCheckoutStyleSettings(\Magento\Framework\Object $to)
     {
         foreach ($this->_ecStyleConfigMap as $key => $exportKey) {
             if ($this->{$key}) {

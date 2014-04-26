@@ -32,7 +32,7 @@ namespace Magento\Connect\Model\Extension;
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Data\Collection\Filesystem
+class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
      * Files and folders regexsp
@@ -52,12 +52,12 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_disallowedFilesMask = '/^package\.xml$/i';
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $connectDirectory;
 
@@ -65,13 +65,13 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * Set base dir
      *
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\App\Filesystem $filesystem)
     {
         parent::__construct($entityFactory);
         $this->filesystem = $filesystem;
-        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         $this->connectDirectory->create('connect');
         $this->addTargetDir($this->connectDirectory->getAbsolutePath('connect'));
     }

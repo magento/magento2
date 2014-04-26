@@ -17,7 +17,7 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -57,7 +57,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             array('getId', 'getState', '__wakeup')
         );
         $this->model = new StoreGroup($this->indexerMock);
-        $this->subject = $this->getMock('Magento\Core\Model\Resource\Store\Group', array(), array(), '', false);
+        $this->subject = $this->getMock('Magento\Store\Model\Resource\Group', array(), array(), '', false);
     }
 
     /**
@@ -68,7 +68,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockIndexerMethods();
         $groupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group',
+            'Magento\Store\Model\Group',
             array('dataHasChangedFor', 'isObjectNew', '__wakeup'),
             array(),
             '',
@@ -88,7 +88,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNotNew($valueMap)
     {
         $groupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group',
+            'Magento\Store\Model\Group',
             array('dataHasChangedFor', 'isObjectNew', '__wakeup'),
             array(),
             '',
@@ -114,7 +114,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveWithoutChanges()
     {
         $groupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group',
+            'Magento\Store\Model\Group',
             array('dataHasChangedFor', 'isObjectNew', '__wakeup'),
             array(),
             '',

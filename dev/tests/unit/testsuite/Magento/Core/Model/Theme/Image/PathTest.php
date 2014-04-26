@@ -43,27 +43,27 @@ class PathTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\View\Url
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Url
      */
     protected $_viewUrlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\StoreManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
      */
     protected $_storeManagerMock;
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $this->_viewUrlMock = $this->getMock('Magento\View\Url', array(), array(), '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_viewUrlMock = $this->getMock('Magento\Framework\View\Url', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
 
         $this->_filesystem->expects(
             $this->any()
         )->method(
             'getPath'
         )->with(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         )->will(
             $this->returnValue('/media')
         );
@@ -85,7 +85,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreviewImageDirectoryUrlGetter()
     {
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
         $this->_storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertEquals('http://localhost/theme/preview/', $this->_model->getPreviewImageDirectoryUrl());

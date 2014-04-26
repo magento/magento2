@@ -25,7 +25,7 @@ namespace Magento\Multishipping\Model\Payment\Method\Specification;
 
 use Magento\Payment\Model\Method\Specification\AbstractSpecification;
 use Magento\Payment\Model\Config as PaymentConfig;
-use Magento\Core\Model\Store\ConfigInterface as StoreConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface as StoreConfig;
 
 /**
  * 3D secure specification
@@ -51,18 +51,18 @@ class Is3DSecure extends AbstractSpecification
      *
      * @var StoreConfig
      */
-    protected $storeConfig;
+    protected $scopeConfig;
 
     /**
      * Construct
      *
      * @param PaymentConfig $paymentConfig
-     * @param StoreConfig $storeConfig
+     * @param StoreConfig $scopeConfig
      */
-    public function __construct(PaymentConfig $paymentConfig, StoreConfig $storeConfig)
+    public function __construct(PaymentConfig $paymentConfig, StoreConfig $scopeConfig)
     {
         parent::__construct($paymentConfig);
-        $this->storeConfig = $storeConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -84,10 +84,10 @@ class Is3DSecure extends AbstractSpecification
      */
     protected function is3DSecureEnabled($paymentMethod)
     {
-        return $this->storeConfig->getConfigFlag(
-            sprintf(self::PATH_PAYMENT_3DSECURE, $paymentMethod)
-        ) || $this->storeConfig->getConfigFlag(
-            sprintf(self::PATH_PAYMENT_CENTINEL, $paymentMethod)
+        return $this->scopeConfig->isSetFlag(
+            sprintf(self::PATH_PAYMENT_3DSECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $paymentMethod)
+        ) || $this->scopeConfig->isSetFlag(
+            sprintf(self::PATH_PAYMENT_CENTINEL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $paymentMethod)
         );
     }
 }

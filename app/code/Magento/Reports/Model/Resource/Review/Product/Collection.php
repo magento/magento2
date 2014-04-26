@@ -118,13 +118,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Get select count sql
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
         $this->_renderFilters();
 
-        /* @var \Magento\DB\Select $select */
+        /* @var \Magento\Framework\DB\Select $select */
         $select = clone $this->getSelect();
         $select->reset(\Zend_Db_Select::ORDER);
         $select->reset(\Zend_Db_Select::LIMIT_COUNT);
@@ -133,7 +133,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $select->resetJoinLeft();
         $select->columns(new \Zend_Db_Expr('1'));
 
-        /* @var \Magento\DB\Select $countSelect */
+        /* @var \Magento\Framework\DB\Select $countSelect */
         $countSelect = clone $select;
         $countSelect->reset();
         $countSelect->from($select, "COUNT(*)");

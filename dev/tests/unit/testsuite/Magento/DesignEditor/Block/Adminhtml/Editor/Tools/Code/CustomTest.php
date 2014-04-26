@@ -84,8 +84,8 @@ class CustomTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom',
             array(
-                'config' => $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
-                'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
+                'config' => $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
+                'formFactory' => $this->getMock('Magento\Framework\Data\FormFactory', array(), array(), '', false),
                 'urlBuilder' => $this->_urlBuilder,
                 'themeContext' => $this->_themeContext
             )
@@ -143,12 +143,18 @@ class CustomTest extends \PHPUnit_Framework_TestCase
     {
         $expectedContent = 'New file content';
 
-        $customization = $this->getMock('Magento\View\Design\Theme\Customization', array(), array(), '', false);
+        $customization = $this->getMock(
+            'Magento\Framework\View\Design\Theme\Customization',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_theme->expects($this->any())->method('getCustomization')->will($this->returnValue($customization));
 
-        /** @var $cssFile \Magento\View\Design\Theme\Customization\File\Css */
+        /** @var $cssFile \Magento\Framework\View\Design\Theme\Customization\File\Css */
         $cssFile = $this->getMock(
-            'Magento\View\Design\Theme\Customization\File\Css',
+            'Magento\Framework\View\Design\Theme\Customization\File\Css',
             array('getContent'),
             array(),
             '',

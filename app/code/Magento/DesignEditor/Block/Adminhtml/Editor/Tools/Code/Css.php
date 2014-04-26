@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 /**
  * Block that renders CSS tab
  */
-class Css extends \Magento\View\Element\Template
+class Css extends \Magento\Framework\View\Element\Template
 {
     /**
      * Get file groups content

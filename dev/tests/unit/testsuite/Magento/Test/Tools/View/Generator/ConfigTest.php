@@ -28,20 +28,20 @@ require_once __DIR__ . '/../../../../../../../../tools/Magento/Tools/View/Genera
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_rootDirectory;
 
     /**
-     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
     protected function setUp()
     {
-        $this->_rootDirectory = $this->getMockForAbstractClass('Magento\Filesystem\Directory\WriteInterface');
+        $this->_rootDirectory = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->_rootDirectory->expects($this->never())->method('getAbsolutePath');
-        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
         $this->_filesystem->expects(
             $this->once()
         )->method(
@@ -70,7 +70,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $exceptionMessage
     ) {
         if ($exceptionMessage) {
-            $this->setExpectedException('\Magento\Exception', $exceptionMessage);
+            $this->setExpectedException('\Magento\Framework\Exception', $exceptionMessage);
         }
 
         $this->_rootDirectory->expects(

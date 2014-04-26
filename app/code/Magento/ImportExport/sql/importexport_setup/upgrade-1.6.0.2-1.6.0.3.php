@@ -24,14 +24,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->getConnection()->addColumn(
     $installer->getTable('importexport_importdata'),
     'entity_subtype',
     array(
-        'TYPE' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+        'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         'LENGTH' => 50,
         'COMMENT' => 'Defines entity subtype to have ability import entity data partially'
     )

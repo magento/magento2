@@ -53,9 +53,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
-        $this->readAdapter = $this->getMock('\Magento\DB\Adapter\AdapterInterface', array(), array(), '', false);
-        $this->writeAdapter = $this->getMock('\Magento\DB\Adapter\AdapterInterface', array(), array(), '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
+        $this->readAdapter =
+            $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', array(), array(), '', false);
+        $this->writeAdapter =
+            $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', array(), array(), '', false);
         $this->model = $objectManager->getObject(
             'Magento\Catalog\Model\Resource\Product\Link',
             array('resource' => $this->resource)
@@ -64,7 +66,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareReadAdapter()
     {
-        $this->dbSelect = $this->getMock('Magento\DB\Select', array(), array(), '', false);
+        $this->dbSelect = $this->getMock('Magento\Framework\DB\Select', array(), array(), '', false);
 
         // method flow
         $this->resource->expects(

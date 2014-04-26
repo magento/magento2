@@ -34,14 +34,13 @@
  */
 namespace Magento\CatalogSearch\Model\Config\Backend\Search;
 
-use Magento\App\ConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogSearch\Model\Fulltext;
-use Magento\Core\Model\Config\Value;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Model\Resource\AbstractResource;
-use Magento\Core\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Data\Collection\Db;
 
 class Type extends Value
 {
@@ -53,27 +52,25 @@ class Type extends Value
     protected $_catalogSearchFulltext;
 
     /**
-     * @param Context $context
+     * @param \Magento\Framework\Model\Context $context
      * @param Registry $registry
-     * @param StoreManagerInterface $storeManager
-     * @param ConfigInterface $config
+     * @param ScopeConfigInterface $config
      * @param Fulltext $catalogSearchFulltext
-     * @param AbstractResource $resource
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param Db $resourceCollection
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        StoreManagerInterface $storeManager,
-        ConfigInterface $config,
+        ScopeConfigInterface $config,
         Fulltext $catalogSearchFulltext,
         AbstractResource $resource = null,
         Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

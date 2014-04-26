@@ -26,14 +26,14 @@ namespace Magento\Catalog\Model\Product\Option;
 class UrlBuilder
 {
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_frontendUrlBuilder;
 
     /**
-     * @param \Magento\UrlInterface $frontendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
      */
-    public function __construct(\Magento\UrlInterface $frontendUrlBuilder)
+    public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
     {
         $this->_frontendUrlBuilder = $frontendUrlBuilder;
     }

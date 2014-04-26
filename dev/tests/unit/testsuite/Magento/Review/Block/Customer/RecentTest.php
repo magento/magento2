@@ -33,7 +33,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
     /** @var \Magento\Review\Model\Resource\Review\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
@@ -45,13 +45,13 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\CustomerCurrentService|\PHPUnit_Framework_MockObject_MockObject */
     protected $currentCustomer;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('\Magento\Core\Model\StoreManagerInterface');
-        $this->context = $this->getMock('Magento\View\Element\Template\Context', array(), array(), '', false);
+        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', array(), array(), '', false);
         $this->context->expects(
             $this->any()
         )->method(
@@ -73,28 +73,41 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->collectionFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->collection));
+        $this->collectionFactory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->collection)
+        );
         $this->currentCustomer = $this->getMock(
             'Magento\Customer\Service\V1\CustomerCurrentService',
-            [],
-            [],
+            array(),
+            array(),
             '',
             false
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->object = $this->objectManagerHelper->getObject('Magento\Review\Block\Customer\Recent', [
-            'context' => $this->context,
-            'collectionFactory' => $this->collectionFactory,
-            'currentCustomer' => $this->currentCustomer
-        ]);
+        $this->object = $this->objectManagerHelper->getObject(
+            'Magento\Review\Block\Customer\Recent',
+            array(
+                'context' => $this->context,
+                'collectionFactory' => $this->collectionFactory,
+                'currentCustomer' => $this->currentCustomer
+            )
+        );
     }
 
     public function testGetCollection()
     {
-        $this->storeManager->expects($this->any())->method('getStore')
-            ->will($this->returnValue(new \Magento\Object(['id' => 42])));
+        $this->storeManager->expects(
+            $this->any()
+        )->method(
+            'getStore'
+        )->will(
+            $this->returnValue(new \Magento\Framework\Object(array('id' => 42)))
+        );
         $this->currentCustomer->expects($this->any())->method('getCustomerId')->will($this->returnValue(4242));
 
         $this->collection->expects(

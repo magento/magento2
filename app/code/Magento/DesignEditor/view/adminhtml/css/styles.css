@@ -41,7 +41,7 @@
     border-bottom: 1px solid #000;
 }
 
-.vde-dialog .action-close {
+/*.vde-dialog .action-close {
     background: none;
     border: none;
     color: #6d665e;
@@ -57,7 +57,7 @@
 .vde-dialog .action-close:hover {
     color: #000;
     border-bottom: 1px solid #000;
-}
+}*/
 
 .vde-dialog .ui-dialog-buttonset {
     text-align: right;
@@ -234,35 +234,8 @@
 #theme_selector_tabs .tabs-horiz {
     background: none;
     border: 0;
-    padding: 9px 9px 0;
-    border-bottom: 1px solid #beb8af;
-}
-
-#theme_selector_tabs .tabs-horiz > li {
-    margin-right: 4px;
-    border: 1px solid #beb8af;
-    border-bottom-width: 0;
-    border-radius: 5px 5px 0 0;
-}
-
-#theme_selector_tabs .tabs-horiz > li a {
-    background: #dbd6ce;
-    font-size: 15px;
-    color: #524c44;
-    border-radius: 5px 5px 0 0;
-    padding: 10px 18px 11px;
-}
-
-#theme_selector_tabs .tabs-horiz > .ui-state-active {
-    border-bottom: 1px solid #fff;
-    margin-bottom: -1px;
-}
-
-#theme_selector_tabs .tabs-horiz > .ui-state-active a {
-    background: #fff;
-    border: 0;
-    margin-top: 0;
-    box-shadow: none;
+    padding: 9px 0 0;
+    background: #F2EBDE;
 }
 
 /*
@@ -270,12 +243,12 @@
 -------------------------------------- */
 .theme-selector {
     overflow: auto;
+    background: #fff;
 }
 
 .theme-selector .ui-tabs-panel {
-    padding: 60px 40px 20px;
+    padding: 20px;
     background: #fff;
-    border-radius: 0 0 5px 5px;
     min-height: 500px;
 }
 
@@ -429,9 +402,10 @@
     My Customizations Tab
 -------------------------------------- */
 .themes-customizations h3 {
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 400;
     margin-bottom: 30px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid #cac3b4;
     padding-bottom: 8px;
 }
 

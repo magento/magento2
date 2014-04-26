@@ -32,7 +32,7 @@ namespace Magento\Log\Model\Resource;
  * @package    Magento_Log
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\Model\Resource\Db\AbstractDb
+class Customer extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Visitor data table name
@@ -99,7 +99,7 @@ class Customer extends \Magento\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Log\Model\Customer $object
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {

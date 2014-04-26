@@ -34,7 +34,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Email;
 
-class Method implements \Magento\Option\ArrayInterface
+class Method implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

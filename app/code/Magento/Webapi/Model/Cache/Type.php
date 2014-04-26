@@ -29,7 +29,7 @@
  */
 namespace Magento\Webapi\Model\Cache;
 
-class Type extends \Magento\Cache\Frontend\Decorator\TagScope
+class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types
@@ -42,9 +42,9 @@ class Type extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'WEBSERVICE';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

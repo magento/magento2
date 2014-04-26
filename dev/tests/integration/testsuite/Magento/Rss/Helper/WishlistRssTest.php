@@ -39,12 +39,12 @@ class WishlistRssTest extends \PHPUnit_Framework_TestCase
     protected $_coreData;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Helper\Context
+     * @var \Magento\Framework\App\Helper\Context
      */
     protected $_contextHelper;
 
@@ -66,7 +66,7 @@ class WishlistRssTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');
         $this->_coreData = $this->_objectManager->create('Magento\Core\Helper\Data');
 
-        $this->_contextHelper = $this->_objectManager->create('Magento\App\Helper\Context');
+        $this->_contextHelper = $this->_objectManager->create('Magento\Framework\App\Helper\Context');
         $request = $this->_contextHelper->getRequest();
         $request->setParam('data', $this->_coreData->urlEncode($this->_fixtureCustomerId));
 
@@ -101,7 +101,7 @@ class WishlistRssTest extends \PHPUnit_Framework_TestCase
             ->loadByCustomerId($this->_fixtureCustomerId);
         $wishlist->load($wishlist->getId());
 
-        /** @var \Magento\App\Request\Http $request */
+        /** @var \Magento\Framework\App\Request\Http $request */
         $request = $this->_contextHelper->getRequest();
         $request->setParam('wishlist_id', $wishlist->getId());
 
@@ -119,7 +119,7 @@ class WishlistRssTest extends \PHPUnit_Framework_TestCase
         $wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
             ->loadByCustomerId($this->_fixtureCustomerId);
 
-        /** @var \Magento\App\Request\Http $request */
+        /** @var \Magento\Framework\App\Request\Http $request */
         $request = $this->_contextHelper->getRequest();
         $request->setParam('wishlist_id', '');
 

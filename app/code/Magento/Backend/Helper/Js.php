@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Helper;
 
-class Js extends \Magento\Core\Helper\Js
+class Js
 {
     /**
      * Decode serialized grid data

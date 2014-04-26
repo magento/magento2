@@ -49,33 +49,33 @@ abstract class AbstractAdapter
     protected $_headerCols = null;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $_directoryHandle;
 
     /**
      * Constructor
      *
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param string|null $destination
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function __construct(\Magento\App\Filesystem $filesystem, $destination = null)
+    public function __construct(\Magento\Framework\App\Filesystem $filesystem, $destination = null)
     {
-        $this->_directoryHandle = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::SYS_TMP_DIR);
+        $this->_directoryHandle = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::SYS_TMP_DIR);
         if (!$destination) {
             $destination = uniqid('importexport_');
             $this->_directoryHandle->touch($destination);
         }
         if (!is_string($destination)) {
-            throw new \Magento\Model\Exception(__('Destination file path must be a string'));
+            throw new \Magento\Framework\Model\Exception(__('Destination file path must be a string'));
         }
 
         if (!$this->_directoryHandle->isWritable()) {
-            throw new \Magento\Model\Exception(__('Destination directory is not writable'));
+            throw new \Magento\Framework\Model\Exception(__('Destination directory is not writable'));
         }
         if ($this->_directoryHandle->isFile($destination) && !$this->_directoryHandle->isWritable($destination)) {
-            throw new \Magento\Model\Exception(__('Destination file is not writable'));
+            throw new \Magento\Framework\Model\Exception(__('Destination file is not writable'));
         }
 
         $this->_destination = $destination;

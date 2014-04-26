@@ -37,10 +37,10 @@
         _create: function() {
 
             this.element.on('changePrice', $.proxy(function(e, data) {
-                this.changePrice(data.config, data.price);
-            }, this)).on('reloadPrice', $.proxy(function() {
-                this.reloadPrice();
-            }, this));
+                    this.changePrice(data.config, data.price);
+                }, this)).on('reloadPrice', $.proxy(function() {
+                    this.reloadPrice();
+                }, this));
 
             $(this.options.productCustomSelector).each(
                 $.proxy(function(key, value) {
@@ -88,12 +88,16 @@
         },
         _getOptionPrices: function() {
             var price = 0,
-                oldPrice = 0;
+                oldPrice = 0,
+                inclTaxPrice = 0,
+                exclTaxPrice = 0;
             $.each(this.options.prices, function(key, pair) {
                 price += parseFloat(pair.price);
                 oldPrice += parseFloat(pair.oldPrice);
+                inclTaxPrice += parseFloat(pair.inclTaxPrice);
+                exclTaxPrice += parseFloat(pair.exclTaxPrice);
             });
-            var result = [price, oldPrice];
+            var result = [price, oldPrice, inclTaxPrice, exclTaxPrice];
             return result;
         },
         reloadPrice: function() {
@@ -102,20 +106,20 @@
                     priceSelectors = [
                         '#product-price-' + this.options.priceConfig.productId,
                         '#bundle-price-' + this.options.priceConfig.productId,
-                        '#price-including-tax-' + this.options.priceConfig.productId,
-                        '#price-excluding-tax-' + this.options.priceConfig.productId,
+                        '#price-including-tax-product-price-' + this.options.priceConfig.productId,
+                        '#price-excluding-tax-product-price-' + this.options.priceConfig.productId,
                         '#old-price-' + this.options.priceConfig.productId
                     ],
                     getOptionPrices = this._getOptionPrices(),
                     optionPrice = {
-                        excludeTax: 0,
-                        includeTax: 0,
+                        exclTaxPrice: 0,
+                        inclTaxPrice: 0,
                         oldPrice: 0,
                         price: 0,
-                        update: function(price, excludeTax, includeTax, oldPrice) {
+                        update: function(price, exclTaxPrice, inclTaxPrice, oldPrice) {
                             this.price += price;
-                            this.excludeTax += excludeTax;
-                            this.includeTax += includeTax;
+                            this.exclTaxPrice += exclTaxPrice;
+                            this.inclTaxPrice += inclTaxPrice;
                             this.oldPrice += oldPrice;
                         }
                     };
@@ -135,9 +139,10 @@
                         if (element.is(":checkbox, :radio")) {
                             if (element.is(":checked")) {
                                 if (configOptions[element.val()]) {
-                                    optionPrice.update(configOptions[element.val()].price,
-                                        configOptions[element.val()].excludeTax,
-                                        configOptions[element.val()].includeTax,
+                                    optionPrice.update(
+                                        configOptions[element.val()].price,
+                                        configOptions[element.val()].exclTaxPrice,
+                                        configOptions[element.val()].inclTaxPrice,
                                         configOptions[element.val()].oldPrice);
                                 }
                             }
@@ -149,37 +154,47 @@
                                 }
                             });
                             if (dateSelected) {
-                                optionPrice.update(configOptions.price, configOptions.excludeTax,
-                                    configOptions.includeTax, configOptions.oldPrice);
+                                optionPrice.update(
+                                    configOptions.price,
+                                    configOptions.exclTaxPrice,
+                                    configOptions.inclTaxPrice,
+                                    configOptions.oldPrice);
                                 skipIds[optionId] = optionId;
                             }
                         } else if (element.is('select')) {
                             element.find(':selected').each(function() {
                                 if (configOptions[$(this).val()]) {
-                                    optionPrice.update(configOptions[$(this).val()].price,
-                                        configOptions[$(this).val()].excludeTax,
-                                        configOptions[$(this).val()].includeTax,
+                                    optionPrice.update(
+                                        configOptions[$(this).val()].price,
+                                        configOptions[$(this).val()].exclTaxPrice,
+                                        configOptions[$(this).val()].inclTaxPrice,
                                         configOptions[$(this).val()].oldPrice);
                                 }
                             });
                         } else if (element.is('textarea,:text')) {
                             if (element.val()) {
-                                optionPrice.update(configOptions.price, configOptions.excludeTax,
-                                    configOptions.includeTax, configOptions.oldPrice);
+                                optionPrice.update(
+                                    configOptions.price,
+                                    configOptions.exclTaxPrice,
+                                    configOptions.inclTaxPrice,
+                                    configOptions.oldPrice);
                             }
                         } else if (element.is(":file")) {
                             var controlContainer = element.closest(this.options.controlContainer);
 
                             if (element.val() || controlContainer.find('[id*="change-"]').length > 0) {
-                                optionPrice.update(configOptions.price, configOptions.excludeTax,
-                                    configOptions.includeTax, configOptions.oldPrice);
+                                optionPrice.update(
+                                    configOptions.price,
+                                    configOptions.exclTaxPrice,
+                                    configOptions.inclTaxPrice,
+                                    configOptions.oldPrice);
                             }
                         }
                     }
                 }, this));
                 var updatedPrice = {
-                    priceExclTax: optionPrice.excludeTax + this.options.priceConfig.priceExclTax,
-                    priceInclTax: optionPrice.includeTax + this.options.priceConfig.priceInclTax,
+                    exclTaxPrice: optionPrice.exclTaxPrice + this.options.priceConfig.exclTaxPrice,
+                    inclTaxPrice: optionPrice.inclTaxPrice + this.options.priceConfig.inclTaxPrice,
                     productOldPrice: optionPrice.oldPrice + this.options.priceConfig.productOldPrice,
                     productPrice: optionPrice.price + this.options.priceConfig.productPrice
                 };
@@ -195,17 +210,21 @@
                     if (priceElement.length === 1) {
                         var price = 0;
                         if (value.indexOf('price-including-tax-') >= 0) {
-                            price = updatedPrice.priceInclTax;
+                            price = updatedPrice.inclTaxPrice;
+                            price = price + getOptionPrices[2];
                         } else if (value.indexOf('price-excluding-tax-') >= 0) {
-                            price = updatedPrice.priceExclTax;
+                            price = updatedPrice.exclTaxPrice;
+                            price = price + getOptionPrices[3];
                         } else if (value.indexOf('old-price-') >= 0) {
                             price = updatedPrice.productOldPrice;
+                            price = price + getOptionPrices[1];
                         } else {
                             price = this.options.priceConfig.showIncludeTax ?
-                                updatedPrice.priceInclTax : updatedPrice.priceExclTax;
+                                updatedPrice.inclTaxPrice : updatedPrice.exclTaxPrice;
+                            price = price + getOptionPrices[0];
                         }
 
-                        price = price + getOptionPrices[0];
+
                         var priceHtml = $.tmpl(this.options.priceTemplate, {'formattedPrice': this._formatCurrency(price, this.options.priceConfig.priceFormat)});
                         priceElement.html(priceHtml[0].outerHTML);
                         // If clone exists, update clone price as well

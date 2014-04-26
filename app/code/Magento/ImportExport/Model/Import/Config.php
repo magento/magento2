@@ -23,16 +23,16 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
-class Config extends \Magento\Config\Data implements \Magento\ImportExport\Model\Import\ConfigInterface
+class Config extends \Magento\Framework\Config\Data implements \Magento\ImportExport\Model\Import\ConfigInterface
 {
     /**
      * @param \Magento\ImportExport\Model\Import\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\ImportExport\Model\Import\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'import_config_cache'
     ) {
         parent::__construct($reader, $cache, $cacheId);

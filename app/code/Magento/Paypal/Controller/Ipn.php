@@ -26,10 +26,10 @@ namespace Magento\Paypal\Controller;
 /**
  * Unified IPN controller for all supported PayPal methods
  */
-class Ipn extends \Magento\App\Action\Action
+class Ipn extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -39,14 +39,14 @@ class Ipn extends \Magento\App\Action\Action
     protected $_ipnFactory;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
-        \Magento\Logger $logger
+        \Magento\Framework\Logger $logger
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;

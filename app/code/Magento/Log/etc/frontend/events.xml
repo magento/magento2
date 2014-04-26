@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/Event/etc/events.xsd">
     <event name="controller_action_predispatch">
         <observer name="log" instance="Magento\Log\Model\Visitor" method="initByRequest" />
     </event>
     <event name="controller_action_postdispatch">
         <observer name="log" instance="Magento\Log\Model\Visitor" method="saveByRequest" />
     </event>
-    <event name="customer_login">
+    <event name="customer_data_object_login">
         <observer name="log" instance="Magento\Log\Model\Visitor" method="bindCustomerLogin" />
     </event>
     <event name="customer_logout">

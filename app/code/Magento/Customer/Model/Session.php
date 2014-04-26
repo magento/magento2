@@ -33,7 +33,7 @@ use Magento\Customer\Service\V1\Data\Customer as CustomerData;
 /**
  * Customer session model
  */
-class Session extends \Magento\Session\SessionManager
+class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
      * Customer object
@@ -76,7 +76,7 @@ class Session extends \Magento\Session\SessionManager
     protected $_configShare;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
@@ -89,22 +89,17 @@ class Session extends \Magento\Session\SessionManager
     protected $_customerFactory;
 
     /**
-     * @var \Magento\UrlFactory
+     * @var \Magento\Framework\UrlFactory
      */
     protected $_urlFactory;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\Core\Model\Store\StorageInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $_httpContext;
 
@@ -114,43 +109,41 @@ class Session extends \Magento\Session\SessionManager
     protected $_converter;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Session\SaveHandlerInterface $saveHandler
-     * @param \Magento\Session\ValidatorInterface $validator
-     * @param \Magento\Session\StorageInterface $storage
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Framework\Session\ValidatorInterface $validator
+     * @param \Magento\Framework\Session\StorageInterface $storage
      * @param Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Customer\Helper\Data $customerData
      * @param ResourceCustomer $customerResource
      * @param CustomerFactory $customerFactory
-     * @param \Magento\UrlFactory $urlFactory
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\UrlFactory $urlFactory
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param Converter $converter
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param null $sessionName
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Session\SaveHandlerInterface $saveHandler,
-        \Magento\Session\ValidatorInterface $validator,
-        \Magento\Session\StorageInterface $storage,
+        \Magento\Framework\App\Request\Http $request,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Framework\Session\ValidatorInterface $validator,
+        \Magento\Framework\Session\StorageInterface $storage,
         Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Customer\Helper\Data $customerData,
         Resource\Customer $customerResource,
         CustomerFactory $customerFactory,
-        \Magento\UrlFactory $urlFactory,
-        \Magento\Core\Model\Session $session,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\UrlFactory $urlFactory,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
         CustomerAccountServiceInterface $customerAccountService,
         $sessionName = null
@@ -164,7 +157,6 @@ class Session extends \Magento\Session\SessionManager
         $this->_session = $session;
         $this->_customerAccountService = $customerAccountService;
         $this->_eventManager = $eventManager;
-        $this->_storeManager = $storeManager;
         $this->_httpContext = $httpContext;
         parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
         $this->start($sessionName);
@@ -416,6 +408,7 @@ class Session extends \Magento\Session\SessionManager
     {
         $this->setCustomer($customer);
         $this->_eventManager->dispatch('customer_login', array('customer' => $customer));
+        $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $this->getCustomerDataObject()]);
         $this->regenerateId();
         return $this;
     }
@@ -433,6 +426,7 @@ class Session extends \Magento\Session\SessionManager
         $this->setCustomer($customerModel);
 
         $this->_eventManager->dispatch('customer_login', array('customer' => $customerModel));
+        $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
         return $this;
     }
 
@@ -471,11 +465,11 @@ class Session extends \Magento\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   \Magento\App\Action\Action $action
+     * @param   \Magento\Framework\App\Action\Action $action
      * @param   bool|null $loginUrl
      * @return  bool
      */
-    public function authenticate(\Magento\App\Action\Action $action, $loginUrl = null)
+    public function authenticate(\Magento\Framework\App\Action\Action $action, $loginUrl = null)
     {
         if ($this->isLoggedIn()) {
             return true;
@@ -566,7 +560,7 @@ class Session extends \Magento\Session\SessionManager
     }
 
     /**
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     protected function _createUrl()
     {

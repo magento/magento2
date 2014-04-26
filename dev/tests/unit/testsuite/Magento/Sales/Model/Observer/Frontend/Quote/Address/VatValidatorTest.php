@@ -56,7 +56,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
     protected $testData;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $validationResult;
 
@@ -79,7 +79,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('merchantVatNumber')
         );
 
-        $this->storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
 
         $this->quoteAddressMock = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
@@ -140,7 +140,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
         $this->quoteAddressMock->expects($this->any())->method('getCountryId')->will($this->returnValue('en'));
         $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('testVatID'));
 
-        $this->validationResult = new \Magento\Object($this->testData);
+        $this->validationResult = new \Magento\Framework\Object($this->testData);
 
         $this->model = new \Magento\Sales\Model\Observer\Frontend\Quote\Address\VatValidator(
             $this->customerAddressMock,

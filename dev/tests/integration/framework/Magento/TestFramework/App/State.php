@@ -30,7 +30,7 @@
  */
 namespace Magento\TestFramework\App;
 
-class State extends \Magento\App\State
+class State extends \Magento\Framework\App\State
 {
     /**
      * {@inheritdoc}

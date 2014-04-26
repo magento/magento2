@@ -70,7 +70,7 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Model\AbstractModel
+class Item extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_GLOBAL = 'cataloginventory/options/';
 
@@ -162,19 +162,19 @@ class Item extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Store model manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Locale\FormatInterface
+     * @var \Magento\Framework\Locale\FormatInterface
      */
     protected $_localeFormat;
 
@@ -194,47 +194,47 @@ class Item extends \Magento\Model\AbstractModel
     protected $_customerSession;
 
     /**
-     * @var \Magento\Math\Division
+     * @var \Magento\Framework\Math\Division
      */
     protected $mathDivision;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Index\Model\Indexer $indexer
      * @param Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Locale\FormatInterface $localeFormat
-     * @param \Magento\Math\Division $mathDivision
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Math\Division $mathDivision
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Index\Model\Indexer $indexer,
         Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Locale\FormatInterface $localeFormat,
-        \Magento\Math\Division $mathDivision,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Math\Division $mathDivision,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -244,7 +244,7 @@ class Item extends \Magento\Model\AbstractModel
         $this->_stockStatus = $stockStatus;
         $this->_catalogInventoryData = $catalogInventoryData;
         $this->_catalogInventoryMinsaleqty = $catalogInventoryMinsaleqty;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_localeFormat = $localeFormat;
         $this->mathDivision = $mathDivision;
@@ -319,7 +319,10 @@ class Item extends \Magento\Model\AbstractModel
      */
     public function canSubtractQty()
     {
-        return $this->getManageStock() && $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CAN_SUBTRACT);
+        return $this->getManageStock() && $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CAN_SUBTRACT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -333,7 +336,10 @@ class Item extends \Magento\Model\AbstractModel
         if (!$this->getManageStock()) {
             return $this;
         }
-        $config = $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CAN_SUBTRACT);
+        $config = $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CAN_SUBTRACT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (!$config) {
             return $this;
         }
@@ -387,8 +393,9 @@ class Item extends \Magento\Model\AbstractModel
      */
     public function getMinQty()
     {
-        return (double)($this->getUseConfigMinQty() ? $this->_coreStoreConfig->getConfig(
-            self::XML_PATH_MIN_QTY
+        return (double)($this->getUseConfigMinQty() ? $this->_scopeConfig->getValue(
+            self::XML_PATH_MIN_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : $this->getData(
             'min_qty'
         ));
@@ -447,8 +454,9 @@ class Item extends \Magento\Model\AbstractModel
      */
     public function getMaxSaleQty()
     {
-        return (double)($this->getUseConfigMaxSaleQty() ? $this->_coreStoreConfig->getConfig(
-            self::XML_PATH_MAX_SALE_QTY
+        return (double)($this->getUseConfigMaxSaleQty() ? $this->_scopeConfig->getValue(
+            self::XML_PATH_MAX_SALE_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : $this->getData(
             'max_sale_qty'
         ));
@@ -462,7 +470,10 @@ class Item extends \Magento\Model\AbstractModel
     public function getNotifyStockQty()
     {
         if ($this->getUseConfigNotifyStockQty()) {
-            return (double)$this->_coreStoreConfig->getConfig(self::XML_PATH_NOTIFY_STOCK_QTY);
+            return (double)$this->_scopeConfig->getValue(
+                self::XML_PATH_NOTIFY_STOCK_QTY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return (double)$this->getData('notify_stock_qty');
     }
@@ -475,7 +486,10 @@ class Item extends \Magento\Model\AbstractModel
     public function getEnableQtyIncrements()
     {
         if ($this->getUseConfigEnableQtyInc()) {
-            return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_ENABLE_QTY_INCREMENTS);
+            return $this->_scopeConfig->isSetFlag(
+                self::XML_PATH_ENABLE_QTY_INCREMENTS,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return (bool)$this->getData('enable_qty_increments');
     }
@@ -489,10 +503,12 @@ class Item extends \Magento\Model\AbstractModel
     {
         if ($this->_qtyIncrements === null) {
             if ($this->getEnableQtyIncrements()) {
-                $this->_qtyIncrements = (double)($this
-                    ->getUseConfigQtyIncrements() ? $this
-                    ->_coreStoreConfig
-                    ->getConfig(self::XML_PATH_QTY_INCREMENTS) : $this->getData('qty_increments'));
+                $this->_qtyIncrements = (double)($this->getUseConfigQtyIncrements() ? $this->_scopeConfig->getValue(
+                    self::XML_PATH_QTY_INCREMENTS,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ) : $this->getData(
+                    'qty_increments'
+                ));
                 if ($this->_qtyIncrements <= 0) {
                     $this->_qtyIncrements = false;
                 }
@@ -511,10 +527,12 @@ class Item extends \Magento\Model\AbstractModel
      */
     public function getDefaultQtyIncrements()
     {
-        return $this->_coreStoreConfig->getConfigFlag(
-            self::XML_PATH_ENABLE_QTY_INCREMENTS
-        ) ? (int)$this->_coreStoreConfig->getConfig(
-            self::XML_PATH_QTY_INCREMENTS
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_ENABLE_QTY_INCREMENTS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) ? (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_QTY_INCREMENTS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) : false;
     }
 
@@ -526,7 +544,10 @@ class Item extends \Magento\Model\AbstractModel
     public function getBackorders()
     {
         if ($this->getUseConfigBackorders()) {
-            return (int)$this->_coreStoreConfig->getConfig(self::XML_PATH_BACKORDERS);
+            return (int)$this->_scopeConfig->getValue(
+                self::XML_PATH_BACKORDERS,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $this->getData('backorders');
     }
@@ -539,7 +560,10 @@ class Item extends \Magento\Model\AbstractModel
     public function getManageStock()
     {
         if ($this->getUseConfigManageStock()) {
-            return (int)$this->_coreStoreConfig->getConfigFlag(self::XML_PATH_MANAGE_STOCK);
+            return (int)$this->_scopeConfig->isSetFlag(
+                self::XML_PATH_MANAGE_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $this->getData('manage_stock');
     }
@@ -551,14 +575,17 @@ class Item extends \Magento\Model\AbstractModel
      */
     public function getCanBackInStock()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CAN_BACK_IN_STOCK);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CAN_BACK_IN_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Check quantity
      *
      * @param int|float $qty
-     * @exception \Magento\Model\Exception
+     * @exception \Magento\Framework\Model\Exception
      * @return bool
      */
     public function checkQty($qty)
@@ -628,11 +655,11 @@ class Item extends \Magento\Model\AbstractModel
      * @param int|float $qty quantity of this item (item qty x parent item qty)
      * @param int|float $summaryQty quantity of this product
      * @param int|float $origQty original qty of item (not multiplied on parent item qty)
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function checkQuoteItemQty($qty, $summaryQty, $origQty = 0)
     {
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         $result->setHasError(false);
 
         if (!is_numeric($qty)) {
@@ -776,11 +803,11 @@ class Item extends \Magento\Model\AbstractModel
      * Check qty increments
      *
      * @param int|float $qty
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function checkQtyIncrements($qty)
     {
-        $result = new \Magento\Object();
+        $result = new \Magento\Framework\Object();
         if ($this->getSuppressCheckQtyIncrements()) {
             return $result;
         }
@@ -850,6 +877,7 @@ class Item extends \Magento\Model\AbstractModel
      */
     protected function _beforeSave()
     {
+        parent::_beforeSave();
         // see if quantity is defined for this item type
         $typeId = $this->getTypeId();
         if ($productTypeId = $this->getProductTypeId()) {
@@ -873,7 +901,7 @@ class Item extends \Magento\Model\AbstractModel
                         null,
                         false
                     )->toString(
-                        \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                        \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                     )
                 );
             }

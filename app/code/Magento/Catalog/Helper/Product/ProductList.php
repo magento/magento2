@@ -41,9 +41,9 @@ class ProductList
 
     const DEFAULT_SORT_DIRECTION = 'asc';
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $storeConfig;
+    protected $scopeConfig;
 
     /**
      * Default limits per page
@@ -53,12 +53,12 @@ class ProductList
     protected $_defaultAvailableLimit  = array(10=>10,20=>20,50=>50);
 
     /**
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $storeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->storeConfig = $storeConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -68,7 +68,7 @@ class ProductList
      */
     public function getAvailableViewMode()
     {
-        switch ($this->storeConfig->getConfig(self::XML_PATH_LIST_MODE)) {
+        switch ($this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             case 'grid':
                 $availableMode = array('grid' => __('Grid'));
                 break;
@@ -112,8 +112,9 @@ class ProductList
      */
     public function getDefaultSortField()
     {
-        return $this->storeConfig->getConfig(
-            \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY
+        return $this->scopeConfig->getValue(
+            \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -129,10 +130,16 @@ class ProductList
             return $this->_defaultAvailableLimit;
         }
         $perPageConfigKey = 'catalog/frontend/' . $mode . '_per_page_values';
-        $perPageValues = (string)$this->storeConfig->getConfig($perPageConfigKey);
+        $perPageValues = (string)$this->scopeConfig->getValue(
+            $perPageConfigKey,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $perPageValues = explode(',', $perPageValues);
         $perPageValues = array_combine($perPageValues, $perPageValues);
-        if ($this->storeConfig->getConfigFlag('catalog/frontend/list_allow_all')) {
+        if ($this->scopeConfig->isSetFlag(
+            'catalog/frontend/list_allow_all',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )) {
             return ($perPageValues + array('all'=>__('All')));
         } else {
             return $perPageValues;
@@ -148,9 +155,15 @@ class ProductList
     public function getDefaultLimitPerPageValue($viewMode)
     {
         if ($viewMode == self::VIEW_MODE_LIST) {
-            return $this->storeConfig->getConfig('catalog/frontend/list_per_page');
+            return $this->scopeConfig->getValue(
+                'catalog/frontend/list_per_page',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         } elseif ($viewMode == self::VIEW_MODE_GRID) {
-            return $this->storeConfig->getConfig('catalog/frontend/grid_per_page');
+            return $this->scopeConfig->getValue(
+                'catalog/frontend/grid_per_page',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return 0;
     }

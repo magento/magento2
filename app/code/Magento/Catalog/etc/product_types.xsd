@@ -93,5 +93,6 @@
         <xs:attribute name="indexPriority" type="xs:nonNegativeInteger" use="optional" />
         <xs:attribute name="canUseQtyDecimals" type="xs:boolean" use="optional" />
         <xs:attribute name="isQty" type="xs:boolean" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:integer" use="optional" />
     </xs:complexType>
 </xs:schema>

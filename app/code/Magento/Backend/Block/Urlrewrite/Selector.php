@@ -32,7 +32,7 @@ namespace Magento\Backend\Block\Urlrewrite;
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Selector extends \Magento\View\Element\Template
+class Selector extends \Magento\Framework\View\Element\Template
 {
     /**
      * List of available modes from source model

@@ -26,20 +26,20 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <block class="Magento\Theme\Block\Html" name="root" output="1" template="3columns.phtml">
         <block class="Magento\Theme\Block\Html\Head" name="head" as="head">
-            <block class="Magento\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
+            <block class="Magento\Framework\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
         </block>
         <container name="after_body_start" as="after_body_start" label="Page Top">
-            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
+            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml" cacheable="false"/>
         </container>
         <container name="header-container" label="Page Header Container" as="header-container" htmlTag="header" htmlClass="page header">
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
-                <block class="Magento\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+                <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                     <arguments>
                         <argument name="target" xsi:type="string">maincontent</argument>
                         <argument name="label" translate="true" xsi:type="string">Skip to content</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Core\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
+                <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
             </container>
             <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content">
                 <block class="Magento\Theme\Block\Html\Header" name="logo">
@@ -47,7 +47,7 @@
                         <argument name="show_part" xsi:type="string">logo</argument>
                     </arguments>
                 </block>
-                <block class="Magento\View\Element\Html\Links" name="top.links">
+                <block class="Magento\Framework\View\Element\Html\Links" name="top.links">
                     <arguments>
                         <argument name="css_class" xsi:type="string">header links</argument>
                     </arguments>
@@ -79,8 +79,8 @@
         <container name="columns.top" label="Before Main Columns" as="columns_top">
             <block class="Magento\Theme\Block\Html\Title" name="page.main.title" template="html/title.phtml"/>
             <container name="page.messages" label="invisible" htmlTag="div" htmlClass="page messages">
-                <block class="Magento\View\Element\Messages" name="global_messages" as="global_messages"/>
-                <block class="Magento\View\Element\Messages" name="messages" as="messages"/>
+                <block class="Magento\Framework\View\Element\Messages" name="global_messages" as="global_messages"/>
+                <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
             </container>
         </container>
         <container name="main" as="main" label="Main Content Container" htmlTag="div" htmlClass="column main">
@@ -96,17 +96,20 @@
         </container>
         <container name="footer-container" as="footer" label="Page Footer Container" htmlTag="footer" htmlClass="page footer">
             <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
-                <block class="Magento\Core\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
-                <block class="Magento\View\Element\Html\Links" name="footer_links">
+                <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
+                <block class="Magento\Framework\View\Element\Html\Links" name="footer_links">
                     <arguments>
                         <argument name="css_class" xsi:type="string">footer links</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
-                <block class="Magento\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" />
+                <block class="Magento\Framework\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" />
             </container>
         </container>
         <container name="before_body_end" as="before_body_end" label="Page Bottom"/>
     </block>
     <update handle="default_head_blocks"/>
+    <referenceContainer name="content">
+        <block class="Magento\Framework\View\Element\FormKey" name="formkey"/>
+    </referenceContainer>
 </layout>

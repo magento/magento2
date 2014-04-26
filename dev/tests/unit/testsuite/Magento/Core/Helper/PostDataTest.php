@@ -31,19 +31,25 @@ class PostDataTest extends \PHPUnit_Framework_TestCase
     public function testGetPostData()
     {
         $url = '/controller/sample/action/url/';
-        $product = ['product' => new \Magento\Object(['id' => 1])];
+        $product = ['product' => new \Magento\Framework\Object(['id' => 1])];
         $expected = json_encode([
             'action' => $url,
             'data' => [
-                'product' => new \Magento\Object(['id' => 1]),
-                \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                'product' => new \Magento\Framework\Object(['id' => 1]),
+                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
                     strtr(base64_encode($url . 'for_uenc'), '+/=', '-_,')
             ]
         ]);
 
-        $contextMock = $this->getMock('Magento\App\Helper\Context', array('getUrlBuilder'), array(), '', false);
+        $contextMock = $this->getMock(
+            'Magento\Framework\App\Helper\Context',
+            array('getUrlBuilder'),
+            array(),
+            '',
+            false
+        );
         $urlBuilderMock = $this->getMockForAbstractClass(
-            'Magento\UrlInterface',
+            'Magento\Framework\UrlInterface',
             array(),
             '',
             true,

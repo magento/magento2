@@ -39,7 +39,7 @@ class Collection extends \Magento\Newsletter\Model\Resource\Problem\Collection
     /**
      * Adds queue info to grid
      *
-     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection|\Magento\Newsletter\Model\Resource\Grid\Collection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Newsletter\Model\Resource\Grid\Collection
      */
     protected function _initSelect()
     {

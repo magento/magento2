@@ -35,8 +35,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChildPdfAsArray()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $block = $layout->createBlock('Magento\Payment\Block\Info', 'block');
 
         /** @var $paymentInfoBank \Magento\Payment\Model\Info  */
@@ -53,7 +55,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $childBank->setInfo($paymentInfoBank);
 
         $nonExpectedHtml = 'non-expected html';
-        $childHtml = $layout->addBlock('Magento\View\Element\Text', 'child.html', 'block');
+        $childHtml = $layout->addBlock('Magento\Framework\View\Element\Text', 'child.html', 'block');
         $childHtml->setText($nonExpectedHtml);
 
         /** @var $paymentInfoCheckmo \Magento\Payment\Model\Info */

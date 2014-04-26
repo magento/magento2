@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\App\Request;
 
-class PathInfoProcessor implements \Magento\App\Request\PathInfoProcessorInterface
+class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -33,16 +33,16 @@ class PathInfoProcessor implements \Magento\App\Request\PathInfoProcessorInterfa
     private $_helper;
 
     /**
-     * @var \Magento\Core\App\Request\PathInfoProcessor
+     * @var \Magento\Store\App\Request\PathInfoProcessor
      */
     private $_subject;
 
     /**
-     * @param \Magento\Core\App\Request\PathInfoProcessor $subject
+     * @param \Magento\Store\App\Request\PathInfoProcessor $subject
      * @param \Magento\Backend\Helper\Data $helper
      */
     public function __construct(
-        \Magento\Core\App\Request\PathInfoProcessor $subject,
+        \Magento\Store\App\Request\PathInfoProcessor $subject,
         \Magento\Backend\Helper\Data $helper
     ) {
         $this->_helper = $helper;
@@ -52,11 +52,11 @@ class PathInfoProcessor implements \Magento\App\Request\PathInfoProcessorInterfa
     /**
      * Process path info
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param string $pathInfo
      * @return string
      */
-    public function process(\Magento\App\RequestInterface $request, $pathInfo)
+    public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo)
     {
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         $storeCode = $pathParts[0];

@@ -48,7 +48,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->block = Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Account\Dashboard',
             '',
@@ -65,6 +65,12 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->customerSession->unsCustomerId();
+
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Customer\Model\CustomerRegistry');
+        //Cleanup customer from registry
+        $customerRegistry->remove(1);
     }
 
     /**

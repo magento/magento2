@@ -33,7 +33,7 @@ use Magento\Backend\Model\Menu;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
+class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlInterface
 {
     /**
      * Authentication session
@@ -67,82 +67,70 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     protected $_menuConfig;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface
-     */
-    protected $_config;
-
-    /**
-     * @var \Magento\Core\Model\StoreFactory
+     * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
 
     /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_coreConfig;
-
-    /**
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
-
-    /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $formKey;
 
     /**
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @var \Magento\Store\Model\Store
+     */
+    protected $_scope;
+
+    /**
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Backend\Model\Url\ScopeResolver $scopeResolver
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
-     * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver
+     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param Menu\Config $menuConfig
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param Auth\Session $authSession
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\Data\Form\FormKey $formKey
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
+     * @param string $scopeType
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\RequestInterface $request,
-        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Backend\Model\Url\ScopeResolver $scopeResolver,
-        \Magento\Core\Model\Session $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
-        \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver,
+        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Backend\Model\Menu\Config $menuConfig,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\App\ConfigInterface $coreConfig,
-        \Magento\Data\Form\FormKey $formKey,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Framework\Data\Form\FormKey $formKey,
+        $scopeType,
         array $data = array()
     ) {
         $this->_encryptor = $encryptor;
@@ -155,17 +143,16 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
             $sidResolver,
             $routeParamsResolver,
             $queryParamsResolver,
+            $scopeConfig,
+            $scopeType,
             $data
         );
-        $this->_config = $config;
         $this->_backendHelper = $backendHelper;
         $this->_menuConfig = $menuConfig;
         $this->_cache = $cache;
         $this->_session = $authSession;
         $this->formKey = $formKey;
         $this->_storeFactory = $storeFactory;
-        $this->_coreConfig = $coreConfig;
-        $this->_coreStoreConfig = $coreStoreConfig;
     }
 
     /**
@@ -178,7 +165,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
         if ($this->hasData('secure_is_forced')) {
             return $this->getData('secure');
         }
-        return $this->_config->isSetFlag('web/secure/use_in_adminhtml');
+        return $this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml');
     }
 
     /**
@@ -283,7 +270,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     public function useSecretKey()
     {
-        return $this->_config->isSetFlag('admin/security/use_form_key') && !$this->getNoSecret();
+        return $this->_scopeConfig->isSetFlag('admin/security/use_form_key') && !$this->getNoSecret();
     }
 
     /**
@@ -325,7 +312,9 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     public function getStartupPageUrl()
     {
-        $menuItem = $this->_getMenu()->get($this->_coreStoreConfig->getConfig(self::XML_PATH_STARTUP_MENU_ITEM));
+        $menuItem = $this->_getMenu()->get(
+            $this->_scopeConfig->getValue(self::XML_PATH_STARTUP_MENU_ITEM, $this->_scopeType)
+        );
         if (!is_null($menuItem)) {
             if ($menuItem->isAllowed() && $menuItem->getAction()) {
                 return $menuItem->getAction();
@@ -423,16 +412,19 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Get scope for the url instance
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getScope()
     {
-        return $this->_storeFactory->create(
-            array(
-                'url' => $this,
-                'data' => array('code' => 'admin', 'force_disable_rewrites' => true, 'disable_store_in_url' => true)
-            )
-        );
+        if (!$this->_scope) {
+            $this->_scope = $this->_storeFactory->create(
+                array(
+                    'url' => $this,
+                    'data' => array('code' => 'admin', 'force_disable_rewrites' => true, 'disable_store_in_url' => true)
+                )
+            );
+        }
+        return $this->_scope;
     }
 
     /**
@@ -455,6 +447,6 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      */
     protected function _getConfig($path)
     {
-        return $this->_coreConfig->getValue($path, 'default');
+        return $this->_scopeConfig->getValue($path);
     }
 }

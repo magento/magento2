@@ -29,24 +29,24 @@ namespace Magento\Fedex\Model\Plugin\Rma\Block\Adminhtml\Rma\Edit\Tab\General;
 class Shippingmethod
 {
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Core\Model\Store\Config $storeConfig)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
-     * @param \Magento\Object $subject
+     * @param \Magento\Framework\Object $subject
      * @param bool $result
      * @return bool
      */
-    public function afterCanDisplayCustomValue(\Magento\Object $subject, $result)
+    public function afterCanDisplayCustomValue(\Magento\Framework\Object $subject, $result)
     {
         $carrierCode = $subject->getShipment()->getCarrierCode();
         if (!$carrierCode) {

@@ -62,7 +62,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_cloneFactoryMock = $this->getMock(
             'Magento\Backend\Model\Config\BackendClone\Factory',
             array(),
@@ -107,7 +107,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testGetCloneModelThrowsExceptionIfNoSourceModelIsSet()
     {
@@ -116,7 +116,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->getMock('Magento\App\Config\ValueInterface', array(), array(), '', false);
+        $cloneModel = $this->getMock('Magento\Framework\App\Config\ValueInterface', array(), array(), '', false);
         $this->_depMapperMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper',
             array(),
@@ -140,7 +140,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
         $fieldsetMock = $this->getMock(
-            'Magento\Data\Form\Element\Fieldset',
+            'Magento\Framework\Data\Form\Element\Fieldset',
             array('setOriginalData'),
             array(),
             '',

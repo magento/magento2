@@ -56,7 +56,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Core\Model\StoreManager',
+            'Magento\Store\Model\StoreManager',
             array(),
             array(),
             '',
@@ -79,7 +79,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_elementMock = $this->getMock(
-            'Magento\Data\Form\Element\Text',
+            'Magento\Framework\Data\Form\Element\Text',
             array(
                 'getHtmlId',
                 'getName',

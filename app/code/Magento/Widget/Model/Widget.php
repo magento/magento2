@@ -41,24 +41,24 @@ class Widget
     protected $_dataStorage;
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Url
      */
     protected $_viewUrl;
 
     /**
-     * @var \Magento\View\FileSystem
+     * @var \Magento\Framework\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
      * Core data
      *
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
@@ -68,16 +68,16 @@ class Widget
     protected $_widgetsArray = array();
 
     /**
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\View\FileSystem $viewFileSystem
+     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\FileSystem $viewFileSystem
      */
     public function __construct(
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\View\Url $viewUrl,
-        \Magento\View\FileSystem $viewFileSystem
+        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\FileSystem $viewFileSystem
     ) {
         $this->_escaper = $escaper;
         $this->_dataStorage = $dataStorage;
@@ -108,10 +108,10 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
      *
      * @param string $type Widget type
-     * @return null|\Magento\Simplexml\Element
+     * @return null|\Magento\Framework\Simplexml\Element
      */
     public function getConfigAsXml($type)
     {
@@ -119,16 +119,16 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
      *
      * @param string $type Widget type
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getConfigAsObject($type)
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         if ($widget === null) {
             return $object;
         }
@@ -161,7 +161,7 @@ class Widget
 
                     // prepare helper block object
                     if (isset($data['helper_block'])) {
-                        $helper = new \Magento\Object();
+                        $helper = new \Magento\Framework\Object();
                         if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
                             $helper->addData($data['helper_block']['data']);
                         }
@@ -171,7 +171,7 @@ class Widget
                         $data['helper_block'] = $helper;
                     }
 
-                    $newParams[$key] = new \Magento\Object($data);
+                    $newParams[$key] = new \Magento\Framework\Object($data);
                     $sortOrder++;
                 }
             }
@@ -321,7 +321,7 @@ class Widget
     }
 
     /**
-     * Remove attributes from widget array so that emulates how \Magento\Simplexml\Element::asCanonicalArray works
+     * Remove attributes from widget array so that emulates how \Magento\Framework\Simplexml\Element::asCanonicalArray works
      *
      * @param array $inputArray
      * @return array
@@ -366,8 +366,8 @@ class Widget
     /**
      * Widget parameters sort callback
      *
-     * @param \Magento\Object $firstElement
-     * @param \Magento\Object $secondElement
+     * @param \Magento\Framework\Object $firstElement
+     * @param \Magento\Framework\Object $secondElement
      * @return int
      */
     protected function _sortParameters($firstElement, $secondElement)

@@ -35,7 +35,7 @@ namespace Magento\GoogleOptimizer\Model;
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
  */
-class Code extends \Magento\Model\AbstractModel
+class Code extends \Magento\Framework\Model\AbstractModel
 {
     /**#@+
      * Entity types

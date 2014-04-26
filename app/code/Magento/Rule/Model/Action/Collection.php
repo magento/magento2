@@ -33,14 +33,14 @@ class Collection extends AbstractAction
     protected $_actionFactory;
 
     /**
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Url $viewUrl,
-        \Magento\View\LayoutInterface $layout,
+        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Rule\Model\ActionFactory $actionFactory,
         array $data = array()
     ) {

@@ -29,13 +29,13 @@
  */
 namespace Magento\Core\Model\Theme\Source;
 
-use Magento\View\Design\Theme\Label;
+use Magento\Framework\View\Design\Theme\Label;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
  * Design
  *
- * @package Magento\View
+ * @package Magento\Framework\View
  */
 class Theme extends AbstractSource
 {

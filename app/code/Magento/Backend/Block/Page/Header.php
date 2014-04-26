@@ -99,6 +99,6 @@ class Header extends \Magento\Backend\Block\Template
      */
     public function displayNoscriptNotice()
     {
-        return $this->_storeConfig->getConfig('web/browser_capabilities/javascript');
+        return $this->_scopeConfig->getValue('web/browser_capabilities/javascript', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

@@ -29,12 +29,12 @@
  */
 namespace Magento\Sales\Model\Convert;
 
-class Quote extends \Magento\Object
+class Quote extends \Magento\Framework\Object
 {
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -59,26 +59,26 @@ class Quote extends \Magento\Object
     protected $_orderItemFactory;
 
     /**
-     * @var \Magento\Object\Copy
+     * @var \Magento\Framework\Object\Copy
      */
     private $_objectCopyService;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\AddressFactory $orderAddressFactory
      * @param \Magento\Sales\Model\Order\PaymentFactory $orderPaymentFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
-     * @param \Magento\Object\Copy $objectCopyService
+     * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\AddressFactory $orderAddressFactory,
         \Magento\Sales\Model\Order\PaymentFactory $orderPaymentFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
-        \Magento\Object\Copy $objectCopyService,
+        \Magento\Framework\Object\Copy $objectCopyService,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -184,17 +184,19 @@ class Quote extends \Magento\Object
      */
     public function paymentToOrderPayment(\Magento\Sales\Model\Quote\Payment $payment)
     {
-        $orderPayment = $this->_orderPaymentFactory->create()->setStoreId(
-            $payment->getStoreId()
-        )->setCustomerPaymentId(
-            $payment->getCustomerPaymentId()
-        );
+        /** @var \Magento\Sales\Model\Order\Payment $orderPayment */
+        $orderPayment = $this->_orderPaymentFactory->create()->setStoreId($payment->getStoreId());
+        $orderPayment->setCustomerPaymentId($payment->getCustomerPaymentId());
 
         $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_quote_payment',
             'to_order_payment',
             $payment,
             $orderPayment
+        );
+        $orderPayment->setAdditionalInformation(
+            \Magento\Payment\Model\Method\Substitution::INFO_KEY_TITLE,
+            $payment->getMethodInstance()->getTitle()
         );
 
         return $orderPayment;

@@ -28,17 +28,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
     protected $helper;
 
-    /** @var \Magento\App\Helper\Context */
+    /** @var \Magento\Framework\App\Helper\Context */
     protected $context;
 
-    /** @var \Magento\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $blockFactory;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Core\Model\Store\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $coreStoreConfig;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $scopeConfig;
 
     /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataService;
@@ -48,15 +48,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\App\Helper\Context')->disableOriginalConstructor()->getMock();
+        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->blockFactory = $this->getMockBuilder(
-            'Magento\View\Element\BlockFactory'
+            'Magento\Framework\View\Element\BlockFactory'
         )->disableOriginalConstructor()->getMock();
         $this->storeManager = $this->getMockBuilder(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->disableOriginalConstructor()->getMock();
-        $this->coreStoreConfig = $this->getMockBuilder(
-            'Magento\Core\Model\Store\Config'
+        $this->scopeConfig = $this->getMockBuilder(
+            'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->customerMetadataService = $this->getMockBuilder(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
@@ -72,7 +74,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'blockFactory' => $this->blockFactory,
                 'storeManager' => $this->storeManager,
-                'coreStoreConfig' => $this->coreStoreConfig,
+                'scopeConfig' => $this->scopeConfig,
                 'customerMetadataService' => $this->customerMetadataService,
                 'addressConfig' => $this->addressConfig
             )
@@ -99,7 +101,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($attributeMock)
         );
 
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $this->assertEquals($expectedNumLines, $this->helper->getStreetLines());

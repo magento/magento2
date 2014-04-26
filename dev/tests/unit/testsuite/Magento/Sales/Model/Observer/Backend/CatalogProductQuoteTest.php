@@ -48,9 +48,9 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_quoteMock = $this->getMock('Magento\Sales\Model\Resource\Quote', array(), array(), '', false);
-        $this->_observerMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
+        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', array(), array(), '', false);
         $this->_eventMock = $this->getMock(
-            'Magento\Event',
+            'Magento\Framework\Event',
             array('getProduct', 'getStatus', 'getProductId'),
             array(),
             '',

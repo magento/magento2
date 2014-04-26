@@ -27,7 +27,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetByFullPath()
     {
-        $path = 'frontend/magento_plushe';
+        $path = 'frontend/Magento/plushe';
         $collectionFactory = $this->getMock(
             'Magento\Core\Model\Resource\Theme\CollectionFactory',
             array('create'),
@@ -36,7 +36,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $collectionMock = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', array(), array(), '', false);
-        $theme = $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false);
+        $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', array(), array(), '', false);
         $collectionMock->expects(
             $this->once()
         )->method(

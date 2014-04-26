@@ -33,12 +33,12 @@ namespace Magento\Theme\Model\Config;
 class CustomizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_designPackage;
 
@@ -60,7 +60,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManager = $this->getMockForAbstractClass(
-            'Magento\Core\Model\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             array(),
             '',
             true,
@@ -69,7 +69,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             array('getStores')
         );
         $this->_designPackage = $this->getMockForAbstractClass(
-            'Magento\View\DesignInterface',
+            'Magento\Framework\View\DesignInterface',
             array(),
             '',
             true,
@@ -144,7 +144,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getThemeCustomizations'
         )->with(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->will(
             $this->returnValue(array($this->_getAssignedTheme(), $this->_getUnassignedTheme()))
         );
@@ -179,7 +179,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getThemeCustomizations'
         )->with(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->will(
             $this->returnValue(array($this->_getAssignedTheme(), $this->_getUnassignedTheme()))
         );
@@ -239,7 +239,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getThemeCustomizations'
         )->with(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
+            \Magento\Framework\App\Area::AREA_FRONTEND
         )->will(
             $this->returnValue(array($this->_getAssignedTheme(), $this->_getUnassignedTheme()))
         );
@@ -266,26 +266,26 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getAssignedTheme()
     {
-        return new \Magento\Object(array('id' => 1, 'theme_path' => 'magento_plushe'));
+        return new \Magento\Framework\Object(array('id' => 1, 'theme_path' => 'Magento/plushe'));
     }
 
     /**
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getUnassignedTheme()
     {
-        return new \Magento\Object(array('id' => 2, 'theme_path' => 'magento_blank'));
+        return new \Magento\Framework\Object(array('id' => 2, 'theme_path' => 'Magento/blank'));
     }
 
     /**
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getStore()
     {
-        return new \Magento\Object(array('id' => 55));
+        return new \Magento\Framework\Object(array('id' => 55));
     }
 }

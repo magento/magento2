@@ -28,7 +28,7 @@ namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\A
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Configurable attributes label table name
@@ -68,16 +68,16 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource
@@ -85,10 +85,10 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource,
@@ -167,18 +167,18 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        \Magento\Profiler::start('TTT1:' . __METHOD__, array('group' => 'TTT1', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TTT1:' . __METHOD__, array('group' => 'TTT1', 'method' => __METHOD__));
         $this->_addProductAttributes();
-        \Magento\Profiler::stop('TTT1:' . __METHOD__);
-        \Magento\Profiler::start('TTT2:' . __METHOD__, array('group' => 'TTT2', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::stop('TTT1:' . __METHOD__);
+        \Magento\Framework\Profiler::start('TTT2:' . __METHOD__, array('group' => 'TTT2', 'method' => __METHOD__));
         $this->_addAssociatedProductFilters();
-        \Magento\Profiler::stop('TTT2:' . __METHOD__);
-        \Magento\Profiler::start('TTT3:' . __METHOD__, array('group' => 'TTT3', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::stop('TTT2:' . __METHOD__);
+        \Magento\Framework\Profiler::start('TTT3:' . __METHOD__, array('group' => 'TTT3', 'method' => __METHOD__));
         $this->_loadLabels();
-        \Magento\Profiler::stop('TTT3:' . __METHOD__);
-        \Magento\Profiler::start('TTT4:' . __METHOD__, array('group' => 'TTT4', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::stop('TTT3:' . __METHOD__);
+        \Magento\Framework\Profiler::start('TTT4:' . __METHOD__, array('group' => 'TTT4', 'method' => __METHOD__));
         $this->_loadPrices();
-        \Magento\Profiler::stop('TTT4:' . __METHOD__);
+        \Magento\Framework\Profiler::stop('TTT4:' . __METHOD__);
         return $this;
     }
 

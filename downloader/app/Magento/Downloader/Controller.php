@@ -92,7 +92,7 @@ final class Controller
     /**
      * Connect config instance
      *
-     * @var \Magento\Connect\Config
+     * @var \Magento\Framework\Connect\Config
      */
     private $_config;
 
@@ -534,7 +534,7 @@ final class Controller
                     }
                     include_once self::$_instance->getBootstrapPath();
 
-                    \Magento\App\ObjectManager::getInstance()->get('Magento\App\State')->setIsDownloader();
+                    \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\State')->setIsDownloader();
                 }
                 if (self::isInstalled()) {
                     \Mage::getSingleton('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
@@ -575,13 +575,13 @@ final class Controller
     }
 
     /**
-     * Retrieve path for \Magento\Profiler
+     * Retrieve path for \Magento\Framework\Profiler
      *
      * @return string
      */
     public function getVarFilename()
     {
-        return $this->getMageDir() . '/lib/Magento/Profiler.php';
+        return $this->getMageDir() . '/lib/Magento/Framework/Profiler.php';
     }
 
     /**
@@ -642,7 +642,7 @@ final class Controller
     /**
      * Retrieve object of config
      *
-     * @return \Magento\Connect\Config
+     * @return \Magento\Framework\Connect\Config
      */
     public function config()
     {
@@ -896,7 +896,7 @@ final class Controller
      * Begin install package(s)
      *
      * @return void
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function startInstall()
     {
@@ -904,7 +904,7 @@ final class Controller
             $maintenance_filename = 'maintenance.flag';
             $config = $this->config();
             if (!$this->isWritable() || strlen($config->__get('remote_config')) > 0) {
-                $ftpObj = new \Magento\Connect\Ftp();
+                $ftpObj = new \Magento\Framework\Connect\Ftp();
                 $ftpObj->connect($config->__get('remote_config'));
                 $tempFile = tempnam(sys_get_temp_dir(), 'maintenance');
                 @file_put_contents($tempFile, 'maintenance');
@@ -936,7 +936,7 @@ final class Controller
             if (!$isSuccess) {
                 $this->endInstall();
                 $this->cleanCache();
-                throw new \Magento\Exception(
+                throw new \Magento\Framework\Exception(
                     'The installation process has been canceled because of the backup creation error'
                 );
             }
@@ -976,8 +976,8 @@ final class Controller
                 // reinit config and apply all updates
                 \Mage::app()->getConfig()->reinit();
 
-                /** @var $updater \Magento\Module\UpdaterInterface*/
-                $updater = \Magento\App\ObjectManager::getInstance()->get('Magento\Module\UpdaterInterface');
+                /** @var $updater \Magento\Framework\Module\UpdaterInterface*/
+                $updater = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\Module\UpdaterInterface');
                 $updater->updateScheme();
                 $updater->updateData();
                 $message .= 'Cache cleaned successfully';
@@ -994,7 +994,7 @@ final class Controller
             $maintenance_filename = 'maintenance.flag';
             $config = $this->config();
             if (!$this->isWritable() && strlen($config->__get('remote_config')) > 0) {
-                $ftpObj = new \Magento\Connect\Ftp();
+                $ftpObj = new \Magento\Framework\Connect\Ftp();
                 $ftpObj->connect($config->__get('remote_config'));
                 $ftpObj->delete($maintenance_filename);
                 $ftpObj->close();
@@ -1058,7 +1058,7 @@ final class Controller
             $type = $this->_getBackupTypeByCode($archiveType);
 
             $backupManager = \Magento\Core\Model\ObjectManager::getInstance()->get(
-                'Magento\Backup\Factory'
+                'Magento\Framework\Backup\Factory'
             )->create(
                 $type
             )->setBackupExtension(
@@ -1071,22 +1071,22 @@ final class Controller
                 \Mage::getBaseDir('var') . '/backups'
             );
 
-            \Magento\App\ObjectManager::getInstance()->get(
-                'Magento\Registry'
+            \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\Registry'
             )->register(
                 'backup_manager',
                 $backupManager
             );
 
-            if ($type != \Magento\Backup\Factory::TYPE_DB) {
+            if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
                 $backupManager->setRootDir(\Mage::getBaseDir())->addIgnorePaths($this->_getBackupIgnorePaths());
             }
             $backupManager->create();
             $connect->runHtmlConsole($this->_getCreateBackupSuccessMessageByType($type));
             $isSuccess = true;
-        } catch (\Magento\Backup\Exception\NotEnoughFreeSpace $e) {
+        } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
             $connect->runHtmlConsole('Not enough free space to create backup.');
-        } catch (\Magento\Backup\Exception\NotEnoughPermissions $e) {
+        } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
             $connect->runHtmlConsole('Not enough permissions to create backup.');
         } catch (\Exception $e) {
             $connect->runHtmlConsole('An error occurred while creating the backup.');
@@ -1102,10 +1102,10 @@ final class Controller
     protected function _getExtensionType($type)
     {
         $extensionType = array(
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
-            \Magento\Backup\Factory::TYPE_MEDIA => 'tgz',
-            \Magento\Backup\Factory::TYPE_DB => 'gz'
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => 'tgz',
+            \Magento\Framework\Backup\Factory::TYPE_DB => 'gz'
         );
 
         return $extensionType[$type];
@@ -1138,10 +1138,10 @@ final class Controller
     protected function _getBackupTypeByCode($code)
     {
         $typeMap = array(
-            1 => \Magento\Backup\Factory::TYPE_DB,
-            2 => \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT,
-            3 => \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA,
-            4 => \Magento\Backup\Factory::TYPE_MEDIA
+            1 => \Magento\Framework\Backup\Factory::TYPE_DB,
+            2 => \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT,
+            3 => \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA,
+            4 => \Magento\Framework\Backup\Factory::TYPE_MEDIA
         );
 
         if (!isset($typeMap[$code])) {
@@ -1160,10 +1160,11 @@ final class Controller
     protected function _getCreateBackupSuccessMessageByType($type)
     {
         $messagesMap = array(
-            \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'System backup has been created',
-            \Magento\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'System (excluding Media) backup has been created',
-            \Magento\Backup\Factory::TYPE_MEDIA => 'Database and media backup has been created',
-            \Magento\Backup\Factory::TYPE_DB => 'Database backup has been created'
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'System backup has been created',
+            \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA =>
+                'System (excluding Media) backup has been created',
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => 'Database and media backup has been created',
+            \Magento\Framework\Backup\Factory::TYPE_DB => 'Database backup has been created'
         );
 
         if (!isset($messagesMap[$type])) {

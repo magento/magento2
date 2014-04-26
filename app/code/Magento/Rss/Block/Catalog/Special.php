@@ -31,9 +31,9 @@ namespace Magento\Rss\Block\Catalog;
 class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 {
     /**
-     * \Magento\Stdlib\DateTime\DateInterface object for date comparsions
+     * \Magento\Framework\Stdlib\DateTime\DateInterface object for date comparsions
      *
-     * @var \Magento\Stdlib\DateTime\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Date
      */
     protected static $_currentDate = null;
 
@@ -48,7 +48,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_rssFactory;
 
     /**
-     * @var \Magento\Model\Resource\Iterator
+     * @var \Magento\Framework\Model\Resource\Iterator
      */
     protected $_resourceIterator;
 
@@ -68,25 +68,25 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_outputHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
-     * @param \Magento\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
-        \Magento\Model\Resource\Iterator $resourceIterator,
+        \Magento\Framework\Model\Resource\Iterator $resourceIterator,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Helper\Output $outputHelper,
         array $data = array()
@@ -154,7 +154,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 
         $newUrl = $this->_urlBuilder->getUrl('rss/catalog/special/store_id/' . $storeId);
         $title = __('%1 - Special Products', $this->_storeManager->getStore()->getFrontendName());
-        $lang = $this->_storeConfig->getConfig('general/locale/code');
+        $lang = $this->_scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         /** @var $rssObj \Magento\Rss\Model\Rss */
         $rssObj = $this->_rssFactory->create();
         $rssObj->_addHeader(
@@ -202,7 +202,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
                                 'Special Expires On: %1',
                                 $this->formatDate(
                                     $result['special_to_date'],
-                                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                                 )
                             );
                         }
@@ -234,11 +234,11 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     public function addSpecialXmlCallback($args)
     {
         if (!isset(self::$_currentDate)) {
-            self::$_currentDate = new \Magento\Stdlib\DateTime\Date();
+            self::$_currentDate = new \Magento\Framework\Stdlib\DateTime\Date();
         }
 
         // dispatch event to determine whether the product will eventually get to the result
-        $product = new \Magento\Object(array('allowed_in_rss' => true, 'allowed_price_in_rss' => true));
+        $product = new \Magento\Framework\Object(array('allowed_in_rss' => true, 'allowed_price_in_rss' => true));
         $args['product'] = $product;
         $this->_eventManager->dispatch('rss_catalog_special_xml_callback', $args);
         if (!$product->getAllowedInRss()) {
@@ -255,7 +255,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         ) {
             $compareDate = self::$_currentDate->compareDate(
                 $row['special_to_date'],
-                \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT
+                \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT
             );
             if (-1 === $compareDate || 0 === $compareDate) {
                 $row['use_special'] = true;

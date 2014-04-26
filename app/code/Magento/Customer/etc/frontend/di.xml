@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="sessionName" xsi:type="string">frontend</argument>
@@ -36,11 +36,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Layout">
+    <type name="Magento\Framework\View\Layout">
         <plugin name="customer-session-depersonalize"
                 type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>
-    <type name="Magento\App\Action\Action">
+    <type name="Magento\Framework\App\Action\Action">
         <plugin name="customer-app-action-dispatchController-context-plugin"
                 type="Magento\Customer\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>

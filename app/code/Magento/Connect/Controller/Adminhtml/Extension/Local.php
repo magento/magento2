@@ -43,7 +43,7 @@ class Local extends \Magento\Backend\App\Action
     public function indexAction()
     {
         $url = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getBaseUrl(
             'web'
         ) . 'downloader/?return=' . urlencode(

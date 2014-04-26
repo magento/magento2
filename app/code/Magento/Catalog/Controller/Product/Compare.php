@@ -32,7 +32,7 @@ use Magento\Core\App\Action\FormKeyValidator;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Compare extends \Magento\App\Action\Action
+class Compare extends \Magento\Framework\App\Action\Action
 {
     /**
      * Customer id
@@ -91,7 +91,7 @@ class Compare extends \Magento\App\Action\Action
     protected $_compareItemFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -101,7 +101,7 @@ class Compare extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
@@ -109,11 +109,11 @@ class Compare extends \Magento\App\Action\Action
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
@@ -121,7 +121,7 @@ class Compare extends \Magento\App\Action\Action
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
@@ -183,9 +183,9 @@ class Compare extends \Magento\App\Action\Action
             $product = $this->_productFactory->create();
             $product->setStoreId($this->_storeManager->getStore()->getId())->load($productId);
 
-            if ($product->getId()/* && !$product->isSuper()*/) {
+            if ($product->getId()) {
                 $this->_catalogProductCompareList->addProduct($product);
-                $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
+                $productName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName());
                 $this->messageManager->addSuccess(__('You added product %1 to the comparison list.', $productName));
                 $this->_eventManager->dispatch('catalog_product_compare_add_product', array('product' => $product));
             }
@@ -224,7 +224,7 @@ class Compare extends \Magento\App\Action\Action
                 $helper = $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare');
                 if ($item->getId()) {
                     $item->delete();
-                    $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
+                    $productName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName());
                     $this->messageManager->addSuccess(
                         __('You removed product %1 from the comparison list.', $productName)
                     );
@@ -264,7 +264,7 @@ class Compare extends \Magento\App\Action\Action
             $items->clear();
             $this->messageManager->addSuccess(__('You cleared the comparison list.'));
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));

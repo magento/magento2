@@ -113,7 +113,7 @@ class Price extends \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type
      * Retrieve select for flat attribute update
      *
      * @param int $store
-     * @return \Magento\DB\Select|null
+     * @return \Magento\Framework\DB\Select|null
      */
     public function getFlatUpdateSelect($store)
     {

@@ -49,25 +49,25 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a target="_blank" href="' . $row->getUrl() . '">' . __(
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' . __(
             'Read Details'
-        ) . '</a> | ' : '';
+        ) . '</a>' : '';
 
-        $markAsReadHtml = !$row->getIsRead() ? '<a href="' . $this->getUrl(
+        $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
             array('_current' => true, 'id' => $row->getId())
         ) . '">' . __(
             'Mark as Read'
-        ) . '</a> | ' : '';
+        ) . '</a>' : '';
 
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf(
-            '%s%s<a href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
+            '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
             $readDetailsHtml,
             $markAsReadHtml,
             $this->getUrl(
@@ -75,7 +75,7 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
                 array(
                     '_current' => true,
                     'id' => $row->getId(),
-                    \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl
+                    \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl
                 )
             ),
             __('Are you sure?'),

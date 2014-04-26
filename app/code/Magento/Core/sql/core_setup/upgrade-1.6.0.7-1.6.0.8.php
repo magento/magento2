@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -36,7 +36,7 @@ $connection = $installer->getConnection();
 $connection->addColumn(
     $installer->getTable('core_layout_update'),
     'updated_at',
-    array('type' => \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, 'nullable' => true, 'comment' => 'Last Update Timestamp')
+    array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP, 'nullable' => true, 'comment' => 'Last Update Timestamp')
 );
 
 $installer->endSetup();

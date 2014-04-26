@@ -27,9 +27,8 @@
 require 'customer_address.php';
 
 /** @var \Magento\Customer\Model\Address $customerAddress */
-$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Model\Address'
-);
+$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Customer\Model\Address');
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     array(
@@ -39,7 +38,7 @@ $customerAddress->setData(
         'postcode' => 47676,
         'country_id' => 'US',
         'city' => 'CityX',
-        'street' => 'Black str, 48',
+        'street' => ['Black str, 48'],
         'lastname' => 'Smith',
         'firstname' => 'John',
         'parent_id' => 1,
@@ -49,3 +48,4 @@ $customerAddress->setData(
     1
 );
 $customerAddress->save();
+

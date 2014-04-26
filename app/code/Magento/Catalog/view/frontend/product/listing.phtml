@@ -45,12 +45,12 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
     $viewMode ='grid';
     $image = 'category_page_grid';
     $showDescription = false;
-    $rating = 'short';
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
 } else {
     $viewMode ='list';
     $image = 'category_page_list';
     $showDescription = true;
-    $rating = 'full';
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
 }
 
 ?>
@@ -74,7 +74,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                     . $_helper->productAttribute($_product, $_product->getName(), 'name')
                                     . '</a></strong>';
                     $info['price'] = $this->getPriceHtml($_product, true);
-                    $info['rating'] = $_product->getRatingSummary() ? $this->getReviewsSummaryHtml($_product,$rating) : '';
+                    $info['review'] = $this->getReviewsSummaryHtml($_product, $templateType);
 
                     if ($_product->isSaleable()) {
                         $info['button'] = '<button type="button" title="' . __('Add to Cart') . '" class="action tocart"'
@@ -101,7 +101,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                         $info['description'] = '';
                     }
 
-                    $details = $this->getInfoOrder() ? : array('name','price','rating','description','actions');
+                    $details = $this->getInfoOrder() ? : array('name','price','review','description','actions');
                     foreach ($details as $detail) {
                         echo $info[$detail];
                     }

@@ -23,13 +23,15 @@
  */
 namespace Magento\RecurringPayment\Block\Payment;
 
+use Magento\Customer\Controller\RegistryConstants;
+
 /**
  * Recurring payment view grid
  */
 class Grid extends \Magento\RecurringPayment\Block\Payments
 {
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_registry;
 
@@ -51,16 +53,16 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
     protected $_fields;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\RecurringPayment\Model\Payment $recurringPayment
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\RecurringPayment\Block\Fields $fields
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\RecurringPayment\Model\Payment $recurringPayment,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         \Magento\RecurringPayment\Block\Fields $fields,
         array $data = array()
     ) {
@@ -81,7 +83,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
     {
         $this->_payments = $this->_recurringPayment->getCollection()->addFieldToFilter(
             'customer_id',
-            $this->_registry->registry('current_customer')->getId()
+            $this->_registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
         )->addFieldToSelect(
             $fields
         )->setOrder(
@@ -111,7 +113,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
 
         $this->setGridColumns(
             array(
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array(
                         'index' => 'reference_id',
                         'title' => $this->_fields->getFieldLabel('reference_id'),
@@ -119,8 +121,13 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
                         'width' => 1
                     )
                 ),
-                new \Magento\Object(array('index' => 'state', 'title' => $this->_fields->getFieldLabel('state'))),
-                new \Magento\Object(
+                new \Magento\Framework\Object(
+                    array(
+                        'index' => 'state',
+                        'title' => $this->_fields->getFieldLabel('state')
+                    )
+                ),
+                new \Magento\Framework\Object(
                     array(
                         'index' => 'created_at',
                         'title' => $this->_fields->getFieldLabel('created_at'),
@@ -129,7 +136,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
                         'is_amount' => true
                     )
                 ),
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array(
                         'index' => 'updated_at',
                         'title' => $this->_fields->getFieldLabel('updated_at'),
@@ -137,7 +144,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
                         'width' => 1
                     )
                 ),
-                new \Magento\Object(
+                new \Magento\Framework\Object(
                     array(
                         'index' => 'method_code',
                         'title' => $this->_fields->getFieldLabel('method_code'),
@@ -152,7 +159,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
         $store = $this->_storeManager->getStore();
         foreach ($this->_payments as $payment) {
             $payment->setStore($store);
-            $payments[] = new \Magento\Object(
+            $payments[] = new \Magento\Framework\Object(
                 array(
                     'reference_id' => $payment->getReferenceId(),
                     'reference_id_link_url' => $this->getUrl(

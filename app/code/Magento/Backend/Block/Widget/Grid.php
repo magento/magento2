@@ -97,7 +97,7 @@ class Grid extends \Magento\Backend\Block\Widget
      *
      * @var string|null
      */
-    protected $_emptyTextCss = 'a-center';
+    protected $_emptyTextCss = 'empty-text';
 
     /**
      * Pager visibility
@@ -130,14 +130,14 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Totals
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_varTotals;
 
     /**
      * RSS list
      *
-     * @var \Magento\Object[]
+     * @var \Magento\Framework\Object[]
      */
     protected $_rssLists = array();
 
@@ -214,7 +214,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Set collection object
      *
-     * @param \Magento\Data\Collection $collection
+     * @param \Magento\Framework\Data\Collection $collection
      * @return void
      */
     public function setCollection($collection)
@@ -225,7 +225,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Get collection object
      *
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
     {
@@ -245,13 +245,13 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve export block
      *
-     * @throws \Magento\Model\Exception
-     * @return \Magento\View\Element\AbstractBlock|bool
+     * @throws \Magento\Framework\Model\Exception
+     * @return \Magento\Framework\View\Element\AbstractBlock|bool
      */
     public function getExportBlock()
     {
         if (!$this->getChildBlock('grid.export')) {
-            throw new \Magento\Model\Exception('Export block for grid ' . $this->getNameInLayout() . ' is not defined');
+            throw new \Magento\Framework\Model\Exception('Export block for grid ' . $this->getNameInLayout() . ' is not defined');
         }
         return $this->getChildBlock('grid.export');
     }
@@ -280,7 +280,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Retrieve column by id
      *
      * @param string $columnId
-     * @return \Magento\View\Element\AbstractBlock|bool
+     * @return \Magento\Framework\View\Element\AbstractBlock|bool
      */
     public function getColumn($columnId)
     {
@@ -352,7 +352,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Get prepared collection
      *
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getPreparedCollection()
     {
@@ -450,7 +450,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Get massaction block
      *
-     * @return bool|\Magento\View\Element\AbstractBlock
+     * @return bool|\Magento\Framework\View\Element\AbstractBlock
      */
     public function getMassactionBlock()
     {
@@ -469,7 +469,7 @@ class Grid extends \Magento\Backend\Block\Widget
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Button'
             )->setData(
-                array('label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()')
+                array('label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset')
             )
         );
         $this->setChild(
@@ -713,7 +713,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve rss lists types
      *
-     * @return \Magento\Object[]|false
+     * @return \Magento\Framework\Object[]|false
      */
     public function getRssLists()
     {
@@ -729,7 +729,7 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     public function addRssList($url, $label)
     {
-        $this->_rssLists[] = new \Magento\Object(
+        $this->_rssLists[] = new \Magento\Framework\Object(
             array('url' => $this->getUrl($url, array('_nosecret' => true)), 'label' => $label)
         );
         return $this;
@@ -851,10 +851,10 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Set totals
      *
-     * @param \Magento\Object $totals
+     * @param \Magento\Framework\Object $totals
      * @return void
      */
-    public function setTotals(\Magento\Object $totals)
+    public function setTotals(\Magento\Framework\Object $totals)
     {
         $this->_varTotals = $totals;
     }
@@ -862,7 +862,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve totals
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getTotals()
     {

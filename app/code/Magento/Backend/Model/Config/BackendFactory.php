@@ -30,14 +30,14 @@ class BackendFactory
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectmanager
+     * @param \Magento\Framework\ObjectManager $objectmanager
      */
-    public function __construct(\Magento\ObjectManager $objectmanager)
+    public function __construct(\Magento\Framework\ObjectManager $objectmanager)
     {
         $this->_objectManager = $objectmanager;
     }
@@ -46,13 +46,13 @@ class BackendFactory
      * Create backend model by name
      *
      * @param string $modelName
-     * @return \Magento\App\Config\ValueInterface
+     * @return \Magento\Framework\App\Config\ValueInterface
      * @throws \InvalidArgumentException
      */
     public function create($modelName)
     {
         $model = $this->_objectManager->create($modelName);
-        if (!$model instanceof \Magento\App\Config\ValueInterface) {
+        if (!$model instanceof \Magento\Framework\App\Config\ValueInterface) {
             throw new \InvalidArgumentException('Invalid config field backend model: ' . $modelName);
         }
         return $model;

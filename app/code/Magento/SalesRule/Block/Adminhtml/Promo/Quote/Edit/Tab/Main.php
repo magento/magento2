@@ -35,14 +35,19 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_customerGroup;
+    protected $_customerGroupService;
+
+    /**
+     * @var \Magento\Framework\Convert\Object
+     */
+    protected $_objectConverter;
 
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
@@ -51,24 +56,27 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\SalesRule\Model\RuleFactory $salesRule
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $customerGroup
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
+     * @param \Magento\Framework\Convert\Object $objectConverter
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\SalesRule\Model\RuleFactory $salesRule,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $customerGroup,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService,
+        \Magento\Framework\Convert\Object $objectConverter,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
-        $this->_customerGroup = $customerGroup;
+        $this->_customerGroupService = $customerGroupService;
+        $this->_objectConverter = $objectConverter;
         $this->_salesRule = $salesRule;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -114,7 +122,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -181,18 +189,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $field->setRenderer($renderer);
         }
 
-        $customerGroups = $this->_customerGroup->create()->load()->toOptionArray();
-        $found = false;
-
-        foreach ($customerGroups as $group) {
-            if ($group['value'] == 0) {
-                $found = true;
-            }
-        }
-        if (!$found) {
-            array_unshift($customerGroups, array('value' => 0, 'label' => __('NOT LOGGED IN')));
-        }
-
+        $groups = $this->_customerGroupService->getGroups();
         $fieldset->addField(
             'customer_group_ids',
             'multiselect',
@@ -201,7 +198,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Customer Groups'),
                 'title' => __('Customer Groups'),
                 'required' => true,
-                'values' => $this->_customerGroup->create()->toOptionArray()
+                'values' =>  $this->_objectConverter->toOptionArray($groups, 'id', 'code')
             )
         );
 
@@ -252,7 +249,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             array('name' => 'uses_per_customer', 'label' => __('Uses per Customer'))
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField(
             'from_date',
             'date',
@@ -261,7 +258,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('From Date'),
                 'title' => __('From Date'),
                 'image' => $this->getViewFileUrl('images/grid-cal.gif'),
-                'input_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             )
         );
@@ -273,7 +270,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('To Date'),
                 'title' => __('To Date'),
                 'image' => $this->getViewFileUrl('images/grid-cal.gif'),
-                'input_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             )
         );

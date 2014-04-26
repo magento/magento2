@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Controller;
 
-use Magento\App\Action\Action;
+use Magento\Framework\App\Action\Action;
 
 class Noroute extends Action
 {
@@ -37,8 +37,8 @@ class Noroute extends Action
     public function indexAction()
     {
         $status = $this->getRequest()->getParam('__status__');
-        if (!$status instanceof \Magento\Object) {
-            $status = new \Magento\Object();
+        if (!$status instanceof \Magento\Framework\Object) {
+            $status = new \Magento\Framework\Object();
         }
 
         $this->_eventManager->dispatch('controller_action_noroute', array('action' => $this, 'status' => $status));

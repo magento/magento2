@@ -37,7 +37,7 @@ namespace Magento\Log\Model;
  * @method int getStoreId()
  * @method \Magento\Log\Model\Visitor setStoreId(int $value)
  */
-class Visitor extends \Magento\Model\AbstractModel
+class Visitor extends \Magento\Framework\Model\AbstractModel
 {
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
 
@@ -58,12 +58,12 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -75,12 +75,12 @@ class Visitor extends \Magento\Model\AbstractModel
     protected $_ignores;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Session\SessionManagerInterface
+     * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -90,64 +90,64 @@ class Visitor extends \Magento\Model\AbstractModel
     protected $_quoteFactory;
 
     /**
-     * @var \Magento\HTTP\Header
+     * @var \Magento\Framework\HTTP\Header
      */
     protected $_httpHeader;
 
     /**
-     * @var \Magento\HTTP\PhpEnvironment\RemoteAddress
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
     protected $_remoteAddress;
 
     /**
-     * @var \Magento\HTTP\PhpEnvironment\ServerAddress
+     * @var \Magento\Framework\HTTP\PhpEnvironment\ServerAddress
      */
     protected $_serverAddress;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Session\SessionManagerInterface $session
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\HTTP\Header $httpHeader
-     * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Module\Manager $moduleManager
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
+     * @param \Magento\Framework\HTTP\Header $httpHeader
+     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Framework\HTTP\PhpEnvironment\ServerAddress $serverAddress
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Session\SessionManagerInterface $session,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $coreConfig,
-        \Magento\HTTP\Header $httpHeader,
-        \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Module\Manager $moduleManager,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
+        \Magento\Framework\HTTP\Header $httpHeader,
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        \Magento\Framework\HTTP\PhpEnvironment\ServerAddress $serverAddress,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $ignoredUserAgents = array(),
         array $ignores = array(),
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_quoteFactory = $quoteFactory;
         $this->_session = $session;
         $this->_storeManager = $storeManager;
@@ -181,7 +181,7 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * Retrieve session object
      *
-     * @return \Magento\Session\SessionManagerInterface
+     * @return \Magento\Framework\Session\SessionManagerInterface
      */
     protected function _getSession()
     {
@@ -232,7 +232,10 @@ class Visitor extends \Magento\Model\AbstractModel
      */
     public function getOnlineMinutesInterval()
     {
-        $configValue = $this->_coreStoreConfig->getConfig('customer/online_customers/online_minutes_interval');
+        $configValue = $this->_scopeConfig->getValue(
+            'customer/online_customers/online_minutes_interval',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
@@ -279,7 +282,7 @@ class Visitor extends \Magento\Model\AbstractModel
      *
      * Used in event "controller_action_predispatch"
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Log\Model\Visitor
      */
     public function initByRequest($observer)
@@ -305,7 +308,7 @@ class Visitor extends \Magento\Model\AbstractModel
      *
      * Used in event "controller_action_postdispatch"
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Log\Model\Visitor
      */
     public function saveByRequest($observer)
@@ -329,16 +332,17 @@ class Visitor extends \Magento\Model\AbstractModel
      *
      * Used in event "customer_login"
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Log\Model\Visitor
      */
     public function bindCustomerLogin($observer)
     {
-        if (!$this->getCustomerId() && ($customer = $observer->getEvent()->getCustomer())) {
+        /** @var \Magento\Customer\Service\V1\Data\Customer $customer */
+        $customer = $observer->getEvent()->getCustomer();
+        if (!$this->getCustomerId()) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
         }
-        return $this;
     }
 
     /**
@@ -346,22 +350,20 @@ class Visitor extends \Magento\Model\AbstractModel
      *
      * Used in event "customer_logout"
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param   \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Log\Model\Visitor
      */
     public function bindCustomerLogout($observer)
     {
-        $customer = $observer->getEvent()->getCustomer();
-        if ($this->getCustomerId() && $customer) {
+        if ($this->getCustomerId()) {
             $this->setDoCustomerLogout(true);
         }
-        return $this;
     }
 
     /**
      * Create binding of checkout quote
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function bindQuoteCreate($observer)
@@ -378,7 +380,7 @@ class Visitor extends \Magento\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function bindQuoteDestroy($observer)
@@ -422,7 +424,7 @@ class Visitor extends \Magento\Model\AbstractModel
     /**
      * Returns true if the module is required
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return bool
      */
     public function isModuleIgnored($observer)

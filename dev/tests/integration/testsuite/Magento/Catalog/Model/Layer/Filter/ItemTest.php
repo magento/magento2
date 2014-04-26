@@ -59,7 +59,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testGetFilterException()
     {
@@ -80,7 +80,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->get('Magento\TestFramework\Request');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Action\Action',
+            'Magento\Framework\App\Action\Action',
             array(
                 'request' => $request,
                 'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -99,10 +99,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->create('Magento\App\RequestInterface');
+        $request = $objectManager->create('Magento\Framework\App\RequestInterface');
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\RequestInterface'
+            'Magento\Framework\App\RequestInterface'
         )->setRoutingInfo(
             array('requested_route' => 'x', 'requested_controller' => 'y', 'requested_action' => 'z')
         );
@@ -111,9 +111,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->_model->getFilter()->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\View\LayoutInterface'
+                'Magento\Framework\View\LayoutInterface'
             )->createBlock(
-                'Magento\View\Element\Text'
+                'Magento\Framework\View\Element\Text'
             )
         );
 

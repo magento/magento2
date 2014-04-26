@@ -33,6 +33,9 @@
         $.mage.component({
             paymentAuthentication: [
                 '<?php echo $this->getViewFileUrl('Magento_Checkout::js/payment-authentication.js') ?>'
+            ],
+            dropdownDialog: [
+                '<?php echo $this->getViewFileUrl('mage/dropdown.js') ?>'
             ]
         });
     })(jQuery);

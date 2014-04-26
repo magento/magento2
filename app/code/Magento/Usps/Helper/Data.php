@@ -23,7 +23,7 @@
  */
 namespace Magento\Usps\Helper;
 
-use Magento\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Usps data helper

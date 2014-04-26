@@ -45,13 +45,13 @@ class Add extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'addButton',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Add New Tax Rate'),
                 'onclick' => 'window.location.href=\'' . $this->getUrl('tax/rate/add') . '\'',
-                'class' => 'add'
+                'class' => 'add primary add-tax-rate'
             )
         );
         return parent::_prepareLayout();

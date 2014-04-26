@@ -28,18 +28,18 @@ use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_configManager;
 
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     protected $_imageHelper;
 
-    /** @var \Magento\Core\Model\Store\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_storeConfig;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_scopeConfig;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $productConfigMock;
-    
+
     /** @var Renderer */
     protected $_renderer;
 
@@ -47,7 +47,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_configManager = $this->getMock('Magento\View\ConfigInterface', array(), array(), '', false);
+        $this->_configManager = $this->getMock('Magento\Framework\View\ConfigInterface', array(), array(), '', false);
         $this->_imageHelper = $this->getMock(
             'Magento\Catalog\Helper\Image',
             array('init', 'resize', '__toString'),
@@ -55,7 +55,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->productConfigMock = $this->getMock(
             'Magento\Catalog\Helper\Product\Configuration',
             array(),
@@ -68,7 +68,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             array(
                 'viewConfig' => $this->_configManager,
                 'imageHelper' => $this->_imageHelper,
-                'storeConfig' => $this->_storeConfig,
+                'scopeConfig' => $this->_scopeConfig,
                 'productConfig' => $this->productConfigMock
             )
         );
@@ -79,7 +79,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $url = 'pub/media/catalog/product/cache/1/thumbnail/75x/9df78eab33525d08d6e5fb8d27136e95/_/_/__green.gif';
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $configView = $this->getMock('Magento\Config\View', array('getVarValue'), array(), '', false);
+        $configView = $this->getMock('Magento\Framework\Config\View', array('getVarValue'), array(), '', false);
         $configView->expects($this->any())->method('getVarValue')->will($this->returnValue(75));
 
         $this->_configManager->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
@@ -198,13 +198,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function _initProducts($childHasThumbnail = true, $useParentThumbnail = false)
     {
         /** Set option which can force usage of parent product thumbnail when configurable product is displayed */
-        $thumbnailToBeUsed = $useParentThumbnail ?
-            ThumbnailSource::OPTION_USE_PARENT_IMAGE :
-            ThumbnailSource::OPTION_USE_OWN_IMAGE;
-        $this->_storeConfig->expects(
+        $thumbnailToBeUsed = $useParentThumbnail
+            ? ThumbnailSource::OPTION_USE_PARENT_IMAGE
+            : ThumbnailSource::OPTION_USE_OWN_IMAGE;
+        $this->_scopeConfig->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             Renderer::CONFIG_THUMBNAIL_SOURCE
         )->will(

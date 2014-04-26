@@ -32,7 +32,7 @@ namespace Magento\ProductAlert\Model;
  * @package    Magento_ProductAlert
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Email extends \Magento\Model\AbstractModel
+class Email extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_EMAIL_PRICE_TEMPLATE = 'catalog/productalert/email_price_template';
 
@@ -50,14 +50,14 @@ class Email extends \Magento\Model\AbstractModel
     /**
      * Website Model
      *
-     * @var \Magento\Core\Model\Website
+     * @var \Magento\Store\Model\Website
      */
     protected $_website;
 
     /**
      * Customer model
      *
-     * @var \Magento\Customer\Model\Customer
+     * @var \Magento\Customer\Service\V1\Data\Customer
      */
     protected $_customer;
 
@@ -99,19 +99,19 @@ class Email extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
      */
-    protected $_customerFactory;
+    protected $_customerAccountService;
 
     /**
      * @var \Magento\Core\Model\App\Emulation
@@ -119,42 +119,50 @@ class Email extends \Magento\Model\AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Mail\Template\TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerHelper;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\ProductAlert\Helper\Data $productAlertData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Helper\View $customerHelper
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\ProductAlert\Helper\Data $productAlertData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Helper\View $customerHelper,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productAlertData = $productAlertData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
-        $this->_customerFactory = $customerFactory;
+        $this->_customerAccountService = $customerAccountService;
         $this->_appEmulation = $appEmulation;
         $this->_transportBuilder = $transportBuilder;
+        $this->_customerHelper = $customerHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -182,10 +190,10 @@ class Email extends \Magento\Model\AbstractModel
     /**
      * Set website model
      *
-     * @param \Magento\Core\Model\Website $website
+     * @param \Magento\Store\Model\Website $website
      * @return $this
      */
-    public function setWebsite(\Magento\Core\Model\Website $website)
+    public function setWebsite(\Magento\Store\Model\Website $website)
     {
         $this->_website = $website;
         return $this;
@@ -211,17 +219,17 @@ class Email extends \Magento\Model\AbstractModel
      */
     public function setCustomerId($customerId)
     {
-        $this->_customer = $this->_customerFactory->create()->load($customerId);
+        $this->_customer = $this->_customerAccountService->getCustomer($customerId);
         return $this;
     }
 
     /**
      * Set customer model
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Customer\Service\V1\Data\Customer $customer
      * @return $this
      */
-    public function setCustomer(\Magento\Customer\Model\Customer $customer)
+    public function setCustomerData($customer)
     {
         $this->_customer = $customer;
         return $this;
@@ -316,14 +324,16 @@ class Email extends \Magento\Model\AbstractModel
         $store = $this->_website->getDefaultStore();
         $storeId = $store->getId();
 
-        if ($this->_type == 'price' && !$this->_coreStoreConfig->getConfig(
+        if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_PRICE_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
             return false;
-        } elseif ($this->_type == 'stock' && !$this->_coreStoreConfig->getConfig(
+        } elseif ($this->_type == 'stock' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_STOCK_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
@@ -343,7 +353,11 @@ class Email extends \Magento\Model\AbstractModel
                 $this->_getPriceBlock()->addProduct($product);
             }
             $block = $this->_getPriceBlock()->toHtml();
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_PRICE_TEMPLATE, $storeId);
+            $templateId = $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_PRICE_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
         } else {
             $this->_getStockBlock()->setStore($store)->reset();
             foreach ($this->_stockProducts as $product) {
@@ -351,7 +365,11 @@ class Email extends \Magento\Model\AbstractModel
                 $this->_getStockBlock()->addProduct($product);
             }
             $block = $this->_getStockBlock()->toHtml();
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_STOCK_TEMPLATE, $storeId);
+            $templateId = $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_STOCK_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
         }
 
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
@@ -359,14 +377,18 @@ class Email extends \Magento\Model\AbstractModel
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
-            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
         )->setTemplateVars(
-            array('customerName' => $this->_customer->getName(), 'alertGrid' => $block)
+            array('customerName' => $this->_customerHelper->getCustomerName($this->_customer), 'alertGrid' => $block)
         )->setFrom(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId)
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
         )->addTo(
             $this->_customer->getEmail(),
-            $this->_customer->getName()
+            $this->_customerHelper->getCustomerName($this->_customer)
         )->getTransport();
 
         $transport->sendMessage();

@@ -21,10 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1;
 
-use Magento\Exception\InputException;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1;
 use Magento\Customer\Service\V1\Data\AddressConverter;
 
@@ -39,7 +40,7 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerAddressServiceInterface */
     private $_service;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     private $_objectManager;
 
     /** @var \Magento\Customer\Service\V1\Data\Address[] */
@@ -59,62 +60,53 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
         $this->_customerBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
 
-        $this->_addressBuilder->setId(
-            1
-        )->setCountryId(
-            'US'
-        )->setCustomerId(
-            1
-        )->setDefaultBilling(
-            true
-        )->setDefaultShipping(
-            true
-        )->setPostcode(
-            '75477'
-        )->setRegion(
-            (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
-        )->setStreet(
-            array('Green str, 67')
-        )->setTelephone(
-            '3468676'
-        )->setCity(
-            'CityM'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
+        $region = (new \Magento\Customer\Service\V1\Data\RegionBuilder())
+            ->setRegionCode('AL')
+            ->setRegion('Alabama')
+            ->setRegionId(1)
+            ->create();
+        $this->_addressBuilder
+            ->setId(1)
+            ->setCountryId('US')
+            ->setCustomerId(1)
+            ->setDefaultBilling(true)
+            ->setDefaultShipping(true)
+            ->setPostcode('75477')
+            ->setRegion($region)
+            ->setStreet(array('Green str, 67'))
+            ->setTelephone('3468676')
+            ->setCity('CityM')
+            ->setFirstname('John')
+            ->setLastname('Smith')
+            ->setCompany('CompanyName');
         $address = $this->_addressBuilder->create();
 
         /* XXX: would it be better to have a clear method for this? */
-        $this->_addressBuilder->setId(
-            2
-        )->setCountryId(
-            'US'
-        )->setCustomerId(
-            1
-        )->setDefaultBilling(
-            false
-        )->setDefaultShipping(
-            false
-        )->setPostcode(
-            '47676'
-        )->setRegion(
-            (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
-        )->setStreet(
-            array('Black str, 48')
-        )->setCity(
-            'CityX'
-        )->setTelephone(
-            '3234676'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
+        $this->_addressBuilder
+            ->setId(2)
+            ->setCountryId('US')
+            ->setCustomerId(1)
+            ->setDefaultBilling(false)
+            ->setDefaultShipping(false)
+            ->setPostcode('47676')
+            ->setRegion($region)
+            ->setStreet(array('Black str, 48'))
+            ->setCity('CityX')
+            ->setTelephone('3234676')
+            ->setFirstname('John')
+            ->setLastname('Smith');
+
         $address2 = $this->_addressBuilder->create();
 
         $this->_expectedAddresses = array($address, $address2);
+    }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
+        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry->remove(1);
     }
 
     /**
@@ -221,8 +213,7 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->getAddress(12345);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
-            $this->assertSame($exception->getParams(), array('addressId' => 12345));
+            $this->assertEquals('No such entity with addressId = 12345', $exception->getMessage());
         }
     }
 
@@ -310,14 +301,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->saveAddresses($customerId, array($firstAddress, $secondAddress));
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (InputException $exception) {
-            $this->assertSame($exception->getCode(), \Magento\Exception\InputException::INPUT_EXCEPTION);
-            $this->assertSame(
-                $exception->getParams(),
-                array(
-                    array('index' => 0, 'fieldName' => 'firstname', 'code' => 'REQUIRED_FIELD', 'value' => null),
-                    array('index' => 1, 'fieldName' => 'lastname', 'code' => 'REQUIRED_FIELD', 'value' => null)
-                )
-            );
+            $this->assertEquals(InputException::DEFAULT_MESSAGE, $exception->getMessage());
+            $errors = $exception->getErrors();
+            $this->assertCount(2, $errors);
+            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
+            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
         }
     }
 
@@ -482,8 +470,6 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->saveAddresses(4200, array($proposedAddress));
             $this->fail('Expected exception not thrown');
         } catch (NoSuchEntityException $nsee) {
-            $expectedParams = array('customerId' => '4200');
-            $this->assertEquals($expectedParams, $nsee->getParams());
             $this->assertEquals('No such entity with customerId = 4200', $nsee->getMessage());
         }
     }
@@ -495,9 +481,7 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->saveAddresses('this_is_not_a_valid_id', array($proposedAddress));
             $this->fail('Expected exception not thrown');
         } catch (NoSuchEntityException $nsee) {
-            $expectedParams = array('customerId' => 'this_is_not_a_valid_id');
-            $this->assertEquals($expectedParams, $nsee->getParams());
-            $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
+             $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
         }
     }
 
@@ -520,8 +504,7 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $addressDataObject = $this->_service->getAddress($addressId);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
-            $this->assertSame($exception->getParams(), array('addressId' => $addressId));
+            $this->assertEquals('No such entity with addressId = 1', $exception->getMessage());
         }
     }
 
@@ -535,8 +518,7 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->_service->deleteAddress(12345);
             $this->fail("Expected NoSuchEntityException not caught");
         } catch (NoSuchEntityException $exception) {
-            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
-            $this->assertSame($exception->getParams(), array('addressId' => 12345));
+            $this->assertEquals('No such entity with addressId = 12345', $exception->getMessage());
         }
     }
 
@@ -554,13 +536,13 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->fail("InputException was expected but not thrown");
         } catch (InputException $actualException) {
             $expectedException = new InputException();
-            $expectedException->addError('REQUIRED_FIELD', 'firstname', '', array('index' => 0));
-            $expectedException->addError('REQUIRED_FIELD', 'lastname', '', array('index' => 0));
-            $expectedException->addError('REQUIRED_FIELD', 'street', '', array('index' => 0));
-            $expectedException->addError('REQUIRED_FIELD', 'telephone', '', array('index' => 0));
-            $expectedException->addError('REQUIRED_FIELD', 'postcode', '', array('index' => 0));
-            $expectedException->addError('REQUIRED_FIELD', 'countryId', '', array('index' => 0));
-            $this->assertEquals($expectedException->getErrors(), $actualException->getErrors());
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname', 'index'=> 0]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname', 'index'=> 0]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'street', 'index'=> 0]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'telephone', 'index'=> 0]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode', 'index'=> 0]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId', 'index'=> 0]);
+            $this->assertEquals($expectedException, $actualException);
         }
     }
 
@@ -575,12 +557,24 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->fail("InputException was expected but not thrown");
         } catch (InputException $actualException) {
             $expectedException = new InputException();
-            $expectedException->addError('REQUIRED_FIELD', 'street', '', array('index' => 'addr_3'));
-            $expectedException->addError('REQUIRED_FIELD', 'city', '', array('index' => 'addr_3'));
-            $expectedException->addError('REQUIRED_FIELD', 'telephone', '', array('index' => 'addr_3'));
-            $expectedException->addError('REQUIRED_FIELD', 'postcode', '', array('index' => 'addr_3'));
-            $expectedException->addError('REQUIRED_FIELD', 'countryId', '', array('index' => 'addr_3'));
-            $this->assertEquals($expectedException->getErrors(), $actualException->getErrors());
+            $expectedException->addError(
+                InputException::REQUIRED_FIELD,
+                ['fieldName' => 'street', 'index' => 'addr_3']
+            );
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'city', 'index' => 'addr_3']);
+            $expectedException->addError(
+                InputException::REQUIRED_FIELD,
+                ['fieldName' => 'telephone', 'index' => 'addr_3']
+            );
+            $expectedException->addError(
+                InputException::REQUIRED_FIELD,
+                ['fieldName' => 'postcode', 'index' => 'addr_3']
+            );
+            $expectedException->addError(
+                InputException::REQUIRED_FIELD,
+                ['fieldName' => 'countryId', 'index' => 'addr_3']
+            );
+            $this->assertEquals($expectedException, $actualException);
         }
     }
 
@@ -592,12 +586,12 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             $this->fail("InputException was expected but not thrown");
         } catch (InputException $actualException) {
             $expectedException = new InputException();
-            $expectedException->addError('REQUIRED_FIELD', 'street', '', array('index' => 2));
-            $expectedException->addError('REQUIRED_FIELD', 'city', '', array('index' => 2));
-            $expectedException->addError('REQUIRED_FIELD', 'telephone', '', array('index' => 2));
-            $expectedException->addError('REQUIRED_FIELD', 'postcode', '', array('index' => 2));
-            $expectedException->addError('REQUIRED_FIELD', 'countryId', '', array('index' => 2));
-            $this->assertEquals($expectedException->getErrors(), $actualException->getErrors());
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'street', 'index' => 2]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'city', 'index' => 2]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'telephone', 'index' => 2]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode', 'index' => 2]);
+            $expectedException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId', 'index' => 2]);
+            $this->assertEquals($expectedException, $actualException);
         }
     }
 

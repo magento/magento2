@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Model\Renderer;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Region field renderer
@@ -34,14 +34,14 @@ use Magento\Data\Form\Element\AbstractElement;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Country region collections
      *
      * Structure:
      * array(
-     *      [$countryId] => \Magento\Data\Collection\Db
+     *      [$countryId] => \Magento\Framework\Data\Collection\Db
      * )
      *
      * @var array
@@ -51,7 +51,7 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
     /**
      * Adminhtml data
      *
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper = null;
 
@@ -63,12 +63,12 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
     /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Escaper $escaper
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_countryFactory = $countryFactory;
         $this->_directoryHelper = $directoryHelper;

@@ -60,6 +60,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testFileSchemaUsingPartialXml()
     {
         $xmlFile = $this->_getKnownValidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
@@ -67,6 +71,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
         $xmlFile = $this->_getKnownInvalidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
@@ -74,6 +82,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
         $xmlFile = $this->_getKnownValidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
@@ -91,10 +103,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
         if ($errors) {
             if (!is_null($fileSchemaFile)) {
-                $moreErrors = \Magento\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
+                $moreErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
                 if (empty($moreErrors)) {
                     return;
                 } else {
@@ -124,7 +136,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $actualErrors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $actualErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
 
         if (isset($expectedErrors)) {
             $this->assertNotEmpty(

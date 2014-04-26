@@ -39,13 +39,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
-        $layout = $objectManager->create('Magento\Core\Model\Layout');
+        $layout = $objectManager->create('Magento\Framework\View\Layout');
         $formBlock = $layout->addBlock('Magento\Backend\Block\Widget\Form');
-        $fieldSet = $objectManager->create('Magento\Data\Form\Element\Fieldset');
+        $fieldSet = $objectManager->create('Magento\Framework\Data\Form\Element\Fieldset');
         $arguments = array(
             'data' => array(
                 'attribute_code' => 'date',
@@ -61,7 +61,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fields = $fieldSet->getElements();
 
         $this->assertEquals(1, count($fields));
-        $this->assertInstanceOf('Magento\Data\Form\Element\Date', $fields[0]);
+        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Date', $fields[0]);
         $this->assertNotEmpty($fields[0]->getDateFormat());
     }
 }

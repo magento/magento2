@@ -1,0 +1,100 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.product-actions {
+    .clearfix();
+    .switcher {
+        float: right;
+    }
+}
+
+#configurable-attributes-container .actions-select {
+    .dropdown(
+        @_dropdown-list-pointer: false
+    );
+
+    .action.toggle {
+        padding: 1px 8px;
+        border: 1px solid #ada89e;
+        background: #fff;
+        border-radius: 0 2px 2px 0;
+
+        &:after {
+            width: 14px;
+            text-indent: -2px;
+        }
+    }
+
+    ul.dropdown {
+        li:hover {
+            background: #eef8fc;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+    }
+}
+
+#product-variations-matrix .actions-image-uploader {
+    .dropdown-split(
+        @_dropdown-split-list-pointer: false
+    );
+    display: block;
+    width: 50px;
+
+    .action.toggle {
+        padding: 0 2px;
+        border: 1px solid #b7b2a7;
+        background: #fff;
+        border-radius: 0 4px 4px 0;
+        border-left: none;
+        height: 33px;
+
+        &.no-display {
+            display: none;
+        }
+
+        &:after {
+            width: 12px;
+            text-indent: -5px;
+        }
+    }
+
+    ul.dropdown {
+        left: 0;
+        margin-left: 0;
+        width: 100px;
+
+        li:hover {
+            background: #eef8fc;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+    }
+}

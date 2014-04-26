@@ -31,7 +31,7 @@
  */
 ?>
 
-<?php /** @var $this \Magento\View\Element\Js\Components */ ?>
+<?php /** @var $this \Magento\Framework\View\Element\Js\Components */ ?>
 
 <script type="text/javascript">
 (function($) {
@@ -71,10 +71,10 @@
         loader: [
             '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
             '<?php echo $this->getViewFileUrl('mage/translate.js') ?>',
-            '<?php echo $this->getViewFileUrl('mage/loader.js') ?>'
+            '<?php echo $this->getViewFileUrl('mage/loader_old.js') ?>'
         ],
         loaderAjax: [
-            '<?php echo $this->getViewFileUrl('mage/loader.js') ?>'
+            '<?php echo $this->getViewFileUrl('mage/loader_old.js') ?>'
         ],
         floatingHeader: [
             '<?php echo $this->getViewFileUrl('mage/backend/floating-header.js') ?>'

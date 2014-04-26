@@ -24,11 +24,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg;
-use Magento\Registry;
-use Magento\Logger;
+use Magento\Framework\Registry;
+use Magento\Framework\Logger;
 
 class Builder
 {
@@ -38,12 +38,12 @@ class Builder
     protected $productFactory;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $logger;
 
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $registry;
 

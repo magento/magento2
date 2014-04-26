@@ -91,6 +91,9 @@
             if (shuffle) {
                 this._shuffle(elements);
             }
+            if (limit === 0) {
+                limit = elements.length;
+            }
             for (var index = 0; index < limit; index++) {
                 $(elements[index]).show();
             }

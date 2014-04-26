@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractFilter extends \Magento\Object
+abstract class AbstractFilter extends \Magento\Framework\Object
 {
     /**
      * Request variable name with filter value
@@ -58,7 +58,7 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -73,13 +73,13 @@ abstract class AbstractFilter extends \Magento\Object
      * Constructor
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         array $data = array()
     ) {
@@ -252,7 +252,7 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Get product collection select object with applied filters
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getBaseCollectionSql()
     {
@@ -276,13 +276,13 @@ abstract class AbstractFilter extends \Magento\Object
      * Get attribute model associated with filter
      *
      * @return \Magento\Catalog\Model\Resource\Eav\Attribute
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getAttributeModel()
     {
         $attribute = $this->getData('attribute_model');
         if (is_null($attribute)) {
-            throw new \Magento\Model\Exception(__('The attribute model is not defined.'));
+            throw new \Magento\Framework\Model\Exception(__('The attribute model is not defined.'));
         }
         return $attribute;
     }

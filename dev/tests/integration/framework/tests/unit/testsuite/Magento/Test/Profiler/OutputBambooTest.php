@@ -63,7 +63,7 @@ class OutputBambooTest extends \PHPUnit_Framework_TestCase
 
     public function testDisplay()
     {
-        $this->_output->display(new \Magento\Profiler\Driver\Standard\Stat());
+        $this->_output->display(new \Magento\Framework\Profiler\Driver\Standard\Stat());
         \Magento\Test\Profiler\OutputBambooTestFilter::assertCollectedData("Timestamp,\"sample metric (ms)\"\n%d,%d");
     }
 }

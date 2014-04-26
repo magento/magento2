@@ -37,7 +37,7 @@ class Validatevat extends \Magento\Backend\App\Action
     /**
      * Perform customer VAT ID validation
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _validate()
     {

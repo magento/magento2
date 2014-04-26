@@ -26,7 +26,7 @@ namespace Magento\Catalog\Model\Config\Source\Product\Options;
 /**
  * Product option types mode source
  */
-class Type implements \Magento\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Product Option Config

@@ -37,13 +37,13 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\App\Arguments|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Arguments|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\App\Arguments', array(), array(), '', false);
+        $this->configMock = $this->getMock('Magento\Framework\App\Arguments', array(), array(), '', false);
         $this->configMock->expects(
             $this->any()
         )->method(

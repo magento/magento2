@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout>
+    <container name="container1" label="Container 1">
+        <block class="Magento\Framework\View\Element\Text" name="no.name2" as="no.name2"/>
+    </container>
+    <container name="container2" label="Container 2"/>
+    <move element="container1" destination="container2"/>
+    <block class="Magento\Framework\View\Element\Text" name="block_container" as="block.container">
+        <block class="Magento\Framework\View\Element\Text" name="child_block1"/>
+        <block class="Magento\Framework\View\Element\Text" name="child_block2"/>
+    </block>
+    <container name="container3" label="Container 3">
+        <block class="Magento\Framework\View\Element\Text" name="no_name"/>
+    </container>
+    <move element="no_name" destination="block_container" after="child_block1"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name4"/>
+    <move element="no_name4" destination="block_container" before="child_block2"/>
+    <move element="no_name3" destination="block_container"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name3"/>
+</layout>

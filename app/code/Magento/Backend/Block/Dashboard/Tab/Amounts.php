@@ -39,7 +39,7 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
-     * @param \Magento\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Backend\Helper\Dashboard\Order $dataHelper
      * @param array $data
      */
@@ -47,7 +47,7 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
-        \Magento\Locale\ListsInterface $localeLists,
+        \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Backend\Helper\Dashboard\Order $dataHelper,
         array $data = array()
     ) {

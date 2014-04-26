@@ -23,17 +23,17 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid;
 
-class ItemsUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
+class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $authorization;
 
     /**
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      */
-    public function __construct(\Magento\AuthorizationInterface $authorization)
+    public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
     {
         $this->authorization = $authorization;
     }

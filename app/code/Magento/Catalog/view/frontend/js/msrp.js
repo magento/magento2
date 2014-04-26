@@ -27,15 +27,16 @@
 (function($) {
     $.widget('mage.addToCart', {
         options: {
-            showAddToCart: true
+            showAddToCart: true,
+            cartForm: '.form.map.checkout'
         },
 
         _create: function() {
-            $(document).on('click', this.options.cartButtonId, $.proxy(function() {
+            $(this.options.cartButtonId).on('click', $.proxy(function() {
                 this._addToCartSubmit();
             }, this));
 
-            $(document).on('click', this.options.popupId, $.proxy(function(e) {
+            $(this.options.popupId).on('click', $.proxy(function(e) {
                 if (this.options.submitUrl) {
                     location.href = this.options.submitUrl;
                 } else {
@@ -60,7 +61,7 @@
                 }
             }, this));
 
-            $(document).on('click', this.options.helpLinkId, $.proxy(function(e) {
+            $(this.options.helpLinkId).on('click', $.proxy(function(e) {
                 $('#map-popup-heading').text(this.options.productName);
                 var width = $('#map-popup').width();
                 var offsetX = e.pageX - (width / 2) + "px";
@@ -71,7 +72,7 @@
                 return false;
             }, this));
 
-            $(document).on('click', $.proxy(function() {
+            $(this.options.closeButtonId).on('click', $.proxy(function() {
                 $('#map-popup').removeClass('active').hide();
                 return false;
             }, this));
@@ -81,16 +82,9 @@
         _addToCartSubmit: function() {
             this.element.trigger('addToCart', this.element);
             if (this.options.addToCartUrl) {
-                $('#map-popup').hide();
-                if (opener) {
-                    opener.location.href = this.options.addToCartUrl;
-                } else {
-                    location.href = this.options.addToCartUrl;
-                }
-
-            } else if (this.options.cartForm) {
-                $(this.options.cartForm).submit();
+                $(this.options.cartForm).attr('action', this.options.addToCartUrl);
             }
+            $(this.options.cartForm).submit();
         }
     });
 })(jQuery);

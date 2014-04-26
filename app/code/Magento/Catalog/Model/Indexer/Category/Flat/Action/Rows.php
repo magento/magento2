@@ -31,14 +31,14 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     protected $categoryFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory
     ) {
@@ -49,11 +49,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     /**
      * Return index table name
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @param bool $useTempTable
      * @return string
      */
-    protected function getTableNameByStore(\Magento\Core\Model\Store $store, $useTempTable)
+    protected function getTableNameByStore(\Magento\Store\Model\Store $store, $useTempTable)
     {
         $tableName = $this->getMainStoreTable($store->getId());
         return $useTempTable ? $this->addTemporaryTableSuffix($tableName) : $tableName;
@@ -73,7 +73,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         /* @var $category \Magento\Catalog\Model\Category */
         $category = $this->categoryFactory->create();
 
-        /* @var $store \Magento\Core\Model\Store */
+        /* @var $store \Magento\Store\Model\Store */
         foreach ($stores as $store) {
             $tableName = $this->getTableNameByStore($store, $useTempTable);
 
@@ -121,11 +121,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     /**
      * Delete non stores categories
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @param bool $useTempTable
      * @return void
      */
-    protected function deleteNonStoreCategories(\Magento\Core\Model\Store $store, $useTempTable)
+    protected function deleteNonStoreCategories(\Magento\Store\Model\Store $store, $useTempTable)
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
@@ -133,7 +133,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $rootCatIdExpr = $this->getWriteAdapter()->quote("{$rootId}/{$store->getRootCategoryId()}");
         $catIdExpr = $this->getWriteAdapter()->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
-        /** @var \Magento\DB\Select $select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = $this->getWriteAdapter()->select()->from(
             array('cf' => $this->getTableNameByStore($store, $useTempTable))
         )->joinLeft(
@@ -154,7 +154,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * Filter category ids by store
      *
      * @param int[] $ids
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return int[]
      */
     protected function filterIdsByStore(array $ids, $store)

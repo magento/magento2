@@ -40,7 +40,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_groupService;
 
     /**
-     * @var \Magento\Convert\Object
+     * @var \Magento\Framework\Convert\Object
      */
     protected $_converter;
 
@@ -49,14 +49,14 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Convert\Object $converter
+     * @param \Magento\Framework\Convert\Object $converter
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Convert\Object $converter
+        \Magento\Framework\Convert\Object $converter
     ) {
         $this->_groupService = $groupService;
         $this->_converter = $converter;

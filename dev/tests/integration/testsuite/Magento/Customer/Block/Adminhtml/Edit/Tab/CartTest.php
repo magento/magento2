@@ -37,33 +37,33 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Block\Template\Context */
     private $_context;
 
-    /** @var \Magento\Registry */
+    /** @var \Magento\Framework\Registry */
     private $_coreRegistry;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
     /** @var Cart */
     private $_block;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     private $_objectManager;
 
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManager');
+        $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
         $this->_context = $this->_objectManager->get(
             'Magento\Backend\Block\Template\Context',
             array('storeManager' => $this->_storeManager)
         );
 
-        $this->_coreRegistry = $this->_objectManager->get('Magento\Registry');
+        $this->_coreRegistry = $this->_objectManager->get('Magento\Framework\Registry');
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, self::CUSTOMER_ID_VALUE);
 
         $this->_block = $this->_objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
             '',
@@ -89,20 +89,22 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetGridParentHtml()
     {
         $this->_block = $this->_objectManager->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
             '',
             array()
         );
-        $mockCollection = $this->getMockBuilder('\Magento\Data\Collection')->disableOriginalConstructor()->getMock();
+        $mockCollection = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_block->setCollection($mockCollection);
         $this->assertContains("<div class=\"grid-actions\">", $this->_block->getGridParentHtml());
     }
 
     public function testGetRowUrl()
     {
-        $row = new \Magento\Object();
+        $row = new \Magento\Framework\Object();
         $row->setProductId(1);
         $this->assertContains('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
     }

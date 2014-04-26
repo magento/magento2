@@ -53,8 +53,17 @@ use Magento\Sales\Model\Quote\Item;
  * @method \Magento\Sales\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
  * @method int[] getAppliedRuleIds()
  * @method \Magento\Sales\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
+ * @method float getBaseTaxAmount()
+ * @method float getBaseDiscountTaxCompensation()
+ * @method float getBaseRowTotal()
+ * @method float getQtyOrdered()
+ * @method float getRowTotalInclTax()
+ * @method float getTaxAmount()
+ * @method float getDiscountTaxCompensation()
+ * @method float getRowTotal()
+ * @method float getPriceInclTax()
  */
-abstract class AbstractItem extends \Magento\Model\AbstractModel implements
+abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
@@ -85,19 +94,19 @@ abstract class AbstractItem extends \Magento\Model\AbstractModel implements
     protected $_productFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -150,7 +159,7 @@ abstract class AbstractItem extends \Magento\Model\AbstractModel implements
      * Needed to implement \Magento\Catalog\Model\Product\Configuration\Item\Interface.
      * Return null, as quote item needs no additional configuration.
      *
-     * @return null|\Magento\Object
+     * @return null|\Magento\Framework\Object
      */
     public function getFileDownloadParams()
     {
@@ -297,7 +306,7 @@ abstract class AbstractItem extends \Magento\Model\AbstractModel implements
     /**
      * Retrieve store model object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -318,7 +327,7 @@ abstract class AbstractItem extends \Magento\Model\AbstractModel implements
 
         try {
             $this->setQty($qty);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->setHasError(true);
             $this->setMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -328,7 +337,7 @@ abstract class AbstractItem extends \Magento\Model\AbstractModel implements
 
         try {
             $this->getProduct()->getTypeInstance()->checkProductBuyState($this->getProduct());
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->setHasError(true)->setMessage($e->getMessage());
             $this->getQuote()->setHasError(
                 true

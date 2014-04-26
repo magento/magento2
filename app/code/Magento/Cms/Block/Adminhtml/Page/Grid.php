@@ -106,9 +106,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('title', array('header' => __('Title'), 'align' => 'left', 'index' => 'title'));
+        $this->addColumn('title', array('header' => __('Title'), 'index' => 'title'));
 
-        $this->addColumn('identifier', array('header' => __('URL Key'), 'align' => 'left', 'index' => 'identifier'));
+        $this->addColumn('identifier', array('header' => __('URL Key'), 'index' => 'identifier'));
 
         $this->addColumn(
             'root_template',
@@ -150,22 +150,35 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'creation_time',
-            array('header' => __('Created'), 'index' => 'creation_time', 'type' => 'datetime')
+            array(
+                'header' => __('Created'),
+                'index' => 'creation_time',
+                'type' => 'datetime',
+                'header_css_class' => 'col-date',
+                'column_css_class' => 'col-date'
+            )
         );
 
         $this->addColumn(
             'update_time',
-            array('header' => __('Modified'), 'index' => 'update_time', 'type' => 'datetime')
+            array(
+                'header' => __('Modified'),
+                'index' => 'update_time',
+                'type' => 'datetime',
+                'header_css_class' => 'col-date',
+                'column_css_class' => 'col-date'
+            )
         );
 
         $this->addColumn(
             'page_actions',
             array(
                 'header' => __('Action'),
-                'width' => 10,
                 'sortable' => false,
                 'filter' => false,
-                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action'
+                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
+                'header_css_class' => 'col-action',
+                'column_css_class' => 'col-action'
             )
         );
 
@@ -186,11 +199,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Filter store condition
      *
-     * @param \Magento\Data\Collection $collection
-     * @param \Magento\Object $column
+     * @param \Magento\Framework\Data\Collection $collection
+     * @param \Magento\Framework\Object $column
      * @return void
      */
-    protected function _filterStoreCondition($collection, \Magento\Object $column)
+    protected function _filterStoreCondition($collection, \Magento\Framework\Object $column)
     {
         if (!($value = $column->getFilter()->getValue())) {
             return;
@@ -202,7 +215,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row click url
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

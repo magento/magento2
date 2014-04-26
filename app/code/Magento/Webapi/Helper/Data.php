@@ -24,17 +24,18 @@
 namespace Magento\Webapi\Helper;
 
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
+use Magento\Framework\Service\Data\AbstractObject;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Registry */
+    /** @var \Magento\Framework\Registry */
     protected $_registry;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Registry $registry
      */
-    public function __construct(\Magento\App\Helper\Context $context, \Magento\Registry $registry)
+    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\Registry $registry)
     {
         $this->_registry = $registry;
         parent::__construct($context);
@@ -58,9 +59,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Translate service interface name into service name.
      * Example:
      * <pre>
-     * - \Magento\Customer\Service\CustomerV1Interface         => customer          // $preserveVersion == false
-     * - \Magento\Customer\Service\Customer\AddressV1Interface => customerAddressV1 // $preserveVersion == true
-     * - \Magento\Catalog\Service\ProductV2Interface           => catalogProductV2  // $preserveVersion == true
+     * - 'Magento\Customer\Service\V1\CustomerAccountInterface', false => customerCustomerAccount
+     * - 'Magento\Customer\Service\V1\CustomerAddressInterface', true  => customerCustomerAddressV1
+     * - 'Magento\Catalog\Service\V2\ProductInterface', true           => catalogProductV2
      * </pre>
      *
      * @param string $interfaceName
@@ -77,10 +78,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Identify the list of service name parts including sub-services using class name.
      *
-     * Examples of input/output pairs: <br/>
-     * - 'Magento\Customer\Service\Customer\AddressV1Interface' => array('Customer', 'Address', 'V1') <br/>
-     * - 'Vendor\Customer\Service\Customer\AddressV1Interface' => array('VendorCustomer', 'Address', 'V1) <br/>
-     * - 'Magento\Catalog\Service\ProductV2Interface' => array('CatalogProduct', 'V2')
+     * Examples of input/output pairs:
+     * <pre>
+     * - 'Magento\Customer\Service\V1\CustomerAccountInterface', false => ['CustomerCustomerAccount']
+     * - 'Vendor\Customer\Service\V1\Customer\AddressInterface', true  => ['VendorCustomer', 'Address', 'V1']
+     * - 'Magento\Catalog\Service\V2\ProductInterface', true           => ['CatalogProduct', 'V2']
+     * </pre>
      *
      * @param string $className
      * @param bool $preserveVersion Should version be preserved during class name conversion into service name
@@ -92,7 +95,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if (preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $className, $matches)) {
             $moduleNamespace = $matches[1];
             $moduleName = $matches[2];
-            $moduleNamespace = $moduleNamespace == 'Magento' ? '' : $moduleNamespace;
+            $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
             $serviceNameParts = explode('\\', trim($matches[4], '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
@@ -107,34 +110,5 @@ class Data extends \Magento\App\Helper\AbstractHelper
             return $serviceNameParts;
         }
         throw new \InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $className));
-    }
-
-    /**
-     * Convert Data Object getter name into field name.
-     *
-     * @param string $getterName
-     * @return string
-     */
-    public function dataObjectGetterNameToFieldName($getterName)
-    {
-        if (strpos($getterName, 'get') === 0) {
-            /** Remove 'get' prefix and make the first letter lower case */
-            $fieldName = substr($getterName, strlen('get'));
-        } else {
-            /** If methods are with 'is' or 'has' prefix */
-            $fieldName = $getterName;
-        }
-        return lcfirst($fieldName);
-    }
-
-    /**
-     * Convert Data Object field name into setter name.
-     *
-     * @param string $fieldName
-     * @return string
-     */
-    public function dataObjectFieldNameToSetterName($fieldName)
-    {
-        return 'set' . ucfirst($fieldName);
     }
 }

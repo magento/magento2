@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceContainer name="content">
-        <block class="Magento\Centinel\Block\Adminhtml\Validation" as="card_validation" name="card_validation" template="Magento_Sales::order/create/abstract.phtml">
+        <block class="Magento\Centinel\Block\Adminhtml\Validation" as="card_validation" name="card_validation" template="order/create/abstract.phtml">
             <block class="Magento\Centinel\Block\Adminhtml\Validation\Form" template="validation/form.phtml" name="form"/>
         </block>
     </referenceContainer>

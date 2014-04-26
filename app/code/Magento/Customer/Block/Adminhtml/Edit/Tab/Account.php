@@ -44,12 +44,12 @@ class Account extends GenericMetadata
     protected $_customerFormFactory;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -75,11 +75,11 @@ class Account extends GenericMetadata
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
@@ -90,11 +90,11 @@ class Account extends GenericMetadata
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Customer\Helper\Data $customerHelper,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
@@ -121,7 +121,7 @@ class Account extends GenericMetadata
      */
     public function initForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('_account');
         $form->setFieldNameSuffix('account');
@@ -145,7 +145,8 @@ class Account extends GenericMetadata
             )->setDisableAutoGroupChangeAttribute(
                 $customerForm->getAttribute(self::DISABLE_ATTRIBUTE_NAME)
             )->setDisableAutoGroupChangeAttributeValue(
-                $customerDataObject->getCustomAttribute(self::DISABLE_ATTRIBUTE_NAME)
+                $customerDataObject->getCustomAttribute(self::DISABLE_ATTRIBUTE_NAME) ?
+                $customerDataObject->getCustomAttribute(self::DISABLE_ATTRIBUTE_NAME)->getValue() : null
             )
         );
 
@@ -248,14 +249,14 @@ class Account extends GenericMetadata
         return $this->_customerFormFactory->create(
             'customer',
             'adminhtml_customer',
-            \Magento\Service\DataObjectConverter::toFlatArray($customer)
+            \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer)
         );
     }
 
     /**
      * Handle Read-Only customer
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param int $customerId
      * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes
      * @return void
@@ -275,10 +276,10 @@ class Account extends GenericMetadata
     /**
      * Make sendemail or sendmail_store_id disabled if website_id has an empty value
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return void
      */
-    protected function _disableSendEmailStoreForEmptyWebsite(\Magento\Data\Form $form)
+    protected function _disableSendEmailStoreForEmptyWebsite(\Magento\Framework\Data\Form $form)
     {
         $sendEmailId = $this->_storeManager->isSingleStoreMode() ? 'sendemail' : 'sendemail_store_id';
         $sendEmail = $form->getElement($sendEmailId);
@@ -291,14 +292,14 @@ class Account extends GenericMetadata
             }
             $sendEmail->setAfterElementHtml(
                 '<script type="text/javascript">' .
-                "\n                document.observe('dom:loaded', function()".
-                "{\n                    \$('{$prefix}website_id').disableSendemail = function() ".
-                "{\n                        \$('{$prefix}sendemail').disabled = ('' == this.value || ".
+                "\n                document.observe('dom:loaded', function()" .
+                "{\n                    \$('{$prefix}website_id').disableSendemail = function() " .
+                "{\n                        \$('{$prefix}sendemail').disabled = ('' == this.value || " .
                 "'0' == this.value);" .
                 $_disableStoreField .
-                "\n}.bind(\$('{$prefix}website_id'));\n                    ".
-                "Event.observe('{$prefix}website_id', 'change', \$('{$prefix}website_id').disableSendemail);".
-                "\n                    \$('{$prefix}website_id').disableSendemail();\n                });".
+                "\n}.bind(\$('{$prefix}website_id'));\n                    " .
+                "Event.observe('{$prefix}website_id', 'change', \$('{$prefix}website_id').disableSendemail);" .
+                "\n                    \$('{$prefix}website_id').disableSendemail();\n                });" .
                 "\n                " .
                 '</script>'
             );
@@ -308,8 +309,8 @@ class Account extends GenericMetadata
     /**
      * Create New Customer form fields
      *
-     * @param \Magento\Data\Form $form
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form $form
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
      */
     protected function _addNewCustomerFormFields($form, $fieldset)
@@ -340,13 +341,13 @@ class Account extends GenericMetadata
                 $this->_jsonEncoder->encode(
                     $websites
                 ) .
-                ";\n                jQuery.validator.addMethod('validate-website-has-store', function(v, elem)".
-                "{\n                        return {$prefix}_websites[elem.value] == true;\n                    },".
+                ";\n                jQuery.validator.addMethod('validate-website-has-store', function(v, elem)" .
+                "{\n                       return {$prefix}_websites[elem.value] == true;\n                    }," .
                 "\n                    '" .
                 $note .
-                "'\n                );\n                ".
-                "Element.observe('{$prefix}website_id', 'change', function()".
-                "{\n                    jQuery.validator.validateElement('#{$prefix}website_id');".
+                "'\n                );\n                " .
+                "Element.observe('{$prefix}website_id', 'change', function()" .
+                "{\n                    jQuery.validator.validateElement('#{$prefix}website_id');" .
                 "\n                }.bind(\$('{$prefix}website_id')));\n                " .
                 '</script>'
             );
@@ -373,8 +374,8 @@ class Account extends GenericMetadata
     /**
      * Edit/View Existing Customer form fields
      *
-     * @param \Magento\Data\Form $form
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form $form
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param \Magento\Customer\Service\V1\Data\Customer $customerDataObject
      * @return string[] Values to set on the form
      */

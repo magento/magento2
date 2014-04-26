@@ -26,7 +26,7 @@ namespace Magento\Customer\Service\V1\Data\Eav;
 /**
  * Class AttributeMetadataBuilder
  */
-class AttributeMetadataBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class AttributeMetadataBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * Option builder

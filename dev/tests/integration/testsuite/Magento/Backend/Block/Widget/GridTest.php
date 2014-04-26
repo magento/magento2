@@ -37,7 +37,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_layoutMock;
 
@@ -48,7 +48,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
         $this->_columnSetMock = $this->_getColumnSetMock();
 
         $returnValueMap = array(
@@ -81,7 +81,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\View\LayoutInterface'
+                    'Magento\Framework\View\LayoutInterface'
                 )->createBlock(
                     'Magento\Backend\Block\Widget\Button'
                 )
@@ -101,7 +101,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\Widget\Grid'
         );
@@ -117,16 +117,19 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function _getColumnSetMock()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directoryList = $objectManager->create('Magento\App\Filesystem\DirectoryList', array('root' => __DIR__));
+        $directoryList = $objectManager->create(
+            'Magento\Framework\App\Filesystem\DirectoryList',
+            array('root' => __DIR__)
+        );
         return $this->getMock(
             'Magento\Backend\Block\Widget\Grid\ColumnSet',
             array(),
             array(
                 $objectManager->create(
-                    'Magento\View\Element\Template\Context',
+                    'Magento\Framework\View\Element\Template\Context',
                     array(
                         'filesystem' => $objectManager->create(
-                            '\Magento\App\Filesystem',
+                            '\Magento\Framework\App\Filesystem',
                             array('directoryList' => $directoryList)
                         )
                     )
@@ -157,11 +160,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMassactionBlock()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         /** @var $block \Magento\Backend\Block\Widget\Grid */
         $block = $layout->createBlock('Magento\Backend\Block\Widget\Grid\Extended', 'block');
-        $child = $layout->addBlock('Magento\View\Element\Template', 'massaction', 'block');
+        $child = $layout->addBlock('Magento\Framework\View\Element\Template', 'massaction', 'block');
         $this->assertSame($child, $block->getMassactionBlock());
     }
 }

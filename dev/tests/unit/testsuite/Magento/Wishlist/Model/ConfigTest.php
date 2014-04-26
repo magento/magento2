@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -47,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\ConfigInterface');
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_catalogConfig = $this->getMock('Magento\Catalog\Model\Config', array(), array(), '', false);
         $this->_attributeConfig = $this->getMock(
             'Magento\Catalog\Model\Attribute\Config',
@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_model = new \Magento\Wishlist\Model\Config(
-            $this->_storeConfig,
+            $this->_scopeConfig,
             $this->_catalogConfig,
             $this->_attributeConfig
         );

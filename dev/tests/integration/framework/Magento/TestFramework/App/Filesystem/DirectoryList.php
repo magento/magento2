@@ -23,7 +23,7 @@
  */
 namespace Magento\TestFramework\App\Filesystem;
 
-class DirectoryList extends \Magento\App\Filesystem\DirectoryList
+class DirectoryList extends \Magento\Framework\App\Filesystem\DirectoryList
 {
     /**
      * Check whether configured directory

@@ -38,7 +38,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_storeManagerMock = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')->getMock();
+        $this->_storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
         $this->_object = $objectManager->getObject(
             'Magento\Core\Model\Url\ScopeResolver',
             array('storeManager' => $this->_storeManagerMock)
@@ -51,7 +51,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetScope($scopeId)
     {
-        $scopeMock = $this->getMockBuilder('\Magento\Url\ScopeInterface')->getMock();
+        $scopeMock = $this->getMockBuilder('\Magento\Framework\Url\ScopeInterface')->getMock();
         $this->_storeManagerMock->expects(
             $this->at(0)
         )->method(
@@ -65,7 +65,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Invalid scope object
      */
     public function testGetScopeException()

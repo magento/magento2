@@ -32,7 +32,7 @@ namespace Magento\Customer\Model\Config\Backend\Password\Link;
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Expirationperiod extends \Magento\Core\Model\Config\Value
+class Expirationperiod extends \Magento\Framework\App\Config\Value
 {
     /**
      * Validate expiration period value before saving

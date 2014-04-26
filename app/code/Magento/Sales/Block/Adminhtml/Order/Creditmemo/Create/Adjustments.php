@@ -30,7 +30,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     /**
      * Source object
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_source;
 
@@ -64,7 +64,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     {
         $parent = $this->getParentBlock();
         $this->_source = $parent->getSource();
-        $total = new \Magento\Object(array('code' => 'agjustments', 'block_name' => $this->getNameInLayout()));
+        $total = new \Magento\Framework\Object(array('code' => 'agjustments', 'block_name' => $this->getNameInLayout()));
         $parent->removeTotal('shipping');
         $parent->removeTotal('adjustment_positive');
         $parent->removeTotal('adjustment_negative');
@@ -75,7 +75,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     /**
      * Get source object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getSource()
     {

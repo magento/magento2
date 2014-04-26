@@ -28,7 +28,7 @@ namespace Magento\Backend\Model\Translate\Inline;
 /**
  * Backend Inline Translation config
  */
-class Config implements \Magento\Translate\Inline\ConfigInterface
+class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface

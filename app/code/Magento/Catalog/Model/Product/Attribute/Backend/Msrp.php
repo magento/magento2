@@ -44,10 +44,10 @@ class Msrp extends \Magento\Catalog\Model\Product\Attribute\Backend\Boolean
     /**
      * Constructor
      *
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Catalog\Helper\Data $catalogData
      */
-    public function __construct(\Magento\Logger $logger, \Magento\Catalog\Helper\Data $catalogData)
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Catalog\Helper\Data $catalogData)
     {
         $this->_catalogData = $catalogData;
         parent::__construct($logger);

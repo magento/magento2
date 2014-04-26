@@ -30,7 +30,7 @@
 $element = $this->getElement();
 ?>
 
-<?php /** @var $child \Magento\Data\Form\Element\AbstractElement */ ?>
+<?php /** @var $child \Magento\Framework\Data\Form\Element\AbstractElement */ ?>
 <?php foreach ($element->getElements() as $child): ?>
     <?php echo $child->toHtml(); ?>
 <?php endforeach; ?>

@@ -27,32 +27,35 @@
 <?php $_websiteCollection = $this->getWebsiteCollection() ?>
 <?php if ($_websiteCollection->getSize()): ?>
 <div id="store_switcher_container">
-<p class="switcher"><label for="store_switcher"><?php echo __('Choose Store View:') ?></label>
-<select name="store_switcher" id="store_switcher" class="left-col-block">
-    <option value=""><?php echo $this->getDefaultStoreName() ?></option>
-    <?php foreach ($_websiteCollection as $_website): ?>
-        <?php $showWebsite=false; ?>
-        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-            <?php $showGroup=false; ?>
-            <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                <?php if ($showWebsite == false): ?>
-                    <?php $showWebsite = true; ?>
-                    <optgroup label="<?php echo $_website->getName() ?>"></optgroup>
-                <?php endif; ?>
-                <?php if ($showGroup == false): ?>
-                    <?php $showGroup = true; ?>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?>">
-                <?php endif; ?>
-                <option group="<?php echo $_group->getId() ?>" value="<?php echo $_store->getId() ?>"<?php if($this->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
-            <?php endforeach; ?>
-            <?php if ($showGroup): ?>
-                </optgroup>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php endforeach; ?>
-</select>
-<?php echo $this->getHintHtml() ?>
-</p>
+    <div class="field field-store-switcher">
+        <label for="store_switcher" class="label"><?php echo __('Choose Store View:') ?></label>
+        <div class="control">
+            <select name="store_switcher" id="store_switcher">
+                <option value=""><?php echo $this->getDefaultStoreName() ?></option>
+                <?php foreach ($_websiteCollection as $_website): ?>
+                    <?php $showWebsite=false; ?>
+                    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                        <?php $showGroup=false; ?>
+                        <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                            <?php if ($showWebsite == false): ?>
+                                <?php $showWebsite = true; ?>
+                                <optgroup label="<?php echo $_website->getName() ?>"></optgroup>
+                            <?php endif; ?>
+                            <?php if ($showGroup == false): ?>
+                                <?php $showGroup = true; ?>
+                                <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?>">
+                            <?php endif; ?>
+                            <option group="<?php echo $_group->getId() ?>" value="<?php echo $_store->getId() ?>"<?php if($this->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
+                        <?php endforeach; ?>
+                        <?php if ($showGroup): ?>
+                            </optgroup>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <?php echo $this->getHintHtml() ?>
+    </div>
 </div>
 <script type="text/javascript">
 //<![CDATA[

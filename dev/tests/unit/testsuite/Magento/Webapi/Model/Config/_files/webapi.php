@@ -21,49 +21,112 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-return array(
-    '\Magento\TestModule1\Service\V1\AllSoapAndRestInterface' => array(
-        'class' => '\Magento\TestModule1\Service\V1\AllSoapAndRestInterface',
-        'baseUrl' => '/V1/testmodule1',
-        'methods' => array(
-            'item' => array(
-                'httpMethod' => 'GET',
-                'method' => 'item',
-                'route' => '/:id',
-                'isSecure' => false,
-                'resources' => array('Magento_Test1::resource1')
-            )
-        )
-    ),
-    '\Magento\TestModule1\Service\V2\AllSoapAndRestInterface' => array(
-        'class' => '\Magento\TestModule1\Service\V2\AllSoapAndRestInterface',
-        'baseUrl' => '/V2/testmodule1',
-        'methods' => array(
-            'item' => array(
-                'httpMethod' => 'GET',
-                'method' => 'item',
-                'route' => '/:id',
-                'isSecure' => false,
-                'resources' => array('Magento_Test1::resource1', 'Magento_Test1::resource2')
-            ),
-            'create' => array(
-                'httpMethod' => 'POST',
-                'method' => 'create',
-                'route' => '',
-                'isSecure' => false,
-                'resources' => array('Magento_Test1::resource1', 'Magento_Test1::resource2')
-            ),
-            'delete' => array(
-                'httpMethod' => 'DELETE',
-                'method' => 'delete',
-                'route' => '/:id',
-                'isSecure' => true,
-                'resources' => array('Magento_Test1::resource2')
-            )
-        )
-    ),
-    '\Magento\TestModule1\Service\V3\AllSoapAndRestInterface' => array(
-        'class' => '\Magento\TestModule1\Service\V3\AllSoapAndRestInterface',
-        'methods' => array()
-    )
-);
+return [
+    'services' => [
+        'Magento\Customer\Service\V1\CustomerServiceInterface' => [
+            'getCustomer' => [
+                'resources' => [
+                    'Magento_Customer::customer_self' => true,
+                    'Magento_Customer::read' => true,
+                ],
+                'secure' => false,
+            ],
+            'updateCustomer' => [
+                'resources' => [
+                    'Magento_Customer::customer_self' => true,
+                ],
+                'secure' => true,
+            ],
+            'createCustomer' => [
+                'resources' => [
+                    'Magento_Customer::manage' => true,
+                ],
+                'secure' => false,
+            ],
+            'deleteCustomer' => [
+                'resources' => [
+                    'Magento_Customer::manage' => true,
+                    'Magento_Customer::delete' => true,
+                ],
+                'secure' => false,
+            ],
+        ],
+    ],
+    'routes' => [
+        '/V1/customers/me' => [
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\Customer\Service\V1\CustomerServiceInterface',
+                    'method' => 'getCustomer',
+                ],
+                'resources' => [
+                    'Magento_Customer::customer_self' => true,
+                ],
+                'parameters' => [
+                    'id' => [
+                        'force' => true,
+                        'value' => null,
+                    ],
+                ],
+            ],
+            'PUT' => [
+                'secure' => true,
+                'service' => [
+                    'class' => 'Magento\Customer\Service\V1\CustomerServiceInterface',
+                    'method' => 'updateCustomer',
+                ],
+                'resources' => [
+                    'Magento_Customer::customer_self' => true,
+                ],
+                'parameters' => [
+                    'id' => [
+                        'force' => false,
+                        'value' => null,
+                    ],
+                ],
+            ]
+        ],
+        '/V1/customers' => [
+            'POST' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\Customer\Service\V1\CustomerServiceInterface',
+                    'method' => 'createCustomer',
+                ],
+                'resources' => [
+                    'Magento_Customer::manage' => true,
+                ],
+                'parameters' => [
+                ],
+            ],
+        ],
+        '/V1/customers/:id' => [
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\Customer\Service\V1\CustomerServiceInterface',
+                    'method' => 'getCustomer',
+                ],
+                'resources' => [
+                    'Magento_Customer::read' => true,
+                ],
+                'parameters' => [
+                ],
+            ],
+            'DELETE' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\Customer\Service\V1\CustomerServiceInterface',
+                    'method' => 'deleteCustomer',
+                ],
+                'resources' => [
+                    'Magento_Customer::manage' => true,
+                    'Magento_Customer::delete' => true,
+                ],
+                'parameters' => [
+                ],
+            ],
+        ],
+    ],
+];

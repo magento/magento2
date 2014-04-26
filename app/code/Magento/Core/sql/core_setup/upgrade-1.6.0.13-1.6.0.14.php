@@ -24,6 +24,6 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $this \Magento\Core\Model\Resource\Setup */
+/* @var $this \Magento\Framework\Module\Setup */
 $connection = $this->getConnection();
 $connection->dropTable('core_theme_file_update');

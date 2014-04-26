@@ -31,32 +31,32 @@ namespace Magento\Sales\Model\Resource;
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
      * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
+     * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
+        \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
-        \Magento\App\ConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $moduleName = 'Magento_Sales',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();
@@ -194,25 +194,25 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         $length = null;
         switch ($data['type']) {
             case 'timestamp':
-                $type = \Magento\DB\Ddl\Table::TYPE_TIMESTAMP;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP;
                 break;
             case 'datetime':
-                $type = \Magento\DB\Ddl\Table::TYPE_DATETIME;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME;
                 break;
             case 'decimal':
-                $type = \Magento\DB\Ddl\Table::TYPE_DECIMAL;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL;
                 $length = '12,4';
                 break;
             case 'int':
-                $type = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
                 break;
             case 'text':
-                $type = \Magento\DB\Ddl\Table::TYPE_TEXT;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
                 $length = 65536;
                 break;
             case 'char':
             case 'varchar':
-                $type = \Magento\DB\Ddl\Table::TYPE_TEXT;
+                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
                 $length = 255;
                 break;
         }
@@ -267,7 +267,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     /**
      * Get config model
      *
-     * @return \Magento\App\ConfigInterface
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
      */
     public function getConfigModel()
     {
@@ -275,7 +275,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     }
 
     /**
-     * @return \Magento\Encryption\EncryptorInterface
+     * @return \Magento\Framework\Encryption\EncryptorInterface
      */
     public function getEncryptor()
     {

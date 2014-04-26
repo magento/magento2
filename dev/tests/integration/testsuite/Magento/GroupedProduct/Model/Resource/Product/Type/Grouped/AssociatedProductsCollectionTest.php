@@ -38,7 +38,7 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
         $product->load(9);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
 
         /** @var \Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection $collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

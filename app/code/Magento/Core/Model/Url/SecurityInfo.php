@@ -25,14 +25,12 @@
  */
 namespace Magento\Core\Model\Url;
 
-class SecurityInfo implements \Magento\Url\SecurityInfoInterface
+class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_scopeConfig;
 
     /**
      * List of secure url patterns
@@ -49,14 +47,14 @@ class SecurityInfo implements \Magento\Url\SecurityInfoInterface
     protected $_secureUrlCache = array();
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $secureUrlList
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $secureUrlList = array()
     ) {
-        $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
         $this->_secureUrlList = $secureUrlList;
     }
 
@@ -68,7 +66,11 @@ class SecurityInfo implements \Magento\Url\SecurityInfoInterface
      */
     public function isSecure($url)
     {
-        if (!$this->_storeManager->getStore()->getConfig(\Magento\Core\Model\Store::XML_PATH_SECURE_IN_FRONTEND)) {
+        if (!$this->_scopeConfig->getValue(
+            \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
+        ) {
             return false;
         }
 

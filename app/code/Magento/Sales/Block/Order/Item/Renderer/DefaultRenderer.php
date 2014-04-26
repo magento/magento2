@@ -28,12 +28,12 @@ namespace Magento\Sales\Block\Order\Item\Renderer;
 /**
  * Order item render block
  */
-class DefaultRenderer extends \Magento\View\Element\Template
+class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
@@ -43,14 +43,14 @@ class DefaultRenderer extends \Magento\View\Element\Template
     protected $_productOptionFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = array()
     ) {
@@ -60,10 +60,10 @@ class DefaultRenderer extends \Magento\View\Element\Template
     }
 
     /**
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return $this
      */
-    public function setItem(\Magento\Object $item)
+    public function setItem(\Magento\Framework\Object $item)
     {
         $this->setData('item', $item);
         return $this;
@@ -184,7 +184,7 @@ class DefaultRenderer extends \Magento\View\Element\Template
         $result = array('value' => $truncatedValue);
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots" onclick="return false">...</a>';
+            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, array('full_view' => $optionValue));
         }
@@ -205,7 +205,7 @@ class DefaultRenderer extends \Magento\View\Element\Template
     /**
      * Return product additional information block
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {

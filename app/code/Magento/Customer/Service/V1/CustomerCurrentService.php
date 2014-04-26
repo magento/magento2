@@ -34,7 +34,7 @@ class CustomerCurrentService implements \Magento\Customer\Service\V1\CustomerCur
     protected $customerSession;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $layout;
 
@@ -49,32 +49,32 @@ class CustomerCurrentService implements \Magento\Customer\Service\V1\CustomerCur
     protected $customerAccountService;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param Data\CustomerBuilder $customerBuilder
      * @param CustomerAccountServiceInterface $customerAccountService
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Module\Manager $moduleManager
-     * @param \Magento\App\ViewInterface $view
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\App\ViewInterface $view
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\View\LayoutInterface $layout,
+        \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
-        \Magento\App\RequestInterface $request,
-        \Magento\Module\Manager $moduleManager,
-        \Magento\App\ViewInterface $view
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\App\ViewInterface $view
     ) {
         $this->customerSession = $customerSession;
         $this->layout = $layout;

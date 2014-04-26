@@ -37,21 +37,21 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($resource, $eavConfig);
@@ -208,7 +208,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
             array('l' => $this->getTable('catalog_product_relation')),
             'parent_id'
         )->join(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             '',
             array()
         )->join(
@@ -239,7 +239,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
             $select,
             $idxTable,
             array(),
-            \Magento\DB\Adapter\AdapterInterface::INSERT_IGNORE
+            \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
         );
         $write->query($query);
 

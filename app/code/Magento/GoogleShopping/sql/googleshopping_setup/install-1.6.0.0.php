@@ -31,7 +31,7 @@
  * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -42,19 +42,19 @@ $table = $connection->newTable(
     $this->getTable('googleshopping_types')
 )->addColumn(
     'type_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Type ID'
 )->addColumn(
     'attribute_set_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false),
     'Attribute Set Id'
 )->addColumn(
     'target_country',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     2,
     array('nullable' => false, 'default' => 'US'),
     'Target country'
@@ -63,15 +63,15 @@ $table = $connection->newTable(
     'attribute_set_id',
     $this->getTable('eav_attribute_set'),
     'attribute_set_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addIndex(
     $installer->getIdxName(
         'googleshopping_types',
         array('attribute_set_id', 'target_country'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('attribute_set_id', 'target_country'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->setComment(
     'Google Content Item Types link Attribute Sets'
 );
@@ -81,43 +81,43 @@ $table = $connection->newTable(
     $this->getTable('googleshopping_items')
 )->addColumn(
     'item_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'nullable' => false, 'unsigned' => true, 'primary' => true),
     'Item Id'
 )->addColumn(
     'type_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'unsigned' => true, 'default' => 0),
     'Type Id'
 )->addColumn(
     'product_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Product Id'
 )->addColumn(
     'gcontent_item_id',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Google Content Item Id'
 )->addColumn(
     'store_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Store Id'
 )->addColumn(
     'published',
-    \Magento\DB\Ddl\Table::TYPE_DATETIME,
+    \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
     null,
     array(),
     'Published date'
 )->addColumn(
     'expires',
-    \Magento\DB\Ddl\Table::TYPE_DATETIME,
+    \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
     null,
     array(),
     'Expires date'
@@ -126,13 +126,13 @@ $table = $connection->newTable(
     'product_id',
     $this->getTable('catalog_product_entity'),
     'entity_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('googleshopping_items', 'store_id', 'core_store', 'store_id'),
+    $installer->getFkName('googleshopping_items', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('core_store'),
+    $this->getTable('store'),
     'store_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addIndex(
     $installer->getIdxName('googleshopping_items', array('product_id', 'store_id')),
     array('product_id', 'store_id')
@@ -145,25 +145,25 @@ $table = $connection->newTable(
     $this->getTable('googleshopping_attributes')
 )->addColumn(
     'id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     10,
     array('identity' => true, 'nullable' => false, 'unsigned' => true, 'primary' => true),
     'Id'
 )->addColumn(
     'attribute_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Attribute Id'
 )->addColumn(
     'gcontent_attribute',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false),
     'Google Content Attribute'
 )->addColumn(
     'type_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Type Id'
@@ -172,13 +172,13 @@ $table = $connection->newTable(
     'attribute_id',
     $this->getTable('eav_attribute'),
     'attribute_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('googleshopping_attributes', 'type_id', 'googleshopping_types', 'type_id'),
     'type_id',
     $this->getTable('googleshopping_types'),
     'type_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Google Content Attributes link Product Attributes'
 );

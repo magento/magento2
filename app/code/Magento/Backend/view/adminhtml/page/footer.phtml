@@ -19,10 +19,11 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php echo $this->getChildHtml('copyright');?> /
-<?php echo __('Magento ver. %1', \Magento\AppInterface::VERSION) ?>
+<small class="magento-version"><?php echo __('Magento ver. %1', \Magento\Framework\AppInterface::VERSION) ?></small>
+<?php if ($this->getBugreportUrl()): ?>
+<a class="link-report" href="<?php echo $this->getBugreportUrl(); ?>" id="footer_bug_tracking"><?php echo __('Help Us Keep Magento Healthy - Report All Bugs') ?></a>
+<?php endif; ?>

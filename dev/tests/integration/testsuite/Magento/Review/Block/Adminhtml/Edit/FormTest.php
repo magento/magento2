@@ -38,9 +38,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->loadByEmail('customer@example.com');
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Review\Block\Adminhtml\Edit\Form');
-        /** @var \Magento\Escaper $escaper */
+        /** @var \Magento\Framework\Escaper $escaper */
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Escaper');
+            ->get('Magento\Framework\Escaper');
         $this->assertStringMatchesFormat(
             '%A' . __('<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
                 '%A',

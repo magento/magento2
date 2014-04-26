@@ -25,7 +25,7 @@
  */
 namespace Magento\SalesRule\Model\Coupon;
 
-class Codegenerator extends \Magento\Object implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+class Codegenerator extends \Magento\Framework\Object implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
 {
     /**
      * Retrieve generated code

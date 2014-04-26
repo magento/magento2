@@ -24,20 +24,20 @@
 
 namespace Magento\DesignEditor\Model\Translate\Inline;
 
-class Provider extends \Magento\Translate\Inline\Provider
+class Provider extends \Magento\Framework\Translate\Inline\Provider
 {
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $vdeInlineTranslate;
 
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $inlineTranslate;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
 
@@ -47,16 +47,16 @@ class Provider extends \Magento\Translate\Inline\Provider
     protected $helper;
 
     /**
-     * @param \Magento\Translate\InlineInterface $vdeInlineTranslate
-     * @param \Magento\Translate\InlineInterface $inlineTranslate
+     * @param \Magento\Framework\Translate\InlineInterface $vdeInlineTranslate
+     * @param \Magento\Framework\Translate\InlineInterface $inlineTranslate
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
-        \Magento\Translate\InlineInterface $vdeInlineTranslate,
-        \Magento\Translate\InlineInterface $inlineTranslate,
+        \Magento\Framework\Translate\InlineInterface $vdeInlineTranslate,
+        \Magento\Framework\Translate\InlineInterface $inlineTranslate,
         \Magento\DesignEditor\Helper\Data $helper,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->vdeInlineTranslate = $vdeInlineTranslate;
         $this->inlineTranslate = $inlineTranslate;
@@ -67,7 +67,7 @@ class Provider extends \Magento\Translate\Inline\Provider
     /**
      * Return instance of inline translate class
      *
-     * @return \Magento\Translate\InlineInterface
+     * @return \Magento\Framework\Translate\InlineInterface
      */
     public function get()
     {

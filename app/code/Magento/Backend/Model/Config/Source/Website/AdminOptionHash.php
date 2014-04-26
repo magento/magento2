@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Website;
 
-use Magento\Core\Model\System\Store;
+use Magento\Store\Model\System\Store;
 
 /**
  * Admin OptionHash will include the default store (Admin) with the OptionHash.

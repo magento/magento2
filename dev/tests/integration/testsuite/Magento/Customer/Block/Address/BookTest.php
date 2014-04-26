@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
@@ -42,7 +43,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $blockMock */
         $blockMock = $this->getMockBuilder(
-            '\Magento\View\Element\BlockInterface'
+            '\Magento\Framework\View\Element\BlockInterface'
         )->disableOriginalConstructor()->setMethods(
             array('setTitle', 'toHtml')
         )->getMock();
@@ -50,8 +51,8 @@ class BookTest extends \PHPUnit_Framework_TestCase
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Customer\Service\V1\CustomerCurrentService');
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
         $layout->setBlock('head', $blockMock);
         $this->_block = $layout
             ->createBlock(
@@ -59,6 +60,15 @@ class BookTest extends \PHPUnit_Framework_TestCase
                 '',
                 ['currentCustomer' => $this->currentCustomer]
             );
+    }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        // Cleanup customer from registry
+        $customerRegistry->remove(1);
     }
 
     public function testGetAddressEditUrl()
@@ -127,7 +137,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressHtml()
     {
-        $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
+        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
             "\nUnited States<br/>\nT: 3468676\n\n";
         $address = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Service\V1\CustomerAddressServiceInterface'

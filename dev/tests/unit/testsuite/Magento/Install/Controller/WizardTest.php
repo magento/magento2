@@ -54,7 +54,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface
      */
     protected $_viewMock;
 
@@ -64,7 +64,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
     protected $_installerMock;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layoutMock;
 
@@ -74,7 +74,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\App\Action\Context
+     * @var \Magento\Framework\App\Action\Context
      */
     protected $_contextMock;
 
@@ -84,27 +84,27 @@ class WizardTest extends \PHPUnit_Framework_TestCase
     protected $_wizardMock;
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_sessionMock;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\App\ActionFlag
+     * @var \Magento\Framework\App\ActionFlag
      */
     protected $_actionFlagMock;
 
     /**
-     * @var \Magento\View\Element\Template\Context
+     * @var \Magento\Framework\View\Element\Template\Context
      */
     protected $_blockContextMock;
 
@@ -133,7 +133,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_layoutMock = $this->getMock(
-            '\Magento\Core\Model\Layout',
+            '\Magento\Framework\View\Layout',
             array('getBlock', 'initMessages', 'addBlock'),
             array(),
             '',
@@ -157,7 +157,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_viewMock = $this->getMockForAbstractClass(
-            '\Magento\App\ViewInterface',
+            '\Magento\Framework\App\ViewInterface',
             array(),
             '',
             false,
@@ -173,12 +173,12 @@ class WizardTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_layoutMock)
         );
 
-        $this->_requestMock = $this->_getClearMock('\Magento\App\RequestInterface');
-        $this->_responseMock = $this->_getClearMock('\Magento\App\ResponseInterface');
-        $this->_actionFlagMock = $this->_getClearMock('\Magento\App\ActionFlag');
+        $this->_requestMock = $this->_getClearMock('\Magento\Framework\App\RequestInterface');
+        $this->_responseMock = $this->_getClearMock('\Magento\Framework\App\ResponseInterface');
+        $this->_actionFlagMock = $this->_getClearMock('\Magento\Framework\App\ActionFlag');
 
         $this->_contextMock = $this->getMock(
-            '\Magento\App\Action\Context',
+            '\Magento\Framework\App\Action\Context',
             array('getView', 'getRequest', 'getResponse', 'getActionFlag'),
             array(),
             '',
@@ -209,7 +209,7 @@ class WizardTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_blockContextMock = $this->getMock(
-            '\Magento\View\Element\Template\Context',
+            '\Magento\Framework\View\Element\Template\Context',
             array(),
             array(),
             '',
@@ -233,7 +233,13 @@ class WizardTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(false)
         );
 
-        $this->_sessionMock = $this->getMock('\Magento\Session\Generic', array('getLocale'), array(), '', false);
+        $this->_sessionMock = $this->getMock(
+            '\Magento\Framework\Session\Generic',
+            array('getLocale'),
+            array(),
+            '',
+            false
+        );
         $this->_sessionMock->expects($this->any())->method('getLocale')->will($this->returnValue(self::LOCALE));
 
         $this->_block = $this->_objectManager->getObject(
@@ -261,13 +267,13 @@ class WizardTest extends \PHPUnit_Framework_TestCase
             'Magento\Install\Controller\Wizard',
             array(
                 'context' => $this->_contextMock,
-                'configScope' => $this->_getClearMock('Magento\Config\Scope'),
+                'configScope' => $this->_getClearMock('Magento\Framework\Config\Scope'),
                 'installer' => $this->_getClearMock('Magento\Install\Model\Installer'),
                 'wizard' => $this->_wizardMock,
                 'session' => $this->_sessionMock,
-                'dbUpdater' => $this->_getClearMock('Magento\Module\UpdaterInterface'),
-                'storeManager' => $this->_getClearMock('Magento\Core\Model\StoreManagerInterface'),
-                'appState' => $this->_getClearMock('Magento\App\State')
+                'dbUpdater' => $this->_getClearMock('Magento\Framework\Module\UpdaterInterface'),
+                'storeManager' => $this->_getClearMock('Magento\Store\Model\StoreManagerInterface'),
+                'appState' => $this->_getClearMock('Magento\Framework\App\State')
             )
         );
     }

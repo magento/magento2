@@ -26,7 +26,7 @@ namespace Magento\Backend\App;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Config\ScopePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopePool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $sectionPool;
 
@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sectionPool = $this->getMock(
-            'Magento\App\Config\ScopePool',
+            'Magento\Framework\App\Config\ScopePool',
             array('getScope', 'clean'),
             array(),
             '',
@@ -93,12 +93,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->model->setValue($path, $value);
     }
 
-    public function testReinit()
-    {
-        $this->sectionPool->expects($this->once())->method('clean');
-        $this->model->reinit();
-    }
-
     /**
      * @param mixed $configValue
      * @param bool $expectedResult
@@ -146,10 +140,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * Get ConfigData mock
      *
      * @param $mockedMethod
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\Data
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\Data
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->getMock('Magento\App\Config\Data', array($mockedMethod), array(), '', false);
+        return $this->getMock('Magento\Framework\App\Config\Data', array($mockedMethod), array(), '', false);
     }
 }

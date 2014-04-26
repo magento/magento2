@@ -30,17 +30,17 @@ class Factory
     /**
      * Default url model class name
      */
-    const CLASS_NAME = 'Magento\UrlInterface';
+    const CLASS_NAME = 'Magento\Framework\UrlInterface';
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -62,7 +62,7 @@ class Factory
      * Create url model new instance
      *
      * @param array $arguments
-     * @return \Magento\UrlInterface
+     * @return \Magento\Framework\UrlInterface
      */
     public function create(array $arguments = array())
     {

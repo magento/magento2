@@ -32,7 +32,7 @@ namespace Magento\Cms\Controller;
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Renders CMS Home page
@@ -43,9 +43,10 @@ class Index extends \Magento\App\Action\Action
     public function indexAction($coreRoute = null)
     {
         $pageId = $this->_objectManager->get(
-            'Magento\Core\Model\Store\Config'
-        )->getConfig(
-            \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE
+            'Magento\Framework\App\Config\ScopeConfigInterface'
+        )->getValue(
+            \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
             $this->_forward('defaultIndex');
@@ -90,9 +91,11 @@ class Index extends \Magento\App\Action\Action
     public function noCookiesAction()
     {
         $pageId = $this->_objectManager->get(
-            'Magento\Core\Model\Store\Config'
-        )->getConfig(
-            \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->getValue(
+            \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
             $this->_forward('defaultNoCookies');

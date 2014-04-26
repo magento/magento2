@@ -23,20 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
     <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
     <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider" />
+    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
+    <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
+    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Indexer\Model\Indexer\State">
         <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
     </type>
-    <type name="Magento\Mview\View\StateInterface">
+    <type name="Magento\Framework\Mview\View\StateInterface">
         <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState" />
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState">
@@ -46,8 +49,8 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState">
         <arguments>
-            <argument name="state" xsi:type="object" shared="false">Magento\Mview\View\StateInterface</argument>
-            <argument name="changelog" xsi:type="object" shared="false">Magento\Mview\View\ChangelogInterface</argument>
+            <argument name="state" xsi:type="object" shared="false">Magento\Framework\Mview\View\StateInterface</argument>
+            <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product">
@@ -117,7 +120,7 @@
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="catalog_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
@@ -130,7 +133,7 @@
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Session\Storage">
+    <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">catalog</argument>
         </arguments>
@@ -156,15 +159,15 @@
             <argument name="flatIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Resource\Website">
+    <type name="Magento\Store\Model\Resource\Website">
         <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
     </type>
-    <type name="Magento\Core\Model\Resource\Store">
+    <type name="Magento\Store\Model\Resource\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
     </type>
-    <type name="Magento\Core\Model\Resource\Store\Group">
+    <type name="Magento\Store\Model\Resource\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
@@ -260,13 +263,11 @@
             <argument name="categoryIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
     </type>
-
     <virtualType name="rowsFlatTableBuilder" type="Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder">
         <arguments>
             <argument name="tableData" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData</argument>
         </arguments>
     </virtualType>
-
     <type name="Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows">
         <arguments>
             <argument name="flatTableBuilder" xsi:type="object">rowsFlatTableBuilder</argument>
@@ -311,11 +312,77 @@
         <plugin name="page-cache-indexer-reindex-product-flat"
                 type="Magento\Catalog\Model\Indexer\Product\AffectCache" sortOrder="10"/>
     </type>
-    <type name="Magento\Model\ActionValidator\RemoveAction">
+    <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
             <argument name="protectedModels" xsi:type="array">
                 <item name="catalogCategory" xsi:type="string">Magento\Catalog\Model\Category</item>
                 <item name="catalogProduct" xsi:type="string">Magento\Catalog\Model\Product</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="simple" xsi:type="string">Magento\Framework\Pricing\PriceInfo\Base</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\PriceComposite">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="regular_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">true</item>
+                </item>
+                <item name="final_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+                <item name="tier_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\TierPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">true</item>
+                </item>
+                <item name="group_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\GroupPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">true</item>
+                </item>
+                <item name="special_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\SpecialPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">true</item>
+                </item>
+                <item name="msrp_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\MsrpPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+                <item name="base_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+                <item name="custom_option_price" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
+                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::CODE</item>
+                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
+        <arguments>
+            <argument name="productModel" xsi:type="string">\Magento\Catalog\Model\Product</argument>
+            <argument name="reservedAttributes" xsi:type="array">
+                <item name="position" xsi:type="string">position</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="type_id" xsi:type="string">type_id</item>
+                <item name="calculated_final_price" xsi:type="string">calculated_final_price</item>
+                <item name="request_path" xsi:type="string">request_path</item>
             </argument>
         </arguments>
     </type>

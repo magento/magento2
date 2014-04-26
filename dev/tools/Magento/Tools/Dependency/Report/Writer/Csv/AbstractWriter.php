@@ -34,14 +34,14 @@ abstract class AbstractWriter implements WriterInterface
     /**
      * Csv write object
      *
-     * @var \Magento\File\Csv
+     * @var \Magento\Framework\File\Csv
      */
     protected $writer;
 
     /**
      * Writer constructor
      *
-     * @param \Magento\File\Csv $writer
+     * @param \Magento\Framework\File\Csv $writer
      */
     public function __construct($writer)
     {

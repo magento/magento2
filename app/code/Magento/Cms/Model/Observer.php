@@ -40,27 +40,29 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\Cms\Helper\Page $cmsPage
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Cms\Helper\Page $cmsPage, \Magento\Core\Model\Store\Config $coreStoreConfig)
-    {
+    public function __construct(
+        \Magento\Cms\Helper\Page $cmsPage,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
         $this->_cmsPage = $cmsPage;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
      * Modify No Route Forward object
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function noRoute(\Magento\Event\Observer $observer)
+    public function noRoute(\Magento\Framework\Event\Observer $observer)
     {
         $observer->getEvent()->getStatus()->setLoaded(
             true
@@ -77,14 +79,17 @@ class Observer
     /**
      * Modify no Cookies forward object
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function noCookies(\Magento\Event\Observer $observer)
+    public function noCookies(\Magento\Framework\Event\Observer $observer)
     {
         $redirect = $observer->getEvent()->getRedirect();
 
-        $pageId = $this->_coreStoreConfig->getConfig(\Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE);
+        $pageId = $this->_scopeConfig->getValue(
+            \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $pageUrl = $this->_cmsPage->getPageUrl($pageId);
 
         if ($pageUrl) {

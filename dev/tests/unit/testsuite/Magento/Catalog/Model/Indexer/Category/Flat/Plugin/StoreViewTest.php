@@ -17,7 +17,7 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -71,7 +71,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return false;
         };
-        $this->subjectMock = $this->getMock('Magento\Core\Model\Resource\Store', array(), array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Store', array(), array(), '', false);
         $this->model = new StoreView($this->indexerMock, $this->stateMock);
     }
 
@@ -80,7 +80,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->mockConfigFlatEnabled();
         $this->mockIndexerMethods();
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',
@@ -93,20 +93,11 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveHasChanged()
     {
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',
             false
-        );
-        $storeMock->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'group_id'
-        )->will(
-            $this->returnValue(true)
         );
         $this->assertFalse($this->model->aroundSave($this->subjectMock, $this->closureMock, $storeMock));
     }
@@ -115,20 +106,11 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockConfigFlatEnabledNeever();
         $storeMock = $this->getMock(
-            'Magento\Core\Model\Store',
+            'Magento\Store\Model\Store',
             array('isObjectNew', 'dataHasChangedFor', '__wakeup'),
             array(),
             '',
             false
-        );
-        $storeMock->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'group_id'
-        )->will(
-            $this->returnValue(false)
         );
         $this->assertFalse($this->model->aroundSave($this->subjectMock, $this->closureMock, $storeMock));
     }

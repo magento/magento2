@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
-class Sharing extends \Magento\View\Element\Template
+class Sharing extends \Magento\Framework\View\Element\Template
 {
     /**
      * Entered Data cache
@@ -51,20 +51,20 @@ class Sharing extends \Magento\View\Element\Template
     protected $_wishlistConfig;
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_wishlistSession;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\Session\Generic $wishlistSession
+     * @param \Magento\Framework\Session\Generic $wishlistSession
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\Session\Generic $wishlistSession,
+        \Magento\Framework\Session\Generic $wishlistSession,
         array $data = array()
     ) {
         $this->_wishlistConfig = $wishlistConfig;

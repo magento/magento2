@@ -40,15 +40,15 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -149,14 +149,14 @@ class Product extends \Magento\Backend\App\Action
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', array());
                     $votes = $this->_objectManager->create(
-                        'Magento\Rating\Model\Rating\Option\Vote'
+                        'Magento\Review\Model\Rating\Option\Vote'
                     )->getResourceCollection()->setReviewFilter(
                         $reviewId
                     )->addOptionInfo()->load()->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
                             $this->_objectManager->create(
-                                'Magento\Rating\Model\Rating'
+                                'Magento\Review\Model\Rating'
                             )->setVoteId(
                                 $vote->getId()
                             )->setReviewId(
@@ -166,7 +166,7 @@ class Product extends \Magento\Backend\App\Action
                             );
                         } else {
                             $this->_objectManager->create(
-                                'Magento\Rating\Model\Rating'
+                                'Magento\Review\Model\Rating'
                             )->setRatingId(
                                 $ratingId
                             )->setReviewId(
@@ -181,7 +181,7 @@ class Product extends \Magento\Backend\App\Action
                     $review->aggregate();
 
                     $this->messageManager->addSuccess(__('You saved the review.'));
-                } catch (\Magento\Model\Exception $e) {
+                } catch (\Magento\Framework\Model\Exception $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
                     $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
@@ -214,7 +214,7 @@ class Product extends \Magento\Backend\App\Action
                 $this->getResponse()->setRedirect($this->getUrl('review/*/'));
             }
             return;
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
@@ -241,7 +241,7 @@ class Product extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been deleted.', count($reviewsIds))
                 );
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while deleting record(s).'));
@@ -269,7 +269,7 @@ class Product extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -302,7 +302,7 @@ class Product extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -340,7 +340,7 @@ class Product extends \Magento\Backend\App\Action
      */
     public function jsonProductInfoAction()
     {
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $id = $this->getRequest()->getParam('id');
         if (intval($id) > 0) {
             $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($id);
@@ -363,9 +363,9 @@ class Product extends \Magento\Backend\App\Action
         $productId = $this->getRequest()->getParam('product_id', false);
 
         if ($data = $this->getRequest()->getPost()) {
-            if ($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->hasSingleStore()) {
+            if ($this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->hasSingleStore()) {
                 $data['stores'] = array(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore(true)->getId()
+                    $this->_objectManager->get('Magento\Store\Model\StoreManager')->getStore(true)->getId()
                 );
             } elseif (isset($data['select_stores'])) {
                 $data['stores'] = $data['select_stores'];
@@ -386,7 +386,7 @@ class Product extends \Magento\Backend\App\Action
                 $arrRatingId = $this->getRequest()->getParam('ratings', array());
                 foreach ($arrRatingId as $ratingId => $optionId) {
                     $this->_objectManager->create(
-                        'Magento\Rating\Model\Rating'
+                        'Magento\Review\Model\Rating'
                     )->setRatingId(
                         $ratingId
                     )->setReviewId(
@@ -407,7 +407,7 @@ class Product extends \Magento\Backend\App\Action
                 }
 
                 return;
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while saving review.'));

@@ -35,43 +35,41 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Update;
 
-class Result extends \Magento\View\Element\Template
+class Result extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Adminhtml js
-     *
-     * @var \Magento\Backend\Helper\Js
+     * @var \Magento\Framework\View\Helper\Js
      */
-    protected $_adminhtmlJs = null;
+    protected $_jsHelper = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Helper\Js $adminhtmlJs
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Backend\Helper\Js $adminhtmlJs,
-        \Magento\Registry $registry,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\View\Helper\Js $jsHelper,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_adminhtmlJs = $adminhtmlJs;
+        $this->_jsHelper = $jsHelper;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -86,6 +84,6 @@ class Result extends \Magento\View\Element\Template
         $updateResult = $this->_coreRegistry->registry('composite_update_result');
         $resultJson = $this->_jsonEncoder->encode($updateResult);
         $jsVarname = $updateResult->getJsVarName();
-        return $this->_adminhtmlJs->getScript(sprintf('var %s = %s', $jsVarname, $resultJson));
+        return $this->_jsHelper->getScript(sprintf('var %s = %s', $jsVarname, $resultJson));
     }
 }

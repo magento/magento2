@@ -45,20 +45,22 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
+                        'path' => dirname(__DIR__) . '/_files/design'
+                    )
                 )
             )
         );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\AreaList')
+        $objectManager->get('Magento\Framework\App\AreaList')
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-            ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+            ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
-        $objectManager->get('Magento\App\State')
+        $objectManager->get('Magento\Framework\App\State')
             ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_theme = $objectManager
-            ->create('Magento\View\Design\ThemeInterface');
+            ->create('Magento\Framework\View\Design\ThemeInterface');
         $this->_model = $objectManager
             ->create('Magento\Core\Model\Theme\Registration');
     }
@@ -84,7 +86,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     protected function _getTestTheme()
     {
         $theme = $this->_theme->getCollection()->getThemeByFullPath(
-            implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'))
+            implode(\Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'))
         );
         $this->assertNotEmpty($theme->getId());
         return $theme;
@@ -100,14 +102,14 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $virtualTheme = clone $this->_theme;
         $virtualTheme->setData($theme->getData())->setId(null);
-        $virtualTheme->setType(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)->save();
+        $virtualTheme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL)->save();
 
         $subVirtualTheme = clone $this->_theme;
         $subVirtualTheme->setData($theme->getData())->setId(null);
         $subVirtualTheme->setParentId(
             $virtualTheme->getId()
         )->setType(
-            \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
         )->save();
 
         $this->registerThemes();
@@ -126,11 +128,14 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $testTheme = clone $this->_theme;
         $testTheme->setData($theme->getData())->setThemePath('empty')->setId(null);
-        $testTheme->setType(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL)->save();
+        $testTheme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL)->save();
 
         $this->registerThemes();
         $testTheme->load($testTheme->getId());
-        $this->assertNotEquals((int)$testTheme->getType(), \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
+        $this->assertNotEquals(
+            (int)$testTheme->getType(),
+            \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
+        );
     }
 
     /**
@@ -139,7 +144,10 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     public function testRegister()
     {
         $this->registerThemes();
-        $themePath = implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'));
+        $themePath = implode(
+            \Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR,
+            array('frontend', 'test_test_theme')
+        );
         $theme = $this->_model->getThemeFromDb($themePath);
         $this->assertEquals($themePath, $theme->getFullPath());
     }

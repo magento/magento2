@@ -57,6 +57,17 @@
             </arguments>
         </block>
     </referenceBlock>
+    <referenceContainer name="page.main.actions">
+        <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml">
+            <!--<arguments>-->
+                <!--<argument name="switch_url" xsi:type="url" path="catalog/*/*">-->
+                    <!--<param name="_current" xsi:type="boolean">true</param>-->
+                    <!--<param name="_query" xsi:type="boolean">false</param>-->
+                    <!--<param name="store" xsi:type="null" />-->
+                <!--</argument>-->
+            <!--</arguments>-->
+        </block>
+    </referenceContainer>
     <referenceContainer name="left">
         <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="catalog/category/tree.phtml"/>
     </referenceContainer>
@@ -64,6 +75,6 @@
         <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="catalog/category/edit.phtml"/>
     </referenceContainer>
     <referenceContainer name="js">
-        <block class="Magento\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
     </referenceContainer>
 </layout>

@@ -29,6 +29,8 @@
  */
 namespace Magento\Persistent\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Core\Helper\Data
 {
     const XML_PATH_ENABLED = 'persistent/options/enabled';
@@ -51,102 +53,123 @@ class Data extends \Magento\Core\Helper\Data
     protected $_configFileName = 'persistent.xml';
 
     /**
-     * Persistent session
-     *
-     * @var Session
-     */
-    protected $_persistentSession;
-
-    /**
-     * @var \Magento\Escaper
+     * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_modulesReader;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\State $appState
-     * @param Session $persistentSession
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Module\Dir\Reader $modulesReader
+     * @param \Magento\Framework\Escaper $escaper
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\State $appState,
-        Session $persistentSession,
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Module\Dir\Reader $modulesReader,
+        \Magento\Framework\Escaper $escaper,
         $dbCompatibleMode = true
     ) {
         $this->_modulesReader = $modulesReader;
-        $this->_persistentSession = $persistentSession;
         $this->_escaper = $escaper;
 
-        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $storeManager,
+            $appState,
+            $priceCurrency,
+            $dbCompatibleMode
+        );
     }
 
     /**
      * Checks whether Persistence Functionality is enabled
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isEnabled($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Checks whether "Remember Me" enabled
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isRememberMeEnabled($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_REMEMBER_ME_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_REMEMBER_ME_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Is "Remember Me" checked by default
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isRememberMeCheckedDefault($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_REMEMBER_ME_DEFAULT, $store);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_REMEMBER_ME_DEFAULT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Is shopping cart persist
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      */
     public function isShoppingCartPersist($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_PERSIST_SHOPPING_CART, $store);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_PERSIST_SHOPPING_CART,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Get Persistence Lifetime
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return int
      */
     public function getLifeTime($store = null)
     {
-        $lifeTime = intval($this->_coreStoreConfig->getConfig(self::XML_PATH_LIFE_TIME, $store));
+        $lifeTime = intval(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_LIFE_TIME,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            )
+        );
         return $lifeTime < 0 ? 0 : $lifeTime;
     }
 
@@ -157,7 +180,10 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getClearOnLogout()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_LOGOUT_CLEAR);
+        return $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_LOGOUT_CLEAR,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -168,16 +194,6 @@ class Data extends \Magento\Core\Helper\Data
     public function getUnsetCookieUrl()
     {
         return $this->_getUrl('persistent/index/unsetCookie');
-    }
-
-    /**
-     * Retrieve name of persistent customer
-     *
-     * @return string
-     */
-    public function getPersistentName()
-    {
-        return __('(Not %1?)', $this->_escaper->escapeHtml($this->_persistentSession->getCustomer()->getName()));
     }
 
     /**
@@ -193,7 +209,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Check whether specified action should be processed
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return bool
      */
     public function canProcess($observer)

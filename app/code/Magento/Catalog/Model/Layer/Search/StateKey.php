@@ -34,12 +34,12 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey
     protected $helper;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogSearch\Helper\Data $helper
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogSearch\Helper\Data $helper
     ) {

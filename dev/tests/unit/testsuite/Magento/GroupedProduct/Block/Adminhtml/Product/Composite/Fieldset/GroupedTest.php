@@ -52,33 +52,27 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock('\Magento\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('\Magento\Framework\Registry', array(), array(), '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Core\Model\StoreManagerInterface',
+            '\Magento\Store\Model\StoreManagerInterface',
             array(),
             array(),
             '',
             false
         );
 
-        $customerMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerMock
-            ->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
+        $customerMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Customer'
+        )->disableOriginalConstructor()->getMock();
+        $customerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $priceHelperMock = $this->getMockBuilder('Magento\Catalog\Helper\Product\Price')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceHelperMock = $this->getMockBuilder(
+            'Magento\Catalog\Helper\Product\Price'
+        )->disableOriginalConstructor()->getMock();
 
-        $priceHelperMock
-            ->expects($this->any())
-            ->method('getCustomer')
-            ->will($this->returnValue($customerMock));
+        $priceHelperMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
 
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectHelper->getObject(
@@ -105,7 +99,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 
@@ -129,7 +123,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
 
@@ -203,7 +197,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 2;
 
-        $objectMock = $this->getMock('\Magento\Object', array('getSuperGroup'), array(), '', false);
+        $objectMock = $this->getMock('\Magento\Framework\Object', array('getSuperGroup'), array(), '', false);
         $instanceMock = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
             array(),

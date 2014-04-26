@@ -101,7 +101,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->_getSessionStub();
 
         $this->_storeManager = $this->getMock(
-            'Magento\Core\Model\StoreManager',
+            'Magento\Store\Model\StoreManager',
             array('getStore'),
             array(),
             '',
@@ -116,7 +116,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
 
         // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
         $this->_objectManager->expects(
             $this->any()
         )->method(
@@ -261,7 +261,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $sessionArgs = $helper->getConstructArguments(
             'Magento\Customer\Model\Session',
-            array('storage' => new \Magento\Session\Storage())
+            array('storage' => new \Magento\Framework\Session\Storage())
         );
         $session = $this->getMock(
             'Magento\Customer\Model\Session',
@@ -353,11 +353,11 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * Create store stub
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getStoreStub()
     {
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
         $store->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
         return $store;

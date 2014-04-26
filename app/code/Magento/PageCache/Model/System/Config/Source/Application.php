@@ -34,7 +34,7 @@ namespace Magento\PageCache\Model\System\Config\Source;
  *
  * @package Magento\PageCache\Model\System\Config\Source
  */
-class Application implements \Magento\Option\ArrayInterface
+class Application implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Options getter

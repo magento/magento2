@@ -93,7 +93,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($qty));
         $itemMock->expects($this->any())->method('getBaseCalculationPrice')->will($this->returnValue($price));
         $expected = array(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'parent_item' => $pItem,
                     'name' => $name,

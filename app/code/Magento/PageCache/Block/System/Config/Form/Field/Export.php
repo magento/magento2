@@ -25,37 +25,18 @@
  */
 namespace Magento\PageCache\Block\System\Config\Form\Field;
 
-use Magento\App\ConfigInterface;
-use Magento\Backend\Block\Template\Context;
-
 /**
  * Class Export
  */
 class Export extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
-     * @param Context $context
-     * @param ConfigInterface $config
-     * @param array $data
-     */
-    public function __construct(Context $context, ConfigInterface $config, array $data = array())
-    {
-        $this->config = $config;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Retrieve element HTML markup
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
         $buttonBlock = $this->getForm()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
@@ -81,6 +62,6 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
      */
     public function getTtlValue()
     {
-        return $this->config->getValue(\Magento\PageCache\Model\Config::XML_PAGECACHE_TTL);
+        return $this->_scopeConfig->getValue(\Magento\PageCache\Model\Config::XML_PAGECACHE_TTL);
     }
 }

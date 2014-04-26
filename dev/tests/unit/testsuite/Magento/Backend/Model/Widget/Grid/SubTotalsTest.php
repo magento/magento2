@@ -56,7 +56,7 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_factoryMock = $this->getMock(
-            'Magento\Object\Factory',
+            'Magento\Framework\Object\Factory',
             array('create'),
             array(),
             '',
@@ -71,7 +71,7 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
         )->with(
             array('sub_test1' => 3, 'sub_test2' => 2)
         )->will(
-            $this->returnValue(new \Magento\Object(array('sub_test1' => 3, 'sub_test2' => 2)))
+            $this->returnValue(new \Magento\Framework\Object(array('sub_test1' => 3, 'sub_test2' => 2)))
         );
 
         $arguments = array('factory' => $this->_factoryMock, 'parser' => $this->_parserMock);
@@ -94,24 +94,24 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testCountTotals()
     {
-        $expected = new \Magento\Object(array('sub_test1' => 3, 'sub_test2' => 2));
+        $expected = new \Magento\Framework\Object(array('sub_test1' => 3, 'sub_test2' => 2));
         $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
     }
 
     /**
      * Retrieve test collection
      *
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     protected function _getTestCollection()
     {
-        $collection = new \Magento\Data\Collection(
+        $collection = new \Magento\Framework\Data\Collection(
             $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false)
         );
         $items = array(
-            new \Magento\Object(array('sub_test1' => '1', 'sub_test2' => '2')),
-            new \Magento\Object(array('sub_test1' => '1', 'sub_test2' => '2')),
-            new \Magento\Object(array('sub_test1' => '1', 'sub_test2' => '2'))
+            new \Magento\Framework\Object(array('sub_test1' => '1', 'sub_test2' => '2')),
+            new \Magento\Framework\Object(array('sub_test1' => '1', 'sub_test2' => '2')),
+            new \Magento\Framework\Object(array('sub_test1' => '1', 'sub_test2' => '2'))
         );
         foreach ($items as $item) {
             $collection->addItem($item);

@@ -1,0 +1,2 @@
+"Anchor symbol (#) is not supported in url rewrite suffix","URL 重写后缀不支持固定标志 (#)"
+"Two and more slashes together are not permitted in url rewrite suffix","两个或更多斜杠在 URL 重写后缀中不被允许"

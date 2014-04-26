@@ -52,8 +52,8 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
      * Set current attribute to entry (for specified product)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     public function convertAttribute($product, $entry)
     {
@@ -92,7 +92,7 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
             if (empty($value) || !\Zend_Date::isDate($value, \Zend_Date::ISO_8601)) {
                 return null;
             }
-            $date = new \Magento\Stdlib\DateTime\Date($value, \Zend_Date::ISO_8601);
+            $date = new \Magento\Framework\Stdlib\DateTime\Date($value, \Zend_Date::ISO_8601);
             $value = $date->toString(\Zend_Date::ATOM);
         } else {
             $value = $productAttribute->getFrontend()->getValue($product);
@@ -121,17 +121,17 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
     /**
      * Insert/update attribute in the entry
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
      * @param string $name
      * @param string $type
      * @param string $value
      * @param string $unit
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     protected function _setAttribute($entry, $name, $type = self::ATTRIBUTE_TYPE_TEXT, $value = '', $unit = null)
     {
         if (is_object($value) || (string)$value != $value) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __(
                     'Please correct the attribute "%1" type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.',
                     $name
@@ -139,7 +139,7 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
             );
         }
         $attribute = $entry->getContentAttributeByName($name);
-        if ($attribute instanceof \Magento\Gdata\Gshopping\Extension\Attribute) {
+        if ($attribute instanceof \Magento\Framework\Gdata\Gshopping\Extension\Attribute) {
             $attribute->text = (string)$value;
             $attribute->type = $type;
             if (!is_null($unit)) {

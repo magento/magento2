@@ -67,14 +67,14 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionHtml()
     {
         $layout = $this->getMock(
-            'Magento\Core\Model\Layout',
+            'Magento\Framework\View\Layout',
             array('getChildName', 'getBlock', 'renderElement'),
             array(),
             '',
             false
         );
         $context = $this->_objectHelper->getObject(
-            'Magento\View\Element\Template\Context',
+            'Magento\Framework\View\Element\Template\Context',
             array('layout' => $layout)
         );
 
@@ -140,7 +140,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                 'Magento\Catalog\Model\Product',
                 array(
                     'collectionFactory' => $this->getMock(
-                        'Magento\Data\CollectionFactory',
+                        'Magento\Framework\Data\CollectionFactory',
                         array(),
                         array(),
                         '',

@@ -50,8 +50,9 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Customer\Model\Session');
         $this->_visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Log\Model\Visitor');
-        /** @var \Magento\Stdlib\DateTime $dateTime */
-        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Stdlib\DateTime');
+        /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
+        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Stdlib\DateTime');
         $this->_visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt($dateTime->now())
             ->save();

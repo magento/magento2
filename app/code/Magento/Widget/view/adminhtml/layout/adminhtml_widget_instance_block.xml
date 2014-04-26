@@ -45,21 +45,20 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="instance_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Widget ID</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">instance_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Widget Instance</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">title</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Type</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">instance_type</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Widget\Model\Resource\Widget\Instance\Options\Types"/>
@@ -68,7 +67,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Design Theme</argument>
-                        <argument name="align" xsi:type="string">left</argument>
                         <argument name="index" xsi:type="string">theme_id</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Widget\Model\Resource\Widget\Instance\Options\ThemeId"/>
@@ -78,9 +76,7 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="sort_order">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Sort Order</argument>
-                        <argument name="align" xsi:type="string">center</argument>
                         <argument name="index" xsi:type="string">sort_order</argument>
-                        <argument name="width" xsi:type="string">100</argument>
                     </arguments>
                 </block>
             </block>

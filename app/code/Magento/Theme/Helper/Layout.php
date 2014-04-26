@@ -23,10 +23,10 @@
  */
 namespace Magento\Theme\Helper;
 
-class Layout extends \Magento\App\Helper\AbstractHelper
+class Layout extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
@@ -36,14 +36,14 @@ class Layout extends \Magento\App\Helper\AbstractHelper
     protected $_config;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Theme\Model\Layout\Config $config
-     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutInterface $layout
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Theme\Model\Layout\Config $config,
-        \Magento\View\LayoutInterface $layout
+        \Magento\Framework\View\LayoutInterface $layout
     ) {
         $this->_layout = $layout;
         $this->_config = $config;
@@ -99,7 +99,7 @@ class Layout extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve current applied page layout
      *
-     * @return \Magento\Object|boolean
+     * @return \Magento\Framework\Object|boolean
      */
     public function getCurrentPageLayout()
     {

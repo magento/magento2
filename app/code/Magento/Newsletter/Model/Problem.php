@@ -43,7 +43,7 @@ namespace Magento\Newsletter\Model;
  * @package     Magento_Newsletter
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Problem extends \Magento\Model\AbstractModel
+class Problem extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Current Subscriber
@@ -62,19 +62,19 @@ class Problem extends \Magento\Model\AbstractModel
     /**
      * Construct
      *
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

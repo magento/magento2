@@ -78,7 +78,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Prepare layout object
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
@@ -91,7 +91,7 @@ class Edit extends \Magento\Backend\Block\Widget
         $this->setTitle($section->getLabel());
         $this->setHeaderCss($section->getHeaderCss());
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
             array(

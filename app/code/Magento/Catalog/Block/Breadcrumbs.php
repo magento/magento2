@@ -34,10 +34,10 @@
 namespace Magento\Catalog\Block;
 
 use Magento\Catalog\Helper\Data;
-use Magento\Core\Model\Store;
-use Magento\View\Element\Template\Context;
+use Magento\Store\Model\Store;
+use Magento\Framework\View\Element\Template\Context;
 
-class Breadcrumbs extends \Magento\View\Element\Template
+class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Catalog data
@@ -65,7 +65,7 @@ class Breadcrumbs extends \Magento\View\Element\Template
      */
     public function getTitleSeparator($store = null)
     {
-        $separator = (string)$this->_storeConfig->getConfig('catalog/seo/title_separator', $store);
+        $separator = (string)$this->_scopeConfig->getValue('catalog/seo/title_separator', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         return ' ' . $separator . ' ';
     }
 

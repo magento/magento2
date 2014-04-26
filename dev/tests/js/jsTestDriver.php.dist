@@ -33,7 +33,7 @@ return array(
     'load' => array(
         '/pub/lib/mage/translate.js',
         '/pub/lib/mage/webapi.js',
-        '/pub/lib/jquery/jquery-ui-timepicker-addon.js',
+        '/pub/lib/jquery/jquery-ui-timepicker-addon-1.0.1.js',
         '/pub/lib/jquery/jquery.tmpl.min.js',
         '/dev/tests/js/framework/stub.js',
         '/app/code/Magento/DesignEditor/view/adminhtml/js/base.js',
@@ -47,7 +47,7 @@ return array(
         '/app/code/Magento/DesignEditor/view/frontend/css/styles.css',
         '/pub/lib/mage/cookies.js',
         '/pub/lib/mage/calendar.js',
-        '/pub/lib/mage/loader.js',
+        '/pub/lib/mage/loader_old.js',
         '/pub/lib/mage/edit-trigger.js',
         '/pub/lib/mage/translate-inline.js',
         '/pub/lib/mage/translate-inline-vde.js',

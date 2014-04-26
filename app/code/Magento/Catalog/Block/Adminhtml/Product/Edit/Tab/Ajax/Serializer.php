@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax;
 
-class Serializer extends \Magento\View\Element\Template
+class Serializer extends \Magento\Framework\View\Element\Template
 {
     /**
      * @return $this

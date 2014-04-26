@@ -29,19 +29,24 @@
  * @var $this \Magento\LayeredNavigation\Block\Navigation
  */
 ?>
+
 <?php if($this->canShowBlock()): ?>
     <div class="block filter">
         <div class="title">
             <strong><?php echo __('Shop By') ?></strong>
         </div>
+
         <div class="content">
             <?php echo $this->getChildHtml('state') ?>
+
             <?php if ($this->getLayer()->getState()->getFilters()): ?>
                 <div class="actions">
-                    <a href="<?php echo $this->getClearUrl() ?>" class="action reset"><?php echo __('Clear All') ?></a>
+                    <a href="<?php echo $this->getClearUrl() ?>" class="action clear"><span><?php echo __('Clear All') ?></span></a>
                 </div>
             <?php endif; ?>
+
             <strong class="subtitle"><?php echo __('Shopping Options') ?></strong>
+
             <dl class="options" id="narrow-by-list">
                 <?php foreach ($this->getFilters() as $filter): ?>
                     <?php if ($filter->getItemsCount()): ?>

@@ -34,7 +34,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resourceMock;
 
@@ -44,25 +44,25 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $_configMock;
 
     /**
-     * @var \Magento\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $_adapterMock;
 
     /**
-     * @var \Magento\DB\Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_selectMock;
 
     protected function setUp()
     {
-        $this->_selectMock = $this->getMock('\Magento\DB\Select', array(), array(), '', false);
+        $this->_selectMock = $this->getMock('\Magento\Framework\DB\Select', array(), array(), '', false);
         $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $this->_selectMock->expects($this->any())->method('where');
 
-        $this->_adapterMock = $this->getMock('\Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $this->_adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
         $this->_adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
 
-        $this->_resourceMock = $this->getMock('\Magento\App\Resource', array(), array(), '', false);
+        $this->_resourceMock = $this->getMock('\Magento\Framework\App\Resource', array(), array(), '', false);
         $this->_resourceMock->expects(
             $this->any()
         )->method(
@@ -75,7 +75,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\Sales\Model\Resource\Quote(
             $this->_resourceMock,
-            new \Magento\Stdlib\DateTime(),
+            new \Magento\Framework\Stdlib\DateTime(),
             $this->_configMock
         );
     }

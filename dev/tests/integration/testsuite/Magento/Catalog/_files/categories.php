@@ -99,7 +99,7 @@ $category->setId(
 )->setCustomUseParentSettings(
     0
 )->setCustomDesign(
-    'magento_blank'
+    'Magento/blank'
 )->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');

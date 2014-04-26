@@ -26,7 +26,9 @@
 /** @var $this \Magento\Backend\Block\Widget\Form\Container */
  ?>
 <?php echo $this->getFormInitScripts() ?>
-<div class="page-actions" <?php echo $this->getUiId('content-header') ?>><?php echo $this->getButtonsHtml('header') ?></div>
+<?php if($this->getButtonsHtml('header')): ?>
+    <div class="page-form-actions" <?php echo $this->getUiId('content-header') ?>><?php echo $this->getButtonsHtml('header') ?></div>
+<?php endif; ?>
 <?php echo $this->getFormHtml() ?>
 <?php if ($this->hasFooterButtons()): ?>
     <div class="content-footer">

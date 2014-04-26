@@ -39,28 +39,28 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * HTTP client
      *
-     * @var \Magento\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\ZendClient
      */
     protected $_httpClient;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($currencyFactory);
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_httpClient = new \Magento\HTTP\ZendClient();
+        $this->_scopeConfig = $scopeConfig;
+        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
     }
 
     /**
@@ -78,7 +78,12 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
             $response = $this->_httpClient->setUri(
                 $url
             )->setConfig(
-                array('timeout' => $this->_coreStoreConfig->getConfig('currency/webservicex/timeout'))
+                array(
+                    'timeout' => $this->_scopeConfig->getValue(
+                        'currency/webservicex/timeout',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                )
             )->request(
                 'GET'
             )->getBody();

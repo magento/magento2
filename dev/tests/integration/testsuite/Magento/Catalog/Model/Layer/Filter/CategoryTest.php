@@ -68,14 +68,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $objectManager->get('Magento\TestFramework\Request'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\View\LayoutInterface'
+                'Magento\Framework\View\LayoutInterface'
             )->createBlock(
-                'Magento\View\Element\Text'
+                'Magento\Framework\View\Element\Text'
             )
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Registry')->registry('current_category_filter'));
+        $this->assertNull($objectManager->get('Magento\Framework\Registry')->registry('current_category_filter'));
     }
 
     public function testApply()
@@ -86,14 +86,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\View\LayoutInterface'
+                'Magento\Framework\View\LayoutInterface'
             )->createBlock(
-                'Magento\View\Element\Text'
+                'Magento\Framework\View\Element\Text'
             )
         );
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $objectManager->get('Magento\Registry')->registry('current_category_filter');
+        $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category_filter');
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
         $this->assertEquals(3, $category->getId());
 

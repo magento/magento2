@@ -42,12 +42,12 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
-            '\Magento\Core\Model\StoreManager'
+            '\Magento\Store\Model\StoreManager'
         )->setMethods(
             array('getStore')
         )->disableOriginalConstructor()->getMock();
         $context = $helper->getObject(
-            'Magento\View\Element\Template\Context',
+            'Magento\Framework\View\Element\Template\Context',
             array('storeManager' => $this->_storeManager)
         );
         $this->_object = $helper->getObject('Magento\Payment\Block\Info', array('context' => $context));
@@ -114,7 +114,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getStoreMock($storeCode)
     {
-        $storeMock = $this->getMockBuilder('\Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
         return $storeMock;
     }

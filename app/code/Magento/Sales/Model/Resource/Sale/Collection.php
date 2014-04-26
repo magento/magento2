@@ -24,16 +24,16 @@
 namespace Magento\Sales\Model\Resource\Sale;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Core\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Event\ManagerInterface;
-use Magento\Logger;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Logger;
 use Magento\Sales\Model\Resource\Order;
 
 /**
  * Sales Collection
  */
-class Collection extends \Magento\Data\Collection\Db
+class Collection extends \Magento\Framework\Data\Collection\Db
 {
     /**
      * Totals data
@@ -76,7 +76,7 @@ class Collection extends \Magento\Data\Collection\Db
     protected $_orderResource;
 
     /**
-     * @var \Magento\Core\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
@@ -91,7 +91,7 @@ class Collection extends \Magento\Data\Collection\Db
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param Order $resource
-     * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -100,7 +100,7 @@ class Collection extends \Magento\Data\Collection\Db
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         Order $resource,
-        \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
+        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
         $this->_eventManager = $eventManager;
@@ -214,7 +214,7 @@ class Collection extends \Magento\Data\Collection\Db
         $stores = $this->_storeCollectionFactory->create()->setWithoutDefaultFilter()->load()->toOptionHash();
         $this->_items = array();
         foreach ($data as $v) {
-            $storeObject = new \Magento\Object($v);
+            $storeObject = new \Magento\Framework\Object($v);
             $storeId = $v['store_id'];
             $storeName = isset($stores[$storeId]) ? $stores[$storeId] : null;
             $storeObject->setStoreName(
@@ -240,12 +240,12 @@ class Collection extends \Magento\Data\Collection\Db
     }
 
     /**
-     * Retrieve totals data converted into \Magento\Object
+     * Retrieve totals data converted into \Magento\Framework\Object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getTotals()
     {
-        return new \Magento\Object($this->_totals);
+        return new \Magento\Framework\Object($this->_totals);
     }
 }

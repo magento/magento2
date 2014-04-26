@@ -53,9 +53,9 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_fixtureInitParams = array(
-        \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__),
-            \Magento\App\Filesystem::VAR_DIR => array('path' => __DIR__)
+        \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__),
+            \Magento\Framework\App\Filesystem::VAR_DIR => array('path' => __DIR__)
         )
     );
 
@@ -93,7 +93,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance is not defined yet.
      */
     public function testGetInstanceEmptyProhibited()
@@ -117,7 +117,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetInstanceFirstAllowed
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance cannot be redefined.
      */
     public function testSetInstanceChangeProhibited()

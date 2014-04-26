@@ -35,17 +35,22 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_appConfig;
 
-    /** @var \Magento\Locale\CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_locale;
 
     protected function setUp()
     {
-        $this->_appConfig = $this->getMock('Magento\App\ConfigInterface');
-        $this->_locale = $this->getMock('Magento\Locale\CurrencyInterface', array(), array(), '', false);
+        $this->_appConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $context = $objectHelper->getObject(
+            'Magento\Backend\Block\Template\Context',
+            array('scopeConfig' => $this->_appConfig)
+        );
+        $this->_locale = $this->getMock('Magento\Framework\Locale\CurrencyInterface', array(), array(), '', false);
         $data = array(
-            'applicationConfig' => $this->_appConfig,
+            'context' => $context,
             'localeCurrency' => $this->_locale,
-            'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
+            'formFactory' => $this->getMock('Magento\Framework\Data\FormFactory', array(), array(), '', false),
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false)
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

@@ -51,6 +51,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_storeMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_scopeConfigMock;
+
+    /**
      * @var \Magento\Customer\Model\Address\Config
      */
     protected $_model;
@@ -62,7 +67,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $this->_storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_readerMock = $this->getMock(
             'Magento\Customer\Model\Address\Config\Reader',
@@ -71,8 +77,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
-        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -112,6 +118,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_cacheMock,
             $this->_storeManagerMock,
             $this->_addressHelperMock,
+            $this->_scopeConfigMock,
             $this->_cacheId
         );
     }
@@ -133,11 +140,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storeMock->expects($this->once())->method('getId');
 
-        $this->_storeMock->expects($this->any())->method('getConfig')->will($this->returnValue('someValue'));
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue('someValue'));
 
-
-
-        $rendererMock = $this->getMock('Magento\Object');
+        $rendererMock = $this->getMock('Magento\Framework\Object');
 
         $this->_addressHelperMock->expects(
             $this->any()
@@ -147,7 +152,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($rendererMock)
         );
 
-        $firstExpected = new \Magento\Object();
+        $firstExpected = new \Magento\Framework\Object();
         $firstExpected->setCode(
             'format_one'
         )->setTitle(
@@ -160,7 +165,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             null
         );
 
-        $secondExpected = new \Magento\Object();
+        $secondExpected = new \Magento\Framework\Object();
         $secondExpected->setCode(
             'format_two'
         )->setTitle(

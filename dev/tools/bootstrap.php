@@ -23,7 +23,7 @@
  */
 require_once __DIR__ . '/../../app/autoload.php';
 define('BP', __DIR__ . '/../..');
-\Magento\Autoload\IncludePath::addIncludePath(
+\Magento\Framework\Autoload\IncludePath::addIncludePath(
     array(
         BP . '/app/code',
         BP . '/lib',

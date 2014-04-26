@@ -27,7 +27,7 @@ namespace Magento\Theme\Block\Html;
  * Html pager block
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Pager extends \Magento\View\Element\Template
+class Pager extends \Magento\Framework\View\Element\Template
 {
     /**
      * Current template name
@@ -37,7 +37,7 @@ class Pager extends \Magento\View\Element\Template
     protected $_template = 'Magento_Theme::html/pager.phtml';
 
     /**
-     * @var \Magento\Data\Collection
+     * @var \Magento\Framework\Data\Collection
      */
     protected $_collection;
 
@@ -175,7 +175,7 @@ class Pager extends \Magento\View\Element\Template
     /**
      * Set collection for pagination
      *
-     * @param  \Magento\Data\Collection $collection
+     * @param  \Magento\Framework\Data\Collection $collection
      * @return $this
      */
     public function setCollection($collection)
@@ -192,7 +192,7 @@ class Pager extends \Magento\View\Element\Template
     }
 
     /**
-     * @return \Magento\Data\Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
     {
@@ -715,7 +715,10 @@ class Pager extends \Magento\View\Element\Template
      */
     public function getAnchorTextForPrevious()
     {
-        return $this->_storeConfig->getConfig('design/pagination/anchor_text_for_previous');
+        return $this->_scopeConfig->getValue(
+            'design/pagination/anchor_text_for_previous',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -725,7 +728,10 @@ class Pager extends \Magento\View\Element\Template
      */
     public function getAnchorTextForNext()
     {
-        return $this->_storeConfig->getConfig('design/pagination/anchor_text_for_next');
+        return $this->_scopeConfig->getValue(
+            'design/pagination/anchor_text_for_next',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

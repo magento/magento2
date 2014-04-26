@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\RecurringPayment\Model\Product\Attribute\Backend;
+
 /**
  * Backend for recurring payment parameter
  */
-namespace Magento\RecurringPayment\Model\Product\Attribute\Backend;
-
 class Recurring extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
 {
     /**
@@ -49,10 +49,10 @@ class Recurring extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
     /**
      * Unserialize or remove on failure
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $product
      * @return void
      */
-    protected function _unserialize(\Magento\Object $product)
+    protected function _unserialize(\Magento\Framework\Object $product)
     {
         if ($product->hasIsRecurring()) {
             if ($product->getIsRecurring()) {

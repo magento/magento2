@@ -4,25 +4,36 @@
 "%1 already exists.","%1 已存在。"
 "-- No Theme --","-- 没有主题 --"
 "-- Please Select --","-- 请选择 --"
-"A category object is required for determining the product request path.",为确定产品申请路径，必须提供分类对象。
-"About Us",关于我们
-"Add Products By SKU",通过SKU添加产品
-"Add Products to Group",添加产品到组
-"Add Products to New Option",添加产品到新选项
-"Add Products to Option ""%1""","添加产品到选项""%1"""
-"Add Selected Products",添加选择的产品
-Admin,管理员
-Advanced,高级
-"Advanced Search",高级搜索
-"An error occurred while saving. Please review the error log.",在保存时出现了错误。请查看错误日志。
-"Anchor symbol (#) is not supported in request path",锚点符号（#）不能用于请求路径中
-"Anchor symbol (#) is not supported in url rewrite suffix","URL 重写后缀不支持固定标志（#）"
-"Are you sure you want to delete the folder named",你确定要删除该目录
-"Are you sure?",您是否确认？
-"Assign theme to your live store-view:",分配主题到你的活动店铺视图：
-B,B
-Back,返回
-"Backup Options",备份选项
+"<strong style=""color:red"">Warning!</strong> When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain","<strong style=""color:red"">警告！</strong> 在使用CDN时，某些情况下如果CDN不再您的子域内，JavaScript可能无法正常工作"
+"A category object is required for determining the product request path.","为确定产品申请路径，必须提供分类对象。"
+"Add Block Names to Hints","添加块名称到提示中"
+"Add Secret Key to URLs","添加密钥Key到URL中"
+"Add Store Code to Urls","添加店铺代码到URL中"
+"Admin","管理员"
+"Admin Base URL","管理基本URL"
+"Admin User Emails","管理用户邮件"
+"Advanced","高级"
+"After selecting a new media storage location, press the Synchronize button
+                                to transfer all media to that location. Media will not be available in the new
+                                location until the synchronization process is complete.","在选择新的媒体存储位置后，请按下 同步 按钮以便将所有媒体文件传输到该位置。除非同步工作完成，否则媒体文件将无法通过新位置使用。"
+"Allow Countries","允许的国家"
+"Allow Symlinks","允许的符号链接"
+"Allowed IPs (comma separated)","允许的IP（逗号分割）"
+"Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!","允许的文件类型：ICO、PNG、GIF、JPG、JPEG、APNG，SVG。并非所有浏览器都支持所有这些格式！"
+"Allows customers to stay logged in when switching between different stores.","允许客户在不同店铺间切换时保持登录。"
+"Alternative text for next link in pagination menu. If empty, default arrow image will used.","轮换菜单中链接旁的候选文字。如果为空，则使用默认的箭头图片。"
+"Alternative text for previous link in pagination menu. If empty, default arrow image will used.","轮换菜单中上一个链接旁的候选文字。如果为空，则使用默认的箭头图片。"
+"An error occurred while saving. Please review the error log.","在保存时出现了错误。请查看错误日志。"
+"Anchor Text for Next","下一个的锚点文字"
+"Anchor Text for Previous","上一个的锚点文字"
+"Anchor symbol (#) is not supported in request path","锚点符号（#）不能用于请求路径中"
+"Are you sure?","您是否确认？"
+"Auto-redirect to Base URL","自定重定向到基本 URL"
+"Back","返回"
+"Backup Options","备份选项"
+"Base JavaScript URL","基本 JavaScript URL"
+"Base Link URL","基本链接 URL"
+"Base Media URL","基本媒体 URL"
 "Base Secure URL","基本安全 URL"
 "Base URL",备份URL
 "Base Unsecure URL","基本不安全 URL"
@@ -137,20 +148,19 @@ Host,主机
 "Invalid view file directory ""%1""","无效的视图文件目录""%1"""
 "Invalid website's configuration path: %s",无效的网站配置路径：%s
 "JavaScript Settings","JavaScript 设置"
-Layout,布局
-Layouts,布局
-"Leave empty for access from any location.",从任何位置访问留空。
-"Library files",库文件
-"List of stores",商店列表
-Locale,区域
-"Locale Options",区域选项
-"Log Settings",日志设置
-"Logging from \Magento\Logger. File is located in {{base_dir}}/var/log","登录自 \Magento\Logger。文件位于 {{base_dir}}/var/log"
-"Login is Case Sensitive",登录信息大小写敏感
-"Logo Image",徽标图像
-"Logo Image Alt",备选徽标图像
-"Logo Image Src",徽标图像Src
-"Mail Sending Settings",邮件发送设置
+"Layout","布局"
+"Leave empty for access from any location.","从任何位置访问留空。"
+"List of stores","商店列表"
+"Locale","区域"
+"Locale Options","区域选项"
+"Log Settings","日志设置"
+"Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log","登录自 \Magento\Framework\Logger。文件位于 {{base_dir}}/var/log"
+"Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log","登录自 \Magento\Framework\Logger。文件位于 {{base_dir}}/var/log"
+"Login is Case Sensitive","登录信息大小写敏感"
+"Logo Image","徽标图像"
+"Logo Image Alt","备选徽标图像"
+"Logo Image Src","徽标图像Src"
+"Mail Sending Settings","邮件发送设置"
 "Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/","确保基本URL以""/""（斜线）结尾，例如http://yourdomain/magento/"
 "Manage Stores",管理店铺
 "Match expressions in the same order as displayed in the configuration.",匹配的表达式将以与配置相同的顺序显示出来。
@@ -332,30 +342,33 @@ Themes,主题
 "This website cannot be deleted.",该网站无法被删除。
 "This will be displayed just before body closing tag.",这将在正文结束标记前显示。
 "This will be included before head closing tag in page HTML.","这将在 HTML 页面头部结束标记前被包含。"
-Timezone,时区
-"Title Prefix",标题前缀
-"Title Suffix",标题后缀
-"Transactional Emails",交易邮件
-Translate,翻译
-"Translate Inline",翻译内嵌
-"Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.",对于前端和管理员内嵌翻译，翻译区块和其它输出缓存应被禁用。
-Translations,翻译
-"Two and more slashes together are not permitted in request path",两个或更多斜杠在请求的路径中不被允许
-"Two and more slashes together are not permitted in url rewrite suffix","两个或更多斜杠在 URL 重写后缀中不被允许"
-"Unable to create directory: %1",无法创建目录：%1
-"Unable to delete store view. Please, try again later.",无法删除商店视图。请稍后重试。
-"Unable to delete store. Please, try again later.",无法删除商店。请稍后重试。
-"Unable to delete website. Please, try again later.",无法删除网站。请稍后重试。
-"Unable to proceed. Please, try again",无法继续。请重试
-"Unable to proceed. Please, try again.",无法处理。请重试。
-"Unable to save file ""%1"" at ""%2""","无法保存文件 ""%1"" 中的 ""%2"""
-"Unable to save file: %1",无法保存文件：%1
-"Updater model should not be used in custom layout updates.",Updater模型不应该使用在布局更新里。
-"Upload HTTP Error",上传HTTP错误
-"Upload I/O Error",上传I/O错误
-"Upload Security Error",上传安全错误
-"Uploaded image is not valid",上传的图片无效
-"Use gift registry shipping address",使用礼物登记的货运地址
+"Timezone","时区"
+"Title Prefix","标题前缀"
+"Title Suffix","标题后缀"
+"Transactional Emails","交易邮件"
+"Translate Inline","翻译内嵌"
+"Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.","对于前端和管理员内嵌翻译，翻译区块和其它输出缓存应被禁用。"
+"Translations","翻译"
+"Two and more slashes together are not permitted in request path","两个或更多斜杠在请求的路径中不被允许"
+"Unable to create directory: %s","无法创建目录：%s"
+"Unable to delete store view. Please, try again later.","无法删除商店视图。请稍后重试。"
+"Unable to delete store. Please, try again later.","无法删除商店。请稍后重试。"
+"Unable to delete website. Please, try again later.","无法删除网站。请稍后重试。"
+"Unable to proceed. Please, try again","无法继续。请重试"
+"Unable to proceed. Please, try again.","无法处理。请重试。"
+"Unable to save file ""%s"" at ""%s""","无法保存文件 ""%s"" 中的 ""%s"""
+"Unable to save file: %s","无法保存文件：%s"
+"Unknown old style column type definition: {$definition}.","未知的旧式列类型定义：{$definition}。"
+"Unknown scope ""%s"".","未知范围  ""%s""。"
+"Unsecure","不安全"
+"Url Options","URL 选项"
+"Use Custom Admin Path","使用自定义管理员路径"
+"Use Custom Admin URL","使用自定义管理 URL"
+"Use HTTP Only","仅使用HTTP"
+"Use SID on Frontend","在前端使用 SID"
+"Use Secure URLs in Admin","在管理界面使用安全URL"
+"Use Secure URLs in Frontend","在前端使用安全 URL"
+"Use Web Server Rewrites","使用网络服务器重写"
 "VAT Number","VAT 编号"
 "Validation has failed.",验证失败。
 "Variable Code must be unique.",变量代码必须是唯一的。

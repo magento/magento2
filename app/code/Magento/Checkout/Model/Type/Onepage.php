@@ -35,7 +35,7 @@ use Magento\Customer\Service\V1\Data\Address as AddressDataObject;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadata;
 
@@ -44,10 +44,8 @@ class Onepage
     /**
      * Checkout types: Checkout as Guest, Register, Logged In Customer
      */
-    const METHOD_GUEST = 'guest';
-
+    const METHOD_GUEST    = 'guest';
     const METHOD_REGISTER = 'register';
-
     const METHOD_CUSTOMER = 'customer';
 
     /**
@@ -71,7 +69,7 @@ class Onepage
     protected $_helper;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -85,17 +83,17 @@ class Onepage
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -125,12 +123,12 @@ class Onepage
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Object\Copy
+     * @var \Magento\Framework\Object\Copy
      */
     protected $_objectCopyService;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
@@ -143,7 +141,7 @@ class Onepage
     /** @var AddressBuilder */
     protected $_addressBuilder;
 
-    /** @var \Magento\Math\Random */
+    /** @var \Magento\Framework\Math\Random */
     protected $mathRandom;
 
     /** @var CustomerAddressServiceInterface */
@@ -153,50 +151,50 @@ class Onepage
     protected $_customerAccountService;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Customer\Model\AddressFactory $customrAddrFactory
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Object\Copy $objectCopyService
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param CustomerAccountServiceInterface $accountService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param CustomerBuilder $customerBuilder
      * @param AddressBuilder $addressBuilder
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Math\Random $mathRandom
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param CustomerAddressServiceInterface $customerAddressService
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Checkout\Helper\Data $helper,
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\RequestInterface $request,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Customer\Model\AddressFactory $customrAddrFactory,
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Object\Copy $objectCopyService,
-        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         CustomerBuilder $customerBuilder,
         AddressBuilder $addressBuilder,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Math\Random $mathRandom,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         CustomerAddressServiceInterface $customerAddressService,
         CustomerAccountServiceInterface $accountService
     ) {
@@ -367,7 +365,7 @@ class Onepage
         if (!empty($customerAddressId)) {
             try {
                 $customerAddress = $this->_customerAddressService->getAddress($customerAddressId);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 /** Address does not exist */
             }
             if (isset($customerAddress)) {
@@ -517,7 +515,7 @@ class Onepage
         $quote = $this->getQuote();
         $isCustomerNew = !$quote->getCustomerId();
         $customer = $quote->getCustomerData();
-        $customerData = \Magento\Service\DataObjectConverter::toFlatArray($customer);
+        $customerData = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer);
 
         /** @var Form $customerForm */
         $customerForm = $this->_formFactory->create(
@@ -549,9 +547,14 @@ class Onepage
         if ($quote->getCheckoutMethod() == self::METHOD_REGISTER) {
             // We always have $customerRequest here, otherwise we would have been kicked off the function several
             // lines above
-            if ($customerRequest->getParam('customer_password') != $customerRequest->getParam('confirm_password')) {
-                return array('error' => -1, 'message' => __('Password and password confirmation are not equal.'));
+            $password = $customerRequest->getParam('customer_password');
+            if ($password != $customerRequest->getParam('confirm_password')) {
+                return [
+                    'error'   => -1,
+                    'message' => __('Password and password confirmation are not equal.')
+                ];
             }
+            $quote->setPasswordHash($this->_customerAccountService->getPasswordHash($password));
         } else {
             // set NOT LOGGED IN group id explicitly,
             // otherwise copyFieldsetToTarget('customer_account', 'to_quote') will fill it with default group id value
@@ -563,8 +566,11 @@ class Onepage
         //validate customer
         $attributes = $customerForm->getAllowedAttributes();
         $result = $this->_customerAccountService->validateCustomerData($customer, $attributes);
-        if (true !== $result && is_array($result)) {
-            return $result;
+        if (!$result->isValid()) {
+            return [
+                'error' => -1,
+                'message' => implode(', ', $result->getMessages())
+            ];
         }
 
         // copy customer/guest email to address
@@ -574,7 +580,7 @@ class Onepage
         $this->_objectCopyService->copyFieldsetToTarget(
             'customer_account',
             'to_quote',
-            \Magento\Service\DataObjectConverter::toFlatArray($customer),
+            \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer),
             $quote
         );
 
@@ -720,18 +726,18 @@ class Onepage
      * Validate quote state to be integrated with one page checkout process
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function validate()
     {
         $quote = $this->getQuote();
 
         if ($quote->isMultipleShippingAddresses()) {
-            throw new \Magento\Model\Exception(__('There are more than one shipping address.'));
+            throw new \Magento\Framework\Model\Exception(__('There are more than one shipping address.'));
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
-            throw new \Magento\Model\Exception(__('Sorry, guest checkout is not enabled.'));
+            throw new \Magento\Framework\Model\Exception(__('Sorry, guest checkout is not enabled.'));
         }
     }
 

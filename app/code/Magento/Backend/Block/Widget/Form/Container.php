@@ -82,7 +82,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
         );
         $this->_addButton(
             'reset',
-            array('label' => __('Reset'), 'onclick' => 'setLocation(window.location.href)'),
+            array('label' => __('Reset'), 'onclick' => 'setLocation(window.location.href)', 'class' => 'reset'),
             -1
         );
 
@@ -243,7 +243,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * Set data object and pass it to form
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function setDataObject($object)

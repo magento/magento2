@@ -38,7 +38,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeConfigMock;
+    protected $_scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -52,23 +52,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
-        $this->_storeConfigMock = $this->getMock(
-            'Magento\Core\Model\Store\ConfigInterface',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $this->_registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
         $this->_helper = $objectManager->getObject(
             'Magento\GoogleAdwords\Helper\Data',
             array(
                 'config' => $this->_configMock,
-                'storeConfig' => $this->_storeConfigMock,
+                'scopeConfig' => $this->_scopeConfigMock,
                 'registry' => $this->_registryMock,
                 'context' => $context
             )
@@ -96,16 +90,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue)
     {
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
-            'getConfigFlag'
+            'isSetFlag'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_ACTIVE
         )->will(
             $this->returnValue($isActive)
         );
-        $this->_storeConfigMock->expects($this->any())->method('getConfig')->with($this->isType('string'))->will(
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->with($this->isType('string'))->will(
             $this->returnCallback(
                 function () use ($returnConfigValue) {
                     return $returnConfigValue;
@@ -224,10 +218,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStoreConfigValue($method, $xmlPath, $returnValue)
     {
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             $xmlPath
         )->will(
@@ -240,10 +234,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetConversionValueDynamic()
     {
         $returnValue = 4.1;
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE
         )->will(
@@ -277,20 +271,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConversionValueConstant($conversionValueConst, $returnValue)
     {
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->at(0)
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE
         )->will(
             $this->returnValue(\Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT)
         );
         $this->_registryMock->expects($this->never())->method('registry');
-        $this->_storeConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->at(1)
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE
         )->will(

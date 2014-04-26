@@ -110,7 +110,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setStoreId'
         )->with(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         $duplicateMock->expects($this->once())->method('setData')->with('product data');
 

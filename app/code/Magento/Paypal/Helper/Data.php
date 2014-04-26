@@ -28,7 +28,7 @@ use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
 /**
  * Paypal Data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Cache for shouldAskToCreateBillingAgreement()
@@ -48,12 +48,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_agreementFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
     ) {
@@ -85,7 +85,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve available billing agreement methods
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param \Magento\Sales\Model\Quote|null $quote
      * @return MethodInterface[]
      */

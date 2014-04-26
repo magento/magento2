@@ -21,6 +21,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
+/*global Handlebars*/
 (function ($) {
     "use strict";
     $.widget('mage.catalogSearch', {
@@ -28,7 +29,9 @@
             autocomplete: 'off',
             minSearchLength: 2,
             responseFieldElements: 'ul li',
-            selectClass: 'selected'
+            selectClass: 'selected',
+            template: '<li class="{{row_class}}" title="{{title}}">{{title}}<span class="amount">{{num_of_results}}</span></li>'
+
         },
 
         _create: function() {
@@ -60,7 +63,6 @@
 
             this.searchForm.on('submit', $.proxy(this._onSubmit, this));
         },
-
         /**
          * @private
          * @return {Element} The first element in the suggestion list.
@@ -163,13 +165,21 @@
             var searchField = this.element,
                 clonePosition = {
                     position: 'absolute',
-                    left: searchField.offset().left,
-                    top: searchField.offset().top + searchField.outerHeight(),
+                    // Removed to fix display issues
+                    // left: searchField.offset().left,
+                    // top: searchField.offset().top + searchField.outerHeight(),
                     width: searchField.outerWidth()
-                };
+                },
+                source = this.options.template,
+                template = Handlebars.compile(source),
+                dropdown = $('<ul></ul>');
             if (searchField.val().length >= parseInt(this.options.minSearchLength, 10)) {
                 $.get(this.options.url, {q: searchField.val()}, $.proxy(function (data) {
-                    this.responseList.indexList = this.autoComplete.html(data)
+                    $.each(data, function(index, element){
+                        var html = template(element);
+                        dropdown.append(html);
+                    });
+                    this.responseList.indexList = this.autoComplete.html(dropdown)
                         .css(clonePosition)
                         .show()
                         .find(this.options.responseFieldElements + ':visible');

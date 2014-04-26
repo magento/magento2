@@ -40,7 +40,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="severity">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Severity</argument>
-                        <argument name="width" xsi:type="string">60px</argument>
                         <argument name="index" xsi:type="string">severity</argument>
                         <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Severity</argument>
                     </arguments>
@@ -50,8 +49,9 @@
                         <argument name="header" xsi:type="string" translate="true">Date Added</argument>
                         <argument name="id" xsi:type="string">date_added</argument>
                         <argument name="index" xsi:type="string">date_added</argument>
-                        <argument name="width" xsi:type="string">150px</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
@@ -64,7 +64,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="actions">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Actions</argument>
-                        <argument name="width" xsi:type="string">250px</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Actions</argument>
                     </arguments>

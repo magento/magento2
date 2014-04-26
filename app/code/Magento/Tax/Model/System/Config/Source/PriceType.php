@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\System\Config\Source;
 
-class PriceType implements \Magento\Option\ArrayInterface
+class PriceType implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array

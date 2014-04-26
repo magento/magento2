@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -34,7 +34,7 @@ $connection->addColumn(
     $installer->getTable('core_theme_files'),
     'is_temporary',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_BOOLEAN,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
         'nullable' => false,
         'default' => 0,
         'comment' => 'Is Temporary File'
@@ -46,7 +46,7 @@ $connection->changeColumn(
     'file_name',
     'file_path',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         'length' => 255,
         'nullable' => true,
         'comment' => 'Relative path to file'
@@ -57,7 +57,7 @@ $connection->changeColumn(
     $installer->getTable('core_theme_files'),
     'order',
     'sort_order',
-    array('type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT)
+    array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT)
 );
 
 /**
@@ -67,19 +67,19 @@ $table = $connection->newTable(
     $installer->getTable('core_theme_files_link')
 )->addColumn(
     'files_link_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'nullable' => false, 'unsigned' => true, 'primary' => true),
     'Customization link id'
 )->addColumn(
     'theme_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Theme Id'
 )->addColumn(
     'layout_link_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('nullable' => false, 'unsigned' => true),
     'Theme layout link id'
@@ -88,8 +88,8 @@ $table = $connection->newTable(
     'theme_id',
     $installer->getTable('core_theme'),
     'theme_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Core theme link on layout update'
 );

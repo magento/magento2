@@ -100,14 +100,14 @@
             <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Refund Totals') ?></span></div>
             <?php echo $this->getChildHtml('creditmemo_totals') ?>
             <div class="order-totals-bottom">
-                <div>
-                    <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
+                <div  class="field choice field-append-comments">
                     <input id="notify_customer" name="creditmemo[comment_customer_notify]" value="1" type="checkbox" />
+                    <label for="notify_customer"><span><?php echo __('Append Comments') ?></span></label>
                 </div>
                 <?php if ($this->canSendCreditmemoEmail()):?>
-                <div>
-                    <label class="normal" for="send_email"><?php echo __('Email Copy of Credit Memo') ?></label>
+                <div class="field choice field-email-copy">
                     <input id="send_email" name="creditmemo[send_email]" value="1" type="checkbox" />
+                    <label for="send_email"><span><?php echo __('Email Copy of Credit Memo') ?></span></label>
                 </div>
                 <?php endif; ?>
                 <?php echo $this->getChildHtml('submit_before') ?>

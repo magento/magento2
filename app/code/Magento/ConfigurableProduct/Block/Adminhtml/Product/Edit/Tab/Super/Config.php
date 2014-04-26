@@ -50,7 +50,7 @@ class Config extends Widget implements TabInterface
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -60,45 +60,37 @@ class Config extends Widget implements TabInterface
     protected $_configurableType;
 
     /**
-     * @var \Magento\Locale\CurrencyInterface
+     * @var \Magento\Framework\Locale\CurrencyInterface
      */
     protected $_localeCurrency;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_config;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param Configurable $configurableType
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Locale\CurrencyInterface $localeCurrency
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         Configurable $configurableType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Registry $coreRegistry,
-        \Magento\App\ConfigInterface $config,
-        \Magento\Locale\CurrencyInterface $localeCurrency,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         $this->_configurableType = $configurableType;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogData = $catalogData;
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_config = $config;
         $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $data);
     }
@@ -427,7 +419,7 @@ class Config extends Widget implements TabInterface
     public function getBaseCurrency()
     {
         return $this->_localeCurrency->getCurrency(
-            $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default')
+            $this->_scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default')
         );
     }
 }

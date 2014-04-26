@@ -41,18 +41,18 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     protected $_skipEmptyStoresLabel = false;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
@@ -62,7 +62,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Retrieve System Store model
      *
-     * @return \Magento\Core\Model\System\Store
+     * @return \Magento\Store\Model\System\Store
      */
     protected function _getStoreModel()
     {
@@ -100,10 +100,10 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Render row store views
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
@@ -150,10 +150,10 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Render row store views for export
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function renderExport(\Magento\Object $row)
+    public function renderExport(\Magento\Framework\Object $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();

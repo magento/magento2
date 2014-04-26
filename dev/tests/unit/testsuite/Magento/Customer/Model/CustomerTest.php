@@ -34,10 +34,10 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Customer */
     protected $_model;
 
-    /** @var \Magento\Core\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
     protected $_website;
 
-    /** @var \Magento\Core\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManager;
 
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
@@ -46,35 +46,41 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Eav\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $_attribute;
 
-    /** @var \Magento\Core\Model\Store\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_coreStoreConfigMock;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_scopeConfigMock;
 
-    /** @var \Magento\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportBuilderMock;
 
-    /** @var \Magento\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_encryptor;
 
     protected function setUp()
     {
-        $this->_website = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
+        $this->_website = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
         $this->_config = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
         $this->_attribute = $this->getMock('Magento\Eav\Model\Attribute', array(), array(), '', false);
-        $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $this->_storetMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $this->_coreStoreConfigMock = $this->getMock('\Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
+        $this->_storetMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
+        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_transportBuilderMock = $this->getMock(
-            '\Magento\Mail\Template\TransportBuilder',
+            '\Magento\Framework\Mail\Template\TransportBuilder',
             array(),
             array(),
             '',
             false
         );
-        $this->_transportMock = $this->getMock('Magento\Mail\TransportInterface', array(), array(), '', false);
-        $this->_encryptor = $this->getMock('Magento\Encryption\EncryptorInterface');
+        $this->_transportMock = $this->getMock(
+            'Magento\Framework\Mail\TransportInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Customer\Model\Customer',
@@ -82,7 +88,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->_storeManager,
                 'config' => $this->_config,
                 'transportBuilder' => $this->_transportBuilderMock,
-                'coreStoreConfig' => $this->_coreStoreConfigMock,
+                'scopeConfig' => $this->_scopeConfigMock,
                 'encryptor' => $this->_encryptor
             )
         );
@@ -146,22 +152,24 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->_website->expects($this->once())->method('getStoreIds')->will($this->returnValue($storeIds));
 
-        $this->_coreStoreConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->at(0)
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\Customer\Model\Customer::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )->will(
             $this->returnValue('templateId')
         );
-        $this->_coreStoreConfigMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->at(1)
         )->method(
-            'getConfig'
+            'getValue'
         )->with(
             \Magento\Customer\Model\Customer::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )->will(
             $this->returnValue('sender')

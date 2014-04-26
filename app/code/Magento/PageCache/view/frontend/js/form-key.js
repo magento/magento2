@@ -34,12 +34,12 @@
         },
 
         _create: function() {
-            var formKey = $.cookie('form_key');
+            var formKey = $.mage.cookies.get('form_key');
             if (!formKey) {
                 formKey = this._generate(this.options.allowedCharacters, this.options.length);
                 var date = new Date();
                 date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
-                $.cookie('form_key', formKey, {expires: date, path: '/'});
+                $.mage.cookies.set('form_key', formKey, {expires: date, path: '/'});
             }
             $(this.options.inputSelector).val(formKey);
         },
@@ -50,4 +50,5 @@
             return result;
         }
     });
+    $('body').formKey();
 })(jQuery);

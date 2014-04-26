@@ -45,8 +45,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             array('deserialize', 'get')
         )->disableOriginalConstructor()->getMock();
-        $areaListMock = $this->getMock('Magento\App\AreaList', array(), array(), '', false);
-        $configScopeMock = $this->getMock('Magento\Config\ScopeInterface');
+        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
+        $configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.

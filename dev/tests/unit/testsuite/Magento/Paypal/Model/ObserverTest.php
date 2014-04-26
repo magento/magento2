@@ -33,17 +33,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Event\Observer
+     * @var \Magento\Framework\Event\Observer
      */
     protected $_observer;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_event;
 
     /**
-     * @var \Magento\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_authorization;
 
@@ -59,12 +59,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_event = new \Magento\Object();
+        $this->_event = new \Magento\Framework\Object();
 
-        $this->_observer = new \Magento\Event\Observer();
+        $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_authorization = $this->getMockForAbstractClass('Magento\AuthorizationInterface');
+        $this->_authorization = $this->getMockForAbstractClass('Magento\Framework\AuthorizationInterface');
         $this->_agreementFactory = $this->getMock(
             'Magento\Paypal\Model\Billing\AgreementFactory',
             array('create'),
@@ -88,7 +88,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testAddPaypalShortcuts()
     {
         $layoutMock = $this->getMockBuilder(
-            'Magento\Core\Model\Layout'
+            'Magento\Framework\View\Layout'
         )->setMethods(
             array('createBlock')
         )->disableOriginalConstructor()->getMock();
@@ -212,7 +212,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', array(), array(), '', false);
         $agreement->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
         $comment = $this->getMockForAbstractClass(
-            'Magento\Model\AbstractModel',
+            'Magento\Framework\Model\AbstractModel',
             [],
             '',
             false,

@@ -38,14 +38,14 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Helper\Js $jsHelper
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Backend\Model\Config $backendConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Helper\Js $jsHelper,
+        \Magento\Framework\View\Helper\Js $jsHelper,
         \Magento\Backend\Model\Config $backendConfig,
         array $data = array()
     ) {
@@ -56,7 +56,7 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Add custom css class
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getFrontendClass($element)
@@ -68,7 +68,7 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Check whether current payment method is enabled
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
      */
     protected function _isPaymentEnabled($element)
@@ -88,7 +88,7 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Return header title part of html for payment solution
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getHeaderTitleHtml($element)
@@ -144,7 +144,7 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Return header comment part of html for payment solution
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getHeaderCommentHtml($element)
@@ -155,7 +155,7 @@ class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Get collapsed state on-load
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return false
      */
     protected function _isCollapseState($element)

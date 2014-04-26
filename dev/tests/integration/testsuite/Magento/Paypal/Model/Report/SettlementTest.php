@@ -34,7 +34,7 @@ class SettlementTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Paypal\Model\Report\Settlement'
         );
-        $connection = $this->getMock('Magento\Io\Sftp', array('rawls', 'read'), array(), '', false);
+        $connection = $this->getMock('Magento\Framework\Io\Sftp', array('rawls', 'read'), array(), '', false);
         $filename = 'STL-00000000.00.abc.CSV';
         $connection->expects($this->once())->method('rawls')->will($this->returnValue(array($filename => array())));
         $connection->expects($this->once())->method('read')->with($filename, $this->anything());

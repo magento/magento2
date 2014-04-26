@@ -23,12 +23,11 @@
  */
 ?>
 <script type="text/javascript">
-jQuery(function($) {
+(function($) {
     $('#product_info_tabs_product-details_content').on('stockbeforedisable', function(e) {
         if (e.productType === 'grouped') {
-            e.stopImmediatePropagation();
             return false;
         }
     });
- });
+})(jQuery);
 </script>

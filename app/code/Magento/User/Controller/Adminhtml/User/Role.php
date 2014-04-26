@@ -30,7 +30,7 @@ class Role extends \Magento\Backend\App\AbstractAction
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -64,7 +64,7 @@ class Role extends \Magento\Backend\App\AbstractAction
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\User\Model\RulesFactory $rulesFactory
@@ -72,7 +72,7 @@ class Role extends \Magento\Backend\App\AbstractAction
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\User\Model\RulesFactory $rulesFactory,
@@ -226,7 +226,7 @@ class Role extends \Magento\Backend\App\AbstractAction
 
         $isAll = $this->getRequest()->getParam('all');
         if ($isAll) {
-            $resource = array($this->_objectManager->get('Magento\Acl\RootResource')->getId());
+            $resource = array($this->_objectManager->get('Magento\Framework\Acl\RootResource')->getId());
         }
 
         $role = $this->_initRole('role_id');
@@ -262,7 +262,7 @@ class Role extends \Magento\Backend\App\AbstractAction
                 $this->_addUserToRole($nRuid, $role->getId());
             }
             $this->messageManager->addSuccess(__('You saved the role.'));
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving this role.'));

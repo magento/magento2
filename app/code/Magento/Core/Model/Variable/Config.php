@@ -36,7 +36,7 @@ namespace Magento\Core\Model\Variable;
 class Config
 {
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Url
      */
     protected $_viewUrl;
 
@@ -46,10 +46,10 @@ class Config
     protected $_url;
 
     /**
-     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\Framework\View\Url $viewUrl
      * @param \Magento\Backend\Model\UrlInterface $url
      */
-    public function __construct(\Magento\View\Url $viewUrl, \Magento\Backend\Model\UrlInterface $url)
+    public function __construct(\Magento\Framework\View\Url $viewUrl, \Magento\Backend\Model\UrlInterface $url)
     {
         $this->_viewUrl = $viewUrl;
         $this->_url = $url;
@@ -58,7 +58,7 @@ class Config
     /**
      * Prepare variable wysiwyg config
      *
-     * @param \Magento\Object $config
+     * @param \Magento\Framework\Object $config
      * @return array
      */
     public function getWysiwygPluginSettings($config)

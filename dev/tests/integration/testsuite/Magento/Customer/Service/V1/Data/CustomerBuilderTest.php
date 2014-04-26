@@ -52,13 +52,6 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
         $attributeCodes = $this->_customerBuilder->getCustomAttributesCodes();
         $expectedAttributes = array(
             'disable_auto_group_change',
-            'prefix',
-            'middlename',
-            'suffix',
-            'created_at',
-            'dob',
-            'taxvat',
-            'gender',
             $userDefinedAttributeCode
         );
         $this->assertEquals($expectedAttributes, $attributeCodes, 'Custom attribute codes list is invalid.');

@@ -26,38 +26,39 @@
 ?>
 <?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
 <?php $notificationCount = $this->getUnreadNotificationCount(); ?>
-<div class="notifications" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
+<div class="notifications-summary" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
     <?php if ($notificationCount > 0) : ?>
-        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="notifications-icon" title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
-            <span class="value"><?php echo $this->escapeHtml($notificationCount); ?></span>
+        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action" title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
+            <span class="text"><?php echo __('Notifications'); ?></span>
+            <span class="counter qty"><?php echo $this->escapeHtml($notificationCount); ?></span>
         </a>
-        <ul class="dropdown-menu" data-mark-as-read-url="<?php echo $this->getUrl('adminhtml/notification/ajaxMarkAsRead'); ?>">
+        <ul class="dropdown-menu notifications-list" data-mark-as-read-url="<?php echo $this->getUrl('adminhtml/notification/ajaxMarkAsRead'); ?>">
             <?php foreach ($this->getLatestUnreadNotifications() as $notification) : ?>
             <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
-            <li class="notification-entry<?php if ($notification->getSeverity() == 1): ?> notification-critical<?php endif; ?>"
+            <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                 data-notification-id="<?php echo $this->escapeHtml($notification->getId()); ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
-                <strong><?php echo $this->escapeHtml($notification->getTitle()); ?></strong>
-                <span class="notification-description"><?php echo $this->escapeHtml($notification->getDescription()); ?></span>
-                <time><?php echo $this->escapeHtml($this->formatNotificationDate($notification->getDateAdded())); ?></time>
-                <button class="action-close"><?php echo __('Close'); ?></button>
-                <div class="notification-dialog-content" data-title="<?php echo __('Notification'); ?>" data-cancel-caption="<?php echo  __('Cancel'); ?>" data-acknowledge-caption="<?php echo __('Acknowledge'); ?>">
-                    <strong><?php echo $this->escapeHtml($notification->getTitle()); ?></strong>
-                    <span class="notification-description"><?php echo $this->escapeHtml($notification->getDescription()); ?></span>
-                    <div class="actions">
-                        <a class="notification-url" href="<?php echo $this->escapeUrl($notification->getUrl()); ?>" target="_blank"><?php echo __('Read Details'); ?></a>
+                <strong class="notifications-entry-title"><?php echo $this->escapeHtml($notification->getTitle()); ?></strong>
+                <span class="notifications-entry-description"><?php echo $this->escapeHtml($notification->getDescription()); ?></span>
+                <time class="notifications-entry-time"><?php echo $this->escapeHtml($this->formatNotificationDate($notification->getDateAdded())); ?></time>
+                <button class="action close notifications-close"><span><?php echo __('Close'); ?></span></button>
+                <div class="notifications-dialog-content" data-title="<?php echo __('Notification'); ?>" data-cancel-caption="<?php echo  __('Cancel'); ?>" data-acknowledge-caption="<?php echo __('Acknowledge'); ?>">
+                    <strong class="notifications-entry-title"><?php echo $this->escapeHtml($notification->getTitle()); ?></strong>
+                    <span class="notifications-entry-description"><?php echo $this->escapeHtml($notification->getDescription()); ?></span>
+                    <div class="actions notifications-entry-actions">
+                        <a class="notifications-url" href="<?php echo $this->escapeUrl($notification->getUrl()); ?>" target="_blank"><?php echo __('Read Details'); ?></a>
                     </div>
-                    <time><?php echo $this->escapeHtml($this->formatNotificationDate($notification->getDateAdded())); ?></time>
+                    <time class="notifications-entry-time"><?php echo $this->escapeHtml($this->formatNotificationDate($notification->getDateAdded())); ?></time>
                 </div>
             </li>
             <?php endforeach; ?>
             <li class="last">
-                <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action-more"><?php echo __('See All (%1 unread)', $notificationCount); ?></a>
+                <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action more notification-more"><?php echo __('See All (%1 unread)', $notificationCount); ?></a>
             </li>
         </ul>
     <?php else : ?>
-        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="notifications-icon" title="<?php echo __('Notifications'); ?>">
-            <span class="value"></span>
+        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action empty" title="<?php echo __('Notifications'); ?>">
+            <span class="text"><?php echo __('Notifications'); ?></span>
         </a>
     <?php endif; ?>
 </div>

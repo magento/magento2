@@ -38,60 +38,63 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_configData;
 
     /**
-     * @var \Magento\App\Filesystem\DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     protected $directoryList;
 
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
         $filesystem = $objectManager->create(
-            'Magento\App\Filesystem',
+            'Magento\Framework\App\Filesystem',
             array(
                 'directoryList' => $objectManager->create(
-                    'Magento\App\Filesystem\DirectoryList',
+                    'Magento\Framework\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
                         'directories' => array(
-                            \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files/code'),
-                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files/code'),
-                            \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
+                            \Magento\Framework\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files/code'),
+                            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files/code'),
+                            \Magento\Framework\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
                         )
                     )
                 )
             )
         );
 
-        $this->directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $this->directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
         $dirPath = ltrim(
             str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files',
             '/'
         );
-        $this->directoryList->addDirectory(\Magento\App\Filesystem::MODULES_DIR, array('path' => $dirPath));
+        $this->directoryList->addDirectory(\Magento\Framework\App\Filesystem::MODULES_DIR, array('path' => $dirPath));
 
-        /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
+        /** @var \Magento\Framework\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(
-            'Magento\Module\Declaration\FileResolver',
+            'Magento\Framework\Module\Declaration\FileResolver',
             array(
                 'filesystem' => $filesystem,
-                'fileIteratorFactory' => $objectManager->create('Magento\Config\FileIteratorFactory')
+                'fileIteratorFactory' => $objectManager->create('Magento\Framework\Config\FileIteratorFactory')
             )
         );
 
 
-        /** @var \Magento\Module\Declaration\Reader\Filesystem $filesystemReader */
+        /** @var \Magento\Framework\Module\Declaration\Reader\Filesystem $filesystemReader */
         $filesystemReader = $objectManager->create(
-            'Magento\Module\Declaration\Reader\Filesystem',
+            'Magento\Framework\Module\Declaration\Reader\Filesystem',
             array('fileResolver' => $modulesDeclarations)
         );
 
-        /** @var \Magento\Module\ModuleList $modulesList */
-        $modulesList = $objectManager->create('Magento\Module\ModuleList', array('reader' => $filesystemReader));
+        /** @var \Magento\Framework\Module\ModuleList $modulesList */
+        $modulesList = $objectManager->create(
+            'Magento\Framework\Module\ModuleList',
+            array('reader' => $filesystemReader)
+        );
 
-        /** @var \Magento\Module\Dir\Reader $moduleReader */
+        /** @var \Magento\Framework\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader',
+            'Magento\Framework\Module\Dir\Reader',
             array('moduleList' => $modulesList, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');

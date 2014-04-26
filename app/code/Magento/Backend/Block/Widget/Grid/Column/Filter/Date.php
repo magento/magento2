@@ -31,27 +31,27 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\DB\Helper $resourceHelper
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Framework\Math\Random $mathRandom
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\DB\Helper $resourceHelper,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\DB\Helper $resourceHelper,
+        \Magento\Framework\Math\Random $mathRandom,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->mathRandom = $mathRandom;
@@ -76,7 +76,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $html = '<div class="range" id="' .
             $htmlId .
             '_range"><div class="range-line date">' .
@@ -156,7 +156,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         $value = $this->getValue($index);
         if ($value instanceof \Zend_Date) {
             return $value->toString(
-                $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
             );
         }
         return $value;
@@ -220,7 +220,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      *
      * @param string $date
      * @param string $locale
-     * @return \Magento\Stdlib\DateTime\Date|null
+     * @return \Magento\Framework\Stdlib\DateTime\Date|null
      */
     protected function _convertDate($date, $locale)
     {
@@ -228,7 +228,12 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $dateObj = $this->_localeDate->date(null, null, $locale, false);
 
             //set default timezone for store (admin)
-            $dateObj->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+            $dateObj->setTimezone(
+                $this->_scopeConfig->getValue(
+                    $this->_localeDate->getDefaultTimezonePath(),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
 
             //set beginning of day
             $dateObj->setHour(00);
@@ -239,7 +244,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $dateObj->set($date, \Zend_Date::DATE_SHORT, $locale);
 
             //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
 
             return $dateObj;
         } catch (\Exception $e) {

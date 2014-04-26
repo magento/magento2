@@ -30,7 +30,7 @@ namespace Magento\Sitemap\Model\Resource\Catalog;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Category extends \Magento\Model\Resource\Db\AbstractDb
+class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Collection Zend Db select
@@ -47,7 +47,7 @@ class Category extends \Magento\Model\Resource\Db\AbstractDb
     protected $_attributesCache = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -57,13 +57,13 @@ class Category extends \Magento\Model\Resource\Db\AbstractDb
     protected $_categoryResource;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category $categoryResource
     ) {
         $this->_storeManager = $storeManager;
@@ -82,14 +82,14 @@ class Category extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Get category collection array
      *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return array|bool
      */
     public function getCollection($storeId)
     {
         $categories = array();
 
-        /* @var $store \Magento\Core\Model\Store */
+        /* @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore($storeId);
 
         if (!$store) {
@@ -141,11 +141,11 @@ class Category extends \Magento\Model\Resource\Db\AbstractDb
      * Prepare category
      *
      * @param array $categoryRow
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _prepareCategory(array $categoryRow)
     {
-        $category = new \Magento\Object();
+        $category = new \Magento\Framework\Object();
         $category->setId($categoryRow[$this->getIdFieldName()]);
         $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] : 'catalog/category/view/id/' .
             $category->getId();

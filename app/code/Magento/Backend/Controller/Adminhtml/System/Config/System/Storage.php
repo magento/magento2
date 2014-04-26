@@ -91,7 +91,7 @@ class Storage extends \Magento\Backend\App\Action
         try {
             $this->_getSyncSingleton()->synchronize($storage);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $flag->passError($e);
         }
 
@@ -153,9 +153,9 @@ class Storage extends \Magento\Backend\App\Action
                         ) && $flagData['timeout_reached'])
                         ) {
                             $this->_objectManager->get(
-                                'Magento\Logger'
+                                'Magento\Framework\Logger'
                             )->logException(
-                                new \Magento\Exception(
+                                new \Magento\Framework\Exception(
                                     __('The timeout limit for response from synchronize process was reached.')
                                 )
                             );

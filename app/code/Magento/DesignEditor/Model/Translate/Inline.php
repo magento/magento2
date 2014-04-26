@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Model\Translate;
 /**
  * Inline translation specific to Vde.
  */
-class Inline implements \Magento\Translate\InlineInterface
+class Inline implements \Magento\Framework\Translate\InlineInterface
 {
     /**
      * data-translate-mode attribute name
@@ -56,17 +56,17 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $_helper;
 
     /**
-     * @var \Magento\Translate\Inline\ParserInterface
+     * @var \Magento\Framework\Translate\Inline\ParserInterface
      */
     protected $_parser;
 
     /**
-     * @var \Magento\Translate\Inline\ParserFactory
+     * @var \Magento\Framework\Translate\Inline\ParserFactory
      */
     protected $parserFactory;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -78,37 +78,37 @@ class Inline implements \Magento\Translate\InlineInterface
     protected $_isScriptInserted = false;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
     /**
-     * @var \Magento\BaseScopeResolverInterface
+     * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
 
     /**
      * Initialize inline translation model specific for vde
      *
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\BaseScopeResolverInterface $scopeResolver
-     * @param \Magento\Translate\Inline\ParserFactory $parserFactory
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\Translate\Inline\ParserFactory $parserFactory
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param \Magento\UrlInterface $url
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
     public function __construct(
-        \Magento\View\DesignInterface $design,
-        \Magento\BaseScopeResolverInterface $scopeResolver,
-        \Magento\Translate\Inline\ParserFactory $parserFactory,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\Translate\Inline\ParserFactory $parserFactory,
         \Magento\DesignEditor\Helper\Data $helper,
-        \Magento\UrlInterface $url,
-        \Magento\ObjectManager $objectManager
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\ObjectManager $objectManager
     ) {
         $this->_design = $design;
         $this->_scopeResolver = $scopeResolver;
@@ -133,7 +133,7 @@ class Inline implements \Magento\Translate\InlineInterface
     /**
      * Retrieve Inline Parser instance
      *
-     * @return \Magento\Translate\Inline\ParserInterface
+     * @return \Magento\Framework\Translate\Inline\ParserInterface
      */
     public function getParser()
     {
@@ -215,8 +215,8 @@ class Inline implements \Magento\Translate\InlineInterface
      */
     protected function getInlineScript()
     {
-        /** @var $block \Magento\View\Element\Template */
-        $block = $this->_objectManager->create('Magento\View\Element\Template');
+        /** @var $block \Magento\Framework\View\Element\Template */
+        $block = $this->_objectManager->create('Magento\Framework\View\Element\Template');
 
         $block->setArea($this->_design->getArea());
         $block->setAjaxUrl($this->_getAjaxUrl());

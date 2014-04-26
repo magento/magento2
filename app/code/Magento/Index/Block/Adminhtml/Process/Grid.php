@@ -133,20 +133,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $this->addColumn(
             'indexer_code',
-            array('header' => __('Index'), 'width' => '180', 'align' => 'left', 'index' => 'name', 'sortable' => false)
+            array('header' => __('Index'), 'index' => 'name', 'sortable' => false)
         );
 
         $this->addColumn(
             'description',
-            array('header' => __('Description'), 'align' => 'left', 'index' => 'description', 'sortable' => false)
+            array('header' => __('Description'), 'index' => 'description', 'sortable' => false)
         );
 
         $this->addColumn(
             'mode',
             array(
                 'header' => __('Mode'),
-                'width' => '150',
-                'align' => 'left',
                 'index' => 'mode',
                 'type' => 'options',
                 'options' => $this->_indexProcess->getModesOptions()
@@ -157,8 +155,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'status',
             array(
                 'header' => __('Status'),
-                'width' => '120',
-                'align' => 'left',
                 'index' => 'status',
                 'type' => 'options',
                 'options' => $this->_indexProcess->getStatusesOptions(),
@@ -171,8 +167,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             array(
                 'header' => __('Update Required'),
                 'sortable' => false,
-                'width' => '120',
-                'align' => 'left',
                 'index' => 'update_required',
                 'type' => 'options',
                 'options' => $this->_indexProcess->getUpdateRequiredOptions(),
@@ -185,8 +179,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             array(
                 'header' => __('Updated'),
                 'type' => 'datetime',
-                'width' => '180',
-                'align' => 'left',
                 'index' => 'ended_at',
                 'frame_callback' => array($this, 'decorateDate')
             )
@@ -196,7 +188,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'action',
             array(
                 'header' => __('Action'),
-                'width' => '100',
                 'type' => 'action',
                 'getter' => 'getId',
                 'actions' => array(

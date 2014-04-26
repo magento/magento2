@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\Model\Resource\Indexer;
 
-class State extends \Magento\Model\Resource\Db\AbstractDb
+class State extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

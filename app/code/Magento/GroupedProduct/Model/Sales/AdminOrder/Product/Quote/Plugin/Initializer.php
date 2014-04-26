@@ -39,7 +39,7 @@ class Initializer
      * @param callable $proceed
      * @param \Magento\Sales\Model\Quote $quote
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Object $config
+     * @param \Magento\Framework\Object $config
      *
      * @return \Magento\Sales\Model\Quote\Item|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -49,7 +49,7 @@ class Initializer
         \Closure $proceed,
         \Magento\Sales\Model\Quote $quote,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Object $config
+        \Magento\Framework\Object $config
     ) {
         $item = $proceed($quote, $product, $config);
 

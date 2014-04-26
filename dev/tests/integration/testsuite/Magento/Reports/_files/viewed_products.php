@@ -22,9 +22,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
     ->getArea('adminhtml')
-    ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
+    ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
@@ -37,8 +37,14 @@ $reportObserver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
 );
 foreach (array(1, 2, 1, 21, 1, 21) as $productId) {
     $reportObserver->catalogProductView(
-        new \Magento\Event\Observer(
-            array('event' => new \Magento\Object(array('product' => new \Magento\Object(array('id' => $productId)))))
+        new \Magento\Framework\Event\Observer(
+            array(
+                'event' => new \Magento\Framework\Object(
+                        array(
+                            'product' => new \Magento\Framework\Object(array('id' => $productId))
+                        )
+                    )
+            )
         )
     );
 }

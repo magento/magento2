@@ -30,7 +30,7 @@
  */
 namespace Magento\TestFramework;
 
-class Cookie extends \Magento\Stdlib\Cookie
+class Cookie extends \Magento\Framework\Stdlib\Cookie
 {
     /**
      * Dummy function, which sets value directly to $_COOKIE super-global array instead of calling setcookie()

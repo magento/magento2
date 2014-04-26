@@ -23,9 +23,9 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite;
-use Magento\Filesystem\File\Write;
-use Magento\Filesystem\FilesystemException;
+use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Filesystem\FilesystemException;
 
 /**
  * Class Synchronization
@@ -48,14 +48,14 @@ class Synchronization
 
     /**
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->storageFactory = $storageFactory;
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_DIR);
     }
 
     /**

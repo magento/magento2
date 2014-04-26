@@ -26,14 +26,14 @@ namespace Magento\Core\App\Action;
 class FormKeyValidator
 {
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $_formKey;
 
     /**
-     * @param \Magento\Data\Form\FormKey $formKey
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
      */
-    public function __construct(\Magento\Data\Form\FormKey $formKey)
+    public function __construct(\Magento\Framework\Data\Form\FormKey $formKey)
     {
         $this->_formKey = $formKey;
     }
@@ -41,10 +41,10 @@ class FormKeyValidator
     /**
      * Validate form key
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    public function validate(\Magento\App\RequestInterface $request)
+    public function validate(\Magento\Framework\App\RequestInterface $request)
     {
         $formKey = $request->getParam('form_key', null);
         if (!$formKey || $formKey !== $this->_formKey->getFormKey()) {

@@ -23,7 +23,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 
@@ -34,25 +34,25 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('indexer_state')
 )->addColumn(
     'state_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Indexer State Id'
 )->addColumn(
     'indexer_id',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Indexer Id'
 )->addColumn(
     'status',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     16,
     array('default' => \Magento\Indexer\Model\Indexer\State::STATUS_INVALID),
     'Indexer Status'
 )->addColumn(
     'updated',
-    \Magento\DB\Ddl\Table::TYPE_DATETIME,
+    \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
     null,
     array(),
     'Indexer Status'
@@ -72,7 +72,7 @@ $table = $installer->getConnection()
         $installer->getTable('mview_state')
     )->addColumn(
         'state_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array(
             'identity' => true,
@@ -83,31 +83,31 @@ $table = $installer->getConnection()
         'View State Id'
     )->addColumn(
         'view_id',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         255,
         array(),
         'View Id'
     )->addColumn(
         'mode',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         16,
-        array('default' => \Magento\Mview\View\StateInterface::MODE_DISABLED,),
+        array('default' => \Magento\Framework\Mview\View\StateInterface::MODE_DISABLED,),
         'View Mode'
     )->addColumn(
         'status',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         16,
-        array('default' => \Magento\Mview\View\StateInterface::STATUS_IDLE,),
+        array('default' => \Magento\Framework\Mview\View\StateInterface::STATUS_IDLE,),
         'View Status'
     )->addColumn(
         'updated',
-        \Magento\DB\Ddl\Table::TYPE_DATETIME,
+        \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
         null,
         array(),
         'View updated time'
     )->addColumn(
         'version_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('unsigned' => true,),
         'View Version Id'

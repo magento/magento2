@@ -51,14 +51,14 @@ $element = $this->getElement();
                     <th class="col-websites" <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>><?php echo __('Web Site') ?></th>
                     <th class="col-customer-group"><?php echo __('Customer Group') ?></th>
                     <th class="col-qty required"><?php echo __('Quantity') ?></th>
-                    <th class="col-price required"><?php echo $this->getPriceColumnHeader(__('Price')) ?></th>
+                    <th class="col-price required"><?php echo $this->getPriceColumnHeader(__('Item Price')) ?></th>
                     <th class="col-delete"><?php echo __('Action') ?></th>
                 </tr>
             </thead>
             <tbody id="<?php echo $_htmlId ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>"><?php echo $this->getAddButtonHtml() ?></td>
+                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?php echo $this->getAddButtonHtml() ?></td>
                 </tr>
             </tfoot>
         </table>

@@ -45,7 +45,7 @@ class Config
     /**
      * Filesystem
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $filesystem;
 
@@ -53,9 +53,9 @@ class Config
      * Constructor
      *
      * @param Config\Data $dataStorage
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\App\Filesystem $filesystem)
+    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\Framework\App\Filesystem $filesystem)
     {
         $this->_dataStorage = $dataStorage;
         $this->filesystem = $filesystem;
@@ -64,7 +64,7 @@ class Config
     /**
      * Get array of wizard steps
      *
-     * Array($index => \Magento\Object)
+     * Array($index => \Magento\Framework\Object)
      *
      * @return array
      */
@@ -73,7 +73,7 @@ class Config
         $data = $this->_dataStorage->get();
         $steps = array();
         foreach ($data['steps'] as $step) {
-            $stepObject = new \Magento\Object($step);
+            $stepObject = new \Magento\Framework\Object($step);
             $steps[] = $stepObject;
         }
         return $steps;

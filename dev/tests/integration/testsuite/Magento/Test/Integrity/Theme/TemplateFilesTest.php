@@ -52,7 +52,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             $params = array('area' => $area, 'themeId' => $themeId, 'module' => $module);
             try {
                 $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
-                    'Magento\View\FileSystem'
+                    'Magento\Framework\View\FileSystem'
                 )->getFilename(
                     $file,
                     $params
@@ -80,9 +80,9 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
         $themes = $this->_getDesignThemes();
         foreach ($themes as $theme) {
-            /** @var \Magento\View\Layout\ProcessorInterface $layoutUpdate */
+            /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutUpdate */
             $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\View\Layout\ProcessorInterface',
+                'Magento\Framework\View\Layout\ProcessorInterface',
                 array('theme' => $theme)
             );
             $layoutTemplates = $this->_getLayoutTemplates($layoutUpdate->getFileLayoutUpdatesXml());

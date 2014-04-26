@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Model\Resource;
 
-class Wishlist extends \Magento\Model\Resource\Db\AbstractDb
+class Wishlist extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Store wishlist items count
@@ -65,7 +65,7 @@ class Wishlist extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Zend_Db_Select
      */
     protected function _getLoadSelect($field, $value, $object)

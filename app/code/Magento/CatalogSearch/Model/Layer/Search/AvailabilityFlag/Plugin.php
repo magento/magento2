@@ -31,9 +31,9 @@ class Plugin
     const XML_PATH_DISPLAY_LAYER_COUNT = 'catalog/search/use_layered_navigation_count';
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $storeManager;
+    protected $scopeConfig;
 
     /**
      * @var \Magento\CatalogSearch\Model\Resource\EngineProvider
@@ -41,14 +41,14 @@ class Plugin
     protected $engineProvider;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param EngineProvider $engineProvider
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         EngineProvider $engineProvider
     ) {
-        $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
         $this->engineProvider = $engineProvider;
     }
 
@@ -70,7 +70,10 @@ class Plugin
         if (!$_isLNAllowedByEngine) {
             return false;
         }
-        $availableResCount = (int)$this->storeManager->getStore()->getConfig(self::XML_PATH_DISPLAY_LAYER_COUNT);
+        $availableResCount = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_DISPLAY_LAYER_COUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         if (!$availableResCount || ($availableResCount > $layer->getProductCollection()->getSize())) {
             return $proceed($layer, $filters);

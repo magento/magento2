@@ -33,7 +33,7 @@ $websiteCode = $this->getRequest()->getParam('website');
 $storeCode = $this->getRequest()->getParam('store');
 
 if (!$storeCode && $websiteCode) {
-    /** @var $web \Magento\Core\Model\Website */
+    /** @var $web \Magento\Store\Model\Website */
     $web = $this->getWebsiteModel()->load($websiteCode);
     $storedAllowedMethods = explode(',', $web->getConfig('carriers/ups/allowed_methods'));
     $storedOriginShipment = $web->getConfig('carriers/ups/origin_shipment');

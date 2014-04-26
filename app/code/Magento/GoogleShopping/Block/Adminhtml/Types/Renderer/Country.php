@@ -58,10 +58,10 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * Renders Google Content Item Id
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $iso = $row->getData($this->getColumn()->getIndex());
         return $this->_config->getCountryInfo($iso, 'name');

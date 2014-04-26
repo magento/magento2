@@ -31,10 +31,10 @@ class StateTest extends \PHPUnit_Framework_TestCase
     /**
      * Name of layout classes that will be used as main layout
      */
-    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
+    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Framework\View\Layout';
 
     /**
-     * Url model classes that will be used instead of \Magento\UrlInterface in different vde modes
+     * Url model classes that will be used instead of \Magento\Framework\UrlInterface in different vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -102,7 +102,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_configMock;
 
@@ -149,7 +149,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_cacheStateMock = $this->getMockBuilder(
-            'Magento\App\Cache\StateInterface'
+            'Magento\Framework\App\Cache\StateInterface'
         )->disableOriginalConstructor()->getMock();
 
         $this->_dataHelper = $this->getMock(
@@ -160,30 +160,32 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
-        $this->_application = $this->getMock('Magento\Core\Model\App', array('getStore', 'getConfig'),
-            array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
 
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array('setConfig'), array(), '', false);
-        $storeManager->expects(
+        $mutableConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\MutableScopeConfigInterface');
+        $mutableConfig->expects(
             $this->any()
         )->method(
-            'setConfig'
+            'setValue'
         )->with(
-            $this->equalTo(\Magento\View\DesignInterface::XML_PATH_THEME_ID),
-            $this->equalTo(self::THEME_ID)
+            $this->equalTo(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
+            $this->equalTo(self::THEME_ID),
+            $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         )->will(
             $this->returnSelf()
         );
 
-        $this->_configMock = $this->getMock('Magento\App\ConfigInterface');
-        $this->_configMock->expects($this->any())
-            ->method('setNode')
-            ->with(
-                $this->equalTo('default/' . \Magento\View\DesignInterface::XML_PATH_THEME_ID),
-                $this->equalTo(self::THEME_ID)
-            )
-            ->will($this->returnSelf());
+        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_configMock->expects(
+            $this->any()
+        )->method(
+            'setNode'
+        )->with(
+            $this->equalTo('default/' . \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
+            $this->equalTo(self::THEME_ID)
+        )->will(
+            $this->returnSelf()
+        );
 
         $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('getId', '__wakeup'), array(), '', false);
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::THEME_ID));
@@ -212,7 +214,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             $this->_objectManager,
             $this->_configMock,
             $this->_themeContext,
-            $storeManager
+            $mutableConfig
         );
     }
 
@@ -297,7 +299,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testUpdateNavigationMode()
     {
         $this->_setAdditionalExpectations();
-        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
 
         $request->expects($this->once())->method('getPathInfo')->will($this->returnValue('/'));
 
@@ -323,6 +325,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->_areaEmulator->expects($this->once())->method('emulateLayoutArea')->with(self::AREA_CODE);
         $controller = $this->getMock('Magento\Backend\Controller\Adminhtml\Action', array(), array(), '', false);
 
-        $this->assertNull($this->_model->update(self::AREA_CODE, $request, $controller));
+        $this->_model->update(self::AREA_CODE, $request, $controller);
     }
 }

@@ -26,36 +26,36 @@ namespace Magento\AdminNotification\Model\System\Message;
 class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      */
     public function __construct(
-        \Magento\App\ConfigInterface $config,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Model\Config\ValueFactory $configValueFactory
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory
     ) {
         $this->_urlBuilder = $urlBuilder;
         $this->_config = $config;
@@ -71,20 +71,20 @@ class Baseurl implements \Magento\AdminNotification\Model\System\MessageInterfac
     protected function _getConfigUrl()
     {
         $output = '';
-        $defaultUnsecure = $this->_config->getValue(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
+        $defaultUnsecure = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        $defaultSecure = $this->_config->getValue(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL, 'default');
+        $defaultSecure = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, 'default');
 
-        if ($defaultSecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER ||
-            $defaultUnsecure == \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER
+        if ($defaultSecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER ||
+            $defaultUnsecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', array('section' => 'web'));
         } else {
             /** @var $dataCollection \Magento\Core\Model\Resource\Config\Data\Collection */
             $dataCollection = $this->_configValueFactory->create()->getCollection();
-            $dataCollection->addValueFilter(\Magento\Core\Model\Store::BASE_URL_PLACEHOLDER);
+            $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
 
-            /** @var $data \Magento\App\Config\ValueInterface */
+            /** @var $data \Magento\Framework\App\Config\ValueInterface */
             foreach ($dataCollection as $data) {
                 if ($data->getScope() == 'stores') {
                     $code = $this->_storeManager->getStore($data->getScopeId())->getCode();

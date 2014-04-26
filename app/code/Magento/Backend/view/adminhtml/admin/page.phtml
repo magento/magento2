@@ -33,10 +33,12 @@
 </head>
 
 <body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
-    <div class="wrapper">
+    <div class="page-wrapper">
         <?php echo $this->getChildHtml('notification_window'); ?>
         <?php echo $this->getChildHtml('global_notices') ?>
-        <?php echo $this->getChildHtml('header') ?>
+        <div class="page-header-wrapper">
+            <?php echo $this->getChildHtml('header') ?>
+        </div>
         <?php echo $this->getChildHtml('menu') ?>
         <?php echo $this->getChildHtml('notifications'); ?>
 
@@ -45,7 +47,7 @@
             <div id="messages" data-container-for="messages" class="messages">
                 <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
             </div>
-
+            <?php echo $this->getChildHtml('page_main_actions'); ?>
             <?php if($this->getChildHtml('left')): ?>
                 <div id="page:main-container" class="<?php echo $this->getContainerCssClass() ?> col-2-left-layout">
                     <div class="main-col" id="content">
@@ -64,11 +66,10 @@
         </section>
 
         <?php echo $this->getChildHtml('js') ?>
+        <div class="page-footer-wrapper">
+            <?php echo $this->getChildHtml('footer') ?>
+        </div>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content"><?php echo $this->getChildHtml('footer') ?></div>
-    </footer>
     <?php echo $this->getChildHtml('before_body_end') ?>
     <!-- TODO: remove this popup after refactoring of "varienLoader.js" file -->
     <div class="loading-old" id="loading-mask" style="display:none;">

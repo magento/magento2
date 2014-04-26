@@ -41,7 +41,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         }
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\App\Filesystem::LIB_DIR) . '/Magento/Config/etc/view.xsd'
+            $this->getPath(\Magento\Framework\App\Filesystem::LIB_DIR) . '/Magento/Framework/Config/etc/view.xsd'
         );
     }
 
@@ -51,7 +51,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function viewConfigFileDataProvider()
     {
         $result = array();
-        $files = glob($this->getPath(\Magento\App\Filesystem::THEMES_DIR) . '/*/*/view.xml');
+        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/view.xml');
         foreach ($files as $file) {
             $result[$file] = array($file);
         }
@@ -73,7 +73,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileExistsDataProvider()
     {
         $result = array();
-        $files = glob($this->getPath(\Magento\App\Filesystem::THEMES_DIR) . '/*/*', GLOB_ONLYDIR);
+        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*', GLOB_ONLYDIR);
         foreach ($files as $themeDir) {
             $result[$themeDir] = array($themeDir);
         }
@@ -88,7 +88,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\App\Filesystem::LIB_DIR) . '/Magento/Config/etc/theme.xsd'
+            $this->getPath(\Magento\Framework\App\Filesystem::LIB_DIR) . '/Magento/Framework/Config/etc/theme.xsd'
         );
     }
 
@@ -112,7 +112,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileDataProvider()
     {
         $result = array();
-        $files = glob($this->getPath(\Magento\App\Filesystem::THEMES_DIR) . '/*/*/theme.xml');
+        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*/theme.xml');
         foreach ($files as $file) {
             $result[$file] = array($file);
         }
@@ -128,7 +128,8 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function _validateConfigFile($file, $schemaFile)
     {
-        $domConfig = new \Magento\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $errors = array();
         $result = $domConfig->validate($schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -146,7 +147,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     protected function getPath($code)
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getPath(
             $code
         );

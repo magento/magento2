@@ -79,47 +79,47 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     protected $_cacheMock;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
-    protected $_storeConfigMock;
+    protected $_scopeConfigMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\StoreManager */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
     protected $_storeManagerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Math\Random */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random */
     protected $_mathMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Data\Form\FormKey */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Form\FormKey */
     protected $_formKey;
 
     protected function setUp()
     {
         // These mocks are accessed via context
-        $this->_designMock          = $this->_makeMock('Magento\View\DesignInterface');
-        $this->_sessionMock         = $this->_makeMock('Magento\Core\Model\Session');
-        $this->_sidResolver         = $this->_makeMock('Magento\Core\Model\Session\SidResolver');
-        $this->_translatorMock      = $this->_makeMock('Magento\TranslateInterface');
-        $this->_layoutMock          = $this->_makeMock('Magento\Core\Model\Layout');
-        $this->_requestMock         = $this->_makeMock('Magento\App\RequestInterface');
-        $this->_messagesMock        = $this->_makeMock('Magento\View\Element\Messages');
-        $this->_urlMock             = $this->_makeMock('Magento\UrlInterface');
-        $this->_eventManagerMock    = $this->_makeMock('Magento\Event\ManagerInterface');
-        $this->_controllerMock      = $this->_makeMock('Magento\App\FrontController');
-        $this->_loggerMock          = $this->_makeMock('Magento\Logger');
-        $this->_filesystemMock      = $this->_makeMock('Magento\App\Filesystem');
-        $this->_cacheMock           = $this->_makeMock('Magento\App\CacheInterface');
-        $this->_storeConfigMock     = $this->_makeMock('Magento\Core\Model\Store\Config');
-        $this->_storeManagerMock    = $this->_makeMock('Magento\Core\Model\StoreManager');
-        $viewUrlMock                = $this->_makeMock('Magento\View\Url');
-        $viewConfigMock             = $this->_makeMock('Magento\View\ConfigInterface');
-        $viewFileSystemMock         = $this->_makeMock('Magento\View\FileSystem');
-        $templatePoolMock           = $this->_makeMock('Magento\View\TemplateEnginePool');
-        $authorizationMock          = $this->_makeMock('Magento\AuthorizationInterface');
-        $cacheStateMock             = $this->_makeMock('Magento\App\Cache\StateInterface');
-        $escaperMock                = $this->_makeMock('Magento\Escaper');
-        $filterManagerMock          = $this->_makeMock('Magento\Filter\FilterManager');
+        $this->_designMock          = $this->_makeMock('Magento\Framework\View\DesignInterface');
+        $this->_sessionMock         = $this->_makeMock('Magento\Framework\Session\Generic');
+        $this->_sidResolver         = $this->_makeMock('Magento\Framework\Session\SidResolver');
+        $this->_translatorMock      = $this->_makeMock('Magento\Framework\TranslateInterface');
+        $this->_layoutMock          = $this->_makeMock('Magento\Framework\View\Layout');
+        $this->_requestMock         = $this->_makeMock('Magento\Framework\App\RequestInterface');
+        $this->_messagesMock        = $this->_makeMock('Magento\Framework\View\Element\Messages');
+        $this->_urlMock             = $this->_makeMock('Magento\Framework\UrlInterface');
+        $this->_eventManagerMock    = $this->_makeMock('Magento\Framework\Event\ManagerInterface');
+        $this->_controllerMock      = $this->_makeMock('Magento\Framework\App\FrontController');
+        $this->_loggerMock          = $this->_makeMock('Magento\Framework\Logger');
+        $this->_filesystemMock      = $this->_makeMock('Magento\Framework\App\Filesystem');
+        $this->_cacheMock           = $this->_makeMock('Magento\Framework\App\CacheInterface');
+        $this->_scopeConfigMock     = $this->_makeMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_storeManagerMock    = $this->_makeMock('Magento\Store\Model\StoreManager');
+        $viewUrlMock                = $this->_makeMock('Magento\Framework\View\Url');
+        $viewConfigMock             = $this->_makeMock('Magento\Framework\View\ConfigInterface');
+        $viewFileSystemMock         = $this->_makeMock('Magento\Framework\View\FileSystem');
+        $templatePoolMock           = $this->_makeMock('Magento\Framework\View\TemplateEnginePool');
+        $authorizationMock          = $this->_makeMock('Magento\Framework\AuthorizationInterface');
+        $cacheStateMock             = $this->_makeMock('Magento\Framework\App\Cache\StateInterface');
+        $escaperMock                = $this->_makeMock('Magento\Framework\Escaper');
+        $filterManagerMock          = $this->_makeMock('Magento\Framework\Filter\FilterManager');
         $backendSessionMock         = $this->_makeMock('Magento\Backend\Model\Session');
-        $appState                   = $this->_makeMock('Magento\App\State');
-        $this->_mathMock            = $this->_makeMock('Magento\Math\Random');
-        $this->_formKey             = $this->_makeMock('Magento\Data\Form\FormKey');
+        $appState                   = $this->_makeMock('Magento\Framework\App\State');
+        $this->_mathMock            = $this->_makeMock('Magento\Framework\Math\Random');
+        $this->_formKey             = $this->_makeMock('Magento\Framework\Data\Form\FormKey');
 
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
@@ -141,7 +141,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
             $this->_designMock,
             $this->_sessionMock,
             $this->_sidResolver,
-            $this->_storeConfigMock,
+            $this->_scopeConfigMock,
             $this->_controllerMock,
             $viewUrlMock,
             $viewConfigMock,

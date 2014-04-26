@@ -30,7 +30,7 @@ namespace Magento\Backup\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Db implements \Magento\Backup\Db\BackupDbInterface
+class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {
     /**
      * Buffer length for multi rows
@@ -48,16 +48,18 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
     /**
      * Core resource model
      *
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource = null;
 
     /**
      * @param \Magento\Backup\Model\Resource\Db $resourceDb
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(\Magento\Backup\Model\Resource\Db $resourceDb, \Magento\App\Resource $resource)
-    {
+    public function __construct(
+        \Magento\Backup\Model\Resource\Db $resourceDb,
+        \Magento\Framework\App\Resource $resource
+    ) {
         $this->_resourceDb = $resourceDb;
         $this->_resource = $resource;
     }
@@ -143,10 +145,10 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
     /**
      * Create backup and stream write to adapter
      *
-     * @param \Magento\Backup\Db\BackupInterface $backup
+     * @param \Magento\Framework\Backup\Db\BackupInterface $backup
      * @return $this
      */
-    public function createBackup(\Magento\Backup\Db\BackupInterface $backup)
+    public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup)
     {
         $backup->open(true);
 

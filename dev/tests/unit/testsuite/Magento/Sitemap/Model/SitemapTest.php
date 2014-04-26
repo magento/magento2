@@ -62,17 +62,17 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected $_sitemapCmsPageMock;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystemMock;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $_directoryMock;
 
     /**
-     * @var \Magento\Filesystem\File\Write
+     * @var \Magento\Framework\Filesystem\File\Write
      */
     protected $_fileMock;
 
@@ -148,16 +148,16 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
 
         $this->_fileMock = $this->getMockBuilder(
-            'Magento\Filesystem\File\Write'
+            'Magento\Framework\Filesystem\File\Write'
         )->disableOriginalConstructor()->getMock();
 
         $this->_directoryMock = $this->getMockBuilder(
-            'Magento\Filesystem\Directory\Write'
+            'Magento\Framework\Filesystem\Directory\Write'
         )->disableOriginalConstructor()->getMock();
         $this->_directoryMock->expects($this->any())->method('openFile')->will($this->returnValue($this->_fileMock));
 
         $this->_filesystemMock = $this->getMockBuilder(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->setMethods(
             array('getDirectoryWrite')
         )->disableOriginalConstructor()->getMock();
@@ -173,7 +173,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not allowed sitemap path validation
      *
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Please define a correct path.
      */
     public function testNotAllowedPath()
@@ -186,7 +186,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not exists sitemap path validation
      *
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
      */
     public function testPathNotExists()
@@ -200,7 +200,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not writable sitemap path validation
      *
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Please make sure that "/" is writable by the web-server.
      */
     public function testPathNotWritable()
@@ -216,8 +216,9 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check invalid chars in sitemap filename validation
      *
-     * @expectedException \Magento\Model\Exception
-     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.
+     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.
+     * No spaces or other characters are allowed.
      */
     //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
@@ -535,8 +536,10 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 array(
-                    new \Magento\Object(array('url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00')),
-                    new \Magento\Object(
+                    new \Magento\Framework\Object(
+                        array('url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00')
+                    ),
+                    new \Magento\Framework\Object(
                         array('url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00')
                     )
                 )
@@ -549,18 +552,22 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 array(
-                    new \Magento\Object(array('url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00')),
-                    new \Magento\Object(
+                    new \Magento\Framework\Object(
+                        array('url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00')
+                    ),
+                    new \Magento\Framework\Object(
                         array(
                             'url' => 'product2.html',
                             'updated_at' => '2012-12-21 00:00:00',
-                            'images' => new \Magento\Object(
+                            'images' => new \Magento\Framework\Object(
                                 array(
                                     'collection' => array(
-                                        new \Magento\Object(
+                                        new \Magento\Framework\Object(
                                             array('url' => 'image1.png', 'caption' => 'caption & > title < "')
                                         ),
-                                        new \Magento\Object(array('url' => 'image_no_caption.png', 'caption' => null))
+                                        new \Magento\Framework\Object(
+                                            array('url' => 'image_no_caption.png', 'caption' => null)
+                                        )
                                     ),
                                     'thumbnail' => 'thumbnail.jpg',
                                     'title' => 'Product & > title < "'

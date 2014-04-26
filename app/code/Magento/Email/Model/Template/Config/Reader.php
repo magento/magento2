@@ -25,12 +25,10 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-use Magento\Config\FileResolverInterface;
-use Magento\Email\Model\Template\Config\Converter;
-use Magento\Email\Model\Template\Config\SchemaLocator;
-use Magento\Config\ValidationStateInterface;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\ValidationStateInterface;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
@@ -56,7 +54,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
         ValidationStateInterface $validationState,
         $fileName = 'email_templates.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(

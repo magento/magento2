@@ -32,7 +32,7 @@ namespace Magento\ImportExport\Model\Resource\Import;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAggregate
+class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \IteratorAggregate
 {
     /**
      * @var \Iterator
@@ -49,12 +49,12 @@ class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAgg
     /**
      * Class constructor
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $arguments
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Core\Helper\Data $coreHelper,
         array $arguments = array()
     ) {
@@ -98,7 +98,7 @@ class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAgg
     /**
      * Clean all bunches from table.
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function cleanBunches()
     {
@@ -130,7 +130,7 @@ class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAgg
      *
      * @param string $code parameter name
      * @return string
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getUniqueColumnData($code)
     {
@@ -138,7 +138,7 @@ class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAgg
         $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), array($code))));
 
         if (count($values) != 1) {
-            throw new \Magento\Model\Exception(__('Error in data structure: %1 values are mixed', $code));
+            throw new \Magento\Framework\Model\Exception(__('Error in data structure: %1 values are mixed', $code));
         }
         return $values[0];
     }

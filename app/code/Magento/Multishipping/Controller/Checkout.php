@@ -23,7 +23,7 @@
  */
 namespace Magento\Multishipping\Controller;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
@@ -35,13 +35,13 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
 {
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService
@@ -93,7 +93,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -280,7 +280,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
             if ($shipToInfo = $this->getRequest()->getPost('ship')) {
                 $this->_getCheckout()->setShippingItemsInformation($shipToInfo);
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/addresses');
         } catch (\Exception $e) {
@@ -462,11 +462,11 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
             $this->_view->loadLayout();
             $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->messageManager->addException($e, __('We cannot open the overview page.'));
             $this->_redirect('*/*/billing');
         }
@@ -484,19 +484,13 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
         }
 
         try {
-            $requiredAgreements = $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->getRequiredAgreementIds();
-            if ($requiredAgreements) {
-                $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
-                $diff = array_diff($requiredAgreements, $postedAgreements);
-                if ($diff) {
-                    $this->messageManager->addError(
-                        __('Please agree to all Terms and Conditions before placing the order.')
-                    );
-                    $this->_redirect('*/*/billing');
-                    return;
-                }
+            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
+            if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', array())))) {
+                $this->messageManager->addError(
+                    __('Please agree to all Terms and Conditions before placing the order.')
+                );
+                $this->_redirect('*/*/billing');
+                return;
             }
 
             $payment = $this->getRequest()->getPost('payment');
@@ -530,7 +524,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
             $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/cart');
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(
@@ -541,7 +535,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(
@@ -580,7 +574,7 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      */
     public function getCustomerBeforeAuthUrl()
     {
-        return $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*', array('_secure' => true));
+        return $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*', array('_secure' => true));
     }
 
     /**

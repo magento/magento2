@@ -51,7 +51,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -71,7 +71,7 @@ class Main extends \Magento\Backend\Block\Template
     protected $_groupFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
@@ -82,21 +82,21 @@ class Main extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param AttributeMapperInterface $attributeMapper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         AttributeMapperInterface $attributeMapper,
         array $data = array()
     ) {
@@ -134,7 +134,7 @@ class Main extends \Magento\Backend\Block\Template
             array('label' => __('Add New'), 'onclick' => 'editSet.addGroup();', 'class' => 'add')
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -144,32 +144,39 @@ class Main extends \Magento\Backend\Block\Template
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Reset'), 'onclick' => 'window.location.reload()')
+            array('label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset')
         );
 
-        $this->addChild(
+        if (!$this->getIsCurrentSetDefault()) {
+            $this->getToolbar()->addChild(
+                'delete_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Delete Attribute Set'),
+                    'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
+                        __(
+                            'You are about to delete all products in this set. ' .
+                            'Are you sure you want to delete this attribute set?'
+                        )
+                    ) . '\', \'' . $this->getUrl(
+                        'catalog/*/delete',
+                        array('id' => $setId)
+                    ) . '\')',
+                    'class' => 'delete'
+                )
+            );
+        }
+
+        $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Save Attribute Set'), 'onclick' => 'editSet.save();', 'class' => 'save')
-        );
-
-        $this->addChild(
-            'delete_button',
-            'Magento\Backend\Block\Widget\Button',
             array(
-                'label' => __('Delete Attribute Set'),
-                'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
-                    __(
-                        'You are about to delete all products in this set. Are you sure you want to delete this attribute set?'
-                    )
-                ) . '\', \'' . $this->getUrl(
-                    'catalog/*/delete',
-                    array('id' => $setId)
-                ) . '\')',
-                'class' => 'delete'
+                'label' => __('Save Attribute Set'),
+                'onclick' => 'editSet.save();',
+                'class' => 'save primary save-attribute-set'
             )
         );
 
@@ -324,49 +331,6 @@ class Main extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve Back Button HTML
-     *
-     * @return string
-     */
-    public function getBackButtonHtml()
-    {
-        return $this->getChildHtml('back_button');
-    }
-
-    /**
-     * Retrieve Reset Button HTML
-     *
-     * @return string
-     */
-    public function getResetButtonHtml()
-    {
-        return $this->getChildHtml('reset_button');
-    }
-
-    /**
-     * Retrieve Save Button HTML
-     *
-     * @return string
-     */
-    public function getSaveButtonHtml()
-    {
-        return $this->getChildHtml('save_button');
-    }
-
-    /**
-     * Retrieve Delete Button HTML
-     *
-     * @return string
-     */
-    public function getDeleteButtonHtml()
-    {
-        if ($this->getIsCurrentSetDefault()) {
-            return '';
-        }
-        return $this->getChildHtml('delete_button');
-    }
-
-    /**
      * Retrieve Delete Group Button HTML
      *
      * @return string
@@ -384,16 +348,6 @@ class Main extends \Magento\Backend\Block\Template
     public function getAddGroupButton()
     {
         return $this->getChildHtml('add_group_button');
-    }
-
-    /**
-     * Retrieve Rename Button HTML
-     *
-     * @return string
-     */
-    public function getRenameButton()
-    {
-        return $this->getChildHtml('rename_button');
     }
 
     /**

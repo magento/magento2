@@ -34,8 +34,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
-            'context' => $this->getMock('Magento\App\Helper\Context', array(), array(), '', false),
-            'locale' => $this->getMock('Magento\Locale', array(), array(), '', false)
+            'context' => $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
+            'locale' => $this->getMock('Magento\Framework\Locale', array(), array(), '', false)
         );
 
         $this->_helperData = $helper->getObject('Magento\Usps\Helper\Data', $arguments);

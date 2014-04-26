@@ -45,7 +45,7 @@ class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testFileFormat($file)
     {
-        $dom = new \Magento\Config\Dom(file_get_contents($file));
+        $dom = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $dom->validate($this->_schemaFile, $errors);
         $this->assertTrue($result, print_r($errors, true));
     }

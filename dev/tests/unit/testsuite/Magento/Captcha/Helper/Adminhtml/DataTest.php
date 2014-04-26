@@ -41,7 +41,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $backendConfig = $this->getMockBuilder(
             'Magento\Backend\App\ConfigInterface'
         )->disableOriginalConstructor()->setMethods(
-            array('getValue', 'setValue', 'reinit', 'isSetFlag')
+            array('getValue', 'setValue', 'isSetFlag')
         )->getMock();
         $backendConfig->expects(
             $this->any()
@@ -53,16 +53,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('1')
         );
 
-        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
 
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
 
         $this->_model = new \Magento\Captcha\Helper\Adminhtml\Data(
-            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
-            $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
+            $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $filesystemMock,
             $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false),
             $backendConfig

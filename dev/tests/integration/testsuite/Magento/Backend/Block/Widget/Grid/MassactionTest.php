@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Block\Widget\Grid;
-use Magento\Core\Model\StoreManager;
+use Magento\Store\Model\StoreManager;
 /**
  * @magentoDataFixture Magento/Backend/Block/_files/backend_theme.php
  *
@@ -39,7 +39,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
@@ -52,7 +52,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->_setFixtureTheme();
 
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\View\LayoutInterface',
+            'Magento\Framework\View\LayoutInterface',
             array('area' => 'adminhtml')
         );
         $this->_layout->getUpdate()->load('layout_test_grid_handle');
@@ -70,8 +70,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             StoreManager::PARAM_RUN_CODE => 'admin',
             StoreManager::PARAM_RUN_TYPE => 'store',
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/../../_files/design')
+            \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\Framework\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/../../_files/design')
             ),
         ));
     }
@@ -86,7 +86,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $blockEmpty \Magento\Backend\Block\Widget\Grid\Massaction */
         $blockEmpty = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Backend\Block\Widget\Grid\Massaction'
         );

@@ -32,15 +32,15 @@ namespace Magento\ProductAlert\Model\Resource;
  * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractResource extends \Magento\Model\Resource\Db\AbstractDb
+abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Retrieve alert row by object parameters
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return array|false
      */
-    protected function _getAlertRow(\Magento\Model\AbstractModel $object)
+    protected function _getAlertRow(\Magento\Framework\Model\AbstractModel $object)
     {
         $adapter = $this->_getReadAdapter();
         if ($object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()) {
@@ -66,10 +66,10 @@ abstract class AbstractResource extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load object data by parameters
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    public function loadByParam(\Magento\Model\AbstractModel $object)
+    public function loadByParam(\Magento\Framework\Model\AbstractModel $object)
     {
         $row = $this->_getAlertRow($object);
         if ($row) {
@@ -81,12 +81,12 @@ abstract class AbstractResource extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Delete all customer alerts on website
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param int $customerId
      * @param int $websiteId
      * @return $this
      */
-    public function deleteCustomer(\Magento\Model\AbstractModel $object, $customerId, $websiteId = null)
+    public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
     {
         $adapter = $this->_getWriteAdapter();
         $where = array();

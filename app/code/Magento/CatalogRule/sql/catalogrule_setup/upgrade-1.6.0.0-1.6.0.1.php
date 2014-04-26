@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $tableName = $installer->getTable('catalogrule');
 $columnOptions = array(
-    'TYPE' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     'UNSIGNED' => true,
     'NULLABLE' => false,
     'DEFAULT' => 0,
@@ -38,14 +38,14 @@ $columnOptions = array(
 $installer->getConnection()->addColumn($tableName, 'sub_is_enable', $columnOptions);
 
 $columnOptions = array(
-    'TYPE' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+    'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     'LENGTH' => 32,
     'COMMENT' => 'Simple Action For Subitems'
 );
 $installer->getConnection()->addColumn($tableName, 'sub_simple_action', $columnOptions);
 
 $columnOptions = array(
-    'TYPE' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+    'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
     'SCALE' => 4,
     'PRECISION' => 12,
     'NULLABLE' => false,

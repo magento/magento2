@@ -60,8 +60,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         }
         $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
-        $this->_varDir = $filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/references/';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Filesystem');
+        $this->_varDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::VAR_DIR) . '/references/';
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();
@@ -72,7 +73,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        \Magento\System\Dirs::rm($this->_varDir);
+        \Magento\Framework\System\Dirs::rm($this->_varDir);
     }
 
     public function testGetReferences()

@@ -23,13 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Core\Model\Theme" type="Magento\Core\Model\Theme\Data" />
-    <type name="Magento\App\RouterList" shared="true">
+    <type name="Magento\Framework\App\RouterList" shared="true">
         <arguments>
             <argument name="routerList" xsi:type="array">
                 <item name="install" xsi:type="array">
-                    <item name="instance" xsi:type="string">Magento\Core\App\Router\Base</item>
+                    <item name="class" xsi:type="string">Magento\Core\App\Router\Base</item>
                     <item name="disable" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>

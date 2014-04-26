@@ -28,12 +28,8 @@ use Magento\Customer\Service\V1\Data\Customer;
 
 /**
  * Collection of tax module calls
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Price extends \Magento\App\Helper\AbstractHelper
+class Price extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -101,7 +97,7 @@ class Price extends \Magento\App\Helper\AbstractHelper
     /**
      * Get customer data object
      *
-     * @return Customer CustomerDataObject
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -123,11 +119,11 @@ class Price extends \Magento\App\Helper\AbstractHelper
     /**
      * Get request object with information necessary for getting tax rate
      *
-     * @param null|bool|\Magento\Object $shippingAddress
-     * @param null|bool||\Magento\Object $billingAddress
+     * @param null|bool|\Magento\Framework\Object $shippingAddress
+     * @param null|bool||\Magento\Framework\Object $billingAddress
      * @param null|int $customerTaxClass
      * @param null|int $store
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getRateRequest(
         $shippingAddress = null,
@@ -141,7 +137,7 @@ class Price extends \Magento\App\Helper\AbstractHelper
     /**
      * Get calculation tax rate by specific request
      *
-     * @param \Magento\Object $request
+     * @param \Magento\Framework\Object $request
      * @return float
      */
     public function getRate($request)

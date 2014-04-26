@@ -32,20 +32,20 @@ namespace Magento\Newsletter\Model\Resource;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Model\Resource\Db\AbstractDb
+class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Date
      *
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime\DateTime $date)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime\DateTime $date)
     {
         parent::__construct($resource);
         $this->_date = $date;
@@ -153,14 +153,14 @@ class Template extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($this->checkCodeUsage($object)) {
-            throw new \Magento\Model\Exception(__('Duplicate template code'));
+            throw new \Magento\Framework\Model\Exception(__('Duplicate template code'));
         }
 
         if (!$object->hasTemplateActual()) {

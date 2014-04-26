@@ -39,7 +39,7 @@ class Image extends AbstractBackend
     /**
      * Filesystem facade
      *
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -51,13 +51,13 @@ class Image extends AbstractBackend
     protected $_fileUploaderFactory;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
@@ -68,7 +68,7 @@ class Image extends AbstractBackend
     /**
      * After save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this|void
      */
     public function afterSave($object)
@@ -91,7 +91,7 @@ class Image extends AbstractBackend
             return $this;
         }
         $path = $this->_filesystem->getDirectoryRead(
-            \Magento\App\Filesystem::MEDIA_DIR
+            \Magento\Framework\App\Filesystem::MEDIA_DIR
         )->getAbsolutePath(
             'catalog/product/'
         );

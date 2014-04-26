@@ -29,7 +29,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_connectionMock;
 
@@ -39,15 +39,15 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_connectionMock = $this->getMock('Magento\DB\Adapter\AdapterInterface');
-        $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+        $this->_connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
     }
 
     /**

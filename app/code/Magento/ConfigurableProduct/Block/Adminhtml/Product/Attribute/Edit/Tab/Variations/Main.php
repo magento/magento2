@@ -43,14 +43,14 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        /* @var $form \Magento\Data\Form */
+        /* @var $form \Magento\Framework\Data\Form */
         $form = $this->getForm();
-        /* @var $fieldset \Magento\Data\Form\Element\Fieldset */
+        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
         $fieldset = $form->getElement('base_fieldset');
         $fieldsToRemove = array('attribute_code', 'is_unique', 'frontend_class');
 
         foreach ($fieldset->getElements() as $element) {
-            /** @var \Magento\Data\Form\AbstractForm $element  */
+            /** @var \Magento\Framework\Data\Form\AbstractForm $element  */
             if (substr($element->getId(), 0, strlen('default_value')) == 'default_value') {
                 $fieldsToRemove[] = $element->getId();
             }

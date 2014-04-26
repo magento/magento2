@@ -38,7 +38,7 @@ abstract class AbstractDb
     /**
      * Resource connection adapter factory
      *
-     * @var \Magento\Model\Resource\Type\Db\Pdo\MysqlFactory
+     * @var \Magento\Framework\Model\Resource\Type\Db\Pdo\MysqlFactory
      */
     protected $_adapterFactory;
 
@@ -52,7 +52,7 @@ abstract class AbstractDb
     /**
      *  Adapter instance
      *
-     * @var \Magento\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -73,18 +73,18 @@ abstract class AbstractDb
     /**
      * Configuration arguments
      *
-     * @var \Magento\App\Arguments
+     * @var \Magento\Framework\App\Arguments
      */
     protected $_arguments;
 
     /**
-     * @param \Magento\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory
-     * @param \Magento\App\Arguments $arguments
+     * @param \Magento\Framework\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory
+     * @param \Magento\Framework\App\Arguments $arguments
      * @param array $dbExtensions
      */
     public function __construct(
-        \Magento\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory,
-        \Magento\App\Arguments $arguments,
+        \Magento\Framework\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory,
+        \Magento\Framework\App\Arguments $arguments,
         array $dbExtensions = array()
     ) {
         $this->_adapterFactory = $adapterFactory;
@@ -167,7 +167,7 @@ abstract class AbstractDb
     /**
      * Create new connection with custom config
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getConnection()
     {

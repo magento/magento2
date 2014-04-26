@@ -23,8 +23,6 @@
  */
 namespace Magento\CatalogRule\Model\Resource\Grid;
 
-use Magento\Model\Resource\Db\Collection\AbstractCollection;
-
 class Collection extends \Magento\CatalogRule\Model\Resource\Rule\Collection
 {
     /**

@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Model\Resource\Wishlist;
 
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize resource
@@ -44,17 +44,6 @@ class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollectio
     protected function _construct()
     {
         $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\Resource\Wishlist');
-    }
-
-    /**
-     * Filter collection by customer
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return $this
-     */
-    public function filterByCustomer(\Magento\Customer\Model\Customer $customer)
-    {
-        return $this->filterByCustomerId($customer->getId());
     }
 
     /**

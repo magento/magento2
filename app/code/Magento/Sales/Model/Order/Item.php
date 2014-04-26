@@ -188,7 +188,7 @@ namespace Magento\Sales\Model\Order;
  * @method float getBaseDiscountRefunded()
  * @method \Magento\Sales\Model\Order\Item setBaseDiscountRefunded(float $value)
  */
-class Item extends \Magento\Model\AbstractModel
+class Item extends \Magento\Framework\Model\AbstractModel
 {
     const STATUS_PENDING = 1;
 
@@ -262,21 +262,21 @@ class Item extends \Magento\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_orderFactory = $orderFactory;
@@ -807,7 +807,7 @@ class Item extends \Magento\Model\AbstractModel
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getBuyRequest()
     {
@@ -815,7 +815,7 @@ class Item extends \Magento\Model\AbstractModel
         if (!$option) {
             $option = array();
         }
-        $buyRequest = new \Magento\Object($option);
+        $buyRequest = new \Magento\Framework\Object($option);
         $buyRequest->setQty($this->getQtyOrdered() * 1);
         return $buyRequest;
     }

@@ -30,11 +30,11 @@ $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     'Magento\Catalog\Model\Product\Media\Config'
 );
 
-/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+/** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
 $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\App\Filesystem'
+    'Magento\Framework\App\Filesystem'
 )->getDirectoryWrite(
-    \Magento\App\Filesystem::MEDIA_DIR
+    \Magento\Framework\App\Filesystem::MEDIA_DIR
 );
 
 $mediaDirectory->delete($config->getBaseMediaPath());

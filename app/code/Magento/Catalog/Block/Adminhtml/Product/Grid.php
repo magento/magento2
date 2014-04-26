@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
-use Magento\Core\Model\Store;
+use Magento\Store\Model\Store;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -70,14 +70,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_visibility;
 
     /**
-     * @var \Magento\Core\Model\WebsiteFactory
+     * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
@@ -91,7 +91,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
@@ -240,7 +240,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'entity_id',
             array(
                 'header' => __('ID'),
-                'width' => '50px',
                 'type' => 'number',
                 'index' => 'entity_id',
                 'header_css_class' => 'col-id',
@@ -252,9 +251,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             array(
                 'header' => __('Name'),
                 'index' => 'name',
-                'class' => 'xxx',
-                'header_css_class' => 'col-name',
-                'column_css_class' => 'col-name'
+                'class' => 'xxx'
             )
         );
 
@@ -275,12 +272,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'type',
             array(
                 'header' => __('Type'),
-                'width' => '60px',
                 'index' => 'type_id',
                 'type' => 'options',
-                'options' => $this->_type->getOptionArray(),
-                'header_css_class' => 'col-type',
-                'column_css_class' => 'col-type'
+                'options' => $this->_type->getOptionArray()
             )
         );
 
@@ -292,7 +286,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'set_name',
             array(
                 'header' => __('Attribute Set'),
-                'width' => '100px',
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,
@@ -305,10 +298,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'sku',
             array(
                 'header' => __('SKU'),
-                'width' => '80px',
-                'index' => 'sku',
-                'header_css_class' => 'col-sku',
-                'column_css_class' => 'col-sku'
+                'index' => 'sku'
             )
         );
 
@@ -330,11 +320,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'qty',
                 array(
                     'header' => __('Quantity'),
-                    'width' => '100px',
                     'type' => 'number',
-                    'index' => 'qty',
-                    'header_css_class' => 'col-qty',
-                    'column_css_class' => 'col-qty'
+                    'index' => 'qty'
                 )
             );
         }
@@ -343,7 +330,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'visibility',
             array(
                 'header' => __('Visibility'),
-                'width' => '70px',
                 'index' => 'visibility',
                 'type' => 'options',
                 'options' => $this->_visibility->getOptionArray(),
@@ -356,12 +342,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'status',
             array(
                 'header' => __('Status'),
-                'width' => '70px',
                 'index' => 'status',
                 'type' => 'options',
-                'options' => $this->_status->getOptionArray(),
-                'header_css_class' => 'col-status',
-                'column_css_class' => 'col-status'
+                'options' => $this->_status->getOptionArray()
             )
         );
 
@@ -370,7 +353,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'websites',
                 array(
                     'header' => __('Websites'),
-                    'width' => '100px',
                     'sortable' => false,
                     'index' => 'websites',
                     'type' => 'options',
@@ -385,7 +367,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'edit',
             array(
                 'header' => __('Edit'),
-                'width' => '50px',
                 'type' => 'action',
                 'getter' => 'getId',
                 'actions' => array(
@@ -474,7 +455,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\Magento\Object $row
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

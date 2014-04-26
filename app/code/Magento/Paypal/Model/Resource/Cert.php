@@ -28,27 +28,27 @@ namespace Magento\Paypal\Model\Resource;
 /**
  * PayPal resource model for certificate based authentication
  */
-class Cert extends \Magento\Model\Resource\Db\AbstractDb
+class Cert extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime\DateTime $coreDate,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         $this->_coreDate = $coreDate;
         $this->dateTime = $dateTime;
@@ -68,10 +68,10 @@ class Cert extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Set date of last update
      *
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $object->setUpdatedAt($this->dateTime->formatDate($this->_coreDate->gmtDate()));
         return parent::_beforeSave($object);

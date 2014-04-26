@@ -46,10 +46,10 @@ class PaymentAvailabilityObserver
     }
 
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function observe(\Magento\Event\Observer $observer)
+    public function observe(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();

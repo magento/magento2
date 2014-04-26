@@ -25,6 +25,9 @@
  */
 namespace Magento\Webapi;
 
+use Magento\Framework\Exception\ErrorMessage;
+use Magento\Webapi\Model\Soap\Fault;
+
 class Exception extends \RuntimeException
 {
     /**#@+
@@ -68,6 +71,20 @@ class Exception extends \RuntimeException
     protected $_name;
 
     /**
+     * Stacktrace
+     *
+     * @var string
+     */
+    protected $_stackTrace;
+
+    /**
+     * List of errors
+     *
+     * @var null|ErrorMessage[]
+     */
+    protected $_errors;
+
+    /**
      * Initialize exception with HTTP code.
      *
      * @param string $message
@@ -75,6 +92,9 @@ class Exception extends \RuntimeException
      * @param int $httpCode
      * @param array $details Additional exception details
      * @param string $name Exception name
+     * @param ErrorMessage[]|null $errors Array of errors messages
+     * @param string $stackTrace
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -82,7 +102,9 @@ class Exception extends \RuntimeException
         $code = 0,
         $httpCode = self::HTTP_BAD_REQUEST,
         array $details = array(),
-        $name = ''
+        $name = '',
+        $errors = null,
+        $stackTrace = null
     ) {
         /** Only HTTP error codes are allowed. No success or redirect codes must be used. */
         if ($httpCode < 400 || $httpCode > 599) {
@@ -92,6 +114,8 @@ class Exception extends \RuntimeException
         $this->_httpCode = $httpCode;
         $this->_details = $details;
         $this->_name = $name;
+        $this->_errors = $errors;
+        $this->_stackTrace = $stackTrace;
     }
 
     /**
@@ -111,10 +135,7 @@ class Exception extends \RuntimeException
      */
     public function getOriginator()
     {
-        return $this->getHttpCode() <
-            500 ?
-            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_SENDER :
-            \Magento\Webapi\Model\Soap\Fault::FAULT_CODE_RECEIVER;
+        return $this->getHttpCode() < 500 ? Fault::FAULT_CODE_SENDER : Fault::FAULT_CODE_RECEIVER;
     }
 
     /**
@@ -135,5 +156,15 @@ class Exception extends \RuntimeException
     public function getName()
     {
         return $this->_name;
+    }
+
+    /**
+     * Retrieve list of errors.
+     *
+     * @return null|ErrorMessage[]
+     */
+    public function getErrors()
+    {
+        return $this->_errors;
     }
 }

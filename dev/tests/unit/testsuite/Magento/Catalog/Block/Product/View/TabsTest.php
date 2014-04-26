@@ -27,10 +27,10 @@ class TabsTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddTab()
     {
-        $tabBlock = $this->getMock('Magento\View\Element\Template', array(), array(), '', false);
+        $tabBlock = $this->getMock('Magento\Framework\View\Element\Template', array(), array(), '', false);
         $tabBlock->expects($this->once())->method('setTemplate')->with('template')->will($this->returnSelf());
 
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $layout = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
         $layout->expects($this->once())->method('createBlock')->with('block')->will($this->returnValue($tabBlock));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

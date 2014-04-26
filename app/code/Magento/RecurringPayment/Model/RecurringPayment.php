@@ -23,6 +23,8 @@
  */
 namespace Magento\RecurringPayment\Model;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
 /**
  * Recurring payment
  * Extends from \Magento\Core\Abstract for a reason: to make descendants have its own resource
@@ -38,7 +40,7 @@ namespace Magento\RecurringPayment\Model;
  * @method RecurringPayment setToken()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RecurringPayment extends \Magento\Model\AbstractModel
+class RecurringPayment extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Constants for passing data through catalog
@@ -65,7 +67,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     /**
      * Store instance used by locale or method instance
      *
-     * @var \Magento\Core\Model\Store|null
+     * @var \Magento\Store\Model\Store|null
      */
     protected $_store = null;
 
@@ -94,12 +96,12 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     protected $_fields;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
@@ -109,31 +111,31 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     protected $_managerFactory;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param PeriodUnits $periodUnits
      * @param \Magento\RecurringPayment\Block\Fields $fields
      * @param ManagerInterfaceFactory $managerFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param TimezoneInterface $localeDate
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\RecurringPayment\Model\PeriodUnits $periodUnits,
         \Magento\RecurringPayment\Block\Fields $fields,
         ManagerInterfaceFactory $managerFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Locale\ResolverInterface $localeResolver,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        TimezoneInterface $localeDate,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
@@ -161,7 +163,10 @@ class RecurringPayment extends \Magento\Model\AbstractModel
         // start date, order ref ID, schedule description
         if (!$this->getStartDatetime()) {
             $this->_errors['start_datetime'][] = __('The start date is undefined.');
-        } elseif (!\Zend_Date::isDate($this->getStartDatetime(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)) {
+        } elseif (!\Zend_Date::isDate(
+            $this->getStartDatetime(),
+            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        )) {
             $this->_errors['start_datetime'][] = __('The start date has an invalid format.');
         }
         if (!$this->getScheduleDescription()) {
@@ -223,7 +228,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
         if ($this->_manager) {
             try {
                 $this->_manager->validate($this);
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->_errors['payment_method'][] = $e->getMessage();
             }
         }
@@ -235,7 +240,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
      * Getter for errors that may appear after validation
      *
      * @return array
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getValidationErrors()
     {
@@ -244,7 +249,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
             foreach ($this->_errors as $row) {
                 $result[] = implode(' ', $row);
             }
-            throw new \Magento\Model\Exception(__("The payment is invalid:\n%1.", implode("\n", $result)));
+            throw new \Magento\Framework\Model\Exception(__("The payment is invalid:\n%1.", implode("\n", $result)));
         }
         return $this->_errors;
     }
@@ -266,12 +271,12 @@ class RecurringPayment extends \Magento\Model\AbstractModel
      * Collect needed information from buy request
      * Then filter data
      *
-     * @param \Magento\Object $buyRequest
+     * @param \Magento\Framework\Object $buyRequest
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @throws \Exception
      */
-    public function importBuyRequest(\Magento\Object $buyRequest)
+    public function importBuyRequest(\Magento\Framework\Object $buyRequest)
     {
         $startDate = $buyRequest->getData(self::BUY_REQUEST_START_DATETIME);
         if ($startDate) {
@@ -279,11 +284,13 @@ class RecurringPayment extends \Magento\Model\AbstractModel
                 throw new \Exception('Locale and store instances must be set for this operation.');
             }
             $dateFormat = $this->_localeDate->getDateTimeFormat(
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                TimezoneInterface::FORMAT_TYPE_SHORT
             );
             $localeCode = $this->_localeResolver->getLocaleCode();
             if (!\Zend_Date::isDate($startDate, $dateFormat, $localeCode)) {
-                throw new \Magento\Model\Exception(__('The recurring payment start date has invalid format.'));
+                throw new \Magento\Framework\Model\Exception(
+                    __('The recurring payment start date has invalid format.')
+                );
             }
             $utcTime = $this->_localeDate->utcDate(
                 $this->_store,
@@ -291,7 +298,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
                 true,
                 $dateFormat
             )->toString(
-                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
             );
             $this->setStartDatetime($utcTime)->setImportedStartDatetime($startDate);
         }
@@ -322,9 +329,9 @@ class RecurringPayment extends \Magento\Model\AbstractModel
                 $options = unserialize($options->getValue());
                 if (is_array($options)) {
                     if (isset($options['start_datetime'])) {
-                        $startDatetime = new \Magento\Stdlib\DateTime\Date(
+                        $startDatetime = new \Magento\Framework\Stdlib\DateTime\Date(
                             $options['start_datetime'],
-                            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                         );
                         $this->setNearestStartDatetime($startDatetime);
                     }
@@ -344,7 +351,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     public function exportScheduleInfo()
     {
         $result = array(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'title' => __('Billing Period'),
                     'schedule' => $this->_renderSchedule('period_unit', 'period_frequency', 'period_max_cycles')
@@ -353,7 +360,7 @@ class RecurringPayment extends \Magento\Model\AbstractModel
         );
         $trial = $this->_renderSchedule('trial_period_unit', 'trial_period_frequency', 'trial_period_max_cycles');
         if ($trial) {
-            $result[] = new \Magento\Object(array('title' => __('Trial Period'), 'schedule' => $trial));
+            $result[] = new \Magento\Framework\Object(array('title' => __('Trial Period'), 'schedule' => $trial));
         }
         return $result;
     }
@@ -361,17 +368,17 @@ class RecurringPayment extends \Magento\Model\AbstractModel
     /**
      * Determine nearest possible payment start date
      *
-     * @param \Magento\Stdlib\DateTime\DateInterface $minAllowed
+     * @param \Magento\Framework\Stdlib\DateTime\DateInterface $minAllowed
      * @return $this
      */
-    protected function setNearestStartDatetime(\Magento\Stdlib\DateTime\DateInterface $minAllowed = null)
+    protected function setNearestStartDatetime(\Magento\Framework\Stdlib\DateTime\DateInterface $minAllowed = null)
     {
         // TODO: implement proper logic with invoking payment method instance
         $date = $minAllowed;
         if (!$date || $date->getTimestamp() < time()) {
-            $date = new \Magento\Stdlib\DateTime\Date(time());
+            $date = new \Magento\Framework\Stdlib\DateTime\Date(time());
         }
-        $this->setStartDatetime($date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+        $this->setStartDatetime($date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
         return $this;
     }
 
@@ -388,17 +395,17 @@ class RecurringPayment extends \Magento\Model\AbstractModel
         }
         $date = $this->_localeDate->scopeDate($this->_store, strtotime($datetime), true);
         return $date->toString(
-            $this->_localeDate->getDateTimeFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            $this->_localeDate->getDateTimeFormat(TimezoneInterface::FORMAT_TYPE_SHORT)
         );
     }
 
     /**
      * Store instance setter
      *
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Store\Model\Store $store
      * @return $this
      */
-    public function setStore(\Magento\Core\Model\Store $store)
+    public function setStore(\Magento\Store\Model\Store $store)
     {
         $this->_store = $store;
         return $this;
@@ -482,9 +489,9 @@ class RecurringPayment extends \Magento\Model\AbstractModel
 
         // automatically determine start date, if not set
         if ($this->getStartDatetime()) {
-            $date = new \Magento\Stdlib\DateTime\Date(
+            $date = new \Magento\Framework\Stdlib\DateTime\Date(
                 $this->getStartDatetime(),
-                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
             );
             $this->setNearestStartDatetime($date);
         } else {
@@ -525,15 +532,17 @@ class RecurringPayment extends \Magento\Model\AbstractModel
      * Perform full validation before saving
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _validateBeforeSave()
     {
         if (!$this->isValid()) {
-            throw new \Magento\Model\Exception($this->getValidationErrors());
+            throw new \Magento\Framework\Model\Exception($this->getValidationErrors());
         }
         if (!$this->getInternalReferenceId()) {
-            throw new \Magento\Model\Exception(__('An internal reference ID is required to save the payment.'));
+            throw new \Magento\Framework\Model\Exception(
+                __('An internal reference ID is required to save the payment.')
+            );
         }
     }
 

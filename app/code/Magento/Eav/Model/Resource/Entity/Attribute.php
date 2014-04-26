@@ -25,10 +25,10 @@
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
-use Magento\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\DB\Select;
+use Magento\Framework\DB\Select;
 
 /**
  * EAV attribute resource model
@@ -37,7 +37,7 @@ use Magento\DB\Select;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Model\Resource\Db\AbstractDb
+class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Eav Entity attributes cache
@@ -47,7 +47,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     protected static $_entityAttributes = array();
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,13 +59,13 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Type $eavEntityType
     ) {
         $this->_storeManager = $storeManager;
@@ -121,7 +121,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load attribute data by attribute code
      *
-     * @param EntityAttribute|AbstractModel $object
+     * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object
      * @param int $entityTypeId
      * @param string $code
      * @return bool
@@ -194,14 +194,14 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param EntityAttribute|AbstractModel $object
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave(AbstractModel $object)
     {
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
             if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
-                throw new \Magento\Model\Exception(__('Frontend label is not defined'));
+                throw new \Magento\Framework\Model\Exception(__('Frontend label is not defined'));
             }
             $object->setFrontendLabel($frontendLabel[0])->setStoreLabels($frontendLabel);
         }
@@ -242,7 +242,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save store labels
      *
-     * @param EntityAttribute|AbstractModel $object
+     * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _saveStoreLabels(AbstractModel $object)
@@ -269,7 +269,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Save additional data of attribute
      *
-     * @param EntityAttribute|AbstractModel $object
+     * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _saveAdditionalAttributeData(AbstractModel $object)
@@ -382,12 +382,12 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param array $values
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _checkDefaultOptionValue($values)
     {
         if (!isset($values[0])) {
-            throw new \Magento\Model\Exception(__('Default option value is not defined'));
+            throw new \Magento\Framework\Model\Exception(__('Default option value is not defined'));
         }
     }
 
@@ -557,7 +557,7 @@ class Attribute extends \Magento\Model\Resource\Db\AbstractDb
             't1',
             't1',
             't1',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         if ($attribute->getFlatAddChildData()) {
             $joinCondition .= ' AND e.child_id = t1.entity_id';

@@ -48,14 +48,14 @@ class TypeFactory
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -65,13 +65,13 @@ class TypeFactory
      *
      * @param string $eavType
      * @return mixed
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function createType($eavType)
     {
         $types = $this->_allowedEntityTypes;
         if (!isset($types[$eavType])) {
-            throw new \Magento\Model\Exception(__('Unknown entity type'));
+            throw new \Magento\Framework\Model\Exception(__('Unknown entity type'));
         }
         return $this->_objectManager->create($types[$eavType]);
     }

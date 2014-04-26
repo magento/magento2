@@ -33,8 +33,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
-use Magento\Core\Model\Store\Group;
-use Magento\Core\Model\Website;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Website;
 
 class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

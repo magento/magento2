@@ -24,7 +24,7 @@
 namespace Magento\Customer\Service\V1;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * EAV attribute metadata service
@@ -44,7 +44,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     private $_attrFormCollectionFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManager
+     * @var \Magento\Store\Model\StoreManager
      */
     private $_storeManager;
 
@@ -64,9 +64,19 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     private $_attributeMetadataBuilder;
 
     /**
+     * @var array
+     */
+    private $customerDataObjectMethods;
+
+    /**
+     * @var array
+     */
+    private $addressDataObjectMethods;
+
+    /**
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory
-     * @param \Magento\Core\Model\StoreManager $storeManager
+     * @param \Magento\Store\Model\StoreManager $storeManager
      * @param Data\Eav\OptionBuilder $optionBuilder
      * @param Data\Eav\ValidationRuleBuilder $validationRuleBuilder
      * @param Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
@@ -74,7 +84,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory,
-        \Magento\Core\Model\StoreManager $storeManager,
+        \Magento\Store\Model\StoreManager $storeManager,
         Data\Eav\OptionBuilder $optionBuilder,
         Data\Eav\ValidationRuleBuilder $validationRuleBuilder,
         Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
@@ -98,7 +108,15 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
             $attributeMetadata = $this->_createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {
-            throw (new NoSuchEntityException('entityType', $entityType))->addField('attributeCode', $attributeCode);
+            throw new NoSuchEntityException(
+                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                [
+                    'fieldName' => 'entityType',
+                    'fieldValue' => $entityType,
+                    'field2Name' => 'attributeCode',
+                    'field2Value' => $attributeCode,
+                ]
+            );
         }
     }
 
@@ -110,10 +128,15 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
         if (null === $storeId) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
-        $object = new \Magento\Object(array('store_id' => $storeId, 'attribute_set_id' => $attributeSetId));
+        $object = new \Magento\Framework\Object(
+            [
+                'store_id' => $storeId,
+                'attribute_set_id' => $attributeSetId,
+            ]
+        );
         $attributeCodes = $this->_eavConfig->getEntityAttributeCodes($entityType, $object);
 
-        $attributesMetadata = array();
+        $attributesMetadata = [];
         foreach ($attributeCodes as $attributeCode) {
             try {
                 $attributesMetadata[] = $this->getAttributeMetadata($entityType, $attributeCode);
@@ -129,7 +152,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     public function getAttributes($entityType, $formCode)
     {
-        $attributes = array();
+        $attributes = [];
         $attributesFormCollection = $this->_loadAttributesCollection($entityType, $formCode);
         foreach ($attributesFormCollection as $attribute) {
             $attributes[$attribute->getAttributeCode()] = $this->_createMetadataAttribute($attribute);
@@ -179,13 +202,10 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     private function _loadAttributesCollection($entityType, $formCode)
     {
         $attributesFormCollection = $this->_attrFormCollectionFactory->create();
-        $attributesFormCollection->setStore(
-            $this->_storeManager->getStore()
-        )->setEntityType(
-            $entityType
-        )->addFormCodeFilter(
-            $formCode
-        )->setSortOrder();
+        $attributesFormCollection->setStore($this->_storeManager->getStore())
+            ->setEntityType($entityType)
+            ->addFormCodeFilter($formCode)
+            ->setSortOrder();
 
         return $attributesFormCollection;
     }
@@ -196,54 +216,37 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     private function _createMetadataAttribute($attribute)
     {
-        $options = array();
+        $options = [];
         if ($attribute->usesSource()) {
             foreach ($attribute->getSource()->getAllOptions() as $option) {
-                $options[$option['label']] = $this->_optionBuilder->setLabel(
-                    $option['label']
-                )->setValue(
-                    $option['value']
-                )->create();
+                $options[] = $this->_optionBuilder->setLabel($option['label'])
+                    ->setValue($option['value'])
+                    ->create();
             }
         }
-        $validationRules = array();
+        $validationRules = [];
         foreach ($attribute->getValidateRules() as $name => $value) {
-            $validationRules[$name] = $this->_validationRuleBuilder->setName($name)->setValue($value)->create();
+            $validationRules[$name] = $this->_validationRuleBuilder->setName($name)
+                ->setValue($value)
+                ->create();
         }
 
-        $this->_attributeMetadataBuilder->setAttributeCode(
-            $attribute->getAttributeCode()
-        )->setFrontendInput(
-            $attribute->getFrontendInput()
-        )->setInputFilter(
-            $attribute->getInputFilter()
-        )->setStoreLabel(
-            $attribute->getStoreLabel()
-        )->setValidationRules(
-            $validationRules
-        )->setVisible(
-            $attribute->getIsVisible()
-        )->setRequired(
-            $attribute->getIsRequired()
-        )->setMultilineCount(
-            $attribute->getMultilineCount()
-        )->setDataModel(
-            $attribute->getDataModel()
-        )->setOptions(
-            $options
-        )->setFrontendClass(
-            $attribute->getFrontend()->getClass()
-        )->setFrontendLabel(
-            $attribute->getFrontendLabel()
-        )->setNote(
-            $attribute->getNote()
-        )->setIsSystem(
-            $attribute->getIsSystem()
-        )->setIsUserDefined(
-            $attribute->getIsUserDefined()
-        )->setSortOrder(
-            $attribute->getSortOrder()
-        );
+        $this->_attributeMetadataBuilder->setAttributeCode($attribute->getAttributeCode())
+            ->setFrontendInput($attribute->getFrontendInput())
+            ->setInputFilter($attribute->getInputFilter())
+            ->setStoreLabel($attribute->getStoreLabel())
+            ->setValidationRules($validationRules)
+            ->setVisible($attribute->getIsVisible())
+            ->setRequired($attribute->getIsRequired())
+            ->setMultilineCount($attribute->getMultilineCount())
+            ->setDataModel($attribute->getDataModel())
+            ->setOptions($options)
+            ->setFrontendClass($attribute->getFrontend()->getClass())
+            ->setFrontendLabel($attribute->getFrontendLabel())
+            ->setNote($attribute->getNote())
+            ->setIsSystem($attribute->getIsSystem())
+            ->setIsUserDefined($attribute->getIsUserDefined())
+            ->setSortOrder($attribute->getSortOrder());
 
         return $this->_attributeMetadataBuilder->create();
     }
@@ -253,10 +256,21 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     public function getCustomCustomerAttributeMetadata()
     {
-        $customAttributes = array();
+        $customAttributes = [];
+        if (!$this->customerDataObjectMethods) {
+            $this->customerDataObjectMethods = array_flip(
+                get_class_methods('Magento\Customer\Service\V1\Data\Customer')
+            );
+        }
         foreach ($this->getAllCustomerAttributeMetadata() as $attributeMetadata) {
-            if (!$attributeMetadata->isSystem() ||
-                $attributeMetadata->getAttributeCode() == 'disable_auto_group_change'
+            $attributeCode = $attributeMetadata->getAttributeCode();
+            $camelCaseKey = \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
+            $isDataObjectMethod = isset($this->customerDataObjectMethods['get' . $camelCaseKey])
+                || isset($this->customerDataObjectMethods['is' . $camelCaseKey]);
+
+            /** Even though disable_auto_group_change is system attribute, it should be available to the clients */
+            if (!$isDataObjectMethod
+                && (!$attributeMetadata->isSystem() || $attributeCode == 'disable_auto_group_change')
             ) {
                 $customAttributes[] = $attributeMetadata;
             }
@@ -269,9 +283,19 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     public function getCustomAddressAttributeMetadata()
     {
-        $customAttributes = array();
+        $customAttributes = [];
+        if (!$this->addressDataObjectMethods) {
+            $this->addressDataObjectMethods = array_flip(
+                get_class_methods('Magento\Customer\Service\V1\Data\Address')
+            );
+        }
         foreach ($this->getAllAddressAttributeMetadata() as $attributeMetadata) {
-            if (!$attributeMetadata->isSystem()) {
+            $attributeCode = $attributeMetadata->getAttributeCode();
+            $camelCaseKey = \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
+            $isDataObjectMethod = isset($this->addressDataObjectMethods['get' . $camelCaseKey])
+                || isset($this->addressDataObjectMethods['is' . $camelCaseKey]);
+
+            if (!$isDataObjectMethod && !$attributeMetadata->isSystem()) {
                 $customAttributes[] = $attributeMetadata;
             }
         }

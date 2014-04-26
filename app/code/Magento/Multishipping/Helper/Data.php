@@ -26,7 +26,7 @@ namespace Magento\Multishipping\Helper;
 /**
  * Data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**#@+
      * Xml paths for multishipping checkout
@@ -40,9 +40,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $coreStoreConfig;
+    protected $scopeConfig;
 
     /**
      * Checkout session
@@ -54,16 +54,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Construct
      *
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
-        $this->coreStoreConfig = $coreStoreConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->checkoutSession = $checkoutSession;
         parent::__construct($context);
     }
@@ -85,7 +85,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMaximumQty()
     {
-        return (int)$this->coreStoreConfig->getConfig(self::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -97,7 +97,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function isMultishippingCheckoutAvailable()
     {
         $quote = $this->getQuote();
-        $isMultiShipping = $this->coreStoreConfig->getConfigFlag(self::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE);
+        $isMultiShipping = $this->scopeConfig->isSetFlag(self::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         if (!$quote || !$quote->hasItems()) {
             return $isMultiShipping;
         }

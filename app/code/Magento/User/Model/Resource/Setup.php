@@ -29,7 +29,7 @@ namespace Magento\User\Model\Resource;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Setup extends \Magento\Core\Model\Resource\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * Role model factory
@@ -60,7 +60,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     protected $_rulesFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
      * @param \Magento\User\Model\Resource\Role\CollectionFactory $roleCollectionFactory
      * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
@@ -70,14 +70,14 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         \Magento\User\Model\Resource\Role\CollectionFactory $roleCollectionFactory,
         \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\User\Model\RulesFactory $rulesFactory,
         $moduleName = 'Magento_User',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_roleCollectionFactory = $roleCollectionFactory;
         $this->_rulesCollectionFactory = $rulesCollectionFactory;

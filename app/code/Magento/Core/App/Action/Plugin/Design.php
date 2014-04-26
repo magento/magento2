@@ -26,14 +26,14 @@ namespace Magento\Core\App\Action\Plugin;
 class Design
 {
     /**
-     * @var \Magento\View\DesignLoader
+     * @var \Magento\Framework\View\DesignLoader
      */
     protected $_designLoader;
 
     /**
-     * @param \Magento\View\DesignLoader $designLoader
+     * @param \Magento\Framework\View\DesignLoader $designLoader
      */
-    public function __construct(\Magento\View\DesignLoader $designLoader)
+    public function __construct(\Magento\Framework\View\DesignLoader $designLoader)
     {
         $this->_designLoader = $designLoader;
     }
@@ -41,17 +41,17 @@ class Design
     /**
      * Initialize design
      *
-     * @param \Magento\App\Action\Action $subject
+     * @param \Magento\Framework\App\Action\Action $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\App\Action\Action $subject,
+        \Magento\Framework\App\Action\Action $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->_designLoader->load();
         return $proceed($request);

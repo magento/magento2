@@ -23,28 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\User\Model\Role" shared="false" />
-    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <type name="Magento\User\Model\Resource\Rules">
         <arguments>
-            <argument name="rootResource" xsi:type="object">Magento\Acl\RootResource\Proxy</argument>
-            <argument name="aclCache" xsi:type="object">Magento\Acl\Cache\Proxy</argument>
+            <argument name="rootResource" xsi:type="object">Magento\Framework\Acl\RootResource\Proxy</argument>
+            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\User\Model\Resource\User">
         <arguments>
-            <argument name="aclCache" xsi:type="object">Magento\Acl\Cache\Proxy</argument>
+            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
                 <item name="user_setup" xsi:type="string">Magento\User\Model\Resource\Setup</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Acl\Builder">
+    <type name="Magento\Framework\Acl\Builder">
         <arguments>
             <argument name="ruleLoader" xsi:type="object">Magento\User\Model\Acl\Loader\Rule</argument>
             <argument name="roleLoader" xsi:type="object">Magento\User\Model\Acl\Loader\Role</argument>

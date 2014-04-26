@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Theme;
 /**
  * Button widget
  */
-class Button extends \Magento\View\Element\Template
+class Button extends \Magento\Framework\View\Element\Template
 {
     /**
      * Define block template

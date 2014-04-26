@@ -39,7 +39,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $fileResolver = $this->getMockBuilder(
-            'Magento\Core\Model\Config\FileResolver'
+            'Magento\Framework\App\Config\FileResolver'
         )->disableOriginalConstructor()->getMock();
         $converter = $this->getMockBuilder(
             'Magento\Sales\Model\Config\Converter'
@@ -48,7 +48,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Config\SchemaLocator'
         )->disableOriginalConstructor()->getMock();
         $validator = $this->getMockBuilder(
-            '\Magento\Config\ValidationStateInterface'
+            '\Magento\Framework\Config\ValidationStateInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_reader = new \Magento\Sales\Model\Config\Reader($fileResolver, $converter, $schema, $validator);
     }

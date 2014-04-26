@@ -34,6 +34,6 @@ namespace Magento\Payment\Model\Info;
  * @package    Magento_Payment
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Exception extends \Magento\Model\Exception
+class Exception extends \Magento\Framework\Model\Exception
 {
 }

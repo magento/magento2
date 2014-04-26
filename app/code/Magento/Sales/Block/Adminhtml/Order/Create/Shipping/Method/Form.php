@@ -108,7 +108,11 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getCarrierName($carrierCode)
     {
-        if ($name = $this->_storeConfig->getConfig('carriers/' . $carrierCode . '/title', $this->getStore()->getId())
+        if ($name = $this->_scopeConfig->getValue(
+            'carriers/' . $carrierCode . '/title',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStore()->getId()
+        )
         ) {
             return $name;
         }
@@ -181,7 +185,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $flag,
                 $this->getAddress(),
                 null,
-                //We should send exact quote store to prevent fetching default config for admin store.
                 $this->getAddress()->getQuote()->getStore()
             ),
             true

@@ -25,7 +25,7 @@
  */
 namespace Magento\Tax\Model\Config\Source\TaxClass;
 
-class Product implements \Magento\Option\ArrayInterface
+class Product implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Tax\Model\TaxClass\Source\ProductFactory

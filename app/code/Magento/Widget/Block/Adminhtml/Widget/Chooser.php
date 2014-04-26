@@ -36,25 +36,25 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
 class Chooser extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Data\Form\Element\Factory
+     * @var \Magento\Framework\Data\Form\Element\Factory
      */
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Data\Form\Element\Factory $elementFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Data\Form\Element\Factory $elementFactory,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Data\Form\Element\Factory $elementFactory,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -75,7 +75,7 @@ class Chooser extends \Magento\Backend\Block\Template
     /**
      * Chooser form element getter
      *
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getElement()
     {
@@ -85,16 +85,16 @@ class Chooser extends \Magento\Backend\Block\Template
     /**
      * Convert Array config to Object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getConfig()
     {
-        if ($this->_getData('config') instanceof \Magento\Object) {
+        if ($this->_getData('config') instanceof \Magento\Framework\Object) {
             return $this->_getData('config');
         }
 
         $configArray = $this->_getData('config');
-        $config = new \Magento\Object();
+        $config = new \Magento\Framework\Object();
         $this->setConfig($config);
         if (!is_array($configArray)) {
             return $this->_getData('config');
@@ -155,7 +155,7 @@ class Chooser extends \Magento\Backend\Block\Template
     protected function _toHtml()
     {
         $element = $this->getElement();
-        /* @var $fieldset \Magento\Data\Form\Element\Fieldset */
+        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
         $fieldset = $element->getForm()->getElement($this->getFieldsetId());
         $chooserId = $this->getUniqId();
         $config = $this->getConfig();

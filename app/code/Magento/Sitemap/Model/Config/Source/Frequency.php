@@ -25,7 +25,7 @@
  */
 namespace Magento\Sitemap\Model\Config\Source;
 
-class Frequency implements \Magento\Option\ArrayInterface
+class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

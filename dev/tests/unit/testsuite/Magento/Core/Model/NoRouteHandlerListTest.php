@@ -26,24 +26,24 @@ namespace Magento\Core\Model;
 class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\App\Router\NoRouteHandlerList
+     * @var \Magento\Framework\App\Router\NoRouteHandlerList
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
         $handlersList = array(
-            'default_handler' => array('instance' => 'Magento\Core\App\Router\NoRouteHandler', 'sortOrder' => 100),
-            'backend_handler' => array('instance' => 'Magento\Backend\App\Router\NoRouteHandler', 'sortOrder' => 10)
+            'default_handler' => array('class' => 'Magento\Core\App\Router\NoRouteHandler', 'sortOrder' => 100),
+            'backend_handler' => array('class' => 'Magento\Backend\App\Router\NoRouteHandler', 'sortOrder' => 10)
         );
 
-        $this->_model = new \Magento\App\Router\NoRouteHandlerList($this->_objectManagerMock, $handlersList);
+        $this->_model = new \Magento\Framework\App\Router\NoRouteHandlerList($this->_objectManagerMock, $handlersList);
     }
 
     public function testGetHandlers()

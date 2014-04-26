@@ -41,7 +41,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $quote->load('test01', 'reserved_order_id');
 
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Paypal\Block\Express\Review'
         );

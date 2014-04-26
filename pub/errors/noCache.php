@@ -27,9 +27,9 @@
 require_once 'processor.php';
 
 $processor = new Error_Processor(
-    new \Magento\App\Response\Http(
-        new \Magento\Stdlib\Cookie(),
-        new \Magento\App\Http\Context()
+    new \Magento\Framework\App\Response\Http(
+        new \Magento\Framework\Stdlib\Cookie(),
+        new \Magento\Framework\App\Http\Context()
     )
 );
 $response = $processor->processNoCache();

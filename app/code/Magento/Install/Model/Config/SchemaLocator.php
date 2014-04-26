@@ -25,7 +25,7 @@
  */
 namespace Magento\Install\Model\Config;
 
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
@@ -42,9 +42,9 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader)
+    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
         $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Install') . '/install_wizard.xsd';
         $this->_perFileSchema = $moduleReader->getModuleDir('etc', 'Magento_Install') . '/install_wizard_file.xsd';

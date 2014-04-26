@@ -61,8 +61,10 @@
                     <input class="input-text validate-postcode<?php if ($this->isZipCodeRequired()):?> required-entry<?php endif;?>" type="text" id="postcode" name="estimate_postcode" value="<?php echo $this->escapeHtml($this->getEstimatePostcode()) ?>" />
                 </div>
             </div>
-            <div class="actions">
-                <button type="submit" class="action quote"><span><?php echo __('Get a Quote') ?></span></button>
+            <div class="actions toolbar">
+                <div class="primary">
+                    <button type="submit" class="action quote"><span><?php echo __('Get a Quote') ?></span></button>
+                </div>
             </div>
         </fieldset>
     </form>

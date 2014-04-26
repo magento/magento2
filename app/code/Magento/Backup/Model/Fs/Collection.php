@@ -26,10 +26,10 @@ namespace Magento\Backup\Model\Fs;
 /**
  * Backup data collection
  */
-class Collection extends \Magento\Data\Collection\Filesystem
+class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_varDirectory;
 
@@ -57,13 +57,13 @@ class Collection extends \Magento\Data\Collection\Filesystem
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Backup\Model\Backup $backup
     ) {
         $this->_backupData = $backupData;
@@ -71,7 +71,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
 
         $this->_filesystem = $filesystem;
         $this->_backup = $backup;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
 
         $this->_hideBackupsForApache();
 

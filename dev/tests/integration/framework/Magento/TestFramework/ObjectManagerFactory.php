@@ -29,7 +29,7 @@ namespace Magento\TestFramework;
  * @package Magento\TestFramework
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
+class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
 {
     /**
      * Locator class name
@@ -61,16 +61,18 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
      * Override the parent method and return proxied instance instead, so that we can reset the actual app arguments
      * instance for all its clients at any time
      *
-     * @param \Magento\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param array $arguments
      * @return App\Arguments\Proxy
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
-    protected function createAppArguments(\Magento\App\Filesystem\DirectoryList $directoryList, array $arguments)
-    {
+    protected function createAppArguments(
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        array $arguments
+    ) {
         if ($this->appArgumentsProxy) {
             // Framework constraint: this is ambiguous situation, because it is not clear what to do with older instance
-            throw new \Magento\Exception('Only one creation of application arguments is supported');
+            throw new \Magento\Framework\Exception('Only one creation of application arguments is supported');
         }
         $appArguments = parent::createAppArguments($directoryList, $arguments);
         $this->appArgumentsProxy = new App\Arguments\Proxy($appArguments);
@@ -87,47 +89,50 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
      */
     public function restore(ObjectManager $objectManager, $rootDir, array $arguments)
     {
-        $directories = isset(
-            $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS]
-        ) ? $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS] : array();
+        $directories = isset($arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS])
+            ? $arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
+            : array();
         $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList($rootDir, $directories);
 
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
 
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($directoryList, 'Magento\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
 
         $appArguments = parent::createAppArguments($directoryList, $arguments);
         $this->appArgumentsProxy->setSubject($appArguments);
-        $objectManager->addSharedInstance($appArguments, 'Magento\App\Arguments');
+        $this->factory->setArguments($appArguments->get());
+        $objectManager->addSharedInstance($appArguments, 'Magento\Framework\App\Arguments');
 
-        $objectManager->get('Magento\Interception\PluginList')->reset();
-        $objectManager->configure($objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global'));
+        $objectManager->get('Magento\Framework\Interception\PluginList')->reset();
+        $objectManager->configure(
+            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load('global')
+        );
 
         return $objectManager;
     }
 
     /**
-     * Load primary config data
+     * Load primary config
      *
-     * @param string $configDirectoryPath
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param mixed $argumentMapper
      * @param string $appMode
      * @return array
-     * @throws \Magento\BootstrapException
      */
-    protected function _loadPrimaryConfig($configDirectoryPath, $appMode)
-    {
+    protected function _loadPrimaryConfig(
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        $argumentMapper,
+        $appMode
+    ) {
         if (null === $this->_primaryConfigData) {
             $this->_primaryConfigData = array_replace(
-                parent::_loadPrimaryConfig($configDirectoryPath, $appMode),
+                parent::_loadPrimaryConfig($directoryList, $argumentMapper, $appMode),
                 array(
-                    'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
+                    'Magento\Framework\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
                         'arguments' => array(
-                            'canSaveMap' => array(
-                                \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
-                                'value' => false
-                            )
+                            'canSaveMap' => false
                         )
                     ),
                     'default_setup' => array('type' => 'Magento\TestFramework\Db\ConnectionAdapter')
@@ -135,16 +140,17 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             );
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
-                array(
-                    'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
-                    'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
-                    'Magento\App\Request\Http' => 'Magento\TestFramework\Request',
-                    'Magento\App\ResponseInterface' => 'Magento\TestFramework\Response',
-                    'Magento\App\Response\Http' => 'Magento\TestFramework\Response',
-                    'Magento\Interception\PluginList' => 'Magento\TestFramework\Interception\PluginList',
-                    'Magento\Interception\ObjectManager\Config' => 'Magento\TestFramework\ObjectManager\Config',
-                    'Magento\View\LayoutInterface' => 'Magento\TestFramework\View\Layout'
-                )
+                [
+                    'Magento\Framework\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
+                    'Magento\Framework\App\RequestInterface' => 'Magento\TestFramework\Request',
+                    'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
+                    'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',
+                    'Magento\Framework\App\Response\Http' => 'Magento\TestFramework\Response',
+                    'Magento\Framework\Interception\PluginList' => 'Magento\TestFramework\Interception\PluginList',
+                    'Magento\Framework\Interception\ObjectManager\Config' =>
+                        'Magento\TestFramework\ObjectManager\Config',
+                    'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout'
+                ]
             );
         }
         return $this->_primaryConfigData;
@@ -153,9 +159,9 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
     /**
      * Override method in while running integration tests to prevent getting Exception
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    protected function configureDirectories(\Magento\ObjectManager $objectManager)
+    protected function configureDirectories(\Magento\Framework\ObjectManager $objectManager)
     {
     }
 }

@@ -51,7 +51,7 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      * Return recurring payment child Orders Ids
      *
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return array
      */
     public function getChildOrderIds($object)

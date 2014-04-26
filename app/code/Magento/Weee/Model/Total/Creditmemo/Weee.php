@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Weee\Model\Total\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;
@@ -66,7 +67,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             if ($item->getOrderItem()->isDummy()) {
                 continue;
             }
-            $orderItemQty = $item->getOrderItem()->getQtyOrdered();
 
             $totalTax += $item->getWeeeTaxAppliedAmount() * $item->getQty();
             $baseTotalTax += $item->getBaseWeeeTaxAppliedAmount() * $item->getQty();

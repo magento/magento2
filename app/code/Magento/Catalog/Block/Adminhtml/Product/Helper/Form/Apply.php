@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class Apply extends \Magento\Data\Form\Element\Multiselect
+class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * @return string
@@ -60,7 +60,7 @@ class Apply extends \Magento\Data\Form\Element\Multiselect
     }
 
     /**
-     * Dublicate interface of \Magento\Data\Form\Element\AbstractElement::setReadonly
+     * Dublicate interface of \Magento\Framework\Data\Form\Element\AbstractElement::setReadonly
      *
      * @param bool $readonly
      * @param bool $useDisabled

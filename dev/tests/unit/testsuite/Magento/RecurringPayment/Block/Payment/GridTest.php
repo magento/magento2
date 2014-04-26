@@ -44,14 +44,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareLayout()
     {
-        $customer = $this->getMockBuilder(
-            'Magento\Customer\Model\Customer'
-        )->disableOriginalConstructor()->setMethods(
-            array('getId', '__wakeup')
-        )->getMock();
-        $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $customerId = 1;
         $registry = $this->getMockBuilder(
-            'Magento\Registry'
+            'Magento\Framework\Registry'
         )->disableOriginalConstructor()->setMethods(
             array('registry')
         )->getMock();
@@ -60,11 +55,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registry'
         )->with(
-            'current_customer'
+            'current_customer_id'
         )->will(
-            $this->returnValue($customer)
+            $this->returnValue($customerId)
         );
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $collectionElement = $this->getMockBuilder(
             'Magento\RecurringPayment\Model\Payment'
         )->disableOriginalConstructor()->setMethods(
@@ -107,14 +102,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $payment->expects($this->once())->method('getCollection')->will($this->returnValue($collection));
 
         $storeManager = $this->getMockBuilder(
-            'Magento\Core\Model\StoreManager'
+            'Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->setMethods(
             array('getStore')
         )->getMock();
         $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
         $locale = $this->getMockBuilder(
-            '\Magento\Stdlib\DateTime\TimezoneInterface'
+            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface'
         )->disableOriginalConstructor()->setMethods(
             array('formatDate')
         )->getMockForAbstractClass();
@@ -150,7 +145,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($block->getGridColumns());
         $expectedResult = array(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'reference_id' => 1,
                     'reference_id_link_url' => null,
@@ -167,12 +162,12 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /**
      * Get layout mock
      *
-     * @return \Magento\View\LayoutInterface
+     * @return \Magento\Framework\View\LayoutInterface
      */
     protected function _getMockLayout()
     {
         $layout = $this->getMockBuilder(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->disableOriginalConstructor()->setMethods(
             array('createBlock', 'getChildName', 'setChild')
         )->getMockForAbstractClass();

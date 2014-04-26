@@ -55,7 +55,7 @@ $_showWebsite= $this->isMultiWebsites();
             <tbody id="<?php echo $_htmlId; ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite): ?>5<?php else: ?>4<?php endif; ?>"><?php echo $this->getAddButtonHtml(); ?></td>
+                    <td colspan="<?php if (!$_showWebsite): ?>5<?php else: ?>4<?php endif; ?>" class="col-actions-add"><?php echo $this->getAddButtonHtml(); ?></td>
                 </tr>
             </tfoot>
         </table>

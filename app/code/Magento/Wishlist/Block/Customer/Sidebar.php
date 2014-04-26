@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
-class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\View\Block\IdentityInterface
+class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Retrieve block title

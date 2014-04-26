@@ -25,17 +25,17 @@
  */
 namespace Magento\Backend\Model\Config\Source\Image;
 
-class Adapter implements \Magento\Option\ArrayInterface
+class Adapter implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Image\Adapter\ConfigInterface
+     * @var \Magento\Framework\Image\Adapter\ConfigInterface
      */
     protected $config;
 
     /**
-     * @param \Magento\Image\Adapter\ConfigInterface $config
+     * @param \Magento\Framework\Image\Adapter\ConfigInterface $config
      */
-    public function __construct(\Magento\Image\Adapter\ConfigInterface $config)
+    public function __construct(\Magento\Framework\Image\Adapter\ConfigInterface $config)
     {
         $this->config = $config;
     }

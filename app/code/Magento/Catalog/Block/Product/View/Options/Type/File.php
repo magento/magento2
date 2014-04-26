@@ -45,9 +45,9 @@ class File extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     {
         $info = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $this->getOption()->getId());
         if (empty($info)) {
-            $info = new \Magento\Object();
+            $info = new \Magento\Framework\Object();
         } else if (is_array($info)) {
-            $info = new \Magento\Object($info);
+            $info = new \Magento\Framework\Object($info);
         }
         return $info;
     }

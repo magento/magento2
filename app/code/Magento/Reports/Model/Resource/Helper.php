@@ -34,13 +34,13 @@
  */
 namespace Magento\Reports\Model\Resource;
 
-class Helper extends \Magento\DB\Helper implements \Magento\Reports\Model\Resource\HelperInterface
+class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Model\Resource\HelperInterface
 {
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'reports')
+    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'reports')
     {
         parent::__construct($resource, $modulePrefix);
     }

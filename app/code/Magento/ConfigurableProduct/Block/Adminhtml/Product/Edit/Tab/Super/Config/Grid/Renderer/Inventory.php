@@ -35,10 +35,10 @@ class Inventory extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
     /**
      * Renders grid column value
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $inStock = $this->_getValue($row);
         return $inStock ? __('In Stock') : __('Out of Stock');

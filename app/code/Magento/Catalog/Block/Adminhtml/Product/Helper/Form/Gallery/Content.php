@@ -32,12 +32,12 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  *
- * @method \Magento\Data\Form\Element\AbstractElement getElement()
+ * @method \Magento\Framework\Data\Form\Element\AbstractElement getElement()
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\Media\Uploader;
-use Magento\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\AbstractBlock;
 
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -52,19 +52,19 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_mediaConfig;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         array $data = array()
     ) {

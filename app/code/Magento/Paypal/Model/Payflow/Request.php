@@ -32,7 +32,7 @@ namespace Magento\Paypal\Model\Payflow;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Object
+class Request extends \Magento\Framework\Object
 {
     /**
      * Set/Get attribute wrapper
@@ -41,7 +41,7 @@ class Request extends \Magento\Object
      * @param string $method
      * @param array $args
      * @return mixed
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function __call($method, $args)
     {
@@ -51,29 +51,29 @@ class Request extends \Magento\Object
         }
         switch (substr($method, 0, 3)) {
             case 'get':
-                //\Magento\Profiler::start('GETTER: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::start('GETTER: '.get_class($this).'::'.$method);
                 $data = $this->getData($key, isset($args[0]) ? $args[0] : null);
-                //\Magento\Profiler::stop('GETTER: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::stop('GETTER: '.get_class($this).'::'.$method);
                 return $data;
 
             case 'set':
-                //\Magento\Profiler::start('SETTER: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::start('SETTER: '.get_class($this).'::'.$method);
                 $result = $this->setData($key, isset($args[0]) ? $args[0] : null);
-                //\Magento\Profiler::stop('SETTER: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::stop('SETTER: '.get_class($this).'::'.$method);
                 return $result;
 
             case 'uns':
-                //\Magento\Profiler::start('UNS: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::start('UNS: '.get_class($this).'::'.$method);
                 $result = $this->unsetData($key);
-                //\Magento\Profiler::stop('UNS: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::stop('UNS: '.get_class($this).'::'.$method);
                 return $result;
 
             case 'has':
-                //\Magento\Profiler::start('HAS: '.get_class($this).'::'.$method);
-                //\Magento\Profiler::stop('HAS: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::start('HAS: '.get_class($this).'::'.$method);
+                //\Magento\Framework\Profiler::stop('HAS: '.get_class($this).'::'.$method);
                 return isset($this->_data[$key]);
         }
-        throw new \Magento\Exception(
+        throw new \Magento\Framework\Exception(
             "Invalid method " . get_class($this) . "::" . $method . "(" . print_r($args, 1) . ")"
         );
     }

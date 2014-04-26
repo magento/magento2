@@ -60,9 +60,14 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo = $value['to'];
 
             //calculate end date considering timezone specification
-            $datetimeTo->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+            $datetimeTo->setTimezone(
+                $this->_scopeConfig->getValue(
+                    $this->_localeDate->getDefaultTimezonePath(),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
             $datetimeTo->addDay(1)->subSecond(1);
-            $datetimeTo->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $datetimeTo->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
         }
         return $value;
     }
@@ -72,7 +77,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      *
      * @param string $date
      * @param string $locale
-     * @return \Magento\Stdlib\DateTime\Date|null
+     * @return \Magento\Framework\Stdlib\DateTime\Date|null
      */
     protected function _convertDate($date, $locale)
     {
@@ -81,19 +86,24 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $dateObj = $this->getLocaleDate()->date(null, null, $locale, false);
 
                 //set default timezone for store (admin)
-                $dateObj->setTimezone($this->_storeConfig->getConfig($this->_localeDate->getDefaultTimezonePath()));
+                $dateObj->setTimezone(
+                    $this->_scopeConfig->getValue(
+                        $this->_localeDate->getDefaultTimezonePath(),
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                );
 
                 //set date with applying timezone of store
                 $dateObj->set(
                     $date,
                     $this->getLocaleDate()->getDateTimeFormat(
-                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     ),
                     $locale
                 );
 
                 //convert store date to default date in UTC timezone without DST
-                $dateObj->setTimezone(\Magento\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+                $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
 
                 return $dateObj;
             } catch (\Exception $e) {
@@ -111,41 +121,27 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $timeFormat = '';
 
         if ($this->getColumn()->getFilterTime()) {
             $timeFormat = $this->_localeDate->getTimeFormat(
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
             );
         }
 
-        $html = '<div class="range" id="' .
-            $htmlId .
-            '_range"><div class="range-line date">' .
-            '<input type="text" name="' .
-            $this->_getHtmlName() .
-            '[from]" id="' .
-            $htmlId .
-            '_from"' .
-            ' value="' .
-            $this->getEscapedValue(
-                'from'
-            ) . '" class="input-text no-changes" placeholder="' . __(
+        $html =
+            '<div class="range" id="' . $htmlId . '_range"><div class="range-line date">' . '<input type="text" name="'
+            . $this->_getHtmlName() . '[from]" id="' . $htmlId . '_from"' . ' value="' . $this->getEscapedValue('from')
+            . '" class="input-text no-changes" placeholder="' . __(
                 'From'
             ) . '" ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'from'
             ) . '/>' . '</div>';
-        $html .= '<div class="range-line date">' .
-            '<input type="text" name="' .
-            $this->_getHtmlName() .
-            '[to]" id="' .
-            $htmlId .
-            '_to"' .
-            ' value="' .
-            $this->getEscapedValue(
+        $html .= '<div class="range-line date">' . '<input type="text" name="' . $this->_getHtmlName() . '[to]" id="'
+            . $htmlId . '_to"' . ' value="' . $this->getEscapedValue(
                 'to'
             ) . '" class="input-text no-changes" placeholder="' . __(
                 'To'
@@ -154,41 +150,21 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $this->_getHtmlName(),
                 'to'
             ) . '/>' . '</div></div>';
-        $html .= '<input type="hidden" name="' .
-            $this->_getHtmlName() .
-            '[locale]"' .
-            ' value="' .
-            $this->_localeResolver->getLocaleCode() .
-            '"/>';
+        $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
+            . $this->_localeResolver->getLocaleCode() . '"/>';
         $html .= '<script type="text/javascript">
             (function( $ ) {
-                    $("#' .
-            $htmlId .
-            '_range").dateRange({
-                        dateFormat: "' .
-            $format .
-            '",
-                        timeFormat: "' .
-            $timeFormat .
-            '",
-                        showsTime: ' .
-            ($this->getColumn()->getFilterTime() ? 'true' : 'false') .
-            ',
-                        buttonImage: "' .
-            $this->getViewFileUrl(
-                'images/grid-cal.gif'
-            ) . '",
-                            buttonText: "' . $this->escapeHtml(__('Date selector')) .
-            '",
+                    $("#' . $htmlId . '_range").dateRange({
+                        dateFormat: "' . $format . '",
+                        timeFormat: "' . $timeFormat . '",
+                        showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
+                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.gif') . '",
+                        buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
                         from: {
-                            id: "' .
-            $htmlId .
-            '_from"
+                            id: "' . $htmlId . '_from"
                         },
                         to: {
-                            id: "' .
-            $htmlId .
-            '_to"
+                            id: "' . $htmlId . '_to"
                         }
                     })
             })(jQuery)
@@ -209,7 +185,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if ($value instanceof \Zend_Date) {
                 return $value->toString(
                     $this->_localeDate->getDateTimeFormat(
-                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     )
                 );
             }

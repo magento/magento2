@@ -28,7 +28,7 @@
     $(document).ready(function() {
         // Mark notification as read via AJAX call
         var markNotificationAsRead = function(notificationId) {
-            var requestUrl = $('.notifications .dropdown-menu').attr('data-mark-as-read-url');
+            var requestUrl = $('.notifications-summary .dropdown-menu').attr('data-mark-as-read-url');
             $.ajax({
                 url: requestUrl,
                 type: 'POST',
@@ -39,36 +39,36 @@
                 showLoader: false
             });
         };
-        var notificationCount = $('.notifications').attr('data-notification-count');
+        var notificationCount = $('.notifications-summary').attr('data-notification-count');
         // Remove notification from the list
         var removeNotificationFromList = function(notificationEntry) {
             notificationEntry.remove();
             notificationCount--;
-            $('.notifications').attr('data-notification-count', notificationCount);
+            $('.notifications-summary').attr('data-notification-count', notificationCount);
 
             if (notificationCount == 0) {
                 // Change appearance of the bubble and its behavior when the last notification is removed
-                $('.notifications .dropdown-menu').remove();
-                var notificationIcon = $('.notifications .notifications-icon');
+                $('.notifications-summary .dropdown-menu').remove();
+                var notificationIcon = $('.notifications-summary .notifications-icon');
                 notificationIcon.removeAttr('data-toggle');
                 notificationIcon.off('click.dropdown');
-                $('.notifications .notifications-icon .value').text('');
-                $('.notifications .notifications-icon .value').hide();
+                $('.notifications-action .counter').text('');
+                $('.notifications-action .counter').hide();
             } else {
-                $('.notifications .notifications-icon .value').text(notificationCount);
+                $('.notifications-action .counter').text(notificationCount);
                 // Modify caption of the 'See All' link
-                var actionElement = $('.notifications .dropdown-menu .last .action-more');
+                var actionElement = $('.notifications-summary .dropdown-menu .last .action-more');
                 actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
             }
         };
 
         // Show popup with notification details
         var showNotificationDetails = function(notificationEntry) {
-            var popupElement = notificationEntry.find('.notification-dialog-content').clone();
+            var popupElement = notificationEntry.find('.notifications-dialog-content').clone();
             var notificationId = notificationEntry.attr('data-notification-id');
-            var dialogClassSeverity = 'notification-entry-dialog';
+            var dialogClassSeverity = 'notifications-entry-dialog';
             if (notificationEntry.attr('data-notification-severity')) {
-                dialogClassSeverity = 'notification-entry-dialog notification-entry-dialog-critical';
+                dialogClassSeverity = 'notifications-entry-dialog notifications-entry-dialog-critical';
             }
             popupElement.dialog({
                 title: popupElement.attr('data-title'),
@@ -99,16 +99,16 @@
         };
 
         // Show notification description when corresponding item is clicked
-        $('.notifications .dropdown-menu .notification-entry').on('click.showNotification', function(event) {
+        $('.notifications-summary .dropdown-menu .notifications-entry').on('click.showNotification', function(event) {
             // hide notification dropdown
-            $('.notifications .notifications-icon').trigger('click.dropdown');
+            $('.notifications-summary .notifications-icon').trigger('click.dropdown');
             showNotificationDetails($(this));
             event.stopPropagation();
         });
 
         // Remove corresponding notification from the list and mark it as read
-        $('.notifications .dropdown-menu .notification-entry .action-close').on('click.removeNotification', function(event) {
-            var notificationEntry = $(this).closest('.notification-entry')
+        $('.notifications-close').on('click.removeNotification', function(event) {
+            var notificationEntry = $(this).closest('.notifications-entry')
             var notificationId = notificationEntry.attr('data-notification-id');
             markNotificationAsRead(notificationId);
             removeNotificationFromList(notificationEntry);
@@ -117,9 +117,9 @@
 
         // Hide notifications bubble
         if (notificationCount == 0) {
-            $('.notifications .notifications-icon .value').hide();
+            $('.notifications-action .counter').hide();
         } else {
-            $('.notifications .notifications-icon .value').show();
+            $('.notifications-action .counter').show();
         }
     });
 })(window.jQuery);

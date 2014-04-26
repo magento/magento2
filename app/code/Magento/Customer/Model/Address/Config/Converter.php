@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Model\Address\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert customer address format configuration from dom node tree to array

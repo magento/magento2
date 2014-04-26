@@ -48,17 +48,17 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
      * @param mixed $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
         $connection = null
     ) {
@@ -167,7 +167,7 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
             )->group(
                 'product_id'
             )->order(
-                'views_num ' . \Magento\DB\Select::SQL_DESC
+                'views_num ' . \Magento\Framework\DB\Select::SQL_DESC
             )->limit(
                 $this->_ratingLimit
             );
@@ -196,7 +196,7 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
@@ -220,8 +220,8 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
         $currentStoreIds = $this->_storesIds;
         if (isset(
             $currentStoreIds
-        ) && $currentStoreIds != \Magento\Core\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != array(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != array(
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )
         ) {
             if (!is_array($currentStoreIds)) {
@@ -239,7 +239,7 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
      * Re-declare parent method for applying filters after parent method, but before adding unions and calculating
      * totals
      *
-     * @return $this|\Magento\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     protected function _beforeLoad()
     {
@@ -251,9 +251,9 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
             $selectUnions = array();
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
-            $dtFormat = \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-            $periodFrom = !is_null($this->_from) ? new \Magento\Stdlib\DateTime\Date($this->_from, $dtFormat) : null;
-            $periodTo = !is_null($this->_to) ? new \Magento\Stdlib\DateTime\Date($this->_to, $dtFormat) : null;
+            $dtFormat = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $periodFrom = !is_null($this->_from) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_from, $dtFormat) : null;
+            $periodTo = !is_null($this->_to) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_to, $dtFormat) : null;
             if ('year' == $this->_period) {
 
                 if ($periodFrom) {

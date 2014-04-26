@@ -29,37 +29,35 @@
  */
 namespace Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite;
 
-class Suffix extends \Magento\Core\Model\Config\Value
+class Suffix extends \Magento\Framework\App\Config\Value
 {
     /**
      * Core url rewrite
      *
-     * @var \Magento\Core\Helper\Url\Rewrite
+     * @var \Magento\UrlRewrite\Helper\UrlRewrite
      */
     protected $_coreUrlRewrite = null;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\Core\Helper\Url\Rewrite $coreUrlRewrite
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\UrlRewrite\Helper\UrlRewrite $coreUrlRewrite
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
-        \Magento\Core\Helper\Url\Rewrite $coreUrlRewrite,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\UrlRewrite\Helper\UrlRewrite $coreUrlRewrite,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_coreUrlRewrite = $coreUrlRewrite;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**

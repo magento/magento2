@@ -28,20 +28,22 @@ namespace Magento\Rss\Controller;
 /**
  * RSS Controller for Catalog feeds
  */
-class Catalog extends \Magento\App\Action\Action
+class Catalog extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\App\Action\Context $context, \Magento\Core\Model\Store\Config $storeConfig)
-    {
-        $this->_storeConfig = $storeConfig;
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -100,7 +102,7 @@ class Catalog extends \Magento\App\Action\Action
      */
     protected function _isEnabled($code)
     {
-        return $this->_storeConfig->getConfigFlag("rss/catalog/{$code}");
+        return $this->_scopeConfig->isSetFlag("rss/catalog/{$code}", \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

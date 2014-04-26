@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Web;
 
-class Redirect implements \Magento\Option\ArrayInterface
+class Redirect implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @return array

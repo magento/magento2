@@ -40,13 +40,19 @@ class HeadTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    /** @var  \Magento\View\Element\Template\Context */
+    /** @var  \Magento\Framework\View\Element\Template\Context */
     protected $_context;
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\ObjectManager');
-        $this->_pageAssets = $this->getMock('Magento\View\Asset\GroupedCollection', array(), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_pageAssets = $this->getMock(
+            'Magento\Framework\View\Asset\GroupedCollection',
+            array(),
+            array(),
+            '',
+            false
+        );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Block\Html\Head',
@@ -71,16 +77,16 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             'add'
         )->with(
             'link/http://127.0.0.1/test.rss',
-            $this->isInstanceOf('Magento\View\Asset\Remote'),
+            $this->isInstanceOf('Magento\Framework\View\Asset\Remote'),
             array('attributes' => 'rel="alternate" type="application/rss+xml" title="RSS Feed"')
         );
-        $assetRemoteFile = $this->getMock('Magento\View\Asset\Remote', array(), array(), '', false);
+        $assetRemoteFile = $this->getMock('Magento\Framework\View\Asset\Remote', array(), array(), '', false);
         $this->_objectManager->expects(
             $this->once('')
         )->method(
             'create'
         )->with(
-            'Magento\View\Asset\Remote'
+            'Magento\Framework\View\Asset\Remote'
         )->will(
             $this->returnValue($assetRemoteFile)
         );
@@ -90,7 +96,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFaviconFile()
     {
-        $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue('baseUrl/'));
         $this->_context->getStoreManager()->expects(
             $this->any()
@@ -100,21 +106,21 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($storeMock)
         );
 
-        $this->_context->getStoreConfig()->expects(
+        $this->_context->getScopeConfig()->expects(
             $this->any()
         )->method(
-            'getConfig'
+            'getValue'
         )->will(
-            $this->returnValue('storeConfig')
+            $this->returnValue('scopeConfig')
         );
 
-        $mediaDirMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $mediaDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
         $mediaDirMock->expects(
             $this->any()
         )->method(
             'isFile'
         )->with(
-            'favicon/storeConfig'
+            'favicon/scopeConfig'
         )->will(
             $this->returnValue(true)
         );
@@ -126,6 +132,6 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($mediaDirMock)
         );
 
-        $this->assertEquals('baseUrl/favicon/storeConfig', $this->_block->getFaviconFile());
+        $this->assertEquals('baseUrl/favicon/scopeConfig', $this->_block->getFaviconFile());
     }
 }

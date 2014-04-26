@@ -36,16 +36,9 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
-     * Edit Block model
-     *
-     * @var bool
-     */
-    protected $_editMode = false;
-
-    /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -57,13 +50,13 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -94,7 +87,7 @@ class Edit extends \Magento\Backend\Block\Widget
             $block->setCanLoadTinyMce(true);
         }
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -104,7 +97,7 @@ class Edit extends \Magento\Backend\Block\Widget
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -114,150 +107,62 @@ class Edit extends \Magento\Backend\Block\Widget
             )
         );
 
-        $this->addChild(
-            'to_plain_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
-                'label' => __('Convert to Plain Text'),
-                'onclick' => 'templateControl.stripTags();',
-                'id' => 'convert_button',
-                'class' => 'convert'
-            )
-        );
+        if (!$this->isTextType()) {
+            $this->getToolbar()->addChild(
+                'to_plain_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Convert to Plain Text'),
+                    'onclick' => 'templateControl.stripTags();',
+                    'id' => 'convert_button',
+                    'class' => 'convert'
+                )
+            );
 
-        $this->addChild(
-            'to_html_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
-                'label' => __('Return HTML Version'),
-                'onclick' => 'templateControl.unStripTags();',
-                'id' => 'convert_button_back',
-                'style' => 'display:none',
-                'class' => 'return'
-            )
-        );
+            $this->getToolbar()->addChild(
+                'to_html_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Return HTML Version'),
+                    'onclick' => 'templateControl.unStripTags();',
+                    'id' => 'convert_button_back',
+                    'style' => 'display:none',
+                    'class' => 'return'
+                )
+            );
+        }
 
-        $this->addChild(
-            'save_button',
-            'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Save Template'), 'onclick' => 'templateControl.save();', 'class' => 'save primary')
-        );
-
-        $this->addChild(
-            'save_as_button',
-            'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Save As'), 'onclick' => 'templateControl.saveAs();', 'class' => 'save-as')
-        );
-
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'preview_button',
             'Magento\Backend\Block\Widget\Button',
             array('label' => __('Preview Template'), 'onclick' => 'templateControl.preview();', 'class' => 'preview')
         );
 
-        $this->addChild(
-            'delete_button',
+        if ($this->getEditMode()) {
+            $this->getToolbar()->addChild(
+                'delete_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Delete Template'),
+                    'onclick' => 'templateControl.deleteTemplate();',
+                    'class' => 'delete'
+                )
+            );
+
+            $this->getToolbar()->addChild(
+                'save_as_button',
+                'Magento\Backend\Block\Widget\Button',
+                array('label' => __('Save As'), 'onclick' => 'templateControl.saveAs();', 'class' => 'save-as')
+            );
+        }
+
+        $this->getToolbar()->addChild(
+            'save_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
-                'label' => __('Delete Template'),
-                'onclick' => 'templateControl.deleteTemplate();',
-                'class' => 'delete'
-            )
+            array('label' => __('Save Template'), 'onclick' => 'templateControl.save();', 'class' => 'save primary')
         );
 
         return parent::_prepareLayout();
-    }
-
-    /**
-     * Retrieve Back Button HTML
-     *
-     * @return string
-     */
-    public function getBackButtonHtml()
-    {
-        return $this->getChildHtml('back_button');
-    }
-
-    /**
-     * Retrieve Reset Button HTML
-     *
-     * @return string
-     */
-    public function getResetButtonHtml()
-    {
-        return $this->getChildHtml('reset_button');
-    }
-
-    /**
-     * Retrieve Convert To Plain Button HTML
-     *
-     * @return string
-     */
-    public function getToPlainButtonHtml()
-    {
-        return $this->getChildHtml('to_plain_button');
-    }
-
-    /**
-     * Retrieve Convert to HTML Button HTML
-     *
-     * @return string
-     */
-    public function getToHtmlButtonHtml()
-    {
-        return $this->getChildHtml('to_html_button');
-    }
-
-    /**
-     * Retrieve Save Button HTML
-     *
-     * @return string
-     */
-    public function getSaveButtonHtml()
-    {
-        return $this->getChildHtml('save_button');
-    }
-
-    /**
-     * Retrieve Preview Button HTML
-     *
-     * @return string
-     */
-    public function getPreviewButtonHtml()
-    {
-        return $this->getChildHtml('preview_button');
-    }
-
-    /**
-     * Retrieve Delete Button HTML
-     *
-     * @return string
-     */
-    public function getDeleteButtonHtml()
-    {
-        return $this->getChildHtml('delete_button');
-    }
-
-    /**
-     * Retrieve Save as Button HTML
-     *
-     * @return string
-     */
-    public function getSaveAsButtonHtml()
-    {
-        return $this->getChildHtml('save_as_button');
-    }
-
-    /**
-     * Set edit flag for block
-     *
-     * @param boolean $value
-     * @return $this
-     */
-    public function setEditMode($value = true)
-    {
-        $this->_editMode = (bool)$value;
-        return $this;
     }
 
     /**
@@ -267,7 +172,10 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getEditMode()
     {
-        return $this->_editMode;
+        if ($this->getModel()->getId()) {
+            return true;
+        }
+        return false;
     }
 
     /**

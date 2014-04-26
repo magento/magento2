@@ -41,13 +41,13 @@ class Group extends AbstractComposite
     protected $_dependencyMapper;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator
      * @param \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
@@ -70,13 +70,13 @@ class Group extends AbstractComposite
     /**
      * Retrieve clone model
      *
-     * @return \Magento\Model\AbstractModel
-     * @throws \Magento\Model\Exception
+     * @return \Magento\Framework\Model\AbstractModel
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getCloneModel()
     {
         if (!isset($this->_data['clone_model']) || !$this->_data['clone_model']) {
-            throw new \Magento\Model\Exception('Config form fieldset clone model required to be able to clone fields');
+            throw new \Magento\Framework\Model\Exception('Config form fieldset clone model required to be able to clone fields');
         }
         return $this->_cloneModelFactory->create($this->_data['clone_model']);
     }
@@ -84,10 +84,10 @@ class Group extends AbstractComposite
     /**
      * Populate form fieldset with group data
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @return void
      */
-    public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
+    public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
         $originalData = array();
         foreach ($this->_data as $key => $value) {

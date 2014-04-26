@@ -67,10 +67,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Retrieve select for reindex products of non anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
-     * @return \Magento\DB\Select
+     * @param \Magento\Store\Model\Store $store
+     * @return \Magento\Framework\DB\Select
      */
-    protected function getNonAnchorCategoriesSelect(\Magento\Core\Model\Store $store)
+    protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getNonAnchorCategoriesSelect($store);
         return $select->where('ccp.product_id IN (?)', $this->limitationByProducts);
@@ -79,10 +79,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Retrieve select for reindex products of non anchor categories
      *
-     * @param \Magento\Core\Model\Store $store
-     * @return \Magento\DB\Select
+     * @param \Magento\Store\Model\Store $store
+     * @return \Magento\Framework\DB\Select
      */
-    protected function getAnchorCategoriesSelect(\Magento\Core\Model\Store $store)
+    protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getAnchorCategoriesSelect($store);
         return $select->where('ccp.product_id IN (?)', $this->limitationByProducts);
@@ -91,10 +91,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Get select for all products
      *
-     * @param \Magento\Core\Model\Store $store
-     * @return \Magento\DB\Select
+     * @param \Magento\Store\Model\Store $store
+     * @return \Magento\Framework\DB\Select
      */
-    protected function getAllProducts(\Magento\Core\Model\Store $store)
+    protected function getAllProducts(\Magento\Store\Model\Store $store)
     {
         $select = parent::getAllProducts($store);
         return $select->where('cp.entity_id IN (?)', $this->limitationByProducts);

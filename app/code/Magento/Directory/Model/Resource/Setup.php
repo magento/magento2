@@ -33,7 +33,7 @@
  */
 namespace Magento\Directory\Model\Resource;
 
-class Setup extends \Magento\Core\Model\Resource\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * @var \Magento\Directory\Helper\Data
@@ -41,18 +41,18 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     protected $_directoryData;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         \Magento\Directory\Helper\Data $directoryData,
         $moduleName = 'Magento_Directory',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_directoryData = $directoryData;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);

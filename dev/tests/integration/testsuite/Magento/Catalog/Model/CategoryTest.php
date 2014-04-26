@@ -41,7 +41,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected static $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 
@@ -66,8 +66,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var $storeManager \Magento\Core\Model\StoreManagerInterface */
-        $storeManager = self::$_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        /** @var $storeManager \Magento\Store\Model\StoreManagerInterface */
+        $storeManager = self::$_objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
         $this->_model = self::$_objectManager->create('Magento\Catalog\Model\Category');
     }
@@ -75,14 +75,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlInstance()
     {
         $instance = $this->_model->getUrlInstance();
-        $this->assertInstanceOf('Magento\Url', $instance);
+        $this->assertInstanceOf('Magento\Framework\Url', $instance);
         $this->assertSame($instance, $this->_model->getUrlInstance());
     }
 
     public function testGetUrlRewrite()
     {
         $rewrite = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\Core\Model\Url\Rewrite', $rewrite);
+        $this->assertInstanceOf('Magento\UrlRewrite\Model\UrlRewrite', $rewrite);
         $this->assertSame($rewrite, $this->_model->getUrlRewrite());
     }
 
@@ -142,7 +142,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /* id from fixture */
         $this->assertContains(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreIds()
         );
@@ -152,7 +152,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreId()
         );
@@ -167,8 +167,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStoreIdWithNonNumericValue()
     {
-        /** @var $store \Magento\Core\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
+        /** @var $store \Magento\Store\Model\Store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
         $store->load('fixturestore');
 
         $this->assertNotEquals($this->_model->getStoreId(), $store->getId());

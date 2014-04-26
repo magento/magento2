@@ -26,7 +26,7 @@ namespace Magento\Paypal\Model\Resource\Billing;
 /**
  * Billing agreement resource model
  */
-class Agreement extends \Magento\Model\Resource\Db\AbstractDb
+class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

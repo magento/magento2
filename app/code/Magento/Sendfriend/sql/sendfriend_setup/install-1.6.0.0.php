@@ -25,7 +25,7 @@
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 
@@ -33,25 +33,25 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('sendfriend_log')
 )->addColumn(
     'log_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Log ID'
 )->addColumn(
     'ip',
-    \Magento\DB\Ddl\Table::TYPE_BIGINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
     '20',
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Customer IP address'
 )->addColumn(
     'time',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Log time'
 )->addColumn(
     'website_id',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Website ID'

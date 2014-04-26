@@ -47,7 +47,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 'some test data';
 
-        $form = $this->getMock('Magento\Data\Form', array('getParent'), array(), '', false, false);
+        $form = $this->getMock('Magento\Framework\Data\Form', array('getParent'), array(), '', false, false);
         $parentObjectMock = $this->getMock(
             'Magento\Backend\Block\Template',
             array('getLayout'),
@@ -56,11 +56,11 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
 
         $blockMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false, false);
 
-        $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false, false);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
 
         $mockData = $this->getMock('StdClass', array('toHtml'));

@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -36,7 +36,7 @@ $connection->dropIndex(
     $installer->getIdxName(
         'core_translate',
         array('store_id', 'locale', 'string'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     )
 );
 
@@ -44,9 +44,9 @@ $connection->addColumn(
     $table,
     'crc_string',
     array(
-        'type' => \Magento\DB\Ddl\Table::TYPE_BIGINT,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
         'nullable' => false,
-        'default' => crc32(\Magento\TranslateInterface::DEFAULT_STRING),
+        'default' => crc32(\Magento\Framework\TranslateInterface::DEFAULT_STRING),
         'comment' => 'Translation String CRC32 Hash'
     )
 );
@@ -56,10 +56,10 @@ $connection->addIndex(
     $installer->getIdxName(
         'core_translate',
         array('store_id', 'locale', 'crc_string', 'string'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('store_id', 'locale', 'crc_string', 'string'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
 );
 
 $installer->endSetup();

@@ -34,7 +34,8 @@
     <h4><?php echo __('Apply Coupon Code') ?></h4>
     <fieldset>
         <div class="content">
-            <p><input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" style="width:200px" />&nbsp;<?php echo $this->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?></p>
+            <input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" />
+            <?php echo $this->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
             <?php if($this->getCouponCode()): ?>
             <p><strong><?php echo $this->escapeHtml($this->getCouponCode()) ?></strong> [<a href="#" onclick="order.applyCoupon(''); return false;" title="<?php echo __('Remove Coupon Code') ?>"><?php echo __('Remove') ?></a>]</p>
             <?php endif; ?>

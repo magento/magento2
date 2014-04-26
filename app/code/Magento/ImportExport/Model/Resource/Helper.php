@@ -34,7 +34,7 @@
  */
 namespace Magento\ImportExport\Model\Resource;
 
-class Helper extends \Magento\DB\Helper
+class Helper extends \Magento\Framework\DB\Helper
 {
     /**
      * Constants to be used for DB
@@ -47,10 +47,10 @@ class Helper extends \Magento\DB\Helper
     // The coefficient of useful data from maximum packet length
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'importexport')
+    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'importexport')
     {
         parent::__construct($resource, $modulePrefix);
     }
@@ -79,7 +79,7 @@ class Helper extends \Magento\DB\Helper
         $entityStatus = $adapter->showTableStatus($tableName);
 
         if (empty($entityStatus['Auto_increment'])) {
-            throw new \Magento\Model\Exception(__('Cannot get autoincrement value'));
+            throw new \Magento\Framework\Model\Exception(__('Cannot get autoincrement value'));
         }
         return $entityStatus['Auto_increment'];
     }

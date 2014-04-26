@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
-use Magento\Model\Exception;
+use Magento\Framework\Model\Exception;
 
 /**
  * Catalog composite product configuration controller
@@ -61,13 +61,13 @@ class Cart extends \Magento\Backend\App\Action
      * Loads customer, quote and quote item by request params
      *
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _initData()
     {
         $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
         if (!$this->_customerId) {
-            throw new \Magento\Model\Exception(__('No customer ID defined.'));
+            throw new \Magento\Framework\Model\Exception(__('No customer ID defined.'));
         }
 
         $quoteItemId = (int)$this->getRequest()->getParam('id');
@@ -76,7 +76,7 @@ class Cart extends \Magento\Backend\App\Action
         $this->_quote = $this->_objectManager->create(
             'Magento\Sales\Model\Quote'
         )->setWebsite(
-            $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId)
+            $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
         )->loadByCustomer(
             $this->_customerId
         );
@@ -96,7 +96,7 @@ class Cart extends \Magento\Backend\App\Action
      */
     public function configureAction()
     {
-        $configureResult = new \Magento\Object();
+        $configureResult = new \Magento\Framework\Object();
         try {
             $this->_initData();
 
@@ -133,11 +133,11 @@ class Cart extends \Magento\Backend\App\Action
      */
     public function updateAction()
     {
-        $updateResult = new \Magento\Object();
+        $updateResult = new \Magento\Framework\Object();
         try {
             $this->_initData();
 
-            $buyRequest = new \Magento\Object($this->getRequest()->getParams());
+            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
             $this->_quote->updateItem($this->_quoteItem->getId(), $buyRequest);
             $this->_quote->collectTotals()->save();
 

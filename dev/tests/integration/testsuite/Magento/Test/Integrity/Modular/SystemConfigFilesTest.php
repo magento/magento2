@@ -33,16 +33,17 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // disable config caching to not pollute it
-        /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = $objectManager->get('Magento\App\Cache\StateInterface');
-        $cacheState->setEnabled(\Magento\App\Cache\Type\Config::TYPE_IDENTIFIER, false);
+        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
+        $cacheState = $objectManager->get('Magento\Framework\App\Cache\StateInterface');
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER, false);
 
-        $modulesDir = $objectManager->get('Magento\App\Filesystem')->getPath(\Magento\App\Filesystem::MODULES_DIR);
+        $modulesDir = $objectManager->get('Magento\Framework\App\Filesystem')
+            ->getPath(\Magento\Framework\App\Filesystem::MODULES_DIR);
 
         $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
 
         $configMock = $this->getMock(
-            'Magento\Module\Dir\Reader',
+            'Magento\Framework\Module\Dir\Reader',
             array('getConfigurationFiles', 'getModuleDir'),
             array(),
             '',
@@ -64,7 +65,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
                 'Magento\Backend\Model\Config\Structure\Reader',
                 array('moduleReader' => $configMock, 'runtimeValidation' => true)
             );
-        } catch (\Magento\Exception $exp) {
+        } catch (\Magento\Framework\Exception $exp) {
             $this->fail($exp->getMessage());
         }
     }

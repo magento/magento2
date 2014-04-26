@@ -31,17 +31,17 @@ $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('M
 $review->setEntityId(
     $review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE)
 )->setEntityPkValue(
-    1 // the last product from the fixture file included above
+    1
 )->setStatusId(
     \Magento\Review\Model\Review::STATUS_PENDING
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Core\Model\StoreManagerInterface'
+        'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setStores(
     array(
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId()
     )
 )->setNickname(

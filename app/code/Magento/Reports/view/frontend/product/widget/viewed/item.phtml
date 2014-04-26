@@ -47,7 +47,7 @@ $rating = 'short';
 
                 <?php echo $this->getPriceHtml($item, true, '-' . $type) ?>
 
-                <?php if ($item->getRatingSummary() && $rating): ?>
+                <?php if ($rating): ?>
                     <?php echo $this->getReviewsSummaryHtml($item, $rating) ?>
                 <?php endif; ?>
 

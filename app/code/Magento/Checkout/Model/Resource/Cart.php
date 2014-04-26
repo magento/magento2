@@ -32,7 +32,7 @@ namespace Magento\Checkout\Model\Resource;
  * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cart extends \Magento\Model\Resource\Db\AbstractDb
+class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Model initialization

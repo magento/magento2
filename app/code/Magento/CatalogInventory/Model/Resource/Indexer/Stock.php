@@ -55,13 +55,13 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
     protected $_productType;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $productType
@@ -329,13 +329,13 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
      *
      * @param string $productTypeId
      * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getIndexer($productTypeId)
     {
         $types = $this->_getTypeIndexers();
         if (!isset($types[$productTypeId])) {
-            throw new \Magento\Model\Exception(__('Unsupported product type "%1".', $productTypeId));
+            throw new \Magento\Framework\Model\Exception(__('Unsupported product type "%1".', $productTypeId));
         }
         return $types[$productTypeId];
     }

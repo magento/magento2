@@ -81,11 +81,11 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerAttributes)
         );
         $this->_model->__construct(
-            $objectManager->get('Magento\Core\Model\Store\Config'),
-            $objectManager->get('Magento\Core\Model\StoreManager'),
+            $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
+            $objectManager->get('Magento\Store\Model\StoreManager'),
             $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
             $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory'),
-            $objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface'),
+            $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface'),
             $objectManager->get('Magento\Eav\Model\Config')
         );
     }

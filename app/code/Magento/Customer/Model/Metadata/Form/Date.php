@@ -30,7 +30,7 @@ class Date extends AbstractData
     /**
      * {@inheritdoc}
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         return $this->_applyInputFilter($value);
@@ -133,13 +133,13 @@ class Date extends AbstractData
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT:
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_HTML:
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_PDF:
-                    $this->_dateFilterFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+                    $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
                     break;
             }
             $value = $this->_applyOutputFilter($value);
         }
 
-        $this->_dateFilterFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
 
         return $value;
     }

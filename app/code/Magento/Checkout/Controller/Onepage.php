@@ -25,8 +25,8 @@
  */
 namespace Magento\Checkout\Controller;
 
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
@@ -49,12 +49,12 @@ class Onepage extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Translate\InlineInterface
+     * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $_translateInline;
 
@@ -64,21 +64,21 @@ class Onepage extends Action
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService,
-        \Magento\Registry $coreRegistry,
-        \Magento\Translate\InlineInterface $translateInline,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -91,8 +91,8 @@ class Onepage extends Action
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
-     * @throws \Magento\App\Action\NotFoundException
+     * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -233,13 +233,15 @@ class Onepage extends Action
         }
         if (!$quote->validateMinimumAmount()) {
             $error = $this->_objectManager->get(
-                'Magento\Core\Model\Store\Config'
-            )->getConfig(
-                'sales/minimum_order/error_message'
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            )->getValue(
+                'sales/minimum_order/error_message',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ) ? $this->_objectManager->get(
-                'Magento\Core\Model\Store\Config'
-            )->getConfig(
-                'sales/minimum_order/error_message'
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            )->getValue(
+                'sales/minimum_order/error_message',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ) : __(
                 'Subtotal must exceed minimum order amount'
             );
@@ -249,7 +251,7 @@ class Onepage extends Action
             return;
         }
         $this->_objectManager->get('Magento\Checkout\Model\Session')->setCartWasUpdated(false);
-        $currentUrl = $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*/*', array('_secure' => true));
+        $currentUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/*', array('_secure' => true));
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
         $this->getOnepage()->initCheckout();
         $this->_view->loadLayout();
@@ -505,10 +507,10 @@ class Onepage extends Action
                 $result['fields'] = $e->getFields();
             }
             $result['error'] = $e->getMessage();
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $result['error'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $result['error'] = __('Unable to set Payment Method');
         }
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
@@ -574,23 +576,17 @@ class Onepage extends Action
 
         $result = array();
         try {
-            $requiredAgreements = $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->getRequiredAgreementIds();
-            if ($requiredAgreements) {
-                $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
-                $agreementsDiff = array_diff($requiredAgreements, $postedAgreements);
-                if ($agreementsDiff) {
-                    $result['success'] = false;
-                    $result['error'] = true;
-                    $result['error_messages'] = __(
-                        'Please agree to all the terms and conditions before placing the order.'
-                    );
-                    $this->getResponse()->setBody(
-                        $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-                    );
-                    return;
-                }
+            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
+            if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', array())))) {
+                $result['success'] = false;
+                $result['error'] = true;
+                $result['error_messages'] = __(
+                    'Please agree to all the terms and conditions before placing the order.'
+                );
+                $this->getResponse()->setBody(
+                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+                );
+                return;
             }
 
             $data = $this->getRequest()->getPost('payment', array());
@@ -617,8 +613,8 @@ class Onepage extends Action
             }
             $result['goto_section'] = 'payment';
             $result['update_section'] = array('name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml());
-        } catch (\Magento\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+        } catch (\Magento\Framework\Model\Exception $e) {
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(
@@ -646,7 +642,7 @@ class Onepage extends Action
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(

@@ -27,56 +27,60 @@
  */
 namespace Magento\RecurringPayment\Controller;
 
-use Magento\App\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
-class RecurringPayment extends \Magento\App\Action\Action
+class RecurringPayment extends \Magento\Framework\App\Action\Action
 {
     /**
      *
      * @var \Magento\Customer\Model\Session
      */
-    protected $_session = null;
+    protected $_session;
 
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\App\Action\Title
+     * @var \Magento\Framework\App\Action\Title
      */
     protected $_title;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\Action\Title $title
+     * Initialize dependencies
+     *
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Action\Title $title
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
-        \Magento\App\Action\Title $title
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Action\Title $title,
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
         $this->_title = $title;
+        $this->_session = $customerSession;
     }
 
     /**
      * Make sure customer is logged in and put it into registry
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
-        $this->_session = $this->_objectManager->get('Magento\Customer\Model\Session');
         if (!$this->_session->authenticate($this)) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
@@ -144,11 +148,11 @@ class RecurringPayment extends \Magento\App\Action\Action
                     break;
             }
             $this->messageManager->addSuccess(__('The payment state has been updated.'));
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We couldn\'t update the payment.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
         if ($payment) {
             $this->_redirect('*/*/view', array('payment' => $payment->getId()));
@@ -174,11 +178,11 @@ class RecurringPayment extends \Magento\App\Action\Action
             } else {
                 $this->messageManager->addNotice(__('The payment has no changes.'));
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We couldn\'t update the payment.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
         if ($payment) {
             $this->_redirect('*/*/view', array('payment' => $payment->getId()));
@@ -202,10 +206,10 @@ class RecurringPayment extends \Magento\App\Action\Action
             $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
             return;
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
         $this->_redirect('*/*/');
     }
@@ -214,7 +218,7 @@ class RecurringPayment extends \Magento\App\Action\Action
      * Instantiate current payment and put it into registry
      *
      * @return \Magento\RecurringPayment\Model\Payment
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _initPayment()
     {
@@ -224,7 +228,7 @@ class RecurringPayment extends \Magento\App\Action\Action
             $this->getRequest()->getParam('payment')
         );
         if (!$payment->getId()) {
-            throw new \Magento\Model\Exception(__('We can\'t find the payment you specified.'));
+            throw new \Magento\Framework\Model\Exception(__('We can\'t find the payment you specified.'));
         }
         $this->_coreRegistry->register('current_recurring_payment', $payment);
         return $payment;

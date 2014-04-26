@@ -36,12 +36,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Get form instance
      *
      * @param array $args
-     * @return \Magento\Data\Form
+     * @return \Magento\Framework\Data\Form
      */
     protected function _getFormInstance($args = array())
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         /** @var $block \Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form */
         $block = $layout->createBlock(
             'Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form',
@@ -73,10 +75,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = array();
         if ($productData) {
-            $args['product'] = new \Magento\Object($productData);
+            $args['product'] = new \Magento\Framework\Object($productData);
         }
         if ($categoryData) {
-            $args['category'] = new \Magento\Object($categoryData);
+            $args['category'] = new \Magento\Framework\Object($categoryData);
         }
         $form = $this->_getFormInstance($args);
         $this->assertContains($action, $form->getAction());
@@ -104,10 +106,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = array();
         if ($productData) {
-            $args['product'] = new \Magento\Object($productData);
+            $args['product'] = new \Magento\Framework\Object($productData);
         }
         if ($categoryData) {
-            $args['category'] = new \Magento\Object($categoryData);
+            $args['category'] = new \Magento\Framework\Object($categoryData);
         }
         $form = $this->_getFormInstance($args);
         $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
@@ -119,12 +121,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Core\Model\Store\Exception
+     * @expectedException \Magento\Store\Model\Exception
      * @expectedExceptionMessage We can't set up a URL rewrite because the product you chose is not associated with
      */
     public function testGetEntityStoresProductStoresException()
     {
-        $args = array('product' => new \Magento\Object(array('id' => 1)));
+        $args = array('product' => new \Magento\Framework\Object(array('id' => 1)));
         $this->_getFormInstance($args);
     }
 
@@ -134,14 +136,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Core\Model\Store\Exception
+     * @expectedException \Magento\Store\Model\Exception
      * @expectedExceptionMessage We can't set up a URL rewrite because the product you chose is not associated with
      */
     public function testGetEntityStoresProductCategoryStoresException()
     {
         $args = array(
-            'product' => new \Magento\Object(array('id' => 1, 'store_ids' => array(1))),
-            'category' => new \Magento\Object(array('id' => 1, 'store_ids' => array(3)))
+            'product' => new \Magento\Framework\Object(array('id' => 1, 'store_ids' => array(1))),
+            'category' => new \Magento\Framework\Object(array('id' => 1, 'store_ids' => array(3)))
         );
         $this->_getFormInstance($args);
     }
@@ -152,12 +154,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Core\Model\Store\Exception
+     * @expectedException \Magento\Store\Model\Exception
      * @expectedExceptionMessage We can't set up a URL rewrite because the category your chose is not associated with
      */
     public function testGetEntityStoresCategoryStoresException()
     {
-        $args = array('category' => new \Magento\Object(array('id' => 1)));
+        $args = array('category' => new \Magento\Framework\Object(array('id' => 1)));
         $this->_getFormInstance($args);
     }
 

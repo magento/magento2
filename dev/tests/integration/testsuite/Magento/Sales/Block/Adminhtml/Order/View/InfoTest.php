@@ -35,7 +35,7 @@ class InfoTest extends \Magento\Backend\Utility\Controller
 
     public function testCustomerGridAction()
     {
-        $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
+        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $infoBlock */
         $infoBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\View\Info',
@@ -52,7 +52,7 @@ class InfoTest extends \Magento\Backend\Utility\Controller
      */
     public function testGetCustomerGroupName()
     {
-        $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
+        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $customerGroupBlock */
         $customerGroupBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\View\Info',
@@ -70,7 +70,7 @@ class InfoTest extends \Magento\Backend\Utility\Controller
      */
     public function testGetCustomerAccountData()
     {
-        $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
+        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
 
         $orderData = array(
             'customer_' . FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME => self::ORDER_USER_DEFINED_ATTRIBUTE_VALUE
@@ -95,11 +95,11 @@ class InfoTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @param array $additionalOrderData
-     * @return \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _putOrderIntoRegistry(array $additionalOrderData = array())
     {
-        $registry = $this->getMockBuilder('Magento\Registry')->disableOriginalConstructor()->getMock();
+        $registry = $this->getMockBuilder('Magento\Framework\Registry')->disableOriginalConstructor()->getMock();
 
         $order = $this->_objectManager->get(
             'Magento\Sales\Model\Order'

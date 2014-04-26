@@ -30,7 +30,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
  *
  * @method bool getIsActive()
  */
-abstract class AbstractTabs extends \Magento\View\Element\Template
+abstract class AbstractTabs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Alias of tab handle block in layout

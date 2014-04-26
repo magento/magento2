@@ -37,31 +37,31 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('gift_message')
 )->addColumn(
     'gift_message_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'GiftMessage Id'
 )->addColumn(
     'customer_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Customer id'
 )->addColumn(
     'sender',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Sender'
 )->addColumn(
     'recipient',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Recipient'
 )->addColumn(
     'message',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     null,
     array(),
     'Message'
@@ -75,7 +75,7 @@ $installer->getConnection()->createTable($table);
  * Add 'gift_message_id' attributes for entities
  */
 $entities = array('quote', 'quote_address', 'quote_item', 'quote_address_item', 'order', 'order_item');
-$options = array('type' => \Magento\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false);
+$options = array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false);
 foreach ($entities as $entity) {
     $installer->addAttribute($entity, 'gift_message_id', $options);
 }

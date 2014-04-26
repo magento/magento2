@@ -50,7 +50,7 @@ class Meta extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $isElementDisabled = true;
         }
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('page_');

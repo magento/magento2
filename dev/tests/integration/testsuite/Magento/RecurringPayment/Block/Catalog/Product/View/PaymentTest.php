@@ -37,26 +37,26 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         $product = $objectManager->create('Magento\Catalog\Model\Product');
         $product->setIsRecurring('1');
         $product->setRecurringPayment(array('start_date_is_editable' => true));
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
         $block = $objectManager->create('Magento\RecurringPayment\Block\Catalog\Product\View\Payment');
-        $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));
+        $block->setLayout($objectManager->create('Magento\Framework\View\Layout'));
 
         $html = $block->getDateHtml();
         $this->assertNotEmpty($html);
         $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Stdlib\DateTime\TimezoneInterface'
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
         )->getDateFormat(
-            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
         );
         $timeFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Stdlib\DateTime\TimezoneInterface'
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
         )->getTimeFormat(
-            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
         );
         $this->assertContains('dateFormat: "' . $dateFormat . '",', $html);
         $this->assertContains('timeFormat: "' . $timeFormat . '",', $html);

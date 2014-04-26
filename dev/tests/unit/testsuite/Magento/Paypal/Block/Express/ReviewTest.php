@@ -27,12 +27,12 @@ namespace Magento\Paypal\Block\Express;
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\View\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewUrl;
 
@@ -44,8 +44,8 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->request = $this->getMock('Magento\App\Request\Http', [], [], '', false);
-        $this->viewUrl = $this->getMock('Magento\View\Url', [], [], '', false);
+        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->viewUrl = $this->getMock('Magento\Framework\View\Url', [], [], '', false);
         $this->model = $helper->getObject(
             'Magento\Paypal\Block\Express\Review',
             ['request' => $this->request, 'viewUrl' => $this->viewUrl]

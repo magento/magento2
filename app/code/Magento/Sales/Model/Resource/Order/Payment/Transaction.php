@@ -135,7 +135,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
             array('so' => $this->getTable('sales_flat_order')),
             'cs.website_id'
         )->joinInner(
-            array('cs' => $this->getTable('core_store')),
+            array('cs' => $this->getTable('store')),
             'cs.store_id = so.store_id'
         )->where(
             'so.entity_id = :entity_id'
@@ -149,9 +149,9 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave(\Magento\Model\AbstractModel $transaction)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {
         $parentTxnId = $transaction->getData('parent_txn_id');
         $txnId = $transaction->getData('txn_id');
@@ -161,7 +161,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
 
         if ($parentTxnId) {
             if (!$txnId || !$orderId || !$paymentId) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }
@@ -212,7 +212,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      * @param int $paymentId
      * @param string $txnId
      * @param string|array|\Zend_Db_Expr $columns
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     private function _getLoadByUniqueKeySelect($orderId, $paymentId, $txnId, $columns = '*')
     {

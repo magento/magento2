@@ -55,19 +55,19 @@ class Bootstrap
     /**
      * Ensure reports directory exists, empty, and has write permissions
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function cleanupReports()
     {
         $reportDir = $this->_config->getReportDir();
         try {
-            $filesystemAdapter = new \Magento\Filesystem\Driver\File();
+            $filesystemAdapter = new \Magento\Framework\Filesystem\Driver\File();
             if ($filesystemAdapter->isExists($reportDir)) {
                 $filesystemAdapter->deleteDirectory($reportDir);
             }
-        } catch (\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             if (file_exists($reportDir)) {
-                throw new \Magento\Exception("Cannot cleanup reports directory '{$reportDir}'.");
+                throw new \Magento\Framework\Exception("Cannot cleanup reports directory '{$reportDir}'.");
             }
         }
         mkdir($reportDir, 0777, true);

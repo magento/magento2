@@ -221,7 +221,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Add price rule filter
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Object $filterData
+     * @param \Magento\Framework\Object $filterData
      * @return \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      */
     protected function _addCustomFilter($collection, $filterData)

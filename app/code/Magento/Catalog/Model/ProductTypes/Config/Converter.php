@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\ProductTypes\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert dom node tree to array
@@ -53,6 +53,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $data['index_priority'] = (int)$this->_getAttributeValue($typeNode, 'indexPriority', 0);
             $data['can_use_qty_decimals'] = !empty($isDecimal) && 'false' !== $isDecimal;
             $data['is_qty'] = !empty($isQty) && 'false' !== $isQty;
+            $data['sort_order'] = (int)$this->_getAttributeValue($typeNode, 'sortOrder', 0);
 
             /** @var $childNode \DOMNode */
             foreach ($typeNode->childNodes as $childNode) {

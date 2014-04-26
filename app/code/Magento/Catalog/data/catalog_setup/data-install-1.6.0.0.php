@@ -66,7 +66,13 @@ $installer->createCategory()->setStoreId(
     true
 )->save();
 
-$installer->setConfigData(\Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_ROOT_ID, $category->getId());
+$data = array(
+    'scope' => 'default',
+    'scope_id' => 0,
+    'path' => \Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_ROOT_ID,
+    'value' => $category->getId()
+);
+$installer->getConnection()->insertOnDuplicate($installer->getTable('core_config_data'), $data, array('value'));
 
 $installer->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', 'Design', 6);
 

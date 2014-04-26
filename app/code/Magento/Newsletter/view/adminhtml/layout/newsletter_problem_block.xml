@@ -60,8 +60,8 @@
                         <argument name="header" xsi:type="string" translate="true">Subscriber</argument>
                         <argument name="format" xsi:type="string">#$subscriber_id $customer_name ($subscriber_email)</argument>
                         <argument name="index" xsi:type="string">subscriber_id</argument>
-                        <argument name="header_css_class" xsi:type="string">col-subscriber</argument>
-                        <argument name="column_css_class" xsi:type="string">col-subscriber</argument>
+                        <argument name="header_css_class" xsi:type="string">col-subscriber col-name</argument>
+                        <argument name="column_css_class" xsi:type="string">col-subscriber col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="queue_start">
@@ -70,8 +70,8 @@
                         <argument name="index" xsi:type="string">queue_start_at</argument>
                         <argument name="gmtoffset" xsi:type="string">true</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
-                        <argument name="header_css_class" xsi:type="string">col-start</argument>
-                        <argument name="column_css_class" xsi:type="string">col-start</argument>
+                        <argument name="header_css_class" xsi:type="string">col-start col-date</argument>
+                        <argument name="column_css_class" xsi:type="string">col-start col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="queue">

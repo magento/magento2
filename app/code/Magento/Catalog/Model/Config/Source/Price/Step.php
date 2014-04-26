@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Price;
 
-class Step implements \Magento\Option\ArrayInterface
+class Step implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

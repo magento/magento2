@@ -42,7 +42,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -55,14 +55,14 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
@@ -158,29 +158,35 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'in_category',
                 array(
-                    'header_css_class' => 'a-center',
                     'type' => 'checkbox',
                     'name' => 'in_category',
                     'values' => $this->_getSelectedProducts(),
-                    'align' => 'center',
-                    'index' => 'entity_id'
+                    'index' => 'entity_id',
+                    'header_css_class' => 'col-select col-massaction',
+                    'column_css_class' => 'col-select col-massaction'
                 )
             );
         }
         $this->addColumn(
             'entity_id',
-            array('header' => __('ID'), 'sortable' => true, 'width' => '60', 'index' => 'entity_id')
+            array(
+                'header' => __('ID'),
+                'sortable' => true,
+                'index' => 'entity_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
         );
         $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
-        $this->addColumn('sku', array('header' => __('SKU'), 'width' => '80', 'index' => 'sku'));
+        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku'));
         $this->addColumn(
             'price',
             array(
                 'header' => __('Price'),
                 'type' => 'currency',
-                'width' => '1',
-                'currency_code' => (string)$this->_storeConfig->getConfig(
-                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE
+                'currency_code' => (string)$this->_scopeConfig->getValue(
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price'
             )
@@ -189,11 +195,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'position',
             array(
                 'header' => __('Position'),
-                'width' => '1',
                 'type' => 'number',
                 'index' => 'position',
                 'editable' => !$this->getCategory()->getProductsReadonly()
-                //'renderer'  => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Input'
             )
         );
 

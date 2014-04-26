@@ -54,7 +54,7 @@ namespace Magento\User\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Model\Auth\Credential\StorageInterface
+class User extends \Magento\Framework\Model\AbstractModel implements \Magento\Backend\Model\Auth\Credential\StorageInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -108,7 +108,7 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     /**
      * Factory for validator composite object
      *
-     * @var \Magento\Validator\ObjectFactory
+     * @var \Magento\Framework\Validator\ObjectFactory
      */
     protected $_validatorObject;
 
@@ -120,55 +120,55 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Mail\Template\TransportBuilder
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Validator\ObjectFactory $validatorObjectFactory
+     * @param \Magento\Framework\Validator\ObjectFactory $validatorObjectFactory
      * @param \Magento\User\Model\RoleFactory $roleFactory
-     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\User\Helper\Data $userData,
         \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Validator\ObjectFactory $validatorObjectFactory,
+        \Magento\Framework\Validator\ObjectFactory $validatorObjectFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_encryptor = $encryptor;
@@ -219,16 +219,16 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     public function __wakeup()
     {
         parent::__wakeup();
-        $objectManager = \Magento\App\ObjectManager::getInstance();
-        $this->_eventManager = $objectManager->get('Magento\Event\ManagerInterface');
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
         $this->_userData = $objectManager->get('Magento\User\Helper\Data');
         $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_registry = $objectManager->get('Magento\Registry');
-        $this->_validatorObject = $objectManager->get('Magento\Validator\ObjectFactory');
+        $this->_registry = $objectManager->get('Magento\Framework\Registry');
+        $this->_validatorObject = $objectManager->get('Magento\Framework\Validator\ObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
-        $this->_encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
-        $this->_transportBuilder = $objectManager->get('Magento\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+        $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
+        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
     /**
@@ -293,7 +293,7 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
         $emailValidity = new \Zend_Validate_EmailAddress();
         $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
 
-        /** @var $validator \Magento\Validator\Object */
+        /** @var $validator \Magento\Framework\Validator\Object */
         $validator = $this->_validatorObject->create();
         $validator->addRule(
             $userNameNotEmpty,
@@ -318,10 +318,10 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     /**
      * Add validation rules for the password management fields
      *
-     * @param \Magento\Validator\Object $validator
+     * @param \Magento\Framework\Validator\Object $validator
      * @return void
      */
-    protected function _addPasswordValidation(\Magento\Validator\Object $validator)
+    protected function _addPasswordValidation(\Magento\Framework\Validator\Object $validator)
     {
         $passwordNotEmpty = new \Zend_Validate_NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
@@ -439,11 +439,11 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     public function sendPasswordResetConfirmationEmail()
     {
         // Set all required params and send emails
-        /** @var \Magento\Mail\TransportInterface $transport */
+        /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE)
         )->setTemplateOptions(
-            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 0)
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0)
         )->setTemplateVars(
             array('user' => $this, 'store' => $this->_storeManager->getStore(0))
         )->setFrom(
@@ -465,11 +465,11 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
     public function sendPasswordResetNotificationEmail()
     {
         // Set all required params and send emails
-        /** @var \Magento\Mail\TransportInterface $transport */
+        /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE)
         )->setTemplateOptions(
-            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 0)
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0)
         )->setTemplateVars(
             array('user' => $this, 'store' => $this->_storeManager->getStore(0))
         )->setFrom(
@@ -519,7 +519,7 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @throws \Magento\Backend\Model\Auth\Exception
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
      */
@@ -550,7 +550,7 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
                 'admin_user_authenticate_after',
                 array('username' => $username, 'password' => $password, 'user' => $this, 'result' => $result)
             );
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->unsetData();
             throw $e;
         }
@@ -633,12 +633,12 @@ class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Mode
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Model\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt($this->dateTime->now());

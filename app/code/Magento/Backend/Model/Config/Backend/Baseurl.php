@@ -23,42 +23,40 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Baseurl extends \Magento\Core\Model\Config\Value
+class Baseurl extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\View\Asset\MergeService
+     * @var \Magento\Framework\View\Asset\MergeService
      */
     protected $_mergeService;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ConfigInterface $config
-     * @param \Magento\View\Asset\MergeService $mergeService
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\View\Asset\MergeService $mergeService
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ConfigInterface $config,
-        \Magento\View\Asset\MergeService $mergeService,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\View\Asset\MergeService $mergeService,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_mergeService = $mergeService;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * Validate a base URL field value
      *
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -67,11 +65,11 @@ class Baseurl extends \Magento\Core\Model\Config\Value
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $field = $this->getFieldConfig();
             $label = $field && is_array($field) ? $field['label'] : 'value';
             $msg = __('Invalid %1. %2', $label, $e->getMessage());
-            $error = new \Magento\Model\Exception($msg, 0, $e);
+            $error = new \Magento\Framework\Model\Exception($msg, 0, $e);
             throw $error;
         }
     }
@@ -86,16 +84,16 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     {
         $placeholders = array('{{unsecure_base_url}}');
         switch ($this->getPath()) {
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL:
                 $this->_assertValuesOrUrl(array('{{base_url}}'), $value);
                 break;
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL:
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL:
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL:
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
-            case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
+            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
                 break;
             default:
@@ -114,16 +112,16 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     {
         $placeholders = array('{{unsecure_base_url}}', '{{secure_base_url}}');
         switch ($this->getPath()) {
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL:
                 $this->_assertValuesOrUrl(array('{{base_url}}', '{{unsecure_base_url}}'), $value);
                 break;
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LINK_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL:
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL:
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL:
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
-            case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
+            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
                 break;
             default:
@@ -138,12 +136,12 @@ class Baseurl extends \Magento\Core\Model\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     private function _assertValuesOrUrl(array $values, $value)
     {
         if (!in_array($value, $values) && !$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Value must be a URL or one of placeholders: %1', implode(',', $values))
             );
         }
@@ -155,14 +153,14 @@ class Baseurl extends \Magento\Core\Model\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     private function _assertStartsWithValuesOrUrl(array $values, $value)
     {
         $quoted = array_map('preg_quote', $values, array_fill(0, count($values), '/'));
         if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)
         ) {
-            throw new \Magento\Model\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __(
                     'Specify a URL or path that starts with placeholder(s): %1, and ends with "/".',
                     implode(', ', $values)
@@ -177,7 +175,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     private function _assertStartsWithValuesOrUrlOrEmpty(array $values, $value)
     {
@@ -186,9 +184,9 @@ class Baseurl extends \Magento\Core\Model\Config\Value
         }
         try {
             $this->_assertStartsWithValuesOrUrl($values, $value);
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $msg = __('%1 An empty value is allowed as well.', $e->getMessage());
-            $error = new \Magento\Model\Exception($msg, 0, $e);
+            $error = new \Magento\Framework\Model\Exception($msg, 0, $e);
             throw $error;
         }
     }
@@ -198,12 +196,12 @@ class Baseurl extends \Magento\Core\Model\Config\Value
      *
      * @param string $value
      * @return void
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     private function _validateFullyQualifiedUrl($value)
     {
         if (!$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Model\Exception(__('Specify a fully qualified URL.'));
+            throw new \Magento\Framework\Model\Exception(__('Specify a fully qualified URL.'));
         }
     }
 
@@ -228,12 +226,12 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     {
         if ($this->isValueChanged()) {
             switch ($this->getPath()) {
-                case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL:
-                case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
-                case \Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
-                case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_URL:
-                case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
-                case \Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
+                case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL:
+                case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
+                case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
+                case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL:
+                case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
+                case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
                     $this->_mergeService->cleanMergedJsCss();
                     break;
             }

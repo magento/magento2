@@ -49,8 +49,8 @@ class ShareTest extends \PHPUnit_Framework_TestCase
         /** @var Share $share */
         $share = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Share');
         $expectedIds = array(1);
-        /** @var \Magento\Core\Model\Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Website');
+        /** @var \Magento\Store\Model\Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Website');
         $expectedIds[] = $website->load('secondwebsite')->getId();
         $expectedIds[] = $website->load('thirdwebsite')->getId();
 

@@ -73,7 +73,7 @@ abstract class AbstractSelectorList extends \Magento\Backend\Block\Template
 
         $items = array();
         if (!empty($themeCollection)) {
-            /** @var $theme \Magento\View\Design\ThemeInterface */
+            /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
             foreach ($themeCollection as $theme) {
                 $itemBlock->setTheme($theme);
                 $this->_addThemeButtons($itemBlock);

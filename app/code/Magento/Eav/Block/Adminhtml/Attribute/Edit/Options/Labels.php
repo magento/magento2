@@ -35,7 +35,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 class Labels extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_registry;
 
@@ -46,12 +46,12 @@ class Labels extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -61,7 +61,7 @@ class Labels extends \Magento\Backend\Block\Template
     /**
      * Retrieve stores collection with default store
      *
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\Resource\Store\Collection
      */
     public function getStores()
     {

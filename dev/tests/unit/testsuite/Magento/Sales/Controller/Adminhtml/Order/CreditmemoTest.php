@@ -31,12 +31,12 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
@@ -46,12 +46,12 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected $_sessionMock;
 
     /**
-     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_messageManager;
 
@@ -61,31 +61,37 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $this->_responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $this->_responseMock->headersSentThrowsException = false;
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             'Magento\Backend\Model\Session',
-            array('storage' => new \Magento\Session\Storage())
+            array('storage' => new \Magento\Framework\Session\Storage())
         );
         $this->_sessionMock = $this->getMock(
             'Magento\Backend\Model\Session',
             array('setFormData'),
             $constructArguments
         );
-        $this->_objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
-        $registryMock = $this->getMock('Magento\Registry', array(), array(), '', false, false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
+        $registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false, false);
         $this->_objectManager->expects(
             $this->any()
         )->method(
             'get'
         )->with(
-            $this->equalTo('Magento\Registry')
+            $this->equalTo('Magento\Framework\Registry')
         )->will(
             $this->returnValue($registryMock)
         );
-        $this->_messageManager = $this->getMock('\Magento\Message\ManagerInterface', array(), array(), '', false);
+        $this->_messageManager = $this->getMock(
+            '\Magento\Framework\Message\ManagerInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $arguments = array(
             'response' => $this->_responseMock,
@@ -226,7 +232,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set expectations in case of \Magento\Model\Exception for saveAction method
+     * Set expectations in case of \Magento\Framework\Model\Exception for saveAction method
      *
      * @param array $data
      * @param string $errorMessage

@@ -147,8 +147,8 @@
                         <argument name="id" xsi:type="string">billing_name</argument>
                         <argument name="header" xsi:type="string" translate="true">Bill-to Name</argument>
                         <argument name="index" xsi:type="string">billing_name</argument>
-                        <argument name="header_css_class" xsi:type="string">col-bill-to-name</argument>
-                        <argument name="column_css_class" xsi:type="string">col-bill-to-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="shipping_name">
@@ -156,8 +156,8 @@
                         <argument name="id" xsi:type="string">shipping_name</argument>
                         <argument name="header" xsi:type="string" translate="true">Ship-to Name</argument>
                         <argument name="index" xsi:type="string">shipping_name</argument>
-                        <argument name="header_css_class" xsi:type="string">col-ship-to-name</argument>
-                        <argument name="column_css_class" xsi:type="string">col-ship-to-name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-name</argument>
+                        <argument name="column_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="base_grand_total">

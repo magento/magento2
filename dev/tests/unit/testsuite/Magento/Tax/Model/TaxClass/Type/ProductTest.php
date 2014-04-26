@@ -28,29 +28,18 @@ namespace Magento\Tax\Model\TaxClass\Type;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetAssignedObjects()
+    public function testIsAssignedToObjects()
     {
-        $collectionMock = $this->getMockBuilder(
-            'Magento\Model\Resource\Db\Collection\AbstractCollection'
-        )->setMethods(
-            array('addAttributeToFilter')
-        )->disableOriginalConstructor()->getMock();
-        $collectionMock->expects(
-            $this->once()
-        )->method(
-            'addAttributeToFilter'
-        )->with(
-            $this->equalTo('tax_class_id'),
-            $this->equalTo(1)
-        )->will(
-            $this->returnSelf()
-        );
+        $collectionMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\Collection\AbstractCollection')
+            ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()->getMock();
+        $collectionMock->expects($this->once())->method('addAttributeToFilter')
+            ->with($this->equalTo('tax_class_id'), $this->equalTo(1))->will($this->returnSelf());
+        $collectionMock->expects($this->once())->method('getSize')
+            ->will($this->returnValue(1));
 
-        $productMock = $this->getMockBuilder(
-            'Magento\Catalog\Model\Product'
-        )->setMethods(
-            array('getCollection', '__wakeup')
-        )->disableOriginalConstructor()->getMock();
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(['getCollection', '__wakeup', 'getEntityId'])
+            ->disableOriginalConstructor()->getMock();
         $productMock->expects($this->once())->method('getCollection')->will($this->returnValue($collectionMock));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -59,6 +48,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Model\TaxClass\Type\Product',
             array('modelProduct' => $productMock, 'data' => array('id' => 1))
         );
-        $this->assertEquals($collectionMock, $model->getAssignedToObjects());
+        $this->assertTrue($model->isAssignedToObjects());
     }
 }

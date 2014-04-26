@@ -33,7 +33,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     protected $_widgetModelMock;
 
     /**
-     * @var \Magento\View\FileSystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_viewFileSystemMock;
 
@@ -64,18 +64,24 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             'Magento\Widget\Model\Widget'
         )->disableOriginalConstructor()->getMock();
         $this->_viewFileSystemMock = $this->getMockBuilder(
-            'Magento\View\FileSystem'
+            'Magento\Framework\View\FileSystem'
         )->disableOriginalConstructor()->getMock();
         $this->_namespaceResolver = $this->getMockBuilder(
             '\Magento\Widget\Model\NamespaceResolver'
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheTypesListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
+        $this->_cacheTypesListMock = $this->getMock('Magento\Framework\App\Cache\TypeListInterface');
         $this->_readerMock = $this->getMockBuilder(
             'Magento\Widget\Model\Config\Reader'
         )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
-        $this->_directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_directoryMock = $this->getMock(
+            '\Magento\Framework\Filesystem\Directory\Read',
+            array(),
+            array(),
+            '',
+            false
+        );
         $filesystemMock->expects(
             $this->any()
         )->method(

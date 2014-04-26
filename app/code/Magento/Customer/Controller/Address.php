@@ -23,15 +23,15 @@
  */
 namespace Magento\Customer\Controller;
 
-use Magento\App\RequestInterface;
-use Magento\Exception\InputException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Customer address controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Address extends \Magento\App\Action\Action
+class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -64,7 +64,7 @@ class Address extends \Magento\App\Action\Action
     protected $_addressBuilder;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
@@ -76,7 +76,7 @@ class Address extends \Magento\App\Action\Action
      * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
@@ -107,7 +107,7 @@ class Address extends \Magento\App\Action\Action
      * Check customer authentication
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -197,9 +197,9 @@ class Address extends \Magento\App\Action\Action
             $this->getResponse()->setRedirect($this->_redirect->success($url));
             return;
         } catch (InputException $e) {
+            $this->messageManager->addError($e->getMessage());
             foreach ($e->getErrors() as $error) {
-                $message = InputException::translateError($error);
-                $this->messageManager->addError($message);
+                $this->messageManager->addError($error->getMessage());
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot save address.'));
@@ -274,8 +274,8 @@ class Address extends \Magento\App\Action\Action
      */
     protected function _buildUrl($route = '', $params = array())
     {
-        /** @var \Magento\UrlInterface $urlBuilder */
-        $urlBuilder = $this->_objectManager->create('Magento\UrlInterface');
+        /** @var \Magento\Framework\UrlInterface $urlBuilder */
+        $urlBuilder = $this->_objectManager->create('Magento\Framework\UrlInterface');
         return $urlBuilder->getUrl($route, $params);
     }
 }

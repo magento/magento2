@@ -55,8 +55,8 @@ class VatValidator
      * Validate VAT number
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store|int $store
-     * @return \Magento\Object
+     * @param \Magento\Store\Model\Store|int $store
+     * @return \Magento\Framework\Object
      */
     public function validate(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)
     {
@@ -91,7 +91,7 @@ class VatValidator
             $quoteAddress->save();
         } else {
             // Restore validation results from corresponding quote address
-            $validationResult = new \Magento\Object(
+            $validationResult = new \Magento\Framework\Object(
                 array(
                     'is_valid' => (int)$quoteAddress->getVatIsValid(),
                     'request_identifier' => (string)$quoteAddress->getVatRequestId(),
@@ -108,7 +108,7 @@ class VatValidator
      * Check whether VAT ID validation is enabled
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store|int $store
+     * @param \Magento\Store\Model\Store|int $store
      * @return bool
      */
     public function isEnabled(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)

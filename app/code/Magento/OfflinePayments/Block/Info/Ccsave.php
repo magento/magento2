@@ -30,8 +30,8 @@ class Ccsave extends \Magento\Payment\Block\Info\Cc
      *
      * Expiration date and full number will show up only in secure mode (only for admin, not in emails or pdfs)
      *
-     * @param \Magento\Object|array $transport
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object|array $transport
+     * @return \Magento\Framework\Object
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -39,7 +39,7 @@ class Ccsave extends \Magento\Payment\Block\Info\Cc
             return $this->_paymentSpecificInformation;
         }
         $info = $this->getInfo();
-        $transport = new \Magento\Object(array((string)__('Name on the Card') => $info->getCcOwner()));
+        $transport = new \Magento\Framework\Object(array((string)__('Name on the Card') => $info->getCcOwner()));
         $transport = parent::_prepareSpecificInformation($transport);
         if (!$this->getIsSecureMode()) {
             $transport->addData(

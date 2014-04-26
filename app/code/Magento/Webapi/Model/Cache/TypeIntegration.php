@@ -28,7 +28,7 @@ namespace Magento\Webapi\Model\Cache;
 /**
  * System / Cache Management / Cache type "Integration Api Configuration"
  */
-class TypeIntegration extends \Magento\Cache\Frontend\Decorator\TagScope
+class TypeIntegration extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types
@@ -41,9 +41,9 @@ class TypeIntegration extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'INTEGRATION_API_CONFIG';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

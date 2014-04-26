@@ -39,12 +39,12 @@ class Agreement extends \Magento\Payment\Block\Form
     protected $_agreementFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         array $data = array()
     ) {

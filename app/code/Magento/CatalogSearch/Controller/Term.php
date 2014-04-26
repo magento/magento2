@@ -25,10 +25,9 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-use Magento\App\Action\Action;
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-use Magento\App\ResponseInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 
 class Term extends Action
 {
@@ -40,7 +39,7 @@ class Term extends Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfig('catalog/seo/search_terms')) {
+        if (!$this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('catalog/seo/search_terms', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->_redirect('noroute');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }

@@ -27,7 +27,7 @@
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
 // default generation dir
-$generationDir = BP . '/' . \Magento\Code\Generator\Io::DEFAULT_DIRECTORY;
+$generationDir = BP . '/' . \Magento\Framework\Code\Generator\Io::DEFAULT_DIRECTORY;
 
 try {
     $opt = new Zend_Console_Getopt(
@@ -58,13 +58,13 @@ try {
         $generationDir = $opt->getOption('g');
     }
 } catch (Zend_Console_Getopt_Exception $e) {
-    $generator = new \Magento\Code\Generator();
+    $generator = new \Magento\Framework\Code\Generator();
     $entities = $generator->getGeneratedEntities();
 
     $allowedTypes = 'Allowed entity types are: ' . implode(', ', $entities) . '.';
-    $example = 'Example: php -f entity_generator.php -- -t factory -c \Magento\Event\Observer ' .
+    $example = 'Example: php -f entity_generator.php -- -t factory -c \Magento\Framework\Event\Observer ' .
         '-g /var/mage/m2ee/generation' .
-        ' - will generate file /var/mage/m2ee/generation/Magento/Event/ObserverFactory.php';
+        ' - will generate file /var/mage/m2ee/generation/Magento/Framework/Event/ObserverFactory.php';
 
     echo $e->getMessage() . "\n";
     echo $e->getUsageMessage() . "\n";
@@ -73,18 +73,18 @@ try {
     exit($example);
 }
 
-\Magento\Autoload\IncludePath::addIncludePath($generationDir);
+\Magento\Framework\Autoload\IncludePath::addIncludePath($generationDir);
 
 //reinit generator with correct generation path
-$io = new \Magento\Code\Generator\Io(new \Magento\Filesystem\Driver\File(), null, $generationDir);
-$generator = new \Magento\Code\Generator(null, null, $io);
+$io = new \Magento\Framework\Code\Generator\Io(new \Magento\Framework\Filesystem\Driver\File(), null, $generationDir);
+$generator = new \Magento\Framework\Code\Generator(null, null, $io);
 
 try {
-    if (\Magento\Code\Generator::GENERATION_SUCCESS == $generator->generateClass($className)) {
+    if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generator->generateClass($className)) {
         print "Class {$className} was successfully generated.\n";
     } else {
         print "Can't generate class {$className}. This class either not generated entity, or it already exists.\n";
     }
-} catch (\Magento\Exception $e) {
+} catch (\Magento\Framework\Exception $e) {
     print "Error! {$e->getMessage()}\n";
 }

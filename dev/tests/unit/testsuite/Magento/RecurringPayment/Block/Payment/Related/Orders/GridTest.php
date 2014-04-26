@@ -44,9 +44,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareLayout()
     {
-        $customer = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
-        $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $customerId = 1;
+        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $args = array(
             'getIncrementId',
             'getCreatedAt',
@@ -70,7 +69,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \ArrayIterator(array($collectionElement)))
         );
         $payment = $this->getMock('Magento\RecurringPayment\Model\Payment', array(), array(), '', false);
-        $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $registry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $registry->expects(
             $this->at(0)
         )->method(
@@ -85,14 +84,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registry'
         )->with(
-            'current_customer'
+            'current_customer_id'
         )->will(
-            $this->returnValue($customer)
+            $this->returnValue($customerId)
         );
         $payment->expects($this->once())->method('setStore')->with($store)->will($this->returnValue($payment));
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManagerInterface');
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
-        $locale = $this->getMock('\Magento\Stdlib\DateTime\TimezoneInterface');
+        $locale = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $locale->expects($this->once())->method('formatDate')->will($this->returnValue('11-11-1999'));
         $recurringCollectionFilter = $this->getMock(
             '\Magento\RecurringPayment\Model\Resource\Order\CollectionFilter',
@@ -129,7 +128,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($pagerBlock)
         );
-        $layout = $this->getMock('Magento\View\LayoutInterface');
+        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $layout->expects($this->once())->method('createBlock')->will($this->returnValue($pagerBlock));
         $block->setLayout($layout);
 
@@ -138,7 +137,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
          */
         $this->assertNotEmpty($block->getGridColumns());
         $expectedResult = array(
-            new \Magento\Object(
+            new \Magento\Framework\Object(
                 array(
                     'increment_id' => 1,
                     'increment_id_link_url' => null,

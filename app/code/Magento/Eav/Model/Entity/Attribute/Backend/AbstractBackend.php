@@ -27,10 +27,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -77,14 +73,14 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     protected $_defaultValue = null;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      */
-    public function __construct(\Magento\Logger $logger)
+    public function __construct(\Magento\Framework\Logger $logger)
     {
         $this->_logger = $logger;
     }
@@ -186,7 +182,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Set entity value id
      *
-     * @param \Magento\Object $entity
+     * @param \Magento\Framework\Object $entity
      * @param int $valueId
      * @return $this
      */
@@ -213,7 +209,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Get entity value id
      *
-     * @param \Magento\Object $entity
+     * @param \Magento\Framework\Object $entity
      * @return int
      */
     public function getEntityValueId($entity)
@@ -246,7 +242,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Validate object
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @throws \Magento\Eav\Exception
      * @return bool
      */
@@ -258,10 +254,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
             return false;
         }
 
-        if ($this->getAttribute()->getIsUnique() && !$this->getAttribute()->getIsRequired() && ($value == '' ||
-            $this->getAttribute()->isValueEmpty(
-                $value
-            ))
+        if ($this->getAttribute()->getIsUnique()
+            && !$this->getAttribute()->getIsRequired()
+            && ($value == '' || $this->getAttribute()->isValueEmpty($value))
         ) {
             return true;
         }
@@ -279,7 +274,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After load method
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function afterLoad($object)
@@ -290,7 +285,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before save method
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeSave($object)
@@ -306,7 +301,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After save method
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function afterSave($object)
@@ -317,7 +312,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before delete method
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function beforeDelete($object)
@@ -328,7 +323,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After delete method
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
     public function afterDelete($object)
@@ -339,7 +334,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Retrieve data for update attribute
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return array
      */
     public function getAffectedFields($object)

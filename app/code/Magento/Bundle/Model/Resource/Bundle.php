@@ -32,7 +32,7 @@ namespace Magento\Bundle\Model\Resource;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Bundle extends \Magento\Model\Resource\Db\AbstractDb
+class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Relation
@@ -40,11 +40,11 @@ class Bundle extends \Magento\Model\Resource\Db\AbstractDb
     protected $_productRelation;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\Resource\Product\Relation $productRelation
     ) {
         parent::__construct($resource);

@@ -44,7 +44,7 @@ class System extends Generic
     {
         $model = $this->_coreRegistry->registry('entity_attribute');
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('System Properties')));
 

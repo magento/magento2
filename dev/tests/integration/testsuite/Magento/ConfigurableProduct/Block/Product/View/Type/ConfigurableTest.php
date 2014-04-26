@@ -47,7 +47,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
         $this->_product->load(1);
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\ConfigurableProduct\Block\Product\View\Type\Configurable'
         );

@@ -28,6 +28,7 @@
     $.widget('mage.tierPrice', {
         options: {
             popupHeading: '#map-popup-heading',
+            productForm: '#product_addtocart_form',
             popupPrice: '#map-popup-price',
             popupMsrp: '#map-popup-msrp',
             popup: '#map-popup',
@@ -53,7 +54,7 @@
             $(this.options.popupCartButtonId).off('click');
             $(this.options.popupCartButtonId).on('click', $.proxy(function() {
                 this.element.find(this.options.inputQty).val(data.qty);
-                this.element.submit();
+                this.element.find(this.options.productForm).submit();
             }, this));
             $(this.options.popupHeading).text(data.name);
             $(this.options.popupPrice).html($(data.price)).find('[id^="product-price-"]').attr('id', function() {
@@ -63,7 +64,7 @@
             $(this.options.popupMsrp).html(data.msrp);
             var width = $(this.options.popup).width();
             var offsetX = e.pageX - (width / 2) + "px";
-            $(this.options.popup).css({left: offsetX, top: e.pageY}).show();
+            $(this.options.popup).css({left: offsetX, top: e.pageY}).addClass('active').show();
             $(this.options.popupContent).show();
             $(this.options.popupText).addClass(this.options.popupOnlyText).show();
             $(this.options.popupTextWhatThis).hide();

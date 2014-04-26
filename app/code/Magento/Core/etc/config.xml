@@ -48,18 +48,18 @@
             <js>
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
-                <minify_adapter>Magento\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
+                <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
             </js>
             <image>
                 <default_adapter>GD2</default_adapter>
                 <adapters>
                     <GD2>
                         <title>PHP GD2</title>
-                        <class>Magento\Image\Adapter\Gd2</class>
+                        <class>Magento\Framework\Image\Adapter\Gd2</class>
                     </GD2>
                     <IMAGEMAGICK>
                         <title>ImageMagick</title>
-                        <class>Magento\Image\Adapter\ImageMagick</class>
+                        <class>Magento\Framework\Image\Adapter\ImageMagick</class>
                     </IMAGEMAGICK>
                 </adapters>
             </image>
@@ -129,32 +129,32 @@
                     <ftp>
                         <read_only>0</read_only>
                         <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\File</driver>
                     </ftp>
                     <ftps>
                         <read_only>0</read_only>
                         <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\File</driver>
                     </ftps>
                     <ssh2>
                         <read_only>0</read_only>
                         <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\File</driver>
                     </ssh2>
                 </directory>
                 <protocol>
                     <zlib>
-                        <driver>Magento\Filesystem\Driver\Zlib</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\Zlib</driver>
                         <protocol>compress.zlib</protocol>
                     </zlib>
                     <http>
                         <read_only>1</read_only>
-                        <driver>Magento\Filesystem\Driver\Http</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\Http</driver>
                         <protocol>http</protocol>
                     </http>
                     <https>
                         <read_only>1</read_only>
-                        <driver>Magento\Filesystem\Driver\Https</driver>
+                        <driver>Magento\Framework\Filesystem\Driver\Https</driver>
                         <protocol>https</protocol>
                     </https>
                 </protocol>
@@ -165,9 +165,6 @@
                 <use_store>0</use_store>
                 <redirect_to_base>1</redirect_to_base>
             </url>
-            <seo>
-                <use_rewrites>0</use_rewrites>
-            </seo>
             <unsecure>
                 <base_url>{{base_url}}</base_url>
                 <base_web_url>{{unsecure_base_url}}</base_web_url>
@@ -249,8 +246,8 @@
         </general>
         <theme>
             <customization>
-                <css>Magento\View\Design\Theme\Customization\File\Css</css>
-                <js>Magento\View\Design\Theme\Customization\File\Js</js>
+                <css>Magento\Framework\View\Design\Theme\Customization\File\Css</css>
+                <js>Magento\Framework\View\Design\Theme\Customization\File\Js</js>
             </customization>
         </theme>
     </default>

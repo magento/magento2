@@ -59,11 +59,11 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
 
         $context = $objectManager->create('Magento\Backend\Block\Template\Context', array('urlBuilder' => $urlModel));
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings */
         $block = $layout->createBlock(
             'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings',

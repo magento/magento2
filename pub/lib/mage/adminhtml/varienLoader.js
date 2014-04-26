@@ -194,7 +194,7 @@ varienLoaderHandler.handler = {
             return;
         }
 
-        request.options.loaderArea = $$('#html-body .wrapper')[0]; // Blocks all page
+        request.options.loaderArea = $$('#html-body .page-wrapper')[0]; // Blocks all page
 
         if(request && request.options.loaderArea){
             //Element.clonePosition($('loading-mask'), $(request.options.loaderArea), {offsetLeft:-2});

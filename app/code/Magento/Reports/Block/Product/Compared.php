@@ -51,7 +51,7 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
         if ($this->hasData('page_size')) {
             return $this->getData('page_size');
         }
-        return $this->_storeConfig->getConfig(self::XML_PATH_RECENTLY_COMPARED_COUNT);
+        return $this->_scopeConfig->getValue(self::XML_PATH_RECENTLY_COMPARED_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

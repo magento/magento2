@@ -169,8 +169,8 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                                class="checkbox" data-column="entity_id" <?php echo $checked?> />
                     </td>
                     <td class="col-image" data-column="image">
-                        <div class="actions-split actions-image-uploader">
-                            <div class="action-upload" data-action="upload-image">
+                        <div class="actions split actions-image-uploader">
+                            <div class="action-upload action split" data-action="upload-image">
                                 <span><?php echo __('Upload Image'); ?></span>
                                 <input name="image" type="file" <?php echo $disabled;?>
                                        data-url="<?php echo $this->escapeHtml($this->getImageUploadUrl()) ?>"
@@ -179,10 +179,10 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                                        name="variations-matrix[<?php echo $key?>][image]"
                                        type="hidden" <?php echo $disabled;?>/>
                             </div>
-                            <button type="button" class="action-toggle no-display" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
+                            <button type="button" class="action toggle no-display" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                 <span><?php echo __('Select'); ?></span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown">
                                 <li>
                                     <a class="item" data-action="no-image"><?php echo __('No Image'); ?></a>
                                 </li>

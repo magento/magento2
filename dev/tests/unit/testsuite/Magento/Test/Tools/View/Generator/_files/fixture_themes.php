@@ -24,10 +24,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$themeOne = new \Magento\Object(array('area' => 'area_one', 'theme_path' => 'fixture/theme_one'));
-$themeTwo = new \Magento\Object(array('area' => 'area_one', 'theme_path' => 'fixture/theme_two'));
-$themeThree = new \Magento\Object(array('area' => 'area_two', 'theme_path' => 'fixture/theme_three'));
-$themeFour = new \Magento\Object(array('area' => 'area_two', 'theme_path' => 'fixture/theme_four'));
+$themeOne = new \Magento\Framework\Object(array('area' => 'area_one', 'theme_path' => 'fixture/theme_one'));
+$themeTwo = new \Magento\Framework\Object(array('area' => 'area_one', 'theme_path' => 'fixture/theme_two'));
+$themeThree = new \Magento\Framework\Object(array('area' => 'area_two', 'theme_path' => 'fixture/theme_three'));
+$themeFour = new \Magento\Framework\Object(array('area' => 'area_two', 'theme_path' => 'fixture/theme_four'));
 
 return array(
     'theme_customizing_one_module' => array(

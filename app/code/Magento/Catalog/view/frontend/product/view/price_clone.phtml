@@ -22,5 +22,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var \Magento\Catalog\Block\Product\AbstractProduct $this */ ?>
 <?php $_product = $this->getProduct() ?>
-<?php echo $this->getPriceHtml($_product, false, '_clone') ?>
+<?php echo $this->getProductPriceHtml(
+    $_product,
+    \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+    \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+    [
+        'price_id_suffix' => '_clone'
+    ]
+) ?>

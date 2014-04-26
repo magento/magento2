@@ -73,7 +73,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -92,29 +92,37 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_customerSession;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = array()
     ) {
         $this->_resource = $filterPriceFactory->create();
         $this->_customerSession = $customerSession;
         $this->_priceAlgorithm = $priceAlgorithm;
         $this->_coreRegistry = $coreRegistry;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($filterItemFactory, $storeManager, $layer, $data);
         $this->_requestVar = 'price';
     }
@@ -147,7 +155,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 
             $maxPrice = $this->getMaxPriceInt();
             if (!$range) {
-                $calculation = $this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
+                $calculation = $this->_scopeConfig->getValue(
+                    self::XML_PATH_RANGE_CALCULATION,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
                 if ($calculation == self::RANGE_CALCULATION_AUTO) {
                     $index = 1;
                     do {
@@ -156,7 +167,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
                         $index++;
                     } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
                 } else {
-                    $range = (double)$this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_STEP);
+                    $range = (double)$this->_scopeConfig->getValue(
+                        self::XML_PATH_RANGE_STEP,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    );
                 }
             }
 
@@ -199,7 +213,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             $i = 0;
             $lastIndex = null;
             $maxIntervalsNumber = $this->getMaxIntervalsNumber();
-            $calculation = $this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
+            $calculation = $this->_scopeConfig->getValue(
+                self::XML_PATH_RANGE_CALCULATION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             foreach ($items as $k => $v) {
                 ++$i;
                 if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
@@ -245,8 +262,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         $formattedFromPrice = $store->formatPrice($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
-        } elseif ($fromPrice == $toPrice && $this->_storeManager->getStore()->getConfig(
-            self::XML_PATH_ONE_PRICE_INTERVAL
+        } elseif ($fromPrice == $toPrice && $this->_scopeConfig->getValue(
+            self::XML_PATH_ONE_PRICE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $formattedFromPrice;
@@ -326,8 +344,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        if ($this->_storeManager->getStore()->getConfig(
-            self::XML_PATH_RANGE_CALCULATION
+        if ($this->_scopeConfig->getValue(
+            self::XML_PATH_RANGE_CALCULATION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == self::RANGE_CALCULATION_IMPROVED
         ) {
             return $this->_getCalculatedItemsData();
@@ -514,7 +533,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function getMaxIntervalsNumber()
     {
-        return (int)$this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_MAX_INTERVALS);
+        return (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_RANGE_MAX_INTERVALS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -524,7 +546,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function getIntervalDivisionLimit()
     {
-        return (int)$this->_storeManager->getStore()->getConfig(self::XML_PATH_INTERVAL_DIVISION_LIMIT);
+        return (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_INTERVAL_DIVISION_LIMIT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -552,8 +577,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function getClearLinkText()
     {
-        if ($this->_storeManager->getStore()->getConfig(
-            self::XML_PATH_RANGE_CALCULATION
+        if ($this->_scopeConfig->getValue(
+            self::XML_PATH_RANGE_CALCULATION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == self::RANGE_CALCULATION_IMPROVED && $this->getPriorIntervals()
         ) {
             return __('Clear Price');

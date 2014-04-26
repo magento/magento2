@@ -118,7 +118,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Return url of given row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

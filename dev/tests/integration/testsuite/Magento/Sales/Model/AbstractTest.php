@@ -46,7 +46,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testAfterCommitCallbackOrderGridNotInvoked()
     {
         $adapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Resource'
+            'Magento\Framework\App\Resource'
         )->getConnection(
             'core_write'
         );

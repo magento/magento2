@@ -42,7 +42,7 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
         </thead>
         <tfoot>
         <tr>
-            <td colspan="<?php echo count($this->getColumns())+$_colspan; ?>">
+            <td colspan="<?php echo count($this->getColumns())+$_colspan; ?>" class="col-actions-add">
                 <button id="addToEndBtn<?php echo $_htmlId; ?>" class="action- add" title="<?php echo __('Add'); ?>" type="button">
                     <span><?php echo $this->getAddButtonLabel(); ?><?php echo __('Add'); ?></span>
                 </button>

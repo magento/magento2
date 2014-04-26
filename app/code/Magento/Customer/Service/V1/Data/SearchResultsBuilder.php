@@ -21,19 +21,22 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1\Data;
+
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 
 /**
  * Builder for the SearchResults Service Data Object
  *
  * @method SearchResults create()
  */
-class SearchResultsBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class SearchResultsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * Set search criteria
      *
-     * @param \Magento\Customer\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param SearchCriteria $searchCriteria
      * @return $this
      */
     public function setSearchCriteria(SearchCriteria $searchCriteria)
@@ -55,7 +58,7 @@ class SearchResultsBuilder extends \Magento\Service\Data\AbstractObjectBuilder
     /**
      * Set items
      *
-     * @param \Magento\Service\Data\AbstractObject[] $items
+     * @param \Magento\Customer\Service\V1\Data\CustomerDetails[] $items
      * @return $this
      */
     public function setItems($items)

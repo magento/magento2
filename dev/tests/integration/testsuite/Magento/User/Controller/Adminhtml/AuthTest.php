@@ -103,7 +103,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/auth/resetpassword');
         $this->assertSessionMessages(
             $this->equalTo(array('Your password reset link has expired.')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect();
     }
@@ -155,8 +155,8 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $user = $objectManager->create('Magento\User\Model\User');
         $user->loadByUsername('dummy_username');
 
-        /** @var \Magento\Encryption\EncryptorInterface $encryptor */
-        $encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
+        /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
+        $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
         $this->assertTrue($encryptor->validateHash($newDummyPassword, $user->getPassword()));
     }
 
@@ -171,7 +171,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/auth/resetpasswordpost');
         $this->assertSessionMessages(
             $this->equalTo(array('Your password reset link has expired.')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -223,7 +223,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $this->assertSessionMessages(
             $this->equalTo(array('Your password confirmation must match your password.')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect();
     }

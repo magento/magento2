@@ -32,24 +32,24 @@ class Design extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
-        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->dateFilter = $dateFilter;
@@ -96,7 +96,7 @@ class Design extends Action
         $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $id = (int)$this->getRequest()->getParam('id');
-        $design = $this->_objectManager->create('Magento\Core\Model\Design');
+        $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');
 
         if ($id) {
             $design->load($id);
@@ -124,7 +124,7 @@ class Design extends Action
             $data['design'] = $this->_filterPostData($data['design']);
             $id = (int)$this->getRequest()->getParam('id');
 
-            $design = $this->_objectManager->create('Magento\Core\Model\Design');
+            $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');
             if ($id) {
                 $design->load($id);
             }
@@ -155,12 +155,12 @@ class Design extends Action
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
-            $design = $this->_objectManager->create('Magento\Core\Model\Design')->load($id);
+            $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface')->load($id);
 
             try {
                 $design->delete();
                 $this->messageManager->addSuccess(__('You deleted the design change.'));
-            } catch (\Magento\Exception $e) {
+            } catch (\Magento\Framework\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __("Cannot delete the design change."));

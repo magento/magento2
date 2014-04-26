@@ -28,7 +28,7 @@ use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 /**
  * Multishipping checkout model
  */
-class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
+class Multishipping extends \Magento\Framework\Object
 {
     /**
      * Quote shipping addresses items cache
@@ -40,24 +40,24 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -84,16 +84,36 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     protected $helper;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $_checkoutSession;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $_customerSession;
+
+    /**
+     * @var \Magento\Sales\Model\OrderFactory
+     */
+    protected $_orderFactory;
+
+    /**
+     * @var CustomerAddressServiceInterface
+     */
+    protected $_customerAddressService;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param CustomerAddressServiceInterface $customerAddressService
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Convert\Quote $quote
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param array $data
@@ -103,25 +123,29 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         CustomerAddressServiceInterface $customerAddressService,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Session $session,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Session\Generic $session,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         \Magento\Sales\Model\Convert\Quote $quote,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_session = $session;
         $this->_addressFactory = $addressFactory;
         $this->_quote = $quote;
         $this->_storeManager = $storeManager;
         $this->paymentSpecification = $paymentSpecification;
         $this->helper = $helper;
-        parent::__construct($checkoutSession, $customerSession, $orderFactory, $customerAddressService, $data);
+        $this->_checkoutSession = $checkoutSession;
+        $this->_customerSession = $customerSession;
+        $this->_orderFactory = $orderFactory;
+        $this->_customerAddressService = $customerAddressService;
+        parent::__construct($data);
         $this->_init();
     }
 
@@ -283,7 +307,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      *
      * @param array $info
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setShippingItemsInformation($info)
     {
@@ -299,7 +323,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
             $maxQty = $this->helper->getMaximumQty();
             if ($allQty > $maxQty) {
-                throw new \Magento\Model\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('Maximum qty allowed for Shipping to multiple addresses is %1', $maxQty)
                 );
             }
@@ -385,7 +409,6 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             try {
                 $address = $this->_customerAddressService->getAddress($addressId);
             } catch (\Exception $e) {
-                /** Customer address does not exist. */
             }
             if (isset($address)) {
                 if (!($quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId()))) {
@@ -420,7 +443,6 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         try {
             $address = $this->_customerAddressService->getAddress($addressId);
         } catch (\Exception $e) {
-            /** Customer address does not exist. */
         }
         if (isset($address)) {
             $this->getQuote()->getShippingAddressByCustomerAddressId(
@@ -446,7 +468,6 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         try {
             $address = $this->_customerAddressService->getAddress($addressId);
         } catch (\Exception $e) {
-            /** Customer address does not exist. */
         }
         if (isset($address)) {
             $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address)->collectTotals();
@@ -460,7 +481,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      *
      * @param  array $methods
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setShippingMethods($methods)
     {
@@ -469,7 +490,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             if (isset($methods[$address->getId()])) {
                 $address->setShippingMethod($methods[$address->getId()]);
             } elseif (!$address->getShippingMethod()) {
-                throw new \Magento\Model\Exception(__('Please select shipping methods for all addresses.'));
+                throw new \Magento\Framework\Model\Exception(__('Please select shipping methods for all addresses.'));
             }
         }
         $this->save();
@@ -481,15 +502,15 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      *
      * @param array $payment
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setPaymentMethod($payment)
     {
         if (!isset($payment['method'])) {
-            throw new \Magento\Model\Exception(__('Payment method is not defined'));
+            throw new \Magento\Framework\Model\Exception(__('Payment method is not defined'));
         }
         if (!$this->paymentSpecification->isSatisfiedBy($payment['method'])) {
-            throw new \Magento\Model\Exception(__('The requested Payment Method is not available for multishipping.'));
+            throw new \Magento\Framework\Model\Exception(__('The requested Payment Method is not available for multishipping.'));
         }
         $quote = $this->getQuote();
         $quote->getPayment()->importData($payment);
@@ -555,7 +576,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      * Validate quote data
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _validate()
     {
@@ -564,24 +585,24 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         /** @var $paymentMethod \Magento\Payment\Model\Method\AbstractMethod */
         $paymentMethod = $quote->getPayment()->getMethodInstance();
         if (!empty($paymentMethod) && !$paymentMethod->isAvailable($quote)) {
-            throw new \Magento\Model\Exception(__('Please specify a payment method.'));
+            throw new \Magento\Framework\Model\Exception(__('Please specify a payment method.'));
         }
 
         $addresses = $quote->getAllShippingAddresses();
         foreach ($addresses as $address) {
             $addressValidation = $address->validate();
             if ($addressValidation !== true) {
-                throw new \Magento\Model\Exception(__('Please check shipping addresses information.'));
+                throw new \Magento\Framework\Model\Exception(__('Please check shipping addresses information.'));
             }
             $method = $address->getShippingMethod();
             $rate = $address->getShippingRateByCode($method);
             if (!$method || !$rate) {
-                throw new \Magento\Model\Exception(__('Please specify shipping methods for all addresses.'));
+                throw new \Magento\Framework\Model\Exception(__('Please specify shipping methods for all addresses.'));
             }
         }
         $addressValidation = $quote->getBillingAddress()->validate();
         if ($addressValidation !== true) {
-            throw new \Magento\Model\Exception(__('Please check billing address information.'));
+            throw new \Magento\Framework\Model\Exception(__('Please check billing address information.'));
         }
         return $this;
     }
@@ -669,10 +690,12 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function validateMinimumAmount()
     {
-        return !($this->_coreStoreConfig->getConfigFlag(
-            'sales/minimum_order/active'
-        ) && $this->_coreStoreConfig->getConfigFlag(
-            'sales/minimum_order/multi_address'
+        return !($this->_scopeConfig->isSetFlag(
+            'sales/minimum_order/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) && $this->_scopeConfig->isSetFlag(
+            'sales/minimum_order/multi_address',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && !$this->getQuote()->validateMinimumAmount());
     }
 
@@ -683,9 +706,15 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function getMinimumAmountDescription()
     {
-        $descr = $this->_coreStoreConfig->getConfig('sales/minimum_order/multi_address_description');
+        $descr = $this->_scopeConfig->getValue(
+            'sales/minimum_order/multi_address_description',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (empty($descr)) {
-            $descr = $this->_coreStoreConfig->getConfig('sales/minimum_order/description');
+            $descr = $this->_scopeConfig->getValue(
+                'sales/minimum_order/description',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $descr;
     }
@@ -695,9 +724,15 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function getMinimumAmountError()
     {
-        $error = $this->_coreStoreConfig->getConfig('sales/minimum_order/multi_address_error_message');
+        $error = $this->_scopeConfig->getValue(
+            'sales/minimum_order/multi_address_error_message',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (empty($error)) {
-            $error = $this->_coreStoreConfig->getConfig('sales/minimum_order/error_message');
+            $error = $this->_scopeConfig->getValue(
+                'sales/minimum_order/error_message',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $error;
     }
@@ -712,5 +747,102 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     {
         $idsAssoc = $this->_session->getOrderIds();
         return $asAssoc ? $idsAssoc : array_keys($idsAssoc);
+    }
+
+    /**
+     * Retrieve customer default billing address
+     *
+     * @return \Magento\Customer\Service\V1\Data\Address|null
+     */
+    public function getCustomerDefaultBillingAddress()
+    {
+        $address = $this->getData('customer_default_billing_address');
+        if (is_null($address)) {
+            $customerId = $this->getCustomer()->getId();
+            $address = $this->_customerAddressService->getDefaultBillingAddress($customerId);
+            if (!$address) {
+                /** Default billing address is not available, try to find any customer address */
+                $allAddresses = $this->_customerAddressService->getAddresses($customerId);
+                $address = count($allAddresses) ? reset($allAddresses) : null;
+            }
+            $this->setData('customer_default_billing_address', $address);
+        }
+        return $address;
+    }
+
+    /**
+     * Retrieve customer default shipping address
+     *
+     * @return \Magento\Customer\Service\V1\Data\Address|null
+     */
+    public function getCustomerDefaultShippingAddress()
+    {
+        $address = $this->getData('customer_default_shipping_address');
+        if (is_null($address)) {
+            $customerId = $this->getCustomer()->getId();
+            $address = $this->_customerAddressService->getDefaultShippingAddress($customerId);
+            if (!$address) {
+                /** Default shipping address is not available, try to find any customer address */
+                $allAddresses = $this->_customerAddressService->getAddresses($customerId);
+                $address = count($allAddresses) ? reset($allAddresses) : null;
+            }
+            $this->setData('customer_default_shipping_address', $address);
+        }
+        return $address;
+    }
+
+    /**
+     * Retrieve checkout session model
+     *
+     * @return \Magento\Checkout\Model\Session
+     */
+    public function getCheckoutSession()
+    {
+        $checkout = $this->getData('checkout_session');
+        if (is_null($checkout)) {
+            $checkout = $this->_checkoutSession;
+            $this->setData('checkout_session', $checkout);
+        }
+        return $checkout;
+    }
+
+    /**
+     * Retrieve quote model
+     *
+     * @return \Magento\Sales\Model\Quote
+     */
+    public function getQuote()
+    {
+        return $this->getCheckoutSession()->getQuote();
+    }
+
+    /**
+     * Retrieve quote items
+     *
+     * @return \Magento\Sales\Model\Quote\Item[]
+     */
+    public function getQuoteItems()
+    {
+        return $this->getQuote()->getAllItems();
+    }
+
+    /**
+     * Retrieve customer session model
+     *
+     * @return \Magento\Customer\Model\Session
+     */
+    public function getCustomerSession()
+    {
+        return $this->_customerSession;
+    }
+
+    /**
+     * Retrieve customer object
+     *
+     * @return \Magento\Customer\Service\V1\Data\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->_customerSession->getCustomerDataObject();
     }
 }

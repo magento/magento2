@@ -24,15 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Core\Model\Resource\Setup */
-$installer = $this->_migrationFactory->create(array('resourceName' => 'core_setup'));
+/** @var $this \Magento\Customer\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup\Migration */
+$installer = $this->createMigrationSetup();
 $installer->startSetup();
 
 $installer->appendClassAliasReplace(
     'customer_eav_attribute',
     'data_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('attribute_id')
 );
 $installer->doUpdateClassAliases();

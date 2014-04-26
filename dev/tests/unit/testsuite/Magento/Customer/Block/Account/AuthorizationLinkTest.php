@@ -37,7 +37,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * \Magento\App\Http\Context
+     * \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -54,7 +54,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->httpContext = $this->getMockBuilder('\Magento\App\Http\Context')
+        $this->httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
             ->setMethods(array('getValue'))
             ->getMock();
@@ -63,7 +63,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getLogoutUrl', 'getLoginUrl'))
             ->getMock();
 
-        $context = $this->_objectManager->getObject('Magento\View\Element\Template\Context');
+        $context = $this->_objectManager->getObject('Magento\Framework\View\Element\Template\Context');
         $this->_block = $this->_objectManager->getObject(
             'Magento\Customer\Block\Account\AuthorizationLink',
             array(

@@ -26,4 +26,4 @@
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Registry')->unregister('quote');
+$objectManager->get('Magento\Framework\Registry')->unregister('quote');

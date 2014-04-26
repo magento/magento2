@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model\Resource\Attribute;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Whether to join attribute_set_id to attributes or not

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\RecurringPayment\Model\ManagerInterface" type="Magento\PayPalRecurringPayment\Model\Express" />
     <preference for="Magento\Paypal\Model\Api\Nvp" type="Magento\PayPalRecurringPayment\Model\Api\Nvp" />
     <type name="Magento\Paypal\Model\IpnFactory">

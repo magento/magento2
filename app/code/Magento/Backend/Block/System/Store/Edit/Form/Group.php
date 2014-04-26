@@ -42,31 +42,31 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
     protected $_category;
 
     /**
-     * @var \Magento\Core\Model\StoreFactory
+     * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
 
     /**
-     * @var \Magento\Core\Model\Website\Factory
+     * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\Config\Source\Category $category
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\Core\Model\Website\Factory $websiteFactory
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Catalog\Model\Config\Source\Category $category,
-        \Magento\Core\Model\StoreFactory $storeFactory,
-        \Magento\Core\Model\Website\Factory $websiteFactory,
+        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         array $data = array()
     ) {
         $this->_category = $category;
@@ -78,11 +78,11 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
     /**
      * Prepare group specific fieldset
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _prepareStoreFieldset(\Magento\Data\Form $form)
+    protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form)
     {
         $groupModel = $this->_coreRegistry->registry('store_data');
         $postData = $this->_coreRegistry->registry('store_post_data');

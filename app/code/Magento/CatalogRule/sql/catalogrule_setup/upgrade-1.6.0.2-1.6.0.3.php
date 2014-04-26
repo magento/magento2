@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -32,14 +32,14 @@ $installer->startSetup();
 $ruleProductTable = $installer->getTable('catalogrule_product');
 
 $columnOptions = array(
-    'TYPE' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+    'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     'LENGTH' => 32,
     'COMMENT' => 'Simple Action For Subitems'
 );
 $installer->getConnection()->addColumn($ruleProductTable, 'sub_simple_action', $columnOptions);
 
 $columnOptions = array(
-    'TYPE' => \Magento\DB\Ddl\Table::TYPE_DECIMAL,
+    'TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
     'SCALE' => 4,
     'PRECISION' => 12,
     'NULLABLE' => false,

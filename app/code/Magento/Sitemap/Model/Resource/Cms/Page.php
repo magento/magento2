@@ -30,7 +30,7 @@ namespace Magento\Sitemap\Model\Resource\Cms;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Page extends \Magento\Model\Resource\Db\AbstractDb
+class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Init resource model (catalog/category)
@@ -82,11 +82,11 @@ class Page extends \Magento\Model\Resource\Db\AbstractDb
      * Prepare page object
      *
      * @param array $data
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _prepareObject(array $data)
     {
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
         $object->setUpdatedAt($data['updated_at']);

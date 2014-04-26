@@ -41,12 +41,12 @@ namespace Magento\Test\Integrity;
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\View\Design\Fallback\Rule\RuleInterface
+     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface
      */
     protected static $_fallbackRule;
 
     /**
-     * @var \Magento\View\Design\FileResolution\Strategy\Fallback
+     * @var \Magento\Framework\View\Design\FileResolution\Strategy\Fallback
      */
     protected static $_fallback;
 
@@ -67,11 +67,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
             array('preferences' => array('Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'))
         );
 
-        /** @var $fallbackFactory \Magento\View\Design\Fallback\Factory */
-        $fallbackFactory = $objectManager->get('Magento\View\Design\Fallback\Factory');
+        /** @var $fallbackFactory \Magento\Framework\View\Design\Fallback\Factory */
+        $fallbackFactory = $objectManager->get('Magento\Framework\View\Design\Fallback\Factory');
         self::$_fallbackRule = $fallbackFactory->createViewFileRule();
 
-        self::$_fallback = $objectManager->get('Magento\View\Design\FileResolution\Strategy\Fallback');
+        self::$_fallback = $objectManager->get('Magento\Framework\View\Design\FileResolution\Strategy\Fallback');
 
         // Themes to be checked
         self::$_themeCollection = $objectManager->get('Magento\Core\Model\Theme\Collection');
@@ -90,10 +90,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     /**
      * Return array of locales, supported by the theme
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return array
      */
-    protected static function _getThemeLocales(\Magento\View\Design\ThemeInterface $theme)
+    protected static function _getThemeLocales(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $result = array();
         $patternDir = self::_getLocalePatternDir($theme);
@@ -110,11 +110,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     /**
      * Return pattern for theme locale directories, where <locale_placeholder> is placed to mark a locale's location.
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string
      * @throws \Exception
      */
-    protected static function _getLocalePatternDir(\Magento\View\Design\ThemeInterface $theme)
+    protected static function _getLocalePatternDir(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $localePlaceholder = '<locale_placeholder>';
         $params = array('area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder);
@@ -139,7 +139,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     public function testModularFallback($modularCall, array $usages, $area)
     {
-        list(, $file) = explode(\Magento\View\Service::SCOPE_SEPARATOR, $modularCall);
+        list(, $file) = explode(\Magento\Framework\View\Service::SCOPE_SEPARATOR, $modularCall);
 
         $wrongResolutions = array();
         foreach (self::$_themeCollection as $theme) {
@@ -166,11 +166,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     /**
      * Resolves file to find its fallback'ed paths
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $file
      * @return array
      */
-    protected function _getFileResolutions(\Magento\View\Design\ThemeInterface $theme, $file)
+    protected function _getFileResolutions(\Magento\Framework\View\Design\ThemeInterface $theme, $file)
     {
         $found = array();
         $fileResolved = self::$_fallback->getFile($theme->getArea(), $theme, $file);
@@ -198,7 +198,8 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 
             $modulePattern = '[A-Z][a-z]+_[A-Z][a-z]+';
             $filePattern = '[[:alnum:]_/-]+\\.[[:alnum:]_./-]+';
-            $pattern = '#' . $modulePattern . preg_quote(\Magento\View\Service::SCOPE_SEPARATOR) . $filePattern . '#S';
+            $pattern = '#' . $modulePattern . preg_quote(\Magento\Framework\View\Service::SCOPE_SEPARATOR)
+                . $filePattern . '#S';
             if (!preg_match_all($pattern, file_get_contents($file), $matches)) {
                 continue;
             }

@@ -64,9 +64,9 @@ class Item extends \Magento\Backend\Block\Widget
     /**
      * Set additional action block for this item
      *
-     * @param string|\Magento\View\Element\AbstractBlock $block
+     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setAdditionalActionBlock($block)
     {
@@ -74,8 +74,8 @@ class Item extends \Magento\Backend\Block\Widget
             $block = $this->getLayout()->createBlock($block);
         } elseif (is_array($block)) {
             $block = $this->_createFromConfig($block);
-        } elseif (!$block instanceof \Magento\View\Element\AbstractBlock) {
-            throw new \Magento\Model\Exception('Unknown block type');
+        } elseif (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
+            throw new \Magento\Framework\Model\Exception('Unknown block type');
         }
 
         $this->setChild('additional_action', $block);
@@ -84,7 +84,7 @@ class Item extends \Magento\Backend\Block\Widget
 
     /**
      * @param array $config
-     * @return \Magento\View\Element\BlockInterface
+     * @return \Magento\Framework\View\Element\BlockInterface
      */
     protected function _createFromConfig(array $config)
     {
@@ -103,7 +103,7 @@ class Item extends \Magento\Backend\Block\Widget
     /**
      * Retrieve additional action block for this item
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getAdditionalActionBlock()
     {

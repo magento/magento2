@@ -30,7 +30,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Rest\Response */
     protected $_responseRest;
 
-    /** @var \Magento\App\State */
+    /** @var \Magento\Framework\App\State */
     protected $_appStateMock;
 
     /** @var \Magento\Webapi\Controller\Rest\Response\Renderer\Xml */
@@ -51,7 +51,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_rendererMock));
         $this->_errorProcessorMock = $this->getMockBuilder('Magento\Webapi\Controller\ErrorProcessor')
             ->disableOriginalConstructor()->getMock();
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
 
         /** Init SUP. */
         $this->_responseRest = new \Magento\Webapi\Controller\Rest\Response(
@@ -187,11 +187,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         /** Clear output buffering. */
         ob_end_clean();
         $actualResponse = $this->_responseRest->getBody();
-        $expectedResult = '{"errors":[{"message":"' .
+        $expectedResult = '{"message":"' .
             $exceptionMessage .
-            '","http_code":' .
-            $exceptionHttpCode .
-            '}]}';
+            '"}';
         $this->assertStringStartsWith($expectedResult, $actualResponse, 'Response body is invalid');
     }
 

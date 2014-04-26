@@ -62,8 +62,8 @@ class Tierprice extends AbstractGroupprice
     /**
      * Order by qty
      *
-     * @param \Magento\DB\Select $select
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\DB\Select $select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _loadPriceDataSelect($select)
     {

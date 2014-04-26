@@ -32,7 +32,7 @@ namespace Magento\Tools\View\Generator;
 class CopyRule
 {
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     private $_filesystem;
 
@@ -42,7 +42,7 @@ class CopyRule
     private $_themes;
 
     /**
-     * @var \Magento\View\Design\Fallback\Rule\RuleInterface
+     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface
      */
     private $_fallbackRule;
 
@@ -56,14 +56,14 @@ class CopyRule
     /**
      * Constructor
      *
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Theme\Collection $themes
-     * @param \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
+     * @param \Magento\Framework\View\Design\Fallback\Rule\RuleInterface $fallbackRule
      */
     public function __construct(
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Core\Model\Theme\Collection $themes,
-        \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
+        \Magento\Framework\View\Design\Fallback\Rule\RuleInterface $fallbackRule
     ) {
         $this->_filesystem = $filesystem;
         $this->_themes = $themes;
@@ -82,7 +82,7 @@ class CopyRule
     public function getCopyRules()
     {
         $result = array();
-        /** @var $theme \Magento\View\Design\ThemeInterface */
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($this->_themes as $theme) {
             $area = $theme->getArea();
             $nonModularLocations = $this->_fallbackRule->getPatternDirs(array('area' => $area, 'theme' => $theme));
@@ -138,7 +138,7 @@ class CopyRule
     private function _getMatchingDirs($dirPattern)
     {
         $dirPattern = preg_replace($this->_placeholderPcre, '*', $dirPattern, -1, $placeholderCount);
-        $directoryHandler = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $directoryHandler = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         if ($placeholderCount) {
             // autodetect pattern base directory because the filesystem interface requires it
             $firstPlaceholderPos = strpos($dirPattern, '*');

@@ -28,7 +28,7 @@ namespace Magento\Customer\Service\V1\Data;
  *
  * @method Region create()
  */
-class RegionBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class RegionBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * Set region code

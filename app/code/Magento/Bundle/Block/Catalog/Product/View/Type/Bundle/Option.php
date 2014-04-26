@@ -54,13 +54,13 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected $_coreHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Registry $registry
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Tax\Model\Calculation $taxCalc
      * @param \Magento\Core\Helper\Data $coreHelper
@@ -69,13 +69,13 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Registry $registry,
-        \Magento\Stdlib\String $string,
-        \Magento\Math\Random $mathRandom,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Tax\Model\Calculation $taxCalc,
         \Magento\Core\Helper\Data $coreHelper,
@@ -226,7 +226,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     }
 
     /**
-     * @param mixed $_selection
+     * @param \Magento\Catalog\Model\Product $_selection
      * @param bool $includeContainer
      * @return string
      */
@@ -237,7 +237,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         $priceTitle = $_selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($_selection->getName());
 
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
-            $this->formatPriceString($price, $includeContainer) . ($includeContainer ? '</span>' : '');
+            $this->renderPriceString($_selection, $includeContainer) . ($includeContainer ? '</span>' : '');
 
         return $priceTitle;
     }
@@ -274,11 +274,9 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function getSelectionTitlePrice($_selection, $includeContainer = true)
     {
-        $price = $this->getProduct()->getPriceModel()->getSelectionPreFinalPrice($this->getProduct(), $_selection, 1);
-        $this->setFormatProduct($_selection);
         $priceTitle = $this->escapeHtml($_selection->getName());
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
-            $this->formatPriceString($price, $includeContainer) . ($includeContainer ? '</span>' : '');
+            $this->renderPriceString($_selection, $includeContainer) . ($includeContainer ? '</span>' : '');
         return $priceTitle;
     }
 
@@ -300,6 +298,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param float $price
      * @param bool $includeContainer
      * @return string
+     * @deprecated
      */
     public function formatPriceString($price, $includeContainer = true)
     {
@@ -342,5 +341,30 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     {
         $this->_selectedOptions = null;
         return parent::setOption($option);
+    }
+
+    /**
+     * Format price string
+     *
+     * @param \Magento\Catalog\Model\Product $selection
+     * @param bool $includeContainer
+     * @return string
+     */
+    public function renderPriceString($selection, $includeContainer = true)
+    {
+        /** @var \Magento\Bundle\Pricing\Price\BundleOptionPrice $price */
+        $price = $this->getProduct()->getPriceInfo()->getPrice('bundle_option');
+        $amount = $price->getOptionSelectionAmount($selection);
+
+        $priceHtml = $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
+            $amount,
+            $price,
+            $selection,
+            [
+                'include_container' => $includeContainer
+            ]
+        );
+
+        return $priceHtml;
     }
 }

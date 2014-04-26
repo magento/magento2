@@ -240,13 +240,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $catalogDataMock = $this->getMock('Magento\Catalog\Helper\Data', array('__construct'), array(), '', false);
 
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\ImportExport\Model\Import\Entity\Product\Option(
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', array(), array(), '', false),
-            $this->getMock('Magento\App\Resource', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false),
+            $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
             $this->getMock(
                 'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
@@ -263,8 +263,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             $catalogDataMock,
-            $coreStoreConfig,
-            new \Magento\Stdlib\DateTime(),
+            $scopeConfig,
+            new \Magento\Framework\Stdlib\DateTime(),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         );
     }
@@ -398,14 +398,14 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         );
 
         $fetchStrategy = $this->getMockForAbstractClass(
-            'Magento\Data\Collection\Db\FetchStrategyInterface',
+            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
             array('fetchAll')
         );
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
 
         $optionCollection = $this->getMock(
-            'Magento\Data\Collection\Db',
+            'Magento\Framework\Data\Collection\Db',
             array('reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'),
             array($entityFactory, $logger, $fetchStrategy)
         );
@@ -461,11 +461,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param \Magento\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\Db $collection
      * @param int $pageSize
      * @param array $callbacks
      */
-    public function iterate(\Magento\Data\Collection\Db $collection, $pageSize, array $callbacks)
+    public function iterate(\Magento\Framework\Data\Collection\Db $collection, $pageSize, array $callbacks)
     {
         foreach ($collection as $option) {
             foreach ($callbacks as $callback) {

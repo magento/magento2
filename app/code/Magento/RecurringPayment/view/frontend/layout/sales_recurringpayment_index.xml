@@ -25,6 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="customer_account"/>
+    <referenceBlock name="head">
+        <action method="setTitle">
+            <argument translate="true" name="title" xsi:type="string">Recurring Payments</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\RecurringPayment\Block\Payments" name="sales.recurring.payments" template="recurring/payments.phtml" cacheable="false">
             <block class="Magento\RecurringPayment\Block\Payment\Grid" name="sales.recurring.payments.grid" as="grid" template="recurring/grid.phtml" cacheable="false">

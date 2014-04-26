@@ -89,7 +89,7 @@
                                         _this.options.bundleConfig.options[parts[2]].selections[value] &&
                                         _this.options.optionConfig.options[parts[2]].selections[_elem.val()] &&
                                         _this.options.optionConfig.options[parts[2]]
-                                    ) {
+                                        ) {
                                         _this.options.bundleConfig.options[parts[2]].selections[value].qty = parseInt(quantity, 10);
                                         _this.options.optionConfig.options[parts[2]].selections[_elem.val()].qty = parseInt(quantity, 10);
                                     }
@@ -181,13 +181,13 @@
         reloadPrice: function() {
             if (this.options.bundleConfig) {
                 var optionPrice = {
-                    excludeTax: 0,
-                    includeTax: 0,
-                    price: 0,
-                    update: function(price, excludeTax, includeTax) {
+                    exclTaxPrice: this.options.bundleConfig.finalBasePriceExclTax,
+                    inclTaxPrice: this.options.bundleConfig.finalBasePriceInclTax,
+                    price: this.options.bundleConfig.finalPrice,
+                    update: function(price, exclTaxPrice, inclTaxPrice) {
                         this.price += price;
-                        this.excludeTax += excludeTax;
-                        this.includeTax += includeTax;
+                        this.exclTaxPrice += exclTaxPrice;
+                        this.inclTaxPrice += inclTaxPrice;
                     }
                 };
                 $.each(this.options.bundleConfig.selected, $.proxy(function(index, value) {
@@ -197,11 +197,17 @@
                                 if ($.isArray(element)) {
                                     $.each(element, $.proxy(function(k, e) {
                                         var prices = this.selectionPrice(index, e);
-                                        optionPrice.update(prices[0], prices[1], prices[2]);
+                                        optionPrice.update(
+                                            prices[0],
+                                            prices[1],
+                                            prices[2]);
                                     }, this));
                                 } else {
                                     var prices = this.selectionPrice(index, element);
-                                    optionPrice.update(prices[0], prices[1], prices[2]);
+                                    optionPrice.update(
+                                        prices[0],
+                                        prices[1],
+                                        prices[2]);
                                 }
                             }
                         }, this));
@@ -219,9 +225,9 @@
                     if (priceElement.length === 1) {
                         var price = 0;
                         if (value.indexOf('price-including-tax-') >= 0) {
-                            price = optionPrice.priceInclTax;
+                            price = optionPrice.inclTaxPrice;
                         } else if (value.indexOf('price-excluding-tax-') >= 0) {
-                            price = optionPrice.priceExclTax;
+                            price = optionPrice.exclTaxPrice;
                         } else if (value.indexOf('product-price-') >= 0) {
                             price = optionPrice.price;
                         }
@@ -254,39 +260,24 @@
                 qty = configOption.selections[selectionId].qty;
             }
 
-            var price, tierPrice,
-                selection = configOption.selections[selectionId];
+            var selection = configOption.selections[selectionId];
+
+            var price = selection.price;
+            var inclTaxPrice = selection.inclTaxPrice;
+            var exclTaxPrice = selection.exclTaxPrice;
+            var tierPrice = selection.tierPrice;
+
             if (config.priceType === '0') {
-                price = configOption.selections[selectionId].price;
-                tierPrice = configOption.selections[selectionId].tierPrice;
                 $.each(tierPrice, function(k, e) {
                     if (e.price_qty <= qty && e.price <= price) {
                         price = e.price;
+                        inclTaxPrice = e.inclTaxPrice;
+                        exclTaxPrice = e.exclTaxPrice;
                     }
                 });
-            } else {
-                if (selection.priceType === '0') {
-                    price = selection.priceValue;
-                } else {
-                    price = (config.basePrice * selection.priceValue) / 100;
-                }
             }
 
-            var disposition = configOption.selections[selectionId].plusDisposition +
-                configOption.selections[selectionId].minusDisposition;
-            if (config.specialPrice) {
-                price = Math.min((Math.round(price * config.specialPrice) / 100), price);
-            }
-
-            var priceInclTax;
-            if (selection.priceInclTax !== undefined) {
-                priceInclTax = selection.priceInclTax;
-                price = selection.priceExclTax !== undefined ? selection.priceExclTax : selection.price;
-            } else {
-                priceInclTax = price;
-            }
-
-            return [price * qty, disposition * qty, priceInclTax * qty];
+            return [price * qty, exclTaxPrice * qty, inclTaxPrice * qty];
         },
 
         populateQty: function(optionId, selectionId) {

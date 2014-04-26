@@ -31,7 +31,7 @@ namespace Magento\DesignEditor\Model;
 class State
 {
     /**
-     * Url model classes that will be used instead of \Magento\UrlInterface in navigation vde modes
+     * Url model classes that will be used instead of \Magento\Framework\UrlInterface in navigation vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -67,7 +67,7 @@ class State
     /**
      * Application Cache Manager
      *
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
@@ -77,43 +77,43 @@ class State
     protected $_dataHelper;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_configuration;
 
     /**
-     * Store list manager
+     * Mutable Config
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_mutableConfig;
 
     /**
      * @param \Magento\Backend\Model\Session $backendSession
      * @param AreaEmulator $areaEmulator
      * @param Url\Factory $urlModelFactory
-     * @param \Magento\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\ConfigInterface $configuration
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param Theme\Context $themeContext
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
         AreaEmulator $areaEmulator,
         \Magento\DesignEditor\Model\Url\Factory $urlModelFactory,
-        \Magento\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
-        \Magento\ObjectManager $objectManager,
-        \Magento\App\ConfigInterface $configuration,
+        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
     ) {
         $this->_backendSession = $backendSession;
         $this->_areaEmulator = $areaEmulator;
@@ -123,17 +123,17 @@ class State
         $this->_objectManager = $objectManager;
         $this->_configuration = $configuration;
         $this->_themeContext = $themeContext;
-        $this->_storeManager = $storeManager;
+        $this->_mutableConfig = $mutableConfig;
     }
 
     /**
      * Update system data for current VDE environment
      *
      * @param string $areaCode
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      */
-    public function update($areaCode, \Magento\App\RequestInterface $request)
+    public function update($areaCode, \Magento\Framework\App\RequestInterface $request)
     {
         $mode = $request->getAlias('editorMode') ?: self::MODE_NAVIGATION;
         $this->_themeContext->setEditableThemeById($request->getAlias('themeId'));
@@ -178,7 +178,7 @@ class State
     }
 
     /**
-     * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
+     * Create url model instance that will be used instead of \Magento\Framework\UrlInterface in navigation mode
      *
      * @param string $mode
      * @return void
@@ -202,8 +202,12 @@ class State
     {
         if ($this->_themeContext->getEditableTheme()) {
             $themeId = $this->_themeContext->getVisibleTheme()->getId();
-            $this->_storeManager->getStore()->setConfig(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
-            $this->_configuration->setValue(\Magento\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
+            $this->_mutableConfig->setValue(
+                \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
+                $themeId,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $this->_configuration->setValue(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
         }
     }
 

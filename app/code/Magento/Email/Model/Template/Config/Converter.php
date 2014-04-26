@@ -25,7 +25,7 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}

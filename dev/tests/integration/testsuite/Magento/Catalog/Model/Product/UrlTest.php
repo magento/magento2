@@ -48,14 +48,14 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlInstance()
     {
         $instance = $this->_model->getUrlInstance();
-        $this->assertInstanceOf('Magento\Url', $instance);
+        $this->assertInstanceOf('Magento\Framework\Url', $instance);
         $this->assertSame($instance, $this->_model->getUrlInstance());
     }
 
     public function testGetUrlRewrite()
     {
         $instance = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\Core\Model\Url\Rewrite', $instance);
+        $this->assertInstanceOf('Magento\UrlRewrite\Model\UrlRewrite', $instance);
         $this->assertSame($instance, $this->_model->getUrlRewrite());
     }
 

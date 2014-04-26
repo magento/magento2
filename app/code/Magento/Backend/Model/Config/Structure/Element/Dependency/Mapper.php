@@ -42,26 +42,24 @@ class Mapper
     protected $_fieldFactory;
 
     /**
-     * Store Manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator
      * @param FieldFactory $fieldFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator,
-        FieldFactory $fieldFactory
+        FieldFactory $fieldFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
 
         $this->_fieldLocator = $fieldLocator;
-        $this->_storeManager = $storeManager;
         $this->_fieldFactory = $fieldFactory;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
@@ -87,10 +85,10 @@ class Mapper
              * based on not shown field (not rendered field)
              */
             if (false == $dependentField->isVisible()) {
-                $valueInStore = $this->_storeManager->getStore(
+                $valueInStore = $this->_scopeConfig->getValue(
+                    $dependentField->getPath($fieldPrefix),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $storeCode
-                )->getConfig(
-                    $dependentField->getPath($fieldPrefix)
                 );
                 $shouldAddDependency = !$field->isValueSatisfy($valueInStore);
             }

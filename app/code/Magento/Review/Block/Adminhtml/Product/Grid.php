@@ -35,36 +35,36 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Website collection
      *
-     * @var \Magento\Core\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
      */
     protected $_websitesFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
         array $data = array()
     ) {
         $this->_websitesFactory = $websitesFactory;
@@ -101,7 +101,15 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array('header' => __('ID'), 'width' => '50px', 'index' => 'entity_id'));
+        $this->addColumn(
+            'entity_id',
+            array(
+                'header' => __('ID'),
+                'index' => 'entity_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
         $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
 
@@ -109,20 +117,19 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
             $this->addColumn('custom_name', array('header' => __('Product Store Name'), 'index' => 'custom_name'));
         }
 
-        $this->addColumn('sku', array('header' => __('SKU'), 'width' => '80px', 'index' => 'sku'));
+        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku'));
 
         $this->addColumn('price', array('header' => __('Price'), 'type' => 'currency', 'index' => 'price'));
 
         $this->addColumn(
             'qty',
-            array('header' => __('Quantity'), 'width' => '130px', 'type' => 'number', 'index' => 'qty')
+            array('header' => __('Quantity'), 'type' => 'number', 'index' => 'qty')
         );
 
         $this->addColumn(
             'status',
             array(
                 'header' => __('Status'),
-                'width' => '90px',
                 'index' => 'status',
                 'type' => 'options',
                 'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
@@ -138,7 +145,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
                 'websites',
                 array(
                     'header' => __('Websites'),
-                    'width' => '100px',
                     'sortable' => false,
                     'index' => 'websites',
                     'type' => 'options',
@@ -161,7 +167,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Get catalog product row url
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

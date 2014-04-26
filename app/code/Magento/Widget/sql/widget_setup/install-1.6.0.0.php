@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -37,25 +37,25 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('widget')))
         $installer->getTable('widget')
     )->addColumn(
         'widget_id',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
         null,
         array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
         'Widget Id'
     )->addColumn(
         'widget_code',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         255,
         array(),
         'Widget code for template directive'
     )->addColumn(
         'widget_type',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         255,
         array(),
         'Widget Type'
     )->addColumn(
         'parameters',
-        \Magento\DB\Ddl\Table::TYPE_TEXT,
+        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         '64k',
         array('nullable' => true),
         'Parameters'
@@ -76,7 +76,7 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('widget')))
         ) => array(
             'columns' => array(
                 'widget_id' => array(
-                    'type' => \Magento\DB\Ddl\Table::TYPE_INTEGER,
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     'identity' => true,
                     'unsigned' => true,
                     'nullable' => false,
@@ -84,7 +84,7 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('widget')))
                     'comment' => 'Widget Id'
                 ),
                 'parameters' => array(
-                    'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => '64K',
                     'comment' => 'Parameters'
                 )
@@ -100,7 +100,7 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('widget')))
         'code',
         'widget_code',
         array(
-            'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+            'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             'length' => 255,
             'comment' => 'Widget code for template directive'
         )
@@ -110,7 +110,7 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('widget')))
         $installer->getTable('widget'),
         'type',
         'widget_type',
-        array('type' => \Magento\DB\Ddl\Table::TYPE_TEXT, 'length' => 255, 'comment' => 'Widget Type')
+        array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length' => 255, 'comment' => 'Widget Type')
     );
 
     $installer->getConnection()->addIndex(
@@ -127,43 +127,43 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('widget_instance')
 )->addColumn(
     'instance_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Instance Id'
 )->addColumn(
     'instance_type',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Instance Type'
 )->addColumn(
     'package_theme',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Package Theme'
 )->addColumn(
     'title',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Widget Title'
 )->addColumn(
     'store_ids',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array('nullable' => false, 'default' => '0'),
     'Store ids'
 )->addColumn(
     'widget_parameters',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array(),
     'Widget parameters'
 )->addColumn(
     'sort_order',
-    \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Sort order'
@@ -179,49 +179,49 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('widget_instance_page')
 )->addColumn(
     'page_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Page Id'
 )->addColumn(
     'instance_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Instance Id'
 )->addColumn(
     'page_group',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     25,
     array(),
     'Block Group Type'
 )->addColumn(
     'layout_handle',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Layout Handle'
 )->addColumn(
     'block_reference',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Container'
 )->addColumn(
     'page_for',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     25,
     array(),
     'For instance entities'
 )->addColumn(
     'entities',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
     array(),
     'Catalog entities (comma separated)'
 )->addColumn(
     'page_template',
-    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
     array(),
     'Path to widget template'
@@ -233,8 +233,8 @@ $table = $installer->getConnection()->newTable(
     'instance_id',
     $installer->getTable('widget_instance'),
     'instance_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Instance of Widget on Page'
 );
@@ -247,13 +247,13 @@ $table = $installer->getConnection()->newTable(
     $installer->getTable('widget_instance_page_layout')
 )->addColumn(
     'page_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Page Id'
 )->addColumn(
     'layout_update_id',
-    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     null,
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Layout Update Id'
@@ -267,24 +267,24 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName(
         'widget_instance_page_layout',
         array('layout_update_id', 'page_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('layout_update_id', 'page_id'),
-    array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+    array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addForeignKey(
     $installer->getFkName('widget_instance_page_layout', 'page_id', 'widget_instance_page', 'page_id'),
     'page_id',
     $installer->getTable('widget_instance_page'),
     'page_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
     $installer->getFkName('widget_instance_page_layout', 'layout_update_id', 'core_layout_update', 'layout_update_id'),
     'layout_update_id',
     $installer->getTable('core_layout_update'),
     'layout_update_id',
-    \Magento\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\DB\Ddl\Table::ACTION_CASCADE
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Layout updates'
 );

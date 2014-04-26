@@ -34,32 +34,32 @@
  */
 namespace Magento\Reports\Model\Resource;
 
-class Event extends \Magento\Model\Resource\Db\AbstractDb
+class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
     }
 
@@ -99,7 +99,7 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
      * The collection id field is used without corellation, so it must be unique.
      * DESC ordering by event will be added to the collection
      *
-     * @param \Magento\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\Db $collection
      * @param int $eventTypeId
      * @param int $eventSubjectId
      * @param int $subtype
@@ -107,7 +107,7 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
      * @return $this
      */
     public function applyLogToCollection(
-        \Magento\Data\Collection\Db $collection,
+        \Magento\Framework\Data\Collection\Db $collection,
         $eventTypeId,
         $eventSubjectId,
         $subtype,
@@ -146,7 +146,7 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
             "{$idFieldName} = evt.object_id",
             array()
         )->order(
-            'evt.event_id ' . \Magento\DB\Select::SQL_DESC
+            'evt.event_id ' . \Magento\Framework\DB\Select::SQL_DESC
         );
 
         return $this;
@@ -172,7 +172,10 @@ class Event extends \Magento\Model\Resource\Db\AbstractDb
             }
         } else {
             // get all stores, required by configuration in current store scope
-            switch ($this->_coreStoreConfig->getConfig('catalog/recently_products/scope')) {
+            switch ($this->_scopeConfig->getValue(
+                'catalog/recently_products/scope',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )) {
                 case 'website':
                     $resourceStore = $this->_storeManager->getStore()->getWebsite()->getStores();
                     break;

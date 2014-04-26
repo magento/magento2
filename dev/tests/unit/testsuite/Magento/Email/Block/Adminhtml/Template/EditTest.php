@@ -34,7 +34,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_registryMock;
 
@@ -70,8 +70,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_registryMock = $this->getMock('Magento\Registry', array(), array(), '', false, false);
-        $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
         $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false, false);
         $menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false, false);
@@ -88,14 +88,20 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_emailConfigMock = $this->getMock('Magento\Email\Model\Template\Config', array(), array(), '', false);
 
         $this->filesystemMock = $this->getMock(
-            '\Magento\App\Filesystem',
+            '\Magento\Framework\App\Filesystem',
             array('getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'),
             array(),
             '',
             false
         );
 
-        $viewFilesystem = $this->getMock('\Magento\View\Filesystem', array('getFilename'), array(), '', false);
+        $viewFilesystem = $this->getMock(
+            '\Magento\Framework\View\Filesystem',
+            array('getFilename'),
+            array(),
+            '',
+            false
+        );
         $viewFilesystem->expects(
             $this->any()
         )->method(
@@ -256,12 +262,18 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultTemplatesAsOptionsArray()
     {
         $dirValueMap = array(
-            array(\Magento\App\Filesystem::ROOT_DIR, 'var/www/magento\rootdir/'),
-            array(\Magento\App\Filesystem::APP_DIR, 'var/www/magento\rootdir\app/'),
-            array(\Magento\App\Filesystem::THEMES_DIR, 'var\www/magento\rootdir\app/themes/')
+            array(\Magento\Framework\App\Filesystem::ROOT_DIR, 'var/www/magento\rootdir/'),
+            array(\Magento\Framework\App\Filesystem::APP_DIR, 'var/www/magento\rootdir\app/'),
+            array(\Magento\Framework\App\Filesystem::THEMES_DIR, 'var\www/magento\rootdir\app/themes/')
         );
 
-        $this->directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->directoryMock = $this->getMock(
+            '\Magento\Framework\Filesystem\Directory\Read',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->directoryMock->expects($this->any())->method('isFile')->will($this->returnValue(false));
         $this->directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnValue(''));
 

@@ -39,15 +39,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     protected static $_tmpConfigFile = '';
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected static $_varDirectory;
 
     public static function setUpBeforeClass()
     {
-        /** @var \Magento\App\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
-        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         self::$_tmpDir = self::$_varDirectory->getAbsolutePath('InstallerTest');
         self::$_tmpConfigFile = self::$_tmpDir . '/local.xml';
         self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
@@ -69,22 +70,25 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryList = $objectManager->create(
-            'Magento\App\Filesystem\DirectoryList',
+            'Magento\Framework\App\Filesystem\DirectoryList',
             array(
                 'root' => __DIR__,
-                'directories' => array(\Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir))
+                'directories' => array(\Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir))
             )
         );
-        $objectManager->get('\Magento\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
-        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
+        $objectManager->get('\Magento\Framework\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
+        $filesystem = $objectManager->create(
+            'Magento\Framework\App\Filesystem',
+            array('directoryList' => $directoryList)
+        );
 
         if ($emulateConfig) {
             $installerConfig = new \Magento\Install\Model\Installer\Config(
                 $objectManager->get('Magento\Install\Model\Installer'),
-                $objectManager->get('Magento\App\RequestInterface'),
+                $objectManager->get('Magento\Framework\App\RequestInterface'),
                 $filesystem,
-                $objectManager->get('Magento\Core\Model\StoreManager'),
-                $objectManager->get('Magento\Message\Manager')
+                $objectManager->get('Magento\Store\Model\StoreManager'),
+                $objectManager->get('Magento\Framework\Message\Manager')
             );
             $objectManager->addSharedInstance($installerConfig, 'Magento\Install\Model\Installer\Config');
         }
@@ -143,7 +147,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Key must not exceed
      */
     public function testInstallEncryptionKeySizeViolation()
@@ -162,7 +166,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Key must not exceed
      */
     public function testGetValidEncryptionKeySizeViolation()
@@ -193,13 +197,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /**
-         * @var $cache \Magento\App\Cache
+         * @var $cache \Magento\Framework\App\Cache
          */
-        $cache = $objectManager->create('Magento\App\Cache');
+        $cache = $objectManager->create('Magento\Framework\App\Cache');
         /**
-         * @var $appState \Magento\App\State
+         * @var $appState \Magento\Framework\App\State
          */
-        $appState = $objectManager->get('Magento\App\State');
+        $appState = $objectManager->get('Magento\Framework\App\State');
 
         $cache->save('testValue', 'testName');
         $this->assertEquals('testValue', $cache->load('testName'));
@@ -216,11 +220,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             'In-memory application installation state was not changed right after finishing installation phase'
         );
 
-        /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = $objectManager->create('Magento\App\Cache\StateInterface');
+        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
+        $cacheState = $objectManager->create('Magento\Framework\App\Cache\StateInterface');
 
-        /** @var \Magento\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = $objectManager->create('Magento\App\Cache\TypeListInterface');
+        /** @var \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList */
+        $cacheTypeList = $objectManager->create('Magento\Framework\App\Cache\TypeListInterface');
         $types = array_keys($cacheTypeList->getTypes());
         foreach ($types as $type) {
             $this->assertTrue(

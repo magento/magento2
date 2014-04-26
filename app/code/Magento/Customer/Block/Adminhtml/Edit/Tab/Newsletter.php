@@ -50,16 +50,16 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic
      * Constructor
      *
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
@@ -76,11 +76,11 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function initForm()
     {
-        /**@var \Magento\Data\Form $form */
+        /**@var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('_newsletter');
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $subscriber = $this->_subscriberFactory->create()->loadByCustomer($customerId);
+        $subscriber = $this->_subscriberFactory->create()->loadByCustomerId($customerId);
         $this->_coreRegistry->register('subscriber', $subscriber);
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Newsletter Information')));
@@ -125,7 +125,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic
         if ($subscriber->getChangeStatusAt()) {
             return $this->formatDate(
                 $subscriber->getChangeStatusAt(),
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
                 true
             );
         }

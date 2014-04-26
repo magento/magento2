@@ -26,7 +26,7 @@ namespace Magento\Theme\Block\Html;
 /**
  * Html page breadcrumbs block
  */
-class Breadcrumbs extends \Magento\View\Element\Template
+class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Current template name

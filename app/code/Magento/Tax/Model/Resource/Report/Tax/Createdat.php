@@ -139,7 +139,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 
             $columns = array(
                 'period' => 'period',
-                'store_id' => new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID),
+                'store_id' => new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID),
                 'code' => 'code',
                 'order_status' => 'order_status',
                 'percent' => 'MAX(' . $writeAdapter->quoteIdentifier('percent') . ')',

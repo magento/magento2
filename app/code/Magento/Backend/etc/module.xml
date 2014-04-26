@@ -23,12 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Module/etc/module.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_Backend" version="2.0.0.0" active="true">
         <sequence>
             <module name="Magento_Directory"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Directory"/>
             <module name="Magento_Core"/>
             <module name="Magento_Eav"/>
@@ -48,6 +49,8 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Checkout"/>
+            <module name="Magento_UrlRewrite"/>
+            <module name="Magento_Translation"/>
         </depends>
     </module>
 </config>

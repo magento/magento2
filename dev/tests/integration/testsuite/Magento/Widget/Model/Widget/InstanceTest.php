@@ -49,9 +49,10 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetThemeId()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->setDefaultDesignTheme()->getDesignTheme();
         $this->_model->setThemeId($theme->getId());
 
@@ -65,7 +66,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete(
             'Functionality is failed because widget' .
-            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "app/design/frontend/Magento/iphone_html5/etc/widget.xml" replaces' .
             ' "new_products" widget in Catalog module'
         );
         $config = $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget')->getWidgetConfigAsArray();
@@ -100,7 +101,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete(
             'Functionality is failed because widget' .
-            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "app/design/frontend/Magento/iphone_html5/etc/widget.xml" replaces' .
             ' "new_products" widget in Catalog module'
         );
         $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget');
@@ -136,7 +137,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $params = array('display_mode' => 'fixed', 'types' => array('type_1', 'type_2'));
         $model->setData('widget_parameters', $params);
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
-        $model->setId('test_id')->setPackageTheme('magento_plushe');
+        $model->setId('test_id')->setPackageTheme('Magento/plushe');
         $result = $model->generateLayoutUpdateXml('content');
         $this->assertContains('<referenceContainer name="content">', $result);
         $this->assertContains('<block class="' . $model->getType() . '"', $result);

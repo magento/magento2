@@ -18,24 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Customer\Model\Address\Config as AddressConfig;
+
 /**
  * Multishipping checkout choose item addresses block
- *
- * @category   Magento
- * @package    Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * @var \Magento\Filter\Object\GridFactory
+     * @var \Magento\Framework\Filter\Object\GridFactory
      */
     protected $_filterGridFactory;
 
@@ -45,19 +41,35 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     protected $_multishipping;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Filter\Object\GridFactory $filterGridFactory
+     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     */
+    protected $_customerAddressService;
+
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
+    private $_addressConfig;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
+     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService
+     * @param AddressConfig $addressConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Filter\Object\GridFactory $filterGridFactory,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
+        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService,
+        AddressConfig $addressConfig,
         array $data = array()
     ) {
         $this->_filterGridFactory = $filterGridFactory;
         $this->_multishipping = $multishipping;
+        $this->_customerAddressService = $customerAddressService;
+        $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -90,9 +102,9 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     public function getItems()
     {
         $items = $this->getCheckout()->getQuoteShippingAddressesItems();
-        /** @var \Magento\Filter\Object\Grid $itemsFilter */
+        /** @var \Magento\Framework\Filter\Object\Grid $itemsFilter */
         $itemsFilter = $this->_filterGridFactory->create();
-        $itemsFilter->addFilter(new \Magento\Filter\Sprintf('%d'), 'qty');
+        $itemsFilter->addFilter(new \Magento\Framework\Filter\Sprintf('%d'), 'qty');
         return $itemsFilter->filter($items);
     }
 
@@ -105,17 +117,11 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressesHtmlSelect($item, $index)
     {
-        $select = $this->getLayout()->createBlock(
-            'Magento\View\Element\Html\Select'
-        )->setName(
-            'ship[' . $index . '][' . $item->getQuoteItemId() . '][address]'
-        )->setId(
-            'ship_' . $index . '_' . $item->getQuoteItemId() . '_address'
-        )->setValue(
-            $item->getCustomerAddressId()
-        )->setOptions(
-            $this->getAddressOptions()
-        );
+        $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
+            ->setName('ship['.$index.']['.$item->getQuoteItemId().'][address]')
+            ->setId('ship_'.$index.'_'.$item->getQuoteItemId().'_address')
+            ->setValue($item->getCustomerAddressId())
+            ->setOptions($this->getAddressOptions());
 
         return $select->getHtml();
     }
@@ -129,9 +135,25 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     {
         $options = $this->getData('address_options');
         if (is_null($options)) {
-            $options = array();
-            foreach ($this->getCustomer()->getAddresses() as $address) {
-                $options[] = array('value' => $address->getId(), 'label' => $address->format('oneline'));
+            $options = [];
+            $addresses = [];
+
+            try {
+                $addresses = $this->_customerAddressService->getAddresses($this->getCustomerId());
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                /** Customer does not exist */
+            }
+            /** @var \Magento\Customer\Service\V1\Data\Address $address */
+            foreach ($addresses as $address) {
+                $label = $this->_addressConfig
+                    ->getFormatByCode(AddressConfig::DEFAULT_ADDRESS_FORMAT)
+                    ->getRenderer()
+                    ->renderArray(\Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($address));
+
+                $options[] = [
+                    'value' => $address->getId(),
+                    'label' => $label
+                ];
             }
             $this->setData('address_options', $options);
         }
@@ -140,11 +162,13 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * Retrieve active customer ID
+     *
+     * @return int|null
      */
-    public function getCustomer()
+    public function getCustomerId()
     {
-        return $this->getCheckout()->getCustomerSession()->getCustomer();
+        return $this->getCheckout()->getCustomerSession()->getCustomerId();
     }
 
     /**

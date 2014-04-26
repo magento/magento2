@@ -60,14 +60,16 @@
     <tbody>
     <?php if ($_hasAssociatedProducts): ?>
     <?php foreach ($_associatedProducts as $_item): ?>
-        <?php $_finalPriceInclTax = $this->helper('Magento\Tax\Helper\Data')->getPrice($_item, $_item->getFinalPrice(), true) ?>
         <tr>
             <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
             <?php if ($this->getCanShowProductPrice($_product)): ?>
             <td class="col price">
                 <?php if ($this->getCanShowProductPrice($_item)): ?>
-                <?php echo $this->getPriceHtml($_item, true) ?>
-                <?php echo $this->getTierPriceHtml($_item) ?>
+                <?php echo $this->getProductPrice($_item) ?>
+                    <?php echo $this->getProductPriceHtml(
+                        $_item,
+                        \Magento\Catalog\Pricing\Price\TierPriceInterface::PRICE_TYPE_TIER
+                    ) ?>
                 <?php endif; ?>
             </td>
             <?php endif; ?>

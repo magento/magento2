@@ -40,7 +40,7 @@ class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic imple
      */
     public function createFromConfiguration(array $configuration)
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
         foreach ($configuration as $itemId => $item) {

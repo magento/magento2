@@ -25,8 +25,8 @@
  */
 namespace Magento\Index\App;
 
-use Magento\App\Console\Response;
-use Magento\AppInterface;
+use Magento\Framework\App\Console\Response;
+use Magento\Framework\AppInterface;
 
 class Indexer implements AppInterface
 {
@@ -38,7 +38,7 @@ class Indexer implements AppInterface
     protected $_reportDir;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
@@ -48,19 +48,19 @@ class Indexer implements AppInterface
     protected $_indexerFactory;
 
     /**
-     * @var \Magento\App\Console\Response
+     * @var \Magento\Framework\App\Console\Response
      */
     protected $_response;
 
     /**
      * @param string $reportDir
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Index\Model\IndexerFactory $indexerFactory
      * @param Response $response
      */
     public function __construct(
         $reportDir,
-        \Magento\App\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Index\Model\IndexerFactory $indexerFactory,
         Response $response
     ) {
@@ -73,12 +73,12 @@ class Indexer implements AppInterface
     /**
      * Run application
      *
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function launch()
     {
         /* Clean reports */
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $path = $directory->getRelativePath($this->_reportDir);
         if ($directory->isExist($path)) {
             $directory->delete($path);

@@ -27,12 +27,12 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 {
     public function testAroundDispatch()
     {
-        $subjectMock = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
-        $designLoaderMock = $this->getMock('Magento\View\DesignLoader', array(), array(), '', false);
+        $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
+        $designLoaderMock = $this->getMock('Magento\Framework\View\DesignLoader', array(), array(), '', false);
         $closureMock = function () {
             return 'Expected';
         };
-        $requestMock = $this->getMock('Magento\App\RequestInterface');
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $plugin = new \Magento\Core\App\Action\Plugin\Design($designLoaderMock);
         $designLoaderMock->expects($this->once())->method('load');
         $this->assertEquals('Expected', $plugin->aroundDispatch($subjectMock, $closureMock, $requestMock));

@@ -36,9 +36,9 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\CatalogRule\Model\Rule\Job;
-use Magento\Model\Exception;
-use Magento\Stdlib\DateTime\Filter\Date;
-use Magento\Registry;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\Registry;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Action\AbstractAction;
 
@@ -60,7 +60,7 @@ class Catalog extends Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
@@ -185,7 +185,7 @@ class Catalog extends Action
                     }
                 }
 
-                $validateResult = $model->validateData(new \Magento\Object($data));
+                $validateResult = $model->validateData(new \Magento\Framework\Object($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
                         $this->messageManager->addError($errorMessage);
@@ -224,7 +224,7 @@ class Catalog extends Action
                 $this->messageManager->addError(
                     __('An error occurred while saving the rule data. Please review the log and try again.')
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
                 $this->_redirect('catalog_rule/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
                 return;
@@ -254,7 +254,7 @@ class Catalog extends Action
                 $this->messageManager->addError(
                     __('An error occurred while deleting the rule. Please review the log and try again.')
                 );
-                $this->_objectManager->get('Magento\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_redirect('catalog_rule/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }

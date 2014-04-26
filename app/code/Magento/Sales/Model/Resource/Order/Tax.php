@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Resource\Order;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Model\Resource\Db\AbstractDb
+class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Model initialization

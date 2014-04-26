@@ -25,7 +25,7 @@
  */
 namespace Magento\PageCache\Controller;
 
-class Block extends \Magento\App\Action\Action
+class Block extends \Magento\Framework\App\Action\Action
 {
     /**
      * Returns block content depends on ajax request
@@ -65,7 +65,7 @@ class Block extends \Magento\App\Action\Action
             $blockInstance = array_shift($blocks);
             $html = $blockInstance->toHtml();
             $ttl = $blockInstance->getTtl();
-            if ($blockInstance instanceof \Magento\View\Block\IdentityInterface) {
+            if ($blockInstance instanceof \Magento\Framework\View\Block\IdentityInterface) {
                 $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
             }
         }

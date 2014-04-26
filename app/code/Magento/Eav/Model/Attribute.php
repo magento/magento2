@@ -36,7 +36,7 @@
  */
 namespace Magento\Eav\Model;
 
-use Magento\Core\Model\Website;
+use Magento\Store\Model\Website;
 
 abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {

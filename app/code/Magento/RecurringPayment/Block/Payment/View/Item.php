@@ -44,16 +44,16 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
     protected $_quoteItemOptionFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $quoteItemOptionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\Option $option,
         \Magento\Catalog\Model\Product $product,
         \Magento\Sales\Model\Quote\Item\OptionFactory $quoteItemOptionFactory,
@@ -112,7 +112,7 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
             )->setOption(
                 $option
             )->setRequest(
-                new \Magento\Object($request)
+                new \Magento\Framework\Object($request)
             )->setProduct(
                 $this->_product
             )->setUseQuotePath(

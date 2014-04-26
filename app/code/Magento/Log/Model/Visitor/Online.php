@@ -46,7 +46,7 @@ namespace Magento\Log\Model\Visitor;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Online extends \Magento\Model\AbstractModel
+class Online extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
 
@@ -55,27 +55,27 @@ class Online extends \Magento\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Model\Context $context
-     * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Model\Context $context,
-        \Magento\Registry $registry,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -142,7 +142,10 @@ class Online extends \Magento\Model\AbstractModel
      */
     public function getUpdateFrequency()
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_FREQUENCY);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_UPDATE_FREQUENCY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -152,7 +155,12 @@ class Online extends \Magento\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $value = intval($this->_coreStoreConfig->getConfig(self::XML_PATH_ONLINE_INTERVAL));
+        $value = intval(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_ONLINE_INTERVAL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         if (!$value) {
             $value = \Magento\Log\Model\Visitor::DEFAULT_ONLINE_MINUTES_INTERVAL;
         }

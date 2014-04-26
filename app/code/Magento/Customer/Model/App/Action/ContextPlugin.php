@@ -35,37 +35,37 @@ class ContextPlugin
     protected $customerSession;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
     /**
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\App\Http\Context $httpContext
+        \Magento\Framework\App\Http\Context $httpContext
     ) {
         $this->customerSession = $customerSession;
         $this->httpContext = $httpContext;
     }
 
     /**
-     * @param \Magento\App\Action\Action $subject
+     * @param \Magento\Framework\App\Action\Action $subject
      * @param callable $proceed
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      */
     public function aroundDispatch(
-        \Magento\App\Action\Action $subject,
+        \Magento\Framework\App\Action\Action $subject,
         \Closure $proceed,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->httpContext->setValue(
             \Magento\Customer\Helper\Data::CONTEXT_GROUP,
             $this->customerSession->getCustomerGroupId(),
-            \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
         );
         $this->httpContext->setValue(
             \Magento\Customer\Helper\Data::CONTEXT_AUTH,

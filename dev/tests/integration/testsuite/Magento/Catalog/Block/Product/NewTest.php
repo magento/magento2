@@ -40,16 +40,19 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Http\Context')
-            ->setValue(
-                \Magento\Customer\Helper\Data::CONTEXT_GROUP,
-                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
-            );
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Product\NewProduct');
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Http\Context'
+        )->setValue(
+            \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+        );
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Catalog\Block\Product\NewProduct'
+        );
     }
 
     public function testGetCacheKeyInfo()
@@ -65,7 +68,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, array_shift($keys));
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Model\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $info[1]
         );
@@ -73,7 +76,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(2, array_shift($keys));
 
         $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
+            'Magento\Framework\View\DesignInterface'
         )->getDesignTheme();
 
         $this->assertEquals($themeModel->getId() ?: null, $info[2]);
@@ -113,7 +116,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->_block->setProductsCount(5);
         $this->_block->setTemplate('product/widget/new/content/new_list.phtml');
         $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
         );
 
         $html = $this->_block->toHtml();

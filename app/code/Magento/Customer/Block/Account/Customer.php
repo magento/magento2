@@ -25,7 +25,7 @@ namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
-class Customer extends \Magento\View\Element\Template
+class Customer extends \Magento\Framework\View\Element\Template
 {
     /** @var CustomerAccountServiceInterface */
     protected $_customerAccountService;
@@ -34,7 +34,7 @@ class Customer extends \Magento\View\Element\Template
     protected $_viewHelper;
 
     /**
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -44,18 +44,18 @@ class Customer extends \Magento\View\Element\Template
     protected $currentCustomer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Helper\View $viewHelper,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array()
     ) {
@@ -87,7 +87,7 @@ class Customer extends \Magento\View\Element\Template
         try {
             $customer = $this->_customerAccountService->getCustomer($this->currentCustomer->getCustomerId());
             return $this->escapeHtml($this->_viewHelper->getCustomerName($customer));
-        } catch (\Magento\Exception\NoSuchEntityException $e) {
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }
     }

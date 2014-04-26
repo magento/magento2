@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Weee\Model\Total\Quote\Nominal;
+
 /**
  * Nominal fixed product tax total
  */
-namespace Magento\Weee\Model\Total\Quote\Nominal;
-
 class Weee extends \Magento\Weee\Model\Total\Quote\Weee
 {
     /**

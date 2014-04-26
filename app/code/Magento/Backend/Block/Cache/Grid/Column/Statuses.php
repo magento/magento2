@@ -28,18 +28,18 @@ namespace Magento\Backend\Block\Cache\Grid\Column;
 class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -60,7 +60,7 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      * Decorate status column values
      *
      * @param string $value
-     * @param  \Magento\Model\AbstractModel $row
+     * @param  \Magento\Framework\Model\AbstractModel $row
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @param bool $isExport
      * @return string

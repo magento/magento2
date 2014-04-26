@@ -79,7 +79,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected function _initForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Role Information')));

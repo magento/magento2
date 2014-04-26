@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Block\System\Config\Form\Field;
 
-class Image extends \Magento\Data\Form\Element\Image
+class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * Get image preview url

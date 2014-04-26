@@ -23,7 +23,6 @@
  */
 namespace Magento\RecurringPayment\Block\Adminhtml\Customer\Edit\Tab;
 
-use Magento\Customer\Controller\Adminhtml\Index as CustomerController;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\RecurringPayment\Block\Adminhtml\Payment\Grid as PaymentGrid;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -36,7 +35,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
     /**
      * Core registry
      *
-     * @var \Magento\Registry|null
+     * @var \Magento\Framework\Registry|null
      */
     protected $_coreRegistry = null;
 
@@ -52,7 +51,7 @@ class RecurringPayment extends PaymentGrid implements TabInterface
      * @param \Magento\RecurringPayment\Model\States $recurringStates
      * @param \Magento\RecurringPayment\Block\Fields $fields
      * @param \Magento\RecurringPayment\Model\Method\PaymentMethodsList $payments
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -62,19 +61,11 @@ class RecurringPayment extends PaymentGrid implements TabInterface
         \Magento\RecurringPayment\Model\States $recurringStates,
         \Magento\RecurringPayment\Block\Fields $fields,
         \Magento\RecurringPayment\Model\Method\PaymentMethodsList $payments,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-
-        // @todo remove usage of CURRENT_CUSTOMER in advantage of CURRENT_CUSTOMER_ID
-        $currentCustomer = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER);
-        if ($currentCustomer) {
-            $this->_currentCustomerId = $currentCustomer->getId();
-        } else {
-            $this->_currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        }
-
+        $this->_currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         parent::__construct($context, $backendHelper, $paymentCollection, $recurringStates, $fields, $payments, $data);
     }
 

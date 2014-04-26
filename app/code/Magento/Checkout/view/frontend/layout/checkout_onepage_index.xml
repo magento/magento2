@@ -46,8 +46,8 @@
             </block>
             <block class="Magento\Checkout\Block\Onepage\Payment" name="checkout.onepage.payment" as="payment" template="onepage/payment.phtml" cacheable="false">
                 <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="checkout.payment.methods" as="methods" template="onepage/payment/methods.phtml" cacheable="false"/>
-                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.additional" as="additional"/>
-                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
+                <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.additional" as="additional"/>
+                <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
             </block>
             <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml" cacheable="false"/>
         </block>

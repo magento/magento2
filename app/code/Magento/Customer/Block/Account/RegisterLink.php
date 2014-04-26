@@ -26,12 +26,12 @@ namespace Magento\Customer\Block\Account;
 /**
  * Customer register link
  */
-class RegisterLink extends \Magento\View\Element\Html\Link
+class RegisterLink extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * Customer session
      *
-     * @var \Magento\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -41,14 +41,14 @@ class RegisterLink extends \Magento\View\Element\Html\Link
     protected $_customerHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\App\Http\Context $httpContext,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {

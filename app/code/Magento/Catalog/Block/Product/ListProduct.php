@@ -24,21 +24,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Product list
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\View\Element\AbstractBlock;
+use Magento\Framework\View\Block\IdentityInterface;
 
-class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\View\Block\IdentityInterface
+/**
+ * Product list
+ */
+class ListProduct extends AbstractProduct implements IdentityInterface
 {
     /**
      * Default toolbar block name
@@ -69,7 +63,13 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
     protected $_categoryFactory;
 
     /**
+     * @var \Magento\Core\Helper\PostData
+     */
+    protected $_postDataHelper;
+
+    /**
      * @param Context $context
+     * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
@@ -77,6 +77,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array(),
@@ -84,6 +85,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogLayer = $catalogLayer;
+        $this->_postDataHelper = $postDataHelper;
         parent::__construct(
             $context,
             $data,
@@ -108,12 +110,9 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
             // if this is a product view page
             if ($this->_coreRegistry->registry('product')) {
                 // get collection of categories this product is associated with
-                $categories = $this->_coreRegistry->registry(
-                    'product'
-                )->getCategoryCollection()->setPage(
-                    1,
-                    1
-                )->load();
+                $categories = $this->_coreRegistry->registry('product')
+                    ->getCategoryCollection()->setPage(1, 1)
+                    ->load();
                 // if the product is associated with any category
                 if ($categories->count()) {
                     // show products from this category
@@ -265,7 +264,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
     }
 
     /**
-     * @param array|string|integer|\Magento\Core\Model\Config\Element $code
+     * @param array|string|integer|\Magento\Framework\App\Config\Element $code
      * @return $this
      */
     public function addAttribute($code)
@@ -331,5 +330,53 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct impleme
             $identities = array_merge($identities, $item->getIdentities());
         }
         return array_merge($this->getLayer()->getCurrentCategory()->getIdentities(), $identities);
+    }
+
+    /**
+     * Get post parameters
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     */
+    public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        $data = [
+            'product' => $product->getEntityId(),
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->_postDataHelper->getEncodedUrl($url)
+        ];
+        return $this->_postDataHelper->getPostData($url, $data);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     */
+    public function getProductPrice(\Magento\Catalog\Model\Product $product)
+    {
+        $priceRender = $this->getPriceRender();
+
+        $price = '';
+        if ($priceRender) {
+            $price = $priceRender->render(
+                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                $product,
+                [
+                    'include_container' => true,
+                    'display_minimal_price' => true,
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+                ]
+            );
+        }
+
+        return $price;
+    }
+
+    /**
+     * @return \Magento\Framework\Pricing\Render
+     */
+    protected function getPriceRender()
+    {
+        return $this->getLayout()->getBlock('product.price.render.default');
     }
 }

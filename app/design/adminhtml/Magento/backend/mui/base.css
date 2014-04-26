@@ -1,0 +1,211 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+@font-face {
+    font-family: 'MUI-Icons';
+    src: url('fonts/MUI-Icons.eot');
+    src: url('fonts/MUI-Icons.eot?#iefix') format('embedded-opentype'), url('fonts/MUI-Icons.svg#MUI-Icons') format('svg'), url('fonts/MUI-Icons.woff') format('woff'), url('fonts/MUI-Icons.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*
+    Buttons group
+-------------------------------------- */
+
+.buttons-group {
+    position: relative;
+    display: inline-block;
+}
+
+.buttons-group:before,
+.buttons-group:after {
+    display: table;
+    content: "";
+}
+
+.buttons-group:after {
+    clear: both;
+}
+
+.buttons-group > button,
+.buttons-group > .button {
+    position: relative;
+    float: left;
+    margin-left: -1px;
+    border-radius: 0;
+}
+
+.buttons-group > button:first-child,
+.buttons-group > .button:first-child {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.buttons-group > button:last-child,
+.buttons-group > .button:last-child,
+.buttons-group > [data-toggle="dropdown"] {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.buttons-group-vertical > .button {
+    float: none;
+    display: block;
+    margin-left: 0;
+    margin-top: -1px;
+}
+
+.buttons-group-vertical > input[type=button],
+.buttons-group-vertical > input[type=submit],
+.buttons-group-vertical > input[type=reset],
+.buttons-group-vertical > button {
+    width: 100%;
+}
+
+.buttons-group-vertical > .button:first-child {
+    margin-top: 0;
+    border-radius: 4px 4px 0 0;
+}
+
+.buttons-group-vertical > .button:last-child {
+    border-radius: 0 0 4px 4px;
+}
+
+/*
+    Forms
+-------------------------------------- */
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+legend {
+    padding: 0 10px;
+    margin: 0 -10px;
+}
+
+fieldset legend + br {
+    display: none;
+}
+
+label {
+    display: inline-block;
+}
+
+label > input[type="radio"],
+label > input[type="checkbox"] {
+    margin: -3px 3px 0 0;
+    vertical-align: middle;
+}
+
+input[type=text],
+input[type=password],
+input[type=datetime],
+input[type=datetime-local],
+input[type=date],
+input[type=month],
+input[type=time],
+input[type=week],
+input[type=number],
+input[type=range],
+input[type=email],
+input[type=url],
+input[type=search],
+input.search,
+input[type=tel],
+input[type=color],
+textarea,
+.input-text {
+    display: inline-block;
+    padding: 4px;
+    margin: 0 0 8px;
+    background-color: #fff;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+textarea,
+.input-text {
+    height: auto;
+}
+
+select {
+    padding: 4px;
+    margin: 0 0 8px;
+}
+
+select[multiple],
+select[size] {
+    height: auto;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=datetime]:focus,
+input[type=datetime-local]:focus,
+input[type=date]:focus,
+input[type=month]:focus,
+input[type=time]:focus,
+input[type=week]:focus,
+input[type=number]:focus,
+input[type=range]:focus,
+input[type=email]:focus,
+input[type=url]:focus,
+input[type=search]:focus,
+input.search:focus,
+input[type=tel]:focus,
+input[type=color]:focus,
+textarea:focus {
+    outline: 0;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin: 3px 0;
+    line-height: normal;
+}
+
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+    cursor: not-allowed;
+}
+
+/*
+    Blockquotes
+-------------------------------------- */
+blockquote {
+    border-left: 2px solid #ccc;
+    padding-left: 5px;
+}
+
+blockquote small:before {
+    content: '\2014 \00A0';
+}

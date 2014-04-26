@@ -45,6 +45,13 @@
                         <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
                     </arguments>
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Options" name="customer.wishlist.item.options" cacheable="false"/>
+                    <block class="Magento\Catalog\Pricing\Render" name="product.price.render.wishlist">
+                        <arguments>
+                            <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                            <argument name="price_type_code" xsi:type="string">final_price</argument>
+                            <argument name="zone" xsi:type="string">item_list</argument>
+                        </arguments>
+                    </block>
                 </block>
                 <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="item/column/remove.phtml" cacheable="false">
                     <arguments>

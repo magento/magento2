@@ -31,14 +31,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registry;
 
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->registry = $this->getMock('Magento\Registry', array(), array(), '', false);
+        $this->registry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->block = $objectManager->getObject(
             'Magento\GoogleOptimizer\Block\Code\Category',
             array('registry' => $this->registry)

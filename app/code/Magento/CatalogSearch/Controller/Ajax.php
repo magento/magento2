@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-use Magento\App\Action\Action;
+use Magento\Framework\App\Action\Action;
 
 class Ajax extends Action
 {
@@ -46,8 +46,7 @@ class Ajax extends Action
             $this->getResponse()->setRedirect($this->_url->getBaseUrl());
         }
 
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        $suggestData = $this->_objectManager->get('Magento\CatalogSearch\Helper\Data')->getSuggestData();
+        $this->getResponse()->setHeader('Content-type', 'application/json', true)->setBody(json_encode($suggestData));
     }
 }

@@ -28,10 +28,10 @@ class Updated extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetim
     /**
      * Render indexer updated time
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $value = parent::render($row);
         if (!$value) {

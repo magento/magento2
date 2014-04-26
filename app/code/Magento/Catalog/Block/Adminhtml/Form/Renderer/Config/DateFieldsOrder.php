@@ -34,7 +34,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
 use Magento\Backend\Block\System\Config\Form\Field;
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class DateFieldsOrder extends Field
 {

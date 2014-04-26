@@ -30,7 +30,7 @@ namespace Magento\Captcha\Controller;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Refresh extends \Magento\App\Action\Action
+class Refresh extends \Magento\Framework\App\Action\Action
 {
     /**
      * Refreshes captcha and returns JSON encoded URL to image (AJAX action)

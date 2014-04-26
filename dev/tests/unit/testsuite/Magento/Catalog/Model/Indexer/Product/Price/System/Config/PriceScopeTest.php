@@ -56,10 +56,10 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
         );
         $this->_indexerMock->expects($this->any())->method('load')->will($this->returnValue($this->_indexerMock));
 
-        $contextMock = $this->getMock('Magento\Model\Context', array(), array(), '', false);
-        $registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false);
-        $configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\Framework\Model\Context', array(), array(), '', false);
+        $registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
+        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
 
         $this->_model = $this->_objectManager->getObject(

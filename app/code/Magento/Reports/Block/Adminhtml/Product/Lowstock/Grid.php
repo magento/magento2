@@ -87,7 +87,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeId
         )->setOrder(
             'qty',
-            \Magento\Data\Collection::SORT_ORDER_ASC
+            \Magento\Framework\Data\Collection::SORT_ORDER_ASC
         );
 
         if ($storeId) {

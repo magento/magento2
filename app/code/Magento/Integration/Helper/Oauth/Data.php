@@ -28,15 +28,15 @@ namespace Magento\Integration\Helper\Oauth;
  */
 class Data
 {
-    /** @var \Magento\Core\Model\Store\Config */
-    protected $_storeConfig;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Core\Model\Store\Config $storeConfig)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
-        $this->_storeConfig = $storeConfig;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**#@+
@@ -81,7 +81,10 @@ class Data
     public function isCleanupProbability()
     {
         // Safe get cleanup probability value from system configuration
-        $configValue = (int)$this->_storeConfig->getConfig(self::XML_PATH_CLEANUP_PROBABILITY);
+        $configValue = (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_CLEANUP_PROBABILITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $configValue > 0 ? 1 == mt_rand(1, $configValue) : false;
     }
 
@@ -92,7 +95,10 @@ class Data
      */
     public function getCleanupExpirationPeriod()
     {
-        $minutes = (int)$this->_storeConfig->getConfig(self::XML_PATH_CLEANUP_EXPIRATION_PERIOD);
+        $minutes = (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_CLEANUP_EXPIRATION_PERIOD,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $minutes > 0 ? $minutes : self::CLEANUP_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -103,7 +109,10 @@ class Data
      */
     public function getConsumerExpirationPeriod()
     {
-        $seconds = (int)$this->_storeConfig->getConfig(self::XML_PATH_CONSUMER_EXPIRATION_PERIOD);
+        $seconds = (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_CONSUMER_EXPIRATION_PERIOD,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $seconds > 0 ? $seconds : self::CONSUMER_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -114,7 +123,10 @@ class Data
      */
     public function getConsumerPostMaxRedirects()
     {
-        $redirects = (int)$this->_storeConfig->getConfig(self::XML_PATH_CONSUMER_POST_MAXREDIRECTS);
+        $redirects = (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_CONSUMER_POST_MAXREDIRECTS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $redirects > 0 ? $redirects : 0;
     }
 
@@ -125,7 +137,10 @@ class Data
      */
     public function getConsumerPostTimeout()
     {
-        $seconds = (int)$this->_storeConfig->getConfig(self::XML_PATH_CONSUMER_POST_TIMEOUT);
+        $seconds = (int)$this->_scopeConfig->getValue(
+            self::XML_PATH_CONSUMER_POST_TIMEOUT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return $seconds > 0 ? $seconds : self::CONSUMER_POST_TIMEOUT_DEFAULT;
     }
 }

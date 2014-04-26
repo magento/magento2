@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource\Entity\Attribute;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
@@ -88,7 +88,7 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @param int $store
      * @param bool $hasValueField flag which require option value
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getFlatUpdateSelect(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
@@ -112,14 +112,14 @@ class Option extends \Magento\Model\Resource\Db\AbstractDb
             't1',
             't1',
             't1',
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         if ($attribute->getFlatAddChildData()) {
             $joinCondition .= ' AND e.child_id = t1.entity_id';
         }
 
         $valueExpr = $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
-        /** @var $select \Magento\DB\Select */
+        /** @var $select \Magento\Framework\DB\Select */
         $select = $adapter->select()->joinLeft(
             array('t1' => $attributeTable),
             $joinCondition,

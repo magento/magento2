@@ -46,17 +46,17 @@ class Statistics extends \Magento\Backend\App\Action
     protected $_adminSession = null;
 
     /**
-     * @var \Magento\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->_dateFilter = $dateFilter;
         parent::__construct($context);
@@ -78,7 +78,7 @@ class Statistics extends \Magento\Backend\App\Action
     /**
      * Report statistics action initialization operations
      *
-     * @param array|\Magento\Object $blocks
+     * @param array|\Magento\Framework\Object $blocks
      * @return $this
      */
     public function _initReportAction($blocks)
@@ -99,7 +99,7 @@ class Statistics extends \Magento\Backend\App\Action
         );
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
-        $params = new \Magento\Object();
+        $params = new \Magento\Framework\Object();
 
         foreach ($requestData as $key => $value) {
             if (!empty($value)) {
@@ -162,18 +162,18 @@ class Statistics extends \Magento\Backend\App\Action
     {
         try {
             $collectionsNames = $this->_getCollectionNames();
-            /** @var \Magento\Stdlib\DateTime\DateInterface $currentDate */
-            $currentDate = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')->date();
+            /** @var \Magento\Framework\Stdlib\DateTime\DateInterface $currentDate */
+            $currentDate = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->date();
             $date = $currentDate->subHour(25);
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);
             }
             $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
 
         if ($this->_getSession()->isFirstPageAfterLogin()) {
@@ -196,11 +196,11 @@ class Statistics extends \Magento\Backend\App\Action
                 $this->_objectManager->create($collectionName)->aggregate();
             }
             $this->messageManager->addSuccess(__('We updated lifetime statistics.'));
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
 
         if ($this->_getSession()->isFirstPageAfterLogin()) {

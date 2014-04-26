@@ -33,7 +33,7 @@
  */
 namespace Magento\Authorizenet\Model\Directpost;
 
-class Response extends \Magento\Object
+class Response extends \Magento\Framework\Object
 {
     /**
      * Generates an Md5 hash to compare against AuthNet's.

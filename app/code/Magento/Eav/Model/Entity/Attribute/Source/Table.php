@@ -143,7 +143,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return $this
      */
-    public function addValueSortToCollection($collection, $dir = \Magento\DB\Select::SQL_ASC)
+    public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
     {
         $valueTable1 = $this->getAttribute()->getAttributeCode() . '_t1';
         $valueTable2 = $this->getAttribute()->getAttributeCode() . '_t2';
@@ -188,7 +188,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $isMulti = $this->getAttribute()->getFrontend()->getInputType() == 'multiselect';
 
-        $type = $isMulti ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $type = $isMulti ? \Magento\Framework\DB\Ddl\Table::TYPE_TEXT : \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
         $columns[$attributeCode] = array(
             'type' => $type,
             'length' => $isMulti ? '255' : null,
@@ -200,7 +200,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         );
         if (!$isMulti) {
             $columns[$attributeCode . '_value'] = array(
-                'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 255,
                 'unsigned' => false,
                 'nullable' => true,
@@ -242,7 +242,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Select For Flat Attribute update
      *
      * @param int $store
-     * @return \Magento\DB\Select|null
+     * @return \Magento\Framework\DB\Select|null
      */
     public function getFlatUpdateSelect($store)
     {

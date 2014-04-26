@@ -30,15 +30,17 @@
         </action>
     </referenceBlock>
     <referenceBlock name="page-title">
+        <action method="setTitleClass">
+            <argument name="class" xsi:type="string">complex</argument>
+        </action>
+    </referenceBlock>
+    <referenceContainer name="page.main.actions">
         <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
             <action method="setUseConfirm">
                 <argument name="params" xsi:type="string">1</argument>
             </action>
         </block>
-        <action method="setTitleClass">
-            <argument name="class" xsi:type="string">complex</argument>
-        </action>
-    </referenceBlock>
+    </referenceContainer>
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
     </referenceContainer>

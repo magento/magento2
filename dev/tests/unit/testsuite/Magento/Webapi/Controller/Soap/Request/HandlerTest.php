@@ -23,6 +23,9 @@
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
+use Magento\Framework\Service\DataObjectConverter;
+use Magento\Webapi\Model\Soap\Config as SoapConfig;
+
 /**
  * Test for \Magento\Webapi\Controller\Soap\Request\Handler.
  */
@@ -31,7 +34,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Soap\Request\Handler */
     protected $_handler;
 
-    /** @var \Magento\ObjectManager */
+    /** @var \Magento\Framework\ObjectManager */
     protected $_objectManagerMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -43,8 +46,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_authzServiceMock;
 
-    /** @var \Magento\Webapi\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_helperMock;
+    /** @var DataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_dataObjectConverter;
 
     /** @var \Magento\Webapi\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $_serializerMock;
@@ -55,35 +58,26 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_apiConfigMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Config'
-        )->setMethods(
-            array('getServiceMethodInfo')
-        )->disableOriginalConstructor()->getMock();
-        $this->_requestMock = $this->getMock('Magento\Webapi\Controller\Soap\Request', array(), array(), '', false);
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
-        $this->_authzServiceMock = $this->getMock(
-            'Magento\Authz\Service\AuthorizationV1Interface',
-            array(),
-            array(),
+        $this->_apiConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
+            ->setMethods(array('getServiceMethodInfo'))->disableOriginalConstructor()->getMock();
+        $this->_requestMock = $this->getMock('Magento\Webapi\Controller\Soap\Request', [], [], '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $this->_authzServiceMock = $this->getMock('Magento\Authz\Service\AuthorizationV1Interface', [], [], '', false);
+        $this->_dataObjectConverter = $this->getMock(
+            'Magento\Framework\Service\DataObjectConverter',
+            ['convertStdObjectToArray'],
+            [],
             '',
             false
         );
-        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', array(), array(), '', false);
-        $this->_serializerMock = $this->getMock(
-            'Magento\Webapi\Controller\ServiceArgsSerializer',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->_serializerMock = $this->getMock('Magento\Webapi\Controller\ServiceArgsSerializer', [], [], '', false);
         /** Initialize SUT. */
         $this->_handler = new \Magento\Webapi\Controller\Soap\Request\Handler(
             $this->_requestMock,
             $this->_objectManagerMock,
             $this->_apiConfigMock,
             $this->_authzServiceMock,
-            $this->_helperMock,
+            $this->_dataObjectConverter,
             $this->_serializerMock
         );
         parent::setUp();
@@ -92,54 +86,41 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testCall()
     {
         $requestedServices = array('requestedServices');
-        $this->_requestMock->expects(
-            $this->once()
-        )->method(
-            'getRequestedServices'
-        )->will(
-            $this->returnValue($requestedServices)
-        );
+        $this->_requestMock->expects($this->once())
+            ->method('getRequestedServices')
+            ->will($this->returnValue($requestedServices));
+        $this->_dataObjectConverter->expects($this->once())
+            ->method('convertStdObjectToArray')
+            ->will($this->returnValue(['field' => 1]));
         $operationName = 'soapOperation';
-        $className = 'Magento\Object';
+        $className = 'Magento\Framework\Object';
         $methodName = 'testMethod';
         $isSecure = false;
         $aclResources = array('Magento_TestModule::resourceA');
-        $this->_apiConfigMock->expects(
-            $this->once()
-        )->method(
-            'getServiceMethodInfo'
-        )->with(
-            $operationName,
-            $requestedServices
-        )->will(
-            $this->returnValue(
-                array(
-                    \Magento\Webapi\Model\Soap\Config::KEY_CLASS => $className,
-                    \Magento\Webapi\Model\Soap\Config::KEY_METHOD => $methodName,
-                    \Magento\Webapi\Model\Soap\Config::KEY_IS_SECURE => $isSecure,
-                    \Magento\Webapi\Model\Soap\Config::KEY_ACL_RESOURCES => $aclResources
+        $this->_apiConfigMock->expects($this->once())
+            ->method('getServiceMethodInfo')
+            ->with($operationName, $requestedServices)
+            ->will(
+                $this->returnValue(
+                    array(
+                        SoapConfig::KEY_CLASS => $className,
+                        SoapConfig::KEY_METHOD => $methodName,
+                        SoapConfig::KEY_IS_SECURE => $isSecure,
+                        SoapConfig::KEY_ACL_RESOURCES => $aclResources
+                    )
                 )
-            )
-        );
+            );
 
         $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $serviceMock = $this->getMockBuilder(
-            $className
-        )->disableOriginalConstructor()->setMethods(
-            array($methodName)
-        )->getMock();
+        $serviceMock = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->setMethods(array($methodName))
+            ->getMock();
 
         $serviceResponse = array('foo' => 'bar');
         $serviceMock->expects($this->once())->method($methodName)->will($this->returnValue($serviceResponse));
-        $this->_objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'get'
-        )->with(
-            $className
-        )->will(
-            $this->returnValue($serviceMock)
-        );
+        $this->_objectManagerMock->expects($this->once())->method('get')->with($className)
+            ->will($this->returnValue($serviceMock));
         $this->_serializerMock->expects($this->once())->method('getInputData')->will($this->returnArgument(2));
 
         /** Execute SUT. */

@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 
-use Magento\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 /**
  * VAT ID element renderer
@@ -49,18 +49,18 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
     protected $_template = 'sales/order/create/address/form/renderer/vat.phtml';
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -75,7 +75,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
     public function getValidateButton()
     {
         if (is_null($this->_validateButton)) {
-            /** @var $form \Magento\Data\Form */
+            /** @var $form \Magento\Framework\Data\Form */
             $form = $this->_element->getForm();
 
             $vatElementId = $this->_element->getHtmlId();

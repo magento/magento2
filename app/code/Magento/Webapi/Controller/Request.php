@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller;
 
-class Request extends \Zend_Controller_Request_Http implements \Magento\App\RequestInterface
+class Request extends \Zend_Controller_Request_Http implements \Magento\Framework\App\RequestInterface
 {
     /** @var int */
     protected $_consumerId = 0;
@@ -33,13 +33,13 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\App\Requ
     /**
      * Modify pathInfo: strip down the front name and query parameters.
      *
-     * @param \Magento\App\AreaList $areaList
-     * @param \Magento\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\App\AreaList $areaList
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
-        \Magento\App\AreaList $areaList,
-        \Magento\Config\ScopeInterface $configScope,
+        \Magento\Framework\App\AreaList $areaList,
+        \Magento\Framework\Config\ScopeInterface $configScope,
         $uri = null
     ) {
         parent::__construct($uri);

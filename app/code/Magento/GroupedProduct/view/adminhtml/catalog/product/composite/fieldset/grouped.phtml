@@ -27,7 +27,7 @@
 
 <?php /* @var $this \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<div id="catalog_product_composite_configure_fields_grouped" class="grid <?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php echo __('Associated Products') ?></h4>
     <div class="product-options">
         <?php $_product = $this->getProduct(); ?>
@@ -38,21 +38,16 @@
             <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
         <?php endif; ?>
         <table class="data-table grouped-items-table" id="super-product-table">
-            <col />
-            <col />
-            <col />
-            <col />
-            <col width="1" />
             <thead>
                 <tr class="headings">
-                    <th><?php echo __('ID') ?></th>
-                    <th><?php echo __('SKU') ?></th>
-                    <th><?php echo __('Product Name') ?></th>
+                    <th class="col-id"><?php echo __('ID') ?></th>
+                    <th class="col-sku"><?php echo __('SKU') ?></th>
+                    <th class="col-name"><?php echo __('Product Name') ?></th>
                     <?php if ($this->getCanShowProductPrice($_product)): ?>
-                    <th class="a-right"><?php echo __('Price') ?></th>
+                    <th class="col-price"><?php echo __('Price') ?></th>
                     <?php endif; ?>
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
-                    <th class="a-center"><?php echo __('Qty') ?></th>
+                    <th class="col-qty"><?php echo __('Qty') ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -62,18 +57,18 @@
             <?php foreach ($_associatedProducts as $_item): ?>
                 <?php $_finalPriceInclTax = $this->helper('Magento\Catalog\Helper\Product\Price')->getPrice($_item, $_item->getFinalPrice(), true) ?>
                 <tr class="<?php echo (++$i % 2) ? 'even' : 'odd' ?>">
-                    <td><?php echo $_item->getId() ?></td>
-                    <td><?php echo $this->escapeHtml($_item->getSku()) ?></td>
-                    <td><?php echo $this->escapeHtml($_item->getName()) ?></td>
+                    <td class="col-id"><?php echo $_item->getId() ?></td>
+                    <td class="col-sku"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?php echo $this->escapeHtml($_item->getName()) ?></td>
                     <?php if ($this->getCanShowProductPrice($_product)): ?>
-                    <td class="a-right">
+                    <td class="col-price">
                         <?php if ($this->getCanShowProductPrice($_item)): ?>
-                        <?php echo $this->getPriceHtml($_item, true) ?>
+                        <?php echo $this->getProductPrice($_item) ?>
                         <?php endif; ?>
                     </td>
                     <?php endif; ?>
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
-                    <td class="a-center">
+                    <td class="col-qty">
                     <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
                         <input type="text" name="super_group[<?php echo $_item->getId() ?>]" id="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" />
                         <input type="hidden" value="1" price="<?php echo $this->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php echo $_item->getId() ?>]" />
@@ -86,7 +81,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                <tr>
-                   <td colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>4<?php else : ?>3<?php endif; ?>"><?php echo __('No options of this product are available.') ?></td>
+                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>4<?php else : ?>3<?php endif; ?>"><?php echo __('No options of this product are available.') ?></td>
                </tr>
             <?php endif; ?>
             </tbody>

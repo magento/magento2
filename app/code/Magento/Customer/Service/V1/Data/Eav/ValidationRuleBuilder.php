@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Service\V1\Data\Eav;
 
-class ValidationRuleBuilder extends \Magento\Service\Data\AbstractObjectBuilder
+class ValidationRuleBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**
      * Set validation rule name

@@ -24,7 +24,7 @@
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\Customer;
 
 /**
@@ -35,14 +35,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * Request mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * Response mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\ResponseInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -56,7 +56,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * ObjectManager mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
      */
     protected $_objectManager;
 
@@ -80,7 +80,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Message\ManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
@@ -92,10 +92,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\App\Request\Http')->disableOriginalConstructor()->getMock();
+        $this->_request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_response = $this->getMockBuilder(
-            'Magento\App\Response\Http'
+            'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->setMethods(
             array('setRedirect', 'getHeader')
         )->getMock();
@@ -111,15 +113,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_objectManager = $this->getMockBuilder(
-            'Magento\App\ObjectManager'
+            'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->setMethods(
             array('get', 'create')
         )->getMock();
         $frontControllerMock = $this->getMockBuilder(
-            'Magento\App\FrontController'
+            'Magento\Framework\App\FrontController'
         )->disableOriginalConstructor()->getMock();
 
-        $actionFlagMock = $this->getMockBuilder('Magento\App\ActionFlag')->disableOriginalConstructor()->getMock();
+        $actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_session = $this->getMockBuilder(
             'Magento\Backend\Model\Session'
@@ -135,7 +139,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
-            'Magento\Message\Manager'
+            'Magento\Framework\Message\Manager'
         )->disableOriginalConstructor()->setMethods(
             array('addSuccess', 'addMessage', 'addException')
         )->getMock();
@@ -251,7 +255,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->with(
             $customerId
         )->will(
-            $this->throwException(new NoSuchEntityException('customerId', $customerId))
+            $this->throwException(new NoSuchEntityException(
+                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    ['fieldName' => 'customerId', 'fieldValue' => $customerId]
+                )
+            )
         );
 
         $this->_helper->expects(
@@ -285,8 +293,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Model\Exception();
-        $error = new \Magento\Message\Error('Something Bad happened');
+        $exception = new \Magento\Framework\Model\Exception();
+        $error = new \Magento\Framework\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
         $this->_acctServiceMock->expects(
@@ -322,8 +330,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Model\Exception($warningText);
-        $error = new \Magento\Message\Warning('Something Not So Bad happened');
+        $exception = new \Magento\Framework\Model\Exception($warningText);
+        $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);
 
         $this->_acctServiceMock->expects(
@@ -342,7 +350,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addMessage'
         )->with(
-            $this->equalTo(new \Magento\Message\Error($warningText))
+            $this->equalTo(new \Magento\Framework\Message\Error($warningText))
         );
 
         $this->_testedObject->resetPasswordAction();
@@ -429,8 +437,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'initiatePasswordReset'
         )->with(
             $email,
-            $websiteId,
-            CustomerAccountServiceInterface::EMAIL_REMINDER
+            CustomerAccountServiceInterface::EMAIL_REMINDER,
+            $websiteId
         );
 
         // verify success message

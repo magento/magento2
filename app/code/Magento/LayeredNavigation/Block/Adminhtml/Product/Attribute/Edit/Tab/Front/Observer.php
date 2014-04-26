@@ -26,7 +26,7 @@
 namespace Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Edit\Tab\Front;
 
 use Magento\Backend\Model\Config\Source;
-use Magento\Module\Manager;
+use Magento\Framework\Module\Manager;
 
 class Observer
 {
@@ -36,7 +36,7 @@ class Observer
     protected $optionList;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -51,7 +51,7 @@ class Observer
     }
 
     /**
-     * @param \Magento\Event $event
+     * @param \Magento\Framework\Event $event
      * @return void
      */
     public function observe($event)
@@ -60,7 +60,7 @@ class Observer
             return;
         }
 
-        /** @var \Magento\Data\Form\AbstractForm $form */
+        /** @var \Magento\Framework\Data\Form\AbstractForm $form */
         $form = $event->getForm();
 
         $fieldset = $form->getElement('front_fieldset');

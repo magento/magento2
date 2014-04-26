@@ -55,7 +55,13 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helperMock = $this->getMock('Magento\GoogleAdwords\Helper\Data', array(), array(), '', false);
         $this->_localeMock = $this->getMock('Zend_Locale', array(), array(), '', false);
-        $this->_localeModelMock = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false);
+        $this->_localeModelMock = $this->getMock(
+            'Magento\Framework\Locale\ResolverInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_localeModelMock->expects(
             $this->once()
         )->method(

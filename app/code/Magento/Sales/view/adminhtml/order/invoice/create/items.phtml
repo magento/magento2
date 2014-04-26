@@ -91,7 +91,7 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Invoice Totals') ?></span>
             </div>
-            <div>
+            <div class="order-totals-bottom">
                 <?php echo $this->getChildHtml('invoice_totals') ?>
                 <?php if ($this->isCaptureAllowed()): ?>
                 <?php if ($this->canCapture()):?>
@@ -112,12 +112,12 @@
                     <div><?php echo __('The invoice will be created offline without the payment gateway.') ?></div>
                 <?php endif?>
                 <?php endif; ?>
-                <div>
+                <div class="field choice field-append">
                     <input id="notify_customer" name="invoice[comment_customer_notify]" value="1" type="checkbox" />
                     <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
                 </div>
                 <?php if ($this->canSendInvoiceEmail()): ?>
-                <div>
+                <div class="field choice field-email">
                     <input id="send_email" name="invoice[send_email]" value="1" type="checkbox" />
                     <label class="normal" for="send_email"><?php echo __('Email Copy of Invoice') ?></label>
                 </div>

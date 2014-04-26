@@ -28,16 +28,19 @@ namespace Magento\Catalog\Model\Category\CategoryImageTest;
 
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Core\Model\StoreManagerInterface'
-)->getStore()->setConfig(
+    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+)->setValue(
     'dev/log/active',
-    1
+    1,
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
+
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Core\Model\StoreManagerInterface'
-)->getStore()->setConfig(
+    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+)->setValue(
     'dev/log/exception_file',
-    'save_category_without_image.log'
+    'save_category_without_image.log',
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 class StubZendLogWriterStreamTest extends \Zend_Log_Writer_Stream
 {

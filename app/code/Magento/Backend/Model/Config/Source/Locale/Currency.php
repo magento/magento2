@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Locale;
 
-class Currency implements \Magento\Option\ArrayInterface
+class Currency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
@@ -37,14 +37,14 @@ class Currency implements \Magento\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Locale\ListsInterface
+     * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_localeLists;
 
     /**
-     * @param \Magento\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      */
-    public function __construct(\Magento\Locale\ListsInterface $localeLists)
+    public function __construct(\Magento\Framework\Locale\ListsInterface $localeLists)
     {
         $this->_localeLists = $localeLists;
     }

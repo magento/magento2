@@ -34,7 +34,7 @@
  */
 namespace Magento\Backend\Model\Config\Source;
 
-class Checktype implements \Magento\Option\ArrayInterface
+class Checktype implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Retrieve Check Type Option array

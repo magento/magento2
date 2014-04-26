@@ -38,12 +38,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $response;
 
@@ -53,12 +53,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -90,14 +90,14 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->request = $this->getMock(
-            'Magento\App\RequestInterface',
+            'Magento\Framework\App\RequestInterface',
             array('isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam'),
             array(),
             '',
             false
         );
         $this->response = $this->getMock(
-            'Magento\App\ResponseInterface',
+            'Magento\Framework\App\ResponseInterface',
             array('setRedirect', 'sendResponse'),
             array(),
             '',
@@ -110,9 +110,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->url = $this->getMockForAbstractClass('\Magento\UrlInterface');
+        $this->url = $this->getMockForAbstractClass('\Magento\Framework\UrlInterface');
         $this->objectManager = $this->getMock(
-            '\Magento\ObjectManager\ObjectManager',
+            '\Magento\Framework\ObjectManager\ObjectManager',
             array('get'),
             array(),
             '',
@@ -165,8 +165,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    array('Magento\Customer\Helper\Data', new \Magento\Object(array('account_url' => 1))),
-                    array('Magento\Core\Model\Store\Config', new \Magento\Object(array('config_flag' => 1))),
+                    array('Magento\Customer\Helper\Data', new \Magento\Framework\Object(array('account_url' => 1))),
+                    array(
+                        'Magento\Framework\App\Config\ScopeConfigInterface',
+                        new \Magento\Framework\Object(array('config_flag' => 1))
+                    ),
                     array(
                         'Magento\Core\Helper\Data',
                         $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false)

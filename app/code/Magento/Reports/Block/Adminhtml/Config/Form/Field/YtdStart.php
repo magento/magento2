@@ -25,7 +25,7 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Config\Form\Field;
 
-use Magento\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Dashboard Year-To-Date Month and Day starts Field Renderer

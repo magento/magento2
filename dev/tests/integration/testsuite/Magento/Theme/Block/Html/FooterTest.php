@@ -35,18 +35,22 @@ class FooterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        );
         $this->_theme = $design->setDefaultDesignTheme()->getDesignTheme();
     }
 
     public function testGetCacheKeyInfo()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $context = $objectManager->get('Magento\App\Http\Context');
+        $context = $objectManager->get('Magento\Framework\App\Http\Context');
         $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
-        $block = $objectManager->get('Magento\View\LayoutInterface')->createBlock('Magento\Theme\Block\Html\Footer');
-        $storeId = $objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
+        $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
+            ->createBlock('Magento\Theme\Block\Html\Footer');
+        $storeId = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
         $this->assertEquals(
             array('PAGE_FOOTER', $storeId, 0, $this->_theme->getId(), null),
             $block->getCacheKeyInfo()

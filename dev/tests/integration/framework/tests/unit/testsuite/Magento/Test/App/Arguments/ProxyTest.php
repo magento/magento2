@@ -34,7 +34,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testProxiedMethods($method, $params)
     {
-        $subject = $this->getMock('\Magento\App\Arguments', array(), array(), '', false);
+        $subject = $this->getMock('\Magento\Framework\App\Arguments', array(), array(), '', false);
         $invocation = $subject->expects($this->once())->method($method);
         $invocation = call_user_func_array(array($invocation, 'with'), $params);
         $expectedResult = new \stdClass();
@@ -63,10 +63,10 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSubject()
     {
-        $subject1 = $this->getMock('\Magento\App\Arguments', array(), array(), '', false);
+        $subject1 = $this->getMock('\Magento\Framework\App\Arguments', array(), array(), '', false);
         $subject1->expects($this->once())->method('get');
 
-        $subject2 = $this->getMock('\Magento\App\Arguments', array(), array(), '', false);
+        $subject2 = $this->getMock('\Magento\Framework\App\Arguments', array(), array(), '', false);
         $subject2->expects($this->once())->method('get');
 
         $object = new \Magento\TestFramework\App\Arguments\Proxy($subject1);

@@ -23,13 +23,13 @@
  */
 namespace Magento\Downloadable\Helper;
 
-use Magento\App\Filesystem;
-use Magento\Model\Exception as CoreException;
+use Magento\Framework\App\Filesystem;
+use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Downloadable Products Download Helper
  */
-class Download extends \Magento\App\Helper\AbstractHelper
+class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Link type url
@@ -63,7 +63,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Resource open handle
      *
-     * @var \Magento\Filesystem\File\ReadInterface
+     * @var \Magento\Framework\Filesystem\File\ReadInterface
      */
     protected $_handle = null;
 
@@ -112,41 +112,41 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * Working Directory (valid for LINK_TYPE_FILE only).
-     * @var \Magento\Filesystem\Directory\Read
+     * @var \Magento\Framework\Filesystem\Directory\Read
      */
     protected $_workingDirectory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\Filesystem $filesystem
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Filesystem $filesystem
     ) {
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
         $this->_coreFileStorageDb = $coreFileStorageDb;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
 
         parent::__construct($context);
@@ -155,7 +155,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve Resource file handle (socket, file pointer etc)
      *
-     * @return \Magento\Filesystem\File\ReadInterface
+     * @return \Magento\Framework\Filesystem\File\ReadInterface
      * @throws CoreException|\Exception
      */
     protected function _getHandle()
@@ -294,6 +294,6 @@ class Download extends \Magento\App\Helper\AbstractHelper
      */
     public function getContentDisposition($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_CONTENT_DISPOSITION, $store);
+        return $this->_scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }

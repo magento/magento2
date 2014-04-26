@@ -39,11 +39,6 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'end.phtml';
 
     /**
-     * @var \Magento\App\ConfigInterface
-     */
-    protected $_coreConfig;
-
-    /**
      * @var \Magento\AdminNotification\Model\Survey
      */
     protected $_survey;
@@ -56,28 +51,25 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_cryptKey;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\AdminNotification\Model\Survey $survey
      * @param string $cryptKey
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Session\Generic $session,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\Framework\Session\Generic $session,
         \Magento\AdminNotification\Model\Survey $survey,
         $cryptKey,
         array $data = array()
     ) {
         $this->_cryptKey = $cryptKey;
         parent::__construct($context, $installer, $installWizard, $session, $data);
-        $this->_coreConfig = $coreConfig;
         $this->_survey = $survey;
     }
 

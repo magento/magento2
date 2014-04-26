@@ -27,7 +27,7 @@
     <update handle="sales_order_print_shipment_renderers" />
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">
-            <block class="Magento\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list" />
+            <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list" />
         </block>
     </referenceContainer>
 </layout>

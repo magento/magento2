@@ -28,7 +28,7 @@ namespace Magento\CatalogSearch\Model\Resource;
 /**
  * CatalogSearch Fulltext Index resource model
  */
-class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
+class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Searchable attributes cache
@@ -45,7 +45,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     protected $_separator = '|';
 
     /**
-     * Array of \Magento\Stdlib\DateTime\DateInterface objects per store
+     * Array of \Magento\Framework\Stdlib\DateTime\DateInterface objects per store
      *
      * @var array
      */
@@ -101,28 +101,28 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Core string
      *
-     * @var \Magento\Filter\FilterManager
+     * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filter;
 
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -139,53 +139,53 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     protected $_engineProvider;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
      * @param EngineProvider $engineProvider
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Filter\FilterManager $filter
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Helper $resourceHelper
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Filter\FilterManager $filter,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Filter\FilterManager $filter,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Locale\ResolverInterface $localeResolver,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_eavConfig = $eavConfig;
@@ -194,7 +194,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
         $this->_eventManager = $eventManager;
         $this->filter = $filter;
         $this->_catalogSearchData = $catalogSearchData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
         $this->_engineProvider = $engineProvider;
@@ -407,7 +407,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
             $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         } else {
             // Optimized deletion only product-related records
-            /** @var $select \Magento\DB\Select */
+            /** @var $select \Magento\Framework\DB\Select */
             $select = $adapter->select()->from(
                 array('r' => $this->getTable('catalogsearch_result')),
                 null
@@ -429,7 +429,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
             $query = $select->deleteFromSelect('res');
             $adapter->query($query);
 
-            /** @var $select \Magento\DB\Select */
+            /** @var $select \Magento\Framework\DB\Select */
             $select = $adapter->select();
             $subSelect = $adapter->select()->from(array('res' => $this->getTable('catalogsearch_result')), null);
             $select->exists($subSelect, 'res.query_id=' . $this->getTable('catalogsearch_query') . '.query_id', false);
@@ -529,7 +529,7 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
                 $select,
                 $this->getTable('catalogsearch_result'),
                 array(),
-                \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
             );
             $adapter->query($sql, $bind);
 
@@ -742,12 +742,12 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
      * Retrieve Product Emulator (Magento Object)
      *
      * @param string $typeId
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _getProductEmulator($typeId)
     {
         if (!isset($this->_productEmulators[$typeId])) {
-            $productEmulator = new \Magento\Object();
+            $productEmulator = new \Magento\Framework\Object();
             $productEmulator->setIdFieldName('entity_id')->setTypeId($typeId);
             $this->_productEmulators[$typeId] = $productEmulator;
         }
@@ -925,18 +925,26 @@ class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
     protected function _getStoreDate($storeId, $date = null)
     {
         if (!isset($this->_dates[$storeId])) {
-            $timezone = $this->_coreStoreConfig->getConfig($this->_localeDate->getDefaultTimezonePath(), $storeId);
-            $locale = $this->_coreStoreConfig->getConfig($this->_localeResolver->getDefaultLocalePath(), $storeId);
+            $timezone = $this->_scopeConfig->getValue(
+                $this->_localeDate->getDefaultTimezonePath(),
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
+            $locale = $this->_scopeConfig->getValue(
+                $this->_localeResolver->getDefaultLocalePath(),
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
             $locale = new \Zend_Locale($locale);
 
-            $dateObj = new \Magento\Stdlib\DateTime\Date(null, null, $locale);
+            $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
             $dateObj->setTimezone($timezone);
             $this->_dates[$storeId] = array($dateObj, $locale->getTranslation(null, 'date', $locale));
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {
             list($dateObj, $format) = $this->_dates[$storeId];
-            $dateObj->setDate($date, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $dateObj->setDate($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
             return $dateObj->toString($format);
         }

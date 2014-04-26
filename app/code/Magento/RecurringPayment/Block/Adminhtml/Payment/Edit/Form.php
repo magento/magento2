@@ -33,7 +33,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     /**
      * Reference to the parent element (optional)
      *
-     * @var \Magento\Data\Form\Element\AbstractElement
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected $_parentElement = null;
 
@@ -57,7 +57,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     protected $_product = null;
 
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -68,14 +68,14 @@ class Form extends \Magento\Backend\Block\AbstractBlock
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\RecurringPayment\Block\Fields $recurringPaymentFields
      * @param \Magento\RecurringPayment\Model\PeriodUnits $periodUnits
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\RecurringPayment\Block\Fields $recurringPaymentFields,
         \Magento\RecurringPayment\Model\PeriodUnits $periodUnits,
         array $data = array()
@@ -89,10 +89,10 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     /**
      * Setter for parent element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return $this
      */
-    public function setParentElement(\Magento\Data\Form\Element\AbstractElement $element)
+    public function setParentElement(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_parentElement = $element;
         return $this;
@@ -128,7 +128,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
     /**
      * Instantiate form and fields
      *
-     * @return \Magento\Data\Form
+     * @return \Magento\Framework\Data\Form
      */
     protected function _prepareForm()
     {
@@ -221,11 +221,11 @@ class Form extends \Magento\Backend\Block\AbstractBlock
      * Add a field to the form or fieldset
      * Form and fieldset have same abstract
      *
-     * @param \Magento\Data\Form|\Magento\Data\Form\Element\Fieldset $formOrFieldset
+     * @param \Magento\Framework\Data\Form|\Magento\Framework\Data\Form\Element\Fieldset $formOrFieldset
      * @param string $elementName
      * @param array $options
      * @param string $type
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _addField($formOrFieldset, $elementName, $options = array(), $type = 'text')
     {

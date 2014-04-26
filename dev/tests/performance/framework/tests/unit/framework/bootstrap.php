@@ -27,4 +27,4 @@
 $magentoBaseDir = realpath(__DIR__ . '/../../../../../../../');
 
 require_once "{$magentoBaseDir}/app/bootstrap.php";
-\Magento\Autoload\IncludePath::addIncludePath("{$magentoBaseDir}/dev/tests/performance/framework");
+\Magento\Framework\Autoload\IncludePath::addIncludePath("{$magentoBaseDir}/dev/tests/performance/framework");

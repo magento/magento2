@@ -31,15 +31,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected static $_tmpDir = '';
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected static $_varDirectory;
 
     public static function setUpBeforeClass()
     {
-        /** @var \Magento\App\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
-        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
         self::$_tmpDir = self::$_varDirectory->getAbsolutePath('ConfigTest');
         self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
@@ -54,7 +55,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         file_put_contents(self::$_tmpDir . '/local.xml.template', "test; {{date}}; {{base_url}}; {{unknown}}");
         $expectedFile = self::$_tmpDir . '/local.xml';
 
-        $request = $this->getMock('Magento\App\Request\Http', array('getDistroBaseUrl'), array(), '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', array('getDistroBaseUrl'), array(), '', false);
 
         $request->expects($this->once())->method('getDistroBaseUrl')->will($this->returnValue('http://example.com/'));
         $expectedContents = "test; <![CDATA[d-d-d-d-d]]>; <![CDATA[http://example.com/]]>; {{unknown}}";
@@ -63,14 +64,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryList = $objectManager->create(
-            'Magento\App\Filesystem\DirectoryList',
+            'Magento\Framework\App\Filesystem\DirectoryList',
             array(
                 'root' => self::$_tmpDir,
-                'directories' => array(\Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir))
+                'directories' => array(\Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir))
             )
         );
-        $objectManager->get('\Magento\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
-        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
+        $objectManager->get('\Magento\Framework\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
+        $filesystem = $objectManager->create(
+            'Magento\Framework\App\Filesystem',
+            array('directoryList' => $directoryList)
+        );
         $model = $objectManager->create(
             'Magento\Install\Model\Installer\Config',
             array('request' => $request, 'filesystem' => $filesystem)
@@ -87,9 +91,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Install\Model\Installer\Config'
         );
-        /** @var $result \Magento\Object */
+        /** @var $result \Magento\Framework\Object */
         $result = $model->getFormData();
-        $this->assertInstanceOf('Magento\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\Object', $result);
         $data = $result->getData();
         $this->assertArrayHasKey('db_host', $data);
     }

@@ -32,19 +32,19 @@ namespace Magento\Cms\Controller;
  * @package     Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Router extends \Magento\App\Router\AbstractRouter
+class Router extends \Magento\Framework\App\Router\AbstractRouter
 {
     /**
      * Event manager
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,43 +58,43 @@ class Router extends \Magento\App\Router\AbstractRouter
     /**
      * Config primary
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
     /**
      * Url
      *
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
     /**
      * Response
      *
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
     /**
      * Construct
      *
-     * @param \Magento\App\ActionFactory $actionFactory
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\UrlInterface $url
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\ActionFactory $actionFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\ResponseInterface $response
      */
     public function __construct(
-        \Magento\App\ActionFactory $actionFactory,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\UrlInterface $url,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\ActionFactory $actionFactory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\App\State $appState,
         \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\ResponseInterface $response
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\ResponseInterface $response
     ) {
         parent::__construct($actionFactory);
         $this->_eventManager = $eventManager;
@@ -108,12 +108,12 @@ class Router extends \Magento\App\Router\AbstractRouter
     /**
      * Validate and Match Cms Page and modify request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function match(\Magento\App\RequestInterface $request)
+    public function match(\Magento\Framework\App\RequestInterface $request)
     {
         if (!$this->_appState->isInstalled()) {
             $this->_response->setRedirect($this->_url->getUrl('install'))->sendResponse();
@@ -122,7 +122,7 @@ class Router extends \Magento\App\Router\AbstractRouter
 
         $identifier = trim($request->getPathInfo(), '/');
 
-        $condition = new \Magento\Object(array('identifier' => $identifier, 'continue' => true));
+        $condition = new \Magento\Framework\Object(array('identifier' => $identifier, 'continue' => true));
         $this->_eventManager->dispatch(
             'cms_controller_router_match_before',
             array('router' => $this, 'condition' => $condition)
@@ -133,7 +133,7 @@ class Router extends \Magento\App\Router\AbstractRouter
             $this->_response->setRedirect($condition->getRedirectUrl());
             $request->setDispatched(true);
             return $this->_actionFactory->createController(
-                'Magento\App\Action\Redirect',
+                'Magento\Framework\App\Action\Redirect',
                 array('request' => $request)
             );
         }
@@ -150,8 +150,11 @@ class Router extends \Magento\App\Router\AbstractRouter
         }
 
         $request->setModuleName('cms')->setControllerName('page')->setActionName('view')->setParam('page_id', $pageId);
-        $request->setAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+        $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
 
-        return $this->_actionFactory->createController('Magento\App\Action\Forward', array('request' => $request));
+        return $this->_actionFactory->createController(
+            'Magento\Framework\App\Action\Forward',
+            array('request' => $request)
+        );
     }
 }

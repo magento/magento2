@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-use Magento\App\Action\NotFoundException;
+use Magento\Framework\App\Action\NotFoundException;
 
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
@@ -53,10 +53,10 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     /**
      * Check if current section is found and is allowed
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function dispatch(\Magento\App\RequestInterface $request)
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         $section = null;
         if (!$request->getParam('section')) {

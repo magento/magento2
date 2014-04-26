@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
-
+use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 class StockDataFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -33,32 +33,20 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter
+     * @var StockDataFilter
      */
     protected $stockDataFilter;
 
     protected function setUp()
     {
-        $this->storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $this->storeMock->expects(
-            $this->any()
-        )->method(
-            'getConfig'
-        )->with(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
-        )->will(
-            $this->returnValue(1)
-        );
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
-        $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
-
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
-
-        $this->stockDataFilter = new StockDataFilter($this->storeManagerMock);
+        $this->stockDataFilter = new StockDataFilter($this->scopeConfigMock);
     }
 
     /**
@@ -95,13 +83,10 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
             ),
             'case3' => array(
                 'inputStockData' => array(
-                    'qty' =>
-                        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::MAX_QTY_VALUE +
-                    1
+                    'qty' => StockDataFilter::MAX_QTY_VALUE + 1
                 ),
                 'outputStockData' => array(
-                    'qty' =>
-                        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::MAX_QTY_VALUE,
+                    'qty' => StockDataFilter::MAX_QTY_VALUE,
                     'is_decimal_divided' => 0,
                     'use_config_manage_stock' => 0
                 )

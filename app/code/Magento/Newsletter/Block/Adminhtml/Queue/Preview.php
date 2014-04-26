@@ -96,7 +96,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $storeId = $this->_storeManager->getDefaultStoreView()->getId();
         }
 
-        \Magento\Profiler::start("newsletter_queue_proccessing");
+        \Magento\Framework\Profiler::start("newsletter_queue_proccessing");
         $vars = array();
 
         $vars['subscriber'] = $this->_subscriberFactory->create();
@@ -113,7 +113,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Profiler::stop("newsletter_queue_proccessing");
+        \Magento\Framework\Profiler::stop("newsletter_queue_proccessing");
 
         return $templateProcessed;
     }

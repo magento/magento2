@@ -25,12 +25,12 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
-use Magento\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Controller for onepage checkouts
  */
-abstract class Action extends \Magento\App\Action\Action
+abstract class Action extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -48,13 +48,13 @@ abstract class Action extends \Magento\App\Action\Action
     protected $_customerMetadataService;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService
@@ -88,9 +88,9 @@ abstract class Action extends \Magento\App\Action\Action
                 $customer,
                 $this->_customerMetadataService->getAllCustomerAttributeMetadata()
             );
-            if (true !== $validationResult && is_array($validationResult)) {
+            if (!$validationResult->isValid()) {
                 if ($addErrors) {
-                    foreach ($validationResult as $error) {
+                    foreach ($validationResult->getMessages() as $error) {
                         $this->messageManager->addError($error);
                     }
                 }

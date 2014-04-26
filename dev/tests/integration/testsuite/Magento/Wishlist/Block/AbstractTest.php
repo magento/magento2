@@ -40,7 +40,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Magento\Wishlist\Block\AbstractBlock', 
             array(
                 $objectManager->get('Magento\Catalog\Block\Product\Context'),
-                $objectManager->get('Magento\App\Http\Context'),
+                $objectManager->get('Magento\Framework\App\Http\Context'),
                 $objectManager->get('Magento\Catalog\Model\ProductFactory'),
             )
         );
@@ -53,8 +53,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testImage()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');

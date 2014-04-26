@@ -32,17 +32,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /** @var  \Magento\Config\FileResolverInterface/PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit_Framework_MockObject_MockObject */
     protected $_fileResolverMock;
 
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $cache \Magento\App\Cache */
-        $cache = $objectManager->create('Magento\App\Cache');
+        /** @var $cache \Magento\Framework\App\Cache */
+        $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
         $this->_fileResolverMock = $this->getMockBuilder(
-            'Magento\Config\FileResolverInterface'
+            'Magento\Framework\Config\FileResolverInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_model = $objectManager->create(
             'Magento\Payment\Model\Config\Reader',

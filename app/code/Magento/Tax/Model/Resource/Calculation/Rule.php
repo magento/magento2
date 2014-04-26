@@ -32,7 +32,7 @@ namespace Magento\Tax\Model\Resource\Calculation;
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rule extends \Magento\Model\Resource\Db\AbstractDb
+class Rule extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

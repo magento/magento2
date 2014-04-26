@@ -23,7 +23,7 @@
  */
 namespace Magento\RecurringPayment\Controller;
 
-class Download extends \Magento\App\Action\Action
+class Download extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Sales\Model\Download
@@ -31,10 +31,10 @@ class Download extends \Magento\App\Action\Action
     protected $download;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Sales\Model\Download $download
      */
-    public function __construct(\Magento\App\Action\Context $context, \Magento\Sales\Model\Download $download)
+    public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Sales\Model\Download $download)
     {
         parent::__construct($context);
         $this->download = $download;

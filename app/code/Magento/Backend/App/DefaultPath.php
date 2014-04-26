@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\App;
 
-class DefaultPath implements \Magento\App\DefaultPathInterface
+class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
 {
     /**
      * @var array

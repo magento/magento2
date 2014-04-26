@@ -25,7 +25,7 @@
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form;
 
-use Magento\Data\Form;
+use Magento\Framework\Data\Form;
 
 /**
  * VDE area model
@@ -33,7 +33,7 @@ use Magento\Data\Form;
 class Builder
 {
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
@@ -60,13 +60,13 @@ class Builder
     /**
      * Constructor
      *
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\DesignEditor\Model\Editor\Tools\Controls\Factory $configFactory
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory $rendererFactory
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory $elementsFactory
      */
     public function __construct(
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\DesignEditor\Model\Editor\Tools\Controls\Factory $configFactory,
         \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory $rendererFactory,
         \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory $elementsFactory
@@ -93,7 +93,7 @@ class Builder
                 $data['theme'],
                 $data['parent_theme']
             );
-        } catch (\Magento\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             $isFilePresent = false;
         }
 
@@ -134,7 +134,7 @@ class Builder
     protected function _isFormEmpty($form)
     {
         $isEmpty = true;
-        /** @var  $elements \Magento\Data\Form\Element\Collection */
+        /** @var  $elements \Magento\Framework\Data\Form\Element\Collection */
         $elements = $form->getElements();
         foreach ($elements as $element) {
             if ($element->getElements()->count()) {

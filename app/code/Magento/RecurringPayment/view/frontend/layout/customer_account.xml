@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="customer_account_navigation">
-        <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-recurring-payments-link" after="customer-account-navigation-orders-link">
+        <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-recurring-payments-link" after="customer-account-navigation-orders-link">
             <arguments>
                 <argument name="path" xsi:type="string">sales/recurringPayment</argument>
                 <argument name="label" xsi:type="string">Recurring Payments</argument>

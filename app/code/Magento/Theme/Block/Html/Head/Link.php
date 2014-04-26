@@ -26,7 +26,7 @@ namespace Magento\Theme\Block\Html\Head;
 /**
  * Link page block
  */
-class Link extends \Magento\View\Element\Template implements AssetBlockInterface
+class Link extends \Magento\Framework\View\Element\Template implements AssetBlockInterface
 {
     /**
      * Virtual content type
@@ -34,13 +34,13 @@ class Link extends \Magento\View\Element\Template implements AssetBlockInterface
     const VIRTUAL_CONTENT_TYPE = 'link';
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\View\Asset\RemoteFactory $remoteFactory
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Asset\RemoteFactory $remoteFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\View\Asset\RemoteFactory $remoteFactory,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\View\Asset\RemoteFactory $remoteFactory,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -54,7 +54,7 @@ class Link extends \Magento\View\Element\Template implements AssetBlockInterface
     /**
      * Get block asset
      *
-     * @return \Magento\View\Asset\AssetInterface
+     * @return \Magento\Framework\View\Asset\AssetInterface
      */
     public function getAsset()
     {

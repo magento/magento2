@@ -51,10 +51,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_requestId = $this->_context->getRequest()->getParam('id');
         $this->_context->getRequest()->setParam('id', '1');
 
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $customerCurrentService = $objectManager->create(
             'Magento\Customer\Service\V1\CustomerCurrentServiceInterface',
             array('customerSession' => $this->_customerSession)
@@ -68,8 +68,19 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerSession->unsCustomerId();
         $this->_context->getRequest()->setParam('id', $this->_requestId);
+        /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
+        $addressRegistry = $objectManager->get('Magento\Customer\Model\AddressRegistry');
+        //Cleanup address from registry
+        $addressRegistry->remove(1);
+        $addressRegistry->remove(2);
+
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        //Cleanup customer from registry
+        $customerRegistry->remove(1);
     }
 
     /**

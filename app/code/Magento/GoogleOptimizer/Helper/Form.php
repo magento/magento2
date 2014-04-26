@@ -26,9 +26,9 @@
 namespace Magento\GoogleOptimizer\Helper;
 
 use Magento\GoogleOptimizer\Model\Code as ModelCode;
-use Magento\Data\Form as DataForm;
+use Magento\Framework\Data\Form as DataForm;
 
-class Form extends \Magento\App\Helper\AbstractHelper
+class Form extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Prepare form

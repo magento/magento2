@@ -75,8 +75,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false, false);
-        $this->_responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false, false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false, false);
+        $this->_responseMock = $this->getMock(
+            'Magento\Framework\App\Response\Http',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
         $configStructureMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure',
@@ -95,7 +102,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_eventManagerMock = $this->getMock(
-            'Magento\Event\ManagerInterface',
+            'Magento\Framework\Event\ManagerInterface',
             array(),
             array(),
             '',
@@ -106,7 +113,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
 
         $this->messageManagerMock = $this->getMock(
-            'Magento\Message\Manager',
+            'Magento\Framework\Message\Manager',
             array('addSuccess', 'addException'),
             array(),
             '',
@@ -124,7 +131,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_cacheMock = $this->getMock('Magento\App\Cache\Type\Layout', array(), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Layout', array(), array(), '', false);
 
         $configStructureMock->expects(
             $this->any()
@@ -156,7 +163,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $configStructureMock,
                 $this->_configFactoryMock,
                 $this->_cacheMock,
-                new \Magento\Stdlib\String()
+                new \Magento\Framework\Stdlib\String()
             )
         );
     }

@@ -42,8 +42,8 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = array())
     {
-        /** @var $store \Magento\Core\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
+        /** @var $store \Magento\Store\Model\Store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
@@ -54,7 +54,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
 
         $this->assertSessionMessages(
             $this->equalTo(array('You saved the category.')),
-            \Magento\Message\MessageInterface::TYPE_SUCCESS
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
         /** @var $category \Magento\Catalog\Model\Category */
@@ -68,8 +68,8 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         foreach ($attributesSaved as $attribute => $value) {
             $actualValue = $category->getData($attribute);
             if ($value !== $actualValue) {
-                $errors[] =
-                    "value for '{$attribute}' attribute must be '{$value}', but '{$actualValue}' is found instead";
+                $errors[] = "value for '{$attribute}' attribute must be '{$value}'"
+                    . ", but '{$actualValue}' is found instead";
             }
         }
 
@@ -236,7 +236,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
                         'landing_page' => '1',
                         'is_anchor' => '1',
                         'custom_apply_to_products' => '0',
-                        'custom_design' => 'magento_blank',
+                        'custom_design' => 'Magento/blank',
                         'custom_design_from' => '',
                         'custom_design_to' => '',
                         'page_layout' => '',
@@ -269,7 +269,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
                     'default_sort_by' => null,
                     'display_mode' => 'PRODUCTS',
                     'meta_title' => 'Custom Title',
-                    'custom_design' => 'magento_blank',
+                    'custom_design' => 'Magento/blank',
                     'page_layout' => null,
                     'is_active' => '0',
                     'include_in_menu' => '0',
@@ -306,7 +306,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
             $this->equalTo(array('Unable to save the category')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
 }

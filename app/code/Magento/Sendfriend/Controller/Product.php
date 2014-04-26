@@ -25,8 +25,8 @@
  */
 namespace Magento\Sendfriend\Controller;
 
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
+use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Email to a Friend Product Controller
@@ -35,12 +35,12 @@ use Magento\App\RequestInterface;
  * @package     Magento_Sedfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Product extends \Magento\App\Action\Action
+class Product extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -50,13 +50,13 @@ class Product extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Registry $coreRegistry,
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -69,8 +69,8 @@ class Product extends \Magento\App\Action\Action
      * If allow only for customer - redirect to login page
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
-     * @throws \Magento\App\Action\NotFoundException
+     * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -88,7 +88,7 @@ class Product extends \Magento\App\Action\Action
             if ($this->getRequest()->getActionName() == 'sendemail') {
                 $session->setBeforeAuthUrl(
                     $this->_objectManager->create(
-                        'Magento\UrlInterface'
+                        'Magento\Framework\UrlInterface'
                     )->getUrl(
                         '*/*/send',
                         array('_current' => true)
@@ -131,14 +131,14 @@ class Product extends \Magento\App\Action\Action
      */
     protected function _initSendToFriendModel()
     {
-        /** @var \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress */
-        $remoteAddress = $this->_objectManager->get('Magento\HTTP\PhpEnvironment\RemoteAddress');
+        /** @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress */
+        $remoteAddress = $this->_objectManager->get('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress');
 
-        /** @var \Magento\Stdlib\Cookie $cookie */
-        $cookie = $this->_objectManager->get('Magento\Stdlib\Cookie');
+        /** @var \Magento\Framework\Stdlib\Cookie $cookie */
+        $cookie = $this->_objectManager->get('Magento\Framework\Stdlib\Cookie');
 
-        /** @var \Magento\Core\Model\StoreManagerInterface $store */
-        $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        /** @var \Magento\Store\Model\StoreManagerInterface $store */
+        $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
 
         /** @var \Magento\Sendfriend\Model\Sendfriend $model */
         $model = $this->_objectManager->create('Magento\Sendfriend\Model\Sendfriend');
@@ -240,7 +240,7 @@ class Product extends \Magento\App\Action\Action
                     $this->messageManager->addError(__('We found some problems with the data.'));
                 }
             }
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Some emails were not sent.'));
@@ -249,7 +249,7 @@ class Product extends \Magento\App\Action\Action
         // save form data
         $catalogSession->setSendfriendFormData($data);
 
-        $url = $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*/send', array('_current' => true));
+        $url = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/send', array('_current' => true));
         $this->getResponse()->setRedirect($this->_redirect->error($url));
     }
 }

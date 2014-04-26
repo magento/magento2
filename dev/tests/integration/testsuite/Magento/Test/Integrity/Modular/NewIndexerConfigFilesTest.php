@@ -45,9 +45,9 @@ class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\App\Filesystem'
+            'Magento\Framework\App\Filesystem'
         )->getPath(
-            \Magento\App\Filesystem::APP_DIR
+            \Magento\Framework\App\Filesystem::APP_DIR
         ) . '/code/Magento/Indexer/etc/indexer.xsd';
     }
 
@@ -58,7 +58,7 @@ class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexerConfigFile($file)
     {
-        $domConfig = new \Magento\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $domConfig->validate($this->schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -74,9 +74,9 @@ class NewIndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $fileList = glob(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\App\Filesystem'
+                'Magento\Framework\App\Filesystem'
             )->getPath(
-                \Magento\App\Filesystem::APP_DIR
+                \Magento\Framework\App\Filesystem::APP_DIR
             ) . '/*/*/*/etc/indexer.xml'
         );
         $dataProviderResult = array();

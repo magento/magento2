@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* @var $this \Magento\View\Element\Template */
+/* @var $this \Magento\Framework\View\Element\Template */
 
 $havePriceVariation = array_reduce(
     $attribute['values'],
@@ -139,12 +139,12 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                                                         </div>
                                                     </div>
                                                     <div class="field field-pricing-measure">
-                                                        <div class="actions-split actions-select">
+                                                        <div class="actions dropdown actions-select">
                                                             <input name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][is_percent]" type="hidden" value="<?php echo $isPercent ? 1 : 0; ?>"/>
-                                                            <button type="button" class="action-toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
+                                                            <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                                                 <span><?php echo $isPercent ? __('%') : $this->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
-                                                            <ul class="dropdown-menu" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
+                                                            <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
                                                                 <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
                                                                 <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                                             </ul>
@@ -175,7 +175,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"><?php echo $this->getChildHtml('add_option'); ?></td>
+                                    <td colspan="4" class="col-actions-add"><?php echo $this->getChildHtml('add_option'); ?></td>
                                 </tr>
                             </tfoot>
                         </table>

@@ -25,12 +25,12 @@
  */
 ?>
 
-<label>
+<label for="<?php echo $this->getId() ?>_export" class="label">
     <?php echo __('Export to:') ?>
-    <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;">
-        <?php foreach ($this->getExportTypes() as $_type): ?>
-            <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
-        <?php endforeach; ?>
-    </select>
 </label>
+<select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" class="select">
+    <?php foreach ($this->getExportTypes() as $_type): ?>
+        <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
+    <?php endforeach; ?>
+</select>
 <?php echo $this->getExportButtonHtml() ?>

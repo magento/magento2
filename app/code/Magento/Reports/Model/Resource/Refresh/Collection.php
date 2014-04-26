@@ -34,10 +34,10 @@
  */
 namespace Magento\Reports\Model\Resource\Refresh;
 
-class Collection extends \Magento\Data\Collection
+class Collection extends \Magento\Framework\Data\Collection
 {
     /**
-     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
@@ -48,12 +48,12 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory
     ) {
         parent::__construct($entityFactory);
@@ -65,16 +65,16 @@ class Collection extends \Magento\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\Magento\Stdlib\DateTime\DateInterface
+     * @return string|\Magento\Framework\Stdlib\DateTime\DateInterface
      */
     protected function _getUpdatedAt($reportCode)
     {
         $flag = $this->_reportsFlagFactory->create()->setReportFlagCode($reportCode)->loadSelf();
         return $flag->hasData() ? $this->_localeDate->scopeDate(
             0,
-            new \Magento\Stdlib\DateTime\Date(
+            new \Magento\Framework\Stdlib\DateTime\Date(
                 $flag->getLastUpdate(),
-                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
             ),
             true
         ) : '';
@@ -141,7 +141,7 @@ class Collection extends \Magento\Data\Collection
                 )
             );
             foreach ($data as $value) {
-                $item = new \Magento\Object();
+                $item = new \Magento\Framework\Object();
                 $item->setData($value);
                 $this->addItem($item);
             }

@@ -72,11 +72,11 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     /**
      * Generate form for editing of gift message for entity
      *
-     * @param \Magento\Object $entity
+     * @param \Magento\Framework\Object $entity
      * @param string $entityType
      * @return string
      */
-    public function getFormHtml(\Magento\Object $entity, $entityType = 'quote')
+    public function getFormHtml(\Magento\Framework\Object $entity, $entityType = 'quote')
     {
         return $this->getLayout()->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form'

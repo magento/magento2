@@ -60,26 +60,26 @@ class Express extends \Magento\Paypal\Controller\Express\AbstractExpress
     protected $_customerHelper;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
-     * @param \Magento\Session\Generic $paypalSession
+     * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Core\Helper\Url $urlHelper
      * @param \Magento\Customer\Helper\Data $customerHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
-        \Magento\Session\Generic $paypalSession,
+        \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Core\Helper\Url $urlHelper,
         \Magento\Customer\Helper\Data $customerHelper
     ) {

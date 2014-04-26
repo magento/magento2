@@ -44,20 +44,20 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Grouppr
     protected $_productAttributeBackendTierprice;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\App\ConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice
     ) {
@@ -118,5 +118,15 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Grouppr
     protected function _isPriceFixed($priceObject)
     {
         return $priceObject->isTierPriceFixed();
+    }
+
+    /**
+     * By default attribute value is considered non-scalar that can be stored in a generic way
+     *
+     * @return bool
+     */
+    public function isScalar()
+    {
+        return false;
     }
 }

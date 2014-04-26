@@ -42,7 +42,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * expectedExceptionMessage  The specified image adapter cannot be used because of some missed dependencies.
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -58,6 +58,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCorrectSave()
     {
-        $this->_model->setValue(\Magento\Image\Adapter\AdapterInterface::ADAPTER_GD2)->save();
+        $this->_model->setValue(\Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2)->save();
     }
 }

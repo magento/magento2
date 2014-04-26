@@ -30,13 +30,13 @@ use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
 
 class TextTest extends AbstractFormTestCase
 {
-    /** @var \Magento\Stdlib\String */
+    /** @var \Magento\Framework\Stdlib\String */
     protected $stringHelper;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->stringHelper = new \Magento\Stdlib\String();
+        $this->stringHelper = new \Magento\Framework\Stdlib\String();
     }
 
     /**

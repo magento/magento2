@@ -51,7 +51,7 @@ class PaymentAvailabilityObserverTest extends \PHPUnit_Framework_TestCase
     {
         $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()->getMock();
 
-        $event = new \Magento\Event(
+        $event = new \Magento\Framework\Event(
             array(
                 'quote' => $quote,
                 'method_instance' => $this->getMockBuilder(
@@ -70,7 +70,7 @@ class PaymentAvailabilityObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(true)
         );
 
-        $observer = $this->getMockBuilder('Magento\Event\Observer')->disableOriginalConstructor()->getMock();
+        $observer = $this->getMockBuilder('Magento\Framework\Event\Observer')->disableOriginalConstructor()->getMock();
 
         $observer->expects($this->any())->method('getEvent')->will($this->returnValue($event));
 

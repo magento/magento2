@@ -82,7 +82,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventManagerMock = $this->getMock('Magento\Event\Manager', array(), array(), '', false);
+        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', array(), array(), '', false);
         $this->productFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ProductFactory',
             array('create'),
@@ -93,14 +93,14 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->coreHelperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->requestMock = $this->getMock(
-            'Magento\App\Request\Http',
+            'Magento\Framework\App\Request\Http',
             array('getPost', 'getParam', '__wakeup'),
             array(),
             '',
             false
         );
         $this->responseMock = $this->getMock(
-            'Magento\Object',
+            'Magento\Framework\Object',
             array('setError', 'setMessage', 'setAttributes'),
             array(),
             '',

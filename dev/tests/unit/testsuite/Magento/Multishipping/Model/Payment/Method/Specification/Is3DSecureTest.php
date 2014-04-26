@@ -45,14 +45,14 @@ class Is3DSecureTest extends \PHPUnit_Framework_TestCase
     /**
      * Store config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Store\Config
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $storeConfigMock;
+    protected $scopeConfigMock;
 
     public function setUp()
     {
         $this->paymentConfigMock = $this->getMock('\Magento\Payment\Model\Config', array(), array(), '', false);
-        $this->storeConfigMock = $this->getMock('\Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
@@ -76,17 +76,17 @@ class Is3DSecureTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($methodsInfo)
         );
-        $this->storeConfigMock->expects(
+        $this->scopeConfigMock->expects(
             $this->any()
         )->method(
-            'getConfigFlag'
+            'isSetFlag'
         )->will(
             $this->returnValue($is3DSecureEnabled)
         );
 
         $configSpecification = $this->objectManager->getObject(
             'Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure',
-            array('paymentConfig' => $this->paymentConfigMock, 'storeConfig' => $this->storeConfigMock)
+            array('paymentConfig' => $this->paymentConfigMock, 'scopeConfig' => $this->scopeConfigMock)
         );
 
         $this->assertEquals(

@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Filename extends \Magento\Core\Model\Config\Value
+class Filename extends \Magento\Framework\App\Config\Value
 {
     /**
      * @return $this

@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Model\Resource;
 
-class Region extends \Magento\Model\Resource\Db\AbstractDb
+class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Table with localized region names
@@ -39,15 +39,15 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
     protected $_regionNameTable;
 
     /**
-     * @var \Magento\Locale\ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Locale\ResolverInterface $localeResolver)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Locale\ResolverInterface $localeResolver)
     {
         parent::__construct($resource);
         $this->_localeResolver = $localeResolver;
@@ -69,8 +69,8 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Model\AbstractModel $object
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -78,7 +78,7 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
 
         $locale = $this->_localeResolver->getLocaleCode();
-        $systemLocale = \Magento\AppInterface::DISTRO_LOCALE_CODE;
+        $systemLocale = \Magento\Framework\AppInterface::DISTRO_LOCALE_CODE;
 
         $regionField = $adapter->quoteIdentifier($this->getMainTable() . '.' . $this->getIdFieldName());
 
@@ -107,7 +107,7 @@ class Region extends \Magento\Model\Resource\Db\AbstractDb
     /**
      * Load object by country id and code or default name
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param int $countryId
      * @param string $value
      * @param string $field

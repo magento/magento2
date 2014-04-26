@@ -31,7 +31,7 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Object Manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     private $_objectManager;
 

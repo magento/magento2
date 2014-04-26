@@ -253,7 +253,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get store model by request param
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getStore()
     {

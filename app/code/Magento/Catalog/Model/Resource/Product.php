@@ -63,13 +63,13 @@ class Product extends AbstractResource
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
@@ -78,13 +78,13 @@ class Product extends AbstractResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
@@ -213,10 +213,10 @@ class Product extends AbstractResource
     /**
      * Process product data before save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Object $object)
+    protected function _beforeSave(\Magento\Framework\Object $object)
     {
         /**
          * Check if declared category ids in object data.
@@ -239,10 +239,10 @@ class Product extends AbstractResource
     /**
      * Save data related with product
      *
-     * @param \Magento\Object $product
+     * @param \Magento\Framework\Object $product
      * @return $this
      */
-    protected function _afterSave(\Magento\Object $product)
+    protected function _afterSave(\Magento\Framework\Object $product)
     {
         $this->_saveWebsiteIds($product)->_saveCategories($product);
         return parent::_afterSave($product);
@@ -294,10 +294,10 @@ class Product extends AbstractResource
     /**
      * Save product category relations
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return $this
      */
-    protected function _saveCategories(\Magento\Object $object)
+    protected function _saveCategories(\Magento\Framework\Object $object)
     {
         /**
          * If category ids data is not declared we haven't do manipulations
@@ -467,7 +467,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     array('entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'),
-                    \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
         }

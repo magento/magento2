@@ -52,7 +52,7 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
     /**
      * Retrieve store model object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {

@@ -100,7 +100,6 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
             );
             // Columns list
             $columns = array(
-                // convert dates from UTC to current admin timezone
                 'period' => $periodExpr,
                 'store_id' => 'o.store_id',
                 'order_status' => 'o.status',
@@ -259,7 +258,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 $columns[$k] = new \Zend_Db_Expr('SUM(' . $k . ')');
             }
             $columns['period'] = 'period';
-            $columns['store_id'] = new \Zend_Db_Expr(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
+            $columns['store_id'] = new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             $columns['order_status'] = 'order_status';
 
             $select->reset();

@@ -47,9 +47,15 @@ class ApplicationInitializerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->sidResolverMock = $this->getMock('\Magento\Session\SidResolverInterface', array(), array(), '', false);
-        $this->subjectMock = $this->getMock('Magento\App\Cron', array(), array(), '', false);
+        $this->appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $this->sidResolverMock = $this->getMock(
+            '\Magento\Framework\Session\SidResolverInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->subjectMock = $this->getMock('Magento\Framework\App\Cron', array(), array(), '', false);
         $this->model = new ApplicationInitializer(
             $this->appStateMock,
             $this->sidResolverMock

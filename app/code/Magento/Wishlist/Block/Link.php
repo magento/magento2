@@ -27,7 +27,7 @@
  */
 namespace Magento\Wishlist\Block;
 
-class Link extends \Magento\View\Element\Html\Link implements \Magento\View\Block\IdentityInterface
+class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Template name
@@ -42,12 +42,12 @@ class Link extends \Magento\View\Element\Html\Link implements \Magento\View\Bloc
     protected $_wishlistHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         array $data = array()
     ) {

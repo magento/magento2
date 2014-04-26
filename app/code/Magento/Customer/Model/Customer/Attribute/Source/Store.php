@@ -35,12 +35,12 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
 class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_store;
 
     /**
-     * @var \Magento\Core\Model\Resource\Store\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
     protected $_storesFactory;
 
@@ -48,15 +48,15 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Core\Model\System\Store $store
-     * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storesFactory
+     * @param \Magento\Store\Model\System\Store $store
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storesFactory
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Core\Model\System\Store $store,
-        \Magento\Core\Model\Resource\Store\CollectionFactory $storesFactory
+        \Magento\Store\Model\System\Store $store,
+        \Magento\Store\Model\Resource\Store\CollectionFactory $storesFactory
     ) {
         parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
         $this->_store = $store;
@@ -119,7 +119,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\Resource\Store\Collection
      */
     protected function _createStoresCollection()
     {

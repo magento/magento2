@@ -27,7 +27,7 @@ namespace Magento\Catalog\Block\Product\Compare;
 /**
  * Block for displaying link on top menu
  */
-class Link extends \Magento\View\Element\Template
+class Link extends \Magento\Framework\View\Element\Template
 {
     /**
      * The property is used to define content-scope of block. Can be private or public.

@@ -32,7 +32,7 @@ namespace Magento\Paypal\Model;
 class IpnTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -118,12 +118,12 @@ class IpnTest extends \PHPUnit_Framework_TestCase
     /**
      * Mocked HTTP adapter to get VERIFIED PayPal IPN postback result
      *
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return \Magento\Framework\HTTP\Adapter\Curl
      */
     protected function _createMockedHttpAdapter()
     {
-        $factory = $this->getMock('Magento\HTTP\Adapter\CurlFactory', array('create'), array(), '', false);
-        $adapter = $this->getMock('Magento\HTTP\Adapter\Curl', array('read', 'write'), array(), '', false);
+        $factory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', array('create'), array(), '', false);
+        $adapter = $this->getMock('Magento\Framework\HTTP\Adapter\Curl', array('read', 'write'), array(), '', false);
 
         $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
 

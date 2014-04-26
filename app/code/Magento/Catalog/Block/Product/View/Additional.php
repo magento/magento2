@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-class Additional extends \Magento\View\Element\Template
+class Additional extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array

@@ -30,11 +30,11 @@ interface LockValidatorInterface
     /**
      * Check attribute lock state
      *
-     * @param \Magento\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param null $attributeSet
-     * @throws \Magento\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      *
      * @return void
      */
-    public function validate(\Magento\Model\AbstractModel $object, $attributeSet = null);
+    public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null);
 }

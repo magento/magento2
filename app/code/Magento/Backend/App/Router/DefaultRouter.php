@@ -34,12 +34,12 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_backendConfig;
 
     /**
-     * @var \Magento\Core\Model\Url|\Magento\UrlInterface $url
+     * @var \Magento\Core\Model\Url|\Magento\Framework\UrlInterface $url
      */
     protected $_url;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
@@ -52,35 +52,35 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_requiredParams = array('areaFrontName', 'moduleFrontName', 'controllerName', 'actionName');
 
     /**
-     * @param \Magento\App\ActionFactory $actionFactory
-     * @param \Magento\App\DefaultPathInterface $defaultPath
-     * @param \Magento\App\ResponseFactory $responseFactory
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\State $appState
-     * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Framework\App\ActionFactory $actionFactory
+     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
+     * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\Code\NameBuilder $nameBuilder
+     * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\ActionFactory $actionFactory,
-        \Magento\App\DefaultPathInterface $defaultPath,
-        \Magento\App\ResponseFactory $responseFactory,
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\State $appState,
-        \Magento\UrlInterface $url,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\App\ActionFactory $actionFactory,
+        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        \Magento\Framework\App\ResponseFactory $responseFactory,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
-        \Magento\Code\NameBuilder $nameBuilder,
-        \Magento\App\ConfigInterface $coreConfig,
+        \Magento\Framework\Code\NameBuilder $nameBuilder,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
@@ -91,7 +91,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
             $appState,
             $url,
             $storeManager,
-            $storeConfig,
+            $scopeConfig,
             $urlSecurityInfo,
             $routerId,
             $nameBuilder
@@ -146,7 +146,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     /**
      * Retrieve current secure url
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return string
      */
     protected function _getCurrentSecureUrl($request)

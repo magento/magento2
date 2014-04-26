@@ -69,7 +69,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $this->_requestMock = $this->getMock(
+            'Magento\Framework\App\RequestInterface',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -80,7 +87,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('test_section')
         );
 
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
 

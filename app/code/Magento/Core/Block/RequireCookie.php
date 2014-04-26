@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Block;
 
-class RequireCookie extends \Magento\View\Element\Template
+class RequireCookie extends \Magento\Framework\View\Element\Template
 {
     /**
      * Retrieve script options encoded to json

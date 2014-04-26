@@ -25,8 +25,8 @@
  */
 namespace Magento\Backend\Model\Config\Source\Website;
 
-use Magento\Core\Model\System\Store;
-use Magento\Option\ArrayInterface;
+use Magento\Store\Model\System\Store;
+use Magento\Framework\Option\ArrayInterface;
 
 class OptionHash implements ArrayInterface
 {

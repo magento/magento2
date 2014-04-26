@@ -30,7 +30,7 @@ use Magento\Review\Model\Resource\Review\Product\Collection;
 /**
  * Recent Customer Reviews Block
  */
-class Recent extends \Magento\View\Element\Template
+class Recent extends \Magento\Framework\View\Element\Template
 {
     /**
      * Customer list template name
@@ -59,13 +59,13 @@ class Recent extends \Magento\View\Element\Template
     protected $currentCustomer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         array $data = array()
@@ -171,7 +171,7 @@ class Recent extends \Magento\View\Element\Template
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
     }
 
     /**

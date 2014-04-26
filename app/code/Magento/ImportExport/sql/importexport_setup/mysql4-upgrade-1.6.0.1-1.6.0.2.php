@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->getConnection()->modifyColumn(
     $installer->getTable('importexport_importdata'),
     'data',
-    array('type' => \Magento\DB\Ddl\Table::TYPE_TEXT, 'length' => '4G', 'default' => '', 'comment' => 'Data')
+    array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length' => '4G', 'default' => '', 'comment' => 'Data')
 );

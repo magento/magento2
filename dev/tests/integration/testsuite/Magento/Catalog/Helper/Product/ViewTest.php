@@ -42,17 +42,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
-        $objectManager->get('Magento\App\Http\Context')
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\Framework\App\Http\Context')
             ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
-        $objectManager->get('Magento\View\DesignInterface')
+        $objectManager->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Helper\Product\View');
@@ -65,7 +65,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             )
         );
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Action\Context',
+            'Magento\Framework\App\Action\Context',
             $arguments
         );
         $this->_controller = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -74,7 +74,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\LayoutInterface'
+            'Magento\Framework\View\LayoutInterface'
         );
     }
 
@@ -104,7 +104,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')->register('product', $product);
+        $objectManager->get('Magento\Framework\Registry')->register('product', $product);
 
         $this->_helper->initProductLayout($product, $this->_controller);
         $rootBlock = $this->_layout->getBlock('root');
@@ -132,7 +132,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @magentoAppIsolation enabled
      */
     public function testPrepareAndRenderWrongController()
@@ -144,7 +144,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Model\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testPrepareAndRenderWrongProduct()
     {

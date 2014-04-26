@@ -30,8 +30,9 @@
 $obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
-/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $obectManager->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+/** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+$mediaDirectory = $obectManager->get('Magento\Framework\App\Filesystem')
+    ->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
@@ -46,7 +47,7 @@ $productOne->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    array($obectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId())
+    array($obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId())
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -87,7 +88,7 @@ $productTwo->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    array($obectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId())
+    array($obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId())
 )->setSku(
     'simple_product_2'
 )->setName(

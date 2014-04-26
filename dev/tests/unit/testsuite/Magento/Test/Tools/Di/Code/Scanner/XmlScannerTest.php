@@ -89,7 +89,7 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
             'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
         );
         $actual = $this->_model->collectEntities($this->_testFiles);
-        $expected = array('Magento\App\Request\Http\Proxy');
+        $expected = array('Magento\Framework\App\Request\Http\Proxy');
         $this->assertEquals($expected, $actual);
     }
 }

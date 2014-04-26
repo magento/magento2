@@ -106,10 +106,10 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     /**
      * Retrieve attribute value
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return mixed
      */
-    public function getValue(\Magento\Object $object)
+    public function getValue(\Magento\Framework\Object $object)
     {
         $value = $object->getData($this->getAttribute()->getAttributeCode());
         if (in_array($this->getConfigField('input'), array('select', 'boolean'))) {

@@ -50,7 +50,7 @@ class Category extends \Magento\Backend\App\Action
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    'Magento\Core\Model\StoreManagerInterface'
+                    'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -70,8 +70,8 @@ class Category extends \Magento\Backend\App\Action
         if ($activeTabId) {
             $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setActiveTabId($activeTabId);
         }
-        $this->_objectManager->get('Magento\Registry')->register('category', $category);
-        $this->_objectManager->get('Magento\Registry')->register('current_category', $category);
+        $this->_objectManager->get('Magento\Framework\Registry')->register('category', $category);
+        $this->_objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
         $this->_objectManager->get(
             'Magento\Cms\Model\Wysiwyg\Config'
         )->setStoreId(
@@ -115,7 +115,7 @@ class Category extends \Magento\Backend\App\Action
         $parentId = (int)$this->getRequest()->getParam('parent');
         $prevStoreId = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getLastViewedStore(true);
 
-        if (!empty($prevStoreId) && !$this->getRequest()->getQuery('isAjax')) {
+        if (!is_null($prevStoreId) && !$this->getRequest()->getQuery('isAjax')) {
             $params['store'] = $prevStoreId;
             $redirect = true;
         }
@@ -137,7 +137,7 @@ class Category extends \Magento\Backend\App\Action
         }
 
         if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId);
+            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
             $_prevCategoryId = (int)$store->getRootCategoryId();
             $this->getRequest()->setParam('id', $_prevCategoryId);
         }
@@ -194,7 +194,7 @@ class Category extends \Magento\Backend\App\Action
             );
             $this->_view->loadLayout();
 
-            $eventResponse = new \Magento\Object(
+            $eventResponse = new \Magento\Framework\Object(
                 array(
                     'content' => $this->_view->getLayout()->getBlock(
                         'category.edit'
@@ -242,11 +242,11 @@ class Category extends \Magento\Backend\App\Action
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
         $storeMediaUrl = $this->_objectManager->get(
-            'Magento\Core\Model\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             $storeId
         )->getBaseUrl(
-            \Magento\UrlInterface::URL_TYPE_MEDIA
+            \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
         );
 
         $content = $this->_view->getLayout()->createBlock(
@@ -314,7 +314,7 @@ class Category extends \Magento\Backend\App\Action
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
-                            'Magento\Core\Model\StoreManagerInterface'
+                            'Magento\Store\Model\StoreManagerInterface'
                         )->getStore(
                             $storeId
                         )->getRootCategoryId();
@@ -377,16 +377,16 @@ class Category extends \Magento\Backend\App\Action
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
-                            throw new \Magento\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                            throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
                         } else {
-                            throw new \Magento\Model\Exception($error);
+                            throw new \Magento\Framework\Model\Exception($error);
                         }
                     }
                 }
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Model\Exception(__('Unable to save the category'));
+                    throw new \Magento\Framework\Model\Exception(__('Unable to save the category'));
                 }
 
                 $category->save();
@@ -403,8 +403,8 @@ class Category extends \Magento\Backend\App\Action
             $category->load($category->getId());
             // to obtain truncated category name
 
-            /** @var $block \Magento\View\Element\Messages */
-            $block = $this->_objectManager->get('Magento\View\Element\Messages');
+            /** @var $block \Magento\Framework\View\Element\Messages */
+            $block = $this->_objectManager->get('Magento\Framework\View\Element\Messages');
             $block->setMessages($this->messageManager->getMessages(true));
             $body = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
@@ -468,11 +468,11 @@ class Category extends \Magento\Backend\App\Action
         try {
             $category->move($parentNodeId, $prevNodeId);
             $this->getResponse()->setBody('SUCCESS');
-        } catch (\Magento\Model\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->getResponse()->setBody($e->getMessage());
         } catch (\Exception $e) {
             $this->getResponse()->setBody(__('There was a category move error %1', $e));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
     }
 
@@ -493,7 +493,7 @@ class Category extends \Magento\Backend\App\Action
 
                 $category->delete();
                 $this->messageManager->addSuccess(__('You deleted the category.'));
-            } catch (\Magento\Model\Exception $e) {
+            } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->getResponse()->setRedirect($this->getUrl('catalog/*/edit', array('_current' => true)));
                 return;
@@ -539,7 +539,7 @@ class Category extends \Magento\Backend\App\Action
 
         if ($storeId) {
             if (!$categoryId) {
-                $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId);
+                $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
             }
