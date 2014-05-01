@@ -230,7 +230,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             }
         }
 
-        $ifValueId = $this->getConnection()->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
+        $ifValueId = $this->getConnection()->getIfNullSql('t2.value', 't1.value');
         foreach ($tables as $table => $attributeIds) {
             $selects[] = $this->getConnection()->select()->from(
                 array('t1' => $table),
