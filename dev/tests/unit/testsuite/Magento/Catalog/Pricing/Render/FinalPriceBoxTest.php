@@ -76,26 +76,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\Object\SaleableInterface',
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getPriceInfo', '__wakeup']
-        );
-
-        $this->priceType = $this->getMockBuilder('Magento\Catalog\Pricing\Price\MsrpPrice')
-            ->disableOriginalConstructor()
-            ->setMethods(['isShowPriceOnGesture', 'getMsrpPriceMessage', 'canApplyMsrp'])
-            ->getMock();
-
-        $this->priceInfo = $this->getMockBuilder('Magento\Framework\Pricing\PriceInfo')
-            ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
-            ->getMock();
-
+        $this->product = $this->getMock('Magento\Catalog\Model\Product', ['getPriceInfo', '__wakeup'], [], '', false);
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo', ['getPrice'], [], '', false);
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
@@ -106,7 +88,6 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $this->priceBox = $this->getMock('Magento\Framework\Pricing\Render\PriceBox', [], [], '', false);
         $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
-
 
         $this->layout->expects($this->any())
             ->method('getBlock')
@@ -136,8 +117,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $this->price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
         $this->price->expects($this->any())
-            ->method('getPriceType')
-            ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL));
+            ->method('getPriceCode')
+            ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -153,12 +134,13 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderMsrpDisabled()
     {
+        $priceType = $this->getMock('Magento\Catalog\Pricing\Price\MsrpPrice', [], [], '', false);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
-            ->will($this->returnValue($this->priceType));
+            ->will($this->returnValue($priceType));
 
-        $this->priceType->expects($this->any())
+        $priceType->expects($this->any())
             ->method('canApplyMsrp')
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(false));
@@ -173,12 +155,13 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderMsrpEnabled()
     {
+        $priceType = $this->getMock('Magento\Catalog\Pricing\Price\MsrpPrice', [], [], '', false);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
-            ->will($this->returnValue($this->priceType));
+            ->will($this->returnValue($priceType));
 
-        $this->priceType->expects($this->any())
+        $priceType->expects($this->any())
             ->method('canApplyMsrp')
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(true));
@@ -217,5 +200,125 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
         $this->assertRegExp('/[final_price]/', $result);
+    }
+
+    public function testRenderAmountMinimal()
+    {
+        $priceType = $this->getMock('Magento\Catalog\Pricing\Price\FinalPrice', [], [], '', false);
+        $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $priceId = 'price_id';
+        $html = 'html';
+        $this->object->setData('price_id', $priceId);
+
+        $arguments = [
+            'display_label'     => __('As low as:'),
+            'price_id'          => $priceId,
+            'include_container' => false,
+            'skip_adjustments' => true
+        ];
+
+        $amountRender = $this->getMock('Magento\Framework\Pricing\Render\Amount', ['toHtml'], [], '', false);
+        $amountRender->expects($this->once())
+            ->method('toHtml')
+            ->will($this->returnValue($html));
+
+        $this->priceInfo->expects($this->once())
+            ->method('getPrice')
+            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->will($this->returnValue($priceType));
+
+        $priceType->expects($this->once())
+            ->method('getMinimalPrice')
+            ->will($this->returnValue($amount));
+
+        $this->rendererPool->expects($this->once())
+            ->method('createAmountRender')
+            ->with($amount, $this->product, $this->price, $arguments)
+            ->will($this->returnValue($amountRender));
+
+        $this->assertEquals($html, $this->object->renderAmountMinimal());
+    }
+
+    /**
+     * @dataProvider hasSpecialPriceProvider
+     * @param float $regularPrice
+     * @param float $finalPrice
+     * @param bool $expectedResult
+     */
+    public function testHasSpecialPrice($regularPrice, $finalPrice, $expectedResult)
+    {
+        $regularPriceType = $this->getMock('Magento\Catalog\Pricing\Price\RegularPrice', [], [], '', false);
+        $finalPriceType = $this->getMock('Magento\Catalog\Pricing\Price\FinalPrice', [], [], '', false);
+        $regularPriceAmount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $finalPriceAmount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+
+        $regularPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($regularPrice));
+        $finalPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($finalPrice));
+
+        $regularPriceType->expects($this->once())
+            ->method('getAmount')
+            ->will($this->returnValue($regularPriceAmount));
+        $finalPriceType->expects($this->once())
+            ->method('getAmount')
+            ->will($this->returnValue($finalPriceAmount));
+
+        $this->priceInfo->expects($this->at(0))
+            ->method('getPrice')
+            ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
+            ->will($this->returnValue($regularPriceType));
+        $this->priceInfo->expects($this->at(1))
+            ->method('getPrice')
+            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->will($this->returnValue($finalPriceType));
+
+        $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
+    }
+
+    public function hasSpecialPriceProvider()
+    {
+        return [
+            [10.0, 20.0, false],
+            [20.0, 10.0, true],
+            [10.0, 10.0, false]
+        ];
+    }
+
+    public function testShowMinimalPrice()
+    {
+        $finalPrice = 10.0;
+        $minimalPrice = 5.0;
+        $displayMininmalPrice = 2.0;
+
+        $this->object->setDisplayMinimalPrice($displayMininmalPrice);
+
+        $finalPriceType = $this->getMock('Magento\Catalog\Pricing\Price\FinalPrice', [], [], '', false);
+
+        $finalPriceAmount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $minimalPriceAmount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+
+        $finalPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($finalPrice));
+        $minimalPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($minimalPrice));
+
+        $finalPriceType->expects($this->at(0))
+            ->method('getAmount')
+            ->will($this->returnValue($finalPriceAmount));
+        $finalPriceType->expects($this->at(1))
+            ->method('getMinimalPrice')
+            ->will($this->returnValue($minimalPriceAmount));
+
+        $this->priceInfo->expects($this->once())
+            ->method('getPrice')
+            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->will($this->returnValue($finalPriceType));
+
+        $this->assertTrue($this->object->showMinimalPrice());
     }
 }

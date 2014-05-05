@@ -38,7 +38,7 @@ class Adjustment implements AdjustmentInterface
     /**
      * Adjustment code tax
      */
-    const CODE = 'tax';
+    const ADJUSTMENT_CODE = 'tax';
 
     /**
      * @var TaxHelper
@@ -67,7 +67,7 @@ class Adjustment implements AdjustmentInterface
      */
     public function getAdjustmentCode()
     {
-        return self::CODE;
+        return self::ADJUSTMENT_CODE;
     }
 
     /**
@@ -118,8 +118,7 @@ class Adjustment implements AdjustmentInterface
     public function applyAdjustment($amount, SaleableInterface $saleableItem)
     {
         $includingTax = !$this->taxHelper->priceIncludesTax();
-        $amount = $this->taxHelper->getPrice($saleableItem, $amount, $includingTax);
-        return $amount;
+        return $this->taxHelper->getPrice($saleableItem, $amount, $includingTax);
     }
 
     /**

@@ -30,6 +30,11 @@ namespace Magento\Bundle\Pricing\Price;
 class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
 {
     /**
+     * Price type tier
+     */
+    const PRICE_CODE = 'tier_price';
+
+    /**
      * @var bool
      */
     protected $filterByBasePrice = false;

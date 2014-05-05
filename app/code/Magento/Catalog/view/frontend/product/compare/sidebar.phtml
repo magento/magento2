@@ -37,7 +37,13 @@ $count = $_helper->getItemCount();
     </div>
     <div class="content">
         <?php if($_helper->getItemCount() > 0): ?>
-        <ol id="compare-items" class="items compare">
+            <ol id="compare-items" class="items compare"
+                data-mage-init='{"compareItems":{
+                    "removeConfirmMessage":"<?php echo __("Are you sure you would like to remove this item from the compare products?") ?>",
+                    "removeSelector":"#compare-items a.action.delete",
+                    "clearAllConfirmMessage":"<?php echo __("Are you sure you would like to remove all products from your comparison?") ?>",
+                    "clearAllSelector":"#compare-clear-all"
+                }}'>
             <?php foreach($_items as $_index => $_item): ?>
             <li class="item">
                 <input type="hidden" class="compare-item-id" value="<?php echo $_item->getId() ?>"/>
@@ -64,18 +70,6 @@ $count = $_helper->getItemCount();
             </a>
         </div>
     </div>
-    <script type="text/javascript">
-        (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/compare.js') ?>", function () {
-                $('#compare-items').compareItems({
-                    removeConfirmMessage: '<?php echo __('Are you sure you would like to remove this item from the compare products?') ?>',
-                    removeSelector: '#compare-items a.action.delete',
-                    clearAllConfirmMessage: '<?php echo __('Are you sure you would like to remove all products from your comparison?') ?>',
-                    clearAllSelector: '#compare-clear-all'
-                });
-            });
-        })(jQuery);
-    </script>
     <?php else: ?>
         <p class="empty"><?php echo __('You have no items to compare.') ?></p>
         <?php endif; ?>

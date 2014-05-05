@@ -63,7 +63,7 @@
                     </select>
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input name="<?php echo $this->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox" id="inventory_use_config_manage_stock" onclick="toggleValueElements(this, this.parentNode, $('inventory_manage_stock_checkbox'));" value="1" checked="checked" disabled="disabled" />
+                    <input name="<?php echo $this->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox" id="inventory_use_config_manage_stock" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_manage_stock_checkbox'));" value="1" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_manage_stock" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_manage_stock_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -95,7 +95,7 @@
                     <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php echo $this->getFieldSuffix() ?>[min_qty]" value="<?php echo $this->getDefaultConfigValue('min_qty')*1 ?>" disabled="disabled" />
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_min_qty_checkbox'));" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_qty]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_min_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_min_qty" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_min_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -112,7 +112,7 @@
                     <input type="text" class="input-text validate-number" id="inventory_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[min_sale_qty]" value="<?php echo $this->getDefaultConfigValue('min_sale_qty')*1 ?>" disabled="disabled" />
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_min_sale_qty_checkbox'));" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_min_sale_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_min_sale_qty" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_min_sale_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -129,7 +129,7 @@
                     <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[max_sale_qty]" value="<?php echo $this->getDefaultConfigValue('max_sale_qty')*1 ?>" disabled="disabled" />
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_max_sale_checkbox'));" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_max_sale_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_max_sale_qty" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_max_sale_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -169,7 +169,7 @@
                     </select>
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $this->getFieldSuffix() ?>[use_config_backorders]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_backorders_checkbox'));" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $this->getFieldSuffix() ?>[use_config_backorders]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_backorders_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_backorders" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_backorders_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -186,7 +186,7 @@
                     <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[notify_stock_qty]" value="<?php echo $this->getDefaultConfigValue('notify_stock_qty')*1 ?>" disabled="disabled" />
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" onclick="toggleValueElements(this, this.parentNode, $('inventory_notify_stock_qty_checkbox'));" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, $('inventory_notify_stock_qty_checkbox'));" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_notify_stock_qty" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_notify_stock_qty_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -206,7 +206,7 @@
                     </select>
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode, [$('inventory_enable_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, [$('inventory_enable_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_enable_qty_increments" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_enable_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />
@@ -223,7 +223,7 @@
                     <input type="text" class="input-text validate-number" id="inventory_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[qty_increments]" value="<?php echo $this->getDefaultConfigValue('qty_increments')*1 ?>" disabled="disabled" />
                 </div>
                 <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>">
-                    <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode, [$('inventory_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[use_config_qty_increments]" value="1" onclick="toggleValueElements(this, this.parentNode.parentNode, [$('inventory_qty_increments_checkbox')]);" checked="checked" disabled="disabled" />
                     <label for="inventory_use_config_qty_increments" class="normal"><?php echo __('Use Config Settings') ?></label>
                     <span class="attribute-change-checkbox">
                         <input type="checkbox" id="inventory_qty_increments_checkbox" onclick="toggleValueElementsWithCheckbox(this)" />

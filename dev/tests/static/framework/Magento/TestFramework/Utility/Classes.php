@@ -185,7 +185,7 @@ class Classes
             self::getXmlNodeValues(
                 $xml,
                 '/layout//action/attributeType | /layout//action[@method="addTab"]/content
-                | /layout//action[@method="addPriceBlockType" or @method="addMergeSettingsBlockType"
+                | /layout//action[@method="addMergeSettingsBlockType"
                     or @method="addInformationRenderer"
                     or @method="addDatabaseBlock"]/*[2]
                 | /layout//action[@method="setMassactionBlockName"]/name

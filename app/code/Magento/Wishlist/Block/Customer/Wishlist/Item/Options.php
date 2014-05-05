@@ -24,15 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
+
 /**
  * Wishlist block customer items
  *
- * @category   Magento
- * @package    Magento_Wishlist
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @method \Magento\Wishlist\Model\Item getItem()
  */
-namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
-
 class Options extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
@@ -58,23 +56,20 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_helperPool = $helperPool;
         parent::__construct(
             $context,
             $httpContext,
             $productFactory,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

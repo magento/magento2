@@ -31,7 +31,13 @@
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
     <div class="comparison wrapper">
         <div class="comparison container">
-            <table class="data-table data table comparison" id="product-comparison">
+            <table class="data-table data table comparison" id="product-comparison"
+                data-mage-init='{"compareList":{
+                    "windowPrintSelector":".action.print",
+                    "productsInRow":"5",
+                    "selectors":{
+                        "productAddToCartSelector":"button.action.tocart"}
+                }}'>
                 <caption><?php echo __('Compare Products') ?></caption>
                 <thead>
                 <tr>
@@ -143,18 +149,3 @@
 <?php else: ?>
     <p class="empty"><?php echo __('You have no items to compare.') ?></p>
 <?php endif; ?>
-<script type="text/javascript">
-    (function($, window) {
-        <?php if ($_total): ?>
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/list.js')?>", function() {
-            $('#product-comparison').compareList({
-                windowPrintSelector: '.action.print',
-                productsInRow: 5,
-                selectors: {
-                    productAddToCartSelector: 'button.action.tocart'
-                }
-            });
-        });
-        <?php endif; ?>
-    })(jQuery, window);
-</script>

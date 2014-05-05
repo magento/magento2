@@ -35,9 +35,9 @@ use Magento\Downloadable\Model\Link;
 class LinkPrice extends RegularPrice implements LinkPriceInterface
 {
     /**
-     * @var string
+     * Default price type
      */
-    protected $priceType = self::PRICE_TYPE;
+    const PRICE_CODE = 'link_price';
 
     /**
      * @param Link $link

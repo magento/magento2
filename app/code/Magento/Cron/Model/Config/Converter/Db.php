@@ -38,7 +38,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $jobs = isset($source['crontab']['jobs']) ? $source['crontab']['jobs'] : array();
+        $jobs = isset($source['crontab']['default']['jobs']) ? $source['crontab']['default']['jobs'] : array();
 
         if (empty($jobs)) {
             return $jobs;

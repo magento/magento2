@@ -28,8 +28,8 @@
 <?php if (count($_options)):?>
     <script type="text/javascript">
         (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/price-option.js') ?>", function () {
-                $('#product_addtocart_form').priceOption({
+            $(document).ready(function() {
+                $('#product_addtocart_form').mage('priceOption', {
                     'optionConfig':<?php echo $this->getJsonConfig()?>,
                     'controlContainer': '.field'
                 }).trigger('reloadPrice');

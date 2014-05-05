@@ -517,17 +517,11 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         } else {
             $regionId = $address->getRegionId();
         }
-        $request->setCountryId(
-            $address->getCountryId()
-        )->setRegionId(
-            $regionId
-        )->setPostcode(
-            $address->getPostcode()
-        )->setStore(
-            $store
-        )->setCustomerClassId(
-            $customerTaxClass
-        );
+        $request->setCountryId($address->getCountryId())
+            ->setRegionId($regionId)
+            ->setPostcode($address->getPostcode())
+            ->setStore($store)
+            ->setCustomerClassId($customerTaxClass);
         return $request;
     }
 

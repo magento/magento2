@@ -27,18 +27,19 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class OptionPrice
  *
  * @package Magento\Catalog\Pricing\Price
  */
-class CustomOptionPrice extends RegularPrice implements CustomOptionPriceInterface
+class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterface
 {
     /**
-     * @var string
+     * Price model code
      */
-    protected $priceType = self::PRICE_TYPE_CUSTOM_OPTION;
+    const PRICE_CODE = 'custom_option_price';
 
     /**
      * @var array
@@ -46,17 +47,53 @@ class CustomOptionPrice extends RegularPrice implements CustomOptionPriceInterfa
     protected $priceOptions;
 
     /**
-     * Get Value
+     * Get minimal optoin item values
      *
      * @return bool|float
      */
     public function getValue()
     {
+        $requiredMinimalOptions = [];
+        $options = $this->product->getOptions();
+        if ($options) {
+            /** @var $optionItem \Magento\Catalog\Model\Product\Option */
+            foreach ($options as $optionItem) {
+                if (!$optionItem->getIsRequire()) {
+                    continue;
+                }
+                $min = 0.;
+                /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                foreach ($optionItem->getValues() as $optionValue) {
+                    $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
+                    if (!$min) {
+                        $min = $price;
+                    }
+                    if ($price < $min) {
+                        $min = $price;
+                    }
+                }
+                $requiredMinimalOptions[] = [
+                    'option_id' => $optionItem->getId(),
+                    'type' => $optionItem->getType(),
+                    'min' => $min
+                ];
+            }
+        }
+        return $requiredMinimalOptions;
+    }
+
+    /**
+     * Return price for select custom options
+     *
+     * @return float
+     */
+    public function getSelectedOptions()
+    {
         if (null !== $this->value) {
             return $this->value;
         }
         $this->value = false;
-        $optionIds = $this->salableItem->getCustomOption('option_ids');
+        $optionIds = $this->product->getCustomOption('option_ids');
         if (!$optionIds) {
             return $this->value;
         }
@@ -82,11 +119,11 @@ class CustomOptionPrice extends RegularPrice implements CustomOptionPriceInterfa
     {
         $value = 0.;
         foreach ($values as $optionId) {
-            $option = $this->salableItem->getOptionById($optionId);
+            $option = $this->product->getOptionById($optionId);
             if (!$option) {
                 continue;
             }
-            $confItemOption = $this->salableItem->getCustomOption('option_' . $option->getId());
+            $confItemOption = $this->product->getCustomOption('option_' . $option->getId());
 
             $group = $option->groupFactory($option->getType())
                 ->setOption($option)
@@ -107,7 +144,7 @@ class CustomOptionPrice extends RegularPrice implements CustomOptionPriceInterfa
             return $this->priceOptions;
         }
         $this->priceOptions = [];
-        $options = $this->salableItem->getOptions();
+        $options = $this->product->getOptions();
         if ($options) {
             /** @var $optionItem \Magento\Catalog\Model\Product\Option */
             foreach ($options as $optionItem) {
@@ -116,7 +153,7 @@ class CustomOptionPrice extends RegularPrice implements CustomOptionPriceInterfa
                     $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
                     $this->priceOptions[$optionValue->getId()][$price] = [
                         'base_amount' => $price,
-                        'adjustment' => $this->getAmount()->getValue()
+                        'adjustment' => $this->getCustomAmount($price)->getValue()
                     ];
                 }
             }

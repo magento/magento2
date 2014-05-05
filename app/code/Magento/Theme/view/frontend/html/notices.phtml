@@ -87,16 +87,13 @@
     <script type="text/javascript">
         // <![CDATA[
         (function($) {
-            head.js("<?php echo $this->getViewFileUrl('mage/cookies.js')?>",
-                "<?php echo $this->getViewFileUrl('Magento_Theme::js/notices.js')?>", function() {
-                    $('#notice-cookie-block').cookieBlock({
-                        cookieAllowButtonSelector: '#btn-cookie-allow',
-                        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-                        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-                        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-                        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
-                    });
-                });
+            $('#notice-cookie-block').mage('cookieBlock', {
+                cookieAllowButtonSelector: '#btn-cookie-allow',
+                cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+                cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+                cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+                noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
+            });
         })(jQuery);
         // ]]>
     </script>

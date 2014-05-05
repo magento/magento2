@@ -253,4 +253,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_priceInfoMock, $this->model->getPriceInfo());
         $this->assertEquals($this->_priceInfoMock, $this->model->reloadPriceInfo());
     }
+
+    /**
+     * Test for get qty
+     */
+    public function testGetQty()
+    {
+        $this->model->setQty(1);
+        $this->assertEquals(1, $this->model->getQty());
+    }
 }

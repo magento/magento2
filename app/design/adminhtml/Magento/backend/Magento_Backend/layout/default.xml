@@ -94,11 +94,6 @@
                 <argument name="file" xsi:type="string">modernizr/modernizr.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
-            <arguments>
-                <argument name="file" xsi:type="string">headjs/head.min.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-dropdown-js">
             <arguments>
                 <argument name="file" xsi:type="string">mage/dropdown_old.js</argument>

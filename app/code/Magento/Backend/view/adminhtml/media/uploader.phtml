@@ -51,7 +51,7 @@
     $(function () {
         $('#fileupload').fileupload({
             dataType: 'json',
-            dropZone: '#media_gallery_content',
+            dropZone: '[data-tab-panel=image-management]',
             sequentialUploads: true,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             maxFileSize: <?php echo $this->getFileSizeService()->getMaxFileSize() ?>,

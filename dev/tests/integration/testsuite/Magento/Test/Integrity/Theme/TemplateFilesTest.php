@@ -132,7 +132,6 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                         $templates[] = array($module, (string)$template, $parent[0]->asXml());
                     }
                     break;
-                case 'addPriceBlockType':
                 case 'addInformationRenderer':
                 case 'addMergeSettingsBlockType':
                     $blockType = $action[0]->xpath('block');

@@ -50,10 +50,8 @@
     </div>
 </div>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js'); ?>", function() {
-        jQuery('.actions').address({
-            addAddress: "button[role='add-address']",
-            addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
-        });
+    jQuery('.actions').mage('address', {
+        addAddress: "button[role='add-address']",
+        addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
     });
 </script>

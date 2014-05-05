@@ -1,3 +1,61 @@
+2.0.0.0-dev76
+=============
+* Pricing improvements:
+  * Eliminated code duplication from templates and implemented new calculation models for the following modules:
+     * ConfigurableProduct
+     * Wishlist
+     * Rss
+     * ProductAlert
+* JavaScript improvements:
+  * Removed head.js usages from frontend
+  * Removed head.js usages from adminhtml
+* Themes update:
+  * Plushe styles are removed, Plushe theme is now based on blank
+* Fixed bugs:  
+  * Unable to place order with product that contains custom option 'file'
+  * OnePageCheckout is not working if PayPal method is enabled to work via Payment Bridge
+  * Impossible to reset password for admin user (incorrect reset password link in email)
+  * Errors when deleting customer group specified as default one in the config
+  * A number of essential buttons do not work and block other functionality in Internet Explorer 10
+  * "Insert Widget" button is missing in Insert Widget popup while creating CMS page
+  * Impossible to change status for rating in admin
+  * System email templates are not loaded when user creates new email template
+  * Billing Agreements tab displays during New Customer creation in admin panel
+  * Images are not displayed in WYSIWYG when editing default pages
+  * Error message "Asymmetric transaction rollback" when creating simple product with flat catalog product option enabled in config
+  * Fatal error when trying to preview sample(type=link) or view link for download(type="link") for downloadable product
+  * Customer is redirected to Home Page after adding new address during multiple address checkout if secure URLs are enabled for frontend in config
+  * Impossible to select value in the State/Province field in the customer registration form when customer uses multiple address checkout
+  * Manage Stock option is not editable when using mass action on several products in the admin panel
+  * Category is not displayed in layered navigation block when Flat Catalog is enabled in config
+* GitHub requests:
+  * [#489] (https://github.com/magento/magento2/issues/489) -- PHPUnit 4.0 Compatibility
+  * [#535] (https://github.com/magento/magento2/issues/535) -- Image management for products
+* Framework improvements:
+  * Covered Magento lib form elements with unit tests:
+      * `lib/Magento/Framework/Data/Form/Element/AbstractElement.php`
+      * `lib/Magento/Framework/Data/Form/Element/Button.php`
+      * `lib/Magento/Framework/Data/Form/Element/Checkbox.php`
+      * `lib/Magento/Framework/Data/Form/Element/CollectionFactory.php`
+      * `lib/Magento/Framework/Data/Form/Element/Column.php`
+      * `lib/Magento/Framework/Data/Form/Element/File.php`
+      * `lib/Magento/Framework/Data/Form/Element/Hidden.php`
+      * `lib/Magento/Framework/Data/Form/Element/Editablemultiselect.php`
+      * `lib/Magento/Framework/Data/Form/Element/Factory.php`
+      * `lib/Magento/Framework/Data/Form/Element/Image.php`
+      * `lib/Magento/Framework/Data/Form/Element/Imagefile.php`
+      * `lib/Magento/Framework/Data/Form/Element/Label.php`
+      * `lib/Magento/Framework/Data/Form/Element/Link.php`
+      * `lib/Magento/Framework/Data/Form/Element/Multiselect.php`
+      * `lib/Magento/Framework/Data/Form/Element/Note.php`
+      * `lib/Magento/Framework/Data/Form/Element/Obscure.php`
+      * `lib/Magento/Framework/Data/Form/Element/Password.php`
+      * `lib/Magento/Framework/Data/Form/Element/Radio.php`
+      * `lib/Magento/Framework/Data/Form/Element/Reset.php`
+      * `lib/Magento/Framework/Data/Form/Element/Submit.php`
+      * `lib/Magento/Framework/Data/Form/Element/Text.php`
+      * `lib/Magento/Framework/Data/Form/Element/Textarea.php`
+  
 2.0.0.0-dev75
 =============
 * Modularity improvements:

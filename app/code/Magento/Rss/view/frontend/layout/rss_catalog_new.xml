@@ -26,12 +26,11 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="catalog_product_rss_feed_renderer_list" />
     <block class="Magento\Rss\Block\Catalog\NewCatalog" output="1" name="rss.catalog.new" cacheable="false">
-        <block class="Magento\Framework\View\Element\RendererList" name="catalog.product.rss.feed.renderer.list" as="renderer.list" />
-    </block>
-    <block class="Magento\Framework\Pricing\Render" name="product.price.render.default">
-        <arguments>
-            <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
-            <!-- set "override" configuration settings here -->
-        </arguments>
+        <block class="Magento\Framework\Pricing\Render" name="product.price.render.default">
+            <arguments>
+                <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
+                <!-- set "override" configuration settings here -->
+            </arguments>
+        </block>
     </block>
 </layout>

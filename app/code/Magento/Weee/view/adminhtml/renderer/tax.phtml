@@ -35,7 +35,7 @@ $data = ['fptAttribute' => [
 ]];
 ?>
 <div id="attribute-<?php echo $this->getElement()->getHtmlId(); ?>-container" class="field"
-     data-element-id="<?php echo $this->getElement()->getHtmlId(); ?>"
+     data-attribute-code="<?php echo $this->getElement()->getHtmlId(); ?>"
      data-mage-init="<?=$this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>">
     <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
 

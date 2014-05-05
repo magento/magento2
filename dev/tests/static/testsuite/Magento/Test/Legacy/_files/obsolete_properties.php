@@ -338,4 +338,6 @@ return array(
     ['_layout', 'Magento\Install\App\Action\Plugin\Design'],
     ['_layout', 'Magento\Framework\View\DesignLoader'],
     ['_area', 'Magento\Framework\View\Layout'],
+    ['_coreData', '\Magento\Rss\Block\Catalog\Special', 'priceCurrency'],
+    ['_tierPriceDefaultTemplate', 'Magento\Catalog\Block\Product\AbstractProduct'],
 );

@@ -52,7 +52,6 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\LayerFactory $layerFactory
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -61,8 +60,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Category $catalogLayer,
         \Magento\Catalog\Model\LayerFactory $layerFactory,
         CollectionFactory $productCollectionFactory,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_layerFactory = $layerFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -71,8 +69,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
             $postDataHelper,
             $categoryFactory,
             $catalogLayer,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

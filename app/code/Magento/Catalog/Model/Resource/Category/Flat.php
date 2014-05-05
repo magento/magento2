@@ -231,9 +231,10 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\Catalog\Model\Category|int $parentNode
      * @param integer $recursionLevel
      * @param integer $storeId
+     * @param bool $skipMenuFilter
      * @return array
      */
-    protected function _loadNodes($parentNode = null, $recursionLevel = 0, $storeId = 0)
+    protected function _loadNodes($parentNode = null, $recursionLevel = 0, $storeId = 0, $skipMenuFilter = false)
     {
         $_conn = $this->_getReadAdapter();
         $startLevel = 1;
@@ -279,12 +280,13 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
         )->where(
             'main_table.is_active = ?',
             '1'
-        )->where(
-            'main_table.include_in_menu = ?',
-            '1'
-        )->order(
-            'main_table.position'
         );
+
+        if (false == $skipMenuFilter) {
+            $select->where('main_table.include_in_menu = ?', '1');
+        }
+
+        $select->order('main_table.position');
 
         if ($parentPath) {
             $select->where($_conn->quoteInto("main_table.path like ?", "{$parentPath}/%"));
@@ -587,7 +589,7 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
      */
     public function getChildrenCategories($category)
     {
-        $categories = $this->_loadNodes($category, 1, $category->getStoreId());
+        $categories = $this->_loadNodes($category, 1, $category->getStoreId(), true);
         return $categories;
     }
 

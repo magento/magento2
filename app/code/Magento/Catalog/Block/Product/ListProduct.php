@@ -73,23 +73,20 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Layer $catalogLayer,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogLayer = $catalogLayer;
         $this->_postDataHelper = $postDataHelper;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 
@@ -359,7 +356,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 [
                     'include_container' => true,

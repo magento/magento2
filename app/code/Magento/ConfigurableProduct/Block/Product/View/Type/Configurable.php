@@ -25,15 +25,18 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
-use Magento\Catalog\Model\Product\PriceModifierInterface;
-use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+    /**
+     * Catalog product
+     *
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $catalogProduct = null;
+
     /**
      * Prices
      *
@@ -42,73 +45,38 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_prices = array();
 
     /**
-     * Prepared prices
-     *
-     * @var array
-     */
-    protected $_resPrices = array();
-
-    /**
-     * Catalog product
-     *
-     * @var \Magento\Catalog\Helper\Product
-     */
-    protected $_catalogProduct = null;
-
-    /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $_jsonEncoder;
+    protected $jsonEncoder;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Price
+     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
      */
-    protected $priceHelper;
-
-    /**
-     * @var CustomerAccountService
-     */
-    protected $_customerAccountService;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\PriceModifierInterface
-     */
-    protected $priceModifier;
+    protected $helper;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\ConfigurableProduct\Helper\Data $helper
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Catalog\Helper\Product\Price $priceHelper
-     * @param CustomerAccountService $customerAccountService
-     * @param \Magento\Catalog\Model\Product\PriceModifierInterface $priceModifier
      * @param array $data
-     * @param array $priceBlockTypes
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\ConfigurableProduct\Helper\Data $helper,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Catalog\Helper\Product\Price $priceHelper,
-        CustomerAccountService $customerAccountService,
-        PriceModifierInterface $priceModifier,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
-        $this->_catalogProduct = $catalogProduct;
-        $this->_jsonEncoder = $jsonEncoder;
-        $this->priceHelper = $priceHelper;
-        $this->priceModifier = $priceModifier;
-        $this->_customerAccountService = $customerAccountService;
+        $this->helper = $helper;
+        $this->jsonEncoder = $jsonEncoder;
+        $this->catalogProduct = $catalogProduct;
         parent::__construct(
             $context,
             $arrayUtils,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 
@@ -150,7 +118,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->hasAllowProducts()) {
             $products = array();
-            $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
+            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
             foreach ($allProducts as $product) {
                 if ($product->isSaleable() || $skipSaleableCheck) {
@@ -186,230 +154,39 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Composes configuration for js
      *
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getJsonConfig()
     {
-        $attributes = array();
-        $options = array();
         $store = $this->getCurrentStore();
-        $taxHelper = $this->_taxData;
         $currentProduct = $this->getProduct();
-        $baseImageUrl = (string)$this->_imageHelper->init($currentProduct, 'image');
-        $preConfiguredValues = null;
 
-        $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
-        if ($preConfiguredFlag) {
-            $preConfiguredValues = $currentProduct->getPreconfiguredValues();
-            $defaultValues = array();
-        }
-
-        foreach ($this->getAllowProducts() as $product) {
-            $productId = $product->getId();
-            $this->_imageHelper->init($product, 'image');
-
-            foreach ($this->getAllowAttributes() as $attribute) {
-                $productAttribute = $attribute->getProductAttribute();
-                $productAttributeId = $productAttribute->getId();
-                $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                if (!isset($options[$productAttributeId])) {
-                    $options[$productAttributeId] = array();
-                }
-
-                if (!isset($options[$productAttributeId][$attributeValue])) {
-                    $options[$productAttributeId][$attributeValue] = array();
-                }
-                $options[$productAttributeId][$attributeValue][] = $productId;
-
-                if (!$product->getImage() || $product->getImage() === 'no_selection') {
-                    $options['images'][$productAttributeId][$attributeValue][$productId] = $baseImageUrl;
-                } else {
-                    $options['images'][$productAttributeId][$attributeValue][$productId] = (string)$this->_imageHelper;
-                }
-            }
-        }
-
-        $this->_resPrices = array($this->_preparePrice($currentProduct->getFinalPrice()));
-
-        foreach ($this->getAllowAttributes() as $attribute) {
-            $productAttribute = $attribute->getProductAttribute();
-            $attributeId = $productAttribute->getId();
-            $info = array(
-                'id' => $productAttribute->getId(),
-                'code' => $productAttribute->getAttributeCode(),
-                'label' => $attribute->getLabel(),
-                'options' => array()
-            );
-
-            $optionPrices = array();
-            $prices = $attribute->getPrices();
-            if (is_array($prices)) {
-                foreach ($prices as $value) {
-                    if (!$this->_validateAttributeValue($attributeId, $value, $options)) {
-                        continue;
-                    }
-                    $currentProduct->setConfigurablePrice(
-                        $this->_preparePrice($value['pricing_value'], $value['is_percent'])
-                    );
-                    $currentProduct->setParentId(true);
-                    $currentProduct->setConfigurablePrice(
-                        $this->priceModifier->modifyPrice($currentProduct->getConfigurablePrice(), $currentProduct)
-                    );
-                    $configurablePrice = $currentProduct->getConfigurablePrice();
-
-                    if (isset($options[$attributeId][$value['value_index']])) {
-                        $productsIndex = $options[$attributeId][$value['value_index']];
-                    } else {
-                        $productsIndex = array();
-                    }
-
-                    // @todo resolve issue with weee specifics
-                    $info['options'][] = array(
-                        'id' => $value['value_index'],
-                        'label' => $value['label'],
-                        'price' => $configurablePrice,
-                        'oldPrice' => $this->_prepareOldPrice($value['pricing_value'], $value['is_percent']),
-                        'inclTaxPrice' => $currentProduct
-                            ->getPriceInfo()
-                            ->getPrice('final_price')
-                            ->getCustomAmount($configurablePrice, 'weee')
-                            ->getValue(),
-                        'exclTaxPrice' => $configurablePrice,
-                        'products' => $productsIndex
-                    );
-                    $optionPrices[] = $configurablePrice;
-                }
-            }
-
-            /**
-             * Prepare formatted values for options choose
-             */
-            foreach ($optionPrices as $optionPrice) {
-                foreach ($optionPrices as $additional) {
-                    $this->_preparePrice(abs($additional - $optionPrice));
-                }
-            }
-            if ($this->_validateAttributeInfo($info)) {
-                $attributes[$attributeId] = $info;
-            }
-
-            // Add attribute default value (if set)
-            if ($preConfiguredFlag) {
-                $configValue = $preConfiguredValues->getData('super_attribute/' . $attributeId);
-                if ($configValue) {
-                    $defaultValues[$attributeId] = $configValue;
-                }
-            }
-        }
-
-
-        if (is_null($this->priceHelper->getCustomer()->getId())
-            && $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        ) {
-            $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-            $this->priceHelper->setCustomer($this->_customerAccountService->getCustomer($customerId));
-        }
-
-        $_request = $this->priceHelper->getRateRequest(false, false, false);
-        $_request->setProductClassId($currentProduct->getTaxClassId());
-        $defaultTax = $this->priceHelper->getRate($_request);
-
-        $_request = $this->priceHelper->getRateRequest();
-        $_request->setProductClassId($currentProduct->getTaxClassId());
-        $currentTax = $this->priceHelper->getRate($_request);
-
-        $taxConfig = array(
-            'includeTax' => $taxHelper->priceIncludesTax(),
-            'showIncludeTax' => $taxHelper->displayPriceIncludingTax(),
-            'showBothPrices' => $taxHelper->displayBothPrices(),
-            'defaultTax' => $defaultTax,
-            'currentTax' => $currentTax,
-            'inclTaxTitle' => __('Incl. Tax')
-        );
+        /**
+         * @var \Magento\ConfigurableProduct\Pricing\Price\AttributePrice $attributePrice
+         */
+        $attributePrice = $currentProduct
+            ->getPriceInfo()
+            ->getPrice('attribute_price');
+        $options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
+        $attributes = $attributePrice->prepareAttributes($options);
 
         $config = array(
-            'attributes' => $attributes,
+            'attributes' => $attributes['priceOptions'],
             'template' => str_replace('%s', '#{price}', $store->getCurrentCurrency()->getOutputFormat()),
             'basePrice' => $this->_registerJsPrice($this->_convertPrice($currentProduct->getFinalPrice())),
             'oldPrice' => $this->_registerJsPrice($this->_convertPrice($currentProduct->getPrice())),
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'taxConfig' => $taxConfig,
+            'taxConfig' => $attributePrice->getTaxConfig(),
             'images' => $options['images']
         );
 
-        if ($preConfiguredFlag && !empty($defaultValues)) {
-            $config['defaultValues'] = $defaultValues;
+        if ($currentProduct->hasPreconfiguredValues() && !empty($attributes['defaultValues'])) {
+            $config['defaultValues'] = $attributes['defaultValues'];
         }
 
         $config = array_merge($config, $this->_getAdditionalConfig());
 
-        return $this->_jsonEncoder->encode($config);
-    }
-
-    /**
-     * Validating of super product option value
-     *
-     * @param int $attributeId
-     * @param array $value
-     * @param array $options
-     * @return bool
-     */
-    protected function _validateAttributeValue($attributeId, &$value, &$options)
-    {
-        if (isset($options[$attributeId][$value['value_index']])) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Validation of super product option
-     *
-     * @param array $info
-     * @return bool
-     */
-    protected function _validateAttributeInfo(&$info)
-    {
-        if (count($info['options']) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Calculation real price
-     *
-     * @param float $price
-     * @param bool $isPercent
-     * @return string
-     */
-    protected function _preparePrice($price, $isPercent = false)
-    {
-        if ($isPercent && !empty($price)) {
-            $price = $this->getProduct()->getFinalPrice() * $price / 100;
-        }
-
-        return $this->_registerJsPrice($this->_convertPrice($price, true));
-    }
-
-    /**
-     * Calculation price before special price
-     *
-     * @param float $price
-     * @param bool $isPercent
-     * @return string
-     */
-    protected function _prepareOldPrice($price, $isPercent = false)
-    {
-        if ($isPercent && !empty($price)) {
-            $price = $this->getProduct()->getPrice() * $price / 100;
-        }
-
-        return $this->_registerJsPrice($this->_convertPrice($price, true));
+        return $this->jsonEncoder->encode($config);
     }
 
     /**

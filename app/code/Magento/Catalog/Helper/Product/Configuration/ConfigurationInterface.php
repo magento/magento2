@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Interface for product configuration helpers
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Helper\Product\Configuration;
 
+/**
+ * Interface for product configuration helpers
+ */
 interface ConfigurationInterface
 {
     /**

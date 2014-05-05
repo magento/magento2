@@ -30,7 +30,6 @@ use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
 use Magento\Catalog\Pricing\Price\MsrpPrice;
 use Magento\Framework\Pricing\Render;
 use Magento\Catalog\Pricing\Price;
-use Magento\Catalog\Pricing\Price\MsrpPriceInterface;
 
 /**
  * Class for final_price rendering
@@ -59,7 +58,7 @@ class FinalPriceBox extends BasePriceBox
         if ($msrpPriceType->canApplyMsrp($this->getSaleableItem())) {
             /** @var BasePriceBox $msrpBlock */
             $msrpBlock = $this->rendererPool->createPriceRender(
-                MsrpPriceInterface::PRICE_TYPE_MSRP,
+                MsrpPrice::PRICE_CODE,
                 $this->getSaleableItem(),
                 [
                     'real_price_html' => $result
@@ -89,9 +88,8 @@ class FinalPriceBox extends BasePriceBox
      */
     public function renderAmountMinimal()
     {
-        //@TODO Implement 'minimal_price' final price is a minimum price
-
-        $price = $this->getPriceType(\Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL);
+        /** @var \Magento\Catalog\Pricing\Price\FinalPrice $price */
+        $price = $this->getPriceType(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         $id = $this->getPriceId() ? $this->getPriceId() : 'product-minimal-price-' . $this->getSaleableItem()->getId();
         return $this->renderAmount(
             $price->getMinimalPrice(),
@@ -111,8 +109,8 @@ class FinalPriceBox extends BasePriceBox
      */
     public function hasSpecialPrice()
     {
-        $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_TYPE_PRICE_DEFAULT)->getAmount();
-        $displayFinalPrice = $this->getPriceType(Price\FinalPriceInterface::PRICE_TYPE_FINAL)->getAmount();
+        $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_CODE)->getAmount()->getValue();
+        $displayFinalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
         return $displayFinalPrice < $displayRegularPrice;
     }
 
@@ -124,7 +122,7 @@ class FinalPriceBox extends BasePriceBox
     public function showMinimalPrice()
     {
         /** @var Price\FinalPrice $finalPrice */
-        $finalPrice = $this->getPriceType(Price\FinalPriceInterface::PRICE_TYPE_FINAL);
+        $finalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE);
         $finalPriceValue = $finalPrice->getAmount()->getValue();
         $minimalPriceAValue = $finalPrice->getMinimalPrice()->getValue();
         return $this->getDisplayMinimalPrice()

@@ -26,6 +26,7 @@
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Sales\Model\Quote\Item;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
  * Shopping cart item render block
@@ -455,23 +456,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get html for MAP product enabled
-     *
-     * @param Item $item
-     * @return string
-     */
-    public function getMsrpHtml($item)
-    {
-        return $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Product\Price'
-        )->setTemplate(
-            'product/price_msrp_item.phtml'
-        )->setProduct(
-            $item->getProduct()
-        )->toHtml();
-    }
-
-    /**
      * Set qty mode to be strict or not
      *
      * @param bool $strict
@@ -506,5 +490,40 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
             return $this->getProduct()->getIdentities();
         }
         return array();
+    }
+
+    /**
+     * Get product price formatted with html (final price, special price, mrp price)
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return string
+     */
+    public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
+    {
+        $priceRender = $this->getPriceRender();
+        $priceRender->setItem($this->getItem());
+
+        $price = '';
+        if ($priceRender) {
+            $price = $priceRender->render(
+                ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                $product,
+                [
+                    'include_container' => true,
+                    'display_minimal_price' => true,
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+                ]
+            );
+        }
+
+        return $price;
+    }
+
+    /**
+     * @return \Magento\Framework\Pricing\Render
+     */
+    protected function getPriceRender()
+    {
+        return $this->getLayout()->getBlock('product.price.render.default');
     }
 }

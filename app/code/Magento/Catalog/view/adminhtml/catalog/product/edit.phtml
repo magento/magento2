@@ -321,7 +321,7 @@ jQuery(function($) {
                         if (nameDataMapper.apply($elements.get(index)) == elementId) {
                             return true;
                         }
-                        var $elementToMove = $('.fieldset>.field[data-element-id="' + elementId + '"]');
+                        var $elementToMove = $('.fieldset>.field[data-attribute-code="' + elementId + '"]');
                         if ($elementToMove.length === 0) {
                             $elementToMove = $element;
                         }

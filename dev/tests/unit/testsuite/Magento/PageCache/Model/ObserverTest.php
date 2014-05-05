@@ -110,7 +110,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            array('getTtl', 'isScopePrivate', 'getNameInLayout', 'getUrl')
+            array('getData', 'isScopePrivate', 'getNameInLayout', 'getUrl')
         );
         $this->_transport = new \Magento\Framework\Object(array('output' => 'test output html'));
         $this->_observerObject = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
@@ -158,14 +158,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             );
 
             if ($varnishIsEnabled) {
-                $this->_blockMock->setTtl($blockTtl);
-                $this->_blockMock->expects(
-                    $this->any()
-                )->method(
-                    'getUrl'
-                )->will(
-                    $this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff')
-                );
+                $this->_blockMock->expects($this->once())
+                    ->method('getData')
+                    ->with('ttl')
+                    ->will($this->returnValue($blockTtl));
+                $this->_blockMock->expects($this->any())
+                    ->method('getUrl')
+                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff'));
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects(

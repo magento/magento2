@@ -113,14 +113,12 @@
 <?php endif; ?>
 <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/sidebar.js') ?>", function() {
-                $('[data-block="minicart"]').sidebar({
-                    checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
-                    checkoutButton: '#top-cart-btn-checkout',
-                    removeButton: '#mini-cart a.action.delete',
-                    confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
-                });
-            });
+        $('[data-block="minicart"]').mage('sidebar', {
+            checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
+            checkoutButton: '#top-cart-btn-checkout',
+            removeButton: '#mini-cart a.action.delete',
+            confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
+        });
     })(jQuery);
 </script>
 <?php if ($this->getInList()): ?>

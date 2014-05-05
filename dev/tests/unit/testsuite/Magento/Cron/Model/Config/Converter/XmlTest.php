@@ -63,22 +63,28 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $expected = array(
-            'default' => array(
-                'job1' => array(
+        $expected = [
+            'default' => [
+                'job1' => [
                     'name' => 'job1',
                     'schedule' => '30 2 * * *',
                     'instance' => 'Model1',
                     'method' => 'method1'
-                ),
-                'job2' => array(
+                ],
+                'job2' => [
                     'name' => 'job2',
                     'schedule' => '* * * * *',
                     'instance' => 'Model2',
                     'method' => 'method2'
-                )
-            )
-        );
+                ],
+                'job3' => [
+                    'name'        => 'job3',
+                    'instance'    => 'Model3',
+                    'method'      => 'method3',
+                    'config_path' => 'some/config/path'
+                ],
+            ]
+        ];
 
         $xmlFile = __DIR__ . '/../_files/crontab_valid.xml';
         $dom = new \DOMDocument();

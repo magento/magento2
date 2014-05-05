@@ -411,17 +411,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Eav\Model\Attribute\Data\AbstractData $dataModel
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getFactoryMock($dataModel)
-    {
-        $factory = $this->getMockBuilder('Magento\Eav\Model\Attribute\Data')->setMethods(array('factory'))->getMock();
-        $factory::staticExpects($this->once())->method('factory')->will($this->returnValue($dataModel));
-        return $factory;
-    }
-
-    /**
      * @param boolean $returnValue
      * @param string|null $argument
      * @return \PHPUnit_Framework_MockObject_MockObject

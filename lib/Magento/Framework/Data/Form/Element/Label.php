@@ -59,8 +59,7 @@ class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
     public function getElementHtml()
     {
         $html = $this->getBold() ? '<div class="control-value special">' : '<div class="control-value">';
-        $html .= $this->getEscapedValue();
-        $html .= $this->getBold() ? '</div>' : '</div>';
+        $html .= $this->getEscapedValue() . '</div>';
         $html .= $this->getAfterElementHtml();
         return $html;
     }

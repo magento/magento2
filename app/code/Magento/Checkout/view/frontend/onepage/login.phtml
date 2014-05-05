@@ -35,7 +35,11 @@
 <div class="block customer login">
     <div class="title"><strong><?php echo __('Login') ?></strong></div>
     <div class="content">
-        <form class="form login" id="login-form" action="<?php echo $this->getPostAction() ?>" method="post">
+        <form class="form login"
+              id="login-form"
+              action="<?php echo $this->getPostAction() ?>"
+              method="post"
+              data-mage-init='{"validation":{}}'>
             <?php echo $this->getBlockHtml('formkey'); ?>
             <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
                 <p class="field note"><?php echo __('Already registered?') ?> <?php echo __('Please log in below:') ?></p>
@@ -66,18 +70,6 @@
             </fieldset>
         </form>
     </div>
-    <script type="text/javascript">
-        (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-                function() {
-                    $('#login-form').validation();
-                });
-        })(jQuery);
-    </script>
 </div>
 <?php if ( $this->isAllowedGuestCheckout() || $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
 <div class="block guest">
@@ -139,16 +131,3 @@
 </div>
 <?php endif; ?>
 </div>
-<script type="text/javascript">
-    (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-            function() {
-                $('#login-form').validation();
-            }
-        )}
-    )(jQuery);
-</script>

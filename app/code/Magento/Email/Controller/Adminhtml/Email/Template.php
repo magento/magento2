@@ -240,6 +240,7 @@ class Template extends \Magento\Backend\App\Action
      */
     public function defaultTemplateAction()
     {
+        $this->_view->loadLayout();
         $template = $this->_initTemplate('id');
         $templateCode = $this->getRequest()->getParam('code');
         try {

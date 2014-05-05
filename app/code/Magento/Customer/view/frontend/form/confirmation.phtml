@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form action="" method="post" id="form-validate" class="form send confirmation">
+<form action="" method="post" id="form-validate" class="form send confirmation" data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset" data-hasrequired="<?php echo __('* Required Fields') ?>">
         <p class="field note"><?php echo __('Please enter your email below and we will send you the confirmation link for it.') ?></p>
         <div class="field email required">
@@ -42,15 +42,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-            function() {
-                $('#form-validate').validation();
-            });
-    })(jQuery);
-</script>

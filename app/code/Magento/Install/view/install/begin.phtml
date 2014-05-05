@@ -53,9 +53,9 @@
 <script type="text/javascript">
 //<![CDATA[
 (function($) {
-    head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", function() {
+    head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", head.ready(function () {
         $.mage.install.begin('#agree', '#submitButton');
-    });
+    }));
 })(jQuery);
 //]]>
 </script>

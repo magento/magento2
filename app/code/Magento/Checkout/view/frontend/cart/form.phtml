@@ -27,9 +27,15 @@
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
 <div class="cart table wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
     <?php echo $this->getChildHtml('form_before') ?>
-    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="form-validate" >
+    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>"
+          method="post"
+          id="form-validate"
+          data-mage-init='{"validation":{}}'>
         <?php echo $this->getBlockHtml('formkey'); ?>
-        <table id="shopping-cart-table" class="cart items data">
+        <table id="shopping-cart-table"
+               class="cart items data"
+               data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
+                                                "updateCartActionContainer": "#update_cart_action_container"}}'>
             <caption><?php echo __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
@@ -66,37 +72,14 @@
             <!--[if lt IE 8]>
             <input type="hidden" value="" id="update_cart_action_container" />
             <![endif]-->
-            <script type="text/javascript">
-                //<![CDATA[
-                (function($) {
-                    head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/shopping-cart.js')?>",
-                        function() {
-                            // Internet Explorer (lt 8) does not support value attribute in button elements
-                            $('#shopping-cart-table').shoppingCart({
-                                emptyCartButton: 'action.clear',
-                                updateCartActionContainer: '#update_cart_action_container'
-                            });
-                        });
-                })(jQuery);
-                //]]>
-            </script>
         </div>
     </form>
     <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
     <script type="text/javascript">
         (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('mage/sticky.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-                function() {
-                    $('#form-validate').validation();
-                    $('.cart.summary').sticky({
-                        container: '.cart.container'
-                });
-                });
+            $('.cart.summary').mage('sticky', {
+                container: '.cart.container'
+            });
         })(jQuery)
     </script>
 </div>

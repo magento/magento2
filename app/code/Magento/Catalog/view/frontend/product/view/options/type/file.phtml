@@ -31,22 +31,6 @@
 <?php $_fileNamed = $_fileName . '_name'; ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 
-<script type="text/javascript">
-    //<![CDATA[
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/file-option.js')?>", function() {
-            $('#input-box-<?php echo $_fileName ?>').fileOption({
-                fileName: '<?php echo $_fileName ?>',
-                fileNamed: '<?php echo $_fileNamed ?>',
-                fieldNameAction: '<?php echo $_fieldNameAction ?>',
-                changeFileSelector: '#change-<?php echo $_fileName ?>',
-                deleteFileSelector: '#delete-<?php echo $_fileName ?>'
-            });
-        });
-    })(jQuery);
-    //]]>
-</script>
-
 <div class="field file<?php echo $class; ?>">
     <label class="label">
         <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
@@ -64,7 +48,15 @@
         <?php endif; ?>
     </div>
     <?php endif; ?>
-    <div class="control" id="input-box-<?php echo $_fileName ?>" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+    <div class="control" id="input-box-<?php echo $_fileName ?>"
+             data-mage-init='{"fileOption":{
+                "fileName":"<?php echo $_fileName ?>",
+                "fileNamed":"<?php echo $_fileNamed ?>",
+                "fieldNameAction":"<?php echo $_fieldNameAction ?>",
+                "changeFileSelector":"#change-<?php echo $_fileName ?>",
+                "deleteFileSelector":"#delete-<?php echo $_fileName ?>"}
+             }'
+            <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
         <input type="file"
                name="<?php echo $_fileName; ?>"
                class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"

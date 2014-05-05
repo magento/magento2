@@ -40,8 +40,7 @@
         _bind: function() {
             this._labels.on({
                 click: $.proxy(function(e) {
-                    var elem = $(e.currentTarget);
-                    $('#' + elem.attr('for')).attr('checked', 'checked');
+                    $('[id="' + $(e.currentTarget).attr('for') + '"]').prop('checked', true);
                     this._updateRating();
                 }, this),
 

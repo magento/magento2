@@ -55,6 +55,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store web/unsecure/base_link_url http://example.com/
+     * @magentoConfigFixture admin_store web/unsecure/base_link_url http://example.com/
      */
     public function testStoreDirective()
     {
@@ -67,6 +68,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             array('{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"')
         );
         $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
+
+        $this->_model->setStoreId(0);
+        $url = $this->_model->storeDirective(
+            array('{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"')
+        );
+        $this->assertStringMatchesFormat('http://example.com/index.php/backend/translation/ajax/index/%A', $url);
     }
 
     public function testEscapehtmlDirective()

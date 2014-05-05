@@ -74,7 +74,8 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
      * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param array $data
-     * @param array $priceBlockTypes
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -83,8 +84,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\CatalogInventory\Model\Stock $stock,
         \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
         \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_productVisibility = $productVisibility;
@@ -93,8 +93,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_itemRelationsList = $itemRelationsList;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }

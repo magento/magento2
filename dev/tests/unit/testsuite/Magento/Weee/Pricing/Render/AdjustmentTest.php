@@ -103,7 +103,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::CODE, $this->model->getAdjustmentCode());
+        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**

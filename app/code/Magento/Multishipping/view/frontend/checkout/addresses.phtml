@@ -29,7 +29,7 @@
  * @var $this \Magento\Multishipping\Block\Checkout\Addresses
  */
 ?>
-<form id="checkout_multishipping_form" action="<?php echo $this->getPostActionUrl() ?>" method="post" class="multicheckout address form">
+<form id="checkout_multishipping_form" data-mage-init='{"multiShipping":{}, "validation":{}}' action="<?php echo $this->getPostActionUrl() ?>" method="post" class="multicheckout address form">
     <div class="title">
         <strong><?php echo __('Please select a shipping address for applicable items.') ?></strong>
         <button type="button" title="<?php echo __('Enter a New Address') ?>" class="action add" data-role="add-new-address"><span><?php echo __('Enter a New Address') ?></span></button>
@@ -80,16 +80,3 @@
         <button type="submit" title="<?php echo __('Continue to Shipping Information') ?>" class="action continue<?php if ($this->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($this->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Continue to Shipping Information') ?></span></button>
     </div>
 </form>
-
-<script type="text/javascript">
-    head.js(
-        "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-        "<?php echo $this->getViewFileUrl('Magento_Multishipping::js/multi-shipping.js') ?>",
-        function () {
-            jQuery('#checkout_multishipping_form').multiShipping().validation();
-        }
-    );
-</script>

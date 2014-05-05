@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Block\Product;
 
 /**
  * Product price block
- *
- * @category   Magento
- * @package    Magento_Catalog
  */
-namespace Magento\Catalog\Block\Product;
-
 class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
@@ -156,70 +152,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     public function getIdSuffix()
     {
         return $this->_idSuffix;
-    }
-
-    /**
-     * Get tier prices (formatted)
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return array
-     * @deprecated
-     */
-    public function getTierPrices($product = null)
-    {
-        if (is_null($product)) {
-            $product = $this->getProduct();
-        }
-        $prices = $product->getFormatedTierPrice();
-
-        $res = array();
-        if (is_array($prices)) {
-            foreach ($prices as $price) {
-                $price['price_qty'] = $price['price_qty'] * 1;
-
-                $productPrice = $product->getPrice();
-                if ($product->getPrice() != $product->getFinalPrice()) {
-                    $productPrice = $product->getFinalPrice();
-                }
-
-                // Group price must be used for percent calculation if it is lower
-                $groupPrice = $product->getGroupPrice();
-                if ($productPrice > $groupPrice) {
-                    $productPrice = $groupPrice;
-                }
-
-                if ($price['price'] < $productPrice) {
-                    $price['savePercent'] = ceil(100 - 100 / $productPrice * $price['price']);
-
-                    $tierPrice = $this->_storeManager->getStore()->convertPrice(
-                        $this->_taxData->getPrice($product, $price['website_price'])
-                    );
-                    $price['formated_price'] = $this->_storeManager->getStore()->formatPrice($tierPrice);
-                    $price['formated_price_incl_tax'] = $this->_storeManager->getStore()->formatPrice(
-                        $this->_storeManager->getStore()->convertPrice(
-                            $this->_taxData->getPrice($product, $price['website_price'], true)
-                        )
-                    );
-
-                    if ($this->_catalogData->canApplyMsrp($product)) {
-                        $oldPrice = $product->getFinalPrice();
-                        $product->setPriceCalculation(false);
-                        $product->setPrice($tierPrice);
-                        $product->setFinalPrice($tierPrice);
-
-                        $this->getLayout()->getBlock('product.info')->getPriceHtml($product);
-                        $product->setPriceCalculation(true);
-
-                        $price['real_price_html'] = $product->getRealPriceHtml();
-                        $product->setFinalPrice($oldPrice);
-                    }
-
-                    $res[] = $price;
-                }
-            }
-        }
-
-        return $res;
     }
 
     /**

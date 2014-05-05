@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Wishlist block customer item column
- *
- * @category    Magento
- * @package     Magento_Wishlist
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 
+/**
+ * Wishlist block customer item column
+ */
 class Column extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**

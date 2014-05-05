@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Wishlist block customer items
- *
- * @category    Magento
- * @package     Magento_Wishlist
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer\Wishlist;
 
+/**
+ * Wishlist block customer items
+ */
 class Items extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -48,13 +44,13 @@ class Items extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve table column object list
      *
-     * @return array
+     * @return \Magento\Wishlist\Block\Customer\Wishlist\Item\Column[]
      */
     public function getColumns()
     {
         $columns = array();
         foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $child) {
-            if ($child->isEnabled()) {
+            if ($child instanceof \Magento\Wishlist\Block\Customer\Wishlist\Item\Column && $child->isEnabled()) {
                 $columns[] = $child;
             }
         }

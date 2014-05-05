@@ -75,7 +75,7 @@ class Theme implements SourceInterface
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }
-            $result[] = $this->fileFactory->create($filename, $matches['moduleName'], $theme);
+            $result[] = $this->fileFactory->create($filename, $matches['moduleName']);
         }
 
         return $result;

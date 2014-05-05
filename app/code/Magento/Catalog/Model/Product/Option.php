@@ -431,7 +431,7 @@ class Option extends AbstractModel
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
-            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_TYPE_BASE_PRICE)->getValue();
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }

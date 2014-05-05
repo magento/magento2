@@ -37,7 +37,7 @@ $element = $this->getElement();
 
 <?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
 <?php $_showWebsite= $this->isMultiWebsites(); ?>
-<div class="field" id="attribute-<?php echo $_htmlId?>-container" data-element-id="<?php echo $_htmlId?>"
+<div class="field" id="attribute-<?php echo $_htmlId?>-container" data-attribute-code="<?php echo $_htmlId?>"
      data-apply-to="<?php echo $this->escapeHtml(
          $this->helper('Magento\Core\Helper\Data')->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : array()

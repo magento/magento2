@@ -47,7 +47,7 @@ class AggregateInvoker
      * @param \PHPUnit_Framework_TestCase $testCase
      * @param array $options
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testCase, array $options = array())
+    public function __construct($testCase, array $options = array())
     {
         $this->_testCase = $testCase;
         $this->_options = $options + $this->_options;

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form class="form orders search" id="oar-widget-orders-and-returns-form" action="<?php echo $this->getActionUrl() ?>"
+<form class="form orders search" id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{}, "validation":{}}' action="<?php echo $this->getActionUrl() ?>"
       method="post" name="guest_post">
     <fieldset class="fieldset">
         <legend class="legend"><span><?php echo __('Order Information') ?></span></legend>
@@ -79,12 +79,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('Magento_Sales::orders-returns.js');?>", function () {
-            jQuery('#oar-widget-orders-and-returns-form').ordersReturns().validation();
-        });
-</script>

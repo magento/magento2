@@ -34,23 +34,16 @@
 
     <?php if ($this->isPartialAuthorization()): ?>
         <?php echo $this->getChildHtml('cards') ?>
-        <div class="release-amounts" data-container="release-amounts">
+        <div class="release-amounts"
+             data-container="release-amounts"
+             data-mage-init='{"authorizenetAuthenticate":{"partialAuthorizationConfirmationMessage": "<?php echo $this->getPartialAuthorizationConfirmationMessage()?>",
+                                                          "cancelConfirmationMessage": "<?php echo $this->getCancelConfirmationMessage() ?>",
+                                                          "cancelUrl": "<?php echo $this->getCancelUrl() ?>"}}'>
             <button class="button" type="button" id="payment-button-cancel" name="cancel"><span><span>Cancel</span></span></button>
             <span><?php echo __('To cancel pending authorizations and release amounts that have already been processed during this payment, click Cancel.') ?></span>
         </div>
         <?php echo $this->showNoticeMessage(__('Please enter a different credit card number to complete your purchase.')) ?>
 
-        <script type="text/javascript">
-            (function ($) {
-                head.js("<?php echo $this->getViewFileUrl('Magento_Authorizenet::authorizenet-authenticate.js') ?>", function () {
-                    $('[data-container="release-amounts"]').authorizenetAuthenticate({
-                        partialAuthorizationConfirmationMessage: '<?php echo $this->getPartialAuthorizationConfirmationMessage()?>',
-                        cancelConfirmationMessage: '<?php echo $this->getCancelConfirmationMessage() ?>',
-                        cancelUrl: '<?php echo $this->getCancelUrl() ?>'
-                    });
-                });
-            })(jQuery);
-        </script>
         <span id="cancel-please-wait" class="please-wait load indicator" style="display: none" data-text="<?php echo __('Processing...') ?>">
             <span><?php echo __('Processing...') ?></span>
         </span>

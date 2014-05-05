@@ -26,9 +26,7 @@
 <script type="text/javascript">
     //<![CDATA[
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Core::js/require-cookie.js')?>", function () {
-            $('body').requireCookie(<?php echo $this->getScriptOptions(); ?>);
-        });
+        $('body').mage('requireCookie', <?php echo $this->getScriptOptions(); ?>);
     })(jQuery);
     //]]>
 </script>

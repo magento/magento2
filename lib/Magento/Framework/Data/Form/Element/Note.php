@@ -58,8 +58,13 @@ class Note extends AbstractElement
      */
     public function getElementHtml()
     {
-        $html = '<div id="' . $this->getHtmlId() . '" class="control-value">' . $this->getText() . '</div>';
-        $html .= $this->getAfterElementHtml();
+        $html = $this->getBeforeElementHtml()
+            . '<div id="'
+            . $this->getHtmlId()
+            . '" class="control-value">'
+            . $this->getText()
+            . '</div>'
+            . $this->getAfterElementHtml();
         return $html;
     }
 }

@@ -23,7 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form class="form contact" action="<?php echo $this->getFormAction(); ?>" id="contact-form" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>">
+<form class="form contact"
+      action="<?php echo $this->getFormAction(); ?>"
+      id="contact-form"
+      method="post"
+      data-hasrequired="<?php echo __('* Required Fields') ?>"
+      data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
         <legend class="legend"><span><?php echo __('Contact Information') ?></span></legend><br />
         <div class="field name required">
@@ -61,13 +66,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
-                $('#contact-form').validation();
-            });
-    })(jQuery);
-</script>

@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -67,7 +69,7 @@ class Amount extends Template implements AmountRenderInterface
     protected $rendererPool;
 
     /**
-     * @var float
+     * @var AmountInterface
      */
     protected $amount;
 
@@ -153,16 +155,6 @@ class Amount extends Template implements AmountRenderInterface
     }
 
     /**
-     * @param string $code
-     * @param string $html
-     * @return void
-     */
-    public function addAdjustmentHtml($code, $html)
-    {
-        $this->adjustmentsHtml[$code] = $html;
-    }
-
-    /**
      * @return bool
      */
     public function hasAdjustmentsHtml()
@@ -183,10 +175,9 @@ class Amount extends Template implements AmountRenderInterface
      */
     protected function _toHtml()
     {
-        // apply Price Adjustment Renders if available
         $adjustmentRenders = $this->getApplicableAdjustmentRenders();
         if ($adjustmentRenders) {
-            $this->applyAdjustments($adjustmentRenders);
+            $this->adjustmentsHtml = $this->getAdjustments($adjustmentRenders);
         }
         $html = parent::_toHtml();
         return $html;
@@ -199,11 +190,7 @@ class Amount extends Template implements AmountRenderInterface
      */
     protected function getApplicableAdjustmentRenders()
     {
-        if (!$this->hasSkipAdjustments()) {
-            return $this->getAdjustmentRenders();
-        } else {
-            return [];
-        }
+        return (!$this->hasSkipAdjustments()) ? $this->getAdjustmentRenders() : [];
     }
 
     /**
@@ -216,15 +203,20 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @param AdjustmentRenderInterface[] $adjustmentRenders
-     * @return void
+     * @return array
      */
-    protected function applyAdjustments($adjustmentRenders)
+    protected function getAdjustments($adjustmentRenders)
     {
         $this->setAdjustmentCssClasses($adjustmentRenders);
         $data = $this->getData();
+        $adjustments = [];
         foreach ($adjustmentRenders as $adjustmentRender) {
-            $adjustmentRender->render($this, $data);
+            $html = $adjustmentRender->render($this, $data);
+            if (trim($html)) {
+                $adjustments[$adjustmentRender->getAdjustmentCode()] = $html;
+            }
         }
+        return $adjustments;
     }
 
     /**

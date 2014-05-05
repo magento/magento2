@@ -130,14 +130,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $this->_block->getMinimalQty($this->_product));
     }
 
-    public function testGetPriceHtml()
-    {
-        $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
-        );
-        $this->assertContains('10', $this->_block->getPriceHtml($this->_product));
-    }
-
     public function testGetReviewsSummaryHtml()
     {
         $this->_block->setLayout(
@@ -151,40 +143,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetProduct()
     {
         $this->assertSame($this->_product, $this->_block->getProduct());
-    }
-
-    public function testGetTierPriceTemplate()
-    {
-        $this->assertEquals('product/view/tierprices.phtml', $this->_block->getTierPriceTemplate());
-        $this->_block->setData('tier_price_template', 'test.phtml');
-        $this->assertEquals('test.phtml', $this->_block->getTierPriceTemplate());
-    }
-
-    public function testGetTierPriceHtml()
-    {
-        $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
-        );
-        $html = $this->_block->getTierPriceHtml();
-        $this->assertNotEmpty($html);
-        $this->assertContains('2', $html); /* Buy 2 */
-        $this->assertContains('8', $html); /* Price 8 */
-        $this->assertContains('5', $html); /* Buy 5 and price 5 */
-    }
-
-    public function testGetTierPrices()
-    {
-        $prices = $this->_block->getTierPrices();
-        $this->assertNotEmpty($prices);
-        $this->assertGreaterThanOrEqual(2, count($prices));
-        $this->assertArrayHasKey('price', $prices[0]);
-        $this->assertArrayHasKey('savePercent', $prices[0]);
-        $this->assertArrayHasKey('formated_price', $prices[0]);
-        $this->assertArrayHasKey('formated_price_incl_tax', $prices[0]);
-
-        $this->_product->setFinalPrice(7);
-        $prices = $this->_block->getTierPrices();
-        $this->assertEquals(1, count($prices));
     }
 
     public function testGetImageLabel()

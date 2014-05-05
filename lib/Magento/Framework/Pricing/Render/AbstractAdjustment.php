@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -63,7 +65,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     /**
      * @param AmountRenderInterface $amountRender
      * @param array $arguments
-     * @return void
+     * @return string
      */
     public function render(AmountRenderInterface $amountRender, array $arguments = [])
     {
@@ -136,7 +138,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     }
 
     /**
-     * @return void
+     * @return string
      */
     abstract protected function apply();
 }

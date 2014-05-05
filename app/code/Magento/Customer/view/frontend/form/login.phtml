@@ -36,7 +36,11 @@
 <div class="block customer login">
     <div class="title"><strong><?php echo __('Registered Customers') ?></strong></div>
     <div class="content">
-        <form class="form login" action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+        <form class="form login"
+              action="<?php echo $this->getPostActionUrl() ?>"
+              method="post"
+              id="login-form"
+              data-mage-init='{"validation":{}}'>
             <?php echo $this->getBlockHtml('formkey'); ?>
             <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
                 <p class="field note"><?php echo __('If you have an account with us, log in using your email address.') ?></p>
@@ -60,16 +64,4 @@
             </fieldset>
         </form>
     </div>
-    <script type="text/javascript">
-        (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-                function() {
-                    $('#login-form').validation();
-                });
-        })(jQuery);
-    </script>
 </div>

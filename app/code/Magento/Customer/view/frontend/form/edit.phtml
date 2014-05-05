@@ -86,46 +86,36 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-            "<?php echo $this->getViewFileUrl('Magento_Customer::set-password.js') ?>",
-            <?php if ($_dob->isEnabled()): ?>
-            "<?php echo $this->getViewFileUrl('mage/validation/dob-rule.js') ?>",
-            <?php endif ?>
-            function() {
-                $('#change-password').setPassword({
-                    currentPasswordId: '#current-password',
-                    passwordId: '#password',
-                    confirmationId: '#confirmation',
-                    passwordContainer: 'fieldset.fieldset.password',
-                    showOnDefault: <?php echo $this->getChangePassword() ? 'true' : 'false' ?>
-                });
-                var dataForm = $('#form-validate'), ignore;
-                <?php if ($_dob->isEnabled()): ?>
-                ignore = 'input[id$="full"]';
-                <?php endif ?>
-                dataForm.validation({
-                    <?php if ($_dob->isEnabled()): ?>
-                    errorPlacement: function(error, element) {
-                        if (element.prop('id').search('full') !== -1) {
-                            var dobElement = $(element).parents('.customer-dob'),
-                                errorClass = error.prop('class');
-                            error.insertAfter(element.parent());
-                            dobElement.find('.validate-custom').addClass(errorClass)
-                                .after('<div class="' + errorClass + '"></div>');
-                        }
-                        else {
-                            error.insertAfter(element);
-                        }
-                    },
-                    ignore: ':hidden:not(' + ignore + ')'
-                    <?php else: ?>
-                    ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-                    <?php endif ?>
-                });
-            });
+        $('#change-password').mage('setPassword', {
+            'currentPasswordId': '#current-password',
+            'passwordId': '#password',
+            'confirmationId': '#confirmation',
+            'passwordContainer': 'fieldset.fieldset.password',
+            'showOnDefault': <?php echo $this->getChangePassword() ? 'true' : 'false' ?>
+        });
+
+        var dataForm = $('#form-validate'), ignore;
+        <?php if ($_dob->isEnabled()): ?>
+        ignore = 'input[id$="full"]';
+        <?php endif ?>
+        dataForm.mage('validation', {
+        <?php if ($_dob->isEnabled()): ?>
+            errorPlacement: function(error, element) {
+                if (element.prop('id').search('full') !== -1) {
+                    var dobElement = $(element).parents('.customer-dob'),
+                        errorClass = error.prop('class');
+                    error.insertAfter(element.parent());
+                    dobElement.find('.validate-custom').addClass(errorClass)
+                        .after('<div class="' + errorClass + '"></div>');
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            ignore: ':hidden:not(' + ignore + ')'
+        <?php else: ?>
+            ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+        <?php endif ?>
+        });
     })(jQuery);
 </script>

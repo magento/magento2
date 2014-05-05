@@ -114,7 +114,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -124,8 +123,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_coreData = $coreData;
         $this->_itemCollectionFactory = $itemCollectionFactory;
@@ -135,8 +133,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $this->currentCustomer = $currentCustomer;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }
@@ -279,7 +276,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 [
                     'price_id' => 'product-price-' . $product->getId() . $idSuffix,

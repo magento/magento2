@@ -62,7 +62,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -75,8 +74,7 @@ class View extends \Magento\Catalog\Block\Product\View
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_reviewsColFactory = $collectionFactory;
         parent::__construct(
@@ -89,8 +87,7 @@ class View extends \Magento\Catalog\Block\Product\View
             $productHelper,
             $productTypeConfig,
             $localeFormat,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

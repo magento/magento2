@@ -36,6 +36,37 @@
             ],
             dropdownDialog: [
                 '<?php echo $this->getViewFileUrl('mage/dropdown.js') ?>'
+            ],
+            addToCart: [
+                '<?php echo $this->getViewFileUrl('Magento_Catalog::js/msrp.js') ?>'
+            ],
+            checkoutBalance: [
+                '<?php echo $this->getViewFileUrl('Magento_Customer::js/checkout-balance.js')?>'
+            ],
+            shoppingCart: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/shopping-cart.js') ?>'
+            ],
+            regionUpdater: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>'
+            ],
+            creditCardType: [
+                '<?php echo $this->getViewFileUrl('Magento_Payment::cc-type.js') ?>'
+            ],
+            opcheckout: [
+                '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>',
+                '<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>',
+                '<?php echo $this->getViewFileUrl('mage/validation.js')?>',
+                '<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opcheckout.js') ?>'
+            ],
+            accordion: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/accordion.js') ?>'
+            ],
+            sidebar: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/sidebar.js') ?>'
+            ],
+            payment: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/payment.js') ?>'
             ]
         });
     })(jQuery);

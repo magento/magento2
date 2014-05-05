@@ -70,24 +70,18 @@
     </form>
     <script type="text/javascript">
         (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-                "<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>",
-                function() {
-                    $('#country').regionUpdater({
-                        optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
-                        regionListId: '#region_id',
-                        regionInputId: '#region',
-                        postcodeId: '#postcode',
-                        form: $('#shipping-zip-form').validation(),
-                        regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                        defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
-                        countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
-                    });
-                });
+            var $form = $('#shipping-zip-form');
+            $form.mage('validation');
+            $('#country').mage('regionUpdater', {
+                optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+                regionListId: '#region_id',
+                regionInputId: '#region',
+                postcodeId: '#postcode',
+                form: $form,
+                regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
+                countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            });
         })(jQuery);
     </script>
     <?php if (($_shippingRateGroups = $this->getEstimateRates())): ?>

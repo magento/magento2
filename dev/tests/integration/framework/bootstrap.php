@@ -32,11 +32,8 @@ $testsBaseDir = dirname(__DIR__);
 $testsTmpDir = "{$testsBaseDir}/tmp";
 $magentoBaseDir = realpath("{$testsBaseDir}/../../../");
 
-\Magento\Framework\Autoload\IncludePath::addIncludePath(
-    array(
-        "{$testsBaseDir}/framework",
-        "{$testsBaseDir}/testsuite"
-    )
+(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
+    array("{$testsBaseDir}/framework", "{$testsBaseDir}/testsuite")
 );
 
 function tool_autoloader($className)

@@ -110,7 +110,7 @@
 
             this.element.find('input[type="file"]').fileupload({
                 dataType: 'json',
-                dropZone: $dropPlaceholder,
+                dropZone: $dropPlaceholder.closest('[data-attribute-code]'),
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.element.data('maxFileSize'),
                 done: function(event, data) {

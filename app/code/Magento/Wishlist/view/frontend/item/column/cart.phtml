@@ -27,13 +27,12 @@
 /* @var \Magento\Wishlist\Model\Item $item */
 $item = $this->getItem();
 $product = $item->getProduct();
-$options = $this->getChildBlock('customer.wishlist.item.options')
-    ->setItem($item)
-    ->getConfiguredOptions();
 ?>
-<?php echo $this->getPriceHtml($product, empty($options));?>
+<?php foreach ($this->getChildNames() as $childName): ?>
+    <?php echo $this->getLayout()->renderElement($childName, false); ?>
+<?php endforeach;?>
 <div class="box tocart">
-    <?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
+    <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
         <input type="number" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
                name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>">
     <?php endif; ?>
@@ -53,9 +52,7 @@ $options = $this->getChildBlock('customer.wishlist.item.options')
         <?php endif; ?>
     <?php endif; ?>
 </div>
-<?php foreach ($this->getChildNames() as $childName): ?>
-    <?php echo $this->getLayout()->renderElement($childName, false); ?>
-<?php endforeach;?>
+
 <?php if ($product->isVisibleInSiteVisibility()): ?>
     <p>
         <a class="action edit" href="<?php echo $this->getItemConfigureUrl($item) ?>">

@@ -37,11 +37,6 @@
         </arguments>
     </referenceBlock>
     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="mage-zoom-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/zoom.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Css" name="mage-gallery-css">
             <arguments>
                 <argument name="file" xsi:type="string">mage/gallery.css</argument>

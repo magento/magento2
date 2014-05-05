@@ -68,7 +68,7 @@
                 <?php echo $this->getProductPrice($_item) ?>
                     <?php echo $this->getProductPriceHtml(
                         $_item,
-                        \Magento\Catalog\Pricing\Price\TierPriceInterface::PRICE_TYPE_TIER
+                        \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
                     ) ?>
                 <?php endif; ?>
             </td>

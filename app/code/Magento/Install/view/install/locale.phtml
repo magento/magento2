@@ -65,8 +65,8 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", function() {
+        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", head.ready(function () {
             $.mage.install.changeLocale('#locale', '<?php echo $this->getChangeUrl();?>');
-        });
+        }));
     })(jQuery);
 </script>

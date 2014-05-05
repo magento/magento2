@@ -119,9 +119,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function getViewFileUrlProductionModeDataProvider()
+    public function getViewFileUrlProductionModeDataProvider()
     {
-        $usualTheme = \PHPUnit_Framework_MockObject_Generator::getMock(
+        $usualTheme = $this->getMock(
             'Magento\Framework\View\Design\ThemeInterface',
             array(),
             array(),

@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="pagecache_page_head_components" template="Magento_PageCache::js/components.phtml"/>
+    </referenceBlock>
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-pagecache-comments-js" after="jquery-jquery-js">
             <arguments>

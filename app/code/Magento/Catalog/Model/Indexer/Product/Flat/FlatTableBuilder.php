@@ -32,6 +32,11 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 class FlatTableBuilder
 {
     /**
+     * Path to maximum available amount of indexes for flat indexer
+     */
+    const XML_NODE_MAX_INDEX_COUNT = 'catalog/product/flat/max_index_count';
+
+    /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
      */
     protected $_productIndexerHelper;
@@ -123,7 +128,7 @@ class FlatTableBuilder
         $indexesNeed = $this->_productIndexerHelper->getFlatIndexes();
 
         $maxIndex = $this->_config->getValue(
-            \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction::XML_NODE_MAX_INDEX_COUNT
+            self::XML_NODE_MAX_INDEX_COUNT
         );
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
             throw new \Magento\Framework\Model\Exception(

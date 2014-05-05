@@ -270,7 +270,7 @@ jQuery(function ($) {
     matrix.find('[data-action=upload-image] [name=image]').each(function() {
         $(this).fileupload({
             dataType: 'json',
-            dropZone: $(this),
+            dropZone: $(this).closest('[data-role=row]'),
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             done: function (event, data) {
                 if (!data.result) {

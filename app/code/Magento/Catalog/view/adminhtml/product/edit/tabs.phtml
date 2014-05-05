@@ -72,6 +72,7 @@
                     </span>
                 </a>
                 <div id="<?php echo $this->getTabId($_tab) ?>_content" class="no-display"
+                     data-tab-panel="<?=$_tab->getTabId() ?>"
                      <?php echo $this->getUiId('tab', 'content', $_tab->getId()) ?>>
                     <?php echo $this->getTabContent($_tab); ?>
                     <?php foreach ($tabs as $childTab): ?>

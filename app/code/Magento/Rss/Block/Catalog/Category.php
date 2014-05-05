@@ -223,8 +223,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
             $product->getDescription();
 
         if ($product->getAllowedPriceInRss()) {
-            $description .= $this->getPriceHtml($product, true);
-            $description .= 'NEWPRICETEST: ' . $this->renderPriceHtml($product, true) . ' ENDNEWPRICETEST';
+            $description .= $this->renderPriceHtml($product, true);
         }
 
         $description .= '</td></tr></table>';

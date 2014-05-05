@@ -24,11 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <block class="Magento\Rss\Block\Wishlist" name="rss.wishlist" output="1" cacheable="false">
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">msrp_rss</argument>
-            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
-            <argument name="template" xsi:type="string">Magento_Wishlist::render/item/price_msrp_rss.phtml</argument>
-        </action>
-    </block>
+    <block class="Magento\Rss\Block\Wishlist" name="rss.wishlist" output="1" cacheable="false" />
 </layout>

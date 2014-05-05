@@ -27,10 +27,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
 
 /**
  * Adminhtml block for fieldset of bundle product
- *
- * @category   Magento
- * @package    Magento_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bundle extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
 {

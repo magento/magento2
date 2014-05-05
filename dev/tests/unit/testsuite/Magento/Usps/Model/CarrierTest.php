@@ -165,8 +165,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'))
         );
         // for setRequest
-        $request_params = include __DIR__ . '/_files/rates_request_data.php';
-        $request = $this->_helper->getObject('Magento\Sales\Model\Quote\Address\RateRequest', $request_params);
+        $request = $this->_helper->getObject(
+            'Magento\Sales\Model\Quote\Address\RateRequest',
+            require __DIR__ . '/_files/rates_request_data.php'
+        );
 
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
     }
@@ -180,8 +182,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_return_shipment.xml'))
         );
-        $request_params = include __DIR__ . '/_files/return_shipment_request_data.php';
-        $request = $this->_helper->getObject('Magento\Shipping\Model\Shipment\ReturnShipment', $request_params);
+        $request = $this->_helper->getObject(
+            'Magento\Shipping\Model\Shipment\ReturnShipment',
+            require __DIR__ . '/_files/return_shipment_request_data.php'
+        );
         $this->assertNotEmpty($this->_model->returnOfShipment($request)->getInfo()[0]['tracking_number']);
     }
 

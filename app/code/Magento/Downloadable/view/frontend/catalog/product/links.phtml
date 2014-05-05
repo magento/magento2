@@ -29,7 +29,12 @@
     <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?>">
         <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
-        <div class="control" id="downloadable-links-list" data-container-for="downloadable-links">
+        <div class="control" id="downloadable-links-list"
+             data-mage-init='{"downloadable":{
+                 "linkElement":"input:checkbox",
+                 "config":<?php echo $this->getJsonConfig() ?>}
+             }'
+             data-container-for="downloadable-links">
             <?php foreach ($_links as $_link): ?>
                 <div class="field choice" data-role="link">
                     <?php if ($_linksPurchasedSeparately): ?>
@@ -43,7 +48,7 @@
                         <span><?php echo $this->escapeHtml($_link->getTitle()); ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             <a class="sample link"
-                               href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
+                               href="<?php echo $this->getLinkSampleUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
                                 <?php echo __('sample') ?>
                             </a>
                         <?php endif; ?>
@@ -58,16 +63,4 @@
             <span id="links-advice-container"></span>
         <?php endif;?>
     </div>
-    <script type="text/javascript">
-        //<![CDATA[
-        (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Downloadable::downloadable.js') ?>", function () {
-                $('#downloadable-links-list').downloadable({
-                    linkElement: 'input:checkbox',
-                    config: <?php echo $this->getJsonConfig() ?>
-                });
-            });
-        })(jQuery);
-        //]]>
-    </script>
 <?php endif; ?>

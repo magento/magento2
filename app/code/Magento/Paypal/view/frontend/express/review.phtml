@@ -104,16 +104,9 @@ $shippingAddress = $this->getShippingAddress();
     </form>
 </div>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('Magento_Paypal::order-review.js') ?>",
-        function () {
-            jQuery('#order-review-form').validation().orderReview({
-                shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
-                updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',
-                isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
-            });
-        });
+    jQuery('#order-review-form').mage('validation', {}).mage('orderReview', {
+        shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
+        updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',
+        isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
+    });
 </script>

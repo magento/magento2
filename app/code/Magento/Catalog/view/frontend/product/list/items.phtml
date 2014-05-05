@@ -175,7 +175,11 @@ switch($type = $this->getType()) {
 
 <?php if ($exist):?>
     <?php if($type == 'related' || $type == 'upsell'): ?>
-        <div class="block <?php echo $class; ?>" data-limit="<?php echo $limit; ?>" data-shuffle="<?php echo $shuffle; ?>">
+        <?php if($type == 'related'): ?>
+            <div class="block <?php echo $class; ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?php echo $limit; ?>" data-shuffle="<?php echo $shuffle; ?>">
+        <?php else: ?>
+            <div class="block <?php echo $class; ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?php echo $limit; ?>" data-shuffle="<?php echo $shuffle; ?>">
+        <?php endif; ?>
     <?php else: ?>
         <div class="block <?php echo $class; ?>">
     <?php endif; ?>
@@ -282,21 +286,5 @@ switch($type = $this->getType()) {
             </ol>
         </div>
     </div>
-    <?php if($type == 'related'): ?>
-    <script type="text/javascript">
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/related-products.js'); ?>", function() {
-            jQuery(".block.related").relatedProducts({
-                relatedCheckbox: '.related.checkbox'
-            });
-        });
-    </script>
-    <?php endif; ?>
-    <?php if($type == 'upsell'): ?>
-        <script type="text/javascript">
-            head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/upsell-products.js'); ?>", function() {
-                jQuery(".block.upsell").upsellProducts();
-            });
-        </script>
-    <?php endif; ?>
 </div>
 <?php endif;?>

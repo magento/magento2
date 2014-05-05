@@ -24,7 +24,7 @@
 ?>
 <script type="text/javascript">
 (function($) {
-    $('#product_info_tabs_product-details_content').on('stockbeforedisable', function(e) {
+    $('[data-tab-panel=product-details]').on('stockbeforedisable', function(e) {
         if ($('[data-panel=product-variations]').is('.opened')) {
             return false;
         }

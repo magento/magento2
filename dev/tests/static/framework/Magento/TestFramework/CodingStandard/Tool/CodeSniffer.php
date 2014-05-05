@@ -131,6 +131,7 @@ class CodeSniffer implements ToolInterface
         ob_start();
         $result = $this->wrapper->process();
         ob_end_clean();
+
         return $result;
     }
 

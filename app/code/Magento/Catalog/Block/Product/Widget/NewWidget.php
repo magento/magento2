@@ -63,21 +63,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     protected $_pager;
 
     /**
-     * Initialize block's cache and template settings
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->addPriceBlockType(
-            'bundle',
-            'Magento\Bundle\Block\Catalog\Product\Price',
-            'bundle/catalog/product/price.phtml'
-        );
-    }
-
-    /**
      * Product collection initialize process
      *
      * @return \Magento\Catalog\Model\Resource\Product\Collection|Object|\Magento\Framework\Data\Collection
@@ -249,7 +234,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 $arguments
             );

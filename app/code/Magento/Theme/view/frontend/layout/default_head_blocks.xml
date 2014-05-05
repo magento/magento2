@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Template" name="theme_page_head_components" template="Magento_Theme::js/components.phtml"/>
+    </referenceBlock>
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-calendar-css">
             <arguments>
@@ -48,9 +51,9 @@
                 <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="head-load-min-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
             <arguments>
-                <argument name="file" xsi:type="string">headjs/head.load.min.js</argument>
+                <argument name="file" xsi:type="string">headjs/head.min.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-magento-js">
@@ -66,6 +69,11 @@
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-translate-js">
             <arguments>
                 <argument name="file" xsi:type="string">mage/translate.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-cookie-js">
+            <arguments>
+                <argument name="file" xsi:type="string">jquery/jquery.cookie.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-cookies-js">

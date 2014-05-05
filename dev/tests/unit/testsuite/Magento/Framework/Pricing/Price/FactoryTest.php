@@ -18,6 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
+ * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -56,41 +59,40 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $quantity = 2.2;
         $className = 'Magento\Framework\Pricing\Price\PriceInterface';
         $priceMock = $this->getMock($className);
-        $salableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
         $arguments = [];
 
-        $argumentsResult = array_merge($arguments, ['salableItem' => $salableItem, 'quantity' => $quantity]);
+        $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
             ->will($this->returnValue($priceMock));
 
-        $this->assertEquals($priceMock, $this->model->create($salableItem, $className, $quantity, $arguments));
+        $this->assertEquals($priceMock, $this->model->create($saleableItem, $className, $quantity, $arguments));
     }
 
+    /**
+     * @codingStandardsIgnoreStart
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Magento\Framework\Pricing\PriceInfo\Base doesn't implement \Magento\Framework\Pricing\Price\PriceInterface
+     * @codingStandardsIgnoreEnd
+     */
     public function testCreateWithException()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            sprintf(
-                'Magento\Framework\Pricing\PriceInfo\Base doesn\'t implement %s',
-                '\Magento\Framework\Pricing\Price\PriceInterface'
-            )
-        );
         $quantity = 2.2;
         $className = 'Magento\Framework\Pricing\PriceInfo\Base';
         $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $salableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
         $arguments = [];
 
-        $argumentsResult = array_merge($arguments, ['salableItem' => $salableItem, 'quantity' => $quantity]);
+        $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
             ->will($this->returnValue($priceMock));
 
-        $this->model->create($salableItem, $className, $quantity, $arguments);
+        $this->model->create($saleableItem, $className, $quantity, $arguments);
     }
 }

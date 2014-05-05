@@ -21,107 +21,111 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Framework\View\Layout\File\Source;
 
-use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\View\Layout\File\Factory;
-
+/**
+ * Class for testing Magento\View\Layout\File\Source\Base
+ */
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Base
+     * @var \Magento\Framework\View\Layout\File\Source\Base|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $model;
+    protected $class;
 
     /**
-     * @var Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $directory;
+    protected $modulesDirectoryMock;
 
     /**
-     * @var Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\File\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $fileFactory;
+    protected $fileFactoryMock;
 
-    protected function setUp()
+    /**
+     * Set up mocks
+     */
+    public function setUp()
     {
-        $this->directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
-        $filesystem = $this->getMock(
+        $filesystemMock = $this->getMock(
             'Magento\Framework\App\Filesystem',
-            array('getDirectoryRead', '__wakeup'),
-            array(),
+            ['getDirectoryRead', 'getAbsolutePath'],
+            [],
             '',
             false
         );
-        $filesystem->expects(
-            $this->once()
-        )->method(
-            'getDirectoryRead'
-        )->with(
-            \Magento\Framework\App\Filesystem::MODULES_DIR
-        )->will(
-            $this->returnValue($this->directory)
+        $this->fileFactoryMock = $this->getMock('Magento\Framework\View\Layout\File\Factory', [], [], '', false);
+        $this->modulesDirectoryMock = $this->getMock(
+            'Magento\Framework\Filesystem\Directory\ReadInterface', 
+            [], 
+            [], 
+            '', 
+            false
         );
 
-        $this->fileFactory = $this->getMock('Magento\Framework\View\Layout\File\Factory', array(), array(), '', false);
-        $this->model = new Base($filesystem, $this->fileFactory);
+        $filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->modulesDirectoryMock));
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->class = $objectManager->getObject(
+            'Magento\Framework\View\Layout\File\Source\Base',
+            [
+                'filesystem' => $filesystemMock,
+                'fileFactory' => $this->fileFactoryMock
+            ]
+        );
     }
 
     /**
-     * @param array $files
-     * @param string $filePath
-     *
-     * @dataProvider dataProvider
+     * Test for method getFiles
      */
-    public function testGetFiles($files, $filePath)
+    public function testGetFiles()
     {
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
+        $fileName = 'somefile.xml';
+        $fileRightPath = '/namespace/module/view/base/layout/' . $fileName;
+        $themeFileRightPath = '/namespace/module/view/area_code/layout/' . $fileName;
+        $fileWrongPath = '/namespace/module/view/' . $fileName;
+        $themeFileWrongPath = '/namespace/module/view/area_code/' . $fileName;
+        $areaCode = 'area_code';
+        $sharedFiles = [
+            $fileRightPath,
+            $fileWrongPath,
+        ];
+        $themeFiles = [
+            $themeFileRightPath,
+            $themeFileWrongPath,
+        ];
+        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
 
-        $handlePath = 'code/Module/%s/view/area/layout/%s.xml';
-        $returnKeys = array();
-        foreach ($files as $file) {
-            $returnKeys[] = sprintf($handlePath, $file['module'], $file['handle']);
-        }
+        $this->modulesDirectoryMock->expects($this->any())
+            ->method('search')
+            ->will($this->returnValueMap(
+                    [
+                        ["*/*/view/base/layout/*.xml", null, $sharedFiles],
+                        ["*/*/view/$areaCode/layout/*.xml", null, $themeFiles],
+                    ]
+                ));
+        $this->modulesDirectoryMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnArgument(0));
+        $themeMock->expects($this->once())
+            ->method('getArea')
+            ->will($this->returnValue($areaCode));
 
-        $this->directory->expects($this->once())->method('search')->will($this->returnValue($returnKeys));
-        $this->directory->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $this->fileFactoryMock->expects($this->at(0))
+            ->method('create')
+            ->with($this->equalTo($fileRightPath), $this->equalTo('namespace_module'))
+            ->will($this->returnValue($fileRightPath));
+        $this->fileFactoryMock->expects($this->at(1))
+            ->method('create')
+            ->with($this->equalTo($themeFileRightPath), $this->equalTo('namespace_module'))
+            ->will($this->returnValue($themeFileRightPath));
 
-        $checkResult = array();
-        foreach ($files as $key => $file) {
-            $moduleName = 'Module_' . $file['module'];
-            $checkResult[$key] = new \Magento\Framework\View\Layout\File($file['handle'] . '.xml', $moduleName, $theme);
-
-            $this->fileFactory->expects(
-                $this->at($key)
-            )->method(
-                'create'
-            )->with(
-                sprintf($handlePath, $file['module'], $file['handle']),
-                $moduleName
-            )->will(
-                $this->returnValue($checkResult[$key])
-            );
-        }
-
-        $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProvider()
-    {
-        return array(
-            array(
-                array(
-                    array('handle' => '1', 'module' => 'One'),
-                    array('handle' => '2', 'module' => 'One'),
-                    array('handle' => '3', 'module' => 'Two')
-                ),
-                '*'
-            ),
-            array(array(array('handle' => 'preset/4', 'module' => 'Four')), 'preset/4')
-        );
+        $expected = [$fileRightPath, $themeFileRightPath];
+        $result = $this->class->getFiles($themeMock);
+        $this->assertEquals($expected, $result);
     }
 }

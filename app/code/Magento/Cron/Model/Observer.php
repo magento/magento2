@@ -321,11 +321,9 @@ class Observer
                     $jobConfig['config_path'],
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
-            } elseif (empty($cronExpr) && isset($jobConfig['schedule'])) {
+            } elseif (isset($jobConfig['schedule'])) {
                 $cronExpr = $jobConfig['schedule'];
-            }
-
-            if (!$cronExpr) {
+            } else {
                 continue;
             }
 

@@ -173,11 +173,9 @@ class Base implements AmountInterface
     {
         $this->baseAmount = $this->amount;
         $this->totalAdjustmentAmount = 0.;
-        if ($this->adjustmentAmounts) {
-            foreach ($this->adjustmentAmounts as $amount) {
-                $this->baseAmount -= $amount;
-                $this->totalAdjustmentAmount += $amount;
-            }
+        foreach ($this->adjustmentAmounts as $amount) {
+            $this->baseAmount -= $amount;
+            $this->totalAdjustmentAmount += $amount;
         }
     }
 }

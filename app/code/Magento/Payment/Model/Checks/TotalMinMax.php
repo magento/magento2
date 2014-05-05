@@ -26,18 +26,17 @@
 namespace Magento\Payment\Model\Checks;
 
 use Magento\Sales\Model\Quote;
-use Magento\Payment\Model\Method\AbstractMethod;
 
 class TotalMinMax implements SpecificationInterface
 {
     /**
      * Check whether payment method is applicable to quote
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $paymentMethod
+     * @param PaymentMethodChecksInterface $paymentMethod
      * @param \Magento\Sales\Model\Quote $quote
      * @return bool
      */
-    public function isApplicable(AbstractMethod $paymentMethod, Quote $quote)
+    public function isApplicable(PaymentMethodChecksInterface $paymentMethod, Quote $quote)
     {
         $total = $quote->getBaseGrandTotal();
         $minTotal = $paymentMethod->getConfigData('min_order_total');

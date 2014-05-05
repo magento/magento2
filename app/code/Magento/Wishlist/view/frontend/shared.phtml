@@ -53,7 +53,14 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                     <?php echo $this->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
-                            <?php echo $this->getPriceHtml($product) ?>
+                            <?php
+                                echo $this->getProductPriceHtml(
+                                    $product,
+                                    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                    ['item' => $item]
+                                );
+                            ?>
                             <?php echo $this->getDetailsHtml($item) ?>
                         </td>
                         <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>

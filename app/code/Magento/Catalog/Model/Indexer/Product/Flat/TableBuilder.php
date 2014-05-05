@@ -258,7 +258,7 @@ class TableBuilder
 
             $columnsChunks = array_chunk(
                 $tableColumns,
-                \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction::ATTRIBUTES_CHUNK_SIZE,
+                Action\Indexer::ATTRIBUTES_CHUNK_SIZE,
                 true
             );
             foreach ($columnsChunks as $columnsList) {

@@ -96,6 +96,9 @@ class IpnTest extends \PHPUnit_Framework_TestCase
 
         $testMethod = new \ReflectionMethod('Magento\Paypal\Model\Ipn', '_registerPaymentAuthorization');
         $testMethod->setAccessible(true);
+        $this->markTestIncomplete(
+            'MAGETWO-23755: "Fatal error: Using $this when not in object context" is observed under PHPUnit4'
+        );
         $testMethod->invoke($this->_ipn);
     }
 

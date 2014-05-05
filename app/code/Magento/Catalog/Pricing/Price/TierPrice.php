@@ -25,21 +25,23 @@
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 
 /**
  * Tire prices model
  */
-class TierPrice extends RegularPrice implements TierPriceInterface
+class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
     /**
-     * @var string
+     * Price type tier
      */
-    protected $priceType = self::PRICE_TYPE_TIER;
+    const PRICE_CODE = 'tier_price';
 
     /**
      * @var Session
@@ -73,23 +75,23 @@ class TierPrice extends RegularPrice implements TierPriceInterface
     protected $filterByBasePrice = true;
 
     /**
-     * @param SaleableInterface $salableItem
+     * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param Session $customerSession
      */
     public function __construct(
-        SaleableInterface $salableItem,
+        Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         Session $customerSession
     ) {
-        parent::__construct($salableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator);
         $this->customerSession = $customerSession;
-        if ($salableItem->hasCustomerGroupId()) {
-            $this->customerGroup = (int)$salableItem->getCustomerGroupId();
+        if ($saleableItem->hasCustomerGroupId()) {
+            $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
-            $this->customerGroup = (int)$this->customerSession->getCustomerGroupId();
+            $this->customerGroup = (int) $this->customerSession->getCustomerGroupId();
         }
     }
 
@@ -104,7 +106,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
             $prices = $this->getStoredTierPrices();
             $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
             $this->value = $prevPrice = $tierPrice = false;
-            $priceGroup = CustomerGroupServiceInterface::CUST_GROUP_ALL;
+            $priceGroup = Group::CUST_GROUP_ALL;
 
             foreach ($prices as $price) {
                 if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)) {
@@ -172,9 +174,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         $qtyCache = [];
         foreach ($priceList as $priceKey => $price) {
             /* filter price by customer group */
-            if ($price['cust_group'] !== $this->customerGroup
-                && $price['cust_group'] !== CustomerGroupServiceInterface::CUST_GROUP_ALL
-            ) {
+            if ($price['cust_group'] !== $this->customerGroup && $price['cust_group'] !== Group::CUST_GROUP_ALL) {
                 unset($priceList[$priceKey]);
                 continue;
             }
@@ -205,7 +205,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
     protected function getBasePrice()
     {
         /** @var float $productPrice is a minimal available price */
-        return $this->priceInfo->getPrice(BasePrice::PRICE_TYPE_BASE_PRICE)->getValue();
+        return $this->priceInfo->getPrice(BasePrice::PRICE_CODE)->getValue();
     }
 
     /**
@@ -214,7 +214,10 @@ class TierPrice extends RegularPrice implements TierPriceInterface
      */
     public function getSavePercent(AmountInterface $amount)
     {
-        return ceil(100 - ((100 / $this->getBasePrice()) * $amount->getBaseAmount()));
+        return ceil(
+            100 - ((100 / $this->priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getBaseAmount())
+                * $amount->getBaseAmount())
+        );
     }
 
     /**
@@ -223,7 +226,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
      */
     protected function applyAdjustment($price)
     {
-        return $this->calculator->getAmount($price, $this->salableItem);
+        return $this->calculator->getAmount($price, $this->product);
     }
 
     /**
@@ -239,7 +242,7 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
         if ($currentTierPrice['cust_group'] !== $this->customerGroup
-            && $currentTierPrice['cust_group'] !== CustomerGroupServiceInterface::CUST_GROUP_ALL
+            && $currentTierPrice['cust_group'] !== Group::CUST_GROUP_ALL
         ) {
             return false;
         }
@@ -253,8 +256,8 @@ class TierPrice extends RegularPrice implements TierPriceInterface
         }
         // and found tier qty is same as previous tier qty, but current tier group isn't ALL_GROUPS
         if ($currentTierPrice['price_qty'] == $prevQty
-            && $prevPriceGroup !== CustomerGroupServiceInterface::CUST_GROUP_ALL
-            && $currentTierPrice['cust_group'] === CustomerGroupServiceInterface::CUST_GROUP_ALL
+            && $prevPriceGroup !== Group::CUST_GROUP_ALL
+            && $currentTierPrice['cust_group'] === Group::CUST_GROUP_ALL
         ) {
             return false;
         }
@@ -269,13 +272,13 @@ class TierPrice extends RegularPrice implements TierPriceInterface
     protected function getStoredTierPrices()
     {
         if (null === $this->rawPriceList) {
-            $this->rawPriceList = $this->salableItem->getData(self::PRICE_TYPE_TIER);
+            $this->rawPriceList = $this->product->getData(self::PRICE_CODE);
             if (null === $this->rawPriceList || !is_array($this->rawPriceList)) {
                 /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-                $attribute = $this->salableItem->getResource()->getAttribute(self::PRICE_TYPE_TIER);
+                $attribute = $this->product->getResource()->getAttribute(self::PRICE_CODE);
                 if ($attribute) {
-                    $attribute->getBackend()->afterLoad($this->salableItem);
-                    $this->rawPriceList = $this->salableItem->getData(self::PRICE_TYPE_TIER);
+                    $attribute->getBackend()->afterLoad($this->product);
+                    $this->rawPriceList = $this->product->getData(self::PRICE_CODE);
                 }
             }
             if (null === $this->rawPriceList || !is_array($this->rawPriceList)) {

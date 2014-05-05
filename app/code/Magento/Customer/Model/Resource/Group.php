@@ -111,7 +111,8 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $group->getId()
         )->load();
         foreach ($customerCollection as $customer) {
-            $customer->load();
+            /** @var $customer \Magento\Customer\Model\Customer */
+            $customer->load($customer->getId());
             $defaultGroupId = $this->_customerData->getDefaultCustomerGroupId($customer->getStoreId());
             $customer->setGroupId($defaultGroupId);
             $customer->save();

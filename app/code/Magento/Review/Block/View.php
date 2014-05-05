@@ -66,23 +66,20 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_voteFactory = $voteFactory;
         $this->_reviewFactory = $reviewFactory;
 
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

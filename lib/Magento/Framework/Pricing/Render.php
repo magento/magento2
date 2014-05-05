@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -113,14 +115,7 @@ class Render extends AbstractBlock
 
         // obtain concrete Price Render
         $priceRender = $rendererPool->createPriceRender($priceCode, $saleableItem, $useArguments);
-        if ($priceRender) {
-            //@TODO PriceBoxRenderInterface does not contain toHtml() method
-            $result = $priceRender->toHtml();
-        } else {
-            $result = '';
-        }
-        // return rendered output
-        return $result;
+        return $priceRender->toHtml();
     }
 
     /**
@@ -149,12 +144,6 @@ class Render extends AbstractBlock
 
         // obtain concrete Amount Render
         $amountRender = $rendererPool->createAmountRender($amount, $saleableItem, $price, $useArguments);
-        if ($amountRender) {
-            $result = $amountRender->toHtml();
-        } else {
-            $result = '';
-        }
-        // return rendered output
-        return $result;
+        return $amountRender->toHtml();
     }
 }

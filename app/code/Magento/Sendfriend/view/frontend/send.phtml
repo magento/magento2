@@ -54,7 +54,19 @@
     </fieldset>
 </script>
 
-<form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form" class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
+<form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
+      data-mage-init='{
+        "rowBuilder":{
+            "rowTemplate":"#add-recipient-tmpl",
+            "rowContainer":"#recipients-options",
+            "rowParentElem":"<div></div>",
+            "btnRemoveSelector":".action.delete",
+            "maxRows":"<?php echo $this->getMaxRecipients() ?>",
+            "maxRowsMsg":"#max-recipient-message",
+            "addRowBtn":"#add-recipient-button",
+            "additionalRowClass":"additional"},
+        "validation":{}}'
+      class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
     <fieldset class="fieldset sender" id="sender_options">
         <?php echo $this->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Sender:') ?></span></legend>
@@ -117,24 +129,6 @@
 </form>
 <script type="text/javascript">
     //<![CDATA[
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('Magento_Theme::js/row-builder.js')?>", function() {
-                $('#product-sendtofriend-form').rowBuilder({
-                    rowTemplate: '#add-recipient-tmpl',
-                    rowContainer: '#recipients-options',
-                    rowParentElem: '<div></div>',
-                    btnRemoveSelector: '.action.delete',
-                    maxRows: '<?php echo $this->getMaxRecipients() ?>',
-                    maxRowsMsg: '#max-recipient-message',
-                    addRowBtn: '#add-recipient-button',
-                    additionalRowClass: 'additional'
-                }).validation();
-                $('a[role="back"]').on('click', function() { history.back(); return false; });
-            })
-    })(jQuery);
+        jQuery('a[role="back"]').on('click', function() { history.back(); return false; });
     //]]>
 </script>

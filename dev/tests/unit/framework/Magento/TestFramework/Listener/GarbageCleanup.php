@@ -64,6 +64,15 @@ class GarbageCleanup implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
     }

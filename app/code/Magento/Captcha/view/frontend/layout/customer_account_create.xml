@@ -37,4 +37,7 @@
             </action>
         </block>
     </referenceContainer>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
+    </referenceBlock>
 </layout>

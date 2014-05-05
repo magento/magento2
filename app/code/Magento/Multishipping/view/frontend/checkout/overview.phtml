@@ -24,7 +24,7 @@
  */
 ?>
 <?php /** @var $this \Magento\Multishipping\Block\Checkout\Overview */ ?>
-<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="review-order-form" class="form multicheckout overview">
+<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}}' class="form multicheckout overview">
     <div class="block billing">
         <div class="title"><strong><?php echo __('Billing Information') ?></strong></div>
         <div class="box address">
@@ -178,8 +178,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/overview.js')?>", function() {
-        jQuery('#review-order-form').orderOverview();
-    });
-</script>

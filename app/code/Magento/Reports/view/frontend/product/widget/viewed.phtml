@@ -30,7 +30,7 @@ $type = $this->getType() . '-' . $mode;
 $class = 'widget viewed' . ' ' . $mode;
 $title = __('Recently Viewed');
 ?>
-<div class="block <?php echo $class; ?>" id="recently_viewed_container" data-count="<?php echo $this->getCount(); ?>" style="display: none;">
+<div class="block <?php echo $class; ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?php echo $this->getCount(); ?>" style="display: none;">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>
@@ -39,8 +39,3 @@ $title = __('Recently Viewed');
         </ol>
     </div>
 </div>
-<script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_Reports::js/recently-viewed.js'); ?>", function() {
-        jQuery("#recently_viewed_container").recentlyViewedProducts();
-    });
-</script>

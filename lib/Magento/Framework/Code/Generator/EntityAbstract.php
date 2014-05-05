@@ -288,13 +288,13 @@ abstract class EntityAbstract
             $filePath = stream_resolve_include_path(str_replace('_', '/', $controllerPath) . '.php');
             $isSourceClassValid = !empty($filePath);
         } else {
-            $isSourceClassValid = $autoloader::getFile($sourceClassName);
+            $isSourceClassValid = $autoloader->getFile($sourceClassName);
         }
 
         if (!$isSourceClassValid) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($autoloader::getFile($resultClassName)) {
+        } elseif ($autoloader->getFile($resultClassName)) {
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (!$this->_ioObject->makeGenerationDirectory()) {

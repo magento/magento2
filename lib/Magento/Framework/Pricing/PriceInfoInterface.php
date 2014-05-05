@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -38,30 +40,32 @@ interface PriceInfoInterface
     const PRODUCT_QUANTITY_DEFAULT = 1.;
 
     /**
+     * Returns array of prices
+     *
      * @return PriceInterface[]
      */
     public function getPrices();
 
     /**
+     * Returns price by code
+     *
      * @param string $priceCode
-     * @param float|null $quantity
      * @return PriceInterface
      */
-    public function getPrice($priceCode, $quantity = null);
+    public function getPrice($priceCode);
 
     /**
+     * Get all registered adjustments
+     *
      * @return AdjustmentInterface[]
      */
     public function getAdjustments();
 
     /**
+     * Get adjustment by code
+     *
      * @param string $adjustmentCode
      * @return AdjustmentInterface
      */
     public function getAdjustment($adjustmentCode);
-
-    /**
-     * @return PriceInterface[]
-     */
-    public function getPricesIncludedInBase();
 }

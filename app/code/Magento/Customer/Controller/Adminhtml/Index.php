@@ -175,11 +175,11 @@ class Index extends \Magento\Backend\App\Action
         $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
         if ($customerId) {
             $customer->load($customerId);
+            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }
 
         // TODO: Investigate if any piece of code still relies on this; remove if not.
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customer);
-        $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         return $customerId;
     }
 

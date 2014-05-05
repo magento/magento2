@@ -25,7 +25,12 @@
 
 /** @var $this \Magento\Wishlist\Block\Customer\Sharing */
 ?>
-<form class="form wishlist share" action="<?php echo $this->getSendUrl() ?>" id="form-validate" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>">
+<form class="form wishlist share"
+      action="<?php echo $this->getSendUrl() ?>"
+      id="form-validate"
+      method="post"
+      data-hasrequired="<?php echo __('* Required Fields') ?>"
+      data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
         <?php echo $this->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Sharing Information') ?></span></legend><br />
@@ -63,13 +68,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
-                $('#form-validate').validation();
-            })
-    })(jQuery);
-</script>

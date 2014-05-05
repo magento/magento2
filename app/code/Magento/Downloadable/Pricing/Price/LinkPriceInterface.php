@@ -24,9 +24,7 @@
 
 namespace Magento\Downloadable\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Downloadable\Model\Link;
-use Magento\Framework\Pricing\Adjustment\Calculator;
 
 /**
  * Class LinkPrice Model
@@ -34,11 +32,6 @@ use Magento\Framework\Pricing\Adjustment\Calculator;
  */
 interface LinkPriceInterface
 {
-    /**
-     * Default price type
-     */
-    const PRICE_TYPE = 'link_price';
-
     /**
      * @param Link $link
      * @return \Magento\Framework\Pricing\Amount\AmountInterface

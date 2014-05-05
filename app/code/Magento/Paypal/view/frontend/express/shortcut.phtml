@@ -53,17 +53,15 @@ if ($this->isOrPositionBefore()) {
     endif; ?>
     <script type="text/javascript">
         (function ($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>",
-                function () {
-                    $('.paypal-logo').paypalCheckout({
-                        confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
-                        confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
-                        isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
-                        paypalCheckoutSelector: '#pp-checkout-url',
-                        productAddToCartForm: '#product_addtocart_form'
-                    });
+            head.js("<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>", head.ready(function () {
+                $('.paypal-logo').paypalCheckout({
+                    confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
+                    confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
+                    isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
+                    paypalCheckoutSelector: '#pp-checkout-url',
+                    productAddToCartForm: '#product_addtocart_form'
                 });
+            }));
         })(jQuery);
     </script>
 </div>

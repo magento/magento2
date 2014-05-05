@@ -27,7 +27,6 @@
  */
 use Magento\Store\Model\StoreManager;
 
-
 require dirname(__DIR__) . '/app/bootstrap.php';
 umask(0);
 $params = array(StoreManager::PARAM_RUN_CODE => 'admin', \Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM => true);

@@ -24,33 +24,23 @@
 
 namespace Magento\Framework\Pricing\PriceInfo;
 
-use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\PriceInfoInterface;
-use Magento\Framework\Pricing\PriceComposite;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Adjustment\Collection;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\Price\Collection as PriceCollection;
 
 /**
+ * Class Base
  * Price info base model
+ * @package Magento\Framework\Pricing\PriceInfo
  */
 class Base implements PriceInfoInterface
 {
     /**
-     * @var SaleableInterface
+     * @var PriceCollection
      */
-    protected $saleableItem;
-
-    /**
-     * @var PriceComposite
-     */
-    protected $prices;
-
-    /**
-     * @var PriceInterface[]
-     */
-    protected $priceInstances;
+    protected $priceCollection;
 
     /**
      * @var Collection
@@ -58,85 +48,36 @@ class Base implements PriceInfoInterface
     protected $adjustmentCollection;
 
     /**
-     * @var float
-     */
-    protected $quantity;
-
-    /**
-     * @var AmountFactory
-     */
-    protected $amountFactory;
-
-    /**
-     * @param SaleableInterface $saleableItem
-     * @param PriceComposite $prices
+     * @param PriceCollection $prices
      * @param Collection $adjustmentCollection
-     * @param AmountFactory $amountFactory
-     * @param float $quantity
      */
     public function __construct(
-        SaleableInterface $saleableItem,
-        PriceComposite $prices,
-        Collection $adjustmentCollection,
-        AmountFactory $amountFactory,
-        $quantity = self::PRODUCT_QUANTITY_DEFAULT
+        PriceCollection $prices,
+        Collection $adjustmentCollection
     ) {
-        $this->saleableItem = $saleableItem;
-        $this->prices = $prices;
         $this->adjustmentCollection = $adjustmentCollection;
-        $this->amountFactory = $amountFactory;
-        $this->quantity = $quantity;
+        $this->priceCollection = $prices;
     }
 
     /**
-     * @return PriceInterface[]
+     * Returns array of prices
+     *
+     * @return PriceCollection
      */
     public function getPrices()
     {
-        // check if all prices initialized
-        $this->initPrices();
-        return $this->priceInstances;
+        return $this->priceCollection;
     }
 
     /**
-     * Init price types
+     * Returns price by code
      *
-     * @return $this
-     */
-    protected function initPrices()
-    {
-        $prices = $this->prices->getPriceCodes();
-        foreach ($prices as $code) {
-            if (!isset($this->priceInstances[$code])) {
-                $this->priceInstances[$code] = $this->prices->createPriceObject(
-                    $this->saleableItem,
-                    $code,
-                    $this->quantity
-                );
-            }
-        }
-        return $this;
-    }
-
-    /**
      * @param string $priceCode
-     * @param float|null $quantity
      * @return PriceInterface
      */
-    public function getPrice($priceCode, $quantity = null)
+    public function getPrice($priceCode)
     {
-        if (!isset($this->priceInstances[$priceCode]) && $quantity === null) {
-            $this->priceInstances[$priceCode] = $this->prices->createPriceObject(
-                $this->saleableItem,
-                $priceCode,
-                $this->quantity
-            );
-            return $this->priceInstances[$priceCode];
-        } elseif (isset($this->priceInstances[$priceCode]) && $quantity === null) {
-            return $this->priceInstances[$priceCode];
-        } else {
-            return $this->prices->createPriceObject($this->saleableItem, $priceCode, $quantity);
-        }
+        return $this->priceCollection->get($priceCode);
     }
 
     /**
@@ -159,24 +100,5 @@ class Base implements PriceInfoInterface
     public function getAdjustment($adjustmentCode)
     {
         return $this->adjustmentCollection->getItemByCode($adjustmentCode);
-    }
-
-    /**
-     * Returns prices included in base price
-     *
-     * @return array
-     */
-    public function getPricesIncludedInBase()
-    {
-        $prices = [];
-        foreach ($this->prices->getMetadata() as $code => $price) {
-            if (isset($price['include_in_base_price']) && $price['include_in_base_price']) {
-                $priceModel = $this->getPrice($code, $this->quantity);
-                if ($priceModel->getValue() !== false) {
-                    $prices[] = $priceModel;
-                }
-            }
-        }
-        return $prices;
     }
 }

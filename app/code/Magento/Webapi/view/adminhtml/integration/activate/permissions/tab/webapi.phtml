@@ -40,9 +40,11 @@
 <?php if (!$this->isTreeEmpty()): ?>
     <script type="text/javascript">
     jQuery(function($) {
-        head.js('<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js')?>',
+        head.js(
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js')?>',
             '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js')?>',
-            '<?php echo $this->getViewFileUrl('Magento_User::js/roles-tree.js')?>', function() {
+            '<?php echo $this->getViewFileUrl('Magento_User::js/roles-tree.js')?>',
+            head.ready(function () {
                 $.widget('mage.rolesTree', $.mage.rolesTree, {
                     _checkNode: function(event) {},
                     _checkNodes: function() {
@@ -55,7 +57,7 @@
                     'treeInitData': <?php echo $this->getResourcesTreeJson() ?>,
                     'treeInitSelectedData': <?php echo $this->getSelectedResourcesJson() ?>
                 });
-            });
+            }));
     });
     </script>
 <?php endif ?>

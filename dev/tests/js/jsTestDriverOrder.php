@@ -32,7 +32,7 @@ return array(
     '/pub/lib/jquery/jquery-1.8.2.js',
     '/pub/lib/jquery/jquery-ui-1.9.2.js',
     '/pub/lib/jquery/jquery.cookie.js',
-    '/pub/lib/headjs/head.load.min.js',
+    '/pub/lib/headjs/head.min.js',
     '/pub/lib/mage/mage.js',
     '/pub/lib/mage/decorate.js',
     '/pub/lib/jquery/jquery.validate.js',

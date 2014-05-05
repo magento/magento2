@@ -81,10 +81,10 @@
         '<?php echo $this->getViewFileUrl('Magento_Bundle::product/validation-rules.js'); ?>');
 
     jQuery(function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::js/bundle-product.js') ?>", function () {
+        head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::js/bundle-product.js') ?>", head.ready(function () {
             $('#bundle_product_container').mage('bundleProduct');
             $('#product_bundle_container .collapse').collapse('hide');
-        });
+        }));
     });
 </script>
 

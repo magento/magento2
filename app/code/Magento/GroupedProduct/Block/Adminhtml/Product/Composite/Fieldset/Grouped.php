@@ -64,7 +64,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param CustomerAccountService $customerAccountService
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -72,8 +71,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
         \Magento\Catalog\Helper\Product\Price $priceHelper,
         \Magento\Core\Helper\Data $coreHelper,
         CustomerAccountService $customerAccountService,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_customerAccountService = $customerAccountService;
         $this->_coreHelper = $coreHelper;
@@ -81,8 +79,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
         parent::__construct(
             $context,
             $arrayUtils,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

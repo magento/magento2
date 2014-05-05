@@ -32,11 +32,6 @@ namespace Magento\Catalog\Pricing\Price;
 interface SpecialPriceInterface
 {
     /**
-     * Price type special
-     */
-    const PRICE_TYPE_SPECIAL = 'special_price';
-
-    /**
      * Returns special price
      *
      * @return float

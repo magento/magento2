@@ -145,41 +145,33 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
     </script>
     <script type="text/javascript">
         (function($) {
-            head.js("<?php echo $this->getViewFileUrl('mage/zoom.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/gallery.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/gallery-fullscreen.js')?>",
-                function() {
-                    $('[data-role=media-gallery]')
-                        .gallery({
-                            sizes: {
-                                small: {
-                                    width: <?php echo $thumbWidth ?>,
-                                    height: <?php echo $thumbHeight ?>
-                                },
-                                medium: {
-                                    width: <?php echo $_resizedWidth ?>,
-                                    height: <?php echo $_resizedHeight ?>
-                                }
-                            },
-                            controls: {
-                                notice: {
-                                    text: '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>'
-                                }
-                            }
-                        })
-                        .zoom({
-                            controls: {
-                                display: {
-                                    left: 20,
-                                    top: 65
-                                },
-                                notice: {
-                                    text: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>'
-                                }
-                            }
-                        })
-                        .galleryFullScreen();
-            });
+            $('[data-role=media-gallery]').mage('gallery', {
+                'sizes': {
+                    'small': {
+                        'width': <?php echo $thumbWidth ?>,
+                        'height': <?php echo $thumbHeight ?>
+                    },
+                    'medium': {
+                        'width': <?php echo $_resizedWidth ?>,
+                        'height': <?php echo $_resizedHeight ?>
+                    }
+                },
+                'controls': {
+                    'notice': {
+                        'text': '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>'
+                    }
+                }
+            }).mage('zoom', {
+                'controls': {
+                    'display': {
+                        'left': 20,
+                        'top': 65
+                    },
+                    'notice': {
+                        'text': '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>'
+                    }
+                }
+            }).mage('galleryFullScreen', {});
         })(jQuery);
     </script>
 <?php endif; ?>

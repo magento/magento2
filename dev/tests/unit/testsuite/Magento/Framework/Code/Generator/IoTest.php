@@ -82,7 +82,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_autoLoaderMock->staticExpects(
+        $this->_autoLoaderMock->expects(
             $this->any()
         )->method(
             'getFilePath'

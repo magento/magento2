@@ -84,11 +84,14 @@ if (empty($mediaDirectory)) {
 }
 
 $entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
-$entryPoint->run('Magento\Core\App\Media', array(
-    'request' => $request,
-    'workingDirectory' => __DIR__,
-    'mediaDirectory' => $mediaDirectory,
-    'configCacheFile' => $configCacheFile,
-    'isAllowed' => $isAllowed,
-    'relativeFileName' => $relativeFilename,
-));
+$entryPoint->run(
+    'Magento\Core\App\Media',
+    array(
+        'request' => $request,
+        'workingDirectory' => __DIR__,
+        'mediaDirectory' => $mediaDirectory,
+        'configCacheFile' => $configCacheFile,
+        'isAllowed' => $isAllowed,
+        'relativeFileName' => $relativeFilename,
+    )
+);

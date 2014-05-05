@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="persistent_customer_login_head_components" template="Magento_Persistent::js/components.phtml"/>
+    </referenceBlock>
     <referenceContainer name="form.additional.info">
         <block class="Magento\Persistent\Block\Form\Remember" name="persistent.remember.me" template="remember_me.phtml" before="-"/>
         <block class="Magento\Framework\View\Element\Template" name="persistent.remember.me.tooltip" template="Magento_Persistent::remember_me_tooltip.phtml"/>

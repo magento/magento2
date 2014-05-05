@@ -241,6 +241,7 @@ class Observer
                         $customer = $previousCustomer;
                     }
 
+                    /** @var \Magento\Catalog\Model\Product $product */
                     $product = $this->_productFactory->create()->setStoreId(
                         $website->getDefaultStore()->getId()
                     )->load(

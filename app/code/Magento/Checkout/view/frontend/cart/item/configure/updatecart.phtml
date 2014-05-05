@@ -45,16 +45,12 @@
 
     <script type="text/javascript">
         (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('Magento_Catalog::js/msrp.js') ?>", function () {
-                    $('#product_addtocart_form').addToCart({
-                        cartButtonId: "#product-updatecart-button",
-                        cartForm: "#product_addtocart_form"
-                    }).validation();
-                });
+            var addtocartForm = $('#product_addtocart_form');
+            addtocartForm.mage('validation');
+            addtocartForm.mage('addToCart', {
+                cartButtonId: "#product-updatecart-button",
+                cartForm: "#product_addtocart_form"
+            });
         })(jQuery);
     </script>
 <?php endif; ?>

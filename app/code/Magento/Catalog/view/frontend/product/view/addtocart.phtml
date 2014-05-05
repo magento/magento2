@@ -60,13 +60,8 @@
 
 <script type="text/javascript">
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function () {
-                $('#product_addtocart_form').validation({
-                    radioCheckboxClosest: '.nested'
-                });
-            });
+        $('#product_addtocart_form').mage('validation', {
+            radioCheckboxClosest: '.nested'
+        });
     })(jQuery);
 </script>

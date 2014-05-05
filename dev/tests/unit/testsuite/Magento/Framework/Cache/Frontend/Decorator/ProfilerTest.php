@@ -77,10 +77,10 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function proxyMethodDataProvider()
+    public function proxyMethodDataProvider()
     {
         $backend = new \Zend_Cache_Backend_BlackHole();
-        $adaptee = \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core', array(), array(), '', false);
+        $adaptee = $this->getMock('Zend_Cache_Core', array(), array(), '', false);
         $lowLevelFrontend = new \Magento\Framework\Cache\Frontend\Adapter\Zend($adaptee);
 
         return array(

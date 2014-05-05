@@ -25,11 +25,13 @@ namespace Magento\Payment\Model\Method;
 
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
 
 /**
  * Payment method abstract model
  */
-abstract class AbstractMethod extends \Magento\Framework\Object implements \Magento\Payment\Model\MethodInterface
+abstract class AbstractMethod extends \Magento\Framework\Object implements MethodInterface, PaymentMethodChecksInterface
 {
     const ACTION_ORDER = 'order';
 

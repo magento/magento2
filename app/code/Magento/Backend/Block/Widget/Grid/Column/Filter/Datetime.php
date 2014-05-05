@@ -83,7 +83,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $dateObj = $this->getLocaleDate()->date(null, null, $locale, false);
+                $dateObj = $this->_localeDate->date(null, null, $locale, false);
 
                 //set default timezone for store (admin)
                 $dateObj->setTimezone(
@@ -96,7 +96,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 //set date with applying timezone of store
                 $dateObj->set(
                     $date,
-                    $this->getLocaleDate()->getDateTimeFormat(
+                    $this->_localeDate->getDateTimeFormat(
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     ),
                     $locale

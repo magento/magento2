@@ -32,7 +32,7 @@ $_gridPopupBlock->setRowClickCallback('function(){}');
 /** @var $_helper \Magento\Core\Helper\Data */
 $_helper = $this->helper('Magento\Core\Helper\Data');
 ?>
-<div id="grouped-product-container">
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"window.<?php echo $_gridPopupBlock->getJsObjectName() ?>"}}'>
     <div class="no-products-message">
         <?php echo __('There are no grouped products.')?>
     </div>
@@ -41,13 +41,4 @@ $_helper = $this->helper('Magento\Core\Helper\Data');
         <?php echo $this->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
     </div>
     <button type="button" data-role="add-product">Add Products to Group</button>
-    <script type="text/javascript">
-        jQuery(function($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_GroupedProduct::js/grouped-product.js') ?>", function() {
-                $('#grouped-product-container').mage('groupedProduct', {
-                    gridPopup: window.<?php echo $_gridPopupBlock->getJsObjectName() ?>
-                });
-            });
-        });
-    </script>
 </div>

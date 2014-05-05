@@ -43,6 +43,7 @@
         <word>secure_base_url}}js/</word>
         <word>secure_base_url}}skin/</word>
         <word>secure_base_url}}media/</word>
+        <word>head.js</word>
         <!-- typos -->
         <word>overriden</word>
         <word>retrive</word>
@@ -81,6 +82,38 @@
         <item>
             <path>dev/tests/static/testsuite/Magento/Test/Legacy/_files/obsolete_constants.php</path>
             <word>overriden</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Paypal/view/frontend/express/shortcut.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Bundle/view/adminhtml/product/edit/bundle.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Webapi/view/adminhtml/integration/activate/permissions/tab/webapi.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Install/view/install/</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftCard/view/adminhtml/catalog/product/composite/fieldset/giftcard.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftRegistry/view/adminhtml/edit/attributes.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftRegistry/view/adminhtml/edit/type/select.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>pub/lib/mage/mage.js</path>
+            <word>head.js</word>
         </item>
     </whitelist>
 </config>

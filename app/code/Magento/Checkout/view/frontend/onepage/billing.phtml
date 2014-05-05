@@ -207,18 +207,14 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>",
-            function() {
-                $('#billing\\:country_id').regionUpdater({
-                    optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
-                    regionListId: '#billing\\:region_id',
-                    regionInputId: '#billing\\:region',
-                    postcodeId: '#billing\\:postcode',
-                    regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                    defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
-                    countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
-                });
-            });
+        $('#billing\\:country_id').mage('regionUpdater', {
+            optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+            regionListId: '#billing\\\:region_id',
+            regionInputId: '#billing\\\:region',
+            postcodeId: '#billing\\\:postcode',
+            regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+            defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+            countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+        });
     })(jQuery);
 </script>

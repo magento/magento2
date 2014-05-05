@@ -263,7 +263,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'addDatabaseBlock',
             'addInputTypeTemplate',
             'addNotice',
-            'addPriceBlockType',
             'addReportTypeOption',
             'addTab',
             'addTabAfter',

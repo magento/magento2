@@ -95,7 +95,6 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -107,8 +106,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_productHelper = $productHelper;
         $this->_coreData = $coreData;
@@ -120,8 +118,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         $this->_localeFormat = $localeFormat;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 
@@ -249,15 +246,12 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         $_request->setProductClassId($product->getTaxClassId());
         $currentTax = $this->_taxCalculation->getRate($_request);
 
-        $_tierPrices = array();
-        $_tierPricesInclTax = array();
-        foreach ($product->getTierPrice() as $tierPrice) {
-            $_tierPrices[] = $this->_coreData->currency($tierPrice['website_price'], false, false);
-            $_tierPricesInclTax[] = $this->_coreData->currency(
-                $this->_taxData->getPrice($product, (int)$tierPrice['website_price'], true),
-                false,
-                false
-            );
+        $tierPrices = array();
+
+        $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
+
+        foreach ($tierPricesList as $tierPrice) {
+            $tierPrices[] = $this->_coreData->currency($tierPrice['price']->getValue(), false, false);
         }
         $config = array(
             'productId' => $product->getId(),
@@ -271,7 +265,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
                 false
             ),
             'productOldPrice' => $this->_coreData->currency(
-                $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getBaseAmount(),
+                $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
                 false,
                 false
             ),
@@ -293,8 +287,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
             'plusDispositionTax' => 0,
             'oldMinusDisposition' => 0,
             'minusDisposition' => 0,
-            'tierPrices' => $_tierPrices,
-            'tierPricesInclTax' => $_tierPricesInclTax
+            'tierPrices' => $tierPrices
         );
 
         $responseObject = new \Magento\Framework\Object();

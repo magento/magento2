@@ -34,7 +34,9 @@
     <div class="field type required">
         <label for="<?php echo $_code ?>_cc_type" class="label"><span><?php echo __('Credit Card Type') ?></span></label>
         <div class="control">
-            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" title="<?php echo __('Credit Card Type') ?>" data-validate='{required:true, "validate-cc-type-select":"#<?php echo $_code ?>_cc_number"}' class="select">
+            <select id="<?php echo $_code ?>_cc_type"
+                    data-mage-init='{"creditCardType":{"creditCardTypeContainer":"#<?php echo $_code ?>_cc_type_ss_div"}}'
+                    name="payment[cc_type]" title="<?php echo __('Credit Card Type') ?>" data-validate='{required:true, "validate-cc-type-select":"#<?php echo $_code ?>_cc_number"}' class="select">
                 <option value=""><?php echo __('--Please Select--') ?></option>
             <?php $_ccType = $this->getInfoData('cc_type') ?>
             <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
@@ -135,13 +137,6 @@
             </div>
             <div class="adv container" data-validation-msg="validate-cc-ukss">&nbsp;</div>
         </div>
-        <script type="text/javascript">
-            head.js("<?php echo $this->getViewFileUrl('Magento_Payment::cc-type.js')?>", function() {
-                jQuery('#<?php echo $_code ?>_cc_type').creditCardType({
-                    creditCardTypeContainer: '#<?php echo $_code ?>_cc_type_ss_div'
-                });
-            });
-        </script>
     </div>
     <?php endif; ?>
     <?php echo $this->getChildHtml() ?>

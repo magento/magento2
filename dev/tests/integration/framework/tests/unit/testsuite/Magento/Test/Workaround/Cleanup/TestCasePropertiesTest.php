@@ -61,7 +61,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         $testClass = $testSuite->testAt(0);
 
         $propertyObjectMock = $this->getMock('stdClass', array('__destruct'));
-        $propertyObjectMock->expects($this->once())->method('__destruct');
+        $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 
         foreach ($this->_fixtureProperties as $property) {

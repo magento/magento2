@@ -509,15 +509,24 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchGenerate()
     {
         $jobConfig = array(
-            'test_group' => array('test_job1' => array('instance' => 'CronJob', 'method' => 'execute'))
+            'test_group' => array(
+                'default' => array(
+                    'test_job1' => array(
+                        'instance' => 'CronJob',
+                        'method' => 'execute'
+                    )
+                )
+            )
         );
 
         $this->_config->expects($this->at(0))->method('getJobs')->will($this->returnValue($jobConfig));
         $jobs = array(
             'test_group' => array(
-                'job1' => array('config_path' => 'test/path'),
-                'job2' => array('schedule' => ''),
-                'job3' => array('schedule' => '* * * * *')
+                'default' => array(
+                    'job1' => array('config_path' => 'test/path'),
+                    'job2' => array('schedule' => ''),
+                    'job3' => array('schedule' => '* * * * *')
+                )
             )
         );
         $this->_config->expects($this->at(1))->method('getJobs')->will($this->returnValue($jobs));

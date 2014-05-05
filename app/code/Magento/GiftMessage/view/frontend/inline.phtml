@@ -26,9 +26,7 @@
 <?php $_giftMessage = false; ?>
 <?php if(!$this->getDontDisplayContainer()): ?>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_GiftMessage::extra-options.js') ?>", function() {
-        jQuery('#checkoutSteps').extraOptions({additionalUrl: '<?php echo $this->getAdditionalUrl(); ?>'});
-    });
+    jQuery('#checkoutSteps').mage('extraOptions', {additionalUrl: '<?php echo $this->getAdditionalUrl(); ?>'});
 </script>
 <?php endif ?>
 
@@ -38,7 +36,7 @@
         <legend class="legend"><span><?php echo __('Do you have any gift items in your order?'); ?></span></legend><br>
 
         <div class="field choice" id="add-gift-options-<?php echo $this->getEntity()->getId() ?>">
-            <input type="checkbox" name="allow_gift_options" id="allow_gift_options" value="1" data-selector='{"id":"#allow-gift-options-container"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <input type="checkbox" name="allow_gift_options" id="allow_gift_options" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label for="allow_gift_options" class="label"><span><?php echo __('Add gift options') ?></span></label>
         </div>
 
@@ -46,7 +44,7 @@
             <dt id="add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>" class="order">
                 <div class="title"><span><?php echo __('Gift Options for the Entire Order'); ?></span></div>
                 <div class="field choice">
-                    <input type="checkbox" name="allow_gift_messages_for_order" id="allow_gift_options_for_order" value="1" data-selector='{"id":"#allow-gift-options-for-order-container"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <input type="checkbox" name="allow_gift_messages_for_order" id="allow_gift_options_for_order" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_order" class="label"><span><?php echo __('Add gift options for the Entire Order') ?></span></label>
                 </div>
             </dt>
@@ -90,7 +88,7 @@
             <dt id="add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>" class="individual">
                 <div class="title"><span><?php echo __('Gift Options for Individual Items'); ?></span></div>
                 <div class="field choice">
-                    <input type="checkbox" name="allow_gift_options_for_items" id="allow_gift_options_for_items" value="1" data-selector='{"id":"#allow-gift-options-for-items-container"}'<?php if($this->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <input type="checkbox" name="allow_gift_options_for_items" id="allow_gift_options_for_items" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container"}'<?php if($this->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_items" class="label"><span><?php echo __('Add gift options for Individual Items') ?></span></label>
                 </div>
             </dt>
@@ -154,13 +152,6 @@
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-    <script type="text/javascript">
-        head.js("<?php echo $this->getViewFileUrl('Magento_GiftMessage::gift-options.js')?>", function() {
-            jQuery('#allow_gift_options')
-                .add('#allow_gift_options_for_order')
-                .add('#allow_gift_options_for_items').giftOptions();
-        });
-    </script>
 <?php break; ?>
 
 <?php case 'multishipping_address': ?>
@@ -168,7 +159,7 @@
         <legend class="legend"><span><?php echo __('Do you have any gift items in your order?'); ?></span></legend><br>
 
         <div class="field choice" id="add-gift-options-<?php echo $this->getEntity()->getId() ?>">
-            <input type="checkbox" name="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" value="1" data-selector='{"id":"#allow-gift-options-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <input type="checkbox" name="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages() || $this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label for="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options') ?></span></label>
         </div>
 
@@ -176,7 +167,7 @@
             <dt id="add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>" class="order">
                 <div class="title"><span><?php echo __('Gift Options for this address.'); ?></span></div>
                 <div class="field choice">
-                    <input type="checkbox" name="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <input type="checkbox" name="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options for the Entire Order') ?></span></label>
                 </div>
             </dt>
@@ -218,7 +209,7 @@
             <dt id="add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>" class="individual">
                 <div class="title"><span><?php echo __('Gift Options for Individual Items'); ?></span></div>
                 <div class="field choice">
-                    <input type="checkbox" name="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <input type="checkbox" name="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options for Individual Items') ?></span></label>
                 </div>
             </dt>
@@ -282,26 +273,10 @@
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-    <script type="text/javascript">
-        (function($) {
-            $(function() {
-                head.js("<?php echo $this->getViewFileUrl('Magento_GiftMessage::gift-options.js')?>", function() {
-                    $('#allow_gift_options_<?php echo $this->getEntity()->getId() ?>')
-                        .add('#allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>')
-                        .add('#allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>').giftOptions();
-                });
-            });
-        })(jQuery);
-    </script>
     <?php break; ?>
 <?php endswitch ?>
 <?php if ($_giftMessage): ?>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-        "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-        "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
-            jQuery("#shipping_method_form").validation();
-        });
+    jQuery('#shipping_method_form').mage('validation');
 </script>
 <?php endif; ?>

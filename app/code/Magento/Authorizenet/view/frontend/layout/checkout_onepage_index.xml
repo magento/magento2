@@ -31,4 +31,7 @@
             </arguments>
         </block>
     </referenceBlock>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="authorizenet_page_head_components" template="Magento_Authorizenet::js/components.phtml"/>
+    </referenceBlock>
 </layout>

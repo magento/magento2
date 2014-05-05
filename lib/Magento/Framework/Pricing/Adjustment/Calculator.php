@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento_Pricing
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -46,6 +48,9 @@ class Calculator implements CalculatorInterface
     }
 
     /**
+     * Retrieve Amount object based on given float amount, product and exclude option.
+     * It is possible to pass "true" or adjustment code to exclude all or specific adjustment from an amount.
+     *
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
      * @param null|bool|string $exclude

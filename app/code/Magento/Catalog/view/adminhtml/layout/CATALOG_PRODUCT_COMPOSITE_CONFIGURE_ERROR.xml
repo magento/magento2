@@ -25,4 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Error" name="product.composite.error" output="1"/>
+    <block class="Magento\Framework\Pricing\Render" name="product.price.render.default">
+        <arguments>
+            <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
+            <argument name="use_link_for_as_low_as" xsi:type="boolean">true</argument>
+            <!-- set "override" configuration settings here -->
+        </arguments>
+    </block>
 </layout>

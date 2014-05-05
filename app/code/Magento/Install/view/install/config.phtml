@@ -156,13 +156,15 @@
 </form>
 <script type="text/javascript">
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
             "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
             "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", function() {
+            "<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>",
+            head.ready(function () {
                 $.mage.install.configureForm('#form-validate', '#use_secure', '#use_secure_options');
-            });
+            }));
     })(jQuery);
 </script>
 <?php else: ?>
@@ -172,11 +174,11 @@
         <span><?php echo __('Continue') ?></span></button>
     <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js')?>", function() {
+        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js')?>", head.ready(function () {
             $.mage.install.configureContinue(
                 '#btn-continue', '<?php echo $this->getUrl('*/*/*', array('_current' => true)) ?>'
             );
-        });
+        }));
     })(jQuery);
     </script>
 </div>

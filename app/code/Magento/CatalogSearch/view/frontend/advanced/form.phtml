@@ -149,27 +149,20 @@
 <script type="text/javascript">
     //<![CDATA[
     (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-            function() {
-                $('#form-validate').validation({
-                    errorPlacement: function (error, element) {
-                        var parent = element.parent();
-                        if (parent.hasClass('range')) {
-                            parent.find(this.errorElement + '.' + this.errorClass).remove().end().append(error);
-                        } else {
-                            error.insertAfter(element);
-                        }
-                    },
-                    messages: {
-                        'price[to]': {'greater-than-equals-to': 'Please enter a valid price range.'},
-                        'price[from]': {'less-than-equals-to': 'Please enter a valid price range.'}
-                    }
-                });
-            });
+        $('#form-validate').mage('validation', {
+            errorPlacement: function (error, element) {
+                var parent = element.parent();
+                if (parent.hasClass('range')) {
+                    parent.find(this.errorElement + '.' + this.errorClass).remove().end().append(error);
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            messages: {
+                'price[to]': {'greater-than-equals-to': 'Please enter a valid price range.'},
+                'price[from]': {'less-than-equals-to': 'Please enter a valid price range.'}
+            }
+        });
     })(jQuery);
     //]]>
 </script>

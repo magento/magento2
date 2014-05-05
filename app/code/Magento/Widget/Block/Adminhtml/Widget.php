@@ -53,6 +53,7 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('save', 'class', 'add-widget');
         $this->_updateButton('save', 'id', 'insert_button');
         $this->_updateButton('save', 'onclick', 'wWidget.insertWidget()');
+        $this->_updateButton('save', 'region', 'footer');
 
         $this->_formScripts[] = 'wWidget = new WysiwygWidget.Widget(' .
             '"widget_options_form", "select_widget_type", "widget_options", "' .

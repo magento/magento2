@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 use Magento\Framework\Autoload\IncludePath;
 use Magento\Tools\Migration\System\Configuration\Formatter;
 use Magento\Tools\Migration\System\Configuration\Generator;
@@ -40,7 +39,7 @@ use Magento\Tools\Migration\System\Configuration\Logger as Logger;
 
 $rootDir = realpath(__DIR__ . '../../../../../../');
 require __DIR__ . '/../../../../../app/autoload.php';
-IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev/tools'));
+(new IncludePath())->addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
 $defaultReportFile = 'report.log';
 
 try {
