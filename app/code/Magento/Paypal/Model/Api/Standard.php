@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -257,23 +255,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
             $request['state'] = $regionCode;
         }
         $this->_importStreetFromAddress($address, $request, 'address1', 'address2');
-        $this->_applyCountryWorkarounds($request);
 
         $request['address_override'] = 1;
-    }
-
-    /**
-     * Adopt specified request array to be compatible with Paypal
-     * Puerto Rico should be as state of USA and not as a country
-     *
-     * @param array $request
-     * @return void
-     */
-    protected function _applyCountryWorkarounds(&$request)
-    {
-        if (isset($request['country']) && $request['country'] == 'PR') {
-            $request['country'] = 'US';
-            $request['state'] = 'PR';
-        }
     }
 }

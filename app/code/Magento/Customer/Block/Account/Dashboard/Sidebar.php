@@ -74,7 +74,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
     protected $_itemsCompareFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
@@ -85,7 +85,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\WishlistFactory $wishListFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory
-     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
@@ -95,7 +95,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishListFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory,
-        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;

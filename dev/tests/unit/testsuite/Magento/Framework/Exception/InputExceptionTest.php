@@ -45,8 +45,6 @@ namespace Magento\Framework\Exception {
 
     /**
      * Class InputExceptionTest
-     *
-     * @package Magento\Framework\Exception
      */
     class InputExceptionTest extends \PHPUnit_Framework_TestCase
     {

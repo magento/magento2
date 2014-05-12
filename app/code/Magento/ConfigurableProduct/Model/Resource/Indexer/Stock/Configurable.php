@@ -28,8 +28,6 @@ namespace Magento\ConfigurableProduct\Model\Resource\Indexer\Stock;
 /**
  * CatalogInventory Configurable Products Stock Status Indexer Resource Model
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;

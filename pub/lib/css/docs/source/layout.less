@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,17 +16,15 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Layout
 //
-//  MageLess framework provides mixins for flexible page layout customization. For simple quick layout customization global layout variables are used.
-
-// Adding visual style for demonstration purpuse
+//  Magento UI library provides mixins for flexible page layout customization. For simple quick layout customization global layout variables are used.
 
 header.header {
     background-color: rgba(255, 0, 0, 0.2);
@@ -66,30 +64,30 @@ footer.footer {
 //        <tr>
 //            <th>@layout-indent</th>
 //            <td class="vars_value">20px</td>
-//            <td>Page indentation on the left and right</td>
+//            <td>Page indents on the left and right</td>
 //        </tr>
 //        <tr>
-//            <th colspan="3" class="vars_section">Classnames defining different layouts</th>
+//            <th colspan="3" class="vars_section">Class names defining different layouts</th>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-1column</th>
 //            <td class="vars_value">layout-1</td>
-//            <td>Classname for one column layout</td>
+//            <td>Class name for one column layout</td>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-2columns-left</th>
 //            <td class="vars_value">layout-2-left</td>
-//            <td>Classname for two columns layout with left sidebar</td>
+//            <td>Class name for two columns layout with left sidebar</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@layout-class-2columns-right</th>
 //            <td class="vars_value">layout-2-right</td>
-//            <td>Classname for two columns layout with right sidebar</td>
+//            <td>Class name for two columns layout with right sidebar</td>
 //        </tr>
 //        <tr>
 //            <th>@layout-class-3columns</th>
 //            <td class="vars_value">layout-3</td>
-//            <td>Classname for three columns layout with left sidebar</td>
+//            <td>Class name for three columns layout with left sidebar</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Variables used for layout grid</th>
@@ -154,14 +152,14 @@ footer.footer {
 //            <th colspan="3" class="vars_section">Settings variables</th>
 //        </tr>
 //        <tr>
-//            <th>@no-flex</th>
-//            <td class="vars_value">true</td>
+//            <th>@use-flex</th>
+//            <td class="vars_value">false</td>
 //            <td>Sets compatibility for browsers not supporting flex</td>
 //        </tr>
 //        <tr>
 //            <th>@responsive</th>
 //            <td class="vars_value">true</td>
-//            <td>Sets if default transformation rules needs to be generated for smaller screens</td>
+//            <td>Is set to true if theme has responsive layout</td>
 //        </tr>
 //    </table>
 //  </pre>
@@ -176,11 +174,12 @@ footer.footer {
 //
 //  <code>#layout-columns > .left()</code> - alias for left column
 //
-//  <code>#layout-columns > .right()</code> - alias for left column
+//  <code>#layout-columns > .right()</code> - alias for right column
 //
 //  <code>#layout-columns > .reset()</code> - column width and order reset may be used in RWD
 //
 //  These aliases use default class names for layouts predefined in vars (i.e. <code>@layout-class-3columns: layout-3</code>) and general column mixin *[<code>.layout-column()</code>](#layout-column)*
+//
 //  ## Three columns page layout
 //
 //  ```html
@@ -243,26 +242,28 @@ footer.footer {
 .columns {
     #layout-columns();
     > .column {
-        .box-sizing();
-        min-height:10px;
+        &:extend(.add-box-sizing all);
+        .css(padding-bottom, @indent-xl-base);
     }
 }
 
-.column.main {
-    #layout-columns > .main();
-}
+@media (min-width: 600px) {
+    .column.main {
+        #layout-columns > .main();
+    }
 
-.column.left {
-    #layout-columns > .left();
-}
+    .column.left {
+        #layout-columns > .left();
+    }
 
-.column.right {
-    #layout-columns > .right();
+    .column.right {
+        #layout-columns > .right();
+    }
 }
 
 // # Layout column
 //
-//  <code>.layout-column()</code> mixin is used to setup page columns. It configures number, position and width of columns
+//  The <code>.layout-column()</code> mixin is used to setup page columns. It configures number, position and width of columns
 //
 //  3 columns layout example:
 //
@@ -280,7 +281,7 @@ footer.footer {
 //  </div>
 //  ```
 //
-//  Moving main column to the left by changing 2nd argument <code>@_order</code> for main and left columns:
+//  To move main column to the left, change 2nd argument <code>@_order</code> for main and left columns:
 //
 //  ```less
 //  .column.main {
@@ -355,12 +356,16 @@ footer.footer {
 
 //  # Layout width
 //
-//  <code>.layout-width()</code> mixin sets default page width of the element, the mixin is applyed to. Can be used to set width for the whole page wrapper or to the page elements individualy like header, footer, and so on
+//  The <code>.layout-width()</code> mixin is used to set default page width of the element the mixin is applyed to. It can be used to set width for the whole page wrapper or for the page elements individualy like header, footer, and so on.
 
 header.header,
 footer.footer,
 .page.main {
-    .layout-width();
+    .layout-width(
+    @_layout-min-width: 600px,
+    @_layout-max-width: 1000px,
+    @_layout-indent: 0
+    );
 }
 
 //  # Layout width variables
@@ -388,7 +393,7 @@ footer.footer,
 //            <th>@_layout-indent </th>
 //            <td class="vars_value">@layout-indent</td>
 //            <td class="vars_value">20px</td>
-//            <td>Page indentation on the left and right</td>
+//            <td>Page indents on the left and right</td>
 //        </tr>
 //    </table>
 //  </pre>

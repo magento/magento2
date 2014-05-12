@@ -26,7 +26,6 @@ namespace Magento\Framework\Interception;
 
 /**
  * Class GeneralTest
- * @package Magento\Framework\Interception
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GeneralTest extends \PHPUnit_Framework_TestCase

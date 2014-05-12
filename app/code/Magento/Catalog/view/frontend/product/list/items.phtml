@@ -194,14 +194,13 @@ switch($type = $this->getType()) {
         </div>
         <?php endif; ?>
         <div class="products wrapper grid">
-        <ol class="products list items <?php echo $type; ?>">
-        <?php $iterator = 1; ?>
-        <?php foreach($items as $_item): ?>
-            <?php echo ($iterator++==1) ? '' : '</li>' ?>
+            <ol class="products list items <?php echo $type; ?>">
+                <?php $iterator = 1; ?>
+                <?php foreach($items as $_item): ?>
                 <?php if($type == 'related' || $type == 'upsell'): ?>
-                    <li class="item product" style="display: none;">
+                    <?php echo ($iterator++==1) ? '<li class="item product" style="display: none;">' : '</li><li class="item product" style="display: none;">' ?>
                 <?php else: ?>
-                    <li class="item product">
+                    <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
                 <?php endif; ?>
                 <div class="product">
                     <?php echo '<!-- ' . $image . '-->' ?>
@@ -234,14 +233,14 @@ switch($type = $this->getType()) {
                                         <div class="primary">
                                             <?php if($_item->isSaleable()): ?>
                                                 <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
-                                                    <button class="action tocart" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
+                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
                                                         <span><?php echo __('Add to Cart') ?></span>
                                                     </button>
                                                 <?php else: ?>
                                                     <?php $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
                                                     $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                     ?>
-                                                    <button class="action tocart"
+                                                    <button class="action tocart primary"
                                                             data-post='<?php echo $postData; ?>'
                                                             type="button" title="<?php echo __('Add to Cart') ?>">
                                                         <span><?php echo __('Add to Cart') ?></span>

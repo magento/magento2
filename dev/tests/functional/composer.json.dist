@@ -1,0 +1,22 @@
+{
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git://github.com/magento/mtf.git"
+        }
+    ],
+    "require": {
+        "magento/mtf": "dev-develop",
+        "php": ">=5.4.0",
+        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit-selenium": ">=1.2",
+        "netwing/selenium-server-standalone": ">=2.35"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mtf\\": "lib",
+            "Magento\\": "",
+            "": ["testsuites", "generated", "lib", "tests/app"]
+        }
+    }
+}

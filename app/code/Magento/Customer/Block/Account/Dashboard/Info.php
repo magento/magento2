@@ -47,27 +47,27 @@ class Info extends \Magento\Framework\View\Element\Template
     protected $_helperView;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentServiceInterface
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
-    protected $customerCurrentService;
+    protected $currentCustomer;
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Customer\Helper\View $helperView
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Customer\Helper\View $helperView,
         array $data = array()
     ) {
-        $this->customerCurrentService = $customerCurrentService;
+        $this->currentCustomer = $currentCustomer;
         $this->_subscriberFactory = $subscriberFactory;
         $this->_helperView = $helperView;
         parent::__construct($context, $data);
@@ -82,7 +82,7 @@ class Info extends \Magento\Framework\View\Element\Template
     public function getCustomer()
     {
         try {
-            return $this->customerCurrentService->getCustomer();
+            return $this->currentCustomer->getCustomer();
         } catch (NoSuchEntityException $e) {
             return null;
         }

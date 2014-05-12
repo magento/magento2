@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +28,6 @@ use Magento\GiftMessage\Model\Message;
 /**
  * Gift message inline edit form
  *
- * @category   Magento
- * @package    Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Inline extends \Magento\Framework\View\Element\Template
@@ -254,7 +250,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check if items are available
+     * Check if gift messages for separate items are allowed
      *
      * @return bool
      */
@@ -311,7 +307,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check availability of giftmessages for specified entity
+     * Check availability of giftmessages on order level
      *
      * @return bool
      */
@@ -351,5 +347,19 @@ class Inline extends \Magento\Framework\View\Element\Template
     public function getThumbnailSize()
     {
         return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
+    }
+
+    /**
+     * Render HTML code referring to config settings
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        // render HTML when messages are allowed for order or for items only
+        if ($this->isItemsAvailable() || $this->isMessagesAvailable()) {
+            return parent::_toHtml();
+        }
+        return '';
     }
 }

@@ -25,7 +25,6 @@ namespace Magento\Catalog\Model\Product\ProductList;
 
 /**
  * Class Toolbar
- * @package Magento\Catalog\Model\Product\ProductList
  */
 class Toolbar
 {

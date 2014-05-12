@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library\PhpParser;
 use Magento\TestFramework\Integrity\Library\PhpParser\StaticCalls;
 
 /**
- * @package Magento\Test
  */
 class StaticCallsTest extends \PHPUnit_Framework_TestCase
 {

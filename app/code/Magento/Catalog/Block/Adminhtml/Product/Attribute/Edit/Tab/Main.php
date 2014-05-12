@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Product attribute add/edit form main tab
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
@@ -45,6 +41,7 @@ class Main extends AbstractMain
     protected function _prepareForm()
     {
         parent::_prepareForm();
+        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attributeObject */
         $attributeObject = $this->getAttributeObject();
         /* @var $form \Magento\Framework\Data\Form */
         $form = $this->getForm();
@@ -63,8 +60,11 @@ class Main extends AbstractMain
         }
 
         $frontendInputElm = $form->getElement('frontend_input');
-        $additionalTypes = array(array('value' => 'price', 'label' => __('Price')));
-        $additionalReadOnlyTypes = array('media_image' => __('Media Image'), 'gallery' => __('Gallery'));
+        $additionalTypes = array(
+            array('value' => 'price', 'label' => __('Price')),
+            array('value' => 'media_image', 'label' => __('Media Image')),
+        );
+        $additionalReadOnlyTypes = array('gallery' => __('Gallery'));
         if (isset($additionalReadOnlyTypes[$attributeObject->getFrontendInput()])) {
             $additionalTypes[] = array(
                 'value' => $attributeObject->getFrontendInput(),

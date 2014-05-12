@@ -18,12 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this \Magento\Authorizenet\Block\Authorizenet\Form\Cc */ ?>
+
 <?php $_formMessage=$this->getPartialAuthorizationFormMessage(); ?>
 <?php $_isPartialAuthorization=$this->isPartialAuthorization(); ?>
 <?php if ($_isPartialAuthorization || $_formMessage): ?>
@@ -62,7 +62,7 @@
                         });
                     }
                     <?php if ($_message = $this->getPartialAuthorizationConfirmationMessage()): ?>
-                    if (!confirm('<?php echo $_message ?>')) {
+                    if (!confirm('<?php echo $this->escapeMessage($_message) ?>')) {
                         cancelPaymentAuthorizations();
                     }
                     <?php endif;?>

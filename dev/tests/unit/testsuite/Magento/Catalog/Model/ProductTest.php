@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -165,17 +162,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities($expected, $origData, $data, $isDeleted = false)
     {
         $this->model->setIdFieldName('id');
-        $typeMock = $this->getMock('Magento\Catalog\Model\Product\Type\AbstractType', array(), array(), '', false);
-
-        $this->productTypeMock
-            ->expects($this->once())
-            ->method('factory')
-            ->with($this->model)
-            ->will($this->returnValue($typeMock));
-
-        $typeMock->expects($this->once())
-            ->method('getIdentities')
-            ->will($this->returnValue(array('type_1')));
         if (is_array($origData)) {
             foreach ($origData as $key => $value) {
                 $this->model->setOrigData($key, $value);
@@ -193,26 +179,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array('catalog_product_1', 'type_1', 'catalog_category_product_1'),
+                array('catalog_product_1'),
                 array('id' => 1, 'name' => 'value', 'category_ids' => array(1)),
                 array('id' => 1, 'name' => 'value', 'category_ids' => array(1))
             ),
             array(
-                array('catalog_product_1', 'type_1', 'catalog_category_1'),
+                array('catalog_product_1', 'catalog_category_product_1'),
                 null,
-                array('id' => 1, 'name' => 'value', 'category_ids' => array(1))
-            ),
-            array(
-                array('catalog_product_1', 'type_1', 'catalog_category_1'),
-                array('id' => 1, 'name' => '', 'category_ids' => array(1)),
-                array('id' => 1, 'name' => 'value', 'category_ids' => array(1))
-            ),
-            array(
-                array('catalog_product_1', 'type_1', 'catalog_category_1'),
-                array('id' => 1, 'name' => 'value', 'category_ids' => array(1)),
-                array('id' => 1, 'name' => 'value', 'category_ids' => array(1)),
-                true
-            ),
+                array(
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => array(1),
+                    'affected_category_ids' => array(1),
+                    'is_changed_categories' => true
+                )
+            )
         );
     }
 

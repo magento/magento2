@@ -30,7 +30,6 @@ namespace Magento\Framework\Oauth;
  * is not already used by an existing consumer. Validation will persist the nonce if validation succeeds. A method
  * for generating a current timestamp is also provided by this interface.
  *
- * @package Magento\Framework\Oauth
  */
 interface NonceGeneratorInterface
 {

@@ -22,7 +22,7 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.breadcrumbs(
+.mixin-breadcrumbs(
     @_breadcrumbs-font-size: @breadcrumbs-font-size,
     @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
     @_breadcrumbs-separator-color: @breadcrumbs-separator-color,
@@ -76,47 +76,51 @@
     ._breadcrumbs-hide-label(@_breadcrumbs-hide-label);
     .items {
         .font-size(@_breadcrumbs-font-size);
-        color: @_breadcrumbs-current-color;
+        .css(color, @_breadcrumbs-current-color);
         .list-inline();
     }
+    .item {
+        margin: 0;
+    }
     a {
-        .add-padding(@_breadcrumbs-padding);
-        .add-display(@_breadcrumbs-display);
-        .add-background(@_breadcrumbs-link-background);
+        .css(background, @_breadcrumbs-link-background);
         .background-gradient(
             @_breadcrumbs-link-gradient-start-color,
             @_breadcrumbs-link-gradient-end-color,
             @_breadcrumbs-link-gradient-direction,
             @_breadcrumbs-link-gradient
         );
-        .add-border(@_breadcrumbs-link-border);
-        color: @_breadcrumbs-link-color;
-        text-decoration: @_breadcrumbs-link-text-decoration;
+        .css(border, @_breadcrumbs-link-border);
+        .css(display, @_breadcrumbs-display);
+        .css(padding, @_breadcrumbs-padding);
+        .css(color, @_breadcrumbs-link-color);
+        .css(text-decoration, @_breadcrumbs-link-text-decoration);
         &:visited {
-            .add-background(@_breadcrumbs-link-background-visited);
+            .css(background, @_breadcrumbs-link-background-visited);
             .background-gradient(
                 @_breadcrumbs-link-gradient-start-color-visited,
                 @_breadcrumbs-link-gradient-end-color-visited,
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .add-border(@_breadcrumbs-link-border-visited);
-            color: @_breadcrumbs-link-color-visited;
-            text-decoration: @_breadcrumbs-link-text-decoration-visited;
+            .css(border, @_breadcrumbs-link-border-visited);
+            .css(color, @_breadcrumbs-link-color-visited);
+            .css(text-decoration, @_breadcrumbs-link-text-decoration-visited);
         }
         &:hover {
-            .add-background(@_breadcrumbs-link-background-hover);
+            .css(background, @_breadcrumbs-link-background-hover);
             .background-gradient(
                 @_breadcrumbs-link-gradient-start-color-hover,
                 @_breadcrumbs-link-gradient-end-color-hover,
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .add-border(@_breadcrumbs-link-border-hover);
-            color: @_breadcrumbs-link-color-hover;
-            text-decoration: @_breadcrumbs-link-text-decoration-hover;
+            .css(border, @_breadcrumbs-link-border-hover);
+            .css(color, @_breadcrumbs-link-color-hover);
+            .css(text-decoration, @_breadcrumbs-link-text-decoration-hover);
         }
         &:active {
+            .css(background, @_breadcrumbs-link-background-active);
             .add-background(@_breadcrumbs-link-background-active);
             .background-gradient(
                 @_breadcrumbs-link-gradient-start-color-active,
@@ -124,35 +128,35 @@
                 @_breadcrumbs-link-gradient-direction,
                 @_breadcrumbs-link-gradient
             );
-            .add-border(@_breadcrumbs-link-border-active);
-            color: @_breadcrumbs-link-color-active;
-            text-decoration: @_breadcrumbs-link-text-decoration-active;
+            .css(border, @_breadcrumbs-link-border-active);
+            .css(color, @_breadcrumbs-link-color-active);
+            .css(text-decoration, @_breadcrumbs-link-text-decoration-active);
         }
     }
     strong {
-        .add-background(@_breadcrumbs-current-background);
+        .css(background, @_breadcrumbs-current-background);
         .background-gradient(
             @_breadcrumbs-current-gradient-start-color,
             @_breadcrumbs-current-gradient-end-color,
             @_breadcrumbs-current-gradient-direction,
             @_breadcrumbs-current-gradient
         );
-        .add-border(@_breadcrumbs-current-border);
-        .add-padding(@_breadcrumbs-padding);
-        .add-display(@_breadcrumbs-display);
-        font-weight: @_breadcrumbs-current-font-weight;
+        .css(border, @_breadcrumbs-current-border);
+        .css(display, @_breadcrumbs-display);
+        .css(padding, @_breadcrumbs-padding);
+        .css(font-weight, @_breadcrumbs-current-font-weight);
     }
-    .breadcrumbs-separator(@_breadcrumbs-separator-symbol: @_breadcrumbs-separator-symbol);
+    .mixin-breadcrumbs-separator(@_breadcrumbs-separator-symbol: @_breadcrumbs-separator-symbol);
 }
 
-.breadcrumbs-separator(
-    @_breadcrumbs-separator-symbol: @_breadcrumbs-separator-symbol,
-    @_breadcrumbs-separator-color: @_breadcrumbs-separator-color
-) when not (@breadcrumbs-separator-symbol = '') {
+.mixin-breadcrumbs-separator(
+    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
+    @_breadcrumbs-separator-color: @breadcrumbs-separator-color
+) when not (@_breadcrumbs-separator-symbol = '') {
     .item:not(:last-child) {
         &:after {
-            color: @_breadcrumbs-separator-color;
-            content: @_breadcrumbs-separator-symbol;
+            .css(color, @_breadcrumbs-separator-color);
+            .css(content, @_breadcrumbs-separator-symbol);
         }
     }
 }

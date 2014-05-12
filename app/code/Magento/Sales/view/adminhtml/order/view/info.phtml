@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -158,9 +156,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Billing Address */?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <?php if ($this->getAuthorization()->isAllowed('Magento_Sales::actions_edit')) : ?>
                 <div class="actions"><?php echo $this->getAddressEditLink($_order->getBillingAddress()); ?></div>
-                <?php endif; ?>
                 <span class="title"><?php echo __('Billing Address') ?></span>
             </div>
             <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
@@ -172,9 +168,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Shipping Address */ ?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <?php if ($this->getAuthorization()->isAllowed('Magento_Sales::actions_edit')) : ?>
                 <div class="actions"><?php echo $this->getAddressEditLink($_order->getShippingAddress()); ?></div>
-                <?php endif; ?>
                 <span class="title"><?php echo __('Shipping Address') ?></span>
             </div>
             <address><?php echo $_order->getShippingAddress()->format('html') ?></address>

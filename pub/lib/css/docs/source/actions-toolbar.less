@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,11 +16,11 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Actions toolbar
 //  Actions toolbar is a set of actions on a page, form and so on that includes primary and/or secondary actions.
@@ -56,11 +56,15 @@
 .actions.toolbar {
     .actions-toolbar();
 }
+
 .example-actions-toolbar-1 {
     .actions-toolbar();
 }
 
-//  # .actions-toolbar() mixin variables
+//  # Actions toolbar mixin variables
+//
+//  The following variables are used in <code>.actions-toolbar()</code> mixin.
+//
 //  <pre>
 //    <table>
 //      <tr>
@@ -109,7 +113,7 @@
 //        <th>@_actions-toolbar-secondary-actions-margin</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td> margins of secondary .actions in the Actions toolbar</td>
+//        <td>margins of secondary .actions in the Actions toolbar</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_actions-toolbar-actions-links-margin-top</th>
@@ -132,17 +136,17 @@
 //    </table>
 //  </pre>
 // 
-//  #Actions toolbar alignment
-//  To align actions toolabr elements you should pass the needed alignment:
+//  # Actions toolbar alignment
+//
+//  <code>@_actions-toolbar-actions-position</code> variable controls aligning actions toolbar elements. It can be set to:
 //  ```css
 //  justify | left | right | center
 //  ```
-//  to the variable:
+//
+//  **Justify:**
 //  ```css
 //  @_actions-toolbar-actions-position: justify
 //  ```
-//
-//  **Justify**
 //  ``` html
 //  <div class="example-actions-toolbar-2">
 //      <div class="primary">
@@ -154,7 +158,10 @@
 //  </div>
 //  ```
 //
-//  **Align to the left**
+//  **Align toolbar elements left:**
+//  ```css
+//  @_actions-toolbar-actions-position: left
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-3">
 //      <div class="primary">
@@ -165,7 +172,11 @@
 //      </div>
 //  </div>
 //  ```
-//  **Align to the right**
+//
+//  **Align toolbar elements right:**
+//  ```css
+//  @_actions-toolbar-actions-position: right
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-4">
 //      <div class="primary">
@@ -176,7 +187,11 @@
 //      </div>
 //  </div>
 //  ```
-//  **Align center**
+//
+//  **Center:**
+//  ```css
+//  @_actions-toolbar-actions-position: center
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-5">
 //      <div class="primary">
@@ -188,34 +203,43 @@
 //  </div>
 //  ```
 
+.example-actions-toolbar-2 {
+    .actions-toolbar(
+        @_actions-toolbar-actions-position: justify
+    );
+}
+
+.example-actions-toolbar-3 {
+    .actions-toolbar(
+        @_actions-toolbar-actions-position: left
+    );
+}
+
 .example-actions-toolbar-4 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: right
     );
 }
 
-.example-actions-toolbar-2 {
-    .actions-toolbar(
-        @_actions-toolbar-actions-position: justify
-    );
-}
-.example-actions-toolbar-3 {
-    .actions-toolbar(
-        @_actions-toolbar-actions-position: left
-    );
-}
 .example-actions-toolbar-5 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: center
     );
 }
 
-//  #Reverse primary and secondary blocks
-//  <code>@_actions-toolbar-actions-reverse</code> variable controls reversing of primary and secondary blocks.
-//  If it is set to <code>false</code> the order of blocks in action toolbar is default
-//  If it is set to <code>true</code> the order of blocks in action toolbar is reversed
+//  # Reverse primary and secondary blocks
 //
-//  **Aligning justify + reverse**
+//  <code>@_actions-toolbar-actions-reverse</code> variable controls reversing of primary and secondary blocks.
+//
+//  If it is set to <code>false</code>, the order of blocks in action toolbar is **default**.
+//
+//  If it is set to <code>true</code>, the order of blocks in action toolbar is **reversed**.
+//
+//  **Justify toolbar elements and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: justify,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-6">
 //      <div class="primary">
@@ -226,7 +250,12 @@
 //      </div>
 //  </div>
 //  ```
-//  **Align to the left + reverse**
+//
+//  **Align toolbar elements to the left and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: left,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-7">
 //      <div class="primary">
@@ -237,7 +266,12 @@
 //      </div>
 //  </div>
 //  ```
-//  **Align to the right + reverse**
+//
+//  **Align toolbar elements to the right and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: right,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
 //  ``` html
 //  <div class="example-actions-toolbar-8">
 //      <div class="primary">
@@ -248,18 +282,21 @@
 //      </div>
 //  </div>
 //  ```
+
 .example-actions-toolbar-6 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: justify,
         @_actions-toolbar-actions-reverse: true
     );
 }
+
 .example-actions-toolbar-7 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-actions-reverse: true
     );
 }
+
 .example-actions-toolbar-8 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: right,
@@ -267,12 +304,12 @@
     );
 }
 
-//  #Actions toolbar indents customizations
-//  Set up actions toolbar margin and padding
-//  ```css
-//  @_actions-toolbar-margin: value,
-//  @_actions-toolbar-padding: value
-//  ```
+//  # Actions toolbar indents customizations
+//
+//  <code>@_actions-toolbar-margin</code> variable controls margins of the actions toolbar wrapper.
+//
+//  <code>@_actions-toolbar-padding</code> variable controls paddings of the actions toolbar wrapper.
+//
 //  ``` html
 //  <div class="example-actions-toolbar-9">
 //      <div class="primary">
@@ -284,21 +321,10 @@
 //  </div>
 //  ```
 //
-//  To specify the indentation for all .actions in Actions toolbar you should pass the value to <code>@_actions-toolbar-actions-margin</code> variable
+//  <code>@_actions-toolbar-primary-actions-margin</code> variable controls margins of the primary action elements.
+//
 //  ``` html
-//  <div class="example-actions-toolbar-10">
-//      <div class="primary">
-//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
-//      </div>
-//      <div class="secondary">
-//          <a class="action back" href="#"><span>Back</span></a>
-//      </div>
-//  </div>
-//  ```
-///
-//  To specify the margins for primary block in Actions toolbar you should pass the value to <code>@_actions-toolbar-primary-actions-margin</code> variable
-//  ``` html
-//  <div class=" example-actions-toolbar-11">
+//  <div class=" example-actions-toolbar-10">
 //      <div class="primary">
 //          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
 //          <button type="submit" class="action submit2" title="Submit2"><span>Submit2</span></button>
@@ -310,9 +336,10 @@
 //  </div>
 //  ```
 //
-//  To specify the margins for secondary block in Actions toolbar you should pass the value to <code>@_actions-toolbar-secondary-actions-margin</code>variable
+//  <code>@_actions-toolbar-secondary-actions-margin</code> variable controls margins of the secondary action elements.
+//
 //  ``` html
-//  <div class="example-actions-toolbar-12">
+//  <div class="example-actions-toolbar-11">
 //      <div class="primary">
 //          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
 //          <button type="submit" class="action submit2" title="Submit2"><span>Submit2</span></button>
@@ -330,30 +357,27 @@
         @_actions-toolbar-padding: 10px
     );
 }
+
 .example-actions-toolbar-10 {
-    .actions-toolbar(
-        @_actions-toolbar-actions-position: left,
-        @_actions-toolbar-actions-margin: 0 50px 0 0
-    );
-}
-.example-actions-toolbar-11 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-primary-actions-margin: 0 50px 0 0
     );
 }
-.example-actions-toolbar-12 {
+
+.example-actions-toolbar-11 {
     .actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-secondary-actions-margin: 0 50px 0 0
     );
 }
 
-//  #.actions-toolbar-clear-floats() mixin
-//  This mixin removes floats from primary and secondary blocks. It can be used for responsive view. Takes no parameters.
-//  ##Responsive example
+//  # Responsive actions toolbar
+//
+//  To set up responsive action toolbar, all floats of its elements should be cleared. To do this <code> .actions-toolbar-clear-floats()</code> mixin is used.
+//
 //  ``` html
-//  <div class="example-actions-toolbar-13">
+//  <div class="example-actions-toolbar-12">
 //      <div class="primary">
 //          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
 //      </div>
@@ -362,12 +386,13 @@
 //      </div>
 //  </div>
 //  ```
-.example-actions-toolbar-13 {
+
+.example-actions-toolbar-12 {
     .actions-toolbar();
 }
 
 @media only screen and (max-width : @break-point-1) {
-    .example-actions-toolbar-13 {
+    .example-actions-toolbar-12 {
        .actions-toolbar-clear-floats();
     }
 }

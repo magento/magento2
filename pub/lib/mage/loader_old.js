@@ -33,9 +33,11 @@
                 imgAlt: $.mage.__('Loading...')
             },
             template: '<div class="loading-mask" data-role="loader">' +
-                '<div class="loader">' +
-                '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">' +
-                '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
+                '<div class="popup popup-loading">' +
+                '<div class="popup-inner">' +
+                '{{if icon}}<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">{{/if}}' +
+                '{{if texts.loaderText}}${texts.loaderText}{{/if}}' +
+                '</div>' +
                 '</div>' +
                 '</div>'
         },

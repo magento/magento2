@@ -28,7 +28,6 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class GuestTest
- * @package Magento\Sales\Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestTest extends \PHPUnit_Framework_TestCase

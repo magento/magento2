@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -688,6 +686,10 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getIdentities()
     {
-        return array(self::CACHE_TAG . '_' . $this->getId());
+        $identities = array();
+        if ($this->getId()) {
+            $identities = array(self::CACHE_TAG . '_' . $this->getId());
+        }
+        return $identities;
     }
 }

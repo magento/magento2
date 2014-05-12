@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -60,9 +57,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities($expected, $origData, $data, $isDeleted = false)
     {
         if (is_array($origData)) {
-            foreach ($origData as $key => $value) {
-                $this->model->setOrigData($key, $value);
-            }
+            $this->model->setData($origData);
+            $this->model->setOrigData();
         }
         $this->model->setData($data);
         $this->model->isDeleted($isDeleted);
@@ -76,7 +72,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array('catalog_category_1'),
+                array('catalog_category_1', 'catalog_category_product_1'),
                 array('id' => 1, 'name' => 'value'),
                 array('id' => 1, 'name' => 'value')
             ),

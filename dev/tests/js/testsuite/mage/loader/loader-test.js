@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage.js
- * @package     test
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -72,7 +70,7 @@ LoaderTest.prototype.testLoaderOptions = function() {
     div.loader('show');
     assertEquals('icon.gif', loaderInstance.spinner.find('img').attr('src'));
     assertEquals('Image Alt Text', loaderInstance.spinner.find('img').attr('alt'));
-    assertEquals('Loader Text', loaderInstance.spinner.find('p').text());
+    assertEquals('Loader Text', loaderInstance.spinner.find('div.popup-inner').text());
     div.loader('destroy');
     div.loader({
         template:'<div id="test-template"></div>'

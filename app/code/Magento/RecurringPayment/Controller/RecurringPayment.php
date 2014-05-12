@@ -36,7 +36,7 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Customer\Model\Session
      */
-    protected $_session;
+    protected $_customerSession;
 
     /**
      * Core registry
@@ -67,7 +67,7 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
         $this->_title = $title;
-        $this->_session = $customerSession;
+        $this->_customerSession = $customerSession;
     }
 
     /**
@@ -81,10 +81,10 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
-        if (!$this->_session->authenticate($this)) {
+        if (!$this->_customerSession->authenticate($this)) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
-        $customer = $this->_session->getCustomer();
+        $customer = $this->_customerSession->getCustomer();
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customer);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
         return parent::dispatch($request);
@@ -227,7 +227,7 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
         )->load(
             $this->getRequest()->getParam('payment')
         );
-        if (!$payment->getId()) {
+        if (!$payment->getId() || $payment->getCustomerId() != $this->_customerSession->getId()) {
             throw new \Magento\Framework\Model\Exception(__('We can\'t find the payment you specified.'));
         }
         $this->_coreRegistry->register('current_recurring_payment', $payment);

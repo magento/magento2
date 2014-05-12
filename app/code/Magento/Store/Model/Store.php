@@ -905,7 +905,8 @@ class Store extends AbstractModel implements
     public function getCurrentCurrencyCode()
     {
         // try to get currently set code among allowed
-        $code = $this->_getSession()->getCurrencyCode();
+        $code = $this->_httpContext->getValue(\Magento\Core\Helper\Data::CONTEXT_CURRENCY);
+        $code = is_null($code) ? $this->_getSession()->getCurrencyCode() : $code;
         if (empty($code)) {
             $code = $this->getDefaultCurrencyCode();
         }

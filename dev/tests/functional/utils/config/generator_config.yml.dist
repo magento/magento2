@@ -1,0 +1,14 @@
+# Generator running options, in case "generate_specified_modules" is set to "yes" then specified file is used
+generate_specified_modules: no
+specified_modules: dev\tests\functional\utils\config\ee_modules.yml.dist
+
+# Fallback path configurations
+tests_fallback:
+    1:
+        path: tests/app
+
+# Handler priority configuration
+handler_fallback:
+    1: Curl
+    2: Direct
+    3: Ui

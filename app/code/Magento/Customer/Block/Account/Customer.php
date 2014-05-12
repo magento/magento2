@@ -39,7 +39,7 @@ class Customer extends \Magento\Framework\View\Element\Template
     protected $httpContext;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
@@ -48,7 +48,7 @@ class Customer extends \Magento\Framework\View\Element\Template
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Helper\View $viewHelper
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
@@ -56,7 +56,7 @@ class Customer extends \Magento\Framework\View\Element\Template
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Helper\View $viewHelper,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
         parent::__construct($context, $data);

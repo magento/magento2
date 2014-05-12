@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -100,6 +97,59 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/user/save');
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     * @dataProvider resetPasswordDataProvider
+     */
+    public function testSaveActionPasswordChange($postData, $isPasswordCorrect)
+    {
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/admin/user/save');
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $user \Magento\User\Model\User */
+        $user = $objectManager->create('Magento\User\Model\User');
+        $user->loadByUsername($postData['username']);
+        if ($isPasswordCorrect) {
+            $this->assertRedirect($this->stringContains('backend/admin/user/index'));
+            $this->assertEquals($postData['username'], $user->getUsername());
+            $this->assertEquals($postData['email'], $user->getEmail());
+            $this->assertEquals($postData['firstname'], $user->getFirstname());
+            $this->assertEquals($postData['lastname'], $user->getLastname());
+            $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+            $this->assertTrue($encryptor->validateHash($postData['password'], $user->getPassword()));
+        } else {
+            $this->assertRedirect($this->stringContains('backend/admin/user/edit'));
+            $this->assertEmpty($user->getData());
+        }
+    }
+
+    public function resetPasswordDataProvider()
+    {
+        $password = uniqid('123q');
+        $passwordPairs = array(
+            array('password' => $password, 'password_confirmation' => $password, 'is_correct' => true),
+            array('password' => $password, 'password_confirmation' => '', 'is_correct' => false),
+            array('password' => $password, 'password_confirmation' => $password . '123', 'is_correct' => false),
+            array('password' => '', 'password_confirmation' => '', 'is_correct' => false),
+            array('password' => '', 'password_confirmation' => $password, 'is_correct' => false)
+        );
+        $data = array();
+        foreach ($passwordPairs as $passwordPair) {
+            $fixture = uniqid();
+            $postData = array(
+                'username' => $fixture,
+                'email' => "{$fixture}@example.com",
+                'firstname' => 'First',
+                'lastname' => 'Last',
+                'password' => $passwordPair['password'],
+                'password_confirmation' => $passwordPair['password_confirmation']
+            );
+            $data[] = array($postData, $passwordPair['is_correct']);
+        }
+        return $data;
+    }
+
     public function testRoleGridAction()
     {
         $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
@@ -131,5 +181,45 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $this->assertContains('data-ui-id="adminhtml-user-edit-tabs-title"', $response);
         $this->assertContains('User Information', $response);
         $this->assertSelectCount('#user_base_fieldset', 1, $response);
+    }
+
+    public function testValidateActionSuccess()
+    {
+        $data = [
+            'username' => 'admin2',
+            'firstname' => 'new firstname',
+            'lastname' => 'new lastname',
+            'email' => 'example@domain.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $this->getRequest()->setPost($data);
+        $this->dispatch('backend/admin/user/validate');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertEquals('{"error":0}', $body);
+    }
+
+    public function testValidateActionError()
+    {
+        $data = [
+            'username' => 'admin2',
+            'firstname' => 'new firstname',
+            'lastname' => 'new lastname',
+            'email' => 'example@domain.cim',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        /**
+         * set customer data
+         */
+        $this->getRequest()->setPost($data);
+        $this->dispatch('backend/admin/user/validate');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertContains('{"error":1,"html_message":', $body);
+        $this->assertContains('Please correct this email address: \"example@domain.cim\"', $body);
     }
 }

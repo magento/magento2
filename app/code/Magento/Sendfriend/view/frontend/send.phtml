@@ -30,8 +30,8 @@
 <script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
     <div class="actions toolbar">
         <div class="secondary">
-            <a href="delete_email" id="btn-remove${_index_}" class="action delete"
-               title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></a>
+            <button type="button" id="btn-remove${_index_}" class="action remove"
+               title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></button>
         </div>
     </div>
     <fieldset class="fieldset">
@@ -60,7 +60,8 @@
             "rowTemplate":"#add-recipient-tmpl",
             "rowContainer":"#recipients-options",
             "rowParentElem":"<div></div>",
-            "btnRemoveSelector":".action.delete",
+            "remEventSelector":"button",
+            "btnRemoveSelector":".action.remove",
             "maxRows":"<?php echo $this->getMaxRecipients() ?>",
             "maxRowsMsg":"#max-recipient-message",
             "addRowBtn":"#add-recipient-button",
@@ -98,10 +99,16 @@
         </div>
     </fieldset>
 
-    <div class="recipients">
+    <fieldset class="fieldset recipients">
         <?php echo $this->getBlockHtml('formkey')?>
-        <strong class="title"><span><?php echo __('Recipient:') ?></span></strong>
+        <legend class="legend"><span><?php echo __('Recipient:') ?></span></legend>
+        <br />
         <div id="recipients-options"></div>
+        <?php if ($this->getMaxRecipients()): ?>
+            <div id="max-recipient-message" style="display: none;" class="message notice limit">
+                <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
+            </div>
+        <?php endif; ?>
         <div class="actions toolbar">
             <div class="secondary">
             <?php if (1 < $this->getMaxRecipients()): ?>
@@ -110,16 +117,11 @@
             <?php endif; ?>
             </div>
         </div>
-        <div id="max-recipient-message" style="display: none;" class="message notice limit">
-            <?php if ($this->getMaxRecipients()): ?>
-            <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
-            <?php endif; ?>
-        </div>
-    </div>
+    </fieldset>
     <div class="actions toolbar">
         <div class="primary">
             <button type="submit"
-                    class="action submit"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>
+                    class="action submit primary"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>
                 <span><?php echo __('Send Email') ?></span></button>
         </div>
         <div class="secondary">

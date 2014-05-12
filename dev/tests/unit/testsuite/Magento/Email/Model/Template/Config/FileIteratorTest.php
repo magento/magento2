@@ -25,7 +25,6 @@ namespace Magento\Email\Model\Template\Config;
 
 /**
  * Class FileIteratorTest
- * @package Magento\Framework\Config
  */
 class FileIteratorTest extends \PHPUnit_Framework_TestCase
 {

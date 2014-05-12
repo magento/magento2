@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -343,5 +341,30 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function getImageSize()
     {
         return $this->getVar('product_image_size', 'Magento_Wishlist');
+    }
+
+    /**
+     * Return HTML block with price
+     *
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     * @param string $priceType
+     * @param string $renderZone
+     * @param array $arguments
+     * @return string|null
+     */
+    public function getItemPriceHtml(
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item,
+        $priceType = \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        array $arguments = []
+    ) {
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        $priceRender = $this->getLayout()->getBlock('product.price.render.default');
+        $priceRender->setItem($item);
+        $arguments += [
+            'zone'         => $renderZone,
+            'render_block' => $priceRender
+        ];
+        return $priceRender ? $priceRender->render($priceType, $item->getProduct(), $arguments) : null;
     }
 }

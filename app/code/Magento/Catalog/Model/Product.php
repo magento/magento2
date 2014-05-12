@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -55,12 +53,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      */
     const CACHE_TAG = 'catalog_product';
 
-    const CACHE_CATEGORY_TAG = 'catalog_category_product';
+    /**
+     * Category product relation cache tag
+     */
+    const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'catalog_product';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var string
@@ -2019,58 +2020,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     public function getIdentities()
     {
         $identities = array(self::CACHE_TAG . '_' . $this->getId());
-        $identities = array_merge($identities, $this->getTypeInstance()->getIdentities($this));
-
-        if ($this->_isDataChanged()) {
-            $identities = $this->_getCategoryIdentities($identities);
-        } else {
-            $identities = $this->_getCategoryProductIdentities($identities);
-        }
-        return $identities;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isDataChanged()
-    {
-        $isDataChanged = ($this->getOrigData() == null && $this->getData()) || $this->isDeleted();
-        if (!$isDataChanged) {
-            foreach ($this->getOrigData() as $key => $value) {
-                if ($this->getData($key) != $value) {
-                    $isDataChanged = true;
-                    break;
-                }
+        if ($this->getIsChangedCategories()) {
+            foreach ($this->getAffectedCategoryIds() as $categoryId) {
+                $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
-        }
-        return $isDataChanged;
-    }
-
-    /**
-     * @param array $identities
-     * @return array
-     */
-    protected function _getCategoryIdentities($identities)
-    {
-        $categoryIds = $this->getAffectedCategoryIds();
-        if (!$categoryIds) {
-            $categoryIds = $this->getCategoryIds();
-        }
-        foreach ($categoryIds as $categoryId) {
-            $identities[] = Category::CACHE_TAG . '_' . $categoryId;
-        }
-        return $identities;
-    }
-
-    /**
-     * @param array $identities
-     * @return array
-     */
-    protected function _getCategoryProductIdentities($identities)
-    {
-        $categoryIds = $this->getCategoryIds();
-        foreach ($categoryIds as $categoryId) {
-            $identities[] = self::CACHE_CATEGORY_TAG . '_' . $categoryId;
         }
         return $identities;
     }

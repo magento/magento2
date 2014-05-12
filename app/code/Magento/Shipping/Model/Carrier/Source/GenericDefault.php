@@ -27,7 +27,6 @@ namespace Magento\Shipping\Model\Carrier\Source;
  * Class GenericDefault
  * Default implementation of generic carrier source
  *
- * @package Magento\Shipping\Model\Carrier\Source
  */
 class GenericDefault implements GenericInterface
 {

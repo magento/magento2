@@ -27,7 +27,6 @@ namespace Magento\Rss\Block;
 /**
  * Test for rendering price html in rss templates
  *
- * @package Magento\Rss\Block
  */
 class WishlistTest extends \PHPUnit_Framework_TestCase
 {

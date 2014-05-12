@@ -609,4 +609,9 @@ return array(
         'Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction',
         'Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer'
     ),
+    array(
+        'CACHE_CATEGORY_TAG',
+        'Magento\Catalog\Model\Product',
+        'Magento\Catalog\Model\Product::CACHE_PRODUCT_CATEGORY_TAG'
+    ),
 );

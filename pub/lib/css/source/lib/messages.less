@@ -46,9 +46,9 @@
     @_message-border-radius: @message-border-radius
 ) {
     display: block;
-    .add-margin(@message-margin);
-    .add-padding(@_message-padding);
-    border-radius: @_message-border-radius;
+    .css(margin, @_message-margin);
+    .css(padding, @_message-padding);
+    .css(border-radius, @_message-border-radius);
     .typography(
         @_color: @message-color,
         @_font-size: @message-font-size,
@@ -68,22 +68,27 @@
     @_message-link-color-active: @message-info-link-color-active,
     @_message-border-color: @message-info-border-color
 ) {
-    background: @_message-background;
-    border-color: @_message-border-color;
-    color: @_message-color;
+    .css(background, @_message-background);
+    .css(border-color, @_message-border-color);
+    .css(color, @_message-color);
     a {
-        color: @_message-link-color;
+        .css(color, @_message-link-color);
         &:hover {
-            color: @_message-link-color-hover;
+            .css(color, @_message-link-color-hover);
         }
         &:active {
-            color: @_message-link-color-active;
+            .css(color, @_message-link-color-active);
         }
     }
 }
 
-._message-border(@message-border-width, @message-border-width) when not (@message-border-width = 0) {
-    border: @message-border-width @message-border-style;
+._message-border(
+    @_message-border-width: @message-border-width,
+    @_message-border-style: @message-border-style
+) when not (@_message-border-width = 0)
+and not (@_message-border-width = false)
+and not ( @_message-border-style = false) {
+    .css(border, @_message-border-width @_message-border-style);
 }
 
 // Messages with lateral icon
@@ -127,20 +132,20 @@
     &:before {
         content: '';
         position: absolute;
-        width: @message-icon-lateral-width;
+        .css(width, @message-icon-lateral-width);
         text-align: center;
         top: 0;
         height: 100%;
         display: block;
         padding: 0;
-        background: @_message-icon-background;
+        .css(background, @_message-icon-background);
     }
     > *:first-child:before {
         content: '';
         position: absolute;
         overflow: hidden;
         top: 50%;
-        margin-top: -@message-icon-lateral-arrow-size;
+        .css(margin-top, -@message-icon-lateral-arrow-size);
     }
     > *:first-child:after {
         ._icon-font(
@@ -155,7 +160,7 @@
         position: absolute;
         top: 50%;
         text-align: center;
-        width: @message-icon-lateral-width;
+        .css(width, @message-icon-lateral-width);
     }
     ._message-icon-lateral-position(
         @_message-icon-position,
@@ -167,14 +172,14 @@
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = right) {
-    padding-right: @message-icon-lateral-width + @indent-s-base;
+    .css(padding-right, @message-icon-lateral-width + @indent-s-base);
     &:before {
         right: 0;
-        border-radius: 0 (@message-border-radius - @message-border-width) (@message-border-radius - @message-border-width) 0;
+        ._message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
         .arrow(left, @message-icon-lateral-arrow-size, @_message-icon-background);
-        right: @message-icon-lateral-width;
+        .css(right, @message-icon-lateral-width);
     }
     > *:first-child:after {
         right: 0;
@@ -185,19 +190,30 @@
     @_message-icon-position,
     @_message-icon-background
 ) when (@_message-icon-position = left) {
-    padding-left: @message-icon-lateral-width + @indent-s-base;
+    .css(padding-left, @message-icon-lateral-width + @indent-s-base);
     &:before {
         left: 0;
-        border-radius: (@message-border-radius - @message-border-width) 0 0 (@message-border-radius - @message-border-width);
-
+        ._message-icon-lateral-border-radius(@_message-icon-position);
     }
     > *:first-child:before {
         .arrow(right, @message-icon-lateral-arrow-size, @_message-icon-background);
-        left: @message-icon-lateral-width;
+        .css(left, @message-icon-lateral-width);
     }
     > *:first-child:after {
         left: 0;
     }
+}
+
+._message-icon-lateral-border-radius(
+    @_message-icon-position,
+) when (@_message-icon-position = left) and not (@message-border-radius = false) and not (@message-border-width = false) {
+    border-radius: (@message-border-radius - @message-border-width) 0 0 (@message-border-radius - @message-border-width);
+}
+
+._message-icon-lateral-border-radius(
+    @_message-icon-position,
+) when (@_message-icon-position = right) and not (@message-border-radius = false) and not (@message-border-width = false) {
+    border-radius: 0 (@message-border-radius - @message-border-width) (@message-border-radius - @message-border-width) 0;
 }
 
 ._message-icon-inner(
@@ -206,7 +222,7 @@
     @_message-icon-background
 ) {
     position: relative;
-    padding-left: @message-icon-inner-padding-left;
+    .css(padding-left, @message-icon-inner-padding-left);
     > *:first-child:before {
         ._icon-font(
             @_icon-font-content: @_message-icon,
@@ -221,6 +237,6 @@
         left: 0;
         top: 50%;
         text-align: center;
-        width: @message-icon-inner-padding-left;
+        .css(width, @message-icon-inner-padding-left);
     }
 }

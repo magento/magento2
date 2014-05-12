@@ -33,7 +33,8 @@
     }
     > .field,
     .fields > .field {
-        &:last-child {
+        .form-field();
+        &:not(:first-child):last-of-type {
             margin-bottom: 0;
         }
         &.no-label {
@@ -41,13 +42,21 @@
                 .visually-hidden();
             }
         }
-        .label {
-            .box-sizing();
-        }
-        .form-field();
         &.choice {
             .label {
                 font-weight: normal;
+            }
+        }
+        .label {
+            &:extend(.add-box-sizing all);
+            .column:not(.main) & {
+                font-weight: normal;
+            }
+        }
+        .field.choice {
+            margin-bottom: @indent-s-base;
+            &:last-child {
+                margin-bottom: 0;
             }
         }
     }
@@ -71,22 +80,19 @@ input:focus ~ .tooltip .tooltip-content,
 select:focus ~ .tooltip .tooltip-content { display: block; }
 
 //
-//    Responsive
+//    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @mobile) {
-    .fieldset {
-        > .legend {
-            &:extend(._rwd_width_float_margins all);
-        }
-        > .field,
-        .fields > .field {
-            > .label,
-            > .control {
-                &:extend(._rwd_width_float all);
+.responsive(@break) when (@break = @break-point-1) {
+    .column.main {
+        .fieldset {
+            > .legend {
+                &:extend(.margin-for-forms-desktop all);
             }
-            &.choice {
-                &:before {
-                    &:extend(._rwd_width_float all);
+            > .field,
+            .fields > .field {
+                .form-field-type-revert();
+                &:not(:first-child):last-of-type {
+                    margin-bottom: 0;
                 }
             }
         }

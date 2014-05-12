@@ -76,8 +76,9 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                 <?php if ($_product->getTypeInstance()->hasRequiredOptions($_item)): ?>
                                     <button class="action tocart"
                                             data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}'
-                                                            type="button" title="<?php echo __('Add to Cart') ?>">
-                                    <span><?php echo __('Add to Cart') ?></span>
+                                            type="button" title="<?php echo __('Add to Cart') ?>">
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
                                 <?php else: ?>
                                     <?php
                                         $postDataHelper = $this->helper('Magento\Core\Helper\PostData');

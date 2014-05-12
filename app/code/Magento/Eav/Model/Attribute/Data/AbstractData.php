@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,8 +29,6 @@ use Magento\Framework\Model\Exception as CoreException;
 /**
  * EAV Attribute Abstract Data Model
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractData
@@ -461,7 +457,12 @@ abstract class AbstractData
                     }
                     break;
                 case 'date':
-                    $validator = new \Zend_Validate_Date(\Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+                    $validator = new \Zend_Validate_Date(
+                        [
+                            'format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                            'locale' => $this->_localeResolver->getLocale()
+                        ]
+                    );
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Date::INVALID);
                     $validator->setMessage(__('"%1" is not a valid date.', $label), \Zend_Validate_Date::INVALID_DATE);
                     $validator->setMessage(

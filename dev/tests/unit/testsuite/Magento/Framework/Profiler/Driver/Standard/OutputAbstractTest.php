@@ -55,7 +55,9 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $thresholdKey = \Magento\Framework\Profiler\Driver\Standard\Stat::TIME;
         $this->_output->setThreshold($thresholdKey, 100);
-        $thresholds = \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds');
+        $thresholds = class_exists('PHPUnit_Util_Class')
+            ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
+            : \PHPUnit_Framework_Assert::readAttribute($this->_output, '_thresholds');
         $this->assertArrayHasKey($thresholdKey, $thresholds);
         $this->assertEquals(100, $thresholds[$thresholdKey]);
 

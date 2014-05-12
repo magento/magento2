@@ -34,7 +34,7 @@ class AgreementsValidator
     /**
      * @param AgreementsProviderInterface[] $list
      */
-    public function __construct($list)
+    public function __construct($list = null)
     {
         $this->agreementsProviders = (array) $list;
     }
@@ -43,7 +43,7 @@ class AgreementsValidator
      * Validate that all required agreements is signed
      *
      * @param int[] $agreementIds
-     * @return boll
+     * @return bool
      */
     public function isValid($agreementIds)
     {

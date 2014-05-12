@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,6 +25,9 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Framework\View\Block\IdentityInterface;
 
 /**
@@ -326,7 +327,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         foreach ($this->_getProductCollection() as $item) {
             $identities = array_merge($identities, $item->getIdentities());
         }
-        return array_merge($this->getLayer()->getCurrentCategory()->getIdentities(), $identities);
+        $category = $this->getLayer()->getCurrentCategory();
+        if ($category) {
+            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+        }
+        return $identities;
     }
 
     /**

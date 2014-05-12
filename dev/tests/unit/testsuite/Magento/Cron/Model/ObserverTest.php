@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -496,9 +494,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
-        $this->_scheduleFactory->expects($this->at(0))->method('create')->will($this->returnValue($scheduleMock));
+        $this->_scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($scheduleMock));
 
-        $this->_scheduleFactory->expects($this->at(1))->method('create')->will($this->returnValue($schedule));
+        $this->_scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($schedule));
 
         $this->_observer->dispatch('');
     }
@@ -574,9 +572,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array('getCollection', '__wakeup')
         )->getMock();
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
-        $this->_scheduleFactory->expects($this->at(0))->method('create')->will($this->returnValue($scheduleMock));
+        $this->_scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($scheduleMock));
 
-        $this->_scheduleFactory->expects($this->at(1))->method('create')->will($this->returnValue($schedule));
+        $this->_scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($schedule));
 
         $this->_observer->dispatch('');
     }

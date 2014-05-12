@@ -43,13 +43,13 @@
             <strong class="subtitle"><span><?php echo __('Payment Method') ?></span></strong>
             <?php echo $this->getChildHtml('payment_methods_before') ?>
             <?php /* Payment methods forms list */ ?>
-            <dl class="sp-methods" id="payment-methods">
+            <dl class="sp-methods items methods payment" id="payment-methods">
                 <?php
                     $_methods       = $this->getMethods();
                     $_methodsCount  = count($_methods);
                 ?>
                 <?php foreach ($_methods as $_method): $_code = $_method->getCode() ?>
-                    <dt>
+                    <dt class="item title">
                         <?php if ($_methodsCount > 1): ?>
                             <input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if ($this->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio"/>
                         <?php else : ?>
@@ -58,7 +58,7 @@
                         <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
                     </dt>
                     <?php if ($html = $this->getChildHtml('payment.method.' . $_code)) : ?>
-                        <dd>
+                        <dd class="item content">
                             <?php echo $html; ?>
                         </dd>
                     <?php endif; ?>
@@ -68,9 +68,13 @@
             <?php echo $this->getChildHtml('checkout_billing_items') ?>
         </div>
     </div>
-    <div class="actions">
-        <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Shipping Information') ?></span></a>
-        <button id="payment-continue" type="submit" class="action continue"><span><?php echo __('Continue to Review Your Order') ?></span></button>
+    <div class="actions toolbar">
+        <div class="primary">
+            <button id="payment-continue" type="submit" class="action primary continue"><span><?php echo __('Continue to Review Your Order') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Shipping Information') ?></span></a>
+        </div>
     </div>
 </form>
 <script type="text/javascript">
@@ -88,4 +92,3 @@
         }
     });
 </script>
-

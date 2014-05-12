@@ -38,35 +38,35 @@
     @_actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-secondary-actions-links-margin-top
 ) {
     .clearfix();
-    .add-margin(@_actions-toolbar-margin);
-    .add-padding(@_actions-toolbar-padding);
+    .css(margin, @_actions-toolbar-margin);
+    .css(padding, @_actions-toolbar-padding);
     ._actions-toolbar-align(@_actions-toolbar-actions-position);
     ._actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
     .primary,
     .secondary {
         display: inline-block;
         .action {
-            .add-margin(@_actions-toolbar-actions-margin);
+            .css(margin, @_actions-toolbar-actions-margin);
         }
         a.action {
             display: inline-block;
-            ._actions-toolbar-actions-links-margin-top(@_actions-toolbar-actions-links-margin-top);
+            .css(margin-top, @_actions-toolbar-actions-links-margin-top);
         }
     }
     .primary {
         .action {
-            .add-margin(@_actions-toolbar-primary-actions-margin);
+            .css(margin, @_actions-toolbar-primary-actions-margin);
         }
         a.action {
-            ._actions-toolbar-actions-links-margin-top(@_actions-toolbar-primary-actions-links-margin-top);
+            .css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
         }
     }
     .secondary {
         .action {
-            .add-margin(@_actions-toolbar-secondary-actions-margin);
+            .css(margin, @_actions-toolbar-secondary-actions-margin);
         }
         a.action {
-            ._actions-toolbar-actions-links-margin-top(@_actions-toolbar-secondary-actions-links-margin-top);
+            .css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
         }
     }
 }
@@ -85,12 +85,8 @@
 //
 // Internal use mixins
 //--------------------------------------
-._actions-toolbar-actions-links-margin-top(@_actions-toolbar-actions-links-margin) when not (@_actions-toolbar-actions-links-margin = '') {
-    margin-top: @_actions-toolbar-actions-links-margin;
-}
-
-._actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify){
-    text-align: @_actions-toolbar-actions-position;
+._actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
+    .css(text-align, @_actions-toolbar-actions-position);
 }
 
 ._actions-toolbar-floats(
@@ -138,7 +134,7 @@
 ._actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
-) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = false)  {
+) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = false) {
     .secondary {
         float: right;
     }
@@ -147,7 +143,7 @@
 ._actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
-) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = true)  {
+) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = true) {
     .primary {
         float: right;
     }

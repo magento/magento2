@@ -25,7 +25,6 @@ namespace Magento\Framework\Filesystem\File;
 
 /**
  * Class ReadFactoryTest
- * @package Magento\Framework\Filesystem\File
  */
 class ReadFactoryTest extends \PHPUnit_Framework_TestCase
 {

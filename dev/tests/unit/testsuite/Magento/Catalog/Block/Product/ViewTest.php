@@ -82,16 +82,23 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $productTags = array('catalog_product_1');
         $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
-        $this->registryMock->expects(
-            $this->any()
-        )->method(
-            'registry'
-        )->with(
-            'product'
-        )->will(
-            $this->returnValue($product)
+        $category = $this->getMock('Magento\Catalog\Model\Category', array(), array(), '', false);
+
+        $product->expects($this->once())
+            ->method('getIdentities')
+            ->will($this->returnValue($productTags));
+        $category->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $this->registryMock->expects($this->any())
+            ->method('registry')
+            ->will($this->returnValueMap(
+                [
+                    ['product', $product],
+                    ['current_category', $category]
+                ]
+            )
         );
-        $this->assertEquals($productTags, $this->view->getIdentities());
+        $this->assertEquals(array('catalog_product_1', 'catalog_category_product_1'), $this->view->getIdentities());
     }
 }

@@ -26,8 +26,6 @@ namespace Magento\RecurringPayment\Block\Adminhtml\Payment\View;
 /**
  * Adminhtml recurring payment items grid
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems

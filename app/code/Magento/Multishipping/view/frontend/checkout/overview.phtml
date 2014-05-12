@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -27,25 +26,27 @@
 <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}}' class="form multicheckout overview">
     <div class="block billing">
         <div class="title"><strong><?php echo __('Billing Information') ?></strong></div>
-        <div class="box address">
-            <?php $_address=$this->getBillingAddress() ?>
-            <strong class="subtitle">
-                <span><?php echo __('Billing Address') ?></span>
-                <a href="<?php echo $this->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
-            </strong>
-            <address>
-                <?php echo $_address->format('html') ?>
-            </address>
-        </div>
-        <div class="box method">
-            <strong class="subtitle">
-                <span><?php echo __('Payment Method') ?></span>
-                <a href="<?php echo $this->getEditBillingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
-            </strong>
-            <div class="content">
-                <input type="hidden" name="payment[cc_number]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcNumber())?>" />
-                <input type="hidden" name="payment[cc_cid]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcCid())?>" />
-                <?php echo $this->getPaymentHtml() ?>
+        <div class="content">
+            <div class="box address">
+                <?php $_address=$this->getBillingAddress() ?>
+                <strong class="subtitle">
+                    <span><?php echo __('Billing Address') ?></span>
+                    <a href="<?php echo $this->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                </strong>
+                <address>
+                    <?php echo $_address->format('html') ?>
+                </address>
+            </div>
+            <div class="box method">
+                <strong class="subtitle">
+                    <span><?php echo __('Payment Method') ?></span>
+                    <a href="<?php echo $this->getEditBillingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                </strong>
+                <div class="content">
+                    <input type="hidden" name="payment[cc_number]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcNumber())?>" />
+                    <input type="hidden" name="payment[cc_cid]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcCid())?>" />
+                    <?php echo $this->getPaymentHtml() ?>
+                </div>
             </div>
         </div>
     </div>
@@ -89,7 +90,7 @@
                     <span><?php echo __('Items') ?></span>
                     <a href="<?php echo $this->getAddressesEditUrl() ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
                 </strong>
-                <table class="items data" id="overview-table-<?php echo $_address->getId() ?>">
+                <table class="items data table order review" id="overview-table-<?php echo $_address->getId() ?>">
                     <thead>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>" class="col item"><?php echo __('Product Name') ?></th>
@@ -131,7 +132,7 @@
                 <a href="<?php echo $this->getVirtualProductEditUrl() ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
             </strong>
             <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-            <table class="items data" id="virtual-overview-table">
+            <table class="items data table order review" id="virtual-overview-table">
                 <thead>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>" class="col item"><?php echo __('Product Name') ?></th>
@@ -169,9 +170,13 @@
             <strong class="mark"><?php echo __('Grand Total:') ?></strong>
             <strong class="amount"><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()) ?></strong>
         </div>
-        <div class="actions" id="review-buttons-container">
-            <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
-            <button type="submit" class="action submit" id="review-button"><span><?php echo __('Place Order') ?></span></button>
+        <div class="actions toolbar" id="review-buttons-container">
+            <div class="primary">
+                <button type="submit" class="action primary submit" id="review-button"><span><?php echo __('Place Order') ?></span></button>
+            </div>
+            <div class="secondary">
+                <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
+            </div>
             <span id="review-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
                 <span><?php echo __('Submitting order information...') ?></span>
             </span>

@@ -27,7 +27,6 @@ use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Class SessionTest
- * @package Magento\Backend\Model\Auth\Session
  */
 class SessionTest extends \PHPUnit_Framework_TestCase
 {

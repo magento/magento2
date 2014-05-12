@@ -1,3 +1,91 @@
+2.0.0.0-dev77
+=============
+* Themes update:
+  * Blank theme was refactored to implement the mobile-first approach
+* Fixed bugs:
+  * Fixed an issue where it was impossible to place order using store credit
+  * Fixed an issue where adding products with custom options from a wishlist to shopping cart caused an error
+  * Fixed an issue where it was impossible to add a product to the shopping cart from the Wishlist sidebar
+  * Fixed an issue where the Add to Wishlist drop-down arrow was missed on the category page on the frontend
+  * Fixed an issue where it was impossible to manage multiple wishlists on the frontend if FPC was disabled
+  * Fixed an issue where prices with taxes were not displayed on the category and product pages on the frontend
+  * Fixed an issue where it was impossible to store cache when using either Varnish or built-in cache
+  * Fixed an issue where all refactored indexers were in the REINDEX REQUIRED status after installation
+  * Fixed an issue where admins with limited access could perform operations not allowed by role permissions
+  * Fixed an issue where http links were generated instead of https links
+  * Fixed an issue where it was impossible to use Subcategories when building a condition for a catalog price rule
+  * Fixed an issue where a registered customer could not place an order using PayPal Payments Advanced
+  * Fixed an issue where PayPal Settlement report was empty
+  * Fixed an issue where a newly created subcategory was still active after switching to the Default category
+  * Fixed an issue where it was impossible to save changes or remove a customer address on the backend
+  * Fixed an issue where for an admin with restricted permissions previewing a newsletter template caused a fatal error
+  * Fixed an issue where it was impossible to save a Tax Rate if specified that Zip was a range, and the Zip/Post Code field was left empty
+  * Fixed an issue where Puerto Rico was listed both as a state and as a country
+  * Fixed an issue where the Special Price was displayed instead of the place of Original Price in the Items Ordered column if the orders list.
+  * Fixed an issue in Widget configuration where category check boxes did not stay selected when Anchor Categories were specified in the Display On drop-down list.
+  * Fixed an issue where admin user password confirmation was not validated on the server side
+  * Fixed an issue where adding a customer review caused an error
+  * Fixed an issue where the incorrect error messages were displayed if an invalid email was entered during admin user or customer creation
+  * Fixed an issue with the Debug section in developer settings, which should only be displayed for the website or store view scope level
+  * Fixed an issue where the fatal error was displayed after uninstall if during installation it was specified to save session in the database
+  * Fixed an issue where a wrong error message was displayed when a non-existing database was specified when installing Magento using the console install script
+  * Fixed an issue where it was impossible to add products from a wishlist to a shopping cart
+  * Fixed an issue where an error appeared after Magento installation
+  * Improved the Blank theme UI
+  * Fixed an issue with a zooming product image overlapped by category design on the frontend
+  * Fixed an issue where it was impossible to select only billing or only shipping address when editing the user address on the frontend
+  * Fixed an issue where it was impossible to view a Wishlist in the Wishlist Search widget
+  * Fixed an issue where partial cache invalidation did not work for built-in caching
+  * Fixed an issue where it was impossible to find a catalog event using the Countdown Ticker grid filter if the event had been specified to be displayed on both category and product pages
+  * Fixed incorrect error messages displayed during customer registration
+  * Fixed an issue where product attributes from other store views were displayed for products in a Wishlist
+  * Fixed an issue where it was impossible to place an order without the CheckoutAgreements module
+  * Fixed an issue where the Media Image attribute type was not available when creating the product attribute
+  * Fixed an issue with incorrect label attribute for the State/Province drop-down list on the Shipping Information tab
+  * Fixed an issue where using only digits in the SKU field of configurable products led to a confusing behavior
+  * Fixed an issue where a catalog price rule was not shown on the catalog and product pages on the frontend
+  * Fixed an issue where Recurring Profiles (payments) were available on the frontend for any registered user who had the URL
+  * Fixed an issue where a credit card frame was absent on the Payment Information step of Onepage Checkout, if there was only one payment method with a credit card available
+  * Fixed an issued where it was impossible to use inline translate for the My Account and Register links on the frontend
+  * Fixed an issue where it was impossible to activate a customer using REST
+  * Fixed an issue with the undefined version_compate method called in \lib\Magento\Connect\Validator.php
+  * Fixed an issue with invalid XML formatting of Boolean in REST response
+  * Fixed an issue where it was impossible to perform installation using index.php from the pub folder (problem with JS and CSS)
+  * Fixed an issue where the Multiple Wishlist functionality did not work correctly with enabled Full Page Cache in the Chrome browser
+  * Fixed an issue where it was impossible to change an admin frontname using console installation
+  * Fixed an exception on the Transaction page when searching by payment method
+  * Fixed an issue where the "Add to wishlist" link was displayed in catalog even when the Wishlist functionality was disabled
+  * Fixed an issue where the system was broken if an admin user unassigned his own role
+  * Fixed an issue with exceptions thrown on attempt to export products for users with store-level restrictions
+  * Fixed an issue where two loaders were displayed when saving a category
+  * Fixed an issue where it was impossible to search for a newsletter in the Newsletter grid
+  * Fixed an issue where the displayed currency and product price were not changed after switching to a new currency
+  * Fixed an issue with frontend crashing when deleting a product from a mini shopping cart
+  * Fixed an issue where it was impossible to add a bundle product to a shopping cart
+  * Fixed an issue where a configurable product base image disappeared when selecting product variations
+* Functional tests:
+  * Functional end-to-end tests publication
+     * Bundle product
+     * Category
+     * Customer
+     * Configurable product
+     * Downloadable product
+     * Newsletter
+     * Review
+     * Simple product
+     * Sitemap
+     * Store
+     * Tax Rule
+     * User
+     * Virtual product
+* Service layer updates:
+  * Move CurrentCustomerService from Service to Helper
+* GitHub requests:
+  * [#544] (https://github.com/magento/magento2/issues/544) Performance tests not working
+  * [#554] (https://github.com/magento/magento2/pull/554) Performance tests - Fix jmeter output format
+  * [#525] (https://github.com/magento/magento2/pull/525) Fix typo in FS Generator help message
+  * [#563] (https://github.com/magento/magento2/issues/563) Admin Login not working #563
+
 2.0.0.0-dev76
 =============
 * Pricing improvements:
@@ -11,7 +99,7 @@
   * Removed head.js usages from adminhtml
 * Themes update:
   * Plushe styles are removed, Plushe theme is now based on blank
-* Fixed bugs:  
+* Fixed bugs:
   * Unable to place order with product that contains custom option 'file'
   * OnePageCheckout is not working if PayPal method is enabled to work via Payment Bridge
   * Impossible to reset password for admin user (incorrect reset password link in email)

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Connect
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Framework\Connect;
 /**
  * Class to validate string resources
  *
- * @category    Magento
- * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Validator
@@ -433,27 +429,6 @@ class Validator
     public function validatePhpExtension($name)
     {
         return extension_loaded($name);
-    }
-
-    /**
-     * Validate PHP version
-     *
-     * @param string $min
-     * @param string $max
-     * @param string $ver
-     * @return bool
-     */
-    public function validatePHPVersion($min, $max, $ver = PHP_VERSION)
-    {
-        $minAccepted = true;
-        if ($min) {
-            $minAccepted = version_compare($ver, $min, ">=");
-        }
-        $maxAccepted = true;
-        if ($max) {
-            $maxAccepted = version_compare($ver, $max, "<=");
-        }
-        return (bool)$minAccepted && $maxAccepted;
     }
 
     /**

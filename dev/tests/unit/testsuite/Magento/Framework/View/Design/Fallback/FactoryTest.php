@@ -26,7 +26,6 @@ namespace Magento\Framework\View\Design\Fallback;
 /**
  * Factory Test
  *
- * @package Magento\Framework\View\Design\Fallback
  */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

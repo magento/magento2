@@ -46,7 +46,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
@@ -57,7 +57,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param CustomerAddressServiceInterface $addressService
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
@@ -67,7 +67,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         CustomerAccountServiceInterface $customerAccountService,
         CustomerAddressServiceInterface $addressService,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
-        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;

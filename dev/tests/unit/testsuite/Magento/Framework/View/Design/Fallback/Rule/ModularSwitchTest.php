@@ -26,7 +26,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 /**
  * ModularSwitch Test
  *
- * @package Magento\Framework\View
  */
 class ModularSwitchTest extends \PHPUnit_Framework_TestCase
 {

@@ -26,7 +26,6 @@ namespace Magento\Framework\Filesystem;
 /**
  * Class WrapperFactory
  *
- * @package Magento\Framework\Filesystem
  */
 class WrapperFactory
 {

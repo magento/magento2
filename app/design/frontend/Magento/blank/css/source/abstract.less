@@ -25,7 +25,6 @@
 //
 //    List default styles reset
 //--------------------------------------
-
 .reset-list {
     .list-reset-styles();
     > li {
@@ -50,74 +49,9 @@
   border-radius: @button-border-radius;
 }
 
-
-//
-//    Product grid item
-//--------------------------------------
-.product-list-item {
-    &:extend(.reset-list all);
-    .product.item {
-        .box-sizing();
-        display: inline-block;
-        position: relative;
-        vertical-align: top;
-    }
-    .img.container {
-        max-width: 100%;
-        margin-bottom: @indent-base;
-        > .image {
-            max-width: 100%;
-            height: auto;
-        }
-    }
-    .name {
-        .product-name();
-        display: block;
-    }
-    .price-box {
-        margin-top: @indent-s-base;
-        .price {
-            font-weight: @font-weight-bold;
-        }
-    }
-    .actions {
-        .actions-toolbar(
-            @_actions-toolbar-actions-position: left,
-            @_actions-toolbar-actions-margin: @indent-s-base 0 0,
-            @_actions-toolbar-primary-actions-margin: @indent-s-base @indent-xs-base 0 0,
-            @_actions-toolbar-secondary-actions-links-margin-top: @indent-s-base
-        );
-    }
-    .action {
-        &.towishlist {
-            .icon-font(
-                @icon-wishlist-empty,
-                @_icon-font-size: 28px,
-                @_icon-font-color: @text-color-muted,
-                @_icon-font-text-hide: true,
-                @_icon-font-vertical-align: baseline
-            );
-            .icon-text-hide();
-        }
-        &.tocompare {
-            .icon-font(
-                @icon-compare-empty,
-                @_icon-font-size: 28px,
-                @_icon-font-color: @text-color-muted,
-                @_icon-font-text-hide: true,
-                @_icon-font-vertical-align: baseline
-            );
-        }
-        &.tocart {
-            &:extend(.action-primary all);
-        }
-    }
-}
-
 //
 //    Product options list
 //--------------------------------------
-
 .product-options-list {
     dt:after {
         content: ': ';
@@ -134,38 +68,32 @@
     }
 }
 
-
 //
-//    Action with icon remove with text
+//    Button reset width, floats, margins
 //--------------------------------------
-.action-remove {
-    .icon-font(
-        @_icon-font-content: @icon-remove,
-        @_icon-font-size: 26px
-    );
+.button-responsive {
+    .button-responsive();
 }
 
-//
-//    Responsive reset width, floats, margins
-//--------------------------------------
-.responsive(@break) when (@break = @mobile) {
-    .button-responsive {
-        .button-responsive();
+.responsive(@break) when (@break = @break-point-1) {
+    .button-desktop {
+        width: auto;
     }
 }
-
 
 //
 //    Blocks in 2 columns
 //--------------------------------------
-.blocks-2columns {
-    width: 48.8%;
-    &:nth-child(odd) {
-        float: left;
-        clear: left;
-    }
-    &:nth-child(even) {
-        float: right;
+.responsive(@break) when (@break = @break-point-1) {
+    .blocks-2columns {
+        width: 48.8%;
+        &:nth-child(odd) {
+            float: left;
+            clear: left;
+        }
+        &:nth-child(even) {
+            float: right;
+        }
     }
 }
 
@@ -208,23 +136,6 @@
 }
 
 //
-//    Form fields for widgets
-//--------------------------------------
-.form-fields-for-widgets {
-    .field,
-    .fields .field {
-        .form-field(
-            @_type: block,
-            @_column: none,
-            @_type-block-margin: 0 0 10px,
-            @_label-font-size: 14px,
-            @_label-font-weight: normal,
-            @_type-block-label-margin: 0 0 5px
-        );
-    }
-}
-
-//
 //    Remove button for blocks
 //--------------------------------------
 .remove-button-for-blocks {
@@ -252,8 +163,175 @@
 }
 
 //
-//    Action toolbar reset margins
+//    Link
 //--------------------------------------
-.action-toolbar-reset-margin {
+.like-link {
+    .link();
+    cursor: pointer;
+}
+
+//
+//   Reset left margin
+//--------------------------------------
+.reset-left-margin {
     margin-left: 0;
+}
+
+.responsive(@break) when (@break = @break-point-1) {
+    .reset-left-margin-desktop {
+        margin-left: 0;
+    }
+}
+
+//
+//    Action with icon remove with text
+//--------------------------------------
+.action-remove {
+    .button-reset();
+    &:extend(.like-link all);
+    width: auto;
+    line-height: normal;
+    position: absolute;
+    top: 31px; // 6px
+    left: 10px;
+    margin-left: 50%; // margin-left: @form-field-type-inline-label-width + 50%;
+}
+
+//
+//    Action with icon remove with text for desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .action-remove-desktop {
+        top: 6px;
+        margin-left: @form-field-type-inline-label-width + 50%;
+    }
+}
+
+//
+//    Add Recipient
+//--------------------------------------
+.add-recipients {
+    .recipients {
+        margin-bottom: 50px;
+        .field {
+             .control {
+                width: 50%;
+            }
+        }
+        .additional {
+            margin-top: 55px;
+            position: relative;
+            .action.remove {
+                &:extend(.action-remove all);
+            }
+        }
+        .actions.toolbar {
+            > .secondary {
+                .action.add {
+                    margin-top: @indent-l-base;
+                }
+                float: left;
+            }
+        }
+        .fields {
+            .actions.toolbar {
+                margin: 0;
+            }
+        }
+        .message {
+            margin: @indent-l-base 0 0 0;
+        }
+    }
+}
+
+//
+//    Add Recipient for desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .add-recipients-desktop {
+        .recipients {
+            .additional {
+                .action.remove {
+                    &:extend(.action-remove-desktop all);
+                }
+            }
+        }
+    }
+}
+
+//
+//    Margin for forms
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .margin-for-forms-desktop {
+        margin-left: @form-field-type-inline-label-width;
+    }
+}
+
+//
+//    Visually hidden / show visually hidden
+//--------------------------------------
+.visually-hidden {
+    .visually-hidden();
+}
+
+//
+//    Clearfix
+//--------------------------------------
+.add-clearfix {
+    .clearfix();
+}
+
+.responsive(@break) when (@break = @break-point-1) {
+    .add-clearfix-desktop {
+        .clearfix();
+    }
+}
+
+//
+//    Box-sizing
+//--------------------------------------
+.add-box-sizing {
+    .box-sizing();
+}
+
+.responsive(@break) when (@break = @break-point-1) {
+    .add-box-sizing-desktop {
+        .box-sizing();
+    }
+}
+
+//
+//    Revert field type
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .revert-field-type-desktop {
+        .fieldset {
+            > .field,
+            .fields > .field {
+                .form-field-type-revert(@_type: block);
+                &:not(:first-child):last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+//
+//    Settings icons
+//--------------------------------------
+.navigation-icon {
+    .icon-font(
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 34px,
+        @_icon-font-line-height: @icon-font-line-height,
+        @_icon-font-position: after,
+        @_icon-font-display: block
+    );
+    &:after {
+        position: absolute;
+        right: 5px;
+        top: 0;
+    }
 }

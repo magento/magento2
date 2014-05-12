@@ -26,7 +26,6 @@ namespace Magento\TestFramework\Integrity\Library\PhpParser;
 /**
  * Parse uses block
  *
- * @package Magento\TestFramework
  */
 class Uses implements Parser
 {

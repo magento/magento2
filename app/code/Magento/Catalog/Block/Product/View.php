@@ -18,12 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Block\Product;
+
+use Magento\Catalog\Model\Product;
 
 /**
  * Product View block
@@ -387,6 +387,11 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      */
     public function getIdentities()
     {
-        return $this->getProduct()->getIdentities();
+        $identities = $this->getProduct()->getIdentities();
+        $category = $this->_coreRegistry->registry('current_category');
+        if ($category) {
+            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+        }
+        return $identities;
     }
 }

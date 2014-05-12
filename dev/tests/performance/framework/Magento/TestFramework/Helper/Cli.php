@@ -26,7 +26,6 @@ namespace Magento\TestFramework\Helper;
 /**
  * Class Cli static helper
  *
- * @package Magento\TestFramework\Helper
  */
 class Cli
 {

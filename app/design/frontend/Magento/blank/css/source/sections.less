@@ -23,18 +23,17 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-@media only screen
-and (max-width : 99999px) {
-    .product.data.items  {
+.product.data.items {
+    .data-accordion();
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .product.data.items {
         .data-tabs(
             @_tab-content-border-top-status: true
         );
-    }
-}
-
-@media only screen
-and (max-width : @break-point-1) {
-    .product.data.items {
-        .data-accordion();
     }
 }

@@ -28,7 +28,6 @@ use Magento\Downloadable\Model\Link;
 
 /**
  * Class LinkPrice Model
- * @package Magento\Downloadable\Pricing\Price
  */
 interface LinkPriceInterface
 {

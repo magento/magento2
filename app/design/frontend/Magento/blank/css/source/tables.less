@@ -22,11 +22,30 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+.wrapper.table {
+    .table-overflow();
+    > table {
+        .table-caption(@_table-caption-hide: true);
+    }
+    margin-bottom: @indent-base;
+}
+
 //
-//    Responsive
+//    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @mobile) {
+.responsive(@break) when (@break = @break-point-1) {
     .wrapper.table {
-        .table-overflow();
+        > table {
+            > thead,
+            > tbody,
+            > tfoot {
+                > tr {
+                    > th,
+                    > td {
+                        white-space: normal;
+                    }
+                }
+            }
+        }
     }
 }

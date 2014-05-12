@@ -26,7 +26,6 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
  * Class Sample for Proxy and Factory generation
- * @package Magento\Framework\ObjectManager\Code\Generator
  */
 class Sample
 {

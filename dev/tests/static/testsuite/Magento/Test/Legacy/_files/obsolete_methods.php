@@ -1604,6 +1604,7 @@ return array(
     array('getDirectionVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
     array('getModeVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
     array('getLimitVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
+    array('validatePHPVersion', 'Magento\Framework\Connect\Validator'),
     array('getOrderUrl', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
     array('getModeUrl', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
     array('getLimitUrl', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
@@ -1683,4 +1684,7 @@ return array(
     ['getTierPrices', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['getTierPrices', 'Magento\Catalog\Block\Product\Price'],
     ['processTierPrices', 'Magento\Weee\Helper\Data'],
+    ['_getCategoryProductIdentities', 'Magento\Catalog\Model\Product'],
+    ['_getCategoryIdentities', 'Magento\Catalog\Model\Product'],
+    ['_isDataChanged', 'Magento\Catalog\Model\Product'],
 );

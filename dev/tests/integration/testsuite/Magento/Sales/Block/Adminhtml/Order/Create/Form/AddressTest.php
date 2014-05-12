@@ -169,7 +169,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
-        $this->assertSelectCount('option', 247, $countryIdField->getElementHtml());
+        $this->assertSelectCount('option', 246, $countryIdField->getElementHtml());
     }
 
     /**

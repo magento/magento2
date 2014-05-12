@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +28,6 @@ use Magento\Framework\View\Element\BlockInterface;
 /**
  * Catalog category widgets controller for CMS WYSIWYG
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Widget extends \Magento\Backend\App\Action
@@ -72,13 +68,14 @@ class Widget extends \Magento\Backend\App\Action
     {
         $categoryId = (int)$this->getRequest()->getPost('id');
         if ($categoryId) {
-
+            $selected = $this->getRequest()->getPost('selected', '');
             $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
             if ($category->getId()) {
                 $this->_coreRegistry->register('category', $category);
                 $this->_coreRegistry->register('current_category', $category);
             }
-            $this->getResponse()->setBody($this->_getCategoryTreeBlock()->getTreeJson($category));
+            $categoryTreeBlock = $this->_getCategoryTreeBlock()->setSelectedCategories(explode(',', $selected));
+            $this->getResponse()->setBody($categoryTreeBlock->getTreeJson($category));
         }
     }
 

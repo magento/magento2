@@ -30,7 +30,6 @@ use Magento\Framework\Object;
 /**
  * Render HTML <button> tag.
  *
- * @package Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer
  */
 class Button extends AbstractRenderer
 {

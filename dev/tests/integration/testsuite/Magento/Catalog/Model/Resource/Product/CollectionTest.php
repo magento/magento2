@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -108,5 +105,32 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(CustomerGroupServiceInterface::NOT_LOGGED_IN_ID, current($tierPrice)['cust_group']);
         $this->assertEquals(CustomerGroupServiceInterface::CUST_GROUP_ALL, next($tierPrice)['cust_group']);
         $this->assertTrue($this->_collection->getFlag('tier_price_added'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoConfigFixture current_store customer/account_share/scope 0
+     */
+    public function testStoreDependentAttributeValue()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $objectManager->create('Magento\Store\Model\Store');
+        $store->load('fixturestore', 'code');
+
+        $product = $this->_collection
+            ->addAttributeToSelect('name')
+            ->load()
+            ->getFirstItem();
+        $this->assertEquals('Simple Product One', $product->getName());
+
+        $product = $this->_collection
+            ->clear()
+            ->addAttributeToSelect('name')
+            ->addStoreFilter($store)
+            ->load()
+            ->getFirstItem();
+        $this->assertEquals("StoreTitle", $product->getName());
     }
 }

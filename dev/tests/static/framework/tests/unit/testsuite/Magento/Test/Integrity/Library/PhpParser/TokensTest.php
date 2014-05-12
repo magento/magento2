@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library\PhpParser;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
 
 /**
- * @package Magento\Test
  */
 class TokensTest extends \PHPUnit_Framework_TestCase
 {

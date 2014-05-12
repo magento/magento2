@@ -718,21 +718,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Adopt specified request array to be compatible with Paypal
-     * Puerto Rico should be as state of USA and not as a country
-     *
-     * @param array $request
-     * @return void
-     */
-    protected function _applyCountryWorkarounds(&$request)
-    {
-        if (isset($request['SHIPTOCOUNTRY']) && $request['SHIPTOCOUNTRY'] == 'PR') {
-            $request['SHIPTOCOUNTRY'] = 'US';
-            $request['SHIPTOSTATE'] = 'PR';
-        }
-    }
-
-    /**
      * Retrieve headers for request.
      * This is a hack to make Payflow work with negative values for items like discount has.
      *

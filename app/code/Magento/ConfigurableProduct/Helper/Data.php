@@ -30,7 +30,6 @@ use \Magento\Catalog\Model\Product;
  * Class Data
  * Helper class for getting options
  *
- * @package Magento\ConfigurableProduct\Helper
  */
 class Data
 {
@@ -71,7 +70,10 @@ class Data
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
-                $options['images'][$productAttributeId][$attributeValue][$productId] = $image ? $image : $baseImageUrl;
+                $imageUrl = (!$product->getImage() || $product->getImage() === 'no_selection')
+                    ? $baseImageUrl
+                    : (string)$image;
+                $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
             }
         }
 

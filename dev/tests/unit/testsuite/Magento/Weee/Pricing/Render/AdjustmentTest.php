@@ -27,7 +27,6 @@ namespace Magento\Weee\Pricing\Render;
 /**
  * Class AdjustmentTest for testing Adjustment class
  *
- * @package Magento\Weee\Pricing\Render
  */
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
 {

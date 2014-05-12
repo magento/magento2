@@ -364,3 +364,30 @@
 ._abbor_el(@_position, @_color) when (@_position = down) {
     border-top-color: @_color;
 }
+
+//
+//    Input placeholder
+//--------------------------------------
+
+.input-placeholder(
+    @_input-placeholder-color: @form-element-input-placeholder-color,
+    @_input-placeholder-font-weight: @form-element-input-font-weight
+) {
+    &::-webkit-input-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &:-moz-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &::-moz-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &:-ms-input-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+}
+

@@ -36,7 +36,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_paypalConfig;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $currentCustomer;
 
@@ -62,7 +62,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('createBlock')
             ->with('Magento\Framework\View\Element\Template')
             ->will($this->returnValue($mark));
-        $this->currentCustomer = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerCurrentService')
+        $this->currentCustomer = $this->getMockBuilder('\Magento\Customer\Helper\Session\CurrentCustomer')
             ->disableOriginalConstructor()
             ->getMock();
 

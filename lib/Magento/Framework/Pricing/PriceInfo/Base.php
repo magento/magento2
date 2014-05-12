@@ -33,7 +33,6 @@ use Magento\Framework\Pricing\Price\Collection as PriceCollection;
 /**
  * Class Base
  * Price info base model
- * @package Magento\Framework\Pricing\PriceInfo
  */
 class Base implements PriceInfoInterface
 {

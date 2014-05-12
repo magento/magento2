@@ -26,8 +26,6 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 /**
  * Export CSV button for shipping table rates
  *
- * @category   Magento
- * @package    Magento_OfflineShipping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Export extends \Magento\Framework\Data\Form\Element\AbstractElement

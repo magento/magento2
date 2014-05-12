@@ -32,16 +32,17 @@
 <?php if(count($this->getGroups())>1): ?>
 <div class="switcher store">
     <strong class="label"><span><?php echo __('Select Store') ?></span></strong>
-    <div class="options">
+    <div class="actions dropdown options">
         <?php foreach ($this->getGroups() as $_group): ?>
         <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
-            <strong>
-                <span><?php echo $this->escapeHtml($_group->getName()) ?></span>
-            </strong>
+            <div class="action toggle" data-toggle="dropdown">
+                <strong>
+                    <span><?php echo $this->escapeHtml($_group->getName()) ?></span>
+                </strong>
+            </div>
         <?php endif; ?>
         <?php endforeach; ?>
-        <button type="button" data-toggle="dropdown" class="action switch"><span><?php echo __('Change')?></span></button>
-        <ul data-target="dropdown">
+        <ul class="dropdown">
             <?php foreach ($this->getGroups() as $_group): ?>
             <?php if (!($_group->getId()==$this->getCurrentGroupId())): ?>
                 <li>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\ImportExport\Model\Export\Entity;
 /**
  * Export entity product model
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
@@ -857,7 +853,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $dataRows[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
 
                         if ($defaultStoreId == $storeId) {
-                            $rowWebsites[$itemId] = $item->getWebsites();
+                            $rowWebsites[$itemId] = array_intersect(
+                                array_keys($this->_websiteIdToCode),
+                                $item->getWebsites()
+                            );
                             $rowCategories[$itemId] = $item->getCategoryIds();
                         }
                     }

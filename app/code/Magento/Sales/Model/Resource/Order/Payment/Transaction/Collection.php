@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Sales\Model\Resource\Order\Payment\Transaction;
 /**
  * Payment transactions collection
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
@@ -199,19 +195,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     }
 
     /**
-     * Prepare filters
+     * Render additional filters and joins
      *
-     * @return $this
+     * @return void
      */
-    protected function _beforeLoad()
+    protected function _renderFiltersBefore()
     {
-        parent::_beforeLoad();
-
-        if ($this->isLoaded()) {
-            return $this;
-        }
-
-        // filters
         if ($this->_paymentId) {
             $this->getSelect()->where('main_table.payment_id = ?', $this->_paymentId);
         }
@@ -242,7 +231,6 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
                 $this->_addOrderInformation
             );
         }
-        return $this;
     }
 
     /**

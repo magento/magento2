@@ -135,6 +135,42 @@ class User extends \Magento\Backend\App\AbstractAction
     }
 
     /**
+     * AJAX customer validation action
+     *
+     * @return void
+     */
+    public function validateAction()
+    {
+        $response = new \Magento\Framework\Object();
+        $response->setError(0);
+        $errors = null;
+        $userId = (int)$this->getRequest()->getParam('user_id');
+        $data = $this->getRequest()->getPost();
+        try {
+            /** @var $model \Magento\User\Model\User */
+            $model = $this->_userFactory->create()->load($userId);
+            $model->setData($this->_getAdminUserData($data));
+            $errors = $model->validate();
+        } catch (\Magento\Framework\Model\Exception $exception) {
+            /* @var $error Error */
+            foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
+                $errors[] = $error->getText();
+            }
+        }
+
+        if ($errors !== true && !empty($errors)) {
+            foreach ($errors as $error) {
+                $this->messageManager->addError($error);
+            }
+            $response->setError(1);
+            $this->_view->getLayout()->initMessages();
+            $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
+        }
+
+        $this->getResponse()->setBody($response->toJson());
+    }
+
+    /**
      * @return void
      */
     public function saveAction()
@@ -146,7 +182,7 @@ class User extends \Magento\Backend\App\AbstractAction
             return;
         }
         /** @var $model \Magento\User\Model\User */
-        $model = $this->_objectManager->create('Magento\User\Model\User')->load($userId);
+        $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
             $this->messageManager->addError(__('This user no longer exists.'));
             $this->_redirect('adminhtml/*/');
@@ -195,7 +231,10 @@ class User extends \Magento\Backend\App\AbstractAction
         if (isset($data['password']) && $data['password'] === '') {
             unset($data['password']);
         }
-        if (isset($data['password_confirmation']) && $data['password_confirmation'] === '') {
+        if (!isset($data['password'])
+            && isset($data['password_confirmation'])
+            && $data['password_confirmation'] === ''
+        ) {
             unset($data['password_confirmation']);
         }
         return $data;

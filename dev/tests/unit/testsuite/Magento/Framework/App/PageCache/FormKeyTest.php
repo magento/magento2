@@ -26,7 +26,6 @@ namespace Magento\Framework\App\PageCache;
 
 /**
  * Class FormKeyTest
- * @package Magento\Framework\App\PageCache
  */
 class FormKeyTest extends \PHPUnit_Framework_TestCase
 {

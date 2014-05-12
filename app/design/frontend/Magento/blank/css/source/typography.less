@@ -53,8 +53,11 @@
     @font-style: normal
 );
 
-.responsive(@break) when (@break = @mobile) { 
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
     h1 {
-        font-size: @h2-font-size;
+        font-size: @h1-font-size-desktop;
     }
 }

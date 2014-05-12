@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -974,6 +972,9 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             $this->_structure->reorderChild($parentName, $childName, null);
         } else {
             $children = $this->getChildNames($parentName);
+            if ($this->_structure->getChildId($parentName, $offsetOrSibling) !== false) {
+                $offsetOrSibling = $this->_structure->getChildId($parentName, $offsetOrSibling);
+            }
             $sibling = $this->_filterSearchMinus($offsetOrSibling, $children, $after);
             if ($childName !== $sibling) {
                 $siblingParentName = $this->_structure->getParentId($sibling);

@@ -124,132 +124,132 @@
     .items {
         ._pager-inline-block-spaces-container();
         .list-reset-styles();
-        display: @_pager-item-display;
-        font-weight: @_pager-font-weight;
+        .css(display, @_pager-item-display);
+        .css(font-weight, @_pager-font-weight);
     }
     .item {
         ._pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .add-margin(@_pager-item-margin);
-        display: @_pager-item-display;
+        .css(margin, @_pager-item-margin);
+        .css(display, @_pager-item-display);
         .label {
             .visually-hidden();
         }
     }
     a.page {
-        .add-background(@_pager-background);
+        .css(background, @_pager-background);
         .background-gradient(
             @_pager-gradient-start-color,
             @_pager-gradient-end-color,
             @_pager-gradient-direction,
             @_pager-gradient
         );
-        .add-border(@_pager-border);
-        .add-padding(@_pager-item-padding);
-        color: @_pager-color;
-        display: @_pager-item-display;
-        text-decoration: @_pager-text-decoration;
+        .css(border, @_pager-border);
+        .css(padding, @_pager-item-padding);
+        .css(color, @_pager-color);
+        .css(display, @_pager-item-display);
+        .css(text-decoration, @_pager-text-decoration);
         &:visited {
-            .add-background(@_pager-background-visited);
+            .css(background, @_pager-background-visited);
             .background-gradient(
                 @_pager-gradient-start-color-visited,
                 @_pager-gradient-end-color-visited,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .add-border(@_pager-border-visited);
-            color: @_pager-color-visited;
+            .css(border, @_pager-border-visited);
+            .css(color, @_pager-color-visited);
         }
         &:hover {
-            .add-background(@_pager-background-hover);
+            .css(background, @_pager-background-hover);
             .background-gradient(
                 @_pager-gradient-start-color-hover,
                 @_pager-gradient-end-color-hover,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .add-border(@_pager-border-hover);
-            color: @_pager-color-hover;
-            text-decoration: @_pager-text-decoration-hover;
+            .css(border, @_pager-border-hover);
+            .css(color, @_pager-color-hover);
+            .css(text-decoration, @_pager-text-decoration-hover);
         }
         &:active {
-            .add-background(@_pager-background-active);
+            .css(background, @_pager-background-active);
             .background-gradient(
                 @_pager-gradient-start-color-active,
                 @_pager-gradient-end-color-active,
                 @_pager-gradient-direction,
                 @_pager-gradient
             );
-            .add-border(@_pager-border-active);
-            color: @_pager-color-active;
+            .css(border, @_pager-border-active);
+            .css(color, @_pager-color-active);
         }
     }
     strong.page {
-        .add-background(@_pager-current-background);
+        .css(background, @_pager-current-background);
         .background-gradient(
             @_pager-current-gradient-start-color,
             @_pager-current-gradient-end-color,
             @_pager-current-gradient-direction,
             @_pager-current-gradient
         );
-        .add-border(@_pager-current-border);
+        .css(border, @_pager-current-border);
         ._pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .add-padding(@_pager-item-padding);
-        color: @_pager-current-color;
-        display: @_pager-item-display;
-        font-weight: @_pager-current-font-weight;
+        .css(padding, @_pager-item-padding);
+        .css(color, @_pager-current-color);
+        .css(display, @_pager-item-display);
+        .css(font-weight, @_pager-current-font-weight);
     }
     .action {
-        .add-background(@_pager-action-background);
+        .css(background, @_pager-action-background);
         .background-gradient(
             @_pager-action-gradient-start-color,
             @_pager-action-gradient-end-color,
             @_pager-gradient-direction,
             @_pager-action-gradient
         );
-        .add-border(@_pager-action-border);
-        .add-padding(@_pager-actions-padding);
-        color: @_pager-action-color;
-        display: @_pager-item-display;
-        text-decoration: @_pager-action-text-decoration;
+        .css(border, @_pager-action-border);
+        .css(padding, @_pager-actions-padding);
+        .css(color, @_pager-action-color);
+        .css(display, @_pager-item-display);
+        .css(text-decoration, @_pager-action-text-decoration);
         &:visited {
-            .add-background(@_pager-action-background-visited);
+            .css(background, @_pager-action-background-visited);
             .background-gradient(
                 @_pager-action-gradient-start-color-visited,
                 @_pager-action-gradient-end-color-visited,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .add-border(@_pager-action-border-visited);
-            color: @_pager-action-color-visited;
+            .css(border, @_pager-action-border-visited);
+            .css(color, @_pager-action-color-visited);
         }
         &:hover {
-            .add-background(@_pager-action-background-hover);
+            .css(background, @_pager-action-background-hover);
             .background-gradient(
                 @_pager-action-gradient-start-color-hover,
                 @_pager-action-gradient-end-color-hover,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .add-border(@_pager-action-border-hover);
-            color: @_pager-action-color-hover;
-            text-decoration: @_pager-action-text-decoration-hover;
+            .css(border, @_pager-action-border-hover);
+            .css(color, @_pager-action-color-hover);
+            .css(text-decoration, @_pager-action-text-decoration-hover);
         }
         &:active {
-            .add-background(@_pager-action-background-active);
+            .css(background, @_pager-action-background-active);
             .background-gradient(
                 @_pager-action-gradient-start-color-active,
                 @_pager-action-gradient-end-color-active,
                 @_pager-action-gradient-direction,
                 @_pager-action-gradient
             );
-            .add-border(@_pager-action-border-active);
-            color: @_pager-action-color-active;
+            .css(border, @_pager-action-border-active);
+            .css(color, @_pager-action-color-active);
         }
         &.next {
             ._pager-icon (
@@ -310,8 +310,8 @@
     @_pager-line-height: @_pager-line-height
 ) when not (@_pager-label-display = none){
     > .label {
-        display: @_pager-label-display;
-        font-weight: @_pager-font-weight;
+        .css(display, @_pager-label-display);
+        .css(font-weight, @_pager-font-weight);
         .inline-block-space-item(
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
@@ -361,10 +361,10 @@
 ) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
 
     &:visited:before {
-        color: @_icon-font-color-visited;
+        .css(color, @_icon-font-color-visited);
     }
     &:active:before {
-        color: @_icon-font-color-active;
+        .css(color, @_icon-font-color-active);
     }
     .icon-font(
         @_icon-font-content: @_icon-font-content,
@@ -410,9 +410,9 @@
         @_icon-font-text-hide: @_icon-font-text-hide
     );
     &:visited:after {
-        color: @_icon-font-color-visited;
+        .css(color, @_icon-font-color-visited);
     }
     &:active:after {
-        color: @_icon-font-color-active;
+        .css(color, @_icon-font-color-active);
     }
 }

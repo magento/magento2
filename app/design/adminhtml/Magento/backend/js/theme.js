@@ -59,7 +59,7 @@
             itemsConfig: null,
             hoverIntentConfig: {
                 interval: 100,
-                timeout: 700 // number = milliseconds delay before onMouseOut
+                timeout: 500 // number = milliseconds delay before onMouseOut
             }
         },
 
@@ -112,7 +112,11 @@
         _hoverEffects: function (e) {
             $(this)
                 .addClass('hover recent')
-                .siblings('.level-0').removeClass('recent hover');
+                .siblings('.level-0').each(function() {
+                     clearTimeout($(this).prop('hoverIntent_t'));
+                    $(this).prop('hoverIntent_s', 0);
+                    $(this).removeClass('recent hover');
+                })
 
             var targetSubmenu = $(e.target).closest('.submenu');
             if(targetSubmenu.length && targetSubmenu.is(':visible')) {

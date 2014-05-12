@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,11 +31,12 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Customer\Model\Session;
 use Magento\CatalogRule\Model\Resource\RuleFactory;
+use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 
 /**
  * Class CatalogRulePrice
  */
-class CatalogRulePrice extends AbstractPrice
+class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterface
 {
     /**
      * Price type identifier string

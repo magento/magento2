@@ -164,8 +164,16 @@ class Console implements \Magento\Framework\AppInterface
         $areaCode = 'install';
         $this->_state->setAreaCode($areaCode);
         $this->_objectManager->configure($this->_loader->load($areaCode));
+        if (isset($this->_arguments['uninstall'])) {
+            $sessionConsole = $this->_objectManager->create('\Magento\Framework\Session\SessionConsole');
+            $installerModel = $this->_objectManager
+                ->create('Magento\Install\Model\Installer', ['session' => $sessionConsole]);
+            $installer = $this->_installerFactory
+                ->create(['installArgs' => $this->_arguments, 'installer' => $installerModel]);
+        } else {
+            $installer = $this->_installerFactory->create(array('installArgs' => $this->_arguments));
+        }
 
-        $installer = $this->_installerFactory->create(array('installArgs' => $this->_arguments));
         if (isset($this->_arguments['show_locales'])) {
             $this->_output->readableOutput($this->_output->prepareArray($installer->getAvailableLocales()));
         } elseif (isset($this->_arguments['show_currencies'])) {

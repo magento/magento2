@@ -29,7 +29,7 @@
             <block class="Magento\Framework\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
         </block>
         <container name="after_body_start" as="after_body_start" label="Page Top">
-            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml" cacheable="false"/>
+            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
         </container>
         <container name="header-container" label="Page Header Container" as="header-container" htmlTag="header" htmlClass="page header">
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">

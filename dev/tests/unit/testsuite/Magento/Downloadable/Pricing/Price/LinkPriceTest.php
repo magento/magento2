@@ -26,7 +26,6 @@ namespace Magento\Downloadable\Pricing\Price;
 
 /**
  * Class LinkPriceTest
- * @package Magento\Downloadable\Pricing\Price
  */
 class LinkPriceTest extends \PHPUnit_Framework_TestCase
 {

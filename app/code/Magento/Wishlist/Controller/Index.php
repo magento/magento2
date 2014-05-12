@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Wishlist front controller
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Controller;
@@ -612,8 +608,15 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
 
             if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
                 $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-            } elseif ($this->_redirect->getRefererUrl()) {
-                $redirectUrl = $this->_redirect->getRefererUrl();
+            } else {
+                $refererUrl = $this->_redirect->getRefererUrl();
+                if ($refererUrl &&
+                    ($refererUrl != $this->_objectManager->get('Magento\Framework\UrlInterface')
+                            ->getUrl('*/*/configure/', array('id' => $item->getId()))
+                    )
+                ) {
+                    $redirectUrl = $refererUrl;
+                }
             }
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
         } catch (\Magento\Framework\Model\Exception $e) {
@@ -668,8 +671,10 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $cart->getQuote()->removeItem($itemId);
             $cart->save();
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-            $productName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($item->getProduct()->getName());
-            $wishlistName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($wishlist->getName());
+            $productName = $this->_objectManager->get('Magento\Framework\Escaper')
+                ->escapeHtml($item->getProduct()->getName());
+            $wishlistName = $this->_objectManager->get('Magento\Framework\Escaper')
+                ->escapeHtml($wishlist->getName());
             $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
             $wishlist->save();
         } catch (\Magento\Framework\Model\Exception $e) {
@@ -896,5 +901,20 @@ class Index extends \Magento\Wishlist\Controller\AbstractController implements
             $this->_forward('noroute');
         }
         exit(0);
+    }
+
+    /**
+     * Add all items from wishlist to shopping cart
+     *
+     * @return void
+     */
+    public function allcartAction()
+    {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->_forward('noroute');
+            return;
+        }
+
+        parent::allcartAction();
     }
 }

@@ -215,11 +215,14 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function getAddressEditLink($address, $label = '')
     {
-        if (empty($label)) {
-            $label = __('Edit');
+        if ($this->_authorization->isAllowed('Magento_Sales::actions_edit')) {
+            if (empty($label)) {
+                $label = __('Edit');
+            }
+            $url = $this->getUrl('sales/order/address', array('address_id' => $address->getId()));
+            return '<a href="' . $url . '">' . $label . '</a>';
         }
-        $url = $this->getUrl('sales/order/address', array('address_id' => $address->getId()));
-        return '<a href="' . $url . '">' . $label . '</a>';
+        return '';
     }
 
     /**

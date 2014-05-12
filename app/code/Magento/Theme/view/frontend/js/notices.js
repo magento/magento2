@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    notices
- * @package     js
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -26,7 +24,11 @@
 (function ($) {
     $.widget('mage.cookieBlock', {
         _create: function() {
-            this.element.show();
+            if ($.mage.cookies.get(this.options.cookieName)) {
+                this.element.hide();
+            } else {
+                this.element.show();
+            }
             $(this.options.cookieAllowButtonSelector).on('click', $.proxy(function() {
                 var cookieExpires = new Date(new Date().getTime() + this.options.cookieLifetime * 1000);
                 $.mage.cookies.set(this.options.cookieName, this.options.cookieValue, {expires: cookieExpires});

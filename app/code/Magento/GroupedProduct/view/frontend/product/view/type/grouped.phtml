@@ -45,63 +45,66 @@
     <?php endif; ?>
 <?php endif; ?>
 
-<table class="table data grouped" id="super-product-table">
-    <thead>
-    <tr>
-        <th class="col item"><?php echo __('Product Name') ?></th>
-        <?php if ($this->getCanShowProductPrice($_product)): ?>
-            <th class="col price"><?php echo __('Price') ?></th>
-        <?php endif; ?>
-        <?php if ($_product->isSaleable()): ?>
-            <th class="col qty"><?php echo __('Qty') ?></th>
-        <?php endif; ?>
-    </tr>
-    </thead>
-    <tbody>
-    <?php if ($_hasAssociatedProducts): ?>
-    <?php foreach ($_associatedProducts as $_item): ?>
+<div class="wrapper table grouped">
+    <table class="table data grouped" id="super-product-table">
+        <caption class="table caption"><?php echo __('Grouped product items') ?></caption>
+        <thead>
         <tr>
-            <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
+            <th class="col item"><?php echo __('Product Name') ?></th>
             <?php if ($this->getCanShowProductPrice($_product)): ?>
-            <td class="col price">
-                <?php if ($this->getCanShowProductPrice($_item)): ?>
-                <?php echo $this->getProductPrice($_item) ?>
-                    <?php echo $this->getProductPriceHtml(
-                        $_item,
-                        \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
-                    ) ?>
-                <?php endif; ?>
-            </td>
+                <th class="col price"><?php echo __('Price') ?></th>
             <?php endif; ?>
             <?php if ($_product->isSaleable()): ?>
-            <td class="col qty">
-            <?php if ($_item->isSaleable()) : ?>
-                <div class="control qty">
-                    <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
-                           maxlength="12"
-                           value="<?php echo $_item->getQty() * 1 ?>"
-                           title="<?php echo __('Qty') ?>"
-                           class="input-text qty"
-                           data-validate="{'validate-grouped-qty':'#super-product-table'}"
-                           data-validate-message-box="#validate-message-box"/>
-                </div>
-            <?php else: ?>
-                <p class="stock unavailable" title="<?php echo __('Availability') ?>">
-                    <span><?php echo __('Out of stock') ?></span>
-                </p>
-            <?php endif; ?>
-            </td>
+                <th class="col qty"><?php echo __('Qty') ?></th>
             <?php endif; ?>
         </tr>
-    <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td class="unavailable"
-                colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
-                <?php echo __('No options of this product are available.') ?>
-            </td>
-        </tr>
-    <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <?php if ($_hasAssociatedProducts): ?>
+        <?php foreach ($_associatedProducts as $_item): ?>
+            <tr>
+                <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
+                <?php if ($this->getCanShowProductPrice($_product)): ?>
+                <td class="col price">
+                    <?php if ($this->getCanShowProductPrice($_item)): ?>
+                    <?php echo $this->getProductPrice($_item) ?>
+                        <?php echo $this->getProductPriceHtml(
+                            $_item,
+                            \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                        ) ?>
+                    <?php endif; ?>
+                </td>
+                <?php endif; ?>
+                <?php if ($_product->isSaleable()): ?>
+                <td class="col qty">
+                <?php if ($_item->isSaleable()) : ?>
+                    <div class="control qty">
+                        <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
+                               maxlength="12"
+                               value="<?php echo $_item->getQty() * 1 ?>"
+                               title="<?php echo __('Qty') ?>"
+                               class="input-text qty"
+                               data-validate="{'validate-grouped-qty':'#super-product-table'}"
+                               data-validate-message-box="#validate-message-box"/>
+                    </div>
+                <?php else: ?>
+                    <p class="stock unavailable" title="<?php echo __('Availability') ?>">
+                        <span><?php echo __('Out of stock') ?></span>
+                    </p>
+                <?php endif; ?>
+                </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td class="unavailable"
+                    colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
+                    <?php echo __('No options of this product are available.') ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 <div id="validation-message-box"></div>

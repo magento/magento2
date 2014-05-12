@@ -29,7 +29,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 /**
  * Interface CustomOptionPriceInterface for Configurable Product
  *
- * @package Magento\ConfigurableProduct\Pricing\Price
  */
 interface AttributePriceInterface
 {

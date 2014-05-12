@@ -23,54 +23,42 @@
 //  */
 
 .actions.toolbar {
-    .actions-toolbar();
-}
-
-.actions.toolbar {
-    .primary {
+    > .primary,
+    > .secondary {
+        text-align: center;
         .action {
-            &:extend(.action-primary all);
-        }
-        a.action {
-            .link-as-button();
-        }
-    }
-    .secondary {
-        a.action {
-            &:visited {
-                color: @link-color;
+            &:extend(.button-responsive all);
+            margin-bottom: @indent-s-base;
+            &:last-child {
+                margin-bottom: 0;
             }
         }
-    }
-}
-
-form {
-    .actions.toolbar {
-        margin-left: @form-field-type-inline-label-width;
+        margin-bottom: @indent-s-base;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
 
 //
-//    Responsive
+//    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @mobile) {
+.responsive(@break) when (@break = @break-point-1) {
     .actions.toolbar {
-        &:extend(._rwd_margins all);
-        .primary,
-        .secondary {
-            text-align: center;
-            &:extend(._rwd_width_float_margins all);
+        .actions-toolbar();
+        > .primary,
+        > .secondary {
+            margin-bottom: 0;
             .action {
-                &:extend(.button-responsive all);
-                &:extend(._rwd_margins all);
-                margin-bottom: @indent-s-base;
-                &:last-child {
-                    margin-bottom: 0;
-                }
-            }
-            margin-bottom: @indent-s-base;
-            &:last-child {
+                width: auto;
                 margin-bottom: 0;
+            }
+        }
+    }
+    form {
+        .actions.toolbar {
+            .column:not(.sidebar) & {
+                &:extend(.margin-for-forms-desktop all);
             }
         }
     }

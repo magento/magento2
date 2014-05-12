@@ -30,7 +30,6 @@ namespace Magento\Framework\Oauth;
  * include creating a request token, getting an access token, and performing certain validations on tokens and
  * token requests. A method is also included for generating an OAuth header that can be used in an HTTP request.
  *
- * @package Magento\Framework\Oauth
  */
 interface OauthInterface
 {

@@ -26,7 +26,6 @@ namespace Magento\Framework\Json;
 /**
  * Json decoder
  *
- * @package Magento\Framework\Json
  */
 interface DecoderInterface
 {

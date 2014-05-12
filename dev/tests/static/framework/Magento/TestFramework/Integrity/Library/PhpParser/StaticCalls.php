@@ -26,7 +26,6 @@ namespace Magento\TestFramework\Integrity\Library\PhpParser;
 /**
  * Parse static calls and collect dependencies for it
  *
- * @package Magento\TestFramework
  */
 class StaticCalls implements Parser, DependenciesCollector
 {

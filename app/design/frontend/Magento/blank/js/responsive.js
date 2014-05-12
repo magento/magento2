@@ -27,10 +27,37 @@
 
     $(document).ready(function(){
         mediaCheck({
-            media: '(max-width: 768px)',
-
-            // Switch to Mobile Version
+            media: '(min-width: 768px)',
+            // Switch to Desktop Version
             entry: function() {
+                // minicart
+                $('.action.showcart').removeClass('is-disabled');
+
+                (function() {
+
+                    var productInfoMain = $('.product.info.main'),
+                        productInfoAdditional = $("#product-info-additional");
+
+                    if(productInfoAdditional.length) {
+                        productInfoAdditional.addClass("hidden");
+                        productInfoMain.removeClass("responsive");
+                    }
+
+                })();
+
+                var galleryElement = $('[data-role=media-gallery]');
+                if (galleryElement.length && galleryElement.data('zoom')) {
+                    galleryElement.zoom('enable');
+                }
+                if (galleryElement.length && galleryElement.data('gallery')) {
+                    galleryElement.gallery("option","disableLinks",true);
+                }
+                if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
+                    galleryElement.galleryFullScreen('enable');
+                }
+            },
+            // Switch to Mobile Version
+            exit: function() {
                 // minicart
                 $('.action.showcart').addClass('is-disabled');
 
@@ -95,36 +122,8 @@
                     }
                 }, 2000);
 
-            },
-
-            // Switch to Desktop Version
-            exit: function() {
-                // minicart
-                $('.action.showcart').removeClass('is-disabled');
-
-                (function() {
-
-                    var productInfoMain = $('.product.info.main'),
-                        productInfoAdditional = $("#product-info-additional");
-
-                    if(productInfoAdditional.length) {
-                        productInfoAdditional.addClass("hidden");
-                        productInfoMain.removeClass("responsive");
-                    }
-
-                })();
-
-                var galleryElement = $('[data-role=media-gallery]');
-                if (galleryElement.length && galleryElement.data('zoom')) {
-                    galleryElement.zoom('enable');
-                                    }
-                if (galleryElement.length && galleryElement.data('gallery')) {
-                    galleryElement.gallery("option","disableLinks",true);
-                }
-                if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
-                    galleryElement.galleryFullScreen('enable');
-                }
             }
+
         });
     });
 })(window.jQuery);

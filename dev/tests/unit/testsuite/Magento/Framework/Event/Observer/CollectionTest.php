@@ -25,7 +25,6 @@ namespace Magento\Framework\Event\Observer;
 
 /**
  * Class CollectionTest
- * @package Magento\Framework\Event\Observer
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

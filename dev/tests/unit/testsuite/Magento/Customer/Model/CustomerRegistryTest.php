@@ -29,7 +29,6 @@ use Magento\TestFramework\Helper\ObjectManager;
 /**
  * Test for CustomerRegistry
  *
- * @package Magento\Customer\Model
  */
 class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
 {

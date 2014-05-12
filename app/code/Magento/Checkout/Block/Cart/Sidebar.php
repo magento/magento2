@@ -23,11 +23,17 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Checkout\Block\Cart\AbstractCart;
+use Magento\Framework\View\Block\IdentityInterface;
+
 /**
  * Wishlist sidebar block
  */
-class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Magento\Framework\View\Block\IdentityInterface
+class Sidebar extends AbstractCart implements IdentityInterface
 {
+    /**
+     * Xml pah to chackout sidebar count value
+     */
     const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
 
     /**
@@ -58,11 +64,6 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Mage
     protected $_checkoutHelper;
 
     /**
-     * @var \Magento\Checkout\Helper\Url
-     */
-    protected $_urlHelper;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
@@ -72,7 +73,6 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Mage
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Checkout\Helper\Url $urlHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -87,10 +87,8 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Mage
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Checkout\Helper\Url $urlHelper,
         array $data = array()
     ) {
-        $this->_urlHelper = $urlHelper;
         $this->_checkoutHelper = $checkoutHelper;
         $this->_taxData = $taxData;
         $this->_catalogUrl = $catalogUrl;
@@ -276,7 +274,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Mage
      */
     public function getCheckoutUrl()
     {
-        return $this->_urlHelper->getCheckoutUrl();
+        return $this->getUrl('checkout/onepage');
     }
 
     /**

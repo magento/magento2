@@ -26,7 +26,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 /**
  * Theme Test
  *
- * @package Magento\Framework\View\Design\Fallback\Rule
  */
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,18 +16,19 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Tabs and accordions
 //
-//  To set up tabs and accordions MageLess provides 2 types of mixins: <code>.data-tabs-base()</code> and <code>.data-accordion-base()</code> provide resets of markup elements default styles and minimal required css setup to make these elements work properly. <code>.data-tabs()</code> and <code>.data-accordion()</code> mixins provide full customizations opportunities to style tabs and accordions in your theme.
+//  To set up tabs and accordions Magento UI library provides 2 types of mixins: <code>.data-tabs-base()</code> and <code>.data-accordion-base()</code>. These mixins reset markup elements default styles and add minimal required css setup to make these elements work properly.
+//
 //  # Tabs
 //
-//  <code>.data-tabs()</code> mixin is used to setup tabs parameters
+//  The <code>.data-tabs()</code> mixin is used to setup tabs parameters.
 //
 //  ```html
 //  <dl class="example-sections-1" data-sections="tabs">
@@ -35,21 +36,21 @@
 //        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```
@@ -221,7 +222,7 @@
 //            <th>@_tab-content-border-top-status</th>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">true | false</td>
-//            <td>Tab content border top status: when set to <span class="vars_value">true</span> - tab content will only have top border. When set to false, tab content will have all 4 borders</td>
+//            <td>Tab content border top status. When set to 'true' the content has only top border. When set to 'false' the content has all 4 borders</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-margin-top</th>
@@ -237,10 +238,12 @@
 //        </tr>
 //    </table>
 //  </pre>
+//
 //  # Tabs with content top border
-//  To set up tabs with only top content border you should set the following variable:
+//
+//  To set up tabs with only top content border use variable:
 //  ```css
-//    @_tab-content-border: true
+//  @_tab-content-border: true
 //  ```
 //
 //  ```html
@@ -249,21 +252,21 @@
 //        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```
@@ -276,7 +279,7 @@
 
 //  # Accordion
 //
-//  <code>.data-accordion()</code> mixin is used to setup accordion parameters. Accordion has the same markup as tabs.
+//  The <code>.data-accordion()</code> mixin is used to setup accordion parameters. Accordion has the same markup as tabs.
 //
 //  ```html
 //  <dl class="example-sections-3" data-sections="tabs">
@@ -284,20 +287,20 @@
 //        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```
@@ -352,85 +355,85 @@
 //            <th>@_accordion-control-border</th>
 //            <td class="vars_value">@tab-control-border-width solid @tab-control-border-color</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> border</td>
+//            <td>Accordion control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-bg</th>
 //            <td class="vars_value">@tab-control-bg</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> background</td>
+//            <td>Accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color</th>
 //            <td class="vars_value">@tab-control-color</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> color</td>
+//            <td>Accordion control color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration</th>
 //            <td class="vars_value">@tab-control-text-decoration</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> text decoration</td>
+//            <td>Accordion control text decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-visited</th>
 //            <td class="vars_value">@accordion-control-color</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> visited link color</td>
+//            <td>Accordion control visited link color</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_accordion-control-text-decoration-visited</th>
 //            <td class="vars_value">@accordion-control-text-decoration</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Accordion <span class="vars_value">control</span> visited link text-decoration</td>
+//            <td>Accordion control visited link text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-bg-hover</th>
 //            <td class="vars_value">@tab-control-bg-hover</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Hovered accordion <span class="vars_value">control</span>background</td>
+//            <td>Hovered accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-hover</th>
 //            <td class="vars_value">@tab-control-color-hover</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Hovered accordion <span class="vars_value">control</span> text color</td>
+//            <td>Hovered accordion control text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration-hover</th>
 //            <td class="vars_value">@tab-control-text-decoration-hover</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Hovered accordion <span class="vars_value">control</span> text-decoration</td>
+//            <td>Hovered accordion control text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-bg-active</th>
 //            <td class="vars_value">@tab-control-bg-active</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Active accordion  <span class="vars_value">control</span> background</td>
+//            <td>Active accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-active</th>
 //            <td class="vars_value">@tab-control-color-active</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Active accordion  <span class="vars_value">control</span> text color</td>
+//            <td>Active accordion control text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration-active</th>
 //            <td class="vars_value">@tab-control-text-decoration-active</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Active accordion  <span class="vars_value">control</span> text-decoration</td>
+//            <td>Active accordion control text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-height</th>
 //            <td class="vars_value">@indent-xl-base</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Height of  accordion <span class="vars_value">control</span> control</td>
+//            <td>Height of accordion control</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-margin-bottom</th>
 //            <td class="vars_value">@accordion-control-margin-bottom</td>
 //            <td class="vars_value">'' | value</td>
-//            <td>Bottom margin of the accordion  <span class="vars_value">control</span></td>
+//            <td>Bottom margin of the accordion control</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-padding-top</th>
@@ -488,7 +491,7 @@
 
 //  # Responsive tabs
 //
-//  As tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for RWD: for desctop version there will be tabs, for mobile version they should transform to accordion. To implement this apptoach you should call <code>.data-tabs()</code> mixin for desctop version and <code>.data-accordion()</code> mixin for mobile version
+//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desctop version it is transformed to tabs. To implement this approach, use the  <code>.data-accordion()</code> mixin for mobile version, and the <code>.data-tabs()</code> mixin for desctop version.
 //
 //  ```html
 //  <dl class="example-sections-4" data-sections="tabs">
@@ -496,20 +499,20 @@
 //        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```
@@ -528,11 +531,7 @@
 
 //  # Tabs Base
 //
-//  The <code>.data-tabs-base()</code> mixin sets basic tabs styles. To set up tab links height use variable
-//  ```css
-//  @_tab-control-height-base: @tab-control-height-base
-//  ```
-//  Data tabs use the following markup:
+//  The <code>.data-tabs-base()</code> mixin sets basic tabs styles.
 //
 //  ```html
 //  <dl class="example-sections-5" data-sections="tabs">
@@ -540,21 +539,21 @@
 //        <a class="switch" data-toggle="switch" href="#">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```
@@ -566,7 +565,7 @@
 //  # Accordion Base
 //
 //  The <code>.data-accordion-base()</code> mixin sets basic accordion styles.
-//  Data accordion use the same markup as data tabs:
+//  Data accordion uses the same markup as data tabs.
 //
 //  ```html
 //  <dl class="example-sections-6" data-sections="tabs">
@@ -574,20 +573,20 @@
 //        <a class="switch" data-toggle="switch" href="#">Details</a>
 //    </dt>
 //    <dd class="item content active" data-section="content">
-//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 //    </dd>
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#">Tags</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 //    </dd>
 //
 //    <dt class="item title" data-section="title">
 //        <a class="switch" data-toggle="switch" href="#">Reviews</a>
 //    </dt>
 //    <dd class="item content" data-section="content">
-//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. </p>
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 //    </dd>
 //  </dl>
 //  ```

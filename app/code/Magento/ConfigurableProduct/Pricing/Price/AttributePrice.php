@@ -35,7 +35,6 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 /**
  * Class PriceOptions
  *
- * @package Magento\ConfigurableProduct\Block\Product\View\Type
  */
 class AttributePrice extends AbstractPrice implements AttributePriceInterface
 {

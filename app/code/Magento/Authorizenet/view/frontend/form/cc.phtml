@@ -18,16 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this \Magento\Authorizenet\Block\Authorizenet\Form\Cc */ ?>
+
 <?php $_formMessage=$this->getPartialAuthorizationFormMessage(); ?>
 <?php $_isPartialAuthorization=$this->isPartialAuthorization(); ?>
 <?php if ($_isPartialAuthorization || $_formMessage): ?>
-<div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>_before" style="display:none;">
+<div class="form-list items" id="payment_form_<?php echo $this->getMethodCode() ?>_before" style="display:none;">
     <?php if ($_formMessage): ?>
     <?php echo $this->showNoticeMessage($_formMessage) ?>
     <?php endif;?>
@@ -36,9 +36,7 @@
         <?php echo $this->getChildHtml('cards') ?>
         <div class="release-amounts"
              data-container="release-amounts"
-             data-mage-init='{"authorizenetAuthenticate":{"partialAuthorizationConfirmationMessage": "<?php echo $this->getPartialAuthorizationConfirmationMessage()?>",
-                                                          "cancelConfirmationMessage": "<?php echo $this->getCancelConfirmationMessage() ?>",
-                                                          "cancelUrl": "<?php echo $this->getCancelUrl() ?>"}}'>
+             data-mage-init='<?php echo $this->escapeMessage($this->getWidgetInitData()); ?>'>
             <button class="button" type="button" id="payment-button-cancel" name="cancel"><span><span>Cancel</span></span></button>
             <span><?php echo __('To cancel pending authorizations and release amounts that have already been processed during this payment, click Cancel.') ?></span>
         </div>

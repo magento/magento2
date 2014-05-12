@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library\PhpParser;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 
 /**
- * @package Magento\Test
  */
 class ParserFactoryTest extends \PHPUnit_Framework_TestCase
 {
