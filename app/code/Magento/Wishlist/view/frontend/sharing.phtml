@@ -18,14 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 /** @var $this \Magento\Wishlist\Block\Customer\Sharing */
 ?>
-<form class="form wishlist share" action="<?php echo $this->getSendUrl() ?>" id="form-validate" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>">
+<form class="form wishlist share"
+      action="<?php echo $this->getSendUrl() ?>"
+      id="form-validate"
+      method="post"
+      data-hasrequired="<?php echo __('* Required Fields') ?>"
+      data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
         <?php echo $this->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Sharing Information') ?></span></legend><br />
@@ -54,7 +58,7 @@
     </fieldset>
     <div class="actions toolbar">
         <div class="primary">
-            <button type="submit" title="<?php echo __('Share Wishlist') ?>" class="action submit">
+            <button type="submit" title="<?php echo __('Share Wishlist') ?>" class="action submit primary">
                 <span><?php echo __('Share Wishlist') ?></span>
             </button>
         </div>
@@ -63,13 +67,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function() {
-                $('#form-validate').validation();
-            })
-    })(jQuery);
-</script>

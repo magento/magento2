@@ -80,7 +80,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                             <div class="primary">
                                                 <?php if($_item->isSaleable()): ?>
                                                     <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
-                                                        <button class="action tocart" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
+                                                        <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
                                                             <span><?php echo __('Add to Cart') ?></span>
                                                         </button>
                                                     <?php else: ?>
@@ -88,7 +88,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                                             $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
                                                             $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                         ?>
-                                                        <button class="action tocart"
+                                                        <button class="action tocart primary"
                                                                 data-post='<?php echo $postData; ?>'
                                                                 type="button" title="<?php echo __('Add to Cart') ?>">
                                                             <span><?php echo __('Add to Cart') ?></span>

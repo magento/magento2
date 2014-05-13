@@ -29,12 +29,12 @@
     <script type="text/javascript">
         //<![CDATA[
         (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::/bundle.js') ?>", function() {
-                $('#product_addtocart_form').bundleOption({
-                    bundleConfig: <?php echo $this->getJsonConfig() ?>,
-                    bundleOptionQtyPrefix: "#bundle-option-",
-                    bundleOptionQtySuffix: "-qty-input",
-                    priceSelectors: {
+            $(document).ready(function() {
+                $('#product_addtocart_form').mage('bundleOption', {
+                    "bundleConfig": <?php echo $this->getJsonConfig() ?>,
+                    "bundleOptionQtyPrefix": "#bundle-option-",
+                    "bundleOptionQtySuffix": "-qty-input",
+                    "priceSelectors": {
                         "product-price": "#product-price-<?php echo $_product->getId()?>",
                         "bundle-price": "#bundle-price-<?php echo $_product->getId()?>",
                         "price-including-tax": "#price-including-tax-<?php echo $_product->getId()?>",

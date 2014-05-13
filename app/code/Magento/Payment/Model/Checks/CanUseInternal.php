@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Payment\Model\Checks;
 
 use Magento\Sales\Model\Quote;
-use Magento\Payment\Model\Method\AbstractMethod;
 
 class CanUseInternal implements SpecificationInterface
 {
@@ -34,11 +31,11 @@ class CanUseInternal implements SpecificationInterface
      * Check whether payment method is applicable to quote
      * Purposed to allow use in controllers some logic that was implemented in blocks only before
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $paymentMethod
+     * @param PaymentMethodChecksInterface $paymentMethod
      * @param \Magento\Sales\Model\Quote $quote
      * @return bool
      */
-    public function isApplicable(AbstractMethod $paymentMethod, Quote $quote)
+    public function isApplicable(PaymentMethodChecksInterface $paymentMethod, Quote $quote)
     {
         return $paymentMethod->canUseInternal();
     }

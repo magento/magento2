@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Date grid column filter
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
  */
@@ -83,7 +79,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $dateObj = $this->getLocaleDate()->date(null, null, $locale, false);
+                $dateObj = $this->_localeDate->date(null, null, $locale, false);
 
                 //set default timezone for store (admin)
                 $dateObj->setTimezone(
@@ -96,7 +92,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 //set date with applying timezone of store
                 $dateObj->set(
                     $date,
-                    $this->getLocaleDate()->getDateTimeFormat(
+                    $this->_localeDate->getDateTimeFormat(
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     ),
                     $locale

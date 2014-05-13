@@ -143,17 +143,14 @@ class RecurringPaymentTest extends \Magento\TestFramework\TestCase\AbstractContr
     }
 
     /**
-     * Test if orders related to recurring profile are filtered correctly by current customer (with no orders)
-     *
      * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
-    public function testOrdersActionFilterByCustomerWithoutOrders()
+    public function testViewNotCustomersOwnRecurringProfile()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** Preconditions */
-        /** Set filter by customer */
+
         /** @var \Magento\Customer\Model\Session $customerSession */
         $customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $customerSession->setCustomerId($this->_createSecondCustomer()->getId());
@@ -168,20 +165,13 @@ class RecurringPaymentTest extends \Magento\TestFramework\TestCase\AbstractContr
         $order->save();
 
         $this->getRequest()->setParam(RecurringPayment::PARAM_PAYMENT, $payment->getId());
+        $this->dispatch('sales/recurringPayment/view');
 
-        /** Execute SUT */
-        $this->dispatch('sales/recurringPayment/orders');
-
-        /** Ensure that order related to recurring payment is shown on the grid */
-        $this->assertContains(
-            'There are no orders yet',
-            $this->getResponse()->getBody(),
-            'No orders should be shown as related to selected recurring payments for current customer.'
-        );
-        $this->assertNotContains(
-            $fixtureOrderIncrementId,
-            $this->getResponse()->getBody(),
-            'Order should be filtered out.'
+        /** @var \Magento\Framework\Message\Manager $messageManager */
+        $messageManager = $this->_objectManager->get('Magento\Framework\Message\Manager');
+        $this->assertEquals(
+            __('We can\'t find the payment you specified.'),
+            $messageManager->getMessages()->getErrors()[0]->getText()
         );
     }
 

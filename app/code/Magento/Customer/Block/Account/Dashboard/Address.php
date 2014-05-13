@@ -37,31 +37,31 @@ class Address extends \Magento\Framework\View\Element\Template
     protected $_addressConfig;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentServiceInterface
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
-    protected $customerCurrentService;
+    protected $currentCustomer;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface
+     * @var \Magento\Customer\Helper\Session\CurrentCustomerAddress
      */
-    protected $customerAddressCurrentService;
+    protected $currentCustomerAddress;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService
-     * @param \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface $customerAddressCurrentService
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     * @param \Magento\Customer\Helper\Session\CurrentCustomerAddress $currentCustomerAddress
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService,
-        \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface $customerAddressCurrentService,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Customer\Helper\Session\CurrentCustomerAddress $currentCustomerAddress,
         \Magento\Customer\Model\Address\Config $addressConfig,
         array $data = array()
     ) {
-        $this->customerCurrentService = $customerCurrentService;
-        $this->customerAddressCurrentService = $customerAddressCurrentService;
+        $this->currentCustomer = $currentCustomer;
+        $this->currentCustomerAddress = $currentCustomerAddress;
         $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
@@ -75,7 +75,7 @@ class Address extends \Magento\Framework\View\Element\Template
     public function getCustomer()
     {
         try {
-            return $this->customerCurrentService->getCustomer();
+            return $this->currentCustomer->getCustomer();
         } catch (NoSuchEntityException $e) {
             return null;
         }
@@ -89,7 +89,7 @@ class Address extends \Magento\Framework\View\Element\Template
     public function getPrimaryShippingAddressHtml()
     {
         try {
-            $address = $this->customerAddressCurrentService->getDefaultShippingAddress();
+            $address = $this->currentCustomerAddress->getDefaultShippingAddress();
         } catch (NoSuchEntityException $e) {
             return __('You have not set a default shipping address.');
         }
@@ -109,7 +109,7 @@ class Address extends \Magento\Framework\View\Element\Template
     public function getPrimaryBillingAddressHtml()
     {
         try {
-            $address = $this->customerAddressCurrentService->getDefaultBillingAddress();
+            $address = $this->currentCustomerAddress->getDefaultBillingAddress();
         } catch (NoSuchEntityException $e) {
             return __('You have not set a default billing address.');
         }

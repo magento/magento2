@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    frontend product price option
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -35,7 +33,6 @@
             controlContainer: 'dd'
         },
         _create: function() {
-
             this.element.on('changePrice', $.proxy(function(e, data) {
                     this.changePrice(data.config, data.price);
                 }, this)).on('reloadPrice', $.proxy(function() {
@@ -224,8 +221,10 @@
                             price = price + getOptionPrices[0];
                         }
 
-
-                        var priceHtml = $.tmpl(this.options.priceTemplate, {'formattedPrice': this._formatCurrency(price, this.options.priceConfig.priceFormat)});
+                        var priceHtml = $.tmpl(
+                            this.options.priceTemplate,
+                            {'formattedPrice': this._formatCurrency(price, this.options.priceConfig.priceFormat)}
+                        );
                         priceElement.html(priceHtml[0].outerHTML);
                         // If clone exists, update clone price as well
                         if (!isClone && clone.length === 1) {

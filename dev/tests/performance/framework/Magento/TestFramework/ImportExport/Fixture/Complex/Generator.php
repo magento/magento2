@@ -26,7 +26,6 @@ namespace Magento\TestFramework\ImportExport\Fixture\Complex;
 /**
  * Class Generator
  *
- * @package Magento\TestFramework\ImportExport\Fixture\Complex
  *
  */
 class Generator extends \Magento\ImportExport\Model\Import\AbstractSource

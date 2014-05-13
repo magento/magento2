@@ -78,6 +78,14 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
             '<form id="token_form" method="POST" action="https://payflowlink.paypal.com/">',
             $this->getResponse()->getBody()
         );
+        // Check P3P header
+        $headerConstraints = [];
+        foreach ($this->getResponse()->getHeaders() as $header) {
+            $headerConstraints[] = new \PHPUnit_Framework_Constraint_IsEqual($header['name']);
+        }
+        $constraint = new \PHPUnit_Framework_Constraint_Or();
+        $constraint->setConstraints($headerConstraints);
+        $this->assertThat('P3p', $constraint);
     }
 
     /**

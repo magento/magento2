@@ -26,7 +26,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 /**
  * Composite Test
  *
- * @package Magento\Framework\View
  */
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {

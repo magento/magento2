@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library;
 use Magento\TestFramework\Integrity\Library\Injectable;
 
 /**
- * @package Magento\Test
  */
 class InjectableTest extends \PHPUnit_Framework_TestCase
 {

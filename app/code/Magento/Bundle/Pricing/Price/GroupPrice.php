@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,6 +31,11 @@ use Magento\Customer\Model\Session;
  */
 class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice
 {
+    /**
+     * Price type group
+     */
+    const PRICE_CODE = 'group_price';
+
     /**
      * @return float|bool
      */
@@ -59,7 +62,7 @@ class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice
     protected function getBasePrice($qty = null)
     {
         return $this->priceInfo
-            ->getPrice(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_TYPE_BASE_PRICE, $qty)
+            ->getPrice(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
             ->getValue();
     }
 }

@@ -56,15 +56,15 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
-     * @return null
+     * @return string
      */
     protected function apply()
     {
-        $html = $this->toHtml();
         if ($this->displayBothPrices()) {
             if ($this->getZone() !== \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION) {
-                $this->amountRender->setPriceDisplayLabel(__('Excl. Tax:'));
+                $this->amountRender->setPriceDisplayLabel(__('Excl. Tax'));
             }
+            $this->amountRender->setPriceWrapperCss('price-excluding-tax');
             $this->amountRender->setPriceId(
                 $this->buildIdWithPrefix('price-excluding-tax-')
             );
@@ -73,15 +73,12 @@ class Adjustment extends AbstractAdjustment
                 $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
             );
         } elseif ($this->displayPriceExcludingTax()) {
-
             $this->amountRender->setDisplayValue(
                 $this->amountRender->getDisplayValue() -
                 $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
             );
         }
-        if (trim($html)) {
-            $this->amountRender->addAdjustmentHtml($this->getAdjustmentCode(), $html);
-        }
+        return $this->toHtml();
     }
 
     /**
@@ -92,7 +89,7 @@ class Adjustment extends AbstractAdjustment
     public function getAdjustmentCode()
     {
         //@TODO We can build two model using DI, not code. What about passing it in constructor?
-        return \Magento\Tax\Pricing\Adjustment::CODE;
+        return \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE;
     }
 
     /**

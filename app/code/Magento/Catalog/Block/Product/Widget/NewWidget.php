@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -61,21 +59,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
      */
     protected $_pager;
-
-    /**
-     * Initialize block's cache and template settings
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->addPriceBlockType(
-            'bundle',
-            'Magento\Bundle\Block\Catalog\Product\Price',
-            'bundle/catalog/product/price.phtml'
-        );
-    }
 
     /**
      * Product collection initialize process
@@ -249,7 +232,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 $arguments
             );

@@ -24,7 +24,7 @@
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Bundle selection price factory
@@ -34,7 +34,7 @@ class BundleSelectionFactory
     /**
      * Default selection class
      */
-    const SELECTION_CLASS_DEFAULT = 'Magento\Bundle\Pricing\Price\BundleSelectionPriceInterface';
+    const SELECTION_CLASS_DEFAULT = 'Magento\Bundle\Pricing\Price\BundleSelectionPrice';
 
     /**
      * Object Manager
@@ -56,26 +56,26 @@ class BundleSelectionFactory
     /**
      * Create Price object for particular product
      *
-     * @param SaleableInterface $bundleProduct
-     * @param SaleableInterface $selection
+     * @param Product $bundleProduct
+     * @param Product $selection
      * @param float $quantity
      * @param array $arguments
      * @throws \InvalidArgumentException
-     * @return BundleSelectionPriceInterface
+     * @return BundleSelectionPrice
      */
     public function create(
-        SaleableInterface $bundleProduct,
-        SaleableInterface $selection,
+        Product $bundleProduct,
+        Product $selection,
         $quantity,
         array $arguments = []
     ) {
         $arguments['bundleProduct'] = $bundleProduct;
-        $arguments['salableItem'] = $selection;
+        $arguments['saleableItem'] = $selection;
         $arguments['quantity'] = $quantity ? floatval($quantity) : 1.;
         $selectionPrice = $this->objectManager->create(self::SELECTION_CLASS_DEFAULT, $arguments);
-        if (!$selectionPrice instanceof BundleSelectionPriceInterface) {
+        if (!$selectionPrice instanceof BundleSelectionPrice) {
             throw new \InvalidArgumentException(
-                get_class($selectionPrice) . ' doesn\'t implement BundleSelectionPriceInterface'
+                get_class($selectionPrice) . ' doesn\'t extend BundleSelectionPrice'
             );
         }
         return $selectionPrice;

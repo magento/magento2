@@ -25,7 +25,6 @@ namespace Magento\Catalog\Block\Product\Compare;
 
 /**
  * Class ListCompareTest
- * @package Magento\Catalog\Block\Product\Compare
  */
 class ListCompareTest extends \PHPUnit_Framework_TestCase
 {

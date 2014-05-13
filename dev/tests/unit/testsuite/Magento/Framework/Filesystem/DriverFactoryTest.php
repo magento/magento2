@@ -27,7 +27,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class DriverFactoryTest
- * @package Magento\Framework\Filesystem
  */
 class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 {

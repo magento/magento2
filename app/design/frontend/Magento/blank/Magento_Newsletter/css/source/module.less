@@ -23,32 +23,38 @@
 //  */
 
 //
-// Newsletter subscription
+//    Newsletter subscription
 //--------------------------------------
 
 .block.newsletter {
-    position:relative;
-    z-index: 1;
+    margin-bottom: 40px;
+    .form.subscribe {
+        display: table;
+        width: 100%;
+    }
     .fieldset {
-        margin:0;
-        padding:0;
-        display: inline-block;
+        display: table-cell;
+        margin: 0;
+        padding: 0;
         vertical-align: top;
     }
-    .control {
-        .icon-font(
-            @icon-envelope,
-            @_icon-font-size: 35px,
-            @_icon-font-line-height: 33px,
-            @_icon-font-color: #c6c6c6
-            );
-        &:before {
-            position: absolute;
+    .field {
+        margin: 0;
+        .control {
+            .icon-font(
+                @icon-envelope,
+                @_icon-font-size: 35px,
+                @_icon-font-line-height: 33px,
+                @_icon-font-color: @form-element-input-placeholder-color
+                );
+            &:before {
+                position: absolute;
+            }
+            display: block;
         }
-        width:250px;
     }
     input {
-        padding-left:35px;
+        padding-left: 35px;
     }
     .title {
         display: none;
@@ -57,27 +63,28 @@
         .visually-hidden();
     }
     .actions {
-        display:inline-block;
+        display: table-cell;
         vertical-align: top;
+        width: 1%;
     }
-    .action.subscribe {}
+    .action.subscribe {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-left: -1px;
+    }
 }
 
-.responsive(@break) when (@break = @mobile) {
-    .footer.content .block.newsletter {
-        float: none;
-        .subscribe.form {
-            display: flex;
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .block.newsletter {
+        width: 32%;
+        .field {
+            margin-right: 5px;
         }
-        .fieldset,
-        .control {
-            .box-sizing();
-            width: 90%;
-        }
-        .actions {
-            padding-left: 10px;
-            display: block;
-            vertical-align: top;
+        .action.subscribe {
+            border-radius: 3px;
         }
     }
 }

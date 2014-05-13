@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,10 +25,14 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 /**
  * Class FlatTableBuilder
- * @package Magento\Catalog\Model\Indexer\Product\Flat
  */
 class FlatTableBuilder
 {
+    /**
+     * Path to maximum available amount of indexes for flat indexer
+     */
+    const XML_NODE_MAX_INDEX_COUNT = 'catalog/product/flat/max_index_count';
+
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer
      */
@@ -123,7 +125,7 @@ class FlatTableBuilder
         $indexesNeed = $this->_productIndexerHelper->getFlatIndexes();
 
         $maxIndex = $this->_config->getValue(
-            \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction::XML_NODE_MAX_INDEX_COUNT
+            self::XML_NODE_MAX_INDEX_COUNT
         );
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
             throw new \Magento\Framework\Model\Exception(

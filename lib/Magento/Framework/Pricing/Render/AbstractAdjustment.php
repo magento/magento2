@@ -63,7 +63,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     /**
      * @param AmountRenderInterface $amountRender
      * @param array $arguments
-     * @return void
+     * @return string
      */
     public function render(AmountRenderInterface $amountRender, array $arguments = [])
     {
@@ -72,10 +72,11 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
         $origArguments = $this->getData();
         $this->setData(array_replace($origArguments, $arguments));
 
-        $this->apply();
+        $html = $this->apply();
 
         // restore original block arguments
         $this->setData($origArguments);
+        return $html;
     }
 
     /**
@@ -136,7 +137,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     }
 
     /**
-     * @return void
+     * @return string
      */
     abstract protected function apply();
 }

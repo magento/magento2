@@ -26,8 +26,6 @@
 /**
  * Custom import CSV file field for shipping table rates
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;

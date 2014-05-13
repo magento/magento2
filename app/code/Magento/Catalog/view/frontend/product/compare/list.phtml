@@ -29,16 +29,21 @@
         <span><?php echo __('Print This Page') ?></span>
     </a>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-    <div class="comparison wrapper">
-        <div class="comparison container">
-            <table class="data-table data table comparison" id="product-comparison">
+        <div class="table wrapper comparison">
+            <table class="data-table data table comparison" id="product-comparison"
+                data-mage-init='{"compareList":{
+                    "windowPrintSelector":".action.print",
+                    "productsInRow":"5",
+                    "selectors":{
+                        "productAddToCartSelector":"button.action.tocart"}
+                }}'>
                 <caption><?php echo __('Compare Products') ?></caption>
                 <thead>
                 <tr>
                     <?php $_i=0 ?>
                     <?php foreach($this->getItems() as $_item): ?>
                         <?php if($_i++==0): ?>
-                            <th scope="row" class="cell label remove"><?php echo __('Remove Product') ?></th>
+                            <th scope="row" class="cell label remove"><span><?php echo __('Remove Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product">
                             <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
@@ -57,7 +62,7 @@
                     <?php /** @var $_item \Magento\Catalog\Model\Product */ ?>
                     <?php foreach($this->getItems() as $_item): ?>
                         <?php if($_i++==0): ?>
-                            <th scope="row" class="cell label product"><?php echo __('Product') ?></th>
+                            <th scope="row" class="cell label product"><span><?php echo __('Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell product info">
                             <a class="product photo" href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>">
@@ -74,7 +79,7 @@
                             <div class="product actions">
                                 <div class="primary">
                                     <?php if($_item->isSaleable()): ?>
-                                        <button type="button" class="action tocart"
+                                        <button type="button" class="action tocart primary"
                                                 data-url="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($_item) ?>">
                                             <span><?php echo __('Add to Cart') ?></span>
                                         </button>
@@ -139,22 +144,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
 <?php else: ?>
     <p class="empty"><?php echo __('You have no items to compare.') ?></p>
 <?php endif; ?>
-<script type="text/javascript">
-    (function($, window) {
-        <?php if ($_total): ?>
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/list.js')?>", function() {
-            $('#product-comparison').compareList({
-                windowPrintSelector: '.action.print',
-                productsInRow: 5,
-                selectors: {
-                    productAddToCartSelector: 'button.action.tocart'
-                }
-            });
-        });
-        <?php endif; ?>
-    })(jQuery, window);
-</script>

@@ -33,8 +33,8 @@
 
 <script type="text/javascript">
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/price-option.js') ?>", function () {
-            $('#product_addtocart_form').priceOption({"priceConfig":<?php echo $this->getJsonConfig() ?>});
+        $(document).ready(function() {
+            $('#product_addtocart_form').mage('priceOption', {"priceConfig":<?php echo $this->getJsonConfig() ?>});
         });
     })(jQuery);
 </script>

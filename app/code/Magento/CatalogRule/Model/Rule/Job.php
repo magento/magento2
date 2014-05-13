@@ -36,8 +36,6 @@
  * @method bool hasSuccess()
  * @method bool hasError()
  *
- * @category  Magento
- * @package   Magento_CatalogRule
  * @author    Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Rule;

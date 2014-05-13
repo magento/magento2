@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,7 +28,7 @@ $testsBaseDir = realpath(__DIR__ . '/..');
 $magentoBaseDir = realpath($testsBaseDir . '/../../../');
 
 require_once "{$magentoBaseDir}/app/bootstrap.php";
-\Magento\Framework\Autoload\IncludePath::addIncludePath("{$testsBaseDir}/framework");
+(new \Magento\Framework\Autoload\IncludePath())->addIncludePath("{$testsBaseDir}/framework");
 
 $bootstrap = new \Magento\TestFramework\Performance\Bootstrap($testsBaseDir, $magentoBaseDir);
 $bootstrap->cleanupReports();

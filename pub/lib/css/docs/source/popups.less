@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,16 +16,16 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Popups
-//  To implement the popup, use the following markup, which corresponds accessibility requirements. To set Popup styles use the <code>.popup()</code> mixin.
+//  To implement the popup, use the following markup. It corresponds accessibility requirements. To set Popup styles use the <code>.popup()</code> mixin.
 //
-//  <code>.window-overlay()</code> mixin controls the styles of overlay background
+//  The <code>.window-overlay()</code> mixin controls the styles of overlay background.
 //  ##Simple popup
 //
 //  ``` html
@@ -101,13 +101,13 @@
 //        <th>@_popup-width</th>
 //        <td class="vars_value">380px</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup width</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-height</th>
 //        <td class="vars_value">auto</td>
 //        <td class="vars_value">'' | auto | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-padding</th>
@@ -119,31 +119,31 @@
 //        <th>@_popup-background</th>
 //        <td class="vars_value">#fff</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup background</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-border</th>
 //        <td class="vars_value">1px solid #aeaeae</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup border</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-shadow</th>
 //        <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
 //        <td class="vars_value">'' | none | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup shadow</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-fade</th>
 //        <td class="vars_value">opacity 0.3s linear</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup overlay opacity</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-z-index</th>
 //        <td class="vars_value">1001</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup z-index</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Popup position</th>
@@ -152,31 +152,31 @@
 //        <th>@_popup-position</th>
 //        <td class="vars_value">fixed</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-top</th>
 //        <td class="vars_value">20%</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup top</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-right</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup right</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-bottom</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup bottom</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-left</th>
 //        <td class="vars_value">50%</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup left</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Popup margin</th>
@@ -186,67 +186,61 @@
 //        <th>@_popup-margin-top</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-right</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup right margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-bottom</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup bottom margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-left</th>
 //        <td class="vars_value">-((@popup-width+(@popup-padding*2))/2)</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
-//      </tr>
-//      <tr>
-//        <th>&nbsp;</th>
-//        <td class="vars_value">&nbsp;</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup left margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-content-height</th>
 //        <td class="vars_value">auto</td>
 //        <td class="vars_value">'' | auto | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup content height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-header-margin</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup header margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-content-margin</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup content margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-footer-margin</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup footer margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-title-headings</th>
 //        <td class="vars_value">true</td>
 //        <td class="vars_value">true | false</td>
-//        <td>Should popup title have the same style as onte of page headings</td>
+//        <td>Popup title has the same style as one of page headings</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-title-headings-level</th>
 //        <td class="vars_value">h3</td>
 //        <td class="vars_value">h1 | h2 | h3 | h4 | h5 | h6</td>
-//        <td>What heading style should be applyed to the popup title</td>
+//        <td>What heading style is applyed to the popup title</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Popup close button</th>
@@ -255,43 +249,43 @@
 //        <th>@_popup-button-close-icon</th>
 //        <td class="vars_value">true</td>
 //        <td class="vars_value">true | false</td>
-//        <td>Does popup close button have an icon</td>
+//        <td>Popup close button has an icon</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-reset</th>
 //        <td class="vars_value">true</td>
 //        <td class="vars_value">true | false</td>
-//        <td>Should popup close button default styles be reset</td>
+//        <td>Reset popup close button default styles</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position</th>
 //        <td class="vars_value">absolute</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup button close position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-top</th>
 //        <td class="vars_value">10px</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup button close top position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-right</th>
 //        <td class="vars_value">10px</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup button close right position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-bottom</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup button close bottom position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-left</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Popup button close left position</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Popup icons parameters</th>
@@ -300,67 +294,67 @@
 //        <th>@_popup-icon-font-content</th>
 //        <td class="vars_value">@icon-remove</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon code</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font</th>
 //        <td class="vars_value">@button-icon-font</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon font</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-size</th>
 //        <td class="vars_value">@button-icon-font-size</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon font size</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-line-height</th>
 //        <td class="vars_value">@button-icon-font-line-height</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon line height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color</th>
 //        <td class="vars_value">@button-icon-font-color</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color-hover</th>
 //        <td class="vars_value">@button-icon-font-color-hover</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Hovered popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color-active</th>
 //        <td class="vars_value">@popup-icon-font-color-active</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Active popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-margin</th>
 //        <td class="vars_value">@button-icon-font-margin</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon  margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-vertical-align</th>
 //        <td class="vars_value">@button-icon-font-vertical-align</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon vertical align</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-position</th>
 //        <td class="vars_value">@button-icon-font-position</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-text-hide</th>
 //        <td class="vars_value">true</td>
 //        <td class="vars_value">true | false</td>
-//        <td>&nbsp;</td>
+//        <td>Popup icon hide text</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Actions toolbar parameters</th>
@@ -369,67 +363,67 @@
 //        <th>@_popup-action-toolbar</th>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">true | false</td>
-//        <td>Should action toolbar be displayed</td>
+//        <td>Actions toolbar is displayed</td>
 //      </tr>
 //      <tr>
-//        <th>@_popup-actions-toolbar-actions-positio</th>
+//        <th>@_popup-actions-toolbar-actions-position</th>
 //        <td class="vars_value">@actions-toolbar-actions-position</td>
 //        <td class="vars_value">justify | left | right | center</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-actions-reverse</th>
 //        <td class="vars_value">@actions-toolbar-actions-reverse</td>
 //        <td class="vars_value">true | false</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar reverse</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-margin</th>
 //        <td class="vars_value">@actions-toolbar-margin</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-padding</th>
 //        <td class="vars_value">@actions-toolbar-padding</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar padding</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-actions-margin</th>
 //        <td class="vars_value">@actions-toolbar-actions-margin</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar actions margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-primary-actions-margin</th>
 //        <td class="vars_value">@actions-toolbar-primary-actions-margin</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar primary actions margin</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_popup-actions-toolbar-secondary-actions-margin</th>
 //        <td class="vars_value"nowrap="nowrap">@actions-toolbar-secondary-actions-margin</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar secondary actions margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-actions-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-actions-links-margin-top</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar links top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-primary-actions-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-primary-actions-links-margin-top</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar primary actions links top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-secondary-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-secondary-actions-links-margin-top</td>
 //        <td class="vars_value">'' | value</td>
-//        <td>&nbsp;</td>
+//        <td>Actions toolbar secondary links top margin</td>
 //      </tr>
 //    </table>
 // </pre>
@@ -477,7 +471,8 @@
 //  </pre>
 //
 //  # Fixed height popup
-//  To get a fixed height popup you should pass the desired height to <code>@_popup-height</code> variable
+//
+//  To get a fixed height popup set the desired value for <code>@_popup-height</code> variable:
 //  ``` html
 //  <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
 //  <div class="window popup popup-example-2" id="window-popup" tabindex="-1" role="dialog" aria-labelledby="popup-title" aria-describedby="popup-content" aria-hidden="true">
@@ -503,10 +498,7 @@
 }
 
 //  # Fixed content height popup
-//  To set a fixed height to the popup content you should pass the desired height to variable
-//  ```css
-//  @_popup-content-height: value
-//  ```
+//  To get a fixed height popup content set the desired value for <code>@_popup-content-height</code> variable:
 //
 //  ``` html
 //  <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
@@ -533,7 +525,8 @@
 }
 
 //  # Margins for header, content and footer block in popup
-//  To set margins to header, content and footer block in popup, set the values to following variables:
+//
+//  To set margins to header, content and footer block in popup, use variables:
 //  ```css
 //  @_popup-header-margin: value,
 //  @_popup-content-margin: value,
@@ -574,10 +567,14 @@
     );
 }
 
-//  # Popup titles with styled as theme headings
-//  To set margins to header, content and footer block in popup, set the values to following variables:
+//  # Popup titles styled as theme headings
+//
+//  To enable inheritance of the page heading style for popup title set:
 //  ```css
-//  @_popup-title-headings: true,
+//  @_popup-title-headings: true
+//  ```
+//  To set the page heading to inherit use:
+//  ```css
 //  @_popup-title-headings-level: h3 // h1, h2, h3, h4, h5, h6
 //  ```
 // ``` html
@@ -615,12 +612,14 @@
 }
 
 //  # Popup action toolbar
-//  Mixin <code>.popup()</code> uses the same variables wich are used in <code>.actions-toolbar()</code>, but with prefics <code>'@_popup-'</code> instead of <code>@_actions-</code>
-//  Setup
+//
+//  The <code>.popup()</code> mixin uses the same variables as <code>.actions-toolbar()</code>, but with <code>'@_popup-'</code> prefix added.
+//
+//  To use variables from the <code>.actions-toolbar()</code> mixin set:
 //  ```css
 //  @_popup-action-toolbar: true // false
 //  ```
-//  will switch on use dafault variables from <code>.actions-toolbar()</code>. More information about <code>.actions-toolbar()</code> parameters you will find at **Actions-toolbar** page
+//  More information about parameters you will find at **Actions-toolbar** page.
 // ``` html
 // <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
 // <div class="window popup popup-example-6" id="window-popup" tabindex="-1" role="dialog" aria-labelledby="popup-title" aria-describedby="popup-content" aria-hidden="true">
@@ -657,7 +656,7 @@
 }
 
 //  # Popup Close button without an icon
-//  You can set the popup close button to inherit theme's default buttons style and not to add an icon to it. 
+//  You can set the popup close button to inherit theme's default button styles without an icon.
 //  ```css
 //    @_popup-button-close-icon: false,
 //    @_popup-button-close-reset: false
@@ -696,9 +695,9 @@
     );
 }
 
-//  # Modify icon of popup Close button
+//  # Modify the icon of popup Close button
 //
-//  Mixin <code>.popup()</code> uses all the same variables wich are used in <code>.icon-font()</code> mixin, but with prefics <code>'@_popup-'</code>. More information about <code>.icon-font()</code> parameters you can find at **Icons** page
+//  The <code>.popup()</code> mixin uses all the same variables as <code>.icon-font()</code> mixin with <code>'@_popup-'</code> prefix added. More information about <code>.icon-font()</code> parameters you can find at **Icons** page
 //
 // ``` html
 // <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>
@@ -741,7 +740,7 @@
 
 //  # Modify overlay styles
 //
-//  To modify overlay styles you should pass variables values to <code>.window-overlay()</code> mixin
+//  To modify overlay styles use the <code>.window-overlay()</code> mixin
 //
 //  ``` html
 //  <button type="button" class="action toggle" data-toggle="popup" data-backdrop="true" data-target="#window-popup" aria-expanded="false" aria-controls="window-popup"><span>Show popup</span></button>

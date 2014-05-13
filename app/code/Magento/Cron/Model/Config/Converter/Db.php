@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -38,7 +36,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $jobs = isset($source['crontab']['jobs']) ? $source['crontab']['jobs'] : array();
+        $jobs = isset($source['crontab']['default']['jobs']) ? $source['crontab']['default']['jobs'] : array();
 
         if (empty($jobs)) {
             return $jobs;

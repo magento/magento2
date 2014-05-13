@@ -214,7 +214,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             $websiteStores[$store->getWebsiteId()][$store->getId()] = $store;
             $groupStores[$store->getGroupId()][$store->getId()] = $store;
 
-            if (is_null($this->_store) && $store->getCode() === \Magento\Store\Model\Store::DEFAULT_CODE) {
+            if ($this->_hasSingleStore) {
                 $this->_store = $store;
             }
         }

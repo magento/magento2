@@ -46,51 +46,30 @@ $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElemen
 <div class="price-box map info">
     <?php $_price = $this->helper('Magento\Tax\Helper\Data')->getPrice($_product, $_product->getMsrp()) ?>
     <?php if ($_product->getMsrp()): ?>
-    <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(), true, true) ?>
-    <span class="old-price"><?php echo $_msrpPrice ?></span>
+        <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(), true, true) ?>
+        <span class="old-price"><?php echo $_msrpPrice ?></span>
     <?php endif; ?>
 
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
-    <?php $priceElementId = $priceElementIdPrefix . $_id . $this->getIdSuffix(); ?>
-    <span id="<?php echo $priceElementId ?>" style="display:none"></span>
-    <?php $popupId = 'msrp-popup-' . $_id . $this->getRandomString(20); ?>
-    <a href="#" id="<?php echo($popupId);?>"><?php echo __('Click for price'); ?></a>
-
+        <?php $priceElementId = $priceElementIdPrefix . $_id . $this->getIdSuffix(); ?>
+        <span id="<?php echo $priceElementId ?>" style="display:none"></span>
+        <?php $popupId = 'msrp-popup-' . $_id . $this->getRandomString(20); ?>
+        <a href="#"
+           id="<?php echo($popupId);?>"
+           data-mage-init='{"addToCart":{"popupId": "#<?php echo($popupId);?>",
+                                         "productName": "<?php echo $_product->getName() ?>",
+                                         "realPrice": <?php echo $this->getRealPriceJs($_product) ?>,
+                                         "msrpPrice": "<?php echo $_msrpPrice ?>",
+                                         "priceElementId":"<?php echo $priceElementId ?>",
+                                         "popupCartButtonId": "#map-popup-button",
+                                         "cartForm": "#product_addtocart_form"}}'><?php echo __('Click for price') ?>
+        </a>
     <?php else: ?>
-    <span class="msrp message">
+        <span class="msrp message">
          <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
     </span>
     <?php endif; ?>
 
     <?php $helpLinkId = 'msrp-help-' . $_id . $this->getRandomString(20); ?>
-    <a href="#" id="<?php echo($helpLinkId);?>" class="action show map"><span><?php echo __("What's this?"); ?></span></a>
+    <a href="#" id="<?php echo($helpLinkId);?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php echo($helpLinkId);?>", "productName": "<?php echo $_product->getName() ?>"}}' class="action show map"><span><?php echo __("What's this?"); ?></span></a>
 </div>
-
-<script type="text/javascript">
-    //<![CDATA[
-    (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/msrp.js') ?>",
-            function () {
-            <?php if ($this->helper('Magento\Catalog\Helper\Data')->isShowPriceOnGesture($_product)): ?>
-                $('#<?php echo($popupId);?>').addToCart({
-                    cartForm: "#product_addtocart_form",
-                    popupId: "#<?php echo($popupId);?>",
-                    productName: '<?php echo $_product->getName() ?>',
-                    realPrice: '<?php echo $this->getRealPriceJs($_product) ?>',
-                    msrpPrice: '<?php echo $_msrpPrice ?>',
-                    priceElementId: '<?php echo $priceElementId ?>',
-                    closeButtonId: '#map-popup-close',
-                    popupCartButtonId: "#map-popup-button"
-                });
-            <?php endif; ?>
-                $("#<?php echo($helpLinkId);?>").addToCart({
-                    helpLinkId: "#<?php echo($helpLinkId);?>",
-                    productName: '<?php echo $_product->getName() ?>',
-                    closeButtonId: '#map-popup-close'
-                });
-            });
-    })(jQuery);
-    //]]>
-</script>
-
-

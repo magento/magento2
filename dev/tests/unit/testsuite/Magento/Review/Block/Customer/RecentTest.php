@@ -42,7 +42,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionFactory;
 
-    /** @var \Magento\Customer\Service\V1\CustomerCurrentService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
     protected $currentCustomer;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -81,7 +81,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->collection)
         );
         $this->currentCustomer = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerCurrentService',
+            'Magento\Customer\Helper\Session\CurrentCustomer',
             array(),
             array(),
             '',

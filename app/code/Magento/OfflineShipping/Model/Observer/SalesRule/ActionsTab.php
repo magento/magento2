@@ -28,8 +28,6 @@ use Magento\OfflineShipping\Model\SalesRule\Rule;
 /**
  * Checkout cart shipping block plugin
  *
- * @category  Magento
- * @package   Magento_OfflineShipping
  * @author    Magento Core Team <core@magentocommerce.com>
  */
 class ActionsTab

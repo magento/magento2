@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rss
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -224,8 +222,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
             $product->getDescription();
 
         if ($allowedPriceInRss) {
-            $description .= $this->getPriceHtml($product, true);
-            $description .= 'NEWPRICETEST: ' . $this->renderPriceHtml($product, true) . ' ENDNEWPRICETEST';
+            $description .= $this->renderPriceHtml($product, true);
         }
 
         $description .= '</td>' . '</tr></table>';

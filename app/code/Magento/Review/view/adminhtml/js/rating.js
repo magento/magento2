@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -40,8 +38,7 @@
         _bind: function() {
             this._labels.on({
                 click: $.proxy(function(e) {
-                    var elem = $(e.currentTarget);
-                    $('#' + elem.attr('for')).attr('checked', 'checked');
+                    $('[id="' + $(e.currentTarget).attr('for') + '"]').prop('checked', true);
                     this._updateRating();
                 }, this),
 

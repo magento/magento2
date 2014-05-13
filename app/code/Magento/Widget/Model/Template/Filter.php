@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -51,6 +49,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      */
@@ -65,6 +64,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
+        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
@@ -80,7 +80,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $storeManager,
             $layout,
             $layoutFactory,
-            $appState
+            $appState,
+            $backendUrlBuilder
         );
     }
 

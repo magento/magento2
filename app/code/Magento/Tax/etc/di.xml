@@ -51,4 +51,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\AttributePrice">
+        <plugin name="prepareAdjustmentConfig" type="Magento\Tax\Pricing\Price\Plugin\AttributePrice" sortOrder="10"/>
+    </type>
 </config>

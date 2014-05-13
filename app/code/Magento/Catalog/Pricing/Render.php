@@ -18,14 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Pricing;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Registry;
@@ -73,7 +72,9 @@ class Render extends Template
         if ($priceRender instanceof PricingRender) {
             $product = $this->getProduct();
             if ($product instanceof SaleableInterface) {
-                return $priceRender->render($this->getPriceTypeCode(), $product, $this->getData());
+                $arguments = $this->getData();
+                $arguments['render_block'] = $this;
+                return $priceRender->render($this->getPriceTypeCode(), $product, $arguments);
             }
         }
         return parent::_toHtml();
@@ -82,7 +83,7 @@ class Render extends Template
     /**
      * Returns saleable item instance
      *
-     * @return SaleableInterface
+     * @return Product
      */
     protected function getProduct()
     {

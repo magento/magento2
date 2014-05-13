@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -40,7 +38,7 @@
     <?php if($_imageTitle = $this->escapeHtml($this->getCurrentImage()->getLabel())): ?>
         <h1 class="image-label"><?php echo $_imageTitle ?></h1>
     <?php endif; ?>
-    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($this->getProduct(), 'image', $this->getImageFile()); ?>"<?php if($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" title="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" />
+    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($this->getProduct(), 'image', $this->getImageFile()); ?>"<?php if($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" title="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
     <?php if($this->getPreviousImageUrl() || $this->getNextImageUrl()): ?>
         <div class="nav">
@@ -53,10 +51,3 @@
         </div>
     <?php endif; ?>
 </div>
-<script type="text/javascript">
-    window.onload = function() {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/gallery.js');?>", function() {
-            jQuery('#product-gallery-image').gallery();
-        });
-    };
-</script>

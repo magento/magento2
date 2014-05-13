@@ -18,15 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 
 /**
@@ -35,29 +33,26 @@ use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
     /**
+     * Price type final
+     */
+    const PRICE_CODE = 'final_price';
+
+    /**
      * @var BundleCalculatorInterface
      */
     protected $calculator;
 
     /**
-     * @param SaleableInterface $salableItem
-     * @param float $quantity
-     * @param BundleCalculatorInterface $calculator
+     * @var BasePrice
      */
-    public function __construct(
-        SaleableInterface $salableItem,
-        $quantity,
-        BundleCalculatorInterface $calculator
-    ) {
-        parent::__construct($salableItem, $quantity, $calculator);
-    }
+    protected $basePrice;
 
     /**
      * @return float
      */
     public function getValue()
     {
-        return parent::getValue() + $this->basePrice->applyDiscount($this->getBundleOptionPrice()->getValue());
+        return parent::getValue() + $this->basePrice->calculateBaseValue($this->getBundleOptionPrice()->getValue());
     }
 
     /**
@@ -65,7 +60,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
      */
     public function getMaximalPrice()
     {
-        return $this->calculator->getMaxAmount($this->basePrice->getValue(), $this->salableItem);
+        return $this->calculator->getMaxAmount($this->basePrice->getValue(), $this->product);
     }
 
     /**
@@ -76,13 +71,12 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
         return $this->getAmount();
     }
 
-
     /**
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getAmount()
     {
-        return $this->calculator->getAmount(parent::getValue(), $this->salableItem);
+        return $this->calculator->getAmount(parent::getValue(), $this->product);
     }
 
     /**
@@ -90,6 +84,6 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
      */
     protected function getBundleOptionPrice()
     {
-        return $this->priceInfo->getPrice(BundleOptionPriceInterface::PRICE_TYPE_BUNDLE_OPTION, $this->quantity);
+        return $this->priceInfo->getPrice(BundleOptionPrice::PRICE_CODE, $this->quantity);
     }
 }

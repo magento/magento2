@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Data
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -93,8 +90,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test result for bigint
-     *
      * @dataProvider bigintResultProvider
      */
     public function testPrepareColumnValueForBigint($value, $expectedResult)
@@ -124,12 +119,12 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             array(2147483647 + 1, '2147483648'),
             array(9223372036854775807 + 1, '9223372036854775808'),
             array(9223372036854775807, '9223372036854775807'),
-            array(9223372036854775807.3423424234, '9223372036854775807'),
-            array(2147483647 * pow(10, 10)+12, '21474836470000000012'),
+            array(9223372036854775807.3423424234, '9223372036854775808'),
+            array(2147483647 * pow(10, 10)+12, '21474836470000001024'),
             array(9223372036854775807 * pow(10, 10)+12, '92233720368547758080000000000'),
             array((0.099999999999999999999999995+0.2+0.3+0.4+0.5)*10, '15'),
-            array('21474836470000000012', '21474836470000000012'),
-            array(0x5468792130ABCDEF, '6082244480221302255')
+            array('21474836470000000012', '21474836470000001024'),
+            array(0x5468792130ABCDEF, '6082244480221302255'),
         );
     }
 

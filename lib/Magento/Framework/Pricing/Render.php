@@ -113,14 +113,7 @@ class Render extends AbstractBlock
 
         // obtain concrete Price Render
         $priceRender = $rendererPool->createPriceRender($priceCode, $saleableItem, $useArguments);
-        if ($priceRender) {
-            //@TODO PriceBoxRenderInterface does not contain toHtml() method
-            $result = $priceRender->toHtml();
-        } else {
-            $result = '';
-        }
-        // return rendered output
-        return $result;
+        return $priceRender->toHtml();
     }
 
     /**
@@ -149,12 +142,6 @@ class Render extends AbstractBlock
 
         // obtain concrete Amount Render
         $amountRender = $rendererPool->createAmountRender($amount, $saleableItem, $price, $useArguments);
-        if ($amountRender) {
-            $result = $amountRender->toHtml();
-        } else {
-            $result = '';
-        }
-        // return rendered output
-        return $result;
+        return $amountRender->toHtml();
     }
 }

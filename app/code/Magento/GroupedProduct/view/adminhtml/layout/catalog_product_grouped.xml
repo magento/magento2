@@ -31,6 +31,11 @@
                 <argument name="file" xsi:type="string">Magento_GroupedProduct::css/grouped-product.css</argument>
             </arguments>
         </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-grouped-product-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_GroupedProduct::js/grouped-product.js</argument>
+            </arguments>
+        </block>
     </referenceBlock>
     <referenceBlock name="product_tabs">
         <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts" name="catalog.product.edit.grouped.container" template="product/grouped/container.phtml">

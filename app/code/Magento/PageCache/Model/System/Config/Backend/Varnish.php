@@ -27,7 +27,6 @@ namespace Magento\PageCache\Model\System\Config\Backend;
  * Backend model for processing Varnish settings
  *
  * Class Varnish
- * @package Magento\PageCache\Model\System\Config\Backend
  */
 class Varnish extends \Magento\Framework\App\Config\Value
 {

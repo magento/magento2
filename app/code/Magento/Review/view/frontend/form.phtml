@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -90,29 +89,23 @@
     </fieldset>
     <div class="actions toolbar">
         <div class="primary">
-            <button type="submit" class="action submit"><span><?php echo __('Submit Review') ?></span></button>
+            <button type="submit" class="action submit primary"><span><?php echo __('Submit Review') ?></span></button>
         </div>
         <!-- <button type="button" class="action cancel"><span><?php echo __('Cancel') ?></span></button> -->
     </div>
 </form>
 <script>
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-            function() {
-                $('#review-form').validation({
-                    errorPlacement: function (error, element) {
-                        if (element.parents('#product-review-table').length) {
-                            $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                            $('#product-review-table').after(error);
-                        } else {
-                            element.after(error);
-                        }
-                    }
-                });
-            });
+        $('#review-form').mage('validation', {
+            errorPlacement: function (error, element) {
+                if (element.parents('#product-review-table').length) {
+                    $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
+                    $('#product-review-table').after(error);
+                } else {
+                    element.after(error);
+                }
+            }
+        });
     })(jQuery);
 </script>
 <?php else: ?>

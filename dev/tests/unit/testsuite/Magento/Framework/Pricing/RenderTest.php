@@ -218,4 +218,18 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->renderAmount($this->amount, $this->price, $this->saleableItem, $arguments);
         $this->assertEquals($expectedResult, $result);
     }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Wrong Price Rendering layout configuration. Factory block is missed
+     */
+    public function testAmountRenderNoRenderPool()
+    {
+        $this->priceLayout->expects($this->once())
+            ->method('getBlock')
+            ->with('render.product.prices')
+            ->will($this->returnValue(false));
+
+        $this->model->renderAmount($this->amount, $this->price, $this->saleableItem);
+    }
 }

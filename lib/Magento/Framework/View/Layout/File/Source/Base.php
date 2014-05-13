@@ -69,13 +69,24 @@ class Base implements SourceInterface
      */
     public function getFiles(ThemeInterface $theme, $filePath = '*')
     {
+        $result = [];
         $namespace = $module = '*';
+        $sharedFiles = $this->modulesDirectory->search("{$namespace}/{$module}/view/base/layout/{$filePath}.xml");
+
+        $filePathPtn = strtr(preg_quote($filePath), array('\*' => '[^/]+'));
+        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/base/layout/" . $filePathPtn . "\.xml$#i";
+        foreach ($sharedFiles as $file) {
+            $filename = $this->modulesDirectory->getAbsolutePath($file);
+            if (!preg_match($pattern, $filename, $matches)) {
+                continue;
+            }
+            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
+            $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
+        }
         $area = $theme->getArea();
-        $files = $this->modulesDirectory->search("{$namespace}/{$module}/view/{$area}/layout/{$filePath}.xml");
-        $result = array();
-        $filePath = strtr(preg_quote($filePath), array('\*' => '[^/]+'));
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/layout/" . $filePath . "\.xml$#i";
-        foreach ($files as $file) {
+        $themeFiles = $this->modulesDirectory->search("{$namespace}/{$module}/view/{$area}/layout/{$filePath}.xml");
+        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/layout/" . $filePathPtn . "\.xml$#i";
+        foreach ($themeFiles as $file) {
             $filename = $this->modulesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;

@@ -48,69 +48,53 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
-        <arguments>
-            <argument name="types" xsi:type="array">
-                <item name="bundle" xsi:type="string">Magento\Bundle\Pricing\PriceInfo</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="Magento\Bundle\Pricing\PriceInfo" type="Magento\Framework\Pricing\PriceInfo\Base">
-        <arguments>
-            <argument name="prices" xsi:type="object">Magento\Bundle\Pricing\PriceComposite</argument>
-            <argument name="adjustmentCollection" xsi:type="object">Magento\Bundle\Pricing\Adjustment\Collection</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Bundle\Pricing\PriceComposite" type="Magento\Framework\Pricing\PriceComposite">
-        <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="regular_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">true</item>
-                </item>
-                <item name="final_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="tier_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="group_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\GroupPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="special_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\SpecialPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="msrp_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\MsrpPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="base_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Bundle\Pricing\Price\BasePrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="custom_option" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Pricing\Price\OptionPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-                <item name="bundle_option" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Bundle\Pricing\Price\BundleOptionPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Bundle\Pricing\Adjustment\Collection" type="Magento\Framework\Pricing\Adjustment\Collection">
         <arguments>
             <argument name="adjustments" xsi:type="array">
-                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::CODE</item>
-                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::CODE</item>
+                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
             </argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Bundle\Pricing\Price\BundleSelectionPriceInterface" type="Magento\Bundle\Pricing\Price\BundleSelectionPrice" />
     <preference for="Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface" type="Magento\Bundle\Pricing\Adjustment\Calculator" />
+    <virtualType name="Magento\Bundle\Pricing\PriceInfo" type="Magento\Framework\Pricing\PriceInfo\Base">
+        <arguments>
+            <argument name="adjustmentCollection" xsi:type="object">Magento\Bundle\Pricing\Adjustment\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
+                <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
+                <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
+                <item name="group_price" xsi:type="string">Magento\Catalog\Pricing\Price\GroupPrice</item>
+                <item name="special_price" xsi:type="string">Magento\Catalog\Pricing\Price\SpecialPrice</item>
+                <item name="msrp_price" xsi:type="string">Magento\Catalog\Pricing\Price\MsrpPrice</item>
+                <item name="base_price" xsi:type="string">Magento\Bundle\Pricing\Price\BasePrice</item>
+                <item name="configured_price" xsi:type="string">Magento\Bundle\Pricing\Price\ConfiguredPrice</item>
+                <item name="bundle_option" xsi:type="string">Magento\Bundle\Pricing\Price\BundleOptionPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Bundle\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\Bundle\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="bundle" xsi:type="array">
+                    <item name="infoClass" xsi:type="string">Magento\Bundle\Pricing\PriceInfo</item>
+                    <item name="prices" xsi:type="string">Magento\Bundle\Pricing\Price\Collection</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Pricing\Price\FinalPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
 </config>

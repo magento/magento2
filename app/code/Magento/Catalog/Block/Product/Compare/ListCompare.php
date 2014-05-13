@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -101,7 +99,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $_coreData;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
@@ -112,9 +110,8 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      * @param Product\Visibility $catalogProductVisibility
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -123,9 +120,8 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        array $data = array()
     ) {
         $this->_coreData = $coreData;
         $this->_itemCollectionFactory = $itemCollectionFactory;
@@ -135,8 +131,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $this->currentCustomer = $currentCustomer;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }
@@ -279,7 +274,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL,
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 [
                     'price_id' => 'product-price-' . $product->getId() . $idSuffix,

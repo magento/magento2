@@ -27,7 +27,6 @@ namespace Magento\Weee\Pricing\Render;
 /**
  * Class AdjustmentTest for testing Adjustment class
  *
- * @package Magento\Weee\Pricing\Render
  */
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -103,7 +102,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::CODE, $this->model->getAdjustmentCode());
+        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**

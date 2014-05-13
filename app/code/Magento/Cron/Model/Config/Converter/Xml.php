@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -65,6 +63,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
                 $config['name'] = $jobName;
                 $config += $this->convertCronConfig($jobConfig);
                 $config += $this->convertCronSchedule($jobConfig);
+                $config += $this->convertCronConfigPath($jobConfig);
 
                 $output[$group->getAttribute('id')][$jobName] = $config;
             }
@@ -108,6 +107,29 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
             if ($schedules->nodeName == 'schedule') {
                 if (!empty($schedules->nodeValue)) {
                     $result['schedule'] = $schedules->nodeValue;
+                    break;
+                }
+            }
+            continue;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert schedule cron configurations
+     *
+     * @param \DOMElement $jobConfig
+     * @return array
+     */
+    protected function convertCronConfigPath(\DOMElement $jobConfig)
+    {
+        $result = array();
+        /** @var \DOMText $schedules */
+        foreach ($jobConfig->childNodes as $schedules) {
+            if ($schedules->nodeName == 'config_path') {
+                if (!empty($schedules->nodeValue)) {
+                    $result['config_path'] = $schedules->nodeValue;
                     break;
                 }
             }

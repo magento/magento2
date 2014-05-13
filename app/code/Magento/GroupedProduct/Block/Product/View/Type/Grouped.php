@@ -53,30 +53,4 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         return $this;
     }
-
-    /**
-     * Returns product tier price block html
-     *
-     * @param \Magento\Catalog\Model\Product|null $product
-     * @return string
-     */
-    public function getTierPriceHtml($product = null)
-    {
-        if (is_null($product)) {
-            $product = $this->getProduct();
-        }
-        return $this->_getPriceBlock(
-            $product->getTypeId()
-        )->setTemplate(
-            $this->getTierPriceTemplate()
-        )->setProduct(
-            $product
-        )->setListClass(
-            'tier prices grouped items'
-        )->setShowDetailedPrice(
-            false
-        )->setCanDisplayQty(
-            false
-        )->toHtml();
-    }
 }

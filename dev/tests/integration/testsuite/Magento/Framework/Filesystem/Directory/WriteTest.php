@@ -30,7 +30,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class ReadTest
  * Test for Magento\Framework\Filesystem\Directory\Read class
- * @package Magento\Framework\Filesystem\Directory
  */
 class WriteTest extends \PHPUnit_Framework_TestCase
 {

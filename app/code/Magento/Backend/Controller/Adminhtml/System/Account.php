@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +28,6 @@ use Magento\Backend\App\Action;
 /**
  * Adminhtml account controller
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Account extends Action
@@ -73,16 +69,12 @@ class Account extends Action
         )->setEmail(
             strtolower($this->getRequest()->getParam('email', false))
         );
-
         if ($password !== '') {
             $user->setPassword($password);
-        }
-        if ($passwordConfirmation !== '') {
             $user->setPasswordConfirmation($passwordConfirmation);
         }
 
         if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($interfaceLocale)) {
-
             $user->setInterfaceLocale($interfaceLocale);
             $this->_objectManager->get(
                 'Magento\Backend\Model\Locale\Manager'

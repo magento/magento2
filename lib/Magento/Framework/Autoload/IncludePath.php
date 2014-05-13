@@ -38,9 +38,9 @@ class IncludePath
      * @param string $class
      * @return string|bool
      */
-    public static function getFile($class)
+    public function getFile($class)
     {
-        $relativePath = self::getFilePath($class);
+        $relativePath = $this->getFilePath($class);
         return stream_resolve_include_path($relativePath);
     }
 
@@ -51,7 +51,7 @@ class IncludePath
      * @param string $class
      * @return string
      */
-    public static function getFilePath($class)
+    public function getFilePath($class)
     {
         if (strpos($class, self::NS_SEPARATOR) !== false) {
             $class = ltrim(str_replace(self::NS_SEPARATOR, '_', $class), '_');
@@ -66,7 +66,7 @@ class IncludePath
      * @param bool $prepend Whether to prepend paths or to append them
      * @return void
      */
-    public static function addIncludePath($path, $prepend = true)
+    public function addIncludePath($path, $prepend = true)
     {
         $includePathExtra = implode(PATH_SEPARATOR, (array)$path);
         $includePath = get_include_path();
@@ -85,9 +85,9 @@ class IncludePath
      * @param string $class
      * @return void
      */
-    public static function load($class)
+    public function load($class)
     {
-        $file = self::getFile($class);
+        $file = $this->getFile($class);
         if ($file) {
             include $file;
         }

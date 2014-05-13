@@ -44,7 +44,7 @@ class BareTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function proxyMethodDataProvider()
+    public function proxyMethodDataProvider()
     {
         return array(
             array('test', array('record_id'), 111),
@@ -52,8 +52,8 @@ class BareTest extends \PHPUnit_Framework_TestCase
             array('save', array('record_value', 'record_id', array('tag'), 555), true),
             array('remove', array('record_id'), true),
             array('clean', array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true),
-            array('getBackend', array(), \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend')),
-            array('getLowLevelFrontend', array(), \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Core'))
+            array('getBackend', array(), $this->getMock('Zend_Cache_Backend')),
+            array('getLowLevelFrontend', array(), $this->getMock('Zend_Cache_Core'))
         );
     }
 }

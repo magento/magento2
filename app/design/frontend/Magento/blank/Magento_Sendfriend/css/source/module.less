@@ -24,26 +24,28 @@
 
 
 .form.send.friend {
-    .action.delete {
-        &:extend(.action-remove all);
-    }
-    .actions.toolbar {
-        margin-top: @indent-s-base;
-    }
-    .recipients {
-        .title {
-            .heading(h3);
-            margin-left: @form-field-type-inline-label-width;
-        }
-        .message {
-            margin-left: @form-field-type-inline-label-width;
-        }
-    }
+    &:extend(.add-recipients all);
 }
 
 .action.mailto.friend {
     .icon-font(
         @_icon-font-content: @icon-envelope,
-        @_icon-font-size: 28px
+        @_icon-font-size: 28px,
+        @_icon-font-line-height: 28px,
+        @_icon-font-vertical-align: top
     );
+    span {
+        line-height: 28px;
+        vertical-align: top;
+        display: inline-block;
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .form.send.friend {
+        &:extend(.add-recipients-desktop all);
+    }
 }

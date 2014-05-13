@@ -70,8 +70,6 @@
  * - G: route_path
  * - H: route_url
  *
- * @category   Magento
- * @package    Magento_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework;
@@ -560,9 +558,8 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             'controller_name'
         )->unsetData(
             'action_name'
-        )->unsetData(
-            'secure'
         );
+        $this->_queryParamsResolver->unsetData('secure');
         return $this->setData('route_name', $data);
     }
 
@@ -607,7 +604,8 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         if ($this->_getData('controller_name') == $data) {
             return $this;
         }
-        $this->unsetData('route_path')->unsetData('action_name')->unsetData('secure');
+        $this->unsetData('route_path')->unsetData('action_name');
+        $this->_queryParamsResolver->unsetData('secure');
         return $this->setData('controller_name', $data);
     }
 
@@ -635,7 +633,9 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             return $this;
         }
         $this->unsetData('route_path');
-        return $this->setData('action_name', $data)->unsetData('secure');
+        $this->setData('action_name', $data);
+        $this->_queryParamsResolver->unsetData('secure');
+        return $this;
     }
 
     /**
@@ -792,6 +792,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
          * this method has condition for adding default controller and action names
          * in case when we have params
          */
+        $this->_routeParamsResolver->unsetData('secure');
         $fragment = null;
         if (isset($routeParams['_fragment'])) {
             $fragment = $routeParams['_fragment'];
@@ -845,7 +846,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         if (!is_null($fragment)) {
             $url .= '#' . $fragment;
         }
-
+        $this->_routeParamsResolver->unsetData('secure');
         return $this->escape($url);
     }
 

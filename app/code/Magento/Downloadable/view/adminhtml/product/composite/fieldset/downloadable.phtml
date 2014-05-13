@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -44,7 +42,7 @@
                     <label for="links_<?php echo $_link->getId() ?>" class="label">
                     <?php echo $this->escapeHtml($_link->getTitle()) ?>
                     <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                        &nbsp;(<a href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo __('sample') ?></a>)
+                        &nbsp;(<a href="<?php echo $this->getLinkSampleUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo __('sample') ?></a>)
                     <?php endif; ?>
                     <?php if ($_linksPurchasedSeparately): ?>
                     <?php echo $this->getFormattedLinkPrice($_link); ?>

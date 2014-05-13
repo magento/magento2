@@ -17,14 +17,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage date option
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
 (function($) {
     $.widget('mage.dateOption', {
+        options: {
+        },
+
         _create: function() {
             $(this.options.datepickerFieldSelector)
                 .on('change', $.proxy(function() {this.element.trigger('reloadPrice');}, this));

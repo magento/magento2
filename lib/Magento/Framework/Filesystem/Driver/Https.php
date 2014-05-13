@@ -28,7 +28,6 @@ namespace Magento\Framework\Filesystem\Driver;
 /**
  * Class Https
  *
- * @package Magento\Framework\Filesystem\Driver
  */
 class Https extends Http
 {

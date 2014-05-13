@@ -26,7 +26,6 @@ namespace Magento\TestFramework;
 /**
  * Class ObjectManagerFactory
  *
- * @package Magento\TestFramework
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory

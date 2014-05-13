@@ -28,7 +28,6 @@ namespace Magento\PageCache\Model\System\Config\Backend;
  * Backend model for processing Public content cache lifetime settings
  *
  * Class Ttl
- * @package Magento\PageCache\Model\System\Config\Backend
  */
 class Ttl extends \Magento\Framework\App\Config\Value
 {

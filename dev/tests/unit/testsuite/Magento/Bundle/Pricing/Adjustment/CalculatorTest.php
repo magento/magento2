@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -71,7 +68,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->saleableItem = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->saleableItem = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', true);
         $priceInfo->expects($this->any())->method('getPrice')->will($this->returnCallback(function ($type) {
             if (!isset($this->priceMocks[$type])) {
@@ -90,15 +90,15 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $factoryCallback = $this->returnCallback(function () {
             list(, $selectionMock) = func_get_args();
-            $bundlePrice = $this->getMockBuilder('\Magento\Bundle\Pricing\Price\BundleSelectionPriceInterface')
+            $bundlePrice = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionPrice')
                 ->setMethods(['getAmount'])
+                ->disableOriginalConstructor()
                 ->getMock();
             $bundlePrice->expects($this->any())->method('getAmount')
                 ->will($this->returnValue($selectionMock->getAmountMock()));
             return $bundlePrice;
         });
         $this->selectionFactory->expects($this->any())->method('create')->will($factoryCallback);
-
         $this->model = new Calculator($this->baseCalculator, $this->amountFactory, $this->selectionFactory);
     }
 
@@ -122,11 +122,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         }
         $price = $this->getMock('Magento\Bundle\Pricing\Price\BundleOptionPrice', [], [], '', false);
         $price->expects($this->atLeastOnce())->method('getOptions')->will($this->returnValue($options));
-        $this->priceMocks[Price\BundleOptionPriceInterface::PRICE_TYPE_BUNDLE_OPTION] = $price;
+        $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items
         $this->saleableItem->expects($this->any())->method('getPriceType')->will($this->returnValue(
-            ProductPrice::PRICE_TYPE_FIXED
+            ProductPrice::PRICE_TYPE_DYNAMIC
         ));
 
         $this->amountFactory->expects($this->atLeastOnce())->method('create')
@@ -210,7 +210,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             'case with getting maximum amount' => $this->getCaseWithMaxAmount(),
 
             // third case without saleable items
-            'case without saleable items' => $this->getCaseWithoutSaleableItems()
+            'case without saleable items' => $this->getCaseWithoutSaleableItems(),
+
+            // fourth case without require options
+            'case without required options' => $this->getCaseMinAmountWithoutRequiredOptions(),
         ];
     }
 
@@ -387,6 +390,84 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 'isMinAmount' => true,
                 'fullAmount'  => 782.,
                 'adjustments' => ['tax' => 102]
+            ]
+        ];
+    }
+
+    /**
+     * Array for data provider dataProviderForGetterAmount for case 'case without required options'
+     *
+     * @return array
+     */
+    protected function getCaseMinAmountWithoutRequiredOptions()
+    {
+        return [
+            'amountForBundle' => [
+                'adjustmentsAmounts' => [],
+                'amount' => null
+            ],
+            'optionList' => [
+                // first option
+                [
+                    'isMultiSelection' => false,
+                    'data' => [
+                        'title'         => 'test option 1',
+                        'default_title' => 'test option 1',
+                        'type'          => 'select',
+                        'option_id'     => '1',
+                        'position'      => '0',
+                        'required'      => '0',
+                    ],
+                    'selections' => [
+                        'first product selection'  => [
+                            'data'   => ['price' => 20.],
+                            'amount' => [
+                                'adjustmentsAmounts' => ['tax' => 8],
+                                'amount' => 8
+                            ]
+                        ],
+                        'second product selection'  => [
+                            'data'   => ['price' => 30.],
+                            'amount' => [
+                                'adjustmentsAmounts' => ['tax' => 10],
+                                'amount' => 12
+                            ]
+                        ],
+                    ]
+                ],
+                // second option
+                [
+                    'isMultiSelection' => false,
+                    'data' => [
+                        'title'         => 'test option 2',
+                        'default_title' => 'test option 2',
+                        'type'          => 'select',
+                        'option_id'     => '2',
+                        'position'      => '1',
+                        'required'      => '0',
+                    ],
+                    'selections' => [
+                        'first product selection'  => [
+                            'data'   => ['price' => 25.],
+                            'amount' => [
+                                'adjustmentsAmounts' => ['tax' => 8],
+                                'amount' => 9
+                            ]
+                        ],
+                        'second product selection'  => [
+                            'data'   => ['price' => 35.],
+                            'amount' => [
+                                'adjustmentsAmounts' => ['tax' => 10],
+                                'amount' => 10
+                            ]
+                        ],
+                    ]
+                ]
+            ],
+            'expectedResult' => [
+                'isMinAmount' => true,
+                'fullAmount'  => 8.,
+                'adjustments' => ['tax' => 8]
             ]
         ];
     }

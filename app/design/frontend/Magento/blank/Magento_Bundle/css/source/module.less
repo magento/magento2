@@ -25,7 +25,6 @@
 .actions.bundle {
     margin: @indent-s-base 0;
     .action.primary.customize {
-        .button-primary();
         .button-l();
     }
 }
@@ -42,40 +41,16 @@
         display: none;
     }
 
-    .field.option {
-        .form-field(@_type: block);
-    }
-
     .input-text.qty {
-        .form-element-size(
-            @_width: @button-l-height
-        );
+        &:extend(.input-qty all);
     }
 
     .product.options.wrapper {
-        float: left;
-        width: 57%;
         margin-bottom: @indent-l-base;
-
-        .layout-2-left &,
-        .layout-2-right & {
-            width: 48%;
-        }
-        .layout-3 & {
-            width: 48%;
-        }
     }
 
     .product.options.bottom {
-        width: 57%;
         clear: both;
-        .layout-2-left &,
-        .layout-2-right & {
-            width: 48%;
-        }
-        .layout-3 & {
-            width: 48%;
-        }
     }
 
     .price-box {
@@ -86,19 +61,9 @@
     }
 
     .block.bundle.summary {
-        float: right;
-        position: relative;
-        width: 40%;
         padding: @indent-s-base @indent-base;
         background: @color-secondary;
-        .box-sizing();
-        .layout-2-left &,
-        .layout-2-right & {
-            width: 48%;
-        }
-        .layout-3 & {
-            width: 48%;
-        }
+        &:extend(.add-box-sizing all);
 
         > .title > strong{
             .heading(h2);
@@ -124,7 +89,6 @@
                 margin: @indent-s-base 0;
             }
             .action.primary {
-                .button-primary();
             }
         }
         .addto.links {
@@ -139,16 +103,33 @@
     }
 }
 
-.responsive(@break) when (@break = @mobile) {
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
     .bundle.options.container {
-        .product.add.form {
-            .product.options.wrapper,
-            .product.options.bottom,
-            .block.bundle.summary {
-                &:extend(._rwd_width_float all);
-            }
-            .block.bundle.summary {
-                position: static;
+        .legend.title {
+            &:extend(.reset-left-margin all);
+        }
+        .product.options.wrapper {
+            float: left;
+            width: 57%;
+        }
+        .product.options.bottom {
+            width: 57%;
+        }
+        .block.bundle.summary {
+            float: right;
+            width: 40%;
+            position: relative;
+        }
+        .product.options.wrapper,
+        .product.options.bottom,
+        .block.bundle.summary {
+            .layout-2-left &,
+            .layout-2-right &,
+            .layout-3 & {
+                width: 48%;
             }
         }
     }

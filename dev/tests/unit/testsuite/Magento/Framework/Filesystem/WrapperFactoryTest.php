@@ -27,7 +27,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class WrapperFactoryTest
- * @package Magento\Framework\Filesystem
  */
 class WrapperFactoryTest extends \PHPUnit_Framework_TestCase
 {

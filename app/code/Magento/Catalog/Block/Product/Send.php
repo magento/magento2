@@ -47,21 +47,18 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\View $customerView
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\View $customerView,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_customerView = $customerView;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }

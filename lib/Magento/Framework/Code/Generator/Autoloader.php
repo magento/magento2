@@ -48,7 +48,7 @@ class Autoloader
     {
         if (!class_exists($className)) {
             if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS === $this->_generator->generateClass($className)) {
-                \Magento\Framework\Autoload\IncludePath::load($className);
+                (new \Magento\Framework\Autoload\IncludePath())->load($className);
             }
         }
     }

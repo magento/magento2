@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -194,13 +191,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 1,
             \Magento\TestFramework\Performance\Scenario::ARG_HOST => '127.0.0.1',
             \Magento\TestFramework\Performance\Scenario::ARG_PATH => '/',
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_FRONTNAME => 'backend',
+            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => 'backend',
             \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => 'admin',
             \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => 'password1',
             \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->_getFixtureAppBaseDir(),
             'arg1' => 'value 1',
             'arg2' => 'overridden value 2',
-            'arg3' => 'custom value 3'
+            'arg3' => 'custom value 3',
+            'jmeter.save.saveservice.output_format' => 'xml'
         );
         $this->assertEquals($expectedArguments, $scenario->getArguments());
 

@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Magento
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -84,11 +82,14 @@ if (empty($mediaDirectory)) {
 }
 
 $entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
-$entryPoint->run('Magento\Core\App\Media', array(
-    'request' => $request,
-    'workingDirectory' => __DIR__,
-    'mediaDirectory' => $mediaDirectory,
-    'configCacheFile' => $configCacheFile,
-    'isAllowed' => $isAllowed,
-    'relativeFileName' => $relativeFilename,
-));
+$entryPoint->run(
+    'Magento\Core\App\Media',
+    array(
+        'request' => $request,
+        'workingDirectory' => __DIR__,
+        'mediaDirectory' => $mediaDirectory,
+        'configCacheFile' => $configCacheFile,
+        'isAllowed' => $isAllowed,
+        'relativeFileName' => $relativeFilename,
+    )
+);

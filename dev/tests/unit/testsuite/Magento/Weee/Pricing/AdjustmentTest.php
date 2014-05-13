@@ -29,34 +29,35 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Adjustment
+     */
+    protected $adjustment;
+
+    /**
+     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $weeeHelper;
+
+    /**
+     * @var int
+     */
+    protected $sortOrder = 5;
+
+    public function setUp()
+    {
+        $this->weeeHelper = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
+        $this->adjustment = new Adjustment($this->weeeHelper, $this->sortOrder);
+    }
+
     public function testGetAdjustmentCode()
     {
-        // Instantiate/mock objects
-        /** @var WeeeHelper $weeHelper */
-        $weeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
-        $model = new Adjustment($weeHelper);
-
-        // Run tested method
-        $code = $model->getAdjustmentCode();
-
-        // Check expectations
-        $this->assertNotEmpty($code);
+        $this->assertEquals(Adjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
     }
 
     public function testIsIncludedInBasePrice()
     {
-        // Instantiate/mock objects
-        /** @var WeeeHelper|\PHPUnit_Framework_MockObject_MockObject $weeeHelper */
-        $weeeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()->getMock();
-        $model = new Adjustment($weeeHelper);
-
-        // Run tested method
-        $result = $model->isIncludedInBasePrice();
-
-        // Check expectations
-        $this->assertInternalType('bool', $result);
+        $this->assertFalse($this->adjustment->isIncludedInBasePrice());
     }
 
     /**
@@ -64,34 +65,17 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsIncludedInDisplayPrice($expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var WeeeHelper|\PHPUnit_Framework_MockObject_MockObject $weeeHelper */
-        $weeeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('typeOfDisplay'))
-            ->getMock();
-        $model = new Adjustment($weeeHelper);
-
-        // Avoid execution of irrelevant functionality
-        $weeeHelper->expects($this->any())
+        $displayTypes = [
+            \Magento\Weee\Model\Tax::DISPLAY_INCL,
+            \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
+            \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL
+        ];
+        $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
-            ->with(
-                $this->equalTo(
-                    [
-                        \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                        \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
-                        \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
-                        4
-                    ]
-                )
-            )
+            ->with($displayTypes)
             ->will($this->returnValue($expectedResult));
 
-        // Run tested method
-        $result = $model->isIncludedInDisplayPrice();
-
-        // Check expectations
-        $this->assertInternalType('bool', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
 
     /**
@@ -109,26 +93,14 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractAdjustment($amount, $expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var WeeeHelper|\PHPUnit_Framework_MockObject_MockObject $weeeHelper */
-        $weeeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('getAmount'))
-            ->getMock();
-        /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $saleableItem */
-        $saleableItem = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
-        $model = new Adjustment($weeeHelper);
+        $saleableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
 
-        // Avoid execution of irrelevant functionality
-        $weeeHelper->expects($this->any())
+        $this->weeeHelper->expects($this->any())
             ->method('getAmount')
+            ->with($saleableItem)
             ->will($this->returnValue($amount));
 
-        // Run tested method
-        $result = $model->extractAdjustment('anything_here', $saleableItem);
-
-        // Check expectations
-        $this->assertInternalType('float', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $saleableItem));
     }
 
     /**
@@ -150,26 +122,13 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var WeeeHelper|\PHPUnit_Framework_MockObject_MockObject $weeeHelper */
-        $weeeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('getAmount'))
-            ->getMock();
-        /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
-        $model = new Adjustment($weeeHelper);
+        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
 
-        // Avoid execution of irrelevant functionality
-        $weeeHelper->expects($this->any())
+        $this->weeeHelper->expects($this->any())
             ->method('getAmount')
             ->will($this->returnValue($amountOld));
 
-        // Run tested method
-        $result = $model->applyAdjustment($amount, $object);
-
-        // Check expectations
-        $this->assertInternalType('float', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }
 
     /**
@@ -184,20 +143,44 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testIsExcludedWith()
+    /**
+     * @dataProvider isExcludedWithDataProvider
+     * @param string $adjustmentCode
+     * @param bool $expectedResult
+     */
+    public function testIsExcludedWith($adjustmentCode, $expectedResult)
     {
-        $adjustmentCode = 'some_random_adjustment_code123';
+        $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
+    }
 
-        // Instantiate/mock objects
-        /** @var WeeeHelper|\PHPUnit_Framework_MockObject_MockObject $weeeHelper */
-        $weeeHelper = $this->getMockBuilder('Magento\Weee\Helper\Data')->disableOriginalConstructor()->getMock();
-        $model = new Adjustment($weeeHelper);
+    public function isExcludedWithDataProvider()
+    {
+        return [
+            ['weee', true],
+            ['tax', true],
+            ['not_tax_and_not_weee', false]
+        ];
+    }
 
-        // Run tested method
-        $result = $model->isExcludedWith($adjustmentCode);
+    /**
+     * @dataProvider getSortOrderProvider
+     * @param bool $isTaxable
+     * @param int $expectedResult
+     */
+    public function testGetSortOrder($isTaxable, $expectedResult)
+    {
+        $this->weeeHelper->expects($this->any())
+            ->method('isTaxable')
+            ->will($this->returnValue($isTaxable));
 
-        // Check expectations
-        $this->assertInternalType('bool', $result);
-        $this->assertFalse($result);
+        $this->assertEquals($expectedResult, $this->adjustment->getSortOrder());
+    }
+
+    public function getSortOrderProvider()
+    {
+        return [
+            [true, $this->sortOrder],
+            [false, -1]
+        ];
     }
 }

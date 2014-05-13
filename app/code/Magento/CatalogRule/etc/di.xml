@@ -51,14 +51,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Pricing\PriceComposite">
+
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="catalog_rule_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\CatalogRule\Pricing\Price\CatalogRulePrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">true</item>
-                </item>
+            <argument name="prices" xsi:type="array">
+                <item name="catalog_rule_price" xsi:type="string">Magento\CatalogRule\Pricing\Price\CatalogRulePrice</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
+
 </config>

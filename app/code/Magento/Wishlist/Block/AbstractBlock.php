@@ -18,22 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Wishlist\Block;
 
 /**
  * Wishlist Product Items abstract Block
- *
- * @category   Magento
- * @package    Magento_Wishlist
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Block;
-
 abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -65,21 +58,18 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->httpContext = $httpContext;
         $this->_productFactory = $productFactory;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }
@@ -305,48 +295,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
-     * Returns product price block html
-     * Overwrites parent price html return to be ready to show configured, partially configured and
-     * non-configured products
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $displayMinimalPrice
-     * @param string $idSuffix
-     *
-     * @return string
-     */
-    public function getPriceHtml($product, $displayMinimalPrice = false, $idSuffix = '')
-    {
-        $type_id = $product->getTypeId();
-        if ($this->_catalogData->canApplyMsrp($product)) {
-            $realPriceHtml = $this->_preparePriceRenderer(
-                $type_id
-            )->setProduct(
-                $product
-            )->setDisplayMinimalPrice(
-                $displayMinimalPrice
-            )->setIdSuffix(
-                $idSuffix
-            )->setIsEmulateMode(
-                true
-            )->toHtml();
-            $product->setAddToCartUrl($this->getAddToCartUrl($product));
-            $product->setRealPriceHtml($realPriceHtml);
-            $type_id = $this->_mapRenderer;
-        }
-
-        return $this->_preparePriceRenderer(
-            $type_id
-        )->setProduct(
-            $product
-        )->setDisplayMinimalPrice(
-            $displayMinimalPrice
-        )->setIdSuffix(
-            $idSuffix
-        )->toHtml();
-    }
-
-    /**
      * Retrieve URL to item Product
      *
      * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
@@ -393,5 +341,30 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function getImageSize()
     {
         return $this->getVar('product_image_size', 'Magento_Wishlist');
+    }
+
+    /**
+     * Return HTML block with price
+     *
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     * @param string $priceType
+     * @param string $renderZone
+     * @param array $arguments
+     * @return string|null
+     */
+    public function getItemPriceHtml(
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item,
+        $priceType = \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        array $arguments = []
+    ) {
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        $priceRender = $this->getLayout()->getBlock('product.price.render.default');
+        $priceRender->setItem($item);
+        $arguments += [
+            'zone'         => $renderZone,
+            'render_block' => $priceRender
+        ];
+        return $priceRender ? $priceRender->render($priceType, $item->getProduct(), $arguments) : null;
     }
 }

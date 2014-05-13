@@ -156,7 +156,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'getLayoutFactory',
             'getEventManager',
             'getRequest',
-            'getResponse'
+            'getResponse',
+            'getTitle',
+            'getView'
         );
         $contextMock = $this->getMockBuilder(
             '\Magento\Backend\App\Action\Context'
@@ -190,6 +192,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->messageManager)
         );
+        $titleMock =  $this->getMockBuilder('\Magento\Framework\App\Action\Title')->getMock();
+        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($titleMock));
+        $viewMock =  $this->getMockBuilder('\Magento\Framework\App\ViewInterface')->getMock();
+        $viewMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
+        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($viewMock));
 
         $this->_acctServiceMock = $this->getMockBuilder(
             'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
@@ -465,5 +472,23 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
 
         $this->_testedObject->resetPasswordAction();
+    }
+
+    public function testNewsletterAction()
+    {
+        $subscriberMock = $this->getMock(
+            '\Magento\Newsletter\Model\Subscriber',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $subscriberMock->expects($this->once())->method('loadByCustomerId');
+        $this->_objectManager
+            ->expects($this->at(1))
+            ->method('create')
+            ->with('Magento\Newsletter\Model\Subscriber')
+            ->will($this->returnValue($subscriberMock));
+        $this->_testedObject->newsletterAction();
     }
 }

@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -166,7 +165,7 @@
     </fieldset>
     <div class="actions toolbar">
         <div class="primary">
-            <button type="submit" class="action submit" title="<?php echo __('Create account') ?>"><span><?php echo __('Create account') ?></span></button>
+            <button type="submit" class="action submit primary" title="<?php echo __('Create account') ?>"><span><?php echo __('Create account') ?></span></button>
         </div>
         <div class="secondary">
             <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
@@ -175,53 +174,38 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-            <?php if ($this->getShowAddressFields()): ?>
-            "<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>",
-            <?php endif ?>
-            <?php if ($_dob->isEnabled()): ?>
-            "<?php echo $this->getViewFileUrl('mage/validation/dob-rule.js') ?>",
-            <?php endif ?>
-            function() {
-                var dataForm = $('#form-validate'), ignore;
-                <?php if ($_dob->isEnabled()): ?>
-                ignore = 'input[id$="full"]';
-                <?php endif ?>
-                dataForm.validation({
-                    <?php if ($_dob->isEnabled()): ?>
-                    errorPlacement: function(error, element) {
-                        if (element.prop('id').search('full') !== -1) {
-                            var dobElement = $(element).parents('.customer.dob'),
-                                errorClass = error.prop('class');
-                            error.insertAfter(element.parent());
-                            dobElement.find('.validate-custom').addClass(errorClass)
-                                .after('<div class="' + errorClass + '"></div>');
-                        }
-                        else {
-                            error.insertAfter(element);
-                        }
-                    },
-                    ignore: ':hidden:not(' + ignore + ')'
-                    <?php else: ?>
-                    ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-                    <?php endif ?>
-                }).find('input:text').attr('autocomplete', 'off');
-                <?php if ($this->getShowAddressFields()): ?>
-                $('#country').regionUpdater({
-                    optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
-                    regionListId: '#region_id',
-                    regionInputId: '#region',
-                    postcodeId: '#zip',
-                    form: dataForm,
-                    regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                    defaultRegion: "<?php echo $this->getFormData()->getRegionId() ?>",
-                    countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
-                });
-                <?php endif; ?>
-            });
+        var dataForm = $('#form-validate');
+        var ignore = <?php echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
+        dataForm.mage('validation', {
+        <?php if ($_dob->isEnabled()): ?>
+            errorPlacement: function(error, element) {
+                if (element.prop('id').search('full') !== -1) {
+                    var dobElement = $(element).parents('.customer-dob'),
+                        errorClass = error.prop('class');
+                    error.insertAfter(element.parent());
+                    dobElement.find('.validate-custom').addClass(errorClass)
+                        .after('<div class="' + errorClass + '"></div>');
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            ignore: ':hidden:not(' + ignore + ')'
+        <?php else: ?>
+            ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+        <?php endif ?>
+        }).find('input:text').attr('autocomplete', 'off');
+        <?php if ($this->getShowAddressFields()): ?>
+        $('#country').mage('regionUpdater', {
+            optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+            regionListId: '#region_id',
+            regionInputId: '#region',
+            postcodeId: '#zip',
+            form: dataForm,
+            regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+            defaultRegion: "<?php echo $this->getFormData()->getRegionId() ?>",
+            countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+        });
+        <?php endif; ?>
     })(jQuery);
 </script>

@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="wishlist_page_head_components" template="Magento_Wishlist::js/components.phtml"/>
+    </referenceBlock>
     <referenceBlock name="top.links">
         <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link"/>
     </referenceBlock>

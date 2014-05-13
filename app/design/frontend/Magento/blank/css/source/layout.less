@@ -22,7 +22,9 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-// These apply extra styles in styledocco on elements they should not be applyed to
+@layout-column-left-offset: 2%;
+@layout-column-right-offset: @layout-column-left-offset;
+
 .navigation > ul,
 .breadcrumbs,
 .page.header .header.panel,
@@ -32,29 +34,50 @@
 .page.wrapper > .widget,
 .page.wrapper > .page.bottom,
 .block.category.event {
-    .layout-width();
+    padding-left: @layout-indent;
+    padding-right: @layout-indent;
 }
 
 .columns {
     #layout-columns();
     > .column {
-        .box-sizing();
+        &:extend(.add-box-sizing all);
         .css(padding-bottom, @indent-xl-base);
+    }
+    .column.main {
+        min-height: 300px;
     }
 }
 
-.column.main {
-    #layout-columns > .main();
-    min-height:300px;
-}
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .navigation > ul,
+    .breadcrumbs,
+    .page.header .header.panel,
+    .header.content,
+    .footer.content,
+    .page.main,
+    .page.wrapper > .widget,
+    .page.wrapper > .page.bottom,
+    .block.category.event {
+        margin: 0 auto;
+        width: auto;
+        max-width: @layout-max-width;
+    }
 
-.column.left {
-    #layout-columns > .left();
-    padding-right: @layout-column-left-offset;
-}
+    .column.main {
+        #layout-columns > .main();
+    }
 
-.column.right {
-    #layout-columns > .right();
-    padding-left: @layout-column-right-offset;
-}
+    .column.left {
+        #layout-columns > .left();
+        padding-right: @layout-column-left-offset;
+    }
 
+    .column.right {
+        #layout-columns > .right();
+        padding-left: @layout-column-right-offset;
+    }
+}

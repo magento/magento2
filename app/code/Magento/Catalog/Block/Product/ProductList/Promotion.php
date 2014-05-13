@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -52,7 +50,6 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\LayerFactory $layerFactory
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -61,8 +58,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Category $catalogLayer,
         \Magento\Catalog\Model\LayerFactory $layerFactory,
         CollectionFactory $productCollectionFactory,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_layerFactory = $layerFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -71,8 +67,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
             $postDataHelper,
             $categoryFactory,
             $catalogLayer,
-            $data,
-            $priceBlockTypes
+            $data
         );
     }
 

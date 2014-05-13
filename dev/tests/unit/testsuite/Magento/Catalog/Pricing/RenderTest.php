@@ -104,12 +104,14 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('product'))
             ->will($this->returnValue($product));
 
+        $arguments = $this->object->getData();
+        $arguments['render_block'] = $this->object;
         $this->pricingRenderBlock->expects($this->any())
             ->method('render')
             ->with(
                 $this->equalTo('test_price_type_code'),
                 $this->equalTo($product),
-                $this->equalTo($this->object->getData())
+                $this->equalTo($arguments)
             )
             ->will($this->returnValue($expectedValue));
 
@@ -127,12 +129,14 @@ class RenderTest extends \PHPUnit_Framework_TestCase
 
         $block = $this->getMock('Magento\Framework\Pricing\Render', ['getProductItem', 'render'], [], '', false);
 
+        $arguments = $this->object->getData();
+        $arguments['render_block'] = $this->object;
         $block->expects($this->any())
             ->method('render')
             ->with(
                 $this->equalTo('test_price_type_code'),
                 $this->equalTo($product),
-                $this->equalTo($this->object->getData())
+                $this->equalTo($arguments)
             )
             ->will($this->returnValue($expectedValue));
 

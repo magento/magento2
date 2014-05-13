@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -42,37 +41,44 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
             <?php if ($this->hasWishlistItems()): ?>
                 <ol class="items minilist products" id="wishlist-sidebar">
                     <?php $iterator = 1; ?>
-                    <?php foreach ($this->getWishlistItems() as $_item): ?>
-                        <?php $product = $_item->getProduct(); ?>
-                        <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
+                    <?php foreach ($this->getWishlistItems() as $item): ?>
+                        <?php $product = $item->getProduct(); ?>
+                        <?php echo ($iterator++ == 1) ? '<li class="item product">' : '</li><li class="item product">' ?>
                         <div class="product">
-                            <a class="product photo" href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                            <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
                                 <?php echo $imageBlock->init($product, 'wishlist_sidebar_block')->toHtml() ?>
                             </a>
                             <div class="product details">
-                                <strong class="product name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a></strong>
-                                <?php echo $this->getPriceHtml($product, false, '-wishlist') ?>
+                                <strong class="product name"><a href="<?php echo $this->getProductUrl($item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a></strong>
+                                <?php
+                                    echo $this->getProductPriceHtml(
+                                        $product,
+                                        \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                                        \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                        ['item' => $item]
+                                    );
+                                ?>
                                 <div class="product actions">
                                     <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
                                         <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
-                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($product) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
+                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($item) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
                                         <?php else: ?>
                                             <?php
                                                 $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                                $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($product), ['product' => $product->getEntityId()])
+                                                $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
                                             ?>
                                             <div class="primary"><button type="button" class="action tocart" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <div class="secondary">
-                                        <a href="#" data-post='<?php echo $this->getItemRemoveParams($_item) ?>' title="<?php echo __('Remove This Item') ?>" class="btn-remove action delete">
+                                        <a href="#" data-post='<?php echo $this->getItemRemoveParams($item) ?>' title="<?php echo __('Remove This Item') ?>" class="btn-remove action delete">
                                             <span><?php echo __('Remove This Item') ?></span>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <?php echo ($iterator==count($this->getWishlistItems())+1) ? '</li>' : '' ?>
+                        <?php echo ($iterator == count($this->getWishlistItems()) + 1) ? '</li>' : '' ?>
                     <?php endforeach; ?>
                 </ol>
                 <div class="actions">

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -156,13 +154,15 @@
 </form>
 <script type="text/javascript">
     (function ($) {
-        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
             "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
             "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", function() {
+            "<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>",
+            head.ready(function () {
                 $.mage.install.configureForm('#form-validate', '#use_secure', '#use_secure_options');
-            });
+            }));
     })(jQuery);
 </script>
 <?php else: ?>
@@ -172,11 +172,11 @@
         <span><?php echo __('Continue') ?></span></button>
     <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js')?>", function() {
+        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js')?>", head.ready(function () {
             $.mage.install.configureContinue(
                 '#btn-continue', '<?php echo $this->getUrl('*/*/*', array('_current' => true)) ?>'
             );
-        });
+        }));
     })(jQuery);
     </script>
 </div>

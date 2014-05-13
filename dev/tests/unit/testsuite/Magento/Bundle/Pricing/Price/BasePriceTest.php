@@ -64,13 +64,13 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\BasePrice', [
-            'salableItem' => $this->saleable,
+            'saleableItem' => $this->saleable,
             'quantity' => $this->quantity
         ]);
     }
 
     /**
-     * @covers \Magento\Bundle\Pricing\Price\BasePrice::applyDiscount
+     * @covers \Magento\Bundle\Pricing\Price\BasePrice::calculateBaseValue
      * @covers \Magento\Bundle\Pricing\Price\BasePrice::getValue
      */
     public function testGetValue()
@@ -83,7 +83,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
 
         $pricesIncludedInBase = [];
         foreach ($priceValues as $priceValue) {
-            $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
+            $price = $this->getMock('Magento\Catalog\Pricing\Price\RegularPrice', [], [], '', false);
             $price->expects($this->atLeastOnce())
                 ->method('getValue')
                 ->will($this->returnValue($priceValue));
@@ -91,7 +91,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->priceInfo->expects($this->once())
-            ->method('getPricesIncludedInBase')
+            ->method('getPrices')
             ->will($this->returnValue($pricesIncludedInBase));
 
         $tearPrice = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
@@ -112,9 +112,9 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->priceInfo->expects($this->any())
             ->method('getPrice')
             ->will($this->returnValueMap([
-                [CatalogPrice\TierPriceInterface::PRICE_TYPE_TIER, $this->quantity, $tearPrice],
-                [CatalogPrice\GroupPriceInterface::PRICE_TYPE_GROUP, $this->quantity, $groupPrice],
-                [CatalogPrice\SpecialPriceInterface::PRICE_TYPE_SPECIAL, $this->quantity, $specialPrice],
+                [CatalogPrice\TierPrice::PRICE_CODE, $this->quantity, $tearPrice],
+                [CatalogPrice\GroupPrice::PRICE_CODE, $this->quantity, $groupPrice],
+                [CatalogPrice\SpecialPrice::PRICE_CODE, $this->quantity, $specialPrice],
             ]));
 
         $this->assertEquals($result, $this->model->getValue());

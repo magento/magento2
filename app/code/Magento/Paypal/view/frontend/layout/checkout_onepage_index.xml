@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="paypal_opcheckout_head_components" template="Magento_Paypal::js/components.phtml"/>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.paypal.js" after="checkout.onepage" template="Magento_Paypal::onepage.phtml"/>
     </referenceContainer>

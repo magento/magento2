@@ -78,7 +78,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface
     protected function _toHtml()
     {
         $cssClasses = $this->hasData('css_classes') ? explode(' ', $this->getData('css_classes')) : [];
-        $cssClasses[] = 'price-' . $this->getPrice()->getPriceType();
+        $cssClasses[] = 'price-' . $this->getPrice()->getPriceCode();
         $this->setData('css_classes', implode(' ', $cssClasses));
         return parent::_toHtml();
     }
@@ -88,7 +88,6 @@ class PriceBox extends Template implements PriceBoxRenderInterface
      */
     public function getSaleableItem()
     {
-        // @todo move to abstract pricing block
         return $this->saleableItem;
     }
 
@@ -97,7 +96,6 @@ class PriceBox extends Template implements PriceBoxRenderInterface
      */
     public function getPrice()
     {
-        // @todo move to abstract pricing block
         return $this->price;
     }
 
@@ -114,16 +112,8 @@ class PriceBox extends Template implements PriceBoxRenderInterface
             return $this->getData('price_id');
         }
         $priceId = $this->saleableItem->getId();
-        if ($this->hasData('price_id_prefix')) {
-            $prefix = $this->getData('price_id_prefix') . $priceId;
-        } else {
-            $prefix = $defaultPrefix;
-        }
-        if ($this->hasData('price_id_suffix')) {
-            $suffix = $this->getData('price_id_suffix');
-        } else {
-            $suffix = $defaultSuffix;
-        }
+        $prefix = $this->hasData('price_id_prefix') ? $this->getData('price_id_prefix') : $defaultPrefix;
+        $suffix = $this->hasData('price_id_suffix') ? $this->getData('price_id_suffix') : $defaultSuffix;
         $priceId = $prefix . $priceId . $suffix;
         return $priceId;
     }
@@ -132,12 +122,11 @@ class PriceBox extends Template implements PriceBoxRenderInterface
      * Retrieve price object of given type and quantity
      *
      * @param string $priceCode
-     * @param float|null $quantity
      * @return PriceInterface
      */
-    public function getPriceType($priceCode, $quantity = null)
+    public function getPriceType($priceCode)
     {
-        return $this->saleableItem->getPriceInfo()->getPrice($priceCode, $quantity);
+        return $this->saleableItem->getPriceInfo()->getPrice($priceCode);
     }
 
     /**

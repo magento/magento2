@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -54,8 +52,6 @@ use Magento\Framework\Model\AbstractModel;
  * @method int getSortOrder()
  * @method \Magento\Catalog\Model\Product\Option setSortOrder(int $value)
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Option extends AbstractModel
@@ -431,7 +427,7 @@ class Option extends AbstractModel
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
-            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_TYPE_BASE_PRICE)->getValue();
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }

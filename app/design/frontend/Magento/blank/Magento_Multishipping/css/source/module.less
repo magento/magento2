@@ -1,0 +1,202 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.multicheckout {
+    &.form {
+        > .title {
+            &:extend(.add-clearfix all);
+            margin-bottom: 25px;
+            > strong {
+                .heading(h3);
+            }
+            > .action {
+                &:extend(.button-responsive all);
+                margin-top: 10px;
+            }
+        }
+        .items.table {
+            .table-bordered(
+                @_type: light,
+                @_border-width: 1px
+            );
+            td {
+                vertical-align: top;
+                input,
+                select {
+                    margin-top: -@table-cell-padding-vertical;
+                }
+                padding-top: @table-cell-padding-vertical*2;
+            }
+            tbody tr:last-child td {
+                border-bottom: 1px solid @border-color-base;
+            }
+            .col.delete .action {
+                white-space: nowrap;
+            }
+            .col.qty {
+                width: 45px;
+                .input-text {
+                    width: 3.3em;
+                    text-align: center;
+                }
+            }
+        }
+
+        .product .item.options {
+            font-size: @font-size-s;
+            margin-top: 10px;
+            &:extend(.product-options-list all);
+        }
+    }
+
+    .column.main & {
+        .block:not(.widget):not(.widget) {
+            &:extend(.account .column.main .block:not(.widget) all);
+            .content .block.items .price.box {
+                float: none;
+                margin-left: 40px;
+            }
+        }
+    }
+
+    > .title {
+        &:extend(.opc.wrapper .step.title all);
+    }
+
+    .fieldset.gift.message {
+        &:extend(.opc.wrapper .fieldset.gift.message all);
+        margin: 0;
+    }
+
+    .field.wrapping {
+        &:extend(.opc.wrapper .field.wrapping all);
+    }
+
+    .activate.message {
+        &:extend(.opc.wrapper .activate.message all);
+    }
+
+    .hidden {
+        &:extend(.opc.wrapper .hidden all);
+    }
+
+    .options.individual {
+        &:extend(.opc.wrapper .options.individual all);
+    }
+
+    .items.methods {
+        &:extend(.opc.wrapper .items.methods all);
+    }
+
+    .block.billing {
+        .method .methods .item.title {
+            margin-bottom: 5px;
+        }
+        .box.address {
+            margin-bottom: 40px;
+        }
+    }
+
+    .data.table {
+        .col.subtotal {
+            &:extend(.opc.wrapper .data.table .col.subtotal all);
+        }
+        .amount {
+            &:extend(.opc.wrapper .data.table .amount all);
+        }
+    }
+
+    .checkout.review .grand.totals {
+        &:extend(.add-clearfix all);
+        margin: 0 10px 40px;
+        .mark {
+            float: left;
+        }
+        .amount {
+            float: right;
+        }
+    }
+
+    &.block.progress {
+        background: @sidebar-background;
+        padding: 15px;
+        &:extend(.reset-list);
+        .active {
+            font-weight: bold;
+        }
+    }
+}
+
+.responsive(@break) when (@break = @break-point-1) {
+    .multicheckout {
+        &.form {
+            .title {
+                margin-bottom: 25px;
+                > strong {
+                    .heading(h3);
+                }
+                > .action {
+                    float: right;
+                    margin-left: 15px;
+                    &:extend(.button-desktop all);
+                }
+            }
+            .col {
+                &.product {
+                    vertical-align: middle;
+                    width: 35%;
+                }
+                &.address {
+                    vertical-align: middle;
+                }
+            }
+            .actions.toolbar {
+                .primary .action {
+                    margin-right: 10px;
+                }
+            }
+            .column.main & {
+                .actions.toolbar {
+                    &:extend(.reset-left-margin-desktop all);
+                }
+                .block:not(.widget):not(.widget) .content .box.items {
+                    width: 100%;
+                }
+            }
+        }
+
+        &.change.billing {
+            .content {
+                &:extend(.add-clearfix-desktop all);
+            }
+            .box {
+                &:extend(.blocks-2columns all);
+            }
+        }
+
+        .checkout.review .grand.totals {
+            &:extend(.add-clearfix-desktop all);
+        }
+    }
+}

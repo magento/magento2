@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -173,11 +171,9 @@ class Base implements AmountInterface
     {
         $this->baseAmount = $this->amount;
         $this->totalAdjustmentAmount = 0.;
-        if ($this->adjustmentAmounts) {
-            foreach ($this->adjustmentAmounts as $amount) {
-                $this->baseAmount -= $amount;
-                $this->totalAdjustmentAmount += $amount;
-            }
+        foreach ($this->adjustmentAmounts as $amount) {
+            $this->baseAmount -= $amount;
+            $this->totalAdjustmentAmount += $amount;
         }
     }
 }

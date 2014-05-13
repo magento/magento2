@@ -25,9 +25,7 @@
 /** @var \Magento\Multishipping\Block\Checkout\Address\Select $this */
 ?>
 <div class="multicheckout block change billing">
-    <div class="actions">
-        <button type="button" class="action add" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
-    </div>
+    <div class="content">
     <?php foreach ($this->getAddressCollection() as $_address): ?>
         <div class="box billing">
             <address>
@@ -45,15 +43,19 @@
             </div>
         </div>
     <?php endforeach; ?>
-    <div class="actions">
+    </div>
+</div>
+<div class="actions toolbar">
+    <div class="primary">
+        <button type="button" class="action add primary" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
+    </div>
+    <div class="secondary">
         <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
     </div>
 </div>
 <script type="text/javascript">
-    head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js'); ?>", function() {
-        jQuery('.actions').address({
-            addAddress: "button[role='add-address']",
-            addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
-        });
+    jQuery('.actions').mage('address', {
+        addAddress: "button[role='add-address']",
+        addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
     });
 </script>

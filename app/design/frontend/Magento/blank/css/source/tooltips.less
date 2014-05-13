@@ -22,7 +22,7 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.tooltip.box {
+.tooltip.wrapper {
     .tooltip(
         @_tooltip-position: bottom,
         @_tooltip-selector-content: ~".tooltip.content",
@@ -31,6 +31,9 @@
     .tooltip.content {
         dl {
             margin-bottom: 0;
+        }
+        dd {
+            white-space: normal;
         }
         .subtitle {
             display: inline-block;

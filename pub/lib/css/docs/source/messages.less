@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,26 +16,26 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Messages
 //
-//  MageLess framework provides mixins for styling messages. There are 4 types of messages:
+//  Magento UI library provides mixins for styling messages. There are 4 types of messages:
 //  ```css
 //  info
 //  warning
 //  error
 //  success
 //  ```
-//  To configure styles of each type of message global variables from variables.less are used. To apply <code>.message()</code> mixin you should specify the type of message you want to apply styles of.
+//  To configure styles of each type of message, global variables from variables.less are used. To apply the <code>.message()</code> mixin you need to specify the type of message you want to apply styles to.
 //
 //  # Information message
 //
-//  This is an informational message. To apply appropriate style you should specify <code>info</code> type to the <code>.message()</code> mixin.
+//  This is an informational message. To apply appropriate style you need to specify the <code>info</code> type to the <code>.message()</code> mixin.
 //
 //  If there is no content on the page, for example on a category page with no products, a special system information message with <code>class=”message info empty”</code> is used. It inherits styles from information message by default. It can be styled to get unique appearance using <code>.message.info.empty</code> class.
 //
@@ -53,7 +53,7 @@
 
 //  # Warning message 
 //
-//  This is a warning message. To apply appropriate style you should specify <code>warning</code> type to the <code>.warning()</code> mixin.
+//  This is a warning message. To apply appropriate style you need to specify <code>warning</code> type to the <code>.warning()</code> mixin.
 //
 //  ```
 //  <div class="example-message-warning">
@@ -69,7 +69,7 @@
 
 //  # Error message
 //
-//  This is an error message. To apply appropriate style you should specify <code>error</code> type to the <code>.warning()</code> mixin.
+//  This is an error message. To apply appropriate style you need to specify <code>error</code> type to the <code>.warning()</code> mixin.
 //
 //  ```
 //  <div class="example-message-error">
@@ -85,7 +85,7 @@
 
 //  # Success message
 //
-//  This is a success message. To apply appropriate style you should specify <code>success</code> type to the <code>.warning()</code> mixin.
+//  This is a success message. To apply appropriate style you need to specify <code>success</code> type to the <code>.warning()</code> mixin.
 //
 //  ```
 //  <div class="example-message-success">
@@ -101,7 +101,7 @@
 
 //  # Notice message
 //
-//  This is a notice message. To apply appropriate style you should specify <code>notice</code> type to the <code>.warning()</code> mixin.
+//  This is a notice message. To apply appropriate style you need to specify <code>notice</code> type to the <code>.warning()</code> mixin.
 //
 //  ```
 //  <div class="example-message-notice">
@@ -117,7 +117,7 @@
 
 //  # Message with inner icon
 //
-//  To add an inner icon use <code>.message-icon-inner</code> mixin. To apply <code>.message-icon-inner</code> mixin you should specify the type of message you want to apply styles of.
+//  To add an inner icon use <code>.message-icon-inner</code> mixin. To apply the <code>.message-icon-inner</code> mixin, you need to specify the type of a message that you want to apply styles to.
 //
 //  ```html
 //  <div class="example-message-1">
@@ -134,7 +134,7 @@
 
 //  # Message with lateral icon
 //
-//  To add a lateral icon to a message you should use <code>.message-icon-lateral</code> mixin. This mixin is configured by variables:
+//  To add a lateral icon to a message, you need to use the <code>.message-icon-lateral</code> mixin. This mixin is configured by the following variables:
 //  ```css
 //  @_message-type: error; // info | warning | error | success | notice
 //  @_message-position: right; // left | right
@@ -165,11 +165,7 @@
 
 //  # Custom message style
 //
-//  If you want more styles for messages you can define a set of variables, type for your custom message and call appropriate mixin with your custom type.
-//  ```css
-//  @type = custom
-//  ```
-//  Variables setup for custom message
+//  You can specify your own message type, for example “custom”. To use message mixin for this new type you need to add new variables to variables.less:
 //  ```css
 //    @message-<b>custom</b>-color: #000;
 //    @message-<b>custom</b>-background: #fc0;
@@ -181,14 +177,11 @@
 //    @message-<b>custom</b>-icon-color: #000;
 //    @message-<b>custom</b>-icon-background: #green;
 //  ```
-//
-//  ```html
-//  <div class="example-message-4">
-//      <div>
-//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-//      </div>
-//  </div>
+//  And then call message mixin with your new message type
+//  ```css
+//  .message-icon-lateral(custom, left);
 //  ```
+//
 
 @message-custom-color: #000;
 @message-custom-background: #fc0;

@@ -56,12 +56,12 @@ class Factory
      */
     public function create($className, array $arguments = [])
     {
-        $price = $this->objectManager->create($className, $arguments);
-        if (!$price instanceof AdjustmentInterface) {
+        $adjustment = $this->objectManager->create($className, $arguments);
+        if (!$adjustment instanceof AdjustmentInterface) {
             throw new \InvalidArgumentException(
                 $className . ' doesn\'t implement \Magento\Framework\Pricing\Adjustment\AdjustmentInterface'
             );
         }
-        return $price;
+        return $adjustment;
     }
 }

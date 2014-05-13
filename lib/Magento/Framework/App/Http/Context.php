@@ -73,11 +73,13 @@ class Context
      * Data getter
      *
      * @param string $name
-     * @return mixed
+     * @return mixed|null
      */
     public function getValue($name)
     {
-        return isset($this->data[$name]) ? $this->data[$name] : $this->default[$name];
+        return isset($this->data[$name])
+            ? $this->data[$name]
+            : (isset($this->default[$name]) ? $this->default[$name] : null);
     }
 
     /**

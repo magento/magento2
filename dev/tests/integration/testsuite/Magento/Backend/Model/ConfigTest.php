@@ -57,14 +57,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $_configDataObject->setSection('dev')->setWebsite('base');
 
         $_configData = $_configDataObject->load();
-        $this->assertArrayNotHasKey('dev/debug/template_hints', $_configData);
-        $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
+        $this->assertArrayHasKey('dev/debug/template_hints', $_configData);
+        $this->assertArrayHasKey('dev/debug/template_hints_blocks', $_configData);
 
         $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config');
         $_configDataObject->setSection('dev');
         $_configData = $_configDataObject->load();
-        $this->assertArrayHasKey('dev/debug/template_hints', $_configData);
-        $this->assertArrayHasKey('dev/debug/template_hints_blocks', $_configData);
+        $this->assertArrayNotHasKey('dev/debug/template_hints', $_configData);
+        $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
     }
 
     public function saveWithSingleStoreModeEnabledDataProvider()

@@ -18,11 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\View;
+
+use Magento\Framework\App\State;
 
 class PublicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +47,11 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     protected $viewUrl;
 
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
+
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -54,6 +60,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $this->fileSystem = $objectManager->create('Magento\Framework\View\FileSystem');
         $this->viewUrl = $objectManager->create('Magento\Framework\View\Url');
         $this->model = $objectManager->get('Magento\Framework\View\DesignInterface');
+        $this->state = $objectManager->get('Magento\Framework\App\State');
     }
 
     protected function tearDown()
@@ -94,8 +101,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Locale\ResolverInterface'
         )->setLocale(
-            $locale
-        );
+                $locale
+            );
         $url = $this->viewUrl->getViewFileUrl($file);
         $this->assertStringEndsWith($expectedUrl, $url);
         $viewFile = $this->fileSystem->getViewFile($file);
@@ -261,42 +268,44 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $file
      * @param array $designParams
-     * @param string $expectedFile
+     * @param string $resultFile
      * @param string $contentFile
      * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
      * @magentoAppIsolation enabled
      * @dataProvider getPublicFilePathLessDataProvider
      */
-    public function testGetPublicFilePathLess($file, $designParams, $expectedFile, $contentFile)
+    public function testGetPublicFilePathLess($file, $designParams, $resultFile, $contentFile)
     {
         $this->_initTestTheme();
 
-        $expectedFile = $this->viewService->getPublicDir() . '/' . $expectedFile;
+        $resultFile = $this->viewService->getPublicDir() . '/' . $resultFile;
 
         // test doesn't make sense if the original file doesn't exist or the target file already exists
         $originalFile = $this->fileSystem->getViewFile($file, $designParams);
         $this->assertFileNotExists($originalFile);
 
         // getViewUrl() will trigger publication in development mode
-        $this->assertFileNotExists($expectedFile, 'Please verify isolation from previous test(s).');
+        $this->assertFileNotExists($resultFile, 'Please verify isolation from previous test(s).');
         $this->viewUrl->getViewFileUrl($file, $designParams);
-        $this->assertFileExists($expectedFile);
+        $this->assertFileExists($resultFile);
 
-        $this->assertEquals(
-            trim(file_get_contents($this->fileSystem->getViewFile($contentFile, $designParams))),
-            trim(file_get_contents($expectedFile))
-        );
+        $this->assertFileEquals($this->fileSystem->getViewFile($contentFile, $designParams), $resultFile);
     }
 
     public function getPublicFilePathLessDataProvider()
     {
         $designParams = array('area' => 'frontend', 'theme' => 'test_default', 'locale' => 'en_US');
+        $this->setUp();
+        $resultCssFileName = ($this->state->getMode() === State::MODE_DEVELOPER)
+            ? 'result_source_dev.css'
+            : $resultCssFileName = 'result_source.css';
+
         return array(
             'view file' => array(
                 'source.css',
                 $designParams,
                 'frontend/test_default/en_US/source.css',
-                'result_source.css'
+                $resultCssFileName
             )
         );
     }
@@ -701,16 +710,17 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = 'mage/mage.js';
         $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::PUB_LIB_DIR
-        ) . '/' . $filePath;
+                'Magento\Framework\App\Filesystem'
+            )->getPath(
+                    \Magento\Framework\App\Filesystem::PUB_LIB_DIR
+                ) . '/' . $filePath;
         $this->assertFileExists($expectedFile, 'Please verify existence of public library file');
 
         $actualFile = $this->viewUrl->getViewFilePublicPath($filePath);
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }
+
 class MockedFilesystem extends \Magento\Framework\App\Filesystem
 {
     /**

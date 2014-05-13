@@ -29,11 +29,6 @@ namespace Magento\Catalog\Pricing\Price;
 interface CustomOptionPriceInterface
 {
     /**
-     * Price model code
-     */
-    const PRICE_TYPE_CUSTOM_OPTION = 'custom_option_price';
-
-    /**
      * Return calculated options
      *
      * @return array

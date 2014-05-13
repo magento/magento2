@@ -66,6 +66,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="schedule" type="scheduleDeclaration" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="config_path" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="instance" type="xs:string" use="required"/>

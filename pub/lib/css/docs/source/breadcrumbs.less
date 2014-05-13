@@ -1,5 +1,5 @@
 // /**
-// //  * Magento
+////  * Magento
 //  *
 //  * NOTICE OF LICENSE
 //  *
@@ -16,18 +16,18 @@
 //  * Do not edit or add to this file if you wish to upgrade Magento to newer
 //  * versions in the future. If you wish to customize Magento for your
 //  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
 
 //  # Breadcrumbs
-//  Breadcrumbs or breadcrumb trail is a navigation aid used in user interfaces. It allows users to keep track of their locations within programs or documents.
+//  Breadcrumbs or breadcrumb trail is a navigation aid used in user interfaces. It allows users to keep track of their location within programs, websites or documents.
 //
-//  Breadcrumbs layout with links with separating <code>></code> symbol
+//  Breadcrumbs layout with links can be separated by any symbol, for example <code>></code> symbol.
 //
-//  The following markup corresponds to accesibility demands:
+//  The following markup corresponds to the accesibility demands:
 //  ```html
 //  <div class="example-breadcrumbs-1">
 //      <span class="label" id="breadcrumb-label">You are here:</span>
@@ -49,7 +49,7 @@
 //  ```
 
 .example-breadcrumbs-1 {
-    .breadcrumbs();
+    .mixin-breadcrumbs();
 }
 
 //  # Breadcrumbs variables
@@ -59,7 +59,7 @@
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowable values</th>
+//        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
@@ -76,15 +76,15 @@
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-separator-color</th>
-//        <td class="vars_value">@breadcrumbs-current-color</td>
+//        <td class="vars_value" nowrap="nowrap">@breadcrumbs-current-color</td>
 //        <td class="vars_value">&nbsp;</td>
 //        <td>separating symbol color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-display</th>
-//        <td class="vars_value">''</td>
+//        <td class="vars_value">'' | inline | block | inline-block</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs display</td>
+//        <td>breadcrumbs links display property</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-padding</th>
@@ -123,25 +123,25 @@
 //        <th>@_breadcrumbs-current-gradient</th>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">true | false</td>
-//        <td>does breadcrumbs current page have gradient background</td>
+//        <td>breadcrumbs current page have gradient background</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-current-gradient-direction</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | vertical | horizontal</td>
-//        <td>direction of breadcrumbs current page  background gradient  (if there is any)</td>
+//        <td>direction of breadcrumbs current page background gradient (if there is any)</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-current-gradient-start-color</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs current page  gradient start color</td>
+//        <td>breadcrumbs current page gradient start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-current-gradient-end-color</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs current page  gradient end color</td>
+//        <td>breadcrumbs current page gradient end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Breadcrumbs link</th>
@@ -150,13 +150,13 @@
 //        <th>@_breadcrumbs-link-gradient</th>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">true | false</td>
-//        <td>does breadcrumbs item have gradient background</td>
+//        <td>breadcrumbs item have gradient background</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-link-gradient-direction</th>
 //        <td class="vars_value">'' | vertical | horizontal</td>
 //        <td class="vars_value">'' | vertical | horizontal</td>
-//        <td>direction of breadcrumbs item  background gradient  (if there is any)</td>
+//        <td>direction of breadcrumbs item background gradient (if there is any)</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Breadcrumbs link - default</th>
@@ -189,13 +189,13 @@
 //        <th>@_breadcrumbs-link-gradient-start-color</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item  gradient start color</td>
+//        <td>breadcrumbs item gradient start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-link-gradient-end-color</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item  gradient end color</td>
+//        <td>breadcrumbs item gradient end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Breadcrumbs link - visited</th>
@@ -228,13 +228,13 @@
 //        <th>@_breadcrumbs-link-gradient-start-color-visited</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item visited  gradient start color</td>
+//        <td>breadcrumbs item visited gradient start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-link-gradient-end-color-visited</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item visited  gradient end color</td>
+//        <td>breadcrumbs item visited gradient end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Breadcrumbs link - hover</th>
@@ -267,13 +267,13 @@
 //        <th>@_breadcrumbs-link-gradient-start-color-hover</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item  hover gradient start color</td>
+//        <td>breadcrumbs item hover gradient start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-link-gradient-end-color-hover</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item  hover gradient end color</td>
+//        <td>breadcrumbs item hover gradient end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Breadcrumbs link - active</th>
@@ -306,37 +306,39 @@
 //        <th nowrap="nowrap">@_breadcrumbs-link-gradient-start-color-active</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item active  gradient start color</td>
+//        <td>breadcrumbs item active gradient start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_breadcrumbs-link-gradient-end-color-active</th>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">&nbsp;</td>
-//        <td>breadcrumbs item active  gradient end color</td>
+//        <td>breadcrumbs item active gradient end color</td>
 //      </tr>
 //    </table>
 //  </pre>
 //
-//  # Breadcrumbs buttons-styled without separating symbol
-//  Breadcrumbs buttons-styled with gradient background and border without separating symbol
-//  To hide separating symbol use
+//  # Button-styled breadcrumbs with gradient background, border, and no separating symbol
+//
+//  Set values for the following variables to:
+//
+//  hide separating symbol:
 //  ```css
 //  @_breadcrumbs-separator-symbol: ''
 //  ```
-//  To set up gradient background for links for default and hover state
+//  set up links gradient background for default and hover state:
 //  ```css
 //  @_breadcrumbs-link-gradient: true,
 //  @_breadcrumbs-link-gradient-direction: vertical,
 //  @_breadcrumbs-link-gradient-start-color: #f4f4f4,
 //  @_breadcrumbs-link-gradient-end-color: #ccc,
 //  @_breadcrumbs-link-gradient-start-color-hover: #ccc,
-//  @_breadcrumbs-link-gradient-end-color-hover: #f4f4f4,
+//  @_breadcrumbs-link-gradient-end-color-hover: #f4f4f4
 //  ```
-//  To set up gradient background for current page
+//  set up current page gradient background:
 //  ```css
 //  @_breadcrumbs-current-gradient: true,
 //  @_breadcrumbs-current-gradient-start-color: #f7b32e,
-//  @_breadcrumbs-current-gradient-end-color: #ff5501,
+//  @_breadcrumbs-current-gradient-end-color: #ff5501
 //  ```
 //  ```html
 //  <div class="example-breadcrumbs-2">
@@ -358,7 +360,7 @@
 //  ```
 
 .example-breadcrumbs-2 {
-    .breadcrumbs(
+    .mixin-breadcrumbs(
         @_breadcrumbs-separator-symbol: '',
         @_breadcrumbs-display: inline-block,
         @_breadcrumbs-padding: 3px 5px,
@@ -379,46 +381,27 @@
 }
 
 //  # Breadcrumbs with solid background
-//  Breadcrumbs with solid background and a triangle on the right side, without separating symbol
 //
-//  To hide separating symbol use
+//  Breadcrumbs with solid background and a triangle right on the right side, without separating symbol.
+//
+//  Set values for the following variables to:
+//
+//  hide separating symbol use:
 //  ```css
 //  @_breadcrumbs-separator-symbol: ''
 //  ```
-//  To set up solid background for links for default and hover state
+//  set up solid background for links for default and hover state:
 //  ```css
 //  @_breadcrumbs-link-background: #f4f4f4,
 //  @_breadcrumbs-link-background-hover: #ccc
 //  ```
-//  To set up gradient background for current page
+//  set up gradient background for current page:
 //  ```css
 //  @_breadcrumbs-current-background: #e7e7e7,
 //  @_breadcrumbs-current-color: #333,
 //  ```
-//  User can also add customization that was not provided with mixin. Here we can add solid arrows to each link:
-//  ```css
-//    .example-breadcrumbs-3 {
-//        .item a {
-//            position: relative;
-//            margin: 0 11px 0 0;
-//            &:after {
-//                content: "";
-//                position: absolute;
-//                display: block;
-//                width: 0;
-//                height: 0;
-//                top: 0;
-//                right: -10px;
-//                border-style: solid;
-//                border-width: 12px 0 12px 10px;
-//                border-color: transparent transparent transparent #f4f4f4;
-//            }
-//            &:hover:after {
-//                border-color: transparent transparent transparent #ccc;
-//            }
-//        }
-//    }
-//  ```
+//
+//  User can also add customization that was not provided with the breadcrumbs mixin. Here we can add solid arrow right for each link:
 //  ```html
 //  <div class="example-breadcrumbs-3">
 //      <ul class="items">
@@ -439,7 +422,7 @@
 //  ```
 
 .example-breadcrumbs-3 {
-    .breadcrumbs(
+    .mixin-breadcrumbs(
         @_breadcrumbs-separator-symbol: '',
         @_breadcrumbs-display: inline-block,
         @_breadcrumbs-padding: 3px 5px,
@@ -453,16 +436,12 @@
         position: relative;
         margin: 0 11px 0 0;
         &:after {
+            .arrow(right, 12px, #f4f4f4);
             content: "";
             position: absolute;
             display: block;
-            width: 0;
-            height: 0;
             top: 0;
-            right: -10px;
-            border-style: solid;
-            border-width: 12px 0 12px 10px;
-            border-color: transparent transparent transparent #f4f4f4;
+            right: -23px;
         }
         &:hover:after {
             border-color: transparent transparent transparent #ccc;

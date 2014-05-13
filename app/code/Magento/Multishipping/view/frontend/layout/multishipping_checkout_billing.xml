@@ -36,4 +36,7 @@
             <container name="payment_methods_after" label="Payment Methods After"/>
         </block>
     </referenceContainer>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="multishipping_checkout_billing_page_head_components" template="Magento_Checkout::js/components.phtml"/>
+    </referenceBlock>
 </layout>

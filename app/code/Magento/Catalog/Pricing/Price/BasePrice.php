@@ -18,33 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Pricing\Price;
 
+use Magento\Framework\Pricing\Price\AbstractPrice;
+
 /**
  * Class BasePrice
  */
-class BasePrice extends RegularPrice
+class BasePrice extends AbstractPrice
 {
     /**
      * Price type identifier string
      */
-    const PRICE_TYPE_BASE_PRICE = 'base_price';
-
-    /**
-     * @var string
-     */
-    protected $priceType = self::PRICE_TYPE_BASE_PRICE;
-
-    /**
-     * @var bool|float|null
-     */
-    protected $maxValue;
+    const PRICE_CODE = 'base_price';
 
     /**
      * Get Base Price Value
@@ -55,8 +45,11 @@ class BasePrice extends RegularPrice
     {
         if ($this->value === null) {
             $this->value = false;
-            foreach ($this->priceInfo->getPricesIncludedInBase() as $price) {
-                $this->value = min($price->getValue(), $this->value ?: $price->getValue());
+            foreach ($this->priceInfo->getPrices() as $code => $price) {
+                if ($price instanceof \Magento\Framework\Pricing\Price\BasePriceProviderInterface && $price->getValue()
+                ) {
+                    $this->value = min($price->getValue(), $this->value ? : $price->getValue());
+                }
             }
         }
         return $this->value;

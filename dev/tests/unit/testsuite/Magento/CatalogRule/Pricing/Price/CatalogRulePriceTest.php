@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,7 +37,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $salableItemMock;
+    protected $saleableItemMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -91,7 +89,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->salableItemMock = $this->getMock(
+        $this->saleableItemMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['getId', '__wakeup', 'getPriceInfo'],
             [],
@@ -142,7 +140,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
         $this->priceInfoMock->expects($this->any())
             ->method('getAdjustments')
             ->will($this->returnValue([]));
-        $this->salableItemMock->expects($this->any())
+        $this->saleableItemMock->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
@@ -155,7 +153,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $qty = 1;
         $this->object = new CatalogRulePrice(
-            $this->salableItemMock,
+            $this->saleableItemMock,
             $qty,
             $this->calculator,
             $this->dataTimeMock,
@@ -194,7 +192,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
             ->will($this->returnValue($expectedValue));
-        $this->salableItemMock->expects($this->any())
+        $this->saleableItemMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($productId));
 

@@ -18,14 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\ProductAlert\Block\Email\Price */
 ?>
 <?php if ($_products = $this->getProducts()): ?>
 <p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the prices for the following products changed:') ?></p>
 <table>
+<?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
 <?php foreach ($_products as $_product): ?>
     <tr>
         <td class="col photo">
@@ -40,14 +42,18 @@
                 </strong>
             </p>
             <?php if ($shortDescription = $this->escapeHtml($_product->getShortDescription())): ?>
-            <p><small><?php echo $shortDescription ?></small></p>
+                <p><small><?php echo $shortDescription ?></small></p>
             <?php endif; ?>
-            <p><?php if ($_product->getPrice() != $_product->getFinalPrice()): ?>
-                <?php echo __('Regular Price:') ?> <strong style="text-decoration:line-through;"><?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getPrice()) ?></strong><br />
-                <strong><?php echo __('Special price:') ?> <span style="color:#FF0000;"><?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getFinalPrice()) ?></span></strong>
-            <?php else: ?>
-                <strong><?php echo __('Price:') ?></strong> <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getPrice()) ?>
-            <?php endif; ?></p>
+            <p><?php echo $this->getProductPriceHtml(
+                    $_product,
+                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                    \Magento\Framework\Pricing\Render::ZONE_EMAIL,
+                    [
+                        'display_label' => __('Price:')
+                    ]
+                );
+                ?>
+            </p>
             <p><small><a href="<?php echo $this->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
         </td>
     </tr>

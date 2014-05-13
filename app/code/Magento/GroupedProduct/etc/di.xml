@@ -68,12 +68,25 @@
     <type name="Magento\Catalog\Helper\Product\Configuration">
         <plugin name="grouped_options" type="Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped"/>
     </type>
-    <type name="Magento\Framework\Pricing\PriceComposite">
+    <virtualType name="Magento\GroupedProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="grouped_final_price" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\GroupedProduct\Pricing\Price\FinalPrice</item>
-                    <item name="include_in_base_price" xsi:type="boolean">false</item>
+            <argument name="prices" xsi:type="array">
+                <item name="final_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\FinalPrice</item>
+            </argument>
+            <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\GroupedProduct\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\GroupedProduct\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="grouped" xsi:type="array">
+                    <item name="infoClass" xsi:type="string">Magento\Framework\Pricing\PriceInfo\Base</item>
+                    <item name="prices" xsi:type="string">Magento\GroupedProduct\Pricing\Price\Collection</item>
                 </item>
             </argument>
         </arguments>

@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library\PhpParser;
 use Magento\TestFramework\Integrity\Library\PhpParser\Throws;
 
 /**
- * @package Magento\Test
  */
 class ThrowsTest extends \PHPUnit_Framework_TestCase
 {

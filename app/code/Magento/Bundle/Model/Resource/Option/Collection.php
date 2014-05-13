@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -171,7 +169,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         if (is_array($ids)) {
             $this->addFieldToFilter('main_table.option_id', array('in' => $ids));
-        } else if ($ids != '') {
+        } elseif ($ids != '') {
             $this->addFieldToFilter('main_table.option_id', $ids);
         }
         return $this;

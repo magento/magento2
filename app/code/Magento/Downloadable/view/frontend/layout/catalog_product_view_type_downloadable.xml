@@ -41,4 +41,7 @@
             </block>
         </block>
     </referenceBlock>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="downloadable_page_head_components" template="Magento_Downloadable::js/components.phtml"/>
+    </referenceBlock>
 </layout>

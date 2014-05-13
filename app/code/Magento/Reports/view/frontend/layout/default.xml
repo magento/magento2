@@ -28,4 +28,7 @@
         <block class="Magento\Reports\Block\Product\Viewed" name="right.reports.product.viewed" template="product_viewed.phtml"/>
         <block class="Magento\Reports\Block\Product\Compared" name="right.reports.product.compared" template="product_compared.phtml"/>
     </referenceContainer>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="reports_page_head_components" template="Magento_Reports::js/components.phtml"/>
+    </referenceBlock>
 </layout>

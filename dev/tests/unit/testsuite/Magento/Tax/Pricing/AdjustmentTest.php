@@ -24,49 +24,46 @@
 
 namespace Magento\Tax\Pricing;
 
-use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 
 class AdjustmentTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Adjustment
+     */
+    protected $adjustment;
+
+    /**
+     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $taxHelper;
+
+    /**
+     * @var int
+     */
+    protected $sortOrder = 5;
+
+    public function setUp()
+    {
+        $this->taxHelper = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
+        $this->adjustment = new Adjustment($this->taxHelper, $this->sortOrder);
+    }
+
     public function testGetAdjustmentCode()
     {
-        // Instantiate/mock objects
-        /** @var TaxHelper $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array())
-            ->getMock();
-        $model = new Adjustment($taxHelper);
-
-        // Run tested method
-        $code = $model->getAdjustmentCode();
-
-        // Check expectations
-        $this->assertNotEmpty($code);
+        $this->assertEquals(Adjustment::ADJUSTMENT_CODE, $this->adjustment->getAdjustmentCode());
     }
 
     /**
-     * @param bool $isPriceIncludesTax
+     * @param bool $expectedResult
      * @dataProvider isIncludedInBasePriceDataProvider
      */
-    public function testIsIncludedInBasePrice($isPriceIncludesTax)
+    public function testIsIncludedInBasePrice($expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var TaxHelper|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('priceIncludesTax'))
-            ->getMock();
-        $model = new Adjustment($taxHelper);
-
-        // Avoid execution of irrelevant functionality
-        $taxHelper->expects($this->any())->method('priceIncludesTax')->will($this->returnValue($isPriceIncludesTax));
-
-        // Run tested method
-        $result = $model->isIncludedInBasePrice();
-
-        // Check expectations
-        $this->assertInternalType('bool', $result);
-        $this->assertEquals($isPriceIncludesTax, $result);
+        $this->taxHelper->expects($this->once())
+            ->method('priceIncludesTax')
+            ->will($this->returnValue($expectedResult));
+        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInBasePrice());
     }
 
     public function isIncludedInBasePriceDataProvider()
@@ -79,27 +76,16 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsIncludedInDisplayPrice($displayPriceIncludingTax, $displayBothPrices, $expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var TaxHelper|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('displayPriceIncludingTax', 'displayBothPrices'))
-            ->getMock();
-
-        // Avoid execution of irrelevant functionality
-        $taxHelper->expects($this->any())
+        $this->taxHelper->expects($this->once())
             ->method('displayPriceIncludingTax')
             ->will($this->returnValue($displayPriceIncludingTax));
-        $taxHelper->expects($this->any())
-            ->method('displayBothPrices')
-            ->will($this->returnValue($displayBothPrices));
+        if (!$displayPriceIncludingTax) {
+            $this->taxHelper->expects($this->once())
+                ->method('displayBothPrices')
+                ->will($this->returnValue($displayBothPrices));
+        }
 
-        $model = new Adjustment($taxHelper);
-        // Run tested method
-        $result = $model->isIncludedInDisplayPrice();
-
-        // Check expectations
-        $this->assertInternalType('bool', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
 
     /**
@@ -124,30 +110,17 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractAdjustment($isPriceIncludesTax, $amount, $price, $expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var TaxHelper|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('priceIncludesTax', 'getPrice'))
-            ->getMock();
-        /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
-        $model = new Adjustment($taxHelper);
+        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
 
-                // Avoid execution of irrelevant functionality
-        $taxHelper->expects($this->any())
+        $this->taxHelper->expects($this->any())
             ->method('priceIncludesTax')
             ->will($this->returnValue($isPriceIncludesTax));
-        $taxHelper->expects($this->any())
+        $this->taxHelper->expects($this->any())
             ->method('getPrice')
             ->with($object, $amount)
             ->will($this->returnValue($price));
 
-        // Run tested method
-        $result = $model->extractAdjustment($amount, $object);
-
-        // Check expectations
-        $this->assertInternalType('float', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
     }
 
     public function extractAdjustmentDataProvider()
@@ -169,30 +142,17 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($isPriceIncludesTax, $amount, $price, $expectedResult)
     {
-        // Instantiate/mock objects
-        /** @var TaxHelper|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()
-            ->setMethods(array('priceIncludesTax', 'getPrice'))
-            ->getMock();
-        /** @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
         $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
-        $model = new Adjustment($taxHelper);
 
-        // Avoid execution of irrelevant functionality
-        $taxHelper->expects($this->any())
+        $this->taxHelper->expects($this->any())
             ->method('priceIncludesTax')
             ->will($this->returnValue($isPriceIncludesTax));
-        $taxHelper->expects($this->any())
+        $this->taxHelper->expects($this->any())
             ->method('getPrice')
             ->with($object, $amount, !$isPriceIncludesTax)
             ->will($this->returnValue($price));
 
-        // Run tested method
-        $result = $model->applyAdjustment($amount, $object);
-
-        // Check expectations
-        $this->assertInternalType('float', $result);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }
 
     /**
@@ -207,20 +167,26 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testIsExcludedWith()
+    /**
+     * @dataProvider isExcludedWithDataProvider
+     * @param string $adjustmentCode
+     * @param bool $expectedResult
+     */
+    public function testIsExcludedWith($adjustmentCode, $expectedResult)
     {
-        $adjustmentCode = 'some_random_adjustment_code123';
+        $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
+    }
 
-        // Instantiate/mock objects
-        /** @var TaxHelper|\PHPUnit_Framework_MockObject_MockObject $taxHelper */
-        $taxHelper = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()->getMock();
-        $model = new Adjustment($taxHelper);
+    public function isExcludedWithDataProvider()
+    {
+        return [
+            [Adjustment::ADJUSTMENT_CODE, true],
+            ['not_tax', false]
+        ];
+    }
 
-        // Run tested method
-        $result = $model->isExcludedWith($adjustmentCode);
-
-        // Check expectations
-        $this->assertInternalType('bool', $result);
-        $this->assertFalse($result);
+    public function testGetSortOrder()
+    {
+        $this->assertEquals($this->sortOrder, $this->adjustment->getSortOrder());
     }
 }

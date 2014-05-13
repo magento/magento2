@@ -171,6 +171,8 @@ class DataProvider implements DataProviderInterface
             'Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.' => __('Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.'),
             'Please specify shipping method.' => __('Please specify shipping method.'),
             'Your order cannot be completed at this time as there is no payment methods available for it.' => __('Your order cannot be completed at this time as there is no payment methods available for it.'),
+            'Edit Order' => __('Edit Order'),
+            'Ok' => __('Ok'),
         );
     }
 }

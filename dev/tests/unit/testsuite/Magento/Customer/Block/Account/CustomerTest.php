@@ -63,12 +63,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerCurrent = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerCurrentService')
+        $currentCustomer = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
             ->disableOriginalConstructor()
             ->getMock();
 
         $block = new \Magento\Customer\Block\Account\Customer($contextMock, $customerServiceMock,
-            $viewHelperMock, $httpContextMock, $customerCurrent);
+            $viewHelperMock, $httpContextMock, $currentCustomer);
 
         $this->assertSame($customerName, $block->getCustomerName());
     }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Customer\Model\Resource;
 /**
  * Customer group resource model
  *
- * @category    Magento
- * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
@@ -111,7 +107,8 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $group->getId()
         )->load();
         foreach ($customerCollection as $customer) {
-            $customer->load();
+            /** @var $customer \Magento\Customer\Model\Customer */
+            $customer->load($customer->getId());
             $defaultGroupId = $this->_customerData->getDefaultCustomerGroupId($customer->getStoreId());
             $customer->setGroupId($defaultGroupId);
             $customer->save();

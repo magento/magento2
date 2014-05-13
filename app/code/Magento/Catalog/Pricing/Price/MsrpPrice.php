@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +26,7 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * MSRP price model
@@ -36,9 +34,9 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 class MsrpPrice extends FinalPrice implements MsrpPriceInterface
 {
     /**
-     * @var string
+     * Price type MSRP
      */
-    protected $priceType = self::PRICE_TYPE_MSRP;
+    const PRICE_CODE = 'msrp_price';
 
     /**
      * @var \Magento\Catalog\Helper\Data
@@ -46,18 +44,18 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
     protected $catalogDataHelper;
 
     /**
-     * @param SaleableInterface $salableItem
+     * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param Data $catalogDataHelper
      */
     public function __construct(
-        SaleableInterface $salableItem,
+        Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         Data $catalogDataHelper
     ) {
-        parent::__construct($salableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator);
         $this->catalogDataHelper = $catalogDataHelper;
     }
 
@@ -68,7 +66,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      */
     public function isShowPriceOnGesture()
     {
-        return $this->catalogDataHelper->isShowPriceOnGesture($this->salableItem);
+        return $this->catalogDataHelper->isShowPriceOnGesture($this->product);
     }
 
     /**
@@ -78,7 +76,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      */
     public function getMsrpPriceMessage()
     {
-        return $this->catalogDataHelper->getMsrpPriceMessage($this->salableItem);
+        return $this->catalogDataHelper->getMsrpPriceMessage($this->product);
     }
 
     /**
@@ -94,11 +92,11 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
     /**
      * Check if can apply Minimum Advertise price to product
      *
-     * @param SaleableInterface $saleableItem
+     * @param Product $product
      * @return bool
      */
-    public function canApplyMsrp(SaleableInterface $saleableItem)
+    public function canApplyMsrp(Product $product)
     {
-        return $this->catalogDataHelper->canApplyMsrp($saleableItem);
+        return $this->catalogDataHelper->canApplyMsrp($product);
     }
 }

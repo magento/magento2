@@ -32,3 +32,4 @@ TestSuite
 DbTest
 Model1
 Model3
+\Magento\Framework\Error\Processor

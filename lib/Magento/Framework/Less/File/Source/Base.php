@@ -79,7 +79,7 @@ class Base implements SourceInterface
                 continue;
             }
             $moduleFull = "{$matches['namespace']}_{$matches['module']}";
-            $result[] = $this->fileFactory->create($filename, $moduleFull, $theme);
+            $result[] = $this->fileFactory->create($filename, $moduleFull);
         }
         return $result;
     }

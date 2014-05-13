@@ -26,8 +26,6 @@
 /**
  * Free shipping model
  *
- * @category   Magento
- * @package    Magento_OfflineShipping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Model\Carrier;

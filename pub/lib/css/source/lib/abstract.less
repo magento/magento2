@@ -22,33 +22,13 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.responsive(@break) when (@break = @mobile) {
-    ._rwd_columns {
-        flex-direction: column !important;
-    }
-    ._rwd_column {
-       order: 0 !important;
-       width: 100% !important;
-    }
+.responsive(@break) when (@break = @break-point-1) {
     ._rwd_width {
         min-width: 0 !important;
         max-width: auto !important;
     }
-    ._rwd_floats {
-        float: none !important;
-    }
-    ._rwd_margins {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
     ._rwd_width_float {
         width: 100% !important;
         float: none !important;
-    }
-    ._rwd_width_float_margins {
-        width: 100% !important;
-        float: none !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
     }
 }

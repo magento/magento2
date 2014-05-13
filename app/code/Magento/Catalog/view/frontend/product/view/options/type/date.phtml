@@ -40,12 +40,10 @@
                 <script type="text/javascript">
                     //<![CDATA[
                     (function($) {
-                        head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/date-option.js') ?>", function() {
-                            $.mage.dateOption({
-                                datepickerFieldSelector: 'select.datetime-picker',
-                                monthSelector: '#options_<?php echo $_optionId ?>_month',
-                                yearSelector: '#options_<?php echo $_optionId ?>_year'
-                            });
+                        $('#product_addtocart_form').mage('dateOption', {
+                            'datepickerFieldSelector': 'select.datetime-picker',
+                            'monthSelector': '#options_<?php echo $_optionId ?>_month',
+                            'yearSelector': '#options_<?php echo $_optionId ?>_year'
                         });
                     })(jQuery);
                     //]]>
@@ -72,12 +70,12 @@
                    value=""
                    data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
         <?php endif; ?>
-
         <script type="text/javascript">
             //<![CDATA[
             (function($) {
-                head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>", function() {
-                    $.validator.setDefaults({ignore: ':hidden:not(input[name^="validate_datetime_"])'});
+                var addtocartForm = $('#product_addtocart_form');
+                addtocartForm.mage('validation', {
+                    ignore: ':hidden:not(input[name^="validate_datetime_"])'
                 });
             })(jQuery);
             //]]>

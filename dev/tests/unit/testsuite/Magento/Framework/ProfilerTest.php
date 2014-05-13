@@ -217,7 +217,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function testClearTimer()
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->once())->method('clear')->with('timer');
+        $driver->expects($this->at(0))->method('clear')->with('timer');
 
         \Magento\Framework\Profiler::add($driver);
         \Magento\Framework\Profiler::clear('timer');

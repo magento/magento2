@@ -31,12 +31,14 @@
 <?php if(count($this->getStores())>1): ?>
 <div class="switcher language" data-ui-id="language-switcher">
     <strong class="label"><span><?php echo __('Language') ?></span></strong>
-    <div class="options">
-        <strong class="view-<?php echo $this->escapeHtml($this->getCurrentStoreCode()) ?>">
-            <span><?php echo $this->escapeHtml($this->getStoreName()) ?></span>
-        </strong>
-        <button type="button" id="language-switcher" class="action switch"><span><?php echo __('Change')?></span></button>
-        <ul data-mage-init='{"dropdownDialog":{"appendTo":".switcher.language > .options", "triggerTarget":"#language-switcher", "closeOnMouseLeave": false, "triggerClass":"active", "parentClass":"active", "buttons":null}}'>
+    <div class="actions dropdown options">
+        <div class="action toggle" id="language-switcher">
+            <strong class="view-<?php echo $this->escapeHtml($this->getCurrentStoreCode()) ?>">
+                <span><?php echo $this->escapeHtml($this->getStoreName()) ?></span>
+            </strong>
+        </div>
+        <ul class="dropdown"
+            data-mage-init='{"dropdownDialog":{"appendTo":".switcher.language > .options", "triggerTarget":"#language-switcher", "closeOnMouseLeave": false, "triggerClass":"active", "parentClass":"active", "buttons":null}}'>
             <?php foreach ($this->getStores() as $_lang): ?>
                 <?php if($_lang->getId()!=$this->getCurrentStoreId()): ?>
                     <li class="view-<?php echo $this->escapeHtml($_lang->getCode()); ?>">
@@ -49,4 +51,3 @@
     </div>
 </div>
 <?php endif; ?>
-

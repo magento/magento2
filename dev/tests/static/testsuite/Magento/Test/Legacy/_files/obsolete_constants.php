@@ -599,4 +599,19 @@ return array(
     array('CONFIG_KEY_LOCALE', 'Magento\Framework\Translate'),
     array('CONFIG_KEY_SCOPE', 'Magento\Framework\Translate'),
     array('CONFIG_KEY_DESIGN_THEME', 'Magento\Framework\Translate'),
+    array(
+        'XML_NODE_MAX_INDEX_COUNT',
+        'Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction',
+        'Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder'
+    ),
+    array(
+        'ATTRIBUTES_CHUNK_SIZE',
+        'Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction',
+        'Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer'
+    ),
+    array(
+        'CACHE_CATEGORY_TAG',
+        'Magento\Catalog\Model\Product',
+        'Magento\Catalog\Model\Product::CACHE_PRODUCT_CATEGORY_TAG'
+    ),
 );

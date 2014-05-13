@@ -30,9 +30,9 @@
 ) {
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom: @table-margin-bottom;
+    .css(margin-bottom, @table-margin-bottom);
     max-width: 100%;
-    width: @_table-width;
+    .css(width, @_table-width);
     th {
         text-align: left;
     }
@@ -356,13 +356,12 @@
 
 .table-overflow() {
     width: 100%;
-    margin-bottom: @table-margin-bottom;
+    .css(margin-bottom, @table-margin-bottom);
     overflow-y: hidden;
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
     > table {
-        margin-bottom: 0;
         > thead,
         > tbody,
         > tfoot {

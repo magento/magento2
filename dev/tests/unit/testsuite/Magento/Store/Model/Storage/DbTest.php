@@ -190,7 +190,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $websiteCode = 'website_code';
         $groupId = 1;
         $storeId = 1;
-        $storeCode = \Magento\Store\Model\Store::DEFAULT_CODE;
+        $storeCode = 'store_code';
         $websiteCollection =
             $this->getMock('\Magento\Store\Model\Resource\Website\Collection', array(), array(), '', false, false);
         $websiteCollection->expects($this->any())->method('setLoadDefault')->with(true);
@@ -266,7 +266,6 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockForReinit();
         $this->_model->reinitStores();
         $this->assertSame($this->_storeMock, $this->_model->getStore(true));
-
     }
 
     public function testReinitStores()
@@ -294,7 +293,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->_model->reinitStores();
         $this->assertSame($expected, $this->_model->getStores());
 
-        $expected = array(\Magento\Store\Model\Store::DEFAULT_CODE => $this->_storeMock);
+        $expected = array('store_code' => $this->_storeMock);
         $this->assertSame($expected, $this->_model->getStores(false, true));
     }
 

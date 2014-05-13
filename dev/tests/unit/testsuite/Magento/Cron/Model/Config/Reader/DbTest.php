@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -61,7 +59,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $job1 = array('schedule' => array('cron_expr' => '* * * * *'));
         $job2 = array('schedule' => array('cron_expr' => '1 1 1 1 1'));
-        $data = array('crontab' => array('jobs' => array('job1' => $job1, 'job2' => $job2)));
+        $data = array('crontab' => array('default' => array('jobs' => array('job1' => $job1, 'job2' => $job2))));
         $this->_defaultReader->expects($this->once())->method('read')->will($this->returnValue($data));
         $expected = array(
             'job1' => array('schedule' => $job1['schedule']['cron_expr']),

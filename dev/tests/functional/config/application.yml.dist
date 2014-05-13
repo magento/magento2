@@ -1,0 +1,5 @@
+reopen_browser_on: testCase # test|testCase
+backend_user_credentials:
+    login: 'admin'
+    password: '123123q'
+backend_login_url: admin/auth/login

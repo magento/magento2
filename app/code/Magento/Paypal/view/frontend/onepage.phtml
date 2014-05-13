@@ -24,14 +24,8 @@
 ?>
 <script type="text/javascript">
     (function($) {
-        head.js(
-            "<?php echo $this->getViewFileUrl('Magento_Paypal::js/opcheckout.js')?>",
-            function() {
-                $('#checkoutSteps')
-                    .accordion({
-                        activeSelector: '#opc-<?php echo $this->getActiveStep() ?>'
-                    }).opcheckoutPaypalIframe();
-            }
-        );
+        $('#checkoutSteps').mage('accordion', {
+            'activeSelector': '#opc-<?php echo $this->getActiveStep() ?>'
+        }).mage('opcheckoutPaypalIframe', {});
     })(jQuery);
 </script>

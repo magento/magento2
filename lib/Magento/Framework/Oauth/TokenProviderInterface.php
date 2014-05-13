@@ -30,7 +30,6 @@ namespace Magento\Framework\Oauth;
  * as methods for performing certain validations on tokens and token requests. Consumer methods are also provided to
  * help clients manipulating tokens validate and acquire the associated token consumer.
  *
- * @package Magento\Framework\Oauth
  */
 interface TokenProviderInterface
 {

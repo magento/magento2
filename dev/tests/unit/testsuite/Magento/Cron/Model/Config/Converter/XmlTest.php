@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -63,22 +61,28 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $expected = array(
-            'default' => array(
-                'job1' => array(
+        $expected = [
+            'default' => [
+                'job1' => [
                     'name' => 'job1',
                     'schedule' => '30 2 * * *',
                     'instance' => 'Model1',
                     'method' => 'method1'
-                ),
-                'job2' => array(
+                ],
+                'job2' => [
                     'name' => 'job2',
                     'schedule' => '* * * * *',
                     'instance' => 'Model2',
                     'method' => 'method2'
-                )
-            )
-        );
+                ],
+                'job3' => [
+                    'name'        => 'job3',
+                    'instance'    => 'Model3',
+                    'method'      => 'method3',
+                    'config_path' => 'some/config/path'
+                ],
+            ]
+        ];
 
         $xmlFile = __DIR__ . '/../_files/crontab_valid.xml';
         $dom = new \DOMDocument();

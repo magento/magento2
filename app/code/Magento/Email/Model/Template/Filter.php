@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Email
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,6 +26,7 @@ namespace Magento\Email\Model\Template;
 /**
  * Core Email Template Filter Model
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Framework\Filter\Template
@@ -125,6 +124,11 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_appState;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrlBuilder;
+    
+    /**
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -135,8 +139,9 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param array $variables
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -150,6 +155,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
+        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
         $variables = array()
     ) {
         $this->_escaper = $escaper;
@@ -162,6 +168,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
+        $this->backendUrlBuilder = $backendUrlBuilder;
         parent::__construct($string, $variables);
     }
 
@@ -411,7 +418,22 @@ class Filter extends \Magento\Framework\Filter\Template
             unset($params['url']);
         }
 
-        return $this->_storeManager->getStore($this->getStoreId())->getUrl($path, $params);
+        return $this->getUrl($path, $params);
+    }
+
+    /**
+     * @param string $path
+     * @param array $params
+     * @return string
+     */
+    protected function getUrl($path, $params)
+    {
+        $isBackendStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID === $this->getStoreId()
+            || \Magento\Store\Model\Store::ADMIN_CODE === $this->getStoreId();
+
+        return $isBackendStore
+            ? $this->backendUrlBuilder->getUrl($path, $params)
+            : $this->_storeManager->getStore($this->getStoreId())->getUrl($path, $params);
     }
 
     /**

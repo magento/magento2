@@ -136,6 +136,7 @@ class Payflow extends \Magento\Framework\App\Action\Action
      */
     public function formAction()
     {
+        $this->getResponse()->setHeader('P3P', 'CP="CAO PSA OUR"');
         $this->_view->loadLayout(false)->renderLayout();
         $layout = $this->_view->getLayout();
     }

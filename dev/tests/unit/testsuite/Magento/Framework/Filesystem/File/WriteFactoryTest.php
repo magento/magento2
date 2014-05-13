@@ -25,7 +25,6 @@ namespace Magento\Framework\Filesystem\File;
 
 /**
  * Class WriteFactoryTest
- * @package Magento\Framework\Filesystem\File
  */
 class WriteFactoryTest extends \PHPUnit_Framework_TestCase
 {

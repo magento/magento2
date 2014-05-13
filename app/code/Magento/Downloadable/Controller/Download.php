@@ -25,7 +25,6 @@ namespace Magento\Downloadable\Controller;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
-use Magento\Framework\Model\Exception as CoreException;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 
 /**
@@ -126,7 +125,7 @@ class Download extends \Magento\Framework\App\Action\Action
             try {
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('Sorry, there was an error getting requested content. Please contact the store owner.')
                 );
@@ -163,7 +162,7 @@ class Download extends \Magento\Framework\App\Action\Action
             try {
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('Sorry, there was an error getting requested content. Please contact the store owner.')
                 );

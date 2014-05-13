@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    one page checkout first step
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -456,7 +454,9 @@
             parentsDl.find(this.options.methodOn).prop('checked', false);
             _this.prop('checked', true);
             parentsDl.find(this.options.methodDescription).hide().find('[name^="payment["]').prop('disabled', true);
-            _this.parent().nextUntil(this.options.methodContainer).find(this.options.methodDescription).show().find('[name^="payment["]').prop('disabled', false);
+            _this.closest(this.options.methodContainer)
+                .nextUntil(this.options.methodContainer)
+                .find(this.options.methodDescription).show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**

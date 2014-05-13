@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -43,26 +42,15 @@ $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
     </ol>
     <script type="text/javascript">
         (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('Magento_Checkout::js/opcheckout.js') ?>",
-                "<?php echo $this->getViewFileUrl('Magento_Checkout::js/accordion.js') ?>",
-                function() {
-                    $('#checkoutSteps')
-                        .accordion({
-                            activeSelector: '#opc-<?php echo $this->getActiveStep() ?>'
-                        })
-                        .opcheckout($.extend({
-                            checkoutAgreements: '#checkout-agreements',
-                            checkoutProgressContainer: '#checkout-progress-wrapper',
-                            methodDescription: '.items'
-                            },
-                            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-                        ));
-                });
+            $('#checkoutSteps').mage('accordion', {
+                'activeSelector': '#opc-<?php echo $this->getActiveStep() ?>'
+            }).mage('opcheckout', $.extend({
+                'checkoutAgreements': '#checkout-agreements',
+                'checkoutProgressContainer': '#checkout-progress-wrapper',
+                'methodDescription': '.items'
+                },
+                <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
+            ));
         })(jQuery);
     </script>
 </div>

@@ -26,7 +26,6 @@ namespace Magento\Test\Integrity\Library\PhpParser;
 use Magento\TestFramework\Integrity\Library\PhpParser\Uses;
 
 /**
- * @package Magento\Test
  */
 class UsesTest extends \PHPUnit_Framework_TestCase
 {

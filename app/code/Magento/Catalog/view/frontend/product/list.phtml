@@ -83,7 +83,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                         <div class="product actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
                             <div class="primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position: ''; ?>>
                                 <?php if ($_product->isSaleable()): ?>
-                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
+                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart primary"
                                                 data-post='<?php echo $this->getAddToCartPostParams($_product); ?>'>
                                             <span><?php echo __('Add to Cart') ?></span>
                                         </button>
@@ -96,11 +96,13 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                 <?php endif; ?>
                             </div>
                             <div data-role="add-to-links" class="secondary"<?php echo strpos($pos, $viewMode . '-secondary') ? $position : ''; ?>>
-                                <a href="#" title="<?php echo __('Add to Wishlist') ?>"
-                                   data-post='<?php echo $this->getAddToWishlistParams($_product); ?>'
-                                   class="action towishlist" data-action="add-to-wishlist">
-                                    <span><?php echo __('Add to Wishlist') ?></span>
-                                </a>
+                                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
+                                    <a href="#" title="<?php echo __('Add to Wishlist') ?>"
+                                       data-post='<?php echo $this->getAddToWishlistParams($_product); ?>'
+                                       class="action towishlist" data-action="add-to-wishlist">
+                                        <span><?php echo __('Add to Wishlist') ?></span>
+                                    </a>
+                                <?php endif; ?>
                                 <?php
                                 $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
                                 ?>

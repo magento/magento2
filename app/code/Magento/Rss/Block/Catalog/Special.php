@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rss
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -53,9 +51,9 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_resourceIterator;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
-    protected $_coreData;
+    protected $_priceCurrency;
 
     /**
      * @var \Magento\Catalog\Helper\Image
@@ -71,7 +69,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
@@ -83,7 +81,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Framework\Model\Resource\Iterator $resourceIterator,
@@ -93,7 +91,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     ) {
         $this->_outputHelper = $outputHelper;
         $this->_imageHelper = $imageHelper;
-        $this->_coreData = $coreData;
+        $this->_priceCurrency = $priceCurrency;
         $this->_productFactory = $productFactory;
         $this->_rssFactory = $rssFactory;
         $this->_resourceIterator = $resourceIterator;
@@ -183,9 +181,9 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
                 // render a row for RSS feed
                 $product->setData($result);
                 $html = sprintf(
-                    '<table><tr>
-                    <td><a href="%s"><img src="%s" alt="" border="0" align="left" height="75" width="75" /></a></td>
-                    <td style="text-decoration:none;">%s',
+                    '<table><tr>' .
+                    '<td><a href="%s"><img src="%s" alt="" border="0" align="left" height="75" width="75" /></a></td>' .
+                    '<td style="text-decoration:none;">%s',
                     $product->getProductUrl(),
                     $this->_imageHelper->init($product, 'thumbnail')->resize(75, 75),
                     $this->_outputHelper->productAttribute($product, $product->getDescription(), 'description')
@@ -208,8 +206,8 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
                         }
                         $html .= sprintf(
                             '<p>%s %s%s</p>',
-                            __('Price: %1', $this->_coreData->currency($result['price'])),
-                            __('Special Price: %1', $this->_coreData->currency($result['final_price'])),
+                            __('Price: %1', $this->_priceCurrency->convertAndFormat($result['price'])),
+                            __('Special Price: %1', $this->_priceCurrency->convertAndFormat($result['final_price'])),
                             $special
                         );
                     }

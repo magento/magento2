@@ -25,7 +25,6 @@ namespace Magento\Framework\Event\Observer;
 
 /**
  * Class CronTest
- * @package Magento\Framework\Event\Observer
  */
 class CronTest extends \PHPUnit_Framework_TestCase
 {

@@ -32,10 +32,6 @@
                 type="Magento\Customer\Service\V1\CustomerAccountService" />
     <preference for="Magento\Customer\Service\V1\CustomerMetadataServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerMetadataService" />
-    <preference for="Magento\Customer\Service\V1\CustomerCurrentServiceInterface"
-                type="Magento\Customer\Service\V1\CustomerCurrentService" />
-    <preference for="Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface"
-                type="Magento\Customer\Service\V1\CustomerAddressCurrentService" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>

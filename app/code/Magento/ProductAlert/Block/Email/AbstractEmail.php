@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\ProductAlert\Block\Email;
 /**
  * Product Alert Abstract Email Block
  *
- * @category   Magento
- * @package    Magento_ProductAlert
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
@@ -133,5 +129,50 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected function _getUrlParams()
     {
         return array('_scope' => $this->getStore(), '_scope_to_url' => true);
+    }
+
+    /**
+     * @return \Magento\Framework\Pricing\Render
+     */
+    protected function getPriceRender()
+    {
+        return $this->_layout->createBlock(
+            'Magento\Framework\Pricing\Render',
+            '',
+            ['data'=> ['price_render_handle' => 'catalog_product_prices']]
+        );
+    }
+
+    /**
+     * Return HTML block with tier price
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $priceType
+     * @param string $renderZone
+     * @param array $arguments
+     * @return string
+     */
+    public function getProductPriceHtml(
+        \Magento\Catalog\Model\Product $product,
+        $priceType,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        array $arguments = []
+    ) {
+        if (!isset($arguments['zone'])) {
+            $arguments['zone'] = $renderZone;
+        }
+
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        $priceRender = $this->getPriceRender();
+        $price = '';
+
+        if ($priceRender) {
+            $price = $priceRender->render(
+                $priceType,
+                $product,
+                $arguments
+            );
+        }
+        return $price;
     }
 }

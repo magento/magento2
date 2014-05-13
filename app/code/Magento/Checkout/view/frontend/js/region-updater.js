@@ -18,7 +18,6 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    frontend Checkout region-updater
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,10 +28,12 @@
             regionTemplate: '<option value="${value}" title="${title}" {{if isSelected}}selected="selected"{{/if}}>${title}</option>',
             isRegionRequired: true,
             isZipRequired: true,
-            isCountryRequired: true
+            isCountryRequired: true,
+            currentRegion: null
         },
 
         _create: function() {
+            this.currentRegionOption = this.options.currentRegion;
             this._updateRegion(this.element.find('option:selected').val());
             this.element.on('change', $.proxy(function(e) {
                 this._updateRegion($(e.target).val());
@@ -106,7 +107,8 @@
             var regionList = $(this.options.regionListId),
                 regionInput = $(this.options.regionInputId),
                 postcode = $(this.options.postcodeId),
-                requiredLabel = regionList.parent().siblings('label').children('em');
+                label = regionList.parent().siblings('label'),
+                requiredLabel = regionList.parents('div.field');
             this._clearError();
             this._checkRegionRequired(country);
             // Populate state/province dropdown list if available or use input box
@@ -125,20 +127,21 @@
                 }
                 if (this.options.isRegionRequired) {
                     regionList.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.show();
+                    requiredLabel.addClass('required');
                 } else {
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
-                    requiredLabel.hide();
+                    requiredLabel.removeClass('required');
                     if (!this.options.optionalRegionAllowed) {
                         regionList.attr('disabled', 'disabled');
                     }
                 }
                 regionList.show();
                 regionInput.hide();
+                label.attr('for', regionList.attr('id'));
             } else {
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.show();
+                    requiredLabel.addClass('required');
                 } else {
                     if (!this.options.optionalRegionAllowed) {
                         regionInput.attr('disabled', 'disabled');
@@ -146,7 +149,8 @@
                 }
                 regionList.removeClass('required-entry').hide();
                 regionInput.show();
-                requiredLabel.hide();
+                requiredLabel.removeClass('required');
+                label.attr('for', regionInput.attr('id'));
             }
             // If country is in optionalzip list, make postcode input not required
             if (this.options.isZipRequired) {

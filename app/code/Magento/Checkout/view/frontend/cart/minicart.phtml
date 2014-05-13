@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -95,7 +94,11 @@
                         <div class="primary">
                             <?php if ($isPossibleOnepageCheckout): ?>
                                 <?php echo $this->getChildHtml('extra_actions') ?>
-                                <button id="top-cart-btn-checkout" type="button" class="action checkout" title="<?php echo __('Checkout') ?>">
+                                <button
+                                    id="top-cart-btn-checkout"
+                                    type="button"
+                                    class="action checkout primary"
+                                    title="<?php echo __('Checkout') ?>">
                                     <span><?php echo __('Checkout') ?></span>
                                 </button>
                             <?php endif; ?>
@@ -113,14 +116,12 @@
 <?php endif; ?>
 <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/sidebar.js') ?>", function() {
-                $('[data-block="minicart"]').sidebar({
-                    checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
-                    checkoutButton: '#top-cart-btn-checkout',
-                    removeButton: '#mini-cart a.action.delete',
-                    confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
-                });
-            });
+        $('[data-block="minicart"]').mage('sidebar', {
+            checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
+            checkoutButton: '#top-cart-btn-checkout',
+            removeButton: '#mini-cart a.action.delete',
+            confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
+        });
     })(jQuery);
 </script>
 <?php if ($this->getInList()): ?>

@@ -26,8 +26,6 @@ namespace Magento\Paypal\Controller;
 /**
  * Hosted Pro Checkout Controller
  *
- * @category   Magento
- * @package    Magento_Paypal
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Hostedpro extends \Magento\Framework\App\Action\Action

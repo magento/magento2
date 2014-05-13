@@ -111,7 +111,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'data',
-                '<?xml version="1.0"?><response><item>data</item></response>',
+                '<?xml version="1.0"?><response>data</response>',
                 'Invalid XML render with simple data.'
             ),
             array(

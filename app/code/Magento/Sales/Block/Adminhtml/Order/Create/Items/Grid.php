@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,8 +30,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 /**
  * Adminhtml sales order create items grid block
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
@@ -336,13 +332,15 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getQtyTitle($item)
     {
-        $prices = $item->getProduct()->getTierPrice();
+        $prices = $item->getProduct()
+            ->getPriceInfo()
+            ->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)
+            ->getTierPriceList();
         if ($prices) {
             $info = array();
             foreach ($prices as $data) {
-                $qty = $data['price_qty'] * 1;
                 $price = $this->convertPrice($data['price']);
-                $info[] = __('Buy %1 for price %2', $qty, $price);
+                $info[] = __('Buy %1 for price %2', $data['price_qty'], $price);
             }
             return implode(', ', $info);
         } else {

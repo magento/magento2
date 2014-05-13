@@ -64,13 +64,6 @@ interface AmountRenderInterface
     public function getPrice();
 
     /**
-     * @param string $code
-     * @param string $html
-     * @return void
-     */
-    public function addAdjustmentHtml($code, $html);
-
-    /**
      * @return string
      */
     public function getAdjustmentsHtml();

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -227,10 +225,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $filesPath . 'response_shipping_label.xml'
         );
         unset(
-            $empty->AirwayBillNumber,
-            $empty->LabelImage,
-            $billingNumberOnly->LabelImage,
-            $outputImageOnly->AirwayBillNumber
+            $empty->{'AirwayBillNumber'},
+            $empty->{'LabelImage'},
+            $billingNumberOnly->{'LabelImage'},
+            $outputImageOnly->{'AirwayBillNumber'}
         );
 
         return array(array($empty), array($billingNumberOnly), array($outputImageOnly));
@@ -258,8 +256,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'))
         );
         // for setRequest
-        $request_params = include __DIR__ . '/_files/rates_request_data_dhl.php';
-        $request = $this->_helper->getObject('Magento\Sales\Model\Quote\Address\RateRequest', $request_params);
+        $request = $this->_helper->getObject(
+            'Magento\Sales\Model\Quote\Address\RateRequest',
+            require __DIR__ . '/_files/rates_request_data_dhl.php'
+        );
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
     }
 }

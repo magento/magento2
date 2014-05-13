@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,7 +28,6 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Object\SaleableInterface;
 
 class Type
 {
@@ -181,12 +178,12 @@ class Type
     /**
      * Get Product Price Info object
      *
-     * @param SaleableInterface $product
+     * @param Product $saleableItem
      * @return \Magento\Framework\Pricing\PriceInfoInterface
      */
-    public function getPriceInfo(SaleableInterface $product)
+    public function getPriceInfo(Product $saleableItem)
     {
-        return $this->_priceInfoFactory->create($product);
+        return $this->_priceInfoFactory->create($saleableItem);
     }
 
     /**

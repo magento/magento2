@@ -26,7 +26,6 @@ namespace Magento\Paypal\Block\Payflow\Link;
 /**
  * Test for Iframe block
  *
- * @package Magento\Paypal\Block\Payflow\Link
  */
 class IframeTest extends \PHPUnit_Framework_TestCase
 {

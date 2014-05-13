@@ -19,32 +19,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 (function ($) {
-    $.validator.addMethod('validate-rating', function() {
-        var ratings = $('#detailed_rating').find('.field-rating');
-        var inputs;
-        var error = 1;
+    $.validator.addMethod(
+        'validate-rating',
+        function () {
+            var ratings = $('#detailed_rating').find('.field-rating'),
+                noError = true;
 
-        ratings.each(function(i, rating) {
-            if (i > 0) {
-                inputs = $(rating).find('input');
-
-                inputs.each(function(j, input) {
-                    if ($(input).is(':checked')) {
-                        error = 0;
-                    }
-                });
-
-                if (error == 1) {
-                    return false;
-                }
-            }
-        });
-        return !error;
-    }, 'Please select one of each ratings above.');
+            ratings.each(function (index, rating) {
+                noError = noError && $(rating).find('input:checked').length > 0;
+            });
+            return noError;
+        },
+        'Please select one of each ratings above.');
 })(jQuery);

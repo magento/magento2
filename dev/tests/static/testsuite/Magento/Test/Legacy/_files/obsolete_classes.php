@@ -2399,6 +2399,8 @@ return array(
     ['Magento\Backend\Model\Resource\Translate', 'Magento\Translation\Model\Resource\Translate'],
     ['Magento\Backend\Model\Resource\Translate\String', 'Magento\Translation\Model\Resource\String'],
     ['Magento\Core\Model\Layout', 'Magento\Framework\View\Layout'],
+    ['Magento\Catalog\Block\Product\Price\Template'],
+    ['Magento\Bundle\Block\Catalog\Product\View'],
     ['Magento\Backup\Archive\Tar', 'Magento\Framework\Backup\Archive\Tar'],
     ['Magento\Backup\Db\BackupDbInterface', 'Magento\Framework\Backup\Db\BackupDbInterface'],
     ['Magento\Backup\Db\BackupFactory', 'Magento\Framework\Backup\Db\BackupFactory'],
@@ -2493,4 +2495,21 @@ return array(
     ['Magento\Registry', 'Magento\Framework\Registry'],
     ['Magento\Util', 'Magento\Framework\Util'],
     ['Magento\BootstrapException', 'Magento\Framework\BootstrapException'],
+    ['Magento\Checkout\Helper\Url'],
+    [
+        'Magento\Customer\Service\V1\CustomerCurrentService',
+        'Magento\Customer\Helper\Session\CurrentCustomer'
+    ],
+    [
+        'Magento\Customer\Service\V1\CustomerCurrentServiceInterface',
+        'Magento\Customer\Helper\Session\CurrentCustomer'
+    ],
+    [
+        'Magento\Customer\Service\V1\CustomerAddressCurrentService',
+        'Magento\Customer\Helper\Session\CurrentCustomerAddress'
+    ],
+    [
+        'Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface',
+        'Magento\Customer\Helper\Session\CurrentCustomerAddress'
+    ]
 );

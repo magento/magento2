@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage
- * @package     mage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -52,8 +50,8 @@
         _add: function(event, jqXHR) {
             try {
                 var response = $.parseJSON(jqXHR.responseText);
-                if (response && response.error && response.message) {
-                    this.element.find('[data-container-for=messages]').append($.tmpl('globalNotification', response));
+                if (response && response.error && response.html_message) {
+                    this.element.find('[data-container-for=messages]').html(response.html_message);
                 }
             } catch(e) {}
         }

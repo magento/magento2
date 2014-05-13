@@ -59,13 +59,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
         $optionBlock = $this->getMock(
             '\Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox',
-            array('setOption', 'toHtml', 'getPriceBlockTypes'),
+            array('setOption', 'toHtml'),
             array(),
             '',
             false
         );
         $optionBlock->expects($this->any())->method('setOption')->will($this->returnValue($optionBlock));
-        $optionBlock->expects($this->any())->method('getPriceBlockTypes')->will($this->returnValue(array()));
         $optionBlock->expects($this->any())->method('toHtml')->will($this->returnValue('option html'));
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',

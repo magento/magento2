@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rss
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Rss\Block;
 /**
  * Customer Shared Wishlist Rss Block
  *
- * @category   Magento
- * @package    Magento_Rss
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
@@ -70,7 +66,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -80,14 +75,18 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Helper\Output $outputHelper,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_outputHelper = $outputHelper;
         $this->_coreData = $coreData;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_rssFactory = $rssFactory;
-        parent::__construct($context, $httpContext, $productFactory, $data, $priceBlockTypes);
+        parent::__construct(
+            $context,
+            $httpContext,
+            $productFactory,
+            $data
+        );
     }
 
     /**
@@ -180,7 +179,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
                     ) . '<p>';
 
                 if ($product->getAllowedPriceInRss()) {
-                    $description .= $this->getPriceHtml($product, true);
+                    $description .= $this->getProductPrice($product);
                 }
                 $description .= '</p>';
 
@@ -227,20 +226,5 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     {
         $additional['_rss'] = true;
         return parent::getProductUrl($product, $additional);
-    }
-
-    /**
-     * Adding customized price template for product type, used as action in layouts
-     *
-     * @param string $type Catalog Product Type
-     * @param string $block Block Type
-     * @param string $template Template
-     * @return void
-     */
-    public function addPriceBlockType($type, $block = '', $template = '')
-    {
-        if ($type) {
-            $this->_priceBlockTypes[$type] = array('block' => $block, 'template' => $template);
-        }
     }
 }

@@ -316,6 +316,38 @@ class User extends \Magento\Framework\Model\AbstractModel implements \Magento\Ba
     }
 
     /**
+     * Validate customer attribute values.
+     * For existing customer password + confirmation will be validated only when password is set
+     * (i.e. its change is requested)
+     *
+     * @return bool|string[]
+     */
+    public function validate()
+    {
+        $errors = array();
+        if (!\Zend_Validate::is(trim($this->getUsername()), 'NotEmpty')) {
+            $errors[] = __('The user name cannot be empty.');
+        }
+
+        if (!\Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
+            $errors[] = __('The first name cannot be empty.');
+        }
+
+        if (!\Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
+            $errors[] = __('The last name cannot be empty.');
+        }
+
+        if (!\Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
+            $errors[] = __('Please correct this email address: "%1".', $this->getEmail());
+        }
+
+        if (empty($errors)) {
+            return true;
+        }
+        return $errors;
+    }
+
+    /**
      * Add validation rules for the password management fields
      *
      * @param \Magento\Framework\Validator\Object $validator

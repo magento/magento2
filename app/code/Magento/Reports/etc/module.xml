@@ -41,7 +41,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Core"/>
             <module name="Magento_Widget"/>
-            <module name="Magento_Bundle"/>
             <module name="Magento_Log"/>
             <module name="Magento_Wishlist"/>
             <module name="Magento_Review"/>

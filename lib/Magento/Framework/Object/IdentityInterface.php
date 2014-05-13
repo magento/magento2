@@ -25,7 +25,6 @@ namespace Magento\Framework\Object;
 
 /**
  * Interface IdentityInterface
- * @package Magento\Framework\Object
  */
 interface IdentityInterface
 {

@@ -36,12 +36,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     private $localeFormat;
 
     /**
-     * @var \Magento\Model\Context
+     * @var \Magento\Framework\Model\Context
      */
     private $modelContext;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventDispatcher;
 
@@ -81,7 +81,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventDispatcher = $this->getMockBuilder('Magento\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();

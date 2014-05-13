@@ -28,7 +28,6 @@ namespace Magento\Framework\Oauth;
  *
  * This interface exposes minimal consumer functionality needed by the Oauth library.
  *
- * @package Magento\Framework\Oauth
  */
 interface ConsumerInterface
 {

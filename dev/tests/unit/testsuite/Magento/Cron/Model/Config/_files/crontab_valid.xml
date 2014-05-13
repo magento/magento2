@@ -31,5 +31,8 @@
         <job name="job2" instance="Model2" method="method2">
             <schedule>* * * * *</schedule>
         </job>
+        <job name="job3" instance="Model3" method="method3">
+            <config_path>some/config/path</config_path>
+        </job>
     </group>
 </config>

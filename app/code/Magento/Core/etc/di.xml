@@ -61,7 +61,7 @@
     <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Core\Model\Url\RouteParamsResolver" />
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Core\Model\Url\ScopeResolver" />
-    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo" />
+    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
     <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config" />
     <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View" />
     <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor" />

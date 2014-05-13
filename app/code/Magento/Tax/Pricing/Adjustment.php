@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -38,7 +36,7 @@ class Adjustment implements AdjustmentInterface
     /**
      * Adjustment code tax
      */
-    const CODE = 'tax';
+    const ADJUSTMENT_CODE = 'tax';
 
     /**
      * @var TaxHelper
@@ -67,7 +65,7 @@ class Adjustment implements AdjustmentInterface
      */
     public function getAdjustmentCode()
     {
-        return self::CODE;
+        return self::ADJUSTMENT_CODE;
     }
 
     /**
@@ -118,8 +116,7 @@ class Adjustment implements AdjustmentInterface
     public function applyAdjustment($amount, SaleableInterface $saleableItem)
     {
         $includingTax = !$this->taxHelper->priceIncludesTax();
-        $amount = $this->taxHelper->getPrice($saleableItem, $amount, $includingTax);
-        return $amount;
+        return $this->taxHelper->getPrice($saleableItem, $amount, $includingTax);
     }
 
     /**

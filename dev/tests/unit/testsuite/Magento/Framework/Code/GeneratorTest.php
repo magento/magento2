@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Code
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -102,8 +99,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClass($className, $entityType)
     {
-        $this->_autoloader->staticExpects(
-            $this->once()
+        $this->_autoloader->expects(
+            $this->any()
         )->method(
             'getFile'
         )->with(
@@ -130,7 +127,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClassWithExistName($className, $entityType)
     {
-        $this->_autoloader->staticExpects(
+        $this->_autoloader->expects(
             $this->once()
         )->method(
             'getFile'
@@ -158,7 +155,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateClassWithWrongName()
     {
-        $this->_autoloader->staticExpects($this->never())->method('getFile');
+        $this->_autoloader->expects($this->never())->method('getFile');
 
         $this->_model = new \Magento\Framework\Code\Generator($this->_autoloader, $this->_ioObjectMock);
 
@@ -173,7 +170,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClassWithError()
     {
-        $this->_autoloader->staticExpects($this->once())->method('getFile')->will($this->returnValue(false));
+        $this->_autoloader->expects($this->once())->method('getFile')->will($this->returnValue(false));
 
         $this->_model = new \Magento\Framework\Code\Generator(
             $this->_autoloader,

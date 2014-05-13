@@ -35,7 +35,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
@@ -50,7 +50,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
         $blockMock->expects($this->any())->method('setTitle');
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerCurrentService');
+            ->get('Magento\Customer\Helper\Session\CurrentCustomer');
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
         $layout->setBlock('head', $blockMock);

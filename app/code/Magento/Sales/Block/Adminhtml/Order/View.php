@@ -27,10 +27,6 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 
 /**
  * Adminhtml sales order view
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -106,34 +102,21 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::actions_edit') && $order->canEdit()) {
-            $onclickJs = 'deleteConfirm(\'' . __(
-                'Are you sure? This order will be canceled and a new one will be created instead.'
-            ) . '\', \'' . $this->getEditUrl() . '\');';
+            $onclickJs = 'jQuery(\'#order_edit\').orderEditDialog({message: \''
+                . $this->getEditMessage($order) . '\', url: \'' . $this->getEditUrl()
+                . '\'}).orderEditDialog(\'showDialog\');';
+
             $this->_addButton(
                 'order_edit',
-                array('label' => __('Edit'), 'class' => 'edit primary', 'onclick' => $onclickJs)
-            );
-            // see if order has non-editable products as items
-            $nonEditableTypes = array_keys(
-                $this->getOrder()->getResource()->aggregateProductsByTypes(
-                    $order->getId(),
-                    $this->_salesConfig->getAvailableProductTypes(),
-                    false
+                array(
+                    'label' => __('Edit'),
+                    'class' => 'edit primary',
+                    'onclick' => $onclickJs,
+                    'data_attribute' => array(
+                        'mage-init' => '{"orderEditDialog":{}}'
+                    )
                 )
             );
-            if ($nonEditableTypes) {
-                $this->_updateButton(
-                    'order_edit',
-                    'onclick',
-                    'if (!confirm(\'' . __(
-                        'This order contains (%1) items and therefore cannot be edited through the admin interface. ' .
-                        'If you wish to continue editing, the (%2) items will be removed, ' .
-                        ' the order will be canceled and a new order will be placed.',
-                        implode(', ', $nonEditableTypes),
-                        implode(', ', $nonEditableTypes)
-                    ) . '\')) return false;' . $onclickJs
-                );
-            }
         }
 
         if ($this->_isAllowedAction('Magento_Sales::cancel') && $order->canCancel()) {
@@ -480,5 +463,40 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     public function getReviewPaymentUrl($action)
     {
         return $this->getUrl('sales/*/reviewPayment', array('action' => $action));
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order $order
+     * @return string
+     */
+    protected function getEditMessage($order)
+    {
+        // see if order has non-editable products as items
+        $nonEditableTypes = $this->getNonEditableTypes($order);
+        if (!empty($nonEditableTypes)) {
+            return __(
+                'This order contains (%1) items and therefore cannot be edited through the admin interface. ' .
+                'If you wish to continue editing, the (%2) items will be removed, ' .
+                ' the order will be canceled and a new order will be placed.',
+                implode(', ', $nonEditableTypes),
+                implode(', ', $nonEditableTypes)
+            );
+        }
+        return __('Are you sure? This order will be canceled and a new one will be created instead.');
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    protected function getNonEditableTypes($order)
+    {
+        return array_keys(
+            $this->getOrder()->getResource()->aggregateProductsByTypes(
+                $order->getId(),
+                $this->_salesConfig->getAvailableProductTypes(),
+                false
+            )
+        );
     }
 }

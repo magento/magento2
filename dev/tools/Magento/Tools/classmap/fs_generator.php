@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Tools
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,7 +32,7 @@ if (isset($argv[1])) {
 }
 
 if (!$path) {
-    echo "Please specify directory for scan: php -f FsGenerator.php path/to/code";
+    echo "Please specify directory for scan: php -f fs_generator.php path/to/code";
     exit;
 }
 

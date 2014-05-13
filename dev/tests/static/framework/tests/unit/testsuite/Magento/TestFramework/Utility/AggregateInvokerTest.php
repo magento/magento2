@@ -37,7 +37,10 @@ class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_testCase = $this->getMock('PHPUnit_Framework_TestCase');
+        $this->_testCase = $this->getMock(
+            'PHPUnit_Framework_Test',
+            ['run', 'count', 'fail', 'markTestIncomplete', 'markTestSkipped']
+        );
         $this->_invoker = new AggregateInvoker($this->_testCase, array());
     }
 
@@ -90,7 +93,7 @@ class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'Passed: 0, Failed: 0, Incomplete: 0, Skipped: 1.',
-                'markTestCkipped',
+                'markTestSkipped',
                 'PHPUnit_Framework_SkippedTestError'
             )
         );

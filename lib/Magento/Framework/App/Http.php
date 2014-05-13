@@ -144,7 +144,7 @@ class Http implements \Magento\Framework\AppInterface
                         }
                     }
                     require_once $this->_filesystem->getPath(Filesystem::PUB_DIR) . '/errors/report.php';
-                    $processor = new \Error_Processor($this->_response);
+                    $processor = new \Magento\Framework\Error\Processor($this->_response);
                     $processor->saveReport($reportData);
                     $this->_response = $processor->processReport();
                 }

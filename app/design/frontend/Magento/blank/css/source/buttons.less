@@ -25,7 +25,6 @@
 //
 //    Using buttons mixins
 //-------------------------------------- */
-
 button {
     border-radius: @button-border-radius;
     &:active,
@@ -34,3 +33,11 @@ button {
     }
 }
 
+a.action.primary {
+    .link-as-button();
+    border-radius: @button-border-radius;
+}
+
+.action.primary {
+    .button-primary();
+}

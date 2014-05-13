@@ -27,7 +27,6 @@ namespace Magento\Framework\Filesystem;
 
 /**
  * Class Driver
- * @package Magento\Framework\Filesystem
  */
 interface DriverInterface
 {

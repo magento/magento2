@@ -27,7 +27,6 @@ use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Class AuthenticationTest
- * @package Magento\Backend\App\Action\Plugin
  */
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {

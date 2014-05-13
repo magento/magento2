@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Email
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Email\Controller\Adminhtml\Email;
 /**
  * System Template admin controller
  *
- * @category   Magento
- * @package    Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Template extends \Magento\Backend\App\Action
@@ -229,8 +225,13 @@ class Template extends \Magento\Backend\App\Action
      */
     public function previewAction()
     {
-        $this->_view->loadLayout('systemPreview');
-        $this->_view->renderLayout();
+        try {
+            $this->_view->loadLayout('systemPreview');
+            $this->_view->renderLayout();
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred. The email template can not be opened for preview.'));
+            $this->_redirect('adminhtml/*/');
+        }
     }
 
     /**
@@ -240,6 +241,7 @@ class Template extends \Magento\Backend\App\Action
      */
     public function defaultTemplateAction()
     {
+        $this->_view->loadLayout();
         $template = $this->_initTemplate('id');
         $templateCode = $this->getRequest()->getParam('code');
         try {

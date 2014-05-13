@@ -94,7 +94,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
     {
         if (!is_array($data) && !is_object($data)) {
             if ($isRoot) {
-                $data = array($data);
+                return $this->_formatValue($data);
             }
         } elseif ($data instanceof \Magento\Framework\Object) {
             $data = $data->toArray();
@@ -123,6 +123,10 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
      */
     protected function _formatValue($value)
     {
+        if (is_bool($value)) {
+            /** Without the following transformation boolean values are rendered incorrectly */
+            $value = $value ? 'true' : 'false';
+        }
         $replacementMap = array('&' => '&amp;');
         return str_replace(array_keys($replacementMap), array_values($replacementMap), $value);
     }

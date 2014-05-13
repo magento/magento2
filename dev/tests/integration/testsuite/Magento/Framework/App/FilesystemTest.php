@@ -31,7 +31,6 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class FilesystemTest
  * Test for Magento\Framework\App\Filesystem class
  *
- * @package Magento
  */
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -56,7 +55,7 @@
             <div class="actions toolbar">
                 <?php if ($_showAddButtonFlag): ?>
                     <div class="primary">
-                        <button type="submit" title="<?php echo __('Add to Cart') ?>" class="action tocart">
+                        <button type="submit" title="<?php echo __('Add to Cart') ?>" class="action tocart primary">
                             <span><?php echo __('Add to Cart') ?></span>
                         </button>
                     </div>
@@ -71,19 +70,11 @@
     </div>
     <?php echo $this->getPagerHtml(); ?>
     <script type="text/javascript">
-        head.js(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
-            function() {
-                jQuery('#reorder-validate-detail').validation({
-                    errorPlacement: function(error, element) {
-                        error.appendTo('#cart-sidebar-reorder-advice-container');
-                    }
-                });
+        jQuery('#reorder-validate-detail').mage('validation', {
+            errorPlacement: function(error, element) {
+                error.appendTo('#cart-sidebar-reorder-advice-container');
             }
-        );
+        });
     </script>
 </div>
 <?php endif ?>

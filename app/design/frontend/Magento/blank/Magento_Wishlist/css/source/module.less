@@ -24,7 +24,7 @@
 
 .form.wishlist.items {
     .actions.toolbar {
-        &:extend(.action-toolbar-reset-margin all);
+        &:extend(.reset-left-margin all);
     }
 }
 
@@ -46,5 +46,53 @@
             vertical-align: middle;
             &:extend(.input-qty all);
         }
+    }
+}
+
+.block.wishlist {
+    .item.product {
+        margin-bottom: 14px;
+        > .product {
+            position: relative;
+            .product.photo {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .product.details {
+                margin: 0 25px 0 64px;
+                padding: 0;
+            }
+        }
+    }
+    .price-box {
+        display: block;
+        margin: 7px 0;
+    }
+    .actions {
+        margin: 7px 0;
+        .action.delete {
+            &:extend(.remove-button-for-blocks all);
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        a.action.tocart {
+            .link-as-button();
+        }
+        .action.tocart {
+            padding: 0 7px;
+        }
+    }
+    .text {
+        margin-right: 8px;
+    }
+    .counter.qty {
+        color: #999999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .column.sidebar & .subtitle {
+        display: none;
     }
 }

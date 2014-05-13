@@ -26,7 +26,6 @@ namespace Magento\TestFramework\ImportExport\Fixture\Complex;
 /**
  * Complex pattern class for complex generator (used for creating configurable products)
  *
- * @package Magento\TestFramework\ImportExport\Fixture\Complex
  *
  */
 class Pattern

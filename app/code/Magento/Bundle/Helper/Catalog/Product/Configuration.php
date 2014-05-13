@@ -18,38 +18,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Bundle\Helper\Catalog\Product;
 
+use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Helper for fetching properties by product configurational item
- *
- * @category   Magento
- * @package    Magento_Bundle
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
-    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+class Configuration extends AbstractHelper implements ConfigurationInterface
 {
     /**
      * Core data
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData = null;
+    protected $_coreData;
 
     /**
      * Catalog product configuration
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
      */
-    protected $_ctlgProdConfigur = null;
+    protected $productConfiguration;
 
     /**
      * @var \Magento\Framework\Escaper
@@ -58,17 +53,17 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
+        \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Escaper $escaper
     ) {
-        $this->_ctlgProdConfigur = $ctlgProdConfigur;
+        $this->productConfiguration = $productConfiguration;
         $this->_coreData = $coreData;
         $this->_escaper = $escaper;
         parent::__construct($context);
@@ -102,7 +97,9 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     public function getSelectionFinalPrice(ItemInterface $item, $selectionProduct)
     {
         $selectionProduct->unsetData('final_price');
-        return $item->getProduct()->getPriceModel()->getSelectionFinalTotalPrice(
+        /** @var \Magento\Bundle\Model\Product\Price $priceModel */
+        $priceModel = $item->getProduct()->getPriceModel();
+        return $priceModel->getSelectionFinalTotalPrice(
             $item->getProduct(),
             $selectionProduct,
             $item->getQty() * 1,
@@ -126,18 +123,14 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
         $options = array();
         $product = $item->getProduct();
 
-        /**
-         * @var \Magento\Bundle\Model\Product\Type
-         */
+        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $product->getTypeInstance();
 
         // get bundle options
         $optionsQuoteItemOption = $item->getOptionByCode('bundle_option_ids');
         $bundleOptionsIds = $optionsQuoteItemOption ? unserialize($optionsQuoteItemOption->getValue()) : array();
         if ($bundleOptionsIds) {
-            /**
-             * @var \Magento\Bundle\Model\Resource\Option\Collection
-             */
+            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $product);
 
             // get and add bundle selections collection
@@ -146,10 +139,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
             $bundleSelectionIds = unserialize($selectionsQuoteItemOption->getValue());
 
             if (!empty($bundleSelectionIds)) {
-                $selectionsCollection = $typeInstance->getSelectionsByIds(
-                    unserialize($selectionsQuoteItemOption->getValue()),
-                    $product
-                );
+                $selectionsCollection = $typeInstance->getSelectionsByIds($bundleSelectionIds, $product);
 
                 $bundleOptions = $optionsCollection->appendSelections($selectionsCollection, true);
                 foreach ($bundleOptions as $bundleOption) {
@@ -188,6 +178,9 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      */
     public function getOptions(ItemInterface $item)
     {
-        return array_merge($this->getBundleOptions($item), $this->_ctlgProdConfigur->getCustomOptions($item));
+        return array_merge(
+            $this->getBundleOptions($item),
+            $this->productConfiguration->getCustomOptions($item)
+        );
     }
 }

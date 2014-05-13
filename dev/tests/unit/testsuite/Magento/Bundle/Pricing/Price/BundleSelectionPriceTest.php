@@ -30,7 +30,6 @@ use Magento\Catalog\Pricing\Price as CatalogPrice;
 /**
  * Class BundleSelectionPriceTest
  *
- * @package Magento\Bundle\Pricing\Price
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -126,14 +125,14 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     public function getPriceCallback($priceType)
     {
         switch ($priceType) {
-            case CatalogPrice\BasePrice::PRICE_TYPE_BASE_PRICE:
+            case CatalogPrice\BasePrice::PRICE_CODE:
                 $this->basePriceMock = $this->getMock('Magento\Bundle\Pricing\Price\BasePrice', [], [], '', false);
                 $this->basePriceMock->expects($this->once())
-                    ->method('applyDiscount')
+                    ->method('calculateBaseValue')
                     ->with($this->expectedResult)
                     ->will($this->returnArgument(0));
                 return $this->basePriceMock;
-            case CatalogPrice\FinalPriceInterface::PRICE_TYPE_FINAL:
+            case CatalogPrice\FinalPrice::PRICE_CODE:
                 $this->finalPriceMock = $this->getMock(
                     'Magento\Catalog\Pricing\Price\FinalPrice',
                     [],
@@ -145,7 +144,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
                     ->method('getValue')
                     ->will($this->returnValue($this->finalPriceValue));
                 return $this->finalPriceMock;
-            case CatalogPrice\RegularPrice::PRICE_TYPE_PRICE_DEFAULT:
+            case CatalogPrice\RegularPrice::PRICE_CODE:
                 $this->regularPriceMock = $this->getMock(
                     'Magento\Catalog\Pricing\Price\RegularPrice',
                     [],
@@ -215,7 +214,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         $this->bundleSelectionPrice = $this->objectManagerHelper->getObject(
             'Magento\Bundle\Pricing\Price\BundleSelectionPrice',
             [
-                'salableItem' => $this->saleableInterfaceMock,
+                'saleableItem' => $this->saleableInterfaceMock,
                 'quantity' => $this->quantity,
                 'calculator' => $this->calculatorInterfaceMock,
                 'bundleProduct' => $this->productMock,

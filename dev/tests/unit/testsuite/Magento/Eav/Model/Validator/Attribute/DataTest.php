@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -408,17 +405,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             );
         }
         return $attribute;
-    }
-
-    /**
-     * @param \Magento\Eav\Model\Attribute\Data\AbstractData $dataModel
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getFactoryMock($dataModel)
-    {
-        $factory = $this->getMockBuilder('Magento\Eav\Model\Attribute\Data')->setMethods(array('factory'))->getMock();
-        $factory::staticExpects($this->once())->method('factory')->will($this->returnValue($dataModel));
-        return $factory;
     }
 
     /**

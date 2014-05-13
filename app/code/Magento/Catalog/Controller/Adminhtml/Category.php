@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -108,38 +106,13 @@ class Category extends \Magento\Backend\App\Action
      */
     public function editAction()
     {
-        $params['_current'] = true;
-        $redirect = false;
-
         $storeId = (int)$this->getRequest()->getParam('store');
         $parentId = (int)$this->getRequest()->getParam('parent');
-        $prevStoreId = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getLastViewedStore(true);
-
-        if (!is_null($prevStoreId) && !$this->getRequest()->getQuery('isAjax')) {
-            $params['store'] = $prevStoreId;
-            $redirect = true;
-        }
-
         $categoryId = (int)$this->getRequest()->getParam('id');
-        $_prevCategoryId = $this->_objectManager->get(
-            'Magento\Backend\Model\Auth\Session'
-        )->getLastEditedCategory(
-            true
-        );
-
-        if ($_prevCategoryId && !$this->getRequest()->getQuery('isAjax') && !$this->getRequest()->getParam('clear')) {
-            $this->getRequest()->setParam('id', $_prevCategoryId);
-        }
-
-        if ($redirect) {
-            $this->_redirect('catalog/*/edit', $params);
-            return;
-        }
 
         if ($storeId && !$categoryId && !$parentId) {
             $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
-            $_prevCategoryId = (int)$store->getRootCategoryId();
-            $this->getRequest()->setParam('id', $_prevCategoryId);
+            $this->getRequest()->setParam('id', (int)$store->getRootCategoryId());
         }
 
         $category = $this->_initCategory(true);
@@ -182,16 +155,6 @@ class Category extends \Magento\Backend\App\Action
                 }
             }
 
-            $this->_objectManager->get(
-                'Magento\Backend\Model\Auth\Session'
-            )->setLastViewedStore(
-                $this->getRequest()->getParam('store')
-            );
-            $this->_objectManager->get(
-                'Magento\Backend\Model\Auth\Session'
-            )->setLastEditedCategory(
-                $category->getId()
-            );
             $this->_view->loadLayout();
 
             $eventResponse = new \Magento\Framework\Object(

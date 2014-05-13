@@ -26,7 +26,6 @@ namespace Magento\Framework\View\Design\Fallback;
 /**
  * Factory Test
  *
- * @package Magento\Framework\View\Design\Fallback
  */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -161,7 +160,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 array(
                     '/area/current_theme_path/namespace_module',
                     '/area/parent_theme_path/namespace_module',
-                    '/namespace/module/view/area'
+                    '/namespace/module/view/area',
+                    '/namespace/module/view/base'
                 )
             ),
             'non-modular' => array(
@@ -214,7 +214,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                     '/area/parent_theme_path/i18n/en_US/namespace_module',
                     '/area/parent_theme_path/namespace_module',
                     '/namespace/module/view/area/i18n/en_US',
-                    '/namespace/module/view/area'
+                    '/namespace/module/view/area',
+                    '/namespace/module/view/base'
                 )
             ),
             'modular non-localized' => array(
@@ -222,7 +223,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 array(
                     '/area/current_theme_path/namespace_module',
                     '/area/parent_theme_path/namespace_module',
-                    '/namespace/module/view/area'
+                    '/namespace/module/view/area',
+                    '/namespace/module/view/base'
                 )
             ),
             'non-modular localized' => array(

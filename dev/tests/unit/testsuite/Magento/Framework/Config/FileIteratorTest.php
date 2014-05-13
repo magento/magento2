@@ -27,7 +27,6 @@ use Magento\Framework\Config\FileIterator;
 
 /**
  * Class FileIteratorTest
- * @package Magento\Framework\Config
  */
 class FileIteratorTest extends \PHPUnit_Framework_TestCase
 {

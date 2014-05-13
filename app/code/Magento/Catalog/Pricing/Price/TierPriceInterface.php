@@ -30,11 +30,6 @@ namespace Magento\Catalog\Pricing\Price;
 interface TierPriceInterface
 {
     /**
-     * Price type tier
-     */
-    const PRICE_TYPE_TIER = 'tier_price';
-
-    /**
      * @return array
      */
     public function getTierPriceList();

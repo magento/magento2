@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -98,11 +96,6 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action
      */
     public function allcartAction()
     {
-        if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_forward('noroute');
-            return;
-        }
-
         $wishlist = $this->_getWishlist();
         if (!$wishlist) {
             $this->_forward('noroute');

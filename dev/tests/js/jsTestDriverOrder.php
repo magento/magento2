@@ -21,8 +21,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     js
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
@@ -32,7 +30,7 @@ return array(
     '/pub/lib/jquery/jquery-1.8.2.js',
     '/pub/lib/jquery/jquery-ui-1.9.2.js',
     '/pub/lib/jquery/jquery.cookie.js',
-    '/pub/lib/headjs/head.load.min.js',
+    '/pub/lib/headjs/head.min.js',
     '/pub/lib/mage/mage.js',
     '/pub/lib/mage/decorate.js',
     '/pub/lib/jquery/jquery.validate.js',

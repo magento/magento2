@@ -20,9 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Integrity
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -463,6 +460,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/downloader/lib/',
                 '/dev/tools/',
                 '/dev/tests/api-functional/framework/',
+                '/dev/tests/api-functional/_files/',
+                '/dev/tests/functional/',
                 '/dev/tests/integration/framework/',
                 '/dev/tests/integration/framework/tests/unit/testsuite/',
                 '/dev/tests/integration/testsuite/',

@@ -18,15 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Tools
- * @package    acl_db
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $rootDir = realpath(__DIR__ . '/../../../..');
 require $rootDir . '/app/autoload.php';
-\Magento\Framework\Autoload\IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
+(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
 $defaultReportFile = 'report.log';
 
 try {

@@ -18,63 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\GroupedProduct\Pricing\Price;
 
-use Magento\Framework\Pricing\Adjustment\Calculator;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
-use Magento\Catalog\Pricing\Price\FinalPriceInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Catalog\Model\Product;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
-use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Final price model
  */
-class FinalPrice implements FinalPriceInterface, PriceInterface
+class FinalPrice extends AbstractPrice
 {
     /**
-     * @var string
+     * Price type final
      */
-    protected $priceType = self::PRICE_TYPE_FINAL;
+    const PRICE_CODE = 'final_price';
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface
-     */
-    protected $salableItem;
-
-    /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator
-     */
-    protected $calculator;
-
-    /**
-     * @var SaleableInterface
+     * @var Product
      */
     protected $minProduct;
-
-    /**
-     * @var AmountInterface
-     */
-    protected $amount;
-
-    /**
-     * @param SaleableInterface $salableItem
-     * @param Calculator $calculator
-     */
-    public function __construct(
-        SaleableInterface $salableItem,
-        Calculator $calculator
-    ) {
-        $this->salableItem = $salableItem;
-        $this->calculator = $calculator;
-    }
 
     /**
      * Return minimal product price
@@ -83,48 +50,24 @@ class FinalPrice implements FinalPriceInterface, PriceInterface
      */
     public function getValue()
     {
-        return $this->getMinProduct()->getPriceInfo()
-            ->getPrice(\Magento\Catalog\Pricing\Price\FinalPriceInterface::PRICE_TYPE_FINAL)->getValue();
-    }
-
-    /**
-     * Get price type code
-     *
-     * @return string
-     */
-    public function getPriceType()
-    {
-        return $this->priceType;
-    }
-
-    /**
-     * Get Price Amount object
-     *
-     * @return AmountInterface
-     */
-    public function getAmount()
-    {
-        if (!$this->amount) {
-            $this->amount = $this->calculator->getAmount($this->getValue(), $this->salableItem);
-        }
-        return $this->amount;
+        return $this->getMinProduct()->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
     }
 
     /**
      * Returns product with minimal price
      *
-     * @return SaleableInterface
+     * @return Product
      */
     public function getMinProduct()
     {
         if (null === $this->minProduct) {
-            $products = $this->salableItem->getTypeInstance()->getAssociatedProducts($this->salableItem);
+            $products = $this->product->getTypeInstance()->getAssociatedProducts($this->product);
             $minPrice = null;
             foreach ($products as $item) {
                 $product = clone $item;
                 $product->setQty(\Magento\Framework\Pricing\PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT);
                 $price = $product->getPriceInfo()
-                    ->getPrice(FinalPriceInterface::PRICE_TYPE_FINAL)
+                    ->getPrice(FinalPrice::PRICE_CODE)
                     ->getValue();
                 if (($price !== false) && ($price <= (is_null($minPrice) ? $price : $minPrice))) {
                     $this->minProduct = $product;
@@ -133,18 +76,5 @@ class FinalPrice implements FinalPriceInterface, PriceInterface
             }
         }
         return $this->minProduct;
-    }
-
-    /**
-     * @param float $amount
-     * @param null|string $exclude
-     * @return AmountInterface
-     */
-    public function getCustomAmount($amount = null, $exclude = null)
-    {
-        if ($amount === null) {
-            $amount = $this->getValue();
-        }
-        return $this->calculator->getAmount($amount, $this->salableItem, $exclude);
     }
 }

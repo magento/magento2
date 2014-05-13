@@ -23,7 +23,7 @@
 //  */
 
 //
-// Icons using font
+//    Icons using font
 //--------------------------------------
 .font-face(
     @family-name: 'icons-blank-theme',
@@ -43,12 +43,13 @@
     @_icon-font-margin: @icon-font-margin,
     @_icon-font-vertical-align: @icon-font-vertical-align,
     @_icon-font-position: @icon-font-position,
-    @_icon-font-text-hide: @icon-font-text-hide
-)
-when (@_icon-font-position = before) {
-    display: inline-block;
+    @_icon-font-text-hide: @icon-font-text-hide,
+    @_icon-font-display: @icon-font-display
+) when (@_icon-font-position = before) {
+    display: @_icon-font-display;
     text-decoration: none;
     ._icon-text-hide(@_icon-font-text-hide);
+
     &:before {
         ._icon-font(
             @_icon-font-content,
@@ -62,12 +63,12 @@ when (@_icon-font-position = before) {
     }
     &:hover {
         &:before {
-            ._add-color(@_icon-font-color-hover);
+            .css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:before {
-            ._add-color(@_icon-font-color-active);
+            .css(color, @_icon-font-color-active);
         }
     }
 }
@@ -83,10 +84,10 @@ when (@_icon-font-position = before) {
     @_icon-font-margin: @icon-font-margin,
     @_icon-font-vertical-align: @icon-font-vertical-align,
     @_icon-font-position: @icon-font-position,
-    @_icon-font-text-hide: @icon-font-text-hide
-)
-when (@_icon-font-position = after) {
-    display: inline-block;
+    @_icon-font-text-hide: @icon-font-text-hide,
+    @_icon-font-display: @icon-font-display
+) when (@_icon-font-position = after) {
+    display: @_icon-font-display;
     text-decoration: none;
     ._icon-text-hide(@_icon-font-text-hide);
     &:after {
@@ -102,12 +103,12 @@ when (@_icon-font-position = after) {
     }
     &:hover {
         &:after {
-            ._add-color(@_icon-font-color-hover);
+            .css(color, @_icon-font-color-hover);
         }
     }
     &:active {
         &:after {
-            ._add-color(@_icon-font-color-active);
+            .css(color, @_icon-font-color-active);
         }
     }
 }
@@ -116,8 +117,7 @@ when (@_icon-font-position = after) {
     @_icon-font-size: @icon-font-size,
     @_icon-font-line-height: @icon-font-line-height,
     @_icon-font-position: @icon-font-position
-)
-when (@_icon-font-position = before) {
+) when (@_icon-font-position = before) {
     &:before {
         ._icon-font-size(@_icon-font-size, @_icon-font-line-height);
     }
@@ -127,8 +127,7 @@ when (@_icon-font-position = before) {
     @_icon-font-size: @icon-font-size,
     @_icon-font-line-height: @icon-font-line-height,
     @_icon-font-position: @icon-font-position
-)
-when (@_icon-font-position = after) {
+) when (@_icon-font-position = after) {
     &:after {
         ._icon-font-size(@_icon-font-size, @_icon-font-line-height);
     }
@@ -140,7 +139,7 @@ when (@_icon-font-position = after) {
     @_icon-font-position: @icon-font-position
 ) when (@_icon-font-position = before) {
     &:before {
-        content: @_icon-font-content;
+        .css(content, @_icon-font-content);
     }
 }
 
@@ -149,12 +148,12 @@ when (@_icon-font-position = after) {
     @_icon-font-position: @icon-font-position
 ) when (@_icon-font-position = after) {
     &:after {
-        content: @_icon-font-content;
+        .css(content, @_icon-font-content);
     }
 }
 
 //
-// Icons using image or sprite
+//    Icons using image or sprite
 //--------------------------------------
 .icon-image(
     @_icon-image,
@@ -166,8 +165,7 @@ when (@_icon-font-position = after) {
     @_icon-image-position-y: @icon-image-position-y,
     @_icon-image-position: @icon-position,
     @_icon-image-text-hide: @icon-text-hide
-)
-when (@_icon-image-position = before) {
+) when (@_icon-image-position = before) {
     display: inline-block;
     ._icon-text-hide(@_icon-image-text-hide);
     &:before {
@@ -180,7 +178,7 @@ when (@_icon-image-position = before) {
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        margin: @_icon-image-margin;
+        .css(margin, @_icon-image-margin);
     }
 }
 
@@ -194,8 +192,7 @@ when (@_icon-image-position = before) {
     @_icon-image-position-y: @icon-image-position-y,
     @_icon-image-position: @icon-position,
     @_icon-image-text-hide: @icon-text-hide
-)
-when (@_icon-image-position = after) {
+) when (@_icon-image-position = after) {
     display: inline-block;
     ._icon-text-hide(@_icon-image-text-hide);
     &:after {
@@ -208,7 +205,7 @@ when (@_icon-image-position = after) {
             @_icon-image-position-x,
             @_icon-image-position-y
         );
-        margin: @_icon-image-margin;
+        .css(margin, @_icon-image-margin);
     }
 }
 
@@ -216,8 +213,7 @@ when (@_icon-image-position = after) {
     @_icon-image-position-x: @icon-image-position-x,
     @_icon-image-position-y: @icon-image-position-y,
     @_icon-image-position: @icon-position
-)
-when (@_icon-image-position = before) {
+) when (@_icon-image-position = before) {
     &:before {
         ._icon-image-position(
             @_icon-image-position-x,
@@ -230,8 +226,7 @@ when (@_icon-image-position = before) {
     @_icon-image-position-x: @icon-image-position-x,
     @_icon-image-position-y: @icon-image-position-y,
     @_icon-image-position: @icon-position
-)
-when (@_icon-image-position = after) {
+) when (@_icon-image-position = after) {
     &:after {
         ._icon-image-position(
             @_icon-image-position-x,
@@ -274,8 +269,7 @@ when (@_icon-image-position = after) {
     @_icon-image-width: @icon-width,
     @_icon-image-height: @icon-height,
     @_icon-image-position: @icon-position
-)
-when (@_icon-image-position = before) {
+) when (@_icon-image-position = before) {
     &:before {
         ._icon-image-size(@_icon-image-width, @_icon-image-height);
     }
@@ -285,8 +279,7 @@ when (@_icon-image-position = before) {
     @_icon-image-width: @icon-width,
     @_icon-image-height: @icon-height,
     @_icon-image-position: @icon-position
-)
-when (@_icon-image-position = before) {
+) when (@_icon-image-position = before) {
     &:after {
         ._icon-image-size(@_icon-image-width, @_icon-image-height);
     }
@@ -299,12 +292,8 @@ when (@_icon-image-position = before) {
 }
 
 //
-// Internal use mixins
+//    Internal use mixins
 //--------------------------------------
-._add-color(@_add-color) when not (@_add-color = '') {
-    color: @_add-color;
-}
-
 ._icon-text-hide(@_icon-text-hide) when (@_icon-text-hide = true) {
     .icon-text-hide();
 }
@@ -324,12 +313,12 @@ when (@_icon-image-position = before) {
         @_icon-image-width,
         @_icon-image-height
     );
-    line-height: @_icon-image-height;
-    vertical-align: @_icon-image-vertical-align;
+    .css(line-height, @_icon-image-height);
+    .css(vertical-align, @_icon-image-vertical-align);
     background-image: url(@_icon-image);
     background-position: @_icon-image-position-x @_icon-image-position-y;
     background-repeat: no-repeat;
-    margin: @_icon-image-margin;
+    .css(margin, @_icon-image-margin);
 }
 
 ._icon-image-position(
@@ -343,8 +332,8 @@ when (@_icon-image-position = before) {
     @icon-width,
     @icon-height
 ) {
-    width: @icon-width;
-    height: @icon-height;
+    .css(width, @icon-width);
+    .css(height, @icon-height);
 }
 
 ._icon-sprite-position(
@@ -364,21 +353,21 @@ when (@_icon-image-position = before) {
     @_icon-font-margin,
     @_icon-font-vertical-align
 ) {
-    font-family: @_icon-font;
-    content: @_icon-font-content;
+    .css(font-family, @_icon-font);
+    .css(content, @_icon-font-content);
     ._icon-font-size(@_icon-font-size, @_icon-font-line-height);
-    ._add-color(@_icon-font-color);
+    .css(color, @_icon-font-color);
     overflow: hidden;
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
     display: inline-block;
-    vertical-align: @_icon-font-vertical-align;
+    .css(vertical-align, @_icon-font-vertical-align);
     text-align: center;
     .css(margin, @_icon-font-margin);
 }
 
 ._icon-font-size(@_icon-font-size, @_icon-font-line-height) {
-    font-size: @_icon-font-size;
-    line-height: @_icon-font-line-height;
+    .css(font-size, @_icon-font-size);
+    .css(line-height, @_icon-font-line-height);
 }

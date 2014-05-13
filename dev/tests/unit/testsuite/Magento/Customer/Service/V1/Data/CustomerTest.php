@@ -28,7 +28,6 @@ use Magento\Framework\Service\Data\Eav\AttributeValue;
 /**
  * Customer
  *
- * @package Magento\Customer\Service\V1\Data
  */
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {

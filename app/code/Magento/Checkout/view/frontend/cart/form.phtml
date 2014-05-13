@@ -25,11 +25,18 @@
 /**  @var $this \Magento\Checkout\Block\Cart */
 ?>
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-<div class="cart table wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
-    <?php echo $this->getChildHtml('form_before') ?>
-    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="form-validate" >
-        <?php echo $this->getBlockHtml('formkey'); ?>
-        <table id="shopping-cart-table" class="cart items data">
+<?php echo $this->getChildHtml('form_before') ?>
+<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>"
+          method="post"
+          id="form-validate"
+          data-mage-init='{"validation":{}}'
+          class="form cart">
+    <?php echo $this->getBlockHtml('formkey'); ?>
+    <div class="cart table wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
+        <table id="shopping-cart-table"
+               class="cart items data"
+               data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
+                                                "updateCartActionContainer": "#update_cart_action_container"}}'>
             <caption><?php echo __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
@@ -51,53 +58,29 @@
                 <?php echo $this->getItemHtml($_item) ?>
             <?php endforeach ?>
         </table>
-        <div class="cart main actions">
-            <?php if($this->getContinueShoppingUrl()): ?>
-                <a class="action continue" href="<?php echo $this->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
-                    <span><?php echo __('Continue Shopping') ?></span>
-                </a>
-            <?php endif; ?>
-            <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo __('Update Shopping Cart'); ?>" class="action update">
-                <span><?php echo __('Update Shopping Cart'); ?></span>
-            </button>
-            <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo __('Clear Shopping Cart'); ?>" class="action clear" id="empty_cart_button">
-                <span><?php echo __('Clear Shopping Cart'); ?></span>
-            </button>
-            <!--[if lt IE 8]>
-            <input type="hidden" value="" id="update_cart_action_container" />
-            <![endif]-->
-            <script type="text/javascript">
-                //<![CDATA[
-                (function($) {
-                    head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/shopping-cart.js')?>",
-                        function() {
-                            // Internet Explorer (lt 8) does not support value attribute in button elements
-                            $('#shopping-cart-table').shoppingCart({
-                                emptyCartButton: 'action.clear',
-                                updateCartActionContainer: '#update_cart_action_container'
-                            });
-                        });
-                })(jQuery);
-                //]]>
-            </script>
-        </div>
-    </form>
-    <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
-    <script type="text/javascript">
-        (function($) {
-            head.js(
-                "<?php echo $this->getViewFileUrl('mage/sticky.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
-                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
-                function() {
-                    $('#form-validate').validation();
-                    $('.cart.summary').sticky({
-                        container: '.cart.container'
-                });
-                });
-        })(jQuery)
-    </script>
-</div>
-
+    </div>
+    <div class="cart main actions">
+        <?php if($this->getContinueShoppingUrl()): ?>
+            <a class="action continue" href="<?php echo $this->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
+                <span><?php echo __('Continue Shopping') ?></span>
+            </a>
+        <?php endif; ?>
+        <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo __('Update Shopping Cart'); ?>" class="action update">
+            <span><?php echo __('Update Shopping Cart'); ?></span>
+        </button>
+        <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo __('Clear Shopping Cart'); ?>" class="action clear" id="empty_cart_button">
+            <span><?php echo __('Clear Shopping Cart'); ?></span>
+        </button>
+        <!--[if lt IE 8]>
+        <input type="hidden" value="" id="update_cart_action_container" />
+        <![endif]-->
+    </div>
+</form>
+<?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+<script type="text/javascript">
+    (function($) {
+        $('.cart.summary').mage('sticky', {
+            container: '.cart.container'
+        });
+    })(jQuery)
+</script>

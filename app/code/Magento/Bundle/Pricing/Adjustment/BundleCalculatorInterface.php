@@ -24,7 +24,7 @@
 
 namespace Magento\Bundle\Pricing\Adjustment;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
@@ -34,9 +34,55 @@ interface BundleCalculatorInterface extends CalculatorInterface
 {
     /**
      * @param float|string $amount
-     * @param SaleableInterface $saleableItem
+     * @param Product $saleableItem
      * @param null|bool $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getMaxAmount($amount, SaleableInterface $saleableItem, $exclude = null);
+    public function getMaxAmount($amount, Product $saleableItem, $exclude = null);
+
+    /**
+     * Option amount calculation for saleable item
+     *
+     * @param Product $saleableItem
+     * @param null|string $exclude
+     * @param bool $searchMin
+     * @param \Magento\Framework\Pricing\Amount\AmountInterface|null $bundleProductAmount
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getOptionsAmount(
+        Product $saleableItem,
+        $exclude = null,
+        $searchMin = true,
+        $bundleProductAmount = null
+    );
+
+    /**
+     * Calculate amount for bundle product with all selection prices
+     *
+     * @param float $basePriceValue
+     * @param Product $bundleProduct
+     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
+     * @param null|string $exclude code of adjustment that has to be excluded
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null);
+
+    /**
+     * Create selection price list for the retrieved options
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @param Product $bundleProduct
+     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     */
+    public function createSelectionPriceList($option, $bundleProduct);
+
+    /**
+     * Find minimal or maximal price for existing options
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
+     * @param bool $searchMin
+     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     */
+    public function processOptions($option, $selectionPriceList, $searchMin = true);
 }

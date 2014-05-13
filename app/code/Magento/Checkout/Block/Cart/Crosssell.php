@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@ namespace Magento\Checkout\Block\Cart;
 /**
  * Cart crosssell list
  *
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
@@ -74,7 +70,8 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
      * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param array $data
-     * @param array $priceBlockTypes
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -83,8 +80,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\CatalogInventory\Model\Stock $stock,
         \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
         \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_productVisibility = $productVisibility;
@@ -93,8 +89,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_itemRelationsList = $itemRelationsList;
         parent::__construct(
             $context,
-            $data,
-            $priceBlockTypes
+            $data
         );
         $this->_isScopePrivate = true;
     }

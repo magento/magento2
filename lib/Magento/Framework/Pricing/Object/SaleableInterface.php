@@ -25,28 +25,35 @@
 namespace Magento\Framework\Pricing\Object;
 
 /**
- * //@TODO Templates invoke methods that are not defined in the interface:
- *  getProductUrl():
- *      /app\code\Magento\Catalog\view\frontend\product\price\final_price.phtml
- *      /app\code\Magento\Catalog\view\frontend\product\price\msrp_item.phtml
- *
- *  getId() - /app\code\Magento\Catalog\view\frontend\product\price\final_price.phtml
- *  getMsrp() - /app\code\Magento\Catalog\view\frontend\product\price\msrp_item.phtml
+ * Interface SaleableInterface
  */
 interface SaleableInterface
 {
     /**
+     * Returns PriceInfo container of saleable item
+     *
      * @return \Magento\Framework\Pricing\PriceInfoInterface
      */
     public function getPriceInfo();
 
     /**
+     * Returns type identifier of saleable item
+     *
      * @return string
      */
     public function getTypeId();
 
     /**
+     * Returns identifier of saleable item
+     *
      * @return int
      */
     public function getId();
+
+    /**
+     * Returns quantity of saleable item
+     *
+     * @return float
+     */
+    public function getQty();
 }

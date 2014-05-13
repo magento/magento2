@@ -46,10 +46,9 @@ $_attributes = $this->decorateArray($this->getAllowAttributes());
     <?php endforeach; ?>
     <script type="text/javascript">
         (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.parsequery.js') ?>",
-                "<?php echo $this->getViewFileUrl('Magento_ConfigurableProduct::js/configurable.js') ?>", function () {
-                    $('#product_addtocart_form').configurable({"spConfig":<?php echo $this->getJsonConfig() ?>});
-                })
+            $('#product_addtocart_form').mage('configurable', {
+                "spConfig":<?php echo $this->getJsonConfig() ?>
+            });
         })(jQuery);
     </script>
 <?php endif;?>

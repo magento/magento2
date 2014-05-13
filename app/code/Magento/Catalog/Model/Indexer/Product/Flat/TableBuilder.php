@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,7 +25,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 /**
  * Class TableBuilder
- * @package Magento\Catalog\Model\Indexer\Product\Flat
  */
 class TableBuilder
 {
@@ -258,7 +255,7 @@ class TableBuilder
 
             $columnsChunks = array_chunk(
                 $tableColumns,
-                \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction::ATTRIBUTES_CHUNK_SIZE,
+                Action\Indexer::ATTRIBUTES_CHUNK_SIZE,
                 true
             );
             foreach ($columnsChunks as $columnsList) {
