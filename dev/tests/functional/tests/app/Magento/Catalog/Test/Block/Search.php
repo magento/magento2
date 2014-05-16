@@ -75,7 +75,8 @@ class Search extends Block
     public function isPlaceholderContains($placeholderText)
     {
         $field = $this->_rootElement->find(
-            sprintf($this->placeholder, $placeholderText), Locator::SELECTOR_XPATH
+            sprintf($this->placeholder, $placeholderText),
+            Locator::SELECTOR_XPATH
         );
         return $field->isVisible();
     }

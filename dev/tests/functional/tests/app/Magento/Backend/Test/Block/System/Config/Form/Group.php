@@ -84,7 +84,9 @@ class Group extends Form
         }
 
         $element = $this->_rootElement->find(
-            sprintf($this->element, $field), Element\Locator::SELECTOR_XPATH, $input
+            sprintf($this->element, $field),
+            Element\Locator::SELECTOR_XPATH,
+            $input
         );
 
         if ($element->isDisabled()) {

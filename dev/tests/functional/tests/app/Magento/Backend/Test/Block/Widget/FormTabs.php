@@ -138,7 +138,8 @@ class FormTabs extends Form
     protected function updateUnassignedFields(Tab $tabElement)
     {
         $this->unassignedFields = array_diff_key(
-            $this->unassignedFields, array_intersect_key($this->unassignedFields, $tabElement->setFields)
+            $this->unassignedFields,
+            array_intersect_key($this->unassignedFields, $tabElement->setFields)
         );
     }
 
@@ -162,8 +163,9 @@ class FormTabs extends Form
         }
 
         if (!empty($this->unassignedFields)) {
-            throw new \Exception('Could not find all elements on the tabs: '
-                . implode(', ', array_keys($this->unassignedFields)));
+            throw new \Exception(
+                'Could not find all elements on the tabs: ' . implode(', ', array_keys($this->unassignedFields))
+            );
         }
     }
 

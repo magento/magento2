@@ -113,4 +113,3 @@ class CreateStoreGroup extends Curl
         return $data;
     }
 }
-

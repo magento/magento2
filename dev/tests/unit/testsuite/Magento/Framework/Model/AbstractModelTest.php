@@ -64,7 +64,11 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction', array(), array(), '', false
+            '\Magento\Framework\Model\ActionValidator\RemoveAction',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->contextMock = new \Magento\Framework\Model\Context(
             $this->getMock('Magento\Framework\Logger', array(), array(), '', false),

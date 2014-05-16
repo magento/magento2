@@ -51,4 +51,3 @@ class Denied extends Block
         return $this->_rootElement->find($this->accessDeniedText, Locator::SELECTOR_CSS)->getText();
     }
 }
-

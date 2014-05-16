@@ -53,10 +53,6 @@
     <input type="hidden" name="js_uploaded_files[]" value="${temporary}" />
 </div>
 
-<div class="no-display" id="no-js-files-found-template">
-    <span class="filename"><?php echo __('We found no files.') ?></span>
-</div>
-
 
 <ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
 
@@ -67,7 +63,6 @@ jQuery(function($) {
 
     $('#js-files-container').themeJsList({
         templateId : '#js-uploaded-file-template',
-        emptyTemplateId : '#no-js-files-found-template',
         refreshFileListEvent : 'refreshJsList',
         prefixItemId : 'js-file-'
     });

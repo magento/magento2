@@ -51,4 +51,3 @@ class Form extends FormTabs
         $this->_rootElement->find($this->roleTab, Locator::SELECTOR_ID)->click();
     }
 }
-

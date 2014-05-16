@@ -118,15 +118,23 @@ class CreateConfigurableTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()),
-            'Product is absent on category page.');
+        $this->assertTrue(
+            $productListBlock->isProductVisible($product->getProductName()),
+            'Product is absent on category page.'
+        );
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
         $productListBlock->openProductViewPage($product->getProductName());
-        $this->assertEquals($product->getProductName(), $productViewBlock->getProductName(),
-            'Product name does not correspond to specified.');
-        $this->assertEquals($product->getProductPrice(), $productViewBlock->getProductPrice(),
-            'Product price does not correspond to specified.');
+        $this->assertEquals(
+            $product->getProductName(),
+            $productViewBlock->getProductName(),
+            'Product name does not correspond to specified.'
+        );
+        $this->assertEquals(
+            $product->getProductPrice(),
+            $productViewBlock->getProductPrice(),
+            'Product price does not correspond to specified.'
+        );
         $this->assertTrue($productViewBlock->verifyProductOptions($product), 'Added configurable options are absent');
     }
 }

@@ -56,7 +56,11 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->catalogLayerMock = $this->getMock('\Magento\Catalog\Model\Layer', array(), array(), '', false);
         $this->filterListMock = $this->getMock('\Magento\Catalog\Model\Layer\FilterList', array(), array(), '', false);
         $this->visibilityFlagMock = $this->getMock(
-            '\Magento\Catalog\Model\Layer\AvailabilityFlagInterface', array(), array(), '', false
+            '\Magento\Catalog\Model\Layer\AvailabilityFlagInterface',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -122,7 +126,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
         $blockMock = $this->getMockForAbstractClass(
             '\Magento\Framework\View\Element\AbstractBlock',
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $clearUrl = 'very clear URL';
         $blockMock->setClearUrl($clearUrl);

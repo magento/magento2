@@ -24,9 +24,9 @@
 
 namespace Magento\Backend\Test\TestCase\Urlrewrite;
 
-use Mtf\Factory\Factory,
-    Mtf\TestCase\Functional,
-    Magento\Backend\Test\Fixture\Urlrewrite\Category;
+use Mtf\Factory\Factory;
+use Mtf\TestCase\Functional;
+use Magento\Backend\Test\Fixture\Urlrewrite\Category;
 use Mtf\TestCase\Injectable;
 
 /**

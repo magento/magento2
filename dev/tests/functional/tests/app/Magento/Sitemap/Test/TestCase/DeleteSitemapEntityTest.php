@@ -64,7 +64,7 @@ class DeleteSitemapEntityTest extends Injectable
     public function __inject(
         SitemapIndex $sitemapIndex,
         SitemapEdit $sitemapEdit
-    ){
+    ) {
         $this->sitemapIndex = $sitemapIndex;
         $this->sitemapEdit = $sitemapEdit;
     }

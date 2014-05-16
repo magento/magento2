@@ -24,10 +24,6 @@
 
 namespace Magento\Catalog\Test\Page\Product;
 
-use Mtf\Page\Page;
-use Mtf\Factory\Factory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Client\Element\Locator;
 use Magento\GiftCard\Test\Block\Catalog\Product\View\Type\GiftCard;
 use Magento\Catalog\Test\Block\Product\ProductList\Crosssell;
 use Magento\Catalog\Test\Block\Product\Price;
@@ -40,7 +36,10 @@ use Magento\Downloadable\Test\Block\Catalog\Product\Links;
 use Magento\Review\Test\Block\Product\View\Summary;
 use Magento\Review\Test\Block\Form;
 use Magento\Review\Test\Block\Product\View as ReviewView;
-use Magento\Core\Test\Block\Messages;
+use Mtf\Page\Page;
+use Mtf\Factory\Factory;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\Client\Element\Locator;
 
 /**
  * Class CatalogProductView
@@ -176,7 +175,7 @@ class CatalogProductView extends Page
     /**
      * Get product options block
      *
-     * @return Options
+     * @return View
      */
     public function getOptionsBlock()
     {
@@ -188,7 +187,7 @@ class CatalogProductView extends Page
     /**
      * Get product options block
      *
-     * @return CustomOptions
+     * @return Options
      */
     public function getCustomOptionBlock()
     {
@@ -200,7 +199,7 @@ class CatalogProductView extends Page
     /**
      * Get customer reviews block
      *
-     * @return Form
+     * @return CustomOptions
      */
     public function getReviewFormBlock()
     {
@@ -210,7 +209,7 @@ class CatalogProductView extends Page
     /**
      * Get customer reviews block
      *
-     * @return ReviewView
+     * @return Form
      */
     public function getCustomerReviewBlock()
     {
@@ -222,7 +221,7 @@ class CatalogProductView extends Page
     /**
      * Get review summary block
      *
-     * @return Summary
+     * @return ReviewView
      */
     public function getReviewSummaryBlock()
     {
@@ -234,7 +233,7 @@ class CatalogProductView extends Page
     /**
      * Get upsell block
      *
-     * @return Upsell
+     * @return Summary
      */
     public function getUpsellProductBlock()
     {
@@ -246,7 +245,7 @@ class CatalogProductView extends Page
     /**
      * Get messages block
      *
-     * @return Messages
+     * @return Upsell
      */
     public function getMessagesBlock()
     {
@@ -258,7 +257,7 @@ class CatalogProductView extends Page
     /**
      * Get related product block
      *
-     * @return Related
+     * @return GiftCard
      */
     public function getRelatedProductBlock()
     {
@@ -270,7 +269,7 @@ class CatalogProductView extends Page
     /**
      * Get gift card options block
      *
-     * @return GiftCard
+     * @return Related
      */
     public function getGiftCardBlock()
     {

@@ -154,17 +154,20 @@ class TaxRate extends AbstractRepository
      */
     protected function getUKFullTaxRate($defaultData)
     {
-        return array_replace_recursive($defaultData, array(
-            'data' => array(
-                'fields' => array(
-                    'rate' => array(
-                        'value' => 20
-                    ),
-                    'tax_country_id' => array(
-                        'value' => 'GB',
+        return array_replace_recursive(
+            $defaultData,
+            array(
+                'data' => array(
+                    'fields' => array(
+                        'rate' => array(
+                            'value' => 20
+                        ),
+                        'tax_country_id' => array(
+                            'value' => 'GB',
+                        ),
                     ),
                 ),
-            ),
-        ));
+            )
+        );
     }
 }

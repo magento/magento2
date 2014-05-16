@@ -36,12 +36,12 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $jobs = isset($source['crontab']['default']['jobs']) ? $source['crontab']['default']['jobs'] : array();
+        $cronTab = isset($source['crontab']) ? $source['crontab'] : array();
 
-        if (empty($jobs)) {
-            return $jobs;
+        if (empty($cronTab)) {
+            return $cronTab;
         }
-        return $this->_extractParams($jobs);
+        return $this->_extractParams($cronTab);
     }
 
     /**
@@ -50,18 +50,21 @@ class Db implements \Magento\Framework\Config\ConverterInterface
      * @param array $jobs
      * @return array
      */
-    protected function _extractParams(array $jobs)
+    protected function _extractParams(array $cronTab)
     {
         $result = array();
-        foreach ($jobs as $jobName => $value) {
-            $result[$jobName] = $value;
+        foreach ($cronTab as $groupName => $groupConfig) {
+            $jobs = $groupConfig['jobs'];
+            foreach ($jobs as $jobName => $value) {
+                $result[$groupName][$jobName] = $value;
 
-            if (isset($value['schedule']) && is_array($value['schedule'])) {
-                $this->_processConfigParam($value, $jobName, $result);
-                $this->_processScheduleParam($value, $jobName, $result);
+                if (isset($value['schedule']) && is_array($value['schedule'])) {
+                    $this->_processConfigParam($value, $jobName, $result[$groupName]);
+                    $this->_processScheduleParam($value, $jobName, $result[$groupName]);
+                }
+
+                $this->_processRunModel($value, $jobName, $result[$groupName]);
             }
-
-            $this->_processRunModel($value, $jobName, $result);
         }
         return $result;
     }

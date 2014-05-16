@@ -114,4 +114,3 @@ class CreateStore extends Curl
         return $data;
     }
 }
-

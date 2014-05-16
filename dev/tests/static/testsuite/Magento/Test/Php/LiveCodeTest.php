@@ -88,7 +88,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeStylePsr2()
     {
-        $this->markTestSkipped('This is skipped due to strange errors visible only on publication build');
         $reportFile = self::$reportDir . '/phpcs_psr2_report.xml';
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);

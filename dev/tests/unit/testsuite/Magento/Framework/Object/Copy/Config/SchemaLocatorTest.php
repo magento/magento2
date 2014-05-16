@@ -41,7 +41,10 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->fileSystemMock = $this->getMock(
             'Magento\Framework\App\Filesystem',
-            array(), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
         $this->fileSystemMock->expects($this->any())
             ->method('getPath')

@@ -53,7 +53,7 @@ class Category extends DataFixture
      * @param Config $configuration
      * @param array $placeholders
      */
-    public function __construct(Config $configuration, $placeholders =  array())
+    public function __construct(Config $configuration, $placeholders = array())
     {
         parent::__construct($configuration, $placeholders);
 

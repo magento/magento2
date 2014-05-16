@@ -76,15 +76,15 @@ class Product extends \Magento\Framework\App\Action\Action implements \Magento\C
         $specifyOptions = $this->getRequest()->getParam('options');
 
         if ($this->getRequest()->isPost() && $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {
+            $product = $this->_initProduct();
+            if (!$product) {
+                $this->noProductRedirect();
+            }
             if ($specifyOptions) {
-                $product = $this->_initProduct();
-                if (!$product) {
-                    $this->noProductRedirect();
-                }
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
                 $this->messageManager->addNotice($notice);
-                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             }
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             return;
         }
 

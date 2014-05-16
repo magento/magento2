@@ -44,7 +44,7 @@ class UserEdit extends Page
      *
      * @var string
      */
-    protected  $editFormBlock = 'page:main-container';
+    protected $editFormBlock = 'page:main-container';
 
     /**
      * Global messages block
@@ -94,7 +94,8 @@ class UserEdit extends Page
     public function getMessagesBlock()
     {
         return Factory::getBlockFactory()->getMagentoCoreMessages(
-            $this->_browser->find($this->messagesBlock));
+            $this->_browser->find($this->messagesBlock)
+        );
     }
 
     /**
@@ -105,7 +106,8 @@ class UserEdit extends Page
     public function getRoleGridBlock()
     {
         return Factory::getBlockFactory()->getMagentoUserUserEditTabRoles(
-            $this->_browser->find($this->roleGridBlock, Locator::SELECTOR_ID));
+            $this->_browser->find($this->roleGridBlock, Locator::SELECTOR_ID)
+        );
     }
 
     /**
@@ -120,4 +122,3 @@ class UserEdit extends Page
         );
     }
 }
-

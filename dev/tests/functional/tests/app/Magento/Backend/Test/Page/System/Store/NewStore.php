@@ -24,8 +24,8 @@
  */
 namespace Magento\Backend\Test\Page\System\Store;
 
-use Mtf\Factory\Factory,
-    Mtf\Page\Page;
+use Mtf\Factory\Factory;
+use Mtf\Page\Page;
 
 class NewStore extends Page
 {

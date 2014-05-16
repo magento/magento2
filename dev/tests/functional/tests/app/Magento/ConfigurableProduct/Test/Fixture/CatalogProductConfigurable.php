@@ -58,7 +58,13 @@ class CatalogProductConfigurable extends InjectableFixture
         $persist = false
     ) {
         parent::__construct(
-            $configuration, $repositoryFactory, $fixtureFactory, $handlerFactory, $data, $dataSet, $persist
+            $configuration,
+            $repositoryFactory,
+            $fixtureFactory,
+            $handlerFactory,
+            $data,
+            $dataSet,
+            $persist
         );
         if (!isset($this->data['url_key']) && isset($this->data['name'])) {
             $this->data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $this->data['name'])), '-');

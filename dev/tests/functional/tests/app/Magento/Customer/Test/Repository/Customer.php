@@ -235,14 +235,17 @@ class Customer extends AbstractRepository
      */
     protected function getUKWithVAT($defaultData)
     {
-        return array_replace_recursive($defaultData, array(
-            'data' => array(
-                'address' => array(
-                    'dataset' => array(
-                        'value' => 'address_UK_with_VAT',
+        return array_replace_recursive(
+            $defaultData,
+            array(
+                'data' => array(
+                    'address' => array(
+                        'dataset' => array(
+                            'value' => 'address_UK_with_VAT',
+                        ),
                     ),
                 ),
-            ),
-        ));
+            )
+        );
     }
 }

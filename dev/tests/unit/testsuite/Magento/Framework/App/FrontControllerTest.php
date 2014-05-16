@@ -28,31 +28,35 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\FrontController
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_request;
+    protected $request;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_routerList;
+    protected $routerList;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_router;
+    protected $router;
 
     protected function setUp()
     {
-        $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $this->_router =
-            $this->getMock('Magento\Framework\App\Router\AbstractRouter', array('match'), array(), '', false);
-        $this->_routerList = $this->getMock('Magento\Framework\App\RouterList', array(), array(), '', false);
-        $this->_routerList->expects($this->any())->method('getIterator')->will($this->returnValue($this->_routerList));
-        $this->_model = new \Magento\Framework\App\FrontController($this->_routerList);
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
+            ->getMock();
+
+        $this->router = $this->getMockBuilder('Magento\Framework\App\Router\AbstractRouter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->routerList = $this->getMock('Magento\Framework\App\RouterList', array(), array(), '', false);
+        $this->model = new \Magento\Framework\App\FrontController($this->routerList);
     }
 
     /**
@@ -61,24 +65,97 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchThrowException()
     {
-        $this->_request->expects($this->any())->method('isDispatched')->will($this->returnValue(false));
-        $this->_model->dispatch($this->_request);
+        $validCounter = 0;
+        $callbackValid = function () use (&$validCounter) {
+            return $validCounter++%10 ? false : true;
+        };
+        $this->routerList->expects($this->any())->method('valid')->will($this->returnCallback($callbackValid));
+
+        $this->router->expects($this->any())
+            ->method('match')
+            ->with($this->request)
+            ->will($this->returnValue(false));
+
+        $this->routerList->expects($this->any())
+            ->method('current')
+            ->will($this->returnValue($this->router));
+
+        $this->request->expects($this->any())->method('isDispatched')->will($this->returnValue(false));
+
+        $this->model->dispatch($this->request);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage  Front controller reached 100 router match iterations
-     */
-    public function testWhenDispatchedActionInterface()
+    public function testDispatched()
     {
-        $this->_request->expects($this->any())->method('isDispatched')->will($this->returnValue(false));
-        $this->_routerList->expects($this->atLeastOnce())->method('valid')->will($this->returnValue(true));
-        $this->_routerList->expects($this->atLeastOnce())->method('current')->will($this->returnValue($this->_router));
-        $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
+        $this->routerList->expects($this->any())
+            ->method('valid')
+            ->will($this->returnValue(true));
+
         $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
-        $controllerInstance->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $this->_router->expects($this->atLeastOnce())->method('match')->will($this->returnValue($controllerInstance));
-        $controllerInstance->expects($this->any())->method('dispatch')->with($this->_request);
-        $this->_model->dispatch($this->_request);
+        $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
+        $controllerInstance->expects($this->any())
+            ->method('getResponse')
+            ->will($this->returnValue($response));
+        $controllerInstance->expects($this->any())
+            ->method('dispatch')
+            ->with($this->request)
+            ->will($this->returnValue($response));
+        $this->router->expects($this->at(0))
+            ->method('match')
+            ->with($this->request)
+            ->will($this->returnValue(false));
+        $this->router->expects($this->at(1))
+            ->method('match')
+            ->with($this->request)
+            ->will($this->returnValue($controllerInstance));
+
+        $this->routerList->expects($this->any())
+            ->method('current')
+            ->will($this->returnValue($this->router));
+
+        $this->request->expects($this->at(0))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(1))->method('setDispatched')->with(true);
+        $this->request->expects($this->at(2))->method('isDispatched')->will($this->returnValue(true));
+
+        $this->assertEquals($response, $this->model->dispatch($this->request));
+    }
+
+    public function testDispatchedNotFoundException()
+    {
+        $this->routerList->expects($this->any())
+            ->method('valid')
+            ->will($this->returnValue(true));
+
+        $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $controllerInstance = $this->getMock('Magento\Framework\App\ActionInterface');
+        $controllerInstance->expects($this->any())
+            ->method('getResponse')
+            ->will($this->returnValue($response));
+        $controllerInstance->expects($this->any())
+            ->method('dispatch')
+            ->with($this->request)
+            ->will($this->returnValue($response));
+        $this->router->expects($this->at(0))
+            ->method('match')
+            ->with($this->request)
+            ->will($this->throwException(new Action\NotFoundException));
+        $this->router->expects($this->at(1))
+            ->method('match')
+            ->with($this->request)
+            ->will($this->returnValue($controllerInstance));
+
+        $this->routerList->expects($this->any())
+            ->method('current')
+            ->will($this->returnValue($this->router));
+
+        $this->request->expects($this->at(0))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(1))->method('initForward');
+        $this->request->expects($this->at(2))->method('setActionName')->with('noroute');
+        $this->request->expects($this->at(3))->method('setDispatched')->with(false);
+        $this->request->expects($this->at(4))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(5))->method('setDispatched')->with(true);
+        $this->request->expects($this->at(6))->method('isDispatched')->will($this->returnValue(true));
+
+        $this->assertEquals($response, $this->model->dispatch($this->request));
     }
 }

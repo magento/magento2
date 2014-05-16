@@ -103,4 +103,3 @@ class UserIndex extends Page
         );
     }
 }
-

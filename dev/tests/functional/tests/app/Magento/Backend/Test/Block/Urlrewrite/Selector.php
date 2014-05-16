@@ -25,8 +25,8 @@
 
 namespace Magento\Backend\Test\Block\Urlrewrite;
 
-use Mtf\Block\Block,
-    Mtf\Client\Element\Locator;
+use Mtf\Block\Block;
+use Mtf\Client\Element\Locator;
 
 /**
  * Class Selector

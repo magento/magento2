@@ -286,15 +286,18 @@ class Address extends AbstractRepository
      */
     protected function getAddressUKWithVAT($defaultData)
     {
-        return array_replace_recursive($defaultData, array(
-            'data' => array(
-                'fields' => array(
-                    'vat_id' => array(
-                        'value' => '584451913',
+        return array_replace_recursive(
+            $defaultData,
+            array(
+                'data' => array(
+                    'fields' => array(
+                        'vat_id' => array(
+                            'value' => '584451913',
+                        ),
                     ),
                 ),
-            ),
-        ));
+            )
+        );
     }
 
     /**

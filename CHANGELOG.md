@@ -1,7 +1,22 @@
+2.0.0.0-dev78
+=============
+* Fixed bugs:
+  * Fixed an issue where a blank page was displayed when changing store view on a product page
+  * Fixed an issue where it was impossible to change attribute template during product creation
+  * Fixed an issue where the Categories field and the New Category button was displayed during product creation for users with no permissions to access Products and Categories
+  * Fixed an issue where no records were found in the User Roles grid if no users were assigned to a role
+  * Fixed an issue where variable values in the Newsletter templates were not displayed
+  * Fixed an issue where 'No files found' was displayed in the JS Editor on the Design page
+  * Fixed an issue where the State/Province list on frontend was displayed with HTML tags if inline translate was enabled
+  * Fixed an issue where CAPTCHA was not displayed on the Contact Us page
+  * Fixed an issue where scheduled backups were not displayed and neither performed
+  * Fixed functional tests failing PSR-2 test
+
 2.0.0.0-dev77
 =============
 * Themes update:
   * Blank theme was refactored to implement the mobile-first approach
+* Added Readme.md file
 * Fixed bugs:
   * Fixed an issue where it was impossible to place order using store credit
   * Fixed an issue where adding products with custom options from a wishlist to shopping cart caused an error

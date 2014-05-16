@@ -39,16 +39,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $acl = $this->getMock('Magento\Framework\Acl', array('addResource'), array(), '', false);
         $acl->expects($this->exactly(2))->method('addResource');
         $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->will($this->returnSelf());
-        $acl->expects(
-            $this->at(1)
-        )->method(
-            'addResource'
-        )->with(
-            $aclResource,
-            $aclResource
-        )->will(
-            $this->returnSelf()
-        );
+        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->will($this->returnSelf());
 
         $factoryObject = $this->getMock(
             'Magento\Framework\Acl\ResourceFactory',
@@ -61,29 +52,77 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         /** @var $resourceProvider \Magento\Framework\Acl\Resource\ProviderInterface */
         $resourceProvider = $this->getMock('Magento\Framework\Acl\Resource\ProviderInterface');
-        $resourceProvider->expects(
-            $this->once()
-        )->method(
-            'getAclResources'
-        )->will(
-            $this->returnValue(
-                array(
+        $resourceProvider->expects($this->once())
+            ->method('getAclResources')
+            ->will(
+                $this->returnValue(
                     array(
-                        'id' => 'parent_resource::id',
-                        'title' => 'Parent Resource Title',
-                        'sortOrder' => 10,
-                        'children' => array(
-                            array(
-                                'id' => 'child_resource::id',
-                                'title' => 'Child Resource Title',
-                                'sortOrder' => 10,
-                                'children' => array()
+                        array(
+                            'id' => 'parent_resource::id',
+                            'title' => 'Parent Resource Title',
+                            'sortOrder' => 10,
+                            'children' => array(
+                                array(
+                                    'id' => 'child_resource::id',
+                                    'title' => 'Child Resource Title',
+                                    'sortOrder' => 10,
+                                    'children' => array()
+                                )
                             )
                         )
                     )
                 )
-            )
-        );
+            );
+
+        /** @var $loaderResource \Magento\Framework\Acl\Loader\Resource */
+        $loaderResource = new \Magento\Framework\Acl\Loader\Resource($resourceProvider, $factoryObject);
+
+        $loaderResource->populateAcl($acl);
+    }
+
+    /**
+     * Test for \Magento\Framework\Acl\Loader\Resource::populateAcl
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Missing ACL resource identifier
+     */
+    public function testPopulateAclWithException()
+    {
+        /** @var $aclResource \Magento\Framework\Acl\Resource */
+        $aclResource = $this->getMock('Magento\Framework\Acl\Resource', array(), array(), '', false);
+
+        $factoryObject = $this->getMockBuilder('Magento\Framework\Acl\ResourceFactory')
+            ->setMethods(['createResource'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
+
+        /** @var $resourceProvider \Magento\Framework\Acl\Resource\ProviderInterface */
+        $resourceProvider = $this->getMock('Magento\Framework\Acl\Resource\ProviderInterface');
+        $resourceProvider->expects($this->once())
+            ->method('getAclResources')
+            ->will(
+                $this->returnValue(
+                    array(
+                        array(
+                            'title' => 'Parent Resource Title',
+                            'sortOrder' => 10,
+                            'children' => array(
+                                array(
+                                    'id' => 'child_resource::id',
+                                    'title' => 'Child Resource Title',
+                                    'sortOrder' => 10,
+                                    'children' => array()
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+        /** @var $acl \Magento\Framework\Acl */
+        $acl = $this->getMock('Magento\Framework\Acl', array('addResource'), array(), '', false);
 
         /** @var $loaderResource \Magento\Framework\Acl\Loader\Resource */
         $loaderResource = new \Magento\Framework\Acl\Loader\Resource($resourceProvider, $factoryObject);
