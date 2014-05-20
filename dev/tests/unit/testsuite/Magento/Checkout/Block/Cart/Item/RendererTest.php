@@ -99,7 +99,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
             array('getName', '__wakeup', 'getIdentities'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 

@@ -178,5 +178,4 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $this->_model->updateScheme();
         $this->_model->updateData();
     }
-
 }

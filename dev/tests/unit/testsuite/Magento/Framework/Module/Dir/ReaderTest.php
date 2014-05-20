@@ -28,8 +28,8 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use \Magento\Framework\App\Filesystem,
-    \Magento\Framework\Config\FileIteratorFactory;
+use \Magento\Framework\App\Filesystem;
+use \Magento\Framework\Config\FileIteratorFactory;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,13 +79,31 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_dirsMock = $this->getMock('Magento\Framework\Module\Dir', array(), array(), '', false, false);
-        $this->_baseConfigMock =
-            $this->getMock('Magento\Framework\App\Config\Base', array(), array(), '', false, false);
+        $this->_baseConfigMock = $this->getMock(
+            'Magento\Framework\App\Config\Base',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
         $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $this->_filesystemMock =
-            $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false, false);
-        $this->_fileIteratorFactory =
-            $this->getMock('\Magento\Framework\Config\FileIteratorFactory', array(), array(), '', false, false);
+        $this->_filesystemMock = $this->getMock(
+            '\Magento\Framework\App\Filesystem',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_fileIteratorFactory = $this->getMock(
+            '\Magento\Framework\Config\FileIteratorFactory',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
         $this->_model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
@@ -147,5 +165,4 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($configPath, $model->getConfigurationFiles('config.xml')->key());
     }
-
 }

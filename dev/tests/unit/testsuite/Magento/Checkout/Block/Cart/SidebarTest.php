@@ -109,7 +109,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
             array('__wakeup', 'getIdentities'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $identities = [0 => 1, 1 => 2, 2 => 3];
         $product->expects($this->exactly(2))

@@ -71,7 +71,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         foreach ($result as $key => $value) {
             $this->assertArrayHasKey($key, $expected, 'Attribute metadata with key "' . $key . '" not found.');
-            $this->assertEquals($expected[$key], $value,
+            $this->assertEquals(
+                $expected[$key],
+                $value,
                 'Attribute metadata with key "' . $key . '" has invalid value.'
             );
         }

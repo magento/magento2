@@ -39,7 +39,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
-        $model = $this->getMock('\Magento\Framework\ObjectManager\Code\Generator\Factory',
+        $model = $this->getMock(
+            '\Magento\Framework\ObjectManager\Code\Generator\Factory',
             array('_validateData'),
             array('\Magento\Framework\ObjectManager\Code\Generator\Sample', null, $this->ioObjectMock, null, null)
         );
@@ -54,6 +55,4 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
         $this->assertTrue($model->generate());
     }
-
-
 }

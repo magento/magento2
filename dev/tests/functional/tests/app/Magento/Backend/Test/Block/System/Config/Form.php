@@ -55,7 +55,8 @@ class Form extends Block
     {
         $blockFactory = Factory::getBlockFactory();
         $element = $this->_rootElement->find(
-            sprintf($this->groupBlock, $name), Locator::SELECTOR_XPATH
+            sprintf($this->groupBlock, $name),
+            Locator::SELECTOR_XPATH
         );
         return $blockFactory->getMagentoBackendSystemConfigFormGroup($element);
     }

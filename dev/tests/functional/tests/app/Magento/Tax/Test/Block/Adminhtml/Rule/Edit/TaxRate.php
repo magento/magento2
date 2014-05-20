@@ -77,8 +77,10 @@ class TaxRate extends FormInterface
                 $taxRateDialog->find($this->saveTaxRate, Locator::SELECTOR_CSS)->click();
                 $this->waitForElementNotVisible($this->taxRateUiDialog, Locator::SELECTOR_XPATH);
             } else {
-                $this->_rootElement->find($this->taxRateOption . '/span[text()="' . $rate['code']['value'] . '"]',
-                    Locator::SELECTOR_XPATH)->click();
+                $this->_rootElement->find(
+                    $this->taxRateOption . '/span[text()="' . $rate['code']['value'] . '"]',
+                    Locator::SELECTOR_XPATH
+                )->click();
             }
         }
     }

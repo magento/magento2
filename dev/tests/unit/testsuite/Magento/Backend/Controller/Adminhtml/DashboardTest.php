@@ -251,7 +251,11 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             $response->headersSentThrowsException = false;
         }
         $rewriteFactory = $this->getMock(
-            'Magento\UrlRewrite\Model\UrlRewriteFactory', array('create'), array(), '', false
+            'Magento\UrlRewrite\Model\UrlRewriteFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $varienFront = $helper->getObject(

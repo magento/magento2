@@ -252,27 +252,27 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(
-                'setIsJson'
-            )->will(
-                $this->returnValueMap(array(
-                        array($isJson, $this->returnSelf()),
-                        array(!$isJson, $this->returnSelf()),
-                    ))
-            );
+            'setIsJson'
+        )->will(
+            $this->returnValueMap(array(
+                array($isJson, $this->returnSelf()),
+                array(!$isJson, $this->returnSelf()),
+            ))
+        );
         $this->parserMock->expects(
             $this->exactly(1)
         )->method(
-                'processResponseBodyString'
-            )->with(
-                is_array($body) ? reset($body) : $body
-            );
+            'processResponseBodyString'
+        )->with(
+            is_array($body) ? reset($body) : $body
+        );
         $this->parserMock->expects(
             $this->exactly(2)
         )->method(
-                'getContent'
-            )->will(
-                $this->returnValue(is_array($body) ? reset($body) : $body)
-            );
+            'getContent'
+        )->will(
+            $this->returnValue(is_array($body) ? reset($body) : $body)
+        );
 
         $model = new Inline(
             $this->scopeResolverMock,

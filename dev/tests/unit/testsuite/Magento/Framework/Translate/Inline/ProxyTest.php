@@ -52,11 +52,11 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects(
             $this->once()
         )->method(
-                'get'
+            'get'
         )->with(
-                'Magento\Framework\Translate\Inline'
+            'Magento\Framework\Translate\Inline'
         )->will(
-                $this->returnValue($this->translateMock)
+            $this->returnValue($this->translateMock)
         );
         $this->objectManagerMock->expects($this->never())->method('create');
         $this->translateMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));

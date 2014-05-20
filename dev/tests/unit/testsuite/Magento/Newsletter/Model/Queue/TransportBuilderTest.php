@@ -113,12 +113,12 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Template\TransportBui
         $this->_mailTransportFactoryMock->expects(
             $this->at(0)
         )->method(
-                'create'
-            )->with(
-                $this->equalTo(array('message' => $this->messageMock))
-            )->will(
-                $this->returnValue($transport)
-            );
+            'create'
+        )->with(
+            $this->equalTo(array('message' => $this->messageMock))
+        )->will(
+            $this->returnValue($transport)
+        );
 
         $this->objectManagerMock->expects(
             $this->at(0)

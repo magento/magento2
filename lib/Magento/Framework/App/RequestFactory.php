@@ -30,14 +30,14 @@ class RequestFactory
     /**
      * @var \Magento\Framework\ObjectManager
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManager $objectManager
      */
     public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -48,6 +48,6 @@ class RequestFactory
      */
     public function create(array $arguments = array())
     {
-        return $this->_objectManager->create('Magento\Framework\App\RequestInterface', $arguments);
+        return $this->objectManager->create('Magento\Framework\App\RequestInterface', $arguments);
     }
 }

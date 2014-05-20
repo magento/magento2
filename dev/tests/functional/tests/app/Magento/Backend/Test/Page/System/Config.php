@@ -29,8 +29,8 @@ namespace Magento\Backend\Test\Page\System;
 use Magento\Backend\Test\Block\System\Config\Switcher;
 use Magento\Core\Test\Block\Messages;
 use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory,
-    Mtf\Page\Page;
+use Mtf\Factory\Factory;
+use Mtf\Page\Page;
 
 class Config extends Page
 {

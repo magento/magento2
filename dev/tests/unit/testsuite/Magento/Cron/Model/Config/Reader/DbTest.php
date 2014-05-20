@@ -62,12 +62,14 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $data = array('crontab' => array('default' => array('jobs' => array('job1' => $job1, 'job2' => $job2))));
         $this->_defaultReader->expects($this->once())->method('read')->will($this->returnValue($data));
         $expected = array(
-            'job1' => array('schedule' => $job1['schedule']['cron_expr']),
-            'job2' => array('schedule' => $job2['schedule']['cron_expr'])
+            'default' => array(
+                'job1' => array('schedule' => $job1['schedule']['cron_expr']),
+                'job2' => array('schedule' => $job2['schedule']['cron_expr'])
+            )
         );
 
         $result = $this->_reader->get();
-        $this->assertEquals($expected['job1']['schedule'], $result['job1']['schedule']);
-        $this->assertEquals($expected['job2']['schedule'], $result['job2']['schedule']);
+        $this->assertEquals($expected['default']['job1']['schedule'], $result['default']['job1']['schedule']);
+        $this->assertEquals($expected['default']['job2']['schedule'], $result['default']['job2']['schedule']);
     }
 }

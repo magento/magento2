@@ -111,8 +111,8 @@ class ObjectManagerFactory
             new \Magento\Framework\App\Arguments\Loader(
                 $directoryList,
                 isset($arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE])
-                    ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
-                    : null
+                ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
+                : null
             )
         );
     }

@@ -56,7 +56,9 @@ class Product extends Block
     public function addProduct($productType = 'simple')
     {
         $this->_rootElement->find($this->toggleButton, Locator::SELECTOR_CSS)->click();
-        $this->_rootElement->find(str_replace('%productType%', $productType, $this->productItem),
-            Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find(
+            str_replace('%productType%', $productType, $this->productItem),
+            Locator::SELECTOR_CSS
+        )->click();
     }
 }

@@ -121,4 +121,3 @@ class Role extends DataFixture
         $this->_repository->set($name, $data);
     }
 }
-

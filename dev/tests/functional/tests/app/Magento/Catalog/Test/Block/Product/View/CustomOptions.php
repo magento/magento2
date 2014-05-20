@@ -75,5 +75,4 @@ class CustomOptions extends Block
         }
         return $options;
     }
-
 }

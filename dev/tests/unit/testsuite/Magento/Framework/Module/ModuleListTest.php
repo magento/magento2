@@ -91,5 +91,4 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($moduleData, $model->getModule('declared_module'));
         $this->assertNull($model->getModule('not_declared_module'));
     }
-
 }

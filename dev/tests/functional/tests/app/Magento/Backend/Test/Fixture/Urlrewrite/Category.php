@@ -24,10 +24,10 @@
 
 namespace Magento\Backend\Test\Fixture\Urlrewrite;
 
-use Mtf\System\Config,
-    Mtf\Factory\Factory,
-    Mtf\Fixture\DataFixture,
-    Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Mtf\System\Config;
+use Mtf\Factory\Factory;
+use Mtf\Fixture\DataFixture;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 
 /**
  * Class Category

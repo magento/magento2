@@ -68,8 +68,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     public function testCopyFieldsetToTargetWhenFieldsetInputInvalid()
     {
         $this->fieldsetConfigMock->expects($this->never())->method('getFieldset');
-        $this->assertEquals(null,
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', array(), 'target'));
+        $this->assertEquals(
+            null,
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', array(), 'target')
+        );
     }
 
     public function testCopyFieldsetToTargetWhenFieldIsNotExists()
@@ -80,8 +82,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue(null));
         $this->eventManagerMock->expects($this->never())->method('dispatch');
-        $this->assertEquals(array($this->targetMock),
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock)));
+        $this->assertEquals(
+            array($this->targetMock),
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock))
+        );
     }
 
     public function testCopyFieldsetToTargetWhenFieldExists()
@@ -100,8 +104,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             'root'   => 'global'
         );
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals(array($this->targetMock),
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock)));
+        $this->assertEquals(
+            array($this->targetMock),
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock))
+        );
     }
 
     public function testCopyFieldsetToTargetWhenTargetNotArray()
@@ -131,8 +137,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             'root'   => 'global'
         );
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals($this->targetMock,
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $this->targetMock));
+        $this->assertEquals(
+            $this->targetMock,
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $this->targetMock)
+        );
     }
 
     public function testGetCopyFieldsetToTargetWhenTargetIsArray()
@@ -158,7 +166,6 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $newTarget = array(
             'code' => array(),
             'value' => 'value'
-
         );
         $data = array(
             'target' => $newTarget,
@@ -166,8 +173,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             'root'   => 'global'
         );
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
-        $this->assertEquals($newTarget,
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $target));
+        $this->assertEquals(
+            $newTarget,
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, $target)
+        );
     }
 
     public function testGetDataFromFieldsetWhenSourceIsInvalid()
@@ -203,8 +212,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('code')
             ->will($this->returnValue('value'));
 
-        $this->assertEquals(array('value' => 'value'),
-            $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock));
+        $this->assertEquals(
+            array('value' => 'value'),
+            $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
+        );
     }
 
 
@@ -220,7 +231,9 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getDataUsingMethod');
 
-        $this->assertEquals(array(),
-            $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock));
+        $this->assertEquals(
+            array(),
+            $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
+        );
     }
 }

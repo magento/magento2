@@ -55,7 +55,8 @@ class StoreTest extends Functional
         $newStorePage->getPageActionsBlock()->clickSave();
         $storeListPage->getMessagesBlock()->assertSuccessMessage();
         $this->assertContains(
-            'The store view has been saved', $storeListPage->getMessagesBlock()->getSuccessMessages()
+            'The store view has been saved',
+            $storeListPage->getMessagesBlock()->getSuccessMessages()
         );
         $this->assertTrue(
             $storeListPage->getGridBlock()->isStoreExists($storeFixture->getName())

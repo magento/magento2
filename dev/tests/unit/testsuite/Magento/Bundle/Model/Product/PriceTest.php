@@ -68,7 +68,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
-            '\Magento\CatalogRule\Model\Resource\RuleFactory', array(), array(), '', false
+            '\Magento\CatalogRule\Model\Resource\RuleFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');

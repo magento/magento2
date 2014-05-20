@@ -38,4 +38,4 @@ class StubBlock extends AbstractBlock implements IdentityInterface
     {
         return array('identity1', 'identity2');
     }
-} 
+}

@@ -60,10 +60,12 @@ class EditBundleTest extends Functional
         $cachePage = Factory::getPageFactory()->getAdminCache();
 
         $productGridPage->open();
-        $gridBlock->searchAndOpen(array(
-            'sku' => $product->getProductSku(),
-            'type' => 'Bundle Product'
-        ));
+        $gridBlock->searchAndOpen(
+            array(
+                'sku' => $product->getProductSku(),
+                'type' => 'Bundle Product'
+            )
+        );
         $productBlockForm->fill($editProduct);
         $productBlockForm->save($editProduct);
         //Verifying
