@@ -87,7 +87,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      */
     protected function _callObserverMethod($object, $method, $observer)
     {
-        if (method_exists($object, $method)) {
+        if (is_callable(array($object, $method))) {
             $object->{$method}($observer);
         } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
             throw new \LogicException('Method "' . $method . '" is not defined in "' . get_class($object) . '"');
