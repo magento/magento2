@@ -31,7 +31,7 @@
         <strategy>css selector</strategy>
     </block>
     <block>
-        <name>messageBlock</name>
+        <name>messagesBlock</name>
         <class>Magento\Core\Test\Block\Messages</class>
         <locator>.page.messages</locator>
         <strategy>css selector</strategy>

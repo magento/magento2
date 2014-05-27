@@ -149,7 +149,8 @@ class Application
                 Filesystem::STATIC_VIEW_DIR => array('path' => "{$installDir}/pub_static"),
                 Filesystem::PUB_VIEW_CACHE_DIR => array('path' => "{$installDir}/pub_cache"),
                 Filesystem::GENERATION_DIR => array('path' => $generationDir),
-                Filesystem::CACHE_DIR => array('path' => $installDir . '/cache')
+                Filesystem::CACHE_DIR => array('path' => $installDir . '/cache'),
+                Filesystem::LOG_DIR => array('path' => $installDir . '/log'),
             ),
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         );

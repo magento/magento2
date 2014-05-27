@@ -174,4 +174,15 @@ class Calendar extends \Magento\Framework\View\Element\Template
     {
         return $this->_localeDate->scopeTimeStamp($store);
     }
+
+    /**
+     * Getter for yearRange option in datepicker
+     *
+     * @return string
+     */
+    public function getYearRange()
+    {
+        return (int)$this->_localeDate->date('Y')->__toString() - 100
+            . ':' . $this->_localeDate->date('Y')->__toString();
+    }
 }

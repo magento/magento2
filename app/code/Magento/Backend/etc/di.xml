@@ -183,4 +183,38 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Quote\Storage</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Group" shared="false" />
+    <type name="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" shared="false" />
+    
+    <type name="Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
+        <arguments>
+            <argument name="fieldLocator" xsi:type="object">Magento\Backend\Model\Config\Structure\Search\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Data">
+        <arguments>
+            <argument name="cacheId" xsi:type="string">backend_system_configuration_structure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Tab" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Section</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Section" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Group</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Field" shared="false">
+        <arguments>
+            <argument name="groupFlyweight" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Group\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Group" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Field</argument>
+        </arguments>
+    </type>
 </config>

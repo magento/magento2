@@ -30,6 +30,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
     /**
      * Reindex temporary (price result data) for all products
      *
+     * @throws \Exception
      * @return \Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped
      */
     public function reindexAll()
@@ -68,6 +69,9 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
      */
     protected function _prepareGroupedProductPriceData($entityIds = null)
     {
+        if (!$this->hasEntity() && empty($entityIds)) {
+            return $this;
+        }
         $write = $this->_getWriteAdapter();
         $table = $this->getIdxTable();
 

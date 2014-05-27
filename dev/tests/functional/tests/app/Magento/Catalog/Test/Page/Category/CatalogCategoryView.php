@@ -24,84 +24,72 @@
 
 namespace Magento\Catalog\Test\Page\Category;
 
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
-use Mtf\Page\Page;
+use Mtf\Page\FrontendPage;
 
 /**
  * Class CatalogCategoryView
- * Category page on frontend
- *
+ * Catalog Category page
  */
-class CatalogCategoryView extends Page
+class CatalogCategoryView extends FrontendPage
 {
-    /**
-     * URL for category page
-     */
     const MCA = 'catalog/category/view';
 
-    /**
-     * List of results of product search
-     *
-     * @var string
-     */
-    protected $listProductBlock = '.products.wrapper.grid';
+    protected $_blocks = [
+        'listProductBlock' => [
+            'name' => 'listProductBlock',
+            'class' => 'Magento\Catalog\Test\Block\Product\ListProduct',
+            'locator' => '.products.wrapper.grid',
+            'strategy' => 'css selector',
+        ],
+        'mapBlock' => [
+            'name' => 'mapBlock',
+            'class' => 'Magento\Catalog\Test\Block\Product\Price',
+            'locator' => '#map-popup-content',
+            'strategy' => 'css selector',
+        ],
+        'layeredNavigationBlock' => [
+            'name' => 'layeredNavigationBlock',
+            'class' => 'Magento\LayeredNavigation\Test\Block\Navigation',
+            'locator' => '.block.filter',
+            'strategy' => 'css selector',
+        ],
+        'toolbar' => [
+            'name' => 'toolbar',
+            'class' => 'Magento\Catalog\Test\Block\Product\ProductList\Toolbar',
+            'locator' => '.pages .items',
+            'strategy' => 'css selector',
+        ],
+    ];
 
     /**
-     * MAP popup
-     *
-     * @var string
-     */
-    protected $mapBlock = '#map-popup-content';
-
-    /**
-     * Layered navigation block
-     *
-     * @var string
-     */
-    protected $layeredNavigationBlock = '.block.filter';
-
-    /**
-     * Custom constructor
-     */
-    protected function _init()
-    {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
-    }
-
-    /**
-     * Get product list block
-     *
      * @return \Magento\Catalog\Test\Block\Product\ListProduct
      */
     public function getListProductBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogProductListProduct(
-            $this->_browser->find($this->listProductBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('listProductBlock');
     }
 
     /**
-     * Get product price block
-     *
      * @return \Magento\Catalog\Test\Block\Product\Price
      */
     public function getMapBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogProductPrice(
-            $this->_browser->find($this->mapBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('mapBlock');
     }
 
     /**
-     * Get layered navigation block
-     *
-     * @return \Magento\Search\Test\Block\Catalog\Layer\View
+     * @return \Magento\LayeredNavigation\Test\Block\Navigation
      */
     public function getLayeredNavigationBlock()
     {
-        return Factory::getBlockFactory()->getMagentoSearchCatalogLayerView(
-            $this->_browser->find($this->layeredNavigationBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('layeredNavigationBlock');
+    }
+
+    /**
+     * @return \Magento\Catalog\Test\Block\Product\ProductList\Toolbar
+     */
+    public function getToolbar()
+    {
+        return $this->getBlockInstance('toolbar');
     }
 }

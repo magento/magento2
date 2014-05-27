@@ -38,10 +38,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         $this->useIdxTable(true);
         $this->beginTransaction();
         try {
-            $this->_prepareFinalPriceData();
-            $this->_applyCustomOption();
-            $this->_applyConfigurableOption();
-            $this->_movePriceDataToIndexTable();
+            $this->reindex();
             $this->commit();
         } catch (\Exception $e) {
             $this->rollBack();
@@ -58,11 +55,22 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     public function reindexEntity($entityIds)
     {
-        $this->_prepareFinalPriceData($entityIds);
-        $this->_applyCustomOption();
-        $this->_applyConfigurableOption();
-        $this->_movePriceDataToIndexTable();
+        $this->reindex($entityIds);
+        return $this;
+    }
 
+    /**
+     * @param null|int|array $entityIds
+     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     */
+    protected function reindex($entityIds = null)
+    {
+        if ($this->hasEntity() || !empty($entityIds)) {
+            $this->_prepareFinalPriceData($entityIds);
+            $this->_applyCustomOption();
+            $this->_applyConfigurableOption();
+            $this->_movePriceDataToIndexTable();
+        }
         return $this;
     }
 

@@ -27,25 +27,36 @@ namespace Magento\Tax\Test\Repository;
 use Mtf\Repository\AbstractRepository;
 
 /**
- * Class Tax Class Repository
- *
+ * Class TaxClass Repository
  */
 class TaxClass extends AbstractRepository
 {
-    public function __construct(array $defaultConfig = array(), array $defaultData = array())
+    public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['default'] = array(
-            'config' => $defaultConfig,
-            'data' => $defaultData
-        );
+        $this->_data['Taxable Goods'] = [
+            'class_id' => '2',
+            'class_name' => 'Taxable Goods',
+            'class_type' => 'PRODUCT',
+            'id' => '2',
+            'mtf_dataset_name' => 'Taxable Goods',
+        ];
 
-        $this->_data['customer_tax_class'] = array(
-            'config' => $defaultConfig,
-            'data' => $defaultData
-        );
+        $this->_data['Retail Customer'] = [
+            'class_id' => '3',
+            'class_name' => 'Retail Customer',
+            'class_type' => 'CUSTOMER',
+            'id' => '3',
+            'mtf_dataset_name' => 'Retail Customer',
+        ];
 
-        $this->_data['product_tax_class'] = $this->_data['customer_tax_class'];
-        $this->_data['product_tax_class']['data']['fields']['class_name']['value'] = 'Product Tax Class %isolation%';
-        $this->_data['product_tax_class']['data']['fields']['class_type']['value'] = 'PRODUCT';
+        $this->_data['customer_tax_class'] = [
+            'class_name' => 'Customer Tax Class %isolation%',
+            'class_type' => 'CUSTOMER',
+        ];
+
+        $this->_data['product_tax_class'] = [
+            'class_name' => 'Product Tax Class %isolation%',
+            'class_type' => 'PRODUCT',
+        ];
     }
 }

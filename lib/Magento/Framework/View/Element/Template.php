@@ -219,7 +219,7 @@ class Template extends AbstractBlock
      */
     public function getArea()
     {
-        return $this->_appState->getAreaCode();
+        return $this->_getData('area') ? $this->_getData('area') : $this->_appState->getAreaCode();
     }
 
     /**

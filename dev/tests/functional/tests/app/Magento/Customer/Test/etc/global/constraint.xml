@@ -43,6 +43,14 @@
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerInGrid>
+    <assertUpdateCustomerInGrid module="Magento_Customer">
+        <severeness>middle</severeness>
+        <require>
+            <preconditionCustomer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
+        </require>
+    </assertUpdateCustomerInGrid>
     <assertCustomerForm module="Magento_Customer">
         <severeness>middle</severeness>
         <require>
@@ -51,6 +59,15 @@
             <pageCustomerIndexEdit class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit" />
         </require>
     </assertCustomerForm>
+    <assertUpdateCustomerForm module="Magento_Customer">
+        <severeness>middle</severeness>
+        <require>
+            <preconditionCustomer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
+            <pageCustomerIndexEdit class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit" />
+        </require>
+    </assertUpdateCustomerForm>
     <assertCustomerInvalidEmail module="Magento_Customer">
         <severeness>middle</severeness>
         <require>
@@ -59,4 +76,19 @@
             <pageCustomerIndexNew class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew" />
         </require>
     </assertCustomerInvalidEmail>
+    <assertCustomerGroupSuccessCreateMessage module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupSuccessCreateMessage>
+    <assertCustomerGroupInGrid module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupInGrid>
+    <assertCustomerGroupOnCustomerForm module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupOnCustomerForm>
+    <assertCustomerGroupAlreadyExists module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupAlreadyExists>
+    <assertCustomerGroupNotInGrid module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupNotInGrid>
 </constraint>

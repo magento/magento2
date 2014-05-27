@@ -41,8 +41,8 @@ class CustomerAccountCreate extends FrontendPage
             'locator' => '#form-validate',
             'strategy' => 'css selector',
         ],
-        'messageBlock' => [
-            'name' => 'messageBlock',
+        'messagesBlock' => [
+            'name' => 'messagesBlock',
             'class' => 'Magento\Core\Test\Block\Messages',
             'locator' => '.page.messages',
             'strategy' => 'css selector',
@@ -60,8 +60,8 @@ class CustomerAccountCreate extends FrontendPage
     /**
      * @return \Magento\Core\Test\Block\Messages
      */
-    public function getMessageBlock()
+    public function getMessagesBlock()
     {
-        return $this->getBlockInstance('messageBlock');
+        return $this->getBlockInstance('messagesBlock');
     }
 }

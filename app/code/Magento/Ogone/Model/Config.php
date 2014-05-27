@@ -42,7 +42,6 @@ class Config extends \Magento\Payment\Model\Config
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Framework\Config\DataInterface $dataStorage
@@ -51,14 +50,13 @@ class Config extends \Magento\Payment\Model\Config
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Framework\Config\DataInterface $dataStorage,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor
     ) {
-        parent::__construct($scopeConfig, $coreConfig, $paymentMethodFactory, $localeLists, $dataStorage);
+        parent::__construct($scopeConfig, $paymentMethodFactory, $localeLists, $dataStorage);
         $this->_urlBuilder = $urlBuilder;
         $this->_encryptor = $encryptor;
     }
@@ -73,7 +71,11 @@ class Config extends \Magento\Payment\Model\Config
     public function getConfigData($path, $storeId = null)
     {
         if (!empty($path)) {
-            return $this->_scopeConfig->getValue(self::OGONE_PAYMENT_PATH . $path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+            return $this->_scopeConfig->getValue(
+                self::OGONE_PAYMENT_PATH . $path,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
         }
         return false;
     }
@@ -86,7 +88,7 @@ class Config extends \Magento\Payment\Model\Config
      */
     public function getShaInCode($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getConfigData('secret_key_in', $storeId));
+        return $this->getConfigData('secret_key_in', $storeId);
     }
 
     /**
@@ -96,7 +98,7 @@ class Config extends \Magento\Payment\Model\Config
      */
     public function getShaOutCode($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getConfigData('secret_key_out', $storeId));
+        return $this->getConfigData('secret_key_out', $storeId);
     }
 
     /**

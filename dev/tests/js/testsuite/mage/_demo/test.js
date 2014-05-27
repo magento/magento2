@@ -20,6 +20,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-test( "hello test", function() {
+TestCase( "hello test", function() {
     ok( 1 == "1", "Passed!" );
 });

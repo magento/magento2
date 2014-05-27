@@ -28,7 +28,9 @@
     @_options-selector : ~"ul.dropdown",
 
     @_dropdown-actions-padding: @dropdown-actions-padding,
-
+    @_dropdown-list-min-width: @dropdown-list-min-width,
+    @_dropdown-list-width: @dropdown-list-width,
+    @_dropdown-list-height: @dropdown-list-height,
     @_dropdown-list-position-top: @dropdown-list-position-top,
     @_dropdown-list-position-bottom: @dropdown-list-position-bottom,
     @_dropdown-list-position-left: @dropdown-list-position-left,
@@ -37,6 +39,9 @@
     @_dropdown-list-border: @dropdown-list-border,
     @_dropdown-list-pointer: @dropdown-list-pointer,
     @_dropdown-list-pointer-border: @dropdown-list-pointer-border,
+    @_dropdown-list-pointer-position: @dropdown-list-pointer-position,
+    @_dropdown-list-pointer-position-top: @dropdown-list-pointer-position-top,
+    @_dropdown-list-pointer-position-left-right: @dropdown-list-pointer-position-left-right,
     @_dropdown-list-item-border: @dropdown-list-item-border,
     @_dropdown-list-item-padding: @dropdown-list-item-padding,
     @_dropdown-list-item-margin: @dropdown-list-item-margin,
@@ -82,13 +87,14 @@
     }
     ._dropdown-styles(
         @_options-selector: @_options-selector,
+        @_dropdown-list-min-width,
+        @_dropdown-list-width,
+        @_dropdown-list-height,
         @_dropdown-list-background,
         @_dropdown-list-border,
         @_dropdown-list-z-index,
         @_dropdown-list-shadow,
-        @_dropdown-list-pointer,
         @_dropdown-list-background,
-        @_dropdown-list-pointer-border,
         @_dropdown-list-item-padding,
         @_dropdown-list-item-margin,
         @_dropdown-list-item-border,
@@ -96,7 +102,12 @@
         @_dropdown-list-position-top,
         @_dropdown-list-position-bottom,
         @_dropdown-list-position-left,
-        @_dropdown-list-position-right
+        @_dropdown-list-position-right,
+        @_dropdown-list-pointer,
+        @_dropdown-list-pointer-border,
+        @_dropdown-list-pointer-position,
+        @_dropdown-list-pointer-position-top,
+        @_dropdown-list-pointer-position-left-right
     );
 }
 
@@ -110,6 +121,9 @@
     @_dropdown-split-button-actions-padding: @dropdown-split-button-actions-padding,
     @_dropdown-split-toggle-actions-padding: @dropdown-split-toggle-actions-padding,
     @_dropdown-split-toggle-position: @dropdown-split-toggle-position,
+    @_dropdown-split-list-min-width: @dropdown-split-list-min-width,
+    @_dropdown-split-list-width: @dropdown-split-list-width,
+    @_dropdown-split-list-height: @dropdown-split-list-height,
     @_dropdown-split-list-position-top: @dropdown-split-list-position-top,
     @_dropdown-split-list-position-bottom: @dropdown-split-list-position-bottom,
     @_dropdown-split-list-position-left: @dropdown-split-list-position-left,
@@ -118,6 +132,9 @@
     @_dropdown-split-list-border: @dropdown-split-list-border,
     @_dropdown-split-list-pointer: @dropdown-split-list-pointer,
     @_dropdown-split-list-pointer-border: @dropdown-split-list-pointer-border,
+    @_dropdown-split-list-pointer-position: @dropdown-split-list-pointer-position,
+    @_dropdown-split-list-pointer-position-top: @dropdown-split-list-pointer-position-top,
+    @_dropdown-split-list-pointer-position-left-right: @dropdown-split-list-pointer-position-left-right,
     @_dropdown-split-list-item-border: @dropdown-split-list-item-border,
     @_dropdown-split-list-item-padding: @dropdown-split-list-item-padding,
     @_dropdown-split-list-item-margin: @dropdown-split-list-item-margin,
@@ -172,13 +189,14 @@
     }
     ._dropdown-styles(
         @_options-selector: @_options-selector,
+        @_dropdown-split-list-min-width,
+        @_dropdown-split-list-width,
+        @_dropdown-split-list-height,
         @_dropdown-split-list-background,
         @_dropdown-split-list-border,
         @_dropdown-split-list-z-index,
         @_dropdown-split-list-shadow,
-        @_dropdown-split-list-pointer,
         @_dropdown-split-list-background,
-        @_dropdown-split-list-pointer-border,
         @_dropdown-split-list-item-padding,
         @_dropdown-split-list-item-margin,
         @_dropdown-split-list-item-border,
@@ -186,29 +204,26 @@
         @_dropdown-split-list-position-top,
         @_dropdown-split-list-position-bottom,
         @_dropdown-split-list-position-left,
-        @_dropdown-split-list-position-right
+        @_dropdown-split-list-position-right,
+        @_dropdown-split-list-pointer,
+        @_dropdown-split-list-pointer-border,
+        @_dropdown-split-list-pointer-position,
+        @_dropdown-split-list-pointer-position-top,
+        @_dropdown-split-list-pointer-position-left-right
     );
-    @{_options-selector} {
-        ._dropdown-split-list-position-default (
-            @_dropdown-split-list-position-top,
-            @_dropdown-split-list-position-bottom,
-            @_dropdown-split-list-position-left,
-            @_dropdown-split-list-position-right,
-            @_dropdown-split-toggle-position
-        );
-    }
 }
 
 // Internal use mixins
 ._dropdown-styles(
     @_options-selector,
+    @_dropdown-list-min-width,
+    @_dropdown-list-width,
+    @_dropdown-list-height,
     @_dropdown-list-background,
     @_dropdown-list-border,
     @_dropdown-list-z-index,
     @_dropdown-list-shadow,
-    @_dropdown-list-pointer,
     @_dropdown-list-background,
-    @_dropdown-list-pointer-border,
     @_dropdown-list-item-padding,
     @_dropdown-list-item-margin,
     @_dropdown-list-item-border,
@@ -216,7 +231,12 @@
     @_dropdown-list-position-top,
     @_dropdown-list-position-bottom,
     @_dropdown-list-position-left,
-    @_dropdown-list-position-right
+    @_dropdown-list-position-right,
+    @_dropdown-list-pointer,
+    @_dropdown-list-pointer-border,
+    @_dropdown-list-pointer-position,
+    @_dropdown-list-pointer-position-top,
+    @_dropdown-list-pointer-position-left-right,
 ) {
     @{_options-selector} {
         .list-reset-styles();
@@ -231,7 +251,9 @@
             @_dropdown-list-position-left,
             @_dropdown-list-position-right
         );
-        min-width: 100%;
+        .css(min-width, @_dropdown-list-min-width);
+        .css(width, @_dropdown-list-width);
+        .css(height, @_dropdown-list-height);
         display: none;
         ._dropdown-list-shadow(@_dropdown-list-shadow);
         li {
@@ -246,9 +268,11 @@
             }
         }
         ._dropdown-list-pointer(
-            @_dropdown-list-pointer,
             @_dropdown-list-background,
-            @_dropdown-list-pointer-border
+            @_dropdown-list-pointer-border,
+            @_dropdown-list-pointer-position,
+            @_dropdown-list-pointer-position-top,
+            @_dropdown-list-pointer-position-left-right,
         );
     }
     &.active {
@@ -294,30 +318,6 @@
     @_dropdown-list-position-right
 ) when not (@_dropdown-list-position-right = false) and not (@_dropdown-list-position-right = auto) {
     .css(right, @_dropdown-list-position-right);
-}
-
-// Dropdown list position - Default
-._dropdown-split-list-position-default (
-    @_dropdown-list-position-top,
-    @_dropdown-list-position-bottom,
-    @_dropdown-list-position-left,
-    @_dropdown-list-position-right,
-    @_dropdown-split-toggle-position
-) when (@_dropdown-list-position-top = false) and (@_dropdown-list-position-left = false) and (@_dropdown-list-position-right = false) and (@_dropdown-list-position-bottom = false) and (@_dropdown-split-toggle-position = right) {
-    top: 100%;
-    left: 100%;
-    margin-left: -36px;
-}
-
-._dropdown-split-list-position-default (
-    @_dropdown-list-position-top,
-    @_dropdown-list-position-bottom,
-    @_dropdown-list-position-left,
-    @_dropdown-list-position-right,
-    @_dropdown-split-toggle-position
-) when (@_dropdown-list-position-top = false) and (@_dropdown-list-position-left = false) and (@_dropdown-list-position-right = false) and (@_dropdown-list-position-bottom = false) and (@_dropdown-split-toggle-position = left) {
-    top: 100%;
-    left: 0;
 }
 
 // Simple dropdown icon
@@ -494,18 +494,65 @@
 
 // Dropdown show pointer
 ._dropdown-list-pointer(
-    @_dropdown-list-pointer,
     @_dropdown-list-background,
-    @_dropdown-list-pointer-border
+    @_dropdown-list-pointer-border,
+    @_dropdown-list-pointer-position,
+    @_dropdown-list-pointer-position-top,
+    @_dropdown-list-pointer-position-left-right
 ) when (@_dropdown-list-pointer = true) {
     margin-top: 4px;
     ._dropdown-pointer(
         @_dropdown-list-background,
-        @_dropdown-list-pointer-border
+        @_dropdown-list-pointer-border,
+        @_dropdown-list-pointer-position,
+        @_dropdown-list-pointer-position-top,
+        @_dropdown-list-pointer-position-left-right
     );
 }
 
 ._dropdown-pointer(
+    @_dropdown-list-background,
+    @_dropdown-list-pointer-border,
+    @_dropdown-list-pointer-position,
+    @_dropdown-list-pointer-position-top,
+    @_dropdown-list-pointer-position-left-right
+) when (@_dropdown-list-pointer-position = left) {
+    ._dropdown-pointer-default(
+        @_dropdown-list-background,
+        @_dropdown-list-pointer-border
+    );
+    &:before {
+        .css(top, @_dropdown-list-pointer-position-top);
+        .css(left, @_dropdown-list-pointer-position-left-right);
+    }
+    &:after {
+        .css(top, @_dropdown-list-pointer-position-top - 2);
+        .css(left, @_dropdown-list-pointer-position-left-right - 1);
+    }
+}
+
+._dropdown-pointer(
+    @_dropdown-list-background,
+    @_dropdown-list-pointer-border,
+    @_dropdown-list-pointer-position,
+    @_dropdown-list-pointer-position-top,
+    @_dropdown-list-pointer-position-left-right
+) when (@_dropdown-list-pointer-position = right) {
+    ._dropdown-pointer-default(
+        @_dropdown-list-background,
+        @_dropdown-list-pointer-border
+    );
+    &:before {
+        .css(top, @_dropdown-list-pointer-position-top);
+        .css(right, @_dropdown-list-pointer-position-left-right);
+    }
+    &:after {
+        .css(top, @_dropdown-list-pointer-position-top - 2);
+        .css(right, @_dropdown-list-pointer-position-left-right - 1);
+    }
+}
+
+._dropdown-pointer-default(
     @_dropdown-list-background,
     @_dropdown-list-pointer-border
 ) {
@@ -519,15 +566,11 @@
         border-bottom-style: solid;
     }
     &:before {
-        top: -12px;
-        left: 10px;
         z-index: 99;
         border: solid 6px;
         border-color: transparent transparent @_dropdown-list-background transparent;
     }
     &:after {
-        top: -14px;
-        left: 9px;
         z-index: 98;
         border: solid 7px;
         border-color: transparent transparent @_dropdown-list-pointer-border transparent;

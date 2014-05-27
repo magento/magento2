@@ -25,7 +25,7 @@
 .search-global {
     &.miniform {
         position: relative;
-        z-index: 2;
+        z-index: 1000;
         display: inline-block;
         vertical-align: top;
         margin:6px 10px 0;
@@ -384,51 +384,47 @@
     color: #9ba8b5;
 }
 
-.suggest-expandable .action-dropdown .action-toggle {
-    display: inline-block;
-    max-width: 500px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    background: none;
-    border: none;
-    box-shadow: none;
-    color: #676056;
-    font-size: 12px;
-    padding: 5px 4px;
-    filter: none;
-}
-
-.suggest-expandable .action-dropdown .action-toggle span {
-    display: inline;
-}
-
-.suggest-expandable .action-dropdown .action-toggle:before {
-    display: inline-block;
-    float: right;
-    margin-left: 4px;
-    font-size: 13px;
-    color: #b2b0ad;
-}
-
-.suggest-expandable .action-dropdown .action-toggle:hover:before {
-    color: #7e7e7e;
-}
-
-.suggest-expandable .dropdown-menu {
-    margin: 1px 0 0;
-    left: 0;
-    right: auto;
-    width: 221px;
-}
-
 .suggest-expandable {
+    .action-dropdown .action-toggle {
+        display: inline-block;
+        max-width: 500px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        background: none;
+        border: none;
+        box-shadow: none;
+        color: #676056;
+        font-size: 12px;
+        padding: 5px 4px;
+        filter: none;
+        span {
+            display: inline;
+        }
+        &:before {
+            display: inline-block;
+            float: right;
+            margin-left: 4px;
+            font-size: 13px;
+            color: #b2b0ad;
+        }
+        &:hover:before {
+            color: #7e7e7e;
+        }
+    }
+    .dropdown-menu {
+        margin: 1px 0 0;
+        left: 0;
+        right: auto;
+        width: 245px;
+        z-index: 4;
+    }
     .mage-suggest {
         border: none;
         border-radius: 3px 3px 0 0;
         &:after {
-            top: 6px;
-            right: 6px;
+            top: 10px;
+            right: 8px;
         }
     }
     .mage-suggest-inner {
@@ -446,7 +442,7 @@
             margin: 6px 5px 5px;
             padding-right: 20px;
             border: 1px solid #ada89e;
-            width: 211px;
+            width: 236px;
             z-index: 1;
         }
         > input.ui-autocomplete-loading,

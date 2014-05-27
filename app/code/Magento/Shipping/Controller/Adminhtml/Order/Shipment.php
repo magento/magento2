@@ -740,7 +740,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         $page = new \Zend_Pdf_Page($xSize, $ySize);
 
         imageinterlace($image, 0);
-        $tmpFileName = $directory->getAbsolutePath('shipping_labels_' . uniqid(mt_rand()) . time() . '.png');
+        $tmpFileName = $directory->getAbsolutePath('shipping_labels_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber()) . time() . '.png');
         imagepng($image, $tmpFileName);
         $pdfImage = \Zend_Pdf_Image::imageWithPath($tmpFileName);
         $page->drawImage($pdfImage, 0, 0, $xSize, $ySize);

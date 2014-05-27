@@ -32,7 +32,6 @@ use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 /**
  * Class AffectedAttributeSet
  * Choose affected attribute set dialog popup window
- *
  */
 class AffectedAttributeSet extends Block
 {

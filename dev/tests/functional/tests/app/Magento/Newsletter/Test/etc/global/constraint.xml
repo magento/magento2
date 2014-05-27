@@ -24,6 +24,12 @@
  */
 -->
 <constraint>
+    <assertNewsletterSuccessCreateMessage module="Magento_Newsletter">
+        <severeness>low</severeness>
+    </assertNewsletterSuccessCreateMessage>
+    <assertNewsletterInGrid module="Magento_Newsletter">
+        <severeness>low</severeness>
+    </assertNewsletterInGrid>
     <assertCustomerIsSubscribedToNewsletter module="Magento_Newsletter">
         <severeness>low</severeness>
         <require>

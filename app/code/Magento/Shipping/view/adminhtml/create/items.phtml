@@ -96,18 +96,15 @@ if (sendEmailCheckbox) {
     Event.observe(sendEmailCheckbox, 'change', bindSendEmail);
     bindSendEmail();
 }
-function bindSendEmail()
-{
+function bindSendEmail() {
     if (sendEmailCheckbox.checked == true) {
         notifyCustomerCheckbox.disabled = false;
-        //shipmentCommentText.disabled = false;
     }
     else {
         notifyCustomerCheckbox.disabled = true;
-        //shipmentCommentText.disabled = true;
     }
 }
-function toggleCreateLabelCheckbox(){
+function toggleCreateLabelCheckbox() {
     var checkbox = $('create_shipping_label');
     var submitButton = checkbox.up('.order-totals').select('.submit-button span')[0];
     if (checkbox.checked) {
@@ -116,7 +113,11 @@ function toggleCreateLabelCheckbox(){
         submitButton.innerText = submitButton.innerText.replace(/\.\.\.$/, '');
     }
 }
-function submitShipment(btn){
+function submitShipment(btn) {
+    if (!validQtyItems()) {
+        alert('<?php echo __('Invalid value(s) for Qty to Ship') ?>');
+        return;
+    }
     var checkbox = $(btn).up('.order-totals').select('#create_shipping_label')[0];
     if (checkbox && checkbox.checked) {
         packaging.showWindow();
@@ -129,6 +130,16 @@ function submitShipment(btn){
         });
         jQuery('#edit_form').triggerHandler('save');
     }
+}
+function validQtyItems() {
+    var valid = true;
+    $$('.qty-item').each(function(item) {
+        var val = parseFloat(item.value);
+        if (isNaN(val) || val < 0) {
+            valid = false;
+        }
+    });
+    return valid;
 }
 //]]>
 </script>

@@ -37,6 +37,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</fixture>
         </category_ids>
         <color>
             <attribute_code>color</attribute_code>
@@ -93,14 +94,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>textarea</input>
+            <group>product-details</group>
         </description>
-        <enable_googlecheckout>
-            <attribute_code>enable_googlecheckout</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
-        </enable_googlecheckout>
         <gallery>
             <attribute_code>gallery</attribute_code>
             <backend_type>varchar</backend_type>
@@ -171,6 +166,7 @@
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value></default_value>
+            <group>search-optimization</group>
             <input>textarea</input>
         </meta_description>
         <meta_keyword>
@@ -178,6 +174,7 @@
             <backend_type>text</backend_type>
             <is_required>0</is_required>
             <default_value></default_value>
+            <group>search-optimization</group>
             <input>textarea</input>
         </meta_keyword>
         <meta_title>
@@ -185,6 +182,7 @@
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value></default_value>
+            <group>search-optimization</group>
             <input>text</input>
         </meta_title>
         <minimal_price>
@@ -205,14 +203,14 @@
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value>Use config</default_value>
             <input>select</input>
         </msrp_display_actual_price_type>
         <msrp_enabled>
             <attribute_code>msrp_enabled</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
+            <default_value>In Cart</default_value>
             <input>select</input>
         </msrp_enabled>
         <name>
@@ -221,7 +219,7 @@
             <is_required>1</is_required>
             <default_value></default_value>
             <input>text</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
         </name>
         <news_from_date>
             <attribute_code>news_from_date</attribute_code>
@@ -248,7 +246,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>container2</default_value>
+            <default_value>Block after Info Column</default_value>
             <input>select</input>
         </options_container>
         <page_layout>
@@ -264,16 +262,16 @@
             <is_required>1</is_required>
             <default_value></default_value>
             <input>price</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</fixture>
         </price>
         <quantity_and_stock_status>
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value>In Stock</default_value>
             <input>select</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
         </quantity_and_stock_status>
         <recurring_profile>
             <attribute_code>recurring_profile</attribute_code>
@@ -289,20 +287,13 @@
             <default_value></default_value>
             <input>text</input>
         </required_options>
-        <short_description>
-            <attribute_code>short_description</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </short_description>
         <sku>
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input>text</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
         </sku>
         <small_image>
             <attribute_code>small_image</attribute_code>
@@ -325,6 +316,14 @@
             <default_value></default_value>
             <input>date</input>
         </special_from_date>
+        <short_description>
+            <attribute_code>short_description</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>textarea</input>
+            <group>autosettings</group>
+        </short_description>
         <special_price>
             <attribute_code>special_price</attribute_code>
             <backend_type>decimal</backend_type>
@@ -351,8 +350,9 @@
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
+            <default_value>Taxable Goods</default_value>
             <input>select</input>
+            <group>product-details</group>
         </tax_class_id>
         <thumbnail>
             <attribute_code>thumbnail</attribute_code>
@@ -375,6 +375,7 @@
             <default_value></default_value>
             <input>text</input>
             <group>advanced-pricing</group>
+            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</fixture>
         </tier_price>
         <updated_at>
             <attribute_code>updated_at</attribute_code>
@@ -401,7 +402,7 @@
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value>Catalog, Search</default_value>
             <input>select</input>
             <group>autosettings</group>
         </visibility>
@@ -411,7 +412,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>weight</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
         </weight>
         <id>
             <attribute_code>id</attribute_code>
@@ -428,13 +429,14 @@
         <qty>
             <attribute_code>qty</attribute_code>
             <input>input</input>
-            <group>product_info_tabs_product-details</group>
+            <group>product-details</group>
         </qty>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product_info_tabs_customer_options</group>
             <is_required>0</is_required>
+            <group>customer-options</group>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
         </custom_options>
     </fields>

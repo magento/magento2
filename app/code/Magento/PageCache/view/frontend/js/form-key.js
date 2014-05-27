@@ -50,5 +50,7 @@
             return result;
         }
     });
-    $('body').formKey();
+    $(function() {
+        $('body').formKey();
+    });
 })(jQuery);

@@ -1,3 +1,67 @@
+2.0.0.0-dev79
+=============
+* Tax calculation updates:
+ * Fixed issues in tax calculation rounding with discount applied
+ * Fixed an issue with extra penny  when exact tax amount ended with 0.5 cent
+ * Fixed an issue where there were tax calculation errors when customer tax rate was different from store tax rate
+ * Added support to round tax at individual tax rate
+ * Fixed price inconsistencies between catalog and shopping cart
+ * Added support for maintaining consistent price including tax for customers with different tax rates
+ * Added support for applying tax rules with different priorities to subtotal only
+* Fixed bugs:
+  * Removed the extra '%' sign in the error\notice message on Gift Card Accounts page on the backend
+  * Fixed an issue with image uploading functionality in the Catalog configuration
+  * Fixed an issue where a customer could not navigate the store when downloading the downloadable product
+  * Fixed an issue where adding CMS block Catalog Events Lister caused an error
+  * Fixed an issue where the price was displayed twice on the Product page on the frontend
+  * Fixed an issue where an admin could not open search results on the backend
+  * Fixed an issue where the Rule Based Product Relations functionality was generating incorrect SQL when product category attribute was set through "is one of" or "contains" operator by constant value
+  * Fixed an issue where it was impossible to add a product to the Compare list for  categories with three-column page layout
+  * Fixed an issue where a blank page opened when changing store view on a product page on the frontend
+  * Fixed an issue where the  "Please specify at least one search term." error message was not displayed if search is performed without search data specified on the frontend
+  * Fixed a Google Chrome specific issue where page layout was broken when updating status for reviews on the backend
+  * Fixed admin look and feel issues
+  * Fixed an issue where the order notices and error messages were not red
+  * Fixed a UI issue which appeared during custom attribute creation
+  * Fixed an issue where the popup did not open after clicking What's this? next to the Remember Me check box  when persistent shopping cart was enabled
+  * Fixed an issue where the options of the Add Product split dropdown did not fit the page
+  * Fixed an issue where the default theme preview image sample link was missing
+  * Fixed a Safari and Internet Explorer 9 specific issue where the backend menu is not displayed for users with custom admin roles
+  * Fixed an issue where  the price of bundle products was not  displayed correctly on the product page on the frontend
+  * Fixed a UI issue in the debug mode configuration
+  * Fixed minor issues with page layout
+  * Fixed an issue where the mini shopping cart loaded data from cache
+  * Fixed an issue where there was an incorrect value in the Grand Total (Base) column in the Orders grid if Catalog Price Scope was set to Website
+  * Fixed an issue where the Entity Generator tool did not accept the "class" parameter
+  * Fixed an issue where the default email template was not applied when the custom template in use was deleted
+  * Fixed an issue where shipping price for flat rate was set to 0 in the side block during checkout of a product with a configured recurring profile
+  * Fixed an issue where it was possible to create more Shipping Labels than there were products in the shipment
+  * Fixed an issue where data about "SHA-IN Pass Phrase" was missing after changing "Payment Action" in the Ogone payment method configuration
+  * Fixed performance issues with reindexing of the Price indexer
+  * Fixed an issue where importing tax rates with postal code = * led to incorrect data entered into database
+  * Fixed an issue where incorrect link to reset password was sent if secure URL was used on the frontend
+  * Fixed an issue where the Links section was absent while editing downloadable products from the Wishlist
+  * Fixed an issue where specified details for composite products were lost after adding to Gift Card and Downloadable products to the Wishlist
+  * Fixed and issue where the Date widget was set to incorrect date when creating a new customer
+  * Fixed an issue where a customer was redirected to Dashboard if the Redirect user to dashboard after login option was set to вЂNoвЂ™
+  * Fixed an issue where a customer was not able to register during checkout if Guest Checkout was not allowed
+  * Fixed an issue where System logs were not generated properly in integration tests
+  * Fixed benchmarking script
+  * Fixed an issue where it was impossible to put store to the maintenance mode during backup
+  * Fixed insecure use of mt_rand()
+  * Fixed an issue where Quoted price was displayed incorrectly from the shopping cart in the backend
+* Functional tests:
+  * Tax Rule Creation
+  * Admin User Roe Creation
+  * Simple Product Creation
+  * Customer Group Creation
+  * Update Backend Customer
+  * Newsletter Creation
+* Updated composer.json.dist to download and install MTF from Public GitHub repository
+* GitHub requests:
+  * [#542] (https://github.com/magento/magento2/pull/542) Fix ImportExport bug which occurs while importing multiple rows per entity
+  * [#507] (https://github.com/magento/magento2/issues/507) "Insert Image" window is overlapped on menu
+
 2.0.0.0-dev78
 =============
 * Fixed bugs:
@@ -158,7 +222,7 @@
       * `lib/Magento/Framework/Data/Form/Element/Submit.php`
       * `lib/Magento/Framework/Data/Form/Element/Text.php`
       * `lib/Magento/Framework/Data/Form/Element/Textarea.php`
-  
+
 2.0.0.0-dev75
 =============
 * Modularity improvements:
@@ -2678,4 +2742,3 @@ Deprecated code & minor fixes update:
 2.0.0.0-dev01
 =============
 * Added initial version of Magento 2.x CE to public repository
-

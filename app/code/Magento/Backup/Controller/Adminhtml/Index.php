@@ -53,23 +53,31 @@ class Index extends \Magento\Backend\App\Action
     protected $_backupModelFactory;
 
     /**
+     * @var \Magento\Framework\App\State\MaintenanceMode
+     */
+    protected $maintenanceMode;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Backup\Factory $backupFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
+     * @param \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Backup\Factory $backupFactory,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Backup\Model\BackupFactory $backupModelFactory
+        \Magento\Backup\Model\BackupFactory $backupModelFactory,
+        \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_backupFactory = $backupFactory;
         $this->_fileFactory = $fileFactory;
         $this->_backupModelFactory = $backupModelFactory;
+        $this->maintenanceMode = $maintenanceMode;
         parent::__construct($context);
     }
 
@@ -150,9 +158,7 @@ class Index extends \Magento\Backend\App\Action
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                $turnedOn = $helper->turnOnMaintenanceMode();
-
-                if (!$turnedOn) {
+                if (!$this->maintenanceMode->turnOn()) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'
@@ -202,7 +208,7 @@ class Index extends \Magento\Backend\App\Action
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {
-            $helper->turnOffMaintenanceMode();
+            $this->maintenanceMode->turnOff();
         }
 
         $this->getResponse()->setBody($response->toJson());
@@ -306,9 +312,7 @@ class Index extends \Magento\Backend\App\Action
             }
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                $turnedOn = $helper->turnOnMaintenanceMode();
-
-                if (!$turnedOn) {
+                if (!$this->maintenanceMode->turnOn()) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'
@@ -373,7 +377,7 @@ class Index extends \Magento\Backend\App\Action
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {
-            $helper->turnOffMaintenanceMode();
+            $this->maintenanceMode->turnOff();
         }
 
         $this->getResponse()->setBody($response->toJson());

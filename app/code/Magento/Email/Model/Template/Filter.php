@@ -244,12 +244,12 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function blockDirective($construction)
     {
-        $skipParams = array('type', 'id', 'output');
+        $skipParams = array('class', 'id', 'output');
         $blockParameters = $this->_getIncludeParameters($construction[2]);
+        $block = null;
 
-        if (isset($blockParameters['type'])) {
-            $type = $blockParameters['type'];
-            $block = $this->_layout->createBlock($type, null, array('data' => $blockParameters));
+        if (isset($blockParameters['class'])) {
+            $block = $this->_layout->createBlock($blockParameters['class'], null, array('data' => $blockParameters));
         } elseif (isset($blockParameters['id'])) {
             $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
             if ($block) {
@@ -257,19 +257,19 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         }
 
-        if ($block) {
-            $block->setBlockParams($blockParameters);
-            foreach ($blockParameters as $k => $v) {
-                if (in_array($k, $skipParams)) {
-                    continue;
-                }
-                $block->setDataUsingMethod($k, $v);
-            }
-        }
-
         if (!$block) {
             return '';
         }
+
+        $block->setBlockParams($blockParameters);
+        foreach ($blockParameters as $k => $v) {
+            if (in_array($k, $skipParams)) {
+                continue;
+            }
+            $block->setDataUsingMethod($k, $v);
+        }
+
+
         if (isset($blockParameters['output'])) {
             $method = $blockParameters['output'];
         }

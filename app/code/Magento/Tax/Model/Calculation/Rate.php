@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tax\Model\Calculation;
 
 /**
  * Tax Rate Model
@@ -44,17 +45,17 @@
  * @method int getZipTo()
  * @method \Magento\Tax\Model\Calculation\Rate setZipTo(int $value)
  */
-namespace Magento\Tax\Model\Calculation;
-
 class Rate extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var mixed
+     * List of tax titles
+     *
+     * @var array
      */
     protected $_titles = null;
 
     /**
-     * @var mixed
+     * @var \Magento\Tax\Model\Calculation\Rate\Title
      */
     protected $_titleModel = null;
 
@@ -104,7 +105,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     /**
      * Prepare location settings and tax postcode before save rate
      *
-     * @return $this
+     * @return \Magento\Tax\Model\Calculation\Rate
      * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
@@ -120,7 +121,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
             throw new \Magento\Framework\Model\Exception(__('Please fill all required fields with valid information.'));
         }
 
-        if (!is_numeric($this->getRate()) || $this->getRate() <= 0) {
+        if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
             throw new \Magento\Framework\Model\Exception(__('Rate Percent should be a positive number.'));
         }
 
@@ -166,7 +167,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     /**
      * Save rate titles
      *
-     * @return $this
+     * @return \Magento\Tax\Model\Calculation\Rate
      */
     protected function _afterSave()
     {
@@ -178,7 +179,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     /**
      * Processing object before delete data
      *
-     * @return $this
+     * @return \Magento\Tax\Model\Calculation\Rate
      * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeDelete()
@@ -193,7 +194,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
      * After rate delete
      * redeclared for dispatch tax_settings_change_after event
      *
-     * @return $this
+     * @return \Magento\Tax\Model\Calculation\Rate
      */
     protected function _afterDelete()
     {
@@ -202,6 +203,8 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Saves the tax titles
+     *
      * @param array|null $titles
      * @return void
      */
@@ -230,7 +233,9 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return mixed
+     * Returns a tax title
+     *
+     * @return \Magento\Tax\Model\Calculation\Rate\Title
      */
     public function getTitleModel()
     {
@@ -241,7 +246,9 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return mixed
+     * Returns the list of tax titles
+     *
+     * @return array
      */
     public function getTitles()
     {
@@ -252,7 +259,9 @@ class Rate extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return $this
+     * Deletes all tax rates
+     *
+     * @return \Magento\Tax\Model\Calculation\Rate
      */
     public function deleteAllRates()
     {
@@ -265,7 +274,7 @@ class Rate extends \Magento\Framework\Model\AbstractModel
      * Load rate model by code
      *
      * @param  string $code
-     * @return $this
+     * @return \Magento\Tax\Model\Calculation\Rate
      */
     public function loadByCode($code)
     {

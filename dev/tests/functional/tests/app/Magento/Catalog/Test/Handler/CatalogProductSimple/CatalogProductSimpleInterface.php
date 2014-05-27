@@ -27,7 +27,6 @@ use Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CatalogProductSimpleInterface
- *
  */
 interface CatalogProductSimpleInterface extends HandlerInterface
 {

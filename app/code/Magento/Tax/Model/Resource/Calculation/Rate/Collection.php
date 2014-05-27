@@ -31,6 +31,11 @@ namespace Magento\Tax\Model\Resource\Calculation\Rate;
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * Value of fetched from DB of rules per cycle
+     */
+    const TAX_RULES_CHUNK_SIZE = 1000;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -195,5 +200,33 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             $result[$item->getData('tax_calculation_rate_id')] = $item->getData('code');
         }
         return $result;
+    }
+
+    /**
+     * Get rates array without memory leak
+     *
+     * @return array
+     */
+    public function getOptionRates()
+    {
+        $size = self::TAX_RULES_CHUNK_SIZE;
+        $page = 1;
+        $rates = array();
+        do {
+            $offset = $size * ($page - 1);
+            $this->getSelect()->reset();
+            $this->getSelect()
+                ->from(
+                    array('rates' => $this->getMainTable()),
+                    array('tax_calculation_rate_id', 'code')
+                )
+                ->limit($size, $offset);
+
+            $rates = array_merge($rates, $this->toOptionArray());
+            $this->clear();
+            $page++;
+        } while ($this->getSize() > $offset);
+
+        return $rates;
     }
 }

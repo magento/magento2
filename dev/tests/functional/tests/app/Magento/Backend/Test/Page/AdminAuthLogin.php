@@ -58,7 +58,7 @@ class AdminAuthLogin extends Page
      *
      * @var string
      */
-    protected $messageBlock = '#messages .messages';
+    protected $messagesBlock = '#messages .messages';
 
     /**
      * Constructor
@@ -99,7 +99,7 @@ class AdminAuthLogin extends Page
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messageBlock));
+        return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messagesBlock));
     }
 
     public function waitForHeaderBlock()

@@ -1182,6 +1182,9 @@
 //--------------------------------------
 // Variables simple dropdown
 @dropdown-actions-padding: false;
+@dropdown-list-min-width: 100%; // Also used in: @dropdown-split-list-min-width
+@dropdown-list-width: false; // Also used in: @dropdown-split-list-width
+@dropdown-list-height: false; // Also used in: @dropdown-split-list-height
 @dropdown-list-position-top: false;
 @dropdown-list-position-bottom: false;
 @dropdown-list-position-left: false;
@@ -1190,6 +1193,9 @@
 @dropdown-list-background: #fff;
 @dropdown-list-border: 1px solid #bbb;
 @dropdown-list-pointer-border: #bbb;
+@dropdown-list-pointer-position: left; // right
+@dropdown-list-pointer-position-top: -12px;
+@dropdown-list-pointer-position-left-right: 10px;
 @dropdown-list-item-border: 0;
 @dropdown-list-item-padding: 3px 5px;
 @dropdown-list-item-margin: 0;
@@ -1214,7 +1220,10 @@
 @dropdown-split-actions-padding: 0 5px;
 @dropdown-split-toggle-actions-padding: false;
 @dropdown-split-button-actions-padding: false;
-@dropdown-split-toggle-position: right;
+@dropdown-split-toggle-position: right; // Also used in: @dropdown-split-list-pointer-position
+@dropdown-split-list-min-width: @dropdown-list-min-width;
+@dropdown-split-list-width: @dropdown-list-width;
+@dropdown-split-list-height: @dropdown-list-height;
 @dropdown-split-list-position-top: @dropdown-list-position-top;
 @dropdown-split-list-position-bottom: @dropdown-list-position-bottom;
 @dropdown-split-list-position-left: @dropdown-list-position-left;
@@ -1223,6 +1232,9 @@
 @dropdown-split-list-border: @dropdown-list-border;
 @dropdown-split-list-pointer: @dropdown-list-pointer;
 @dropdown-split-list-pointer-border: @dropdown-list-pointer-border;
+@dropdown-split-list-pointer-position: @dropdown-split-toggle-position;
+@dropdown-split-list-pointer-position-top: @dropdown-list-pointer-position-top;
+@dropdown-split-list-pointer-position-left-right: @dropdown-list-pointer-position-left-right;
 @dropdown-split-list-item-border: @dropdown-list-item-border;
 @dropdown-split-list-item-padding: @dropdown-list-item-padding;
 @dropdown-split-list-item-margin: @dropdown-list-item-margin;

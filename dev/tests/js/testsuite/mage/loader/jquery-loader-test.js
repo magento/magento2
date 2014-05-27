@@ -20,7 +20,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-test('options', function() {
+TestCase('options', function() {
 	expect(3);
 
 	var element = $("#loader").loader({
@@ -39,7 +39,7 @@ test('options', function() {
 
 });
 
-test( 'element init', function() {
+TestCase( 'element init', function() {
 	expect(1);
 
 	//Initialize Loader on element
@@ -57,7 +57,7 @@ test( 'element init', function() {
 
 });
 
-test( 'body init', function() {
+TestCase( 'body init', function() {
 	expect(1);
 
 	//Initialize Loader on Body
@@ -68,7 +68,7 @@ test( 'body init', function() {
 
 });
 
-test( 'show/hide', function() {
+TestCase( 'show/hide', function() {
 	expect(3);
 
 	var element = $('body').loader();
@@ -90,7 +90,7 @@ test( 'show/hide', function() {
 
 });
 
-test( 'destroy', function() {
+TestCase( 'destroy', function() {
 	expect(1);
 
 	var element = $("#loader").loader({

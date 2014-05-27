@@ -36,23 +36,24 @@
       data-container="body"
       <?php echo $this->getAddAttribute() ?>
       data-mage-init='{"loaderAjax": {}, "loader": {}}'>
-<?php echo $this->getChildHtml('after_body_start') ?>
-<div class="page print wrapper">
-    <header class="header print">
-        <img src="<?php echo $this->getPrintLogoUrl() ? $this->getPrintLogoUrl() : $this->getViewFileUrl('images/logo.gif') ?>" class="logo" alt="" />
-        <?php if ($this->getPrintLogoText()):?>
-            <address><?php echo nl2br($this->escapeHtml($this->getPrintLogoText())) ?></address>
-        <?php endif;?>
-    </header>
-    <div class="page print main">
-        <?php echo $this->getChildHtml('content') ?>
-    </div>
-    <footer class="page print footer">
-        <div class="actions">
-            <button type="button" title="<?php echo __('Close Window') ?>" class="action close" onclick="window.close();"><span><?php echo __('Close Window') ?></span></button>
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="page print wrapper">
+        <header class="header print">
+            <img src="<?php echo $this->getPrintLogoUrl() ? $this->getPrintLogoUrl() : $this->getViewFileUrl('images/logo.gif') ?>" class="logo" alt="" />
+            <?php if ($this->getPrintLogoText()):?>
+                <address><?php echo nl2br($this->escapeHtml($this->getPrintLogoText())) ?></address>
+            <?php endif;?>
+        </header>
+        <div class="page print main">
+            <?php echo $this->getChildHtml('main') ?>
         </div>
-    </footer>
+        <footer class="page print footer">
+            <div class="actions">
+                <button type="button" title="<?php echo __('Close Window') ?>" class="action close" onclick="window.close();"><span><?php echo __('Close Window') ?></span></button>
+            </div>
+        </footer>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    </div>
     <?php echo $this->getAbsoluteFooter() ?>
-</div>
 </body>
 </html>

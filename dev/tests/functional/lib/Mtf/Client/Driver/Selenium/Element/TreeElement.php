@@ -24,16 +24,12 @@
 
 namespace Mtf\Client\Driver\Selenium\Element;
 
-use Mtf\Client\Element as ElementInterface;
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
-
 /**
  * Class TreeElement
  * Typified element class for Tree elements
  *
  */
-class TreeElement extends Element
+class TreeElement extends Tree
 {
     /**
      * Css class for finding tree nodes
@@ -43,96 +39,18 @@ class TreeElement extends Element
     protected $nodeCssClass = '.x-tree-node > .x-tree-node-ct';
 
     /**
-     * Drag'n'drop method is not accessible in this class.
-     * Throws exception if used.
+     * Css class for detecting tree nodes
      *
-     * @param ElementInterface $target
-     * @throws \BadMethodCallException
+     * @var string
      */
-    public function dragAndDrop(ElementInterface $target)
-    {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
-    }
+    protected $nodeSelector = '.x-tree-node';
 
     /**
-     * setValue method is not accessible in this class.
-     * Throws exception if used.
+     * Css class for fetching node's name
      *
-     * @param string|array $value
-     * @throws \BadMethodCallException
+     * @var string
      */
-    public function setValue($value)
-    {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
-    }
-
-    /**
-     * getValue method is not accessible in this class.
-     * Throws exception if used.
-     *
-     * @throws \BadMethodCallException
-     */
-    public function getValue()
-    {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
-
-    }
-
-    /**
-     * keys method is not accessible in this class.
-     * Throws exception if used.
-     *
-     * @param array $keys
-     * @throws \BadMethodCallException
-     */
-    public function keys(array $keys)
-    {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
-    }
-
-    /**
-     * Click a tree element by its path (Node names) in tree
-     *
-     * @param string $path
-     * @throws \InvalidArgumentException
-     */
-    public function clickByPath($path)
-    {
-        $pathChunkCounter = 0;
-        $pathArray = explode('/', $path);
-        $pathArrayLength = count($pathArray);
-        $structureChunk = $this->getStructure(); //Set the root of a structure as a first structure chunk
-        foreach ($pathArray as $pathChunk) {
-            $structureChunk = $this->deep($pathChunk, $structureChunk);
-            $structureChunk = ($pathChunkCounter == $pathArrayLength - 1) ?
-                $structureChunk['element'] : $structureChunk['subnodes'];
-            ++$pathChunkCounter;
-        }
-        if ($structureChunk) {
-            $needleElement = $structureChunk->find('div > a');
-            $needleElement->click();
-        } else {
-            throw new \InvalidArgumentException('The path specified for tree is invalid');
-        }
-    }
-
-    /**
-     * Internal function for deeping in hierarchy of the tree structure
-     * Return the nested array if it exists or object of class Element if this is the final part of structure
-     *
-     * @param string $pathChunk
-     * @param array $structureChunk
-     * @return array|Element||false
-     */
-    protected function deep($pathChunk, $structureChunk)
-    {
-        foreach ($structureChunk as $structureNode) {
-            if (isset($structureNode) && preg_match('/' . $pathChunk . ' \(\d+\)/', $structureNode['name'])) {
-                return $structureNode;
-            }
-        }
-        return false;
-    }
+    protected $nodeName = 'div > a';
 
     /**
      * Get structure of the tree element
@@ -142,44 +60,5 @@ class TreeElement extends Element
     public function getStructure()
     {
         return $this->_getNodeContent($this, '.x-tree-root-node');
-    }
-
-    /**
-     * Get recursive structure of the tree content
-     *
-     * @param Element $node
-     * @param string $parentCssClass
-     * @return array
-     */
-    protected function _getNodeContent($node, $parentCssClass)
-    {
-        $nodeArray = array();
-        $nodeList = array();
-        $counter = 1;
-
-        $newNode = $node->find($parentCssClass .' > .x-tree-node:nth-of-type(' . $counter . ')');
-
-        //Get list of all children nodes to work with
-        while ($newNode->isVisible()) {
-            $nodeList[] = $newNode;
-            ++$counter;
-            $newNode = $node->find($parentCssClass .' > .x-tree-node:nth-of-type(' . $counter . ')');
-        }
-
-        //Write to array values of current node
-        foreach ($nodeList as $currentNode) {
-            /** @var Element $currentNode */
-            $nodesNames = $currentNode->find('div > a > span');
-            $nodesContents = $currentNode->find($this->nodeCssClass);
-            $text = $nodesNames->getText();
-            $nodeArray[] = array(
-                'name' => $text,
-                'element' => $currentNode,
-                'subnodes' => $nodesContents->isVisible() ?
-                        $this->_getNodeContent($nodesContents, '.x-tree-node > .x-tree-node-ct') : null
-            );
-        }
-
-        return $nodeArray;
     }
 }

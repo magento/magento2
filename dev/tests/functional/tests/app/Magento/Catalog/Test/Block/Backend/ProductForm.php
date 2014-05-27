@@ -37,7 +37,6 @@ use Magento\Catalog\Test\Fixture\ConfigurableProduct;
 /**
  * Class ProductForm
  * Product creation form
- *
  */
 class ProductForm extends FormTabs
 {
@@ -105,6 +104,15 @@ class ProductForm extends FormTabs
     protected $advancedTabPanel = '[role="tablist"] [role="tabpanel"][aria-expanded="true"]:not("overflow")';
 
     /**
+     * Selector popups 'New category'
+     *
+     * @var string
+     */
+    protected $newCategoryPopup = "./ancestor::body//div[div[contains(@id,'new-category')]]";
+
+    /**
+     * Category fixture
+     *
      * @var Category
      */
     protected $category;
@@ -122,7 +130,10 @@ class ProductForm extends FormTabs
     }
 
     /**
+     * Set category
+     *
      * @param Category $category
+     * @return void
      */
     public function setCategory(Category $category)
     {
@@ -189,18 +200,22 @@ class ProductForm extends FormTabs
      * Save new category
      *
      * @param Product $fixture
+     * @return void
      */
     public function addNewCategory(Product $fixture)
     {
         $this->openNewCategoryDialog();
-        $this->_rootElement->find('input#new_category_name', Locator::SELECTOR_CSS)
-            ->setValue($fixture->getNewCategoryName());
+        $popupElement =  $this->_rootElement->find($this->newCategoryPopup, Locator::SELECTOR_XPATH);
 
-        $this->clearCategorySelect();
-        $this->selectParentCategory();
+        if ($popupElement->isVisible()) {
+            $popupElement->find('input#new_category_name', Locator::SELECTOR_CSS)
+                ->setValue($fixture->getNewCategoryName());
+            $this->clearCategorySelect($popupElement);
+            $this->selectParentCategory($popupElement);
+            $popupElement->find('div.ui-dialog-buttonset button.action-create')->click();
+            $this->waitForElementNotVisible('div.ui-dialog-buttonset button.action-create');
+        }
 
-        $this->_rootElement->find('div.ui-dialog-buttonset button.action-create')->click();
-        $this->waitForElementNotVisible('div.ui-dialog-buttonset button.action-create');
     }
 
     /**
@@ -219,6 +234,7 @@ class ProductForm extends FormTabs
      * Fill product variations
      *
      * @param ConfigurableProduct $variations
+     * @return void
      */
     public function fillVariations(ConfigurableProduct $variations)
     {
@@ -230,6 +246,8 @@ class ProductForm extends FormTabs
 
     /**
      * Open variations tab
+     *
+     * @return void
      */
     public function openVariationsTab()
     {
@@ -238,6 +256,8 @@ class ProductForm extends FormTabs
 
     /**
      * Click on 'Create New Variation Set' button
+     *
+     * @return void
      */
     public function clickCreateNewVariationSet()
     {
@@ -246,25 +266,34 @@ class ProductForm extends FormTabs
 
     /**
      * Clear category field
+     *
+     * @param Element $element
+     * @return void
      */
-    public function clearCategorySelect()
+    public function clearCategorySelect(Element $element = null)
     {
+        $element = $element === null ? $this->_rootElement : $element;
         $selectedCategory = 'li.mage-suggest-choice span.mage-suggest-choice-close';
-        if ($this->_rootElement->find($selectedCategory)->isVisible()) {
-            $this->_rootElement->find($selectedCategory)->click();
+        if ($element->find($selectedCategory)->isVisible()) {
+            $element->find($selectedCategory)->click();
         }
     }
 
     /**
      * Select parent category for new one
+     *
+     * @param Element $element
+     * @return void
      */
-    protected function selectParentCategory()
+    protected function selectParentCategory(Element $element = null)
     {
+        $element = $element === null ? $this->_rootElement : $element;
         // TODO should be removed after suggest widget implementation as typified element
         $this->fillCategoryField(
             'Default Category',
             'new_category_parent-suggest',
-            '//*[@id="new_category_form_fieldset"]'
+            '//*[@id="new_category_form_fieldset"]',
+            $element
         );
     }
 
@@ -274,25 +303,30 @@ class ProductForm extends FormTabs
      * @param string $name
      * @param string $elementId
      * @param string $parentLocation
+     * @param Element $element
+     * @return void
      */
-    protected function fillCategoryField($name, $elementId, $parentLocation)
+    protected function fillCategoryField($name, $elementId, $parentLocation, Element $element = null)
     {
+        $element = $element === null ? $this->_rootElement : $element;
         // TODO should be removed after suggest widget implementation as typified element
-        $this->_rootElement->find($elementId, Locator::SELECTOR_ID)->setValue($name);
+        $element->find($elementId, Locator::SELECTOR_ID)->setValue($name);
         //*[@id="attribute-category_ids-container"]  //*[@id="new_category_form_fieldset"]
         $categoryListLocation = $parentLocation . '//div[@class="mage-suggest-dropdown"]'; //
         $this->waitForElementVisible($categoryListLocation, Locator::SELECTOR_XPATH);
         $categoryLocation = $parentLocation . '//li[contains(@data-suggest-option, \'"label":"' . $name . '",\')]//a';
-        $this->_rootElement->find($categoryLocation, Locator::SELECTOR_XPATH)->click();
+        $element->find($categoryLocation, Locator::SELECTOR_XPATH)->click();
     }
 
     /**
      * Open new category dialog
+     *
+     * @return void
      */
     protected function openNewCategoryDialog()
     {
         $this->_rootElement->find('#add_category_button', Locator::SELECTOR_CSS)->click();
-        $this->waitForElementVisible('input#new_category_name');
+        $this->waitForElementVisible($this->newCategoryPopup, Locator::SELECTOR_XPATH);
     }
 
     /**

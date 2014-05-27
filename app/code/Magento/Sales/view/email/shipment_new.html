@@ -96,7 +96,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     </table>
                     <br/>
                     {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
-                    {{block type='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
+                    {{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
                     <p style="font-size:12px; margin:0 10px 10px 0">{{var comment}}</p>
                 </td>
             </tr>

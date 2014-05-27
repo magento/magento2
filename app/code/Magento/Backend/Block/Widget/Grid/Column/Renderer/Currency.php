@@ -57,7 +57,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * @var \Magento\Directory\Model\Currency
      */
-    protected $_baseCurrency;
+    protected $_defaultBaseCurrency;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
@@ -84,11 +84,11 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
         $this->_localeCurrency = $localeCurrency;
-        $baseCurrencyCode = $this->_scopeConfig->getValue(
+        $defaultBaseCurrencyCode = $this->_scopeConfig->getValue(
             \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
             'default'
         );
-        $this->_baseCurrency = $currencyFactory->create()->load($baseCurrencyCode);
+        $this->_defaultBaseCurrency = $currencyFactory->create()->load($defaultBaseCurrencyCode);
     }
 
     /**
@@ -142,7 +142,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
             return floatval($rate);
         }
-        return $this->_baseCurrency->getRate($this->_getCurrencyCode($row));
+        return $this->_defaultBaseCurrency->getRate($this->_getCurrencyCode($row));
     }
 
     /**

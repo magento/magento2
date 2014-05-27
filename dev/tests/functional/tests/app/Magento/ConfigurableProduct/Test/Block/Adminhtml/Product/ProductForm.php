@@ -28,18 +28,18 @@ use Mtf\Block\Mapper;
 use Mtf\Client\Element;
 use Mtf\Client\Browser;
 use Mtf\Factory\Factory;
+use Mtf\Util\XmlConverter;
+use Mtf\Block\BlockFactory;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Mtf\Util\XmlConverter;
 
 /**
  * Class ProductForm
  * Product creation form
- *
  */
 class ProductForm extends FormTabs
 {
@@ -128,6 +128,8 @@ class ProductForm extends FormTabs
     protected $advancedTabPanel = '[role="tablist"] [role="tabpanel"][aria-expanded="true"]:not("overflow")';
 
     /**
+     * Category fixture
+     *
      * @var Category
      */
     protected $category;
@@ -143,16 +145,18 @@ class ProductForm extends FormTabs
      * @param Element $element
      * @param Mapper $mapper
      * @param XmlConverter $xmlConverter
+     * @param BlockFactory $blockFactory
      * @param Browser $browser
      */
     public function __construct(
         Element $element,
         Mapper $mapper,
         XmlConverter $xmlConverter,
+        BlockFactory $blockFactory,
         Browser $browser
     ) {
         $this->browser = $browser;
-        parent::__construct($element, $mapper, $xmlConverter);
+        parent::__construct($element, $mapper, $blockFactory, $xmlConverter);
     }
 
     /**
@@ -181,7 +185,10 @@ class ProductForm extends FormTabs
     }
 
     /**
+     * Initialization categories before use in the form of
+     *
      * @param Category $category
+     * @return void
      */
     public function setCategory(Category $category)
     {
@@ -192,7 +199,7 @@ class ProductForm extends FormTabs
      * Fill the product form
      *
      * @param FixtureInterface $fixture
-     * @param Element $element
+     * @param Element|null $element
      * @return $this
      */
     public function fill(FixtureInterface $fixture, Element $element = null)

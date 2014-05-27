@@ -24,16 +24,15 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CustomOptions
+ * Custom options fixture
  *
  * Data keys:
  *  - preset (Custom options preset name)
  *  - products (comma separated sku identifiers)
- *
  */
 class CustomOptions implements FixtureInterface
 {
@@ -95,7 +94,7 @@ class CustomOptions implements FixtureInterface
             'MAGETWO-23062' => [
                 [
                     'title' => 'custom option drop down',
-                    'is_require' => true,
+                    'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
                         [
@@ -110,7 +109,7 @@ class CustomOptions implements FixtureInterface
             'MAGETWO-23063' => [
                 [
                     'title' => 'custom option drop down',
-                    'is_require' => true,
+                    'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
                         [
@@ -125,7 +124,7 @@ class CustomOptions implements FixtureInterface
             'MAGETWO-23066' => [
                 [
                     'title' => 'custom option drop down',
-                    'is_require' => true,
+                    'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
                         [
@@ -140,7 +139,7 @@ class CustomOptions implements FixtureInterface
             'MAGETWO-23069' => [
                 [
                     'title' => 'custom option drop down',
-                    'is_require' => true,
+                    'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
                         [
@@ -148,6 +147,72 @@ class CustomOptions implements FixtureInterface
                             'price' => 10,
                             'price_type' => 'Percent',
                             'sku' => 'sku_drop_down_row_1'
+                        ]
+                    ]
+                ]
+            ],
+            'options-suite' => [
+                [
+                    'title' => 'Test1 option %isolation%',
+                    'is_require' => 'Yes',
+                    'type' => 'Field',
+                    'options' => [
+                        [
+                            'price' => 120.03,
+                            'price_type' => 'Fixed',
+                            'sku' => 'sku1_%isolation%',
+                            'max_characters' => 45
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'Test2 option %isolation%',
+                    'is_require' => 'Yes',
+                    'type' => 'Field',
+                    'options' => [
+                        [
+                            'price' => 120.03,
+                            'price_type' => 'Fixed',
+                            'sku' => 'sku1_%isolation%',
+                            'max_characters' => 45
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'Test3 option %isolation%',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => 'Test1 %isolation%',
+                            'price' => 10.01,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku2_%isolation%'
+                        ],
+                        [
+                            'title' => 'Test2 %isolation%',
+                            'price' => 20.02,
+                            'price_type' => 'Fixed',
+                            'sku' => 'sku3_%isolation%'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'Test4 option %isolation%',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => 'Test1 %isolation%',
+                            'price' => 10.01,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku2_%isolation%'
+                        ],
+                        [
+                            'title' => 'Test2 %isolation%',
+                            'price' => 20.02,
+                            'price_type' => 'Fixed',
+                            'sku' => 'sku3_%isolation%'
                         ]
                     ]
                 ]

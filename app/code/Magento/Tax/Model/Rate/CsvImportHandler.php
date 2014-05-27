@@ -252,7 +252,7 @@ class CsvImportHandler
         if (!empty($regionsCache[$countryCode][$regionCode])) {
             $regionId = $regionsCache[$countryCode][$regionCode] == '*' ? 0 : $regionsCache[$countryCode][$regionCode];
             // data with index 3 must represent postcode
-            $postCode = empty($rateData[3]) || $rateData[3] == '*' ? null : $rateData[3];
+            $postCode = empty($rateData[3]) ? null : $rateData[3];
             $modelData = array(
                 'code' => $rateData[0],
                 'tax_country_id' => $rateData[1],

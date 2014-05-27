@@ -22,12 +22,14 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-/*
-    Global Navigation
--------------------------------------- */
+//
+//    Global Navigation
+// --------------------------------------
 
 .navigation {
     background-color: @color-middle;
+    position: relative;
+    z-index: 5;
 }
 
 .navigation .level-0.reverse > .submenu {
@@ -36,9 +38,9 @@
 
 .navigation > ul {
     &:extend(._layout-width all);
+    &:extend(.add-clearer all);
     position: relative;
     text-align: right;
-    z-index: 900;
 }
 
 .navigation .level-0 > .submenu {
@@ -91,7 +93,6 @@
 
 .navigation .level-0 > a {
     background: none;
-    //position: relative;
     display: block;
     padding: 12px 13px 0;
     .style15();
@@ -115,7 +116,6 @@
     }
 }
 
-//.navigation .level-0:hover > a,
 .navigation .level-0.hover.recent > a {
     background: #fff;
     .style15I();
@@ -201,9 +201,9 @@
     margin-left: 15px;
 }
 
-/*
-    Admin and Store Settings
--------------------------------------- */
+//
+//    Admin and Store Settings
+// --------------------------------------
 .navigation .level-0.item-system,
 .navigation .level-0.item-stores {
     float: none;

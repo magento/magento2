@@ -24,14 +24,13 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Fixture\FixtureInterface;
+use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertProductSearchableBySku
- *
  */
 class AssertProductSearchableBySku extends AbstractConstraint
 {
@@ -47,13 +46,13 @@ class AssertProductSearchableBySku extends AbstractConstraint
      *
      * @param CatalogsearchResult $catalogSearchResult
      * @param CmsIndex $cmsIndex
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
      * @return void
      */
     public function processAssert(
         CatalogsearchResult $catalogSearchResult,
         CmsIndex $cmsIndex,
-        CatalogProductSimple $product
+        FixtureInterface $product
     ) {
         $cmsIndex->open();
         $cmsIndex->getSearchBlock()->search($product->getSku());
@@ -64,7 +63,7 @@ class AssertProductSearchableBySku extends AbstractConstraint
     }
 
     /**
-     * Text of Searchable assert
+     * Returns a string representation of the object.
      *
      * @return string
      */

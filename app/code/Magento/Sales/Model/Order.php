@@ -2464,7 +2464,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
             $this->unsShippingAddressId();
         }
 
-        $this->setData('protect_code', substr(md5(uniqid(mt_rand(), true) . ':' . microtime(true)), 5, 6));
+        $this->setData('protect_code', substr(md5(uniqid(\Magento\Framework\Math\Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6));
         return $this;
     }
 

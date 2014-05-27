@@ -24,6 +24,16 @@
  */
 -->
 <page>
+    <templateIndex>
+        <mca>newsletter/template/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Newsletter\Test\Page\Adminhtml\templateIndex</class>
+    </templateIndex>
+    <templateNewIndex>
+        <mca>newsletter/template/new/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Newsletter\Test\Page\Adminhtml\templateNewIndex</class>
+    </templateNewIndex>
     <subscriberIndex>
         <mca>newsletter/subscriber/index</mca>
         <area>adminhtml</area>

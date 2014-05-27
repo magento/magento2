@@ -169,4 +169,9 @@
             <input_prefix>product</input_prefix>
         </data_config>
     </catalogProductGrouped>
+    <catalogCategoryEntity module="Magento_Catalog">
+        <type>flat</type>
+        <entity_type>catalog_category_entity</entity_type>
+        <collection>Magento\Catalog\Model\Resource\Category\Collection</collection>
+    </catalogCategoryEntity>
 </fixture>

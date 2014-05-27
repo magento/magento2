@@ -30,6 +30,7 @@ $configuredPrice = $this->getPrice();
 <p class="price-as-configured">
     <?php echo $this->renderAmount($configuredPrice->getAmount(), [
         'display_label'     => __('Price as configured:'),
+        'price_id'          => $this->getPriceId('product-price-'),
         'include_container' => false
     ]); ?>
 </p>

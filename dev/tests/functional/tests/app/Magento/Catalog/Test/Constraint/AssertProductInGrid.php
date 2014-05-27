@@ -24,13 +24,12 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
  * Class AssertProductInGrid
- *
  */
 class AssertProductInGrid extends AbstractConstraint
 {
@@ -42,27 +41,29 @@ class AssertProductInGrid extends AbstractConstraint
     protected $severeness = 'high';
 
     /**
-     * Assert product availability in Products Grid
+     * Assert product availability in products grid
      *
-     * @param CatalogProductSimple $product
-     * @param CatalogProductIndex $productPageGrid
+     * @param FixtureInterface $product
+     * @param CatalogProductIndex $productGrid
      * @return void
      */
-    public function processAssert(CatalogProductSimple $product, CatalogProductIndex $productPageGrid)
+    public function processAssert(FixtureInterface $product, CatalogProductIndex $productGrid)
     {
         $filter = ['sku' => $product->getSku()];
-        $productPageGrid->open();
+        $productGrid->open();
         \PHPUnit_Framework_Assert::assertTrue(
-            $productPageGrid->getProductGrid()->isRowVisible($filter),
+            $productGrid->getProductGrid()->isRowVisible($filter),
             'Product with sku \'' . $product->getSku() . '\' is absent in Products grid.'
         );
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {
-        return 'Product is present in Products grid.';
+        return 'Product is present in products grid.';
     }
 }

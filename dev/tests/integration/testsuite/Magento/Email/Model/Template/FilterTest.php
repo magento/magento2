@@ -51,6 +51,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Isolation level has been raised in order to flush themes configuration in-memory cache
+     *
+     * @magentoAppArea frontend
+     */
+    public function testBlockDirective()
+    {
+        $class = 'Magento\\\\Theme\\\\Block\\\\Html\\\\Footer';
+        $data = array("{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
+                'block',
+                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'"
+
+            );
+        $html = $this->_model->blockDirective($data);
+        $this->assertContains('<div class="footer-container">', $html);
+    }
+
+    /**
      * @magentoConfigFixture current_store web/unsecure/base_link_url http://example.com/
      * @magentoConfigFixture admin_store web/unsecure/base_link_url http://example.com/
      */

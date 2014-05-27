@@ -220,9 +220,12 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
                     'label'    => __('Theme Preview Image'),
                     'title'    => __('Theme Preview Image'),
                     'name'     => 'preview',
-                    'after_element_html' => '<img width="50" src="'
+                    'after_element_html' => '<a href="'
                     . $this->_themeImagePath->getPreviewImageDirectoryUrl()
-                    . $formData['preview_image'] . '" />'
+                    . $formData['preview_image'] . '" onclick="imagePreview(\'theme_preview_image\'); return false;">'
+                    . '<img width="50" src="'
+                    . $this->_themeImagePath->getPreviewImageDirectoryUrl()
+                    . $formData['preview_image'] . '" id="theme_preview_image" /></a>'
                 )
             );
         }

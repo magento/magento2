@@ -852,10 +852,12 @@ td.col-sku {
     font-size: 13px;
     line-height: 28px;
     padding: 15px 15px 0;
+    &:extend(.add-clearer all);
     > .entry-edit {
         float: right;
         .field-row {
             display: inline-block;
+            vertical-align: top;
         }
         .validation-advice {
             display: none !important;
@@ -955,6 +957,11 @@ td.col-sku {
     }
     .grid {
         padding: 0;
+    }
+    .massaction {
+        padding: 0;
+        border-top: none;
+        margin-bottom: 15px;
     }
 }
 
@@ -1088,13 +1095,6 @@ td.col-sku {
             &:extend(.ellipsis all);
             &:extend(.col-110-max all);
         }
-        .col-reason {
-            &:extend(.ellipsis all);
-            &:extend(.col-70-max all);
-            a {
-                display: block;
-            }
-        }
     }
     .col-actions {
         a {
@@ -1124,7 +1124,7 @@ td.col-sku {
 
 .catalog-product-edit .ui-tabs-panel .grid {
     .hor-scroll {
-        overflow-x: auto;
+        &:extend(.h-scroll);
     }
     .col-name,
     .col-type,
@@ -1236,7 +1236,7 @@ td.col-sku {
 .review-product-index {
     .grid {
         .hor-scroll {
-            overflow-x: auto;
+            &:extend(.h-scroll);
         }
         .col-name {
             &:extend(.col-110-max all);
@@ -1404,6 +1404,11 @@ td.col-sku {
             &:extend(.ellipsis);
             &:extend(.col-150-max all);
         }
+    }
+}
+.adminhtml-rma-edit {
+    .hor-scroll {
+        &:extend(.h-scroll);
     }
 }
 

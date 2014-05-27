@@ -136,6 +136,10 @@
                     alert($.mage.__('Please choose to register or to checkout as a guest.'));
                     return false;
                 }
+            } else {
+                if (json.registrationUrl) {
+                    window.location.href = json.registrationUrl;
+                }
             }
             this.element.trigger('login');
         },

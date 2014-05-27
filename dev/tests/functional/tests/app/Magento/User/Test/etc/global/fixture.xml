@@ -29,4 +29,19 @@
         <entity_type>admin_user</entity_type>
         <collection>Magento\User\Model\Resource\User\Collection</collection>
     </adminUser>
+    <adminUserRole module="Magento_User">
+        <type>flat</type>
+        <entity_type>admin_role</entity_type>
+        <collection>Magento\User\Model\Resource\Role\User\Collection</collection>
+        <fields>
+            <resource_access>
+                <attribute_code>all</attribute_code>
+                <backend_type>virtual</backend_type>
+            </resource_access>
+            <roles_resources>
+                <attribute_code>roles_resources</attribute_code>
+                <backend_type>virtual</backend_type>
+            </roles_resources>
+        </fields>
+    </adminUserRole>
 </fixture>

@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\Tax\Test\Fixture\TaxRule">
+    <module>Magento_Tax</module>
+    <type>flat</type>
+    <entity_type>tax_calculation_rule</entity_type>
+    <collection>Magento\Tax\Model\Resource\Calculation\Rule\Collection</collection>
+    <identifier>code</identifier>
+    <fields>
+        <tax_calculation_rule_id>
+            <attribute_code>tax_calculation_rule_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value />
+            <input />
+        </tax_calculation_rule_id>
+        <code>
+            <attribute_code>code</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </code>
+        <priority>
+            <attribute_code>priority</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </priority>
+        <position>
+            <attribute_code>position</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </position>
+        <tax_rate>
+            <attribute_code>tax_rate</attribute_code>
+            <backend_type>virtual</backend_type>
+        </tax_rate>
+        <tax_customer_class>
+            <attribute_code>tax_customer_class</attribute_code>
+            <backend_type>virtual</backend_type>
+        </tax_customer_class>
+        <tax_product_class>
+            <attribute_code>tax_product_class</attribute_code>
+            <backend_type>virtual</backend_type>
+        </tax_product_class>
+    </fields>
+    <data_set />
+    <data_config />
+    <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
+    <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
+</fixture>

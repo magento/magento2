@@ -82,7 +82,7 @@ class Edit extends Form
      * Fill form with attribute options
      *
      * @param FixtureInterface $fixture
-     * @param null|Element $element
+     * @param Element|null $element
      * @return $this
      */
     public function fill(FixtureInterface $fixture, Element $element = null)

@@ -64,7 +64,8 @@
             showHour: false,
             showMinute: false,
             localTimezone: <?php echo $this->getTimezoneOffsetSeconds() ?>,
-            serverTimezoneSeconds:<?php echo $this->getStoreTimestamp() ?>
+            serverTimezoneSeconds:<?php echo $this->getStoreTimestamp() ?>,
+            yearRange: '<?php echo $this->getYearRange() ?>'
         }
     });
 })(jQuery);

@@ -147,6 +147,10 @@ span.required {
     width: auto;
 }
 
+.addon select + .addafter {
+    border: none;
+}
+
 .ie .addon textarea,
 .ie .addon select {
     display:inline-block;

@@ -36,6 +36,9 @@
             <group_id>
                 <input>select</input>
             </group_id>
+            <firstname/>
+            <lastname/>
+            <email/>
             <gender>
                 <input>select</input>
             </gender>

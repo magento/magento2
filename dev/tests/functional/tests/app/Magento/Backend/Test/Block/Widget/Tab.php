@@ -18,20 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @api
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Form as AbstractForm;
 use Mtf\Client\Element;
+use Mtf\Block\Form as AbstractForm;
 
 /**
  * Class Tab
  * Is used to represent any tab on the page
- *
  */
 class Tab extends AbstractForm
 {
@@ -39,10 +37,10 @@ class Tab extends AbstractForm
      * Fill data to fields on tab
      *
      * @param array $fields
-     * @param Element $element
+     * @param Element|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element)
+    public function fillFormTab(array $fields, Element $element = null)
     {
         $data = $this->dataMapping($fields);
         $this->_fill($data, $element);
@@ -51,26 +49,25 @@ class Tab extends AbstractForm
     }
 
     /**
-     * Verify data to fields on tab
+     * Get data of tab
      *
-     * @param array $fields
-     * @param Element $element
-     *
-     * @return bool
+     * @param array|null $fields
+     * @param Element|null $element
+     * @return array
      */
-    public function verifyFormTab(array $fields, Element $element)
+    public function getDataFormTab($fields = null, Element $element = null)
     {
         $data = $this->dataMapping($fields);
-        return $this->_verify($data, $element);
+        return $this->_getData($data, $element);
     }
 
     /**
      * Update data to fields on tab
      *
      * @param array $fields
-     * @param Element $element
+     * @param Element|null $element
      */
-    public function updateFormTab(array $fields, Element $element)
+    public function updateFormTab(array $fields, Element $element = null)
     {
         $this->fillFormTab($fields, $element);
     }

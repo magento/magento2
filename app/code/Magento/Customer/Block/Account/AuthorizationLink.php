@@ -62,7 +62,6 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link
         parent::__construct($context, $data);
         $this->httpContext = $httpContext;
         $this->_customerHelper = $customerHelper;
-        $this->_isScopePrivate = true;
         $this->_postDataHelper = $postDataHelper;
     }
 

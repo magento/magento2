@@ -25,99 +25,74 @@
 
 namespace Magento\Customer\Test\Page;
 
-use Mtf\Page\Page;
-use Mtf\Factory\Factory;
+use Mtf\Page\FrontendPage;
 
 /**
- * Frontend Customer Dashboard page
- *
+ * Class CustomerAccountIndex
+ * Page of customer account
  */
-class CustomerAccountIndex extends Page
+class CustomerAccountIndex extends FrontendPage
 {
-    /**
-     * URL for customer Dashboard
-     */
     const MCA = 'customer/account/index';
 
-    /**
-     * Messages block
-     *
-     * @var string
-     */
-    protected $messagesBlock = '.page.messages';
+    protected $_blocks = [
+        'messages' => [
+            'name' => 'messages',
+            'class' => 'Magento\Core\Test\Block\Messages',
+            'locator' => '.page.messages',
+            'strategy' => 'css selector',
+        ],
+        'dashboardAddress' => [
+            'name' => 'dashboardAddress',
+            'class' => 'Magento\Customer\Test\Block\Account\Dashboard\Address',
+            'locator' => '.block.dashboard.addresses',
+            'strategy' => 'css selector',
+        ],
+        'titleBlock' => [
+            'name' => 'titleBlock',
+            'class' => 'Magento\Theme\Test\Block\Html\Title',
+            'locator' => '.page.title',
+            'strategy' => 'css selector',
+        ],
+        'accountMenuBlock' => [
+            'name' => 'accountMenuBlock',
+            'class' => 'Magento\Customer\Test\Block\Account\Links',
+            'locator' => '.nav.items',
+            'strategy' => 'css selector',
+        ],
+    ];
 
     /**
-     * Address Book block
-     *
-     * @var string
-     */
-    protected $dashboardAddressBlock = '.block.dashboard.addresses';
-
-    /**
-     * Dashboard title
-     *
-     * @var string
-     */
-    protected $titleBlock = '.page.title';
-
-    /**
-     * Account menu selector
-     *
-     * @var string
-     */
-    protected $accountMenuSelector = '.nav.items';
-
-    /**
-     * Custom constructor
-     */
-    protected function _init()
-    {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
-    }
-
-    /**
-     * Get Messages block
-     *
      * @return \Magento\Core\Test\Block\Messages
      */
     public function getMessages()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messagesBlock));
+        return $this->getBlockInstance('messages');
     }
 
     /**
-     * Get Address Book block
-     *
      * @return \Magento\Customer\Test\Block\Account\Dashboard\Address
      */
     public function getDashboardAddress()
     {
-        return Factory::getBlockFactory()->getMagentoCustomerAccountDashboardAddress(
-            $this->_browser->find($this->dashboardAddressBlock)
-        );
+        return $this->getBlockInstance('dashboardAddress');
     }
 
     /**
-     * Get title block
-     *
      * @return \Magento\Theme\Test\Block\Html\Title
      */
     public function getTitleBlock()
     {
-        return $this->titleBlock = Factory::getBlockFactory()->getMagentoThemeHtmlTitle(
-            $this->_browser->find($this->titleBlock)
-        );
+        return $this->getBlockInstance('titleBlock');
     }
 
     /**
      * Get Account Menu Block
      *
-     * @return \Magento\Customer\Test\Block\Account\Menu
+     * @return \Magento\Customer\Test\Block\Account\Links
      */
     public function getAccountMenuBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCustomerAccountMenu(
-            $this->_browser->find($this->accountMenuSelector)
-        );
+        return $this->getBlockInstance('accountMenuBlock');
     }
 }

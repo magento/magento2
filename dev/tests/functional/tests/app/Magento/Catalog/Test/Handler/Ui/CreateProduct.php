@@ -18,21 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @spi
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Test\Handler\Ui;
 
-use Mtf\Fixture\FixtureInterface;
 use Mtf\Handler\Ui;
 use Mtf\Factory\Factory;
+use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CreateProduct
  * Create a product
- *
  */
 class CreateProduct extends Ui
 {
@@ -50,9 +48,9 @@ class CreateProduct extends Ui
         $createProductPage->init($fixture);
         $createProductPage->open();
 
-        $productBlockForm = $createProductPage->getProductBlockForm();
-        $productBlockForm->fill($fixture);
-        $productBlockForm->save($fixture);
+        $productForm = $createProductPage->getProductForm();
+        $productForm->fill($fixture);
+        $createProductPage->getFormAction()->save();
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
     }
 }

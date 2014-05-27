@@ -28,7 +28,7 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class CustomerInjectable
- *
+ * Customer fixture
  */
 class CustomerInjectable extends InjectableFixture
 {
@@ -46,6 +46,8 @@ class CustomerInjectable extends InjectableFixture
         'firstname' => 'John',
         'lastname' => 'Doe',
         'email' => 'John.Doe%isolation%@example.com',
+        'password' => '123123q',
+        'password_confirmation' => '123123q',
     ];
 
     protected $confirmation = [
@@ -200,6 +202,7 @@ class CustomerInjectable extends InjectableFixture
         'is_required' => '1',
         'default_value' => '',
         'input' => 'select',
+        'group' => 'account_information',
     ];
 
     protected $suffix = [

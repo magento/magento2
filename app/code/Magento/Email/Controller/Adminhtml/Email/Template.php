@@ -188,11 +188,20 @@ class Template extends \Magento\Backend\App\Action
         $template = $this->_initTemplate('id');
         if ($template->getId()) {
             try {
-                $template->delete();
-                // display success message
-                $this->messageManager->addSuccess(__('The email template has been deleted.'));
-                // go to grid
-                $this->_redirect('adminhtml/*/');
+                // check if the template is currently used
+                if (count($template->getSystemConfigPathsWhereUsedCurrently()) == 0) {
+                    $template->delete();
+                    // display success message
+                    $this->messageManager->addSuccess(__('The email template has been deleted.'));
+                    $this->_objectManager->get('Magento\Framework\App\ReinitableConfig')->reinit();
+                    // go to grid
+                    $this->_redirect('adminhtml/*/');
+                    return;
+                }
+                // display error  message
+                $this->messageManager->addError(__('The email template is currently being used.'));
+                // redirect to edit form
+                $this->_redirect('adminhtml/*/edit', array('id' => $template->getId()));
                 return;
             } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

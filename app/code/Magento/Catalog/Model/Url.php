@@ -998,7 +998,7 @@ class Url
      */
     public function generateUniqueIdPath()
     {
-        return str_replace('.', '_', uniqid(mt_rand(), true));
+        return str_replace('.', '_', uniqid(\Magento\Framework\Math\Random::getRandomNumber(), true));
     }
 
     /**

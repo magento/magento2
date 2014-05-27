@@ -72,9 +72,10 @@ if (file_exists($classMapPath)) {
 }
 
 if (!defined('BARE_BOOTSTRAP')) {
-    if (file_exists(BP . '/maintenance.flag')) {
-
-        if (!in_array($_SERVER['REMOTE_ADDR'], explode(",", file_get_contents(BP . '/maintenance.flag')))) {
+    $maintenanceFlag = BP . '/' . \Magento\Framework\App\State\MaintenanceMode::FLAG_DIR . '/'
+        . \Magento\Framework\App\State\MaintenanceMode::FLAG_FILENAME;
+    if (file_exists($maintenanceFlag)) {
+        if (!in_array($_SERVER['REMOTE_ADDR'], explode(",", file_get_contents($maintenanceFlag)))) {
             if (PHP_SAPI == 'cli') {
                 echo 'Service temporarily unavailable due to maintenance downtime.';
             } else {

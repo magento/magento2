@@ -36,4 +36,16 @@
             <loginPage class="Magento\Backend\Test\Page\AdminAuthLogin" />
         </require>
     </invalidCredentials>
+   <assertRoleSuccessSaveMessage module="Magento_User">
+       <severeness>low</severeness>
+       <require>
+           <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+       </require>
+   </assertRoleSuccessSaveMessage>
+   <assertRoleInGrid module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+        </require>
+   </assertRoleInGrid>
 </constraint>

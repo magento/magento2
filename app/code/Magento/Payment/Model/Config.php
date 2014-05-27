@@ -68,21 +68,18 @@ class Config
      * Construct
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Framework\Config\DataInterface $dataStorage
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Framework\Config\DataInterface $dataStorage
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_dataStorage = $dataStorage;
-        $this->_coreConfig = $coreConfig;
         $this->_methodFactory = $paymentMethodFactory;
         $this->_localeLists = $localeLists;
     }

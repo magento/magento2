@@ -24,160 +24,114 @@
 
 namespace Magento\Tax\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\System\Config;
+use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class TaxRule
- *
  */
-class TaxRule extends DataFixture
+class TaxRule extends InjectableFixture
 {
     /**
-     * Initialize data and apply placeholders
-     *
-     * @param Config $configuration
-     * @param array $placeholders
+     * @var string
      */
-    public function __construct(Config $configuration, array $placeholders = array())
-    {
-        parent::__construct($configuration, $placeholders);
-
-        $this->_placeholders['us_ca_rate_8_25'] = array($this, '_getTaxRateId');
-        $this->_placeholders['uk_full_tax_rate'] = array($this, '_getTaxRateId');
-        $this->_placeholders['us_ny_rate_8_1'] = array($this, '_getTaxRateData');
-        $this->_placeholders['us_ny_rate_8_375'] = array($this, '_getTaxRateId');
-        $this->_placeholders['product_tax_class'] = array($this, '_getTaxClassId');
-        $this->_placeholders['customer_tax_class'] = array($this, '_getTaxClassId');
-    }
+    protected $repositoryClass = 'Magento\Tax\Test\Repository\TaxRule';
 
     /**
-     * Callback function returns created rate id
-     *
-     * @param string $dataSetName
-     * @return int
+     * @var string
      */
-    protected function _getTaxRateId($dataSetName)
+    protected $handlerInterface = 'Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface';
+
+    protected $defaultDataSet = [
+        'code' => 'TaxIdentifier%isolation%',
+        'tax_rate' => [
+            'dataSet' => [
+                'US-CA-*-Rate 1'
+            ],
+        ],
+    ];
+
+    protected $tax_calculation_rule_id = [
+        'attribute_code' => 'tax_calculation_rule_id',
+        'backend_type' => 'int',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $code = [
+        'attribute_code' => 'code',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $priority = [
+        'attribute_code' => 'priority',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $position = [
+        'attribute_code' => 'position',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $tax_rate = [
+        'attribute_code' => 'tax_rate',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Tax\Test\Fixture\TaxRule\TaxRate',
+    ];
+
+    protected $tax_customer_class = [
+        'attribute_code' => 'tax_customer_class',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Tax\Test\Fixture\TaxRule\TaxClass',
+    ];
+
+    protected $tax_product_class = [
+        'attribute_code' => 'tax_product_class',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Tax\Test\Fixture\TaxRule\TaxClass',
+    ];
+
+    public function getTaxCalculationRuleId()
     {
-        $taxRate = Factory::getFixtureFactory()->getMagentoTaxTaxRate();
-        $taxRate->switchData($dataSetName);
-        return $taxRate->persist()->getTaxRateId();
+        return $this->getData('tax_calculation_rule_id');
     }
 
-    /**
-     * Callback function returns class id
-     *
-     * @param string $dataSetName
-     * @return mixed
-     */
-    protected function _getTaxClassId($dataSetName)
+    public function getCode()
     {
-        $taxClass = Factory::getFixtureFactory()->getMagentoTaxTaxClass();
-        $taxClass->switchData($dataSetName);
-        return $taxClass->persist()->getTaxClassId();
+        return $this->getData('code');
     }
 
-    protected function _getTaxRateData($dataSetName)
+    public function getPriority()
     {
-        $taxClass = Factory::getFixtureFactory()->getMagentoTaxTaxRate();
-        $taxClass->switchData($dataSetName);
-        return $taxClass->getData('fields');
+        return $this->getData('priority');
     }
 
-    /**
-     * Get tax rule name
-     *
-     * @return string
-     */
-    public function getTaxRuleName()
+    public function getPosition()
     {
-        return $this->getData('fields/code/value');
+        return $this->getData('position');
     }
 
-    /**
-     * Get tax rule priority
-     *
-     * @return string
-     */
-    public function getTaxRulePriority()
-    {
-        return $this->getData('fields/priority/value');
-    }
-
-    /**
-     * Get tax rule position
-     *
-     * @return string
-     */
-    public function getTaxRulePosition()
-    {
-        return $this->getData('fields/position/value');
-    }
-
-    /**
-     * Get product/customer tax class
-     *
-     * @return string|array
-     */
     public function getTaxRate()
     {
-        return $this->getData('fields/tax_rate');
+        return $this->getData('tax_rate');
     }
 
-    /**
-     * Get product/customer tax class
-     *
-     * @param string $taxClass (e.g. product|customer)
-     * @return string|array
-     */
-    public function getTaxClass($taxClass)
+    public function getTaxCustomerClass()
     {
-        return $this->getData('fields/tax_' . $taxClass . '_class/value');
+        return $this->getData('tax_customer_class');
     }
 
-    /**
-     * Create tax rule
-     *
-     * @return TaxRule
-     */
-    public function persist()
+    public function getTaxProductClass()
     {
-        Factory::getApp()->magentoTaxCreateTaxRule($this);
-        return $this;
-    }
-
-    /**
-     * Init data
-     */
-    protected function _initData()
-    {
-        $this->_data = array(
-            'fields' => array(
-                'code' => array(
-                    'value' => 'Tax Rule %isolation%'
-                ),
-                'tax_rate' => array(
-                    'value' => '1',
-                    'input_name' => 'tax_rate[]'
-                ),
-                'tax_product_class' => array(
-                    'value' => '2',
-                    'input_name' => 'tax_product_class[]'
-                ),
-                'tax_customer_class' => array(
-                    'value' => '3',
-                    'input_name' => 'tax_customer_class[]'
-                ),
-                'priority' => array(
-                    'value' => '0'
-                ),
-                'position' => array(
-                    'value' => '0'
-                )
-            )
-        );
-
-        $this->_repository = Factory::getRepositoryFactory()->getMagentoTaxTaxRule($this->_dataConfig, $this->_data);
+        return $this->getData('tax_product_class');
     }
 }

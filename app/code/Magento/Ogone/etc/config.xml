@@ -29,7 +29,8 @@
             <ogone>
                 <model>Magento\Ogone\Model\Api</model>
                 <title>Ogone</title>
-                <secret_key backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <secret_key_in backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <secret_key_out backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <payment_action>authorize</payment_action>
                 <hashing_algorithm>sha256</hashing_algorithm>
                 <template>ogone</template>

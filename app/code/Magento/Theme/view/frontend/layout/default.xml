@@ -31,7 +31,7 @@
         <container name="after_body_start" as="after_body_start" label="Page Top">
             <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
         </container>
-        <container name="header-container" label="Page Header Container" as="header-container" htmlTag="header" htmlClass="page header">
+        <container name="header-container" label="Page Header Container" as="header_container" htmlTag="header" htmlClass="page header">
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
                 <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                     <arguments>
@@ -66,16 +66,6 @@
             <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div" htmlClass="top-container"/>
             <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         </container>
-        <!--
-        <container name="page_main" as="page_main" label="Page main" htmlTag="div" htmlClass="columns">
-            <container name="main" as="main" label="Main Content Container" htmlTag="div" htmlClass="column main">
-                <container name="content-top" label="Main Content Top" />
-                <container name="content" label="Main Content Area" />
-                <container name="content-aside" label="Main Content Aside" />
-                <container name="content-bottom" label="Main Content Bottom" />
-            </container>
-        </container>
-        -->
         <container name="columns.top" label="Before Main Columns" as="columns_top">
             <block class="Magento\Theme\Block\Html\Title" name="page.main.title" template="html/title.phtml"/>
             <container name="page.messages" label="invisible" htmlTag="div" htmlClass="page messages">

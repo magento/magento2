@@ -145,9 +145,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         $this->useIdxTable(true);
         $this->beginTransaction();
         try {
-            $this->_prepareFinalPriceData();
-            $this->_applyCustomOption();
-            $this->_movePriceDataToIndexTable();
+            $this->reindex();
             $this->commit();
         } catch (\Exception $e) {
             $this->rollBack();
@@ -160,13 +158,25 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return $this
+     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
      */
     public function reindexEntity($entityIds)
     {
-        $this->_prepareFinalPriceData($entityIds);
-        $this->_applyCustomOption();
-        $this->_movePriceDataToIndexTable();
+        $this->reindex($entityIds);
+        return $this;
+    }
+
+    /**
+     * @param null|int|array $entityIds
+     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     */
+    protected function reindex($entityIds = null)
+    {
+        if ($this->hasEntity() || !empty($entityIds)) {
+            $this->_prepareFinalPriceData($entityIds);
+            $this->_applyCustomOption();
+            $this->_movePriceDataToIndexTable();
+        }
         return $this;
     }
 
@@ -666,5 +676,23 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             return $this->getTable('catalog_product_index_price_idx');
         }
         return $this->getTable('catalog_product_index_price_tmp');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasEntity()
+    {
+        $reader = $this->_getReadAdapter();
+
+        $select = $reader->select()->from(
+            array($this->getTable('catalog_product_entity')),
+            array('count(entity_id)')
+        )->where(
+            'type_id=?',
+            $this->getTypeId()
+        );
+
+        return (int)$reader->fetchOne($select) > 0;
     }
 }

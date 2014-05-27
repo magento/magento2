@@ -80,22 +80,10 @@ class Oauth
      */
     public function generateRandomString($length)
     {
-        if (function_exists('openssl_random_pseudo_bytes')) {
-            // use openssl lib if it is install. It provides a better randomness.
-            $bytes = openssl_random_pseudo_bytes(ceil($length / 2));
-            // hex() doubles the length of the string
-            $hex = bin2hex($bytes);
-            // truncate at most 1 char if length parameter is an odd number
-            $randomString = substr($hex, 0, $length);
-        } else {
-            // fallback to mt_rand() if openssl is not installed
-            $randomString = $this->_mathRandom->getRandomString(
-                $length,
-                \Magento\Framework\Math\Random::CHARS_DIGITS . \Magento\Framework\Math\Random::CHARS_LOWERS
-            );
-        }
-
-        return $randomString;
+        return $this->_mathRandom->getRandomString(
+            $length,
+            \Magento\Framework\Math\Random::CHARS_DIGITS . \Magento\Framework\Math\Random::CHARS_LOWERS
+        );
     }
 
     /**

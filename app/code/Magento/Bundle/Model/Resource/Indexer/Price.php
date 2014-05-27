@@ -537,6 +537,9 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _prepareBundlePrice($entityIds = null)
     {
+        if (!$this->hasEntity() && empty($entityIds)) {
+            return $this;
+        }
         $this->_prepareTierPriceIndex($entityIds);
         $this->_prepareGroupPriceIndex($entityIds);
         $this->_prepareBundlePriceTable();
