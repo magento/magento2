@@ -840,7 +840,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      */
     protected function _setFontRegular($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
+        $font = \Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
         $object->setFont($font, $size);
         return $font;
     }
@@ -854,7 +854,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      */
     protected function _setFontBold($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
+        $font = \Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
         $object->setFont($font, $size);
         return $font;
     }
@@ -868,7 +868,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      */
     protected function _setFontItalic($object, $size = 7)
     {
-        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD_ITALIC);
+        $font = \Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD_ITALIC);
         $object->setFont($font, $size);
         return $font;
     }
