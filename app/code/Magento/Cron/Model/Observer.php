@@ -223,11 +223,7 @@ class Observer
             );
         }
 
-        /**
-         * though running status is set in tryLockJob we must set it here because the object
-         * was loaded with a pending status and will set it back to pending if we don't set it here
-         */
-        $schedule->setStatus(Schedule::STATUS_RUNNING)->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', time()))->save();
+        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', time()))->save();
 
         call_user_func_array($callback, array($schedule));
 
